@@ -225,7 +225,7 @@ class DivTooltipControllerTest {
         assertEquals(0 to 300, location(DivTooltip.Position.BOTTOM_LEFT))
     }
 
-    private fun prepareDiv(duration: Int = 5000, offset: DivPoint? = null) {
+    private fun prepareDiv(duration: Long = 5000, offset: DivPoint? = null) {
         tooltips.add(
             DivTooltip(
                 div = div,

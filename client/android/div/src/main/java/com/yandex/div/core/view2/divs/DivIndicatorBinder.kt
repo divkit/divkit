@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
@@ -97,7 +98,7 @@ internal class DivIndicatorBinder @Inject constructor(
                 )
                 is DivIndicatorItemPlacement.Stretch -> IndicatorParams.ItemPlacement.Stretch(
                     itemSpacing = itemPlacement.value.itemSpacing.toPx(metrics, resolver).toFloat(),
-                    maxVisibleItems = itemPlacement.value.maxVisibleItems.evaluate(resolver)
+                    maxVisibleItems = itemPlacement.value.maxVisibleItems.evaluate(resolver).toIntSafely()
                 )
             }
         )

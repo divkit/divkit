@@ -26,8 +26,8 @@ internal object IntegerSum : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return args.fold(initial = 0) { sum, arg ->
-            Evaluator.evalSum(Token.Operator.Binary.Sum.Plus, sum, arg) as Int
+        return args.fold(initial = 0L) { sum, arg ->
+            Evaluator.evalSum(Token.Operator.Binary.Sum.Plus, sum, arg) as Long
         }
     }
 }
@@ -44,12 +44,12 @@ internal object IntegerSub : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return args.foldIndexed(initial = 0) { index, acc, arg ->
+        return args.foldIndexed(initial = 0L) { index, acc, arg ->
             if (index == 0) {
                 arg
             } else {
                 Evaluator.evalSum(Token.Operator.Binary.Sum.Minus, acc, arg)
-            } as Int
+            } as Long
         }
     }
 }
@@ -66,12 +66,12 @@ internal object IntegerMul : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return args.foldIndexed(initial = 0) { index, acc, arg ->
+        return args.foldIndexed(initial = 0L) { index, acc, arg ->
             if (index == 0) {
                 arg
             } else {
                 Evaluator.evalFactor(Token.Operator.Binary.Factor.Multiplication, acc, arg)
-            } as Int
+            } as Long
         }
     }
 }
@@ -88,9 +88,9 @@ internal object IntegerDiv : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val dividend = args.first() as Int
-        val divisor = args.last() as Int
-        if (divisor == 0) {
+        val dividend = args.first() as Long
+        val divisor = args.last() as Long
+        if (divisor == 0L) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_DIVISION_BY_ZERO)
         }
         return dividend / divisor
@@ -109,9 +109,9 @@ internal object IntegerMod : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val dividend = args.first() as Int
-        val divisor = args.last() as Int
-        if (divisor == 0) {
+        val dividend = args.first() as Long
+        val divisor = args.last() as Long
+        if (divisor == 0L) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_DIVISION_BY_ZERO)
         }
         return dividend % divisor
@@ -128,7 +128,7 @@ internal object IntegerMaxValue : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>) = Int.MAX_VALUE
+    override fun evaluate(args: List<Any>) = Long.MAX_VALUE
 }
 
 internal object IntegerMinValue : Function() {
@@ -141,7 +141,7 @@ internal object IntegerMinValue : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>) = Int.MIN_VALUE
+    override fun evaluate(args: List<Any>) = Long.MIN_VALUE
 }
 
 internal object IntegerMax : Function() {
@@ -159,8 +159,8 @@ internal object IntegerMax : Function() {
         if (args.isEmpty()) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
-        return args.fold(initial = Int.MIN_VALUE) { max, arg ->
-           max(max, arg as Int)
+        return args.fold(initial = Long.MIN_VALUE) { max, arg ->
+           max(max, arg as Long)
         }
     }
 }
@@ -180,8 +180,8 @@ internal object IntegerMin : Function() {
         if (args.isEmpty()) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
-        return args.fold(initial = Int.MAX_VALUE) { min, arg ->
-            min(min, arg as Int)
+        return args.fold(initial = Long.MAX_VALUE) { min, arg ->
+            min(min, arg as Long)
         }
     }
 }
@@ -197,8 +197,8 @@ internal object IntegerAbs : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val value = args.first() as Int
-        if (value == Int.MIN_VALUE) {
+        val value = args.first() as Long
+        if (value == Long.MIN_VALUE) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_INTEGER_OVERFLOW)
         }
         return abs(value)
@@ -216,7 +216,7 @@ internal object IntegerSignum : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return (args.first() as Int).sign
+        return (args.first() as Long).sign.toLong()
     }
 }
 
@@ -234,12 +234,12 @@ internal object IntegerCopySign : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val magnitude = args.first() as Int
-        val sign = (args.last() as Int).sign
+        val magnitude = args.first() as Long
+        val sign = (args.last() as Long).sign
         if (sign == 0) {
             return magnitude
         }
-        if (magnitude == Int.MIN_VALUE) {
+        if (magnitude == Long.MIN_VALUE) {
             if (sign == -1) {
                 return magnitude
             } else {

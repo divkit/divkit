@@ -29,9 +29,9 @@ class DivBaseBinderTest {
         layoutParams = defaultLayoutParams()
     })
 
-    private val paddingsBottom1 = DivEdgeInsets(bottom = 1.asExpression())
-    private val paddingsBottom2 = DivEdgeInsets(bottom = 1.asExpression())
-    private val paddingsTop = DivEdgeInsets(top = 1.asExpression())
+    private val paddingsBottom1 = DivEdgeInsets(bottom = 1L.asExpression())
+    private val paddingsBottom2 = DivEdgeInsets(bottom = 1L.asExpression())
+    private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
     private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
     private val expressionResolver = mock<ExpressionResolver>()

@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.MaskHelper
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -102,7 +103,7 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.applyFontSize(div: DivInput, resolver: ExpressionResolver) {
-        val fontSize = div.fontSize.evaluate(resolver)
+        val fontSize = div.fontSize.evaluate(resolver).toIntSafely()
         applyFontSize(fontSize, div.fontSizeUnit.evaluate(resolver))
         applyLetterSpacing(div.letterSpacing.evaluate(resolver), fontSize)
     }
@@ -134,7 +135,7 @@ internal class DivInputBinder @Inject constructor(
         addSubscription(lineHeightExpr.observeAndGet(resolver, callback))
     }
 
-    private fun DivInputView.applyLineHeight(lineHeight: Int?, unit: DivSizeUnit) {
+    private fun DivInputView.applyLineHeight(lineHeight: Long?, unit: DivSizeUnit) {
         val height = lineHeight?.unitToPx(resources.displayMetrics, unit)
         setFixedLineHeight(height)
         (this as TextView).applyLineHeight(lineHeight, unit)
@@ -143,7 +144,7 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeMaxVisibleLines(div: DivInput, resolver: ExpressionResolver) {
         val maxLinesExpr = div.maxVisibleLines ?: return
 
-        val callback = { _: Any -> maxLines = maxLinesExpr.evaluate(resolver) }
+        val callback = { _: Any -> maxLines = maxLinesExpr.evaluate(resolver).toIntSafely() }
         addSubscription(maxLinesExpr.observeAndGet(resolver, callback))
     }
 

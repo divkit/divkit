@@ -22,7 +22,7 @@ enum class EvaluableType(internal val typeName: String) {
         @JvmStatic
         inline fun <reified T> of(value: T): EvaluableType {
             return when (value) {
-                is Int -> INTEGER
+                is Long -> INTEGER
                 is Double -> NUMBER
                 is Boolean -> BOOLEAN
                 is String -> STRING

@@ -24,11 +24,11 @@ internal class TwoWayStringVariableBinder @Inject constructor(
 internal class TwoWayIntegerVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
     expressionsRuntimeProvider: ExpressionsRuntimeProvider
-) : TwoWayVariableBinder<Int>(errorCollectors, expressionsRuntimeProvider) {
+) : TwoWayVariableBinder<Long>(errorCollectors, expressionsRuntimeProvider) {
 
-    interface Callbacks : TwoWayVariableBinder.Callbacks<Int>
+    interface Callbacks : TwoWayVariableBinder.Callbacks<Long>
 
-    override fun Int.toStringValue() = toString()
+    override fun Long.toStringValue() = toString()
 }
 
 internal abstract class TwoWayVariableBinder<T>(

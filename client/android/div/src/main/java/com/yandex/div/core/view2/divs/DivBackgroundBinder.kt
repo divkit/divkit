@@ -17,6 +17,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -215,7 +216,7 @@ internal class DivBackgroundBinder @Inject constructor(
         resolver: ExpressionResolver
     ): DivBackgroundState = when (this) {
         is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
-            angle = value.angle.evaluate(resolver),
+            angle = value.angle.evaluate(resolver).toIntSafely(),
             colors = value.colors.evaluate(resolver),
         )
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
@@ -239,10 +240,10 @@ internal class DivBackgroundBinder @Inject constructor(
         is DivBackground.NinePatch -> DivBackgroundState.NinePatch(
             imageUrl = value.imageUrl.evaluate(resolver),
             insets= Rect(
-                value.insets.left.evaluate(resolver),
-                value.insets.top.evaluate(resolver),
-                value.insets.right.evaluate(resolver),
-                value.insets.bottom.evaluate(resolver)
+                    value.insets.left.evaluate(resolver).toIntSafely(),
+                    value.insets.top.evaluate(resolver).toIntSafely(),
+                    value.insets.right.evaluate(resolver).toIntSafely(),
+                    value.insets.bottom.evaluate(resolver).toIntSafely()
             )
         )
     }
@@ -272,7 +273,7 @@ internal class DivBackgroundBinder @Inject constructor(
     }
 
     private fun DivFilter.toBackgroundState(resolver: ExpressionResolver) = when (this) {
-        is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver), this)
+        is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver).toIntSafely(), this)
     }
 
     private sealed class DivBackgroundState {

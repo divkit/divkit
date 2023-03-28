@@ -617,7 +617,7 @@ class TokenizerTest {
             ?: throw EvaluableException("Non empty token list is expected for adding unary minus.")
         return if (first is Token.Operand.Literal.Num) {
             val negativeValue = when (first.value) {
-                is Int -> first.value.unaryMinus()
+                is Long -> first.value.unaryMinus()
                 is Double -> first.value.unaryMinus()
                 else -> throw EvaluableException("Unknown type of number ${first.value}.")
             }
@@ -718,7 +718,13 @@ class TokenizerTest {
         private val ts = Token.StringTemplate.Start
         private val te = Token.StringTemplate.End
 
-        private fun n(value: Number) = Token.Operand.Literal.Num(value)
+        private fun n(value: Number): Token.Operand.Literal {
+            return if (value is Int) {
+                Token.Operand.Literal.Num(value.toLong())
+            } else {
+                Token.Operand.Literal.Num(value)
+            }
+        }
         private fun s(value: String) = Token.Operand.Literal.Str(value)
         private fun b(value: Boolean) = Token.Operand.Literal.Bool(value)
         private fun v(value: String) = Token.Operand.Variable(value)

@@ -5,8 +5,8 @@ import com.yandex.div.internal.parser.JsonParser
 import com.yandex.div.internal.parser.ListValidator
 import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
+import com.yandex.div.internal.parser.TYPE_HELPER_COLOR
 import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
-import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ConstantExpressionList
@@ -72,7 +72,7 @@ internal data class ShimmerData(
                             alwaysValid(),
                             logger,
                             env,
-                            TYPE_HELPER_INT
+                            TYPE_HELPER_COLOR
                     ) ?: DEFAULT_COLORS,
                     locations = JsonParser.readOptionalExpressionList(
                             json,

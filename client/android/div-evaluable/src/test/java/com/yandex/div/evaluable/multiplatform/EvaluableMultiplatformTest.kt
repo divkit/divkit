@@ -192,7 +192,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 VALUE_TYPE_STRING -> json.getString(VALUE_FIELD)
                 VALUE_TYPE_URL -> TestUrl(json.getString(VALUE_FIELD))
                 VALUE_TYPE_COLOR -> Color.parse(json.getString(VALUE_FIELD))
-                VALUE_TYPE_INTEGER -> json.getInt(VALUE_FIELD)
+                VALUE_TYPE_INTEGER -> json.getLong(VALUE_FIELD)
                 VALUE_TYPE_DECIMAL -> json.getDouble(VALUE_FIELD)
                 VALUE_TYPE_BOOLEAN,
                 VALUE_TYPE_BOOL_INT -> {

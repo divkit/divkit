@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.gallery
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div2.DivGallery
@@ -14,7 +15,7 @@ internal class DivGridLayoutManager(
     override val div: DivGallery,
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL
 ) : StaggeredGridLayoutManager (
-    div.columnCount?.evaluate(divView.expressionResolver) ?: 1,
+        div.columnCount?.evaluate(divView.expressionResolver)?.toIntSafely() ?: 1,
     orientation
 ), DivGalleryItemHelper {
 

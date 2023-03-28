@@ -72,7 +72,7 @@ public interface DivViewFacade {
      * Switches view to state without saving state into cache
      * @param id in divState
      */
-    default void switchToState(@IntRange(from = 0) int id) {
+    default void switchToState(@IntRange(from = 0) long id) {
         switchToState(id, true);
     }
 
@@ -82,7 +82,7 @@ public interface DivViewFacade {
      * @param temporary true,  if updated state should be kept only in in-memory storage
      *                  false, if updated state should be saved into cache
      */
-    void switchToState(@IntRange(from = 0) int id, boolean temporary);
+    void switchToState(@IntRange(from = 0) long id, boolean temporary);
 
     /**
      * Switches view to initial state.
@@ -132,7 +132,7 @@ public interface DivViewFacade {
     /**
      * @return Current div state id
      */
-    int getCurrentStateId();
+    long getCurrentStateId();
 
     /**
      * @return DivViewState from DivStateManager

@@ -52,7 +52,7 @@ class DivVisibilityActionTrackerTest {
     private val action3 = DivVisibilityAction(logId = "visibility_action3")
     private val lottaActions = listOf(action1, action2, action3)
     private val actionsWithThreeDifferentDelays = Array(6) {
-        val delay = when {
+        val delay: Long = when {
             it < 2 -> 100
             it < 4 -> 200
             else -> 300

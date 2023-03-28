@@ -23,6 +23,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -78,6 +79,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -161,6 +163,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -216,6 +219,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -243,6 +247,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -270,6 +275,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -297,6 +303,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -310,6 +317,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -379,6 +387,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -420,6 +429,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -433,6 +443,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -474,6 +485,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -515,6 +527,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -528,22 +541,9 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
-      ]
-    },
-    {
-      "name": "maxInteger() => 2147483647",
-      "expression": "@{maxInteger()}",
-      "deprecated": true,
-      "description": "The size of integer was increased.",
-      "expected": {
-        "type": "integer",
-        "value": 2147483647
-      },
-      "variables": [],
-      "platforms": [
-        "android"
       ]
     },
     {
@@ -555,22 +555,9 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
-      ]
-    },
-    {
-      "name": "minInteger() => -2147483648",
-      "expression": "@{minInteger()}",
-      "deprecated": true,
-      "description": "The size of integer was increased.",
-      "expected": {
-        "type": "integer",
-        "value": -2147483648
-      },
-      "variables": [],
-      "platforms": [
-        "android"
       ]
     },
     {
@@ -582,6 +569,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -636,6 +624,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -663,22 +652,9 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
-      ]
-    },
-    {
-      "name": "abs(-2147483648) => error",
-      "expression": "@{abs(-2147483648)}",
-      "deprecated": true,
-      "description": "The size of integer was increased.",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [abs(-2147483648)]. Integer overflow."
-      },
-      "variables": [],
-      "platforms": [
-        "android"
       ]
     },
     {
@@ -690,6 +666,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -835,20 +812,6 @@
       ]
     },
     {
-      "name": "copySign(-2147483648, 1) => error",
-      "expression": "@{copySign(-2147483648, 1)}",
-      "deprecated": true,
-      "description": "The size of integer was increased.",
-      "expected": {
-        "type": "error",
-        "value": "Failed to evaluate [copySign(-2147483648, 1)]. Integer overflow."
-      },
-      "variables": [],
-      "platforms": [
-        "android"
-      ]
-    },
-    {
       "name": "copySign(-9223372036854775808, 1) => error",
       "expression": "@{copySign(-9223372036854775808, 1)}",
       "expected": {
@@ -857,6 +820,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -884,6 +848,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

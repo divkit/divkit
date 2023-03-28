@@ -214,7 +214,7 @@ class EvaluableTest {
     // Variables Test
     @Test
     fun `variables # Int variable is Int`() {
-        setVariable(TEST_VARIABLE_1, 1)
+        setVariable(TEST_VARIABLE_1, 1L)
         assertIntExpression(1, TEST_VARIABLE_1)
     }
 
@@ -256,31 +256,31 @@ class EvaluableTest {
 
     @Test
     fun `equality # Int literal equals the same Int variable`() {
-        setVariable(TEST_VARIABLE_1, 5)
+        setVariable(TEST_VARIABLE_1, 5L)
         assertEqualityExpression(true, "5", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, 15)
+        setVariable(TEST_VARIABLE_1, 15L)
         assertEqualityExpression(true, "15", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, 155)
+        setVariable(TEST_VARIABLE_1, 155L)
         assertEqualityExpression(true, "155", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, -958)
+        setVariable(TEST_VARIABLE_1, -958L)
         assertEqualityExpression(true, "-958", TEST_VARIABLE_1)
     }
 
     @Test
     fun `equality # different Int literal and variable not equals`() {
-        setVariable(TEST_VARIABLE_1, 7)
+        setVariable(TEST_VARIABLE_1, 7L)
         assertEqualityExpression(false, "5", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, 25)
+        setVariable(TEST_VARIABLE_1, 25L)
         assertEqualityExpression(false, "15", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, 15)
+        setVariable(TEST_VARIABLE_1, 15L)
         assertEqualityExpression(false, "155", TEST_VARIABLE_1)
 
-        setVariable(TEST_VARIABLE_1, 958)
+        setVariable(TEST_VARIABLE_1, 958L)
         assertEqualityExpression(false, "-958", TEST_VARIABLE_1)
     }
 
@@ -389,7 +389,7 @@ class EvaluableTest {
 
     @Test
     fun `comparison # Int literal and variable comparison test`() {
-        setVariable(TEST_VARIABLE_1, 1)
+        setVariable(TEST_VARIABLE_1, 1L)
         assertComparisonExpression(false, false, TEST_VARIABLE_1, "0")
         assertComparisonExpression(false, true, "1", TEST_VARIABLE_1)
         assertComparisonExpression(true, false, TEST_VARIABLE_1, "10")
@@ -558,8 +558,8 @@ class EvaluableTest {
 
     @Test
     fun `variables do not affect caching`() {
-        setVariable(VAR_A, 1)
-        setVariable(VAR_B, 2)
+        setVariable(VAR_A, 1L)
+        setVariable(VAR_B, 2L)
         assertEvaluableIsOrNotCacheable("sum($VAR_A,$VAR_B)", true)
         assertEvaluableIsOrNotCacheable("$VAR_A + getYear(nowLocal())", false)
     }
@@ -583,7 +583,7 @@ class EvaluableTest {
     // Stress tests
     @Test(expected = EvaluableException::class)
     fun `errors # invalid Int literal`() {
-        assertIntExpression(Int.MAX_VALUE, "9999999999999999")
+        assertIntExpression(Long.MAX_VALUE, "999999999999999999999")
     }
 
     @Test(expected = EvaluableException::class)
@@ -594,7 +594,7 @@ class EvaluableTest {
 
     @Test(expected = EvaluableException::class)
     fun `errors # invalid negative Int literal`() {
-        assertIntExpression(Int.MIN_VALUE, "-9999999999999999")
+        assertIntExpression(Long.MIN_VALUE, "-999999999999999999999")
     }
 
     @Test(expected = EvaluableException::class)
@@ -681,14 +681,14 @@ class EvaluableTest {
         assertEquals(expected, actual as Boolean)
     }
 
-    private fun assertIntExpression(expected: Int, expr: String) {
+    private fun assertIntExpression(expected: Long, expr: String) {
         assertIntTemplate(expected, "@{$expr}")
     }
 
-    private fun assertIntTemplate(expected: Int, template: String) {
+    private fun assertIntTemplate(expected: Long, template: String) {
         val actual: Any = evaluator.eval(Evaluable.prepare(template))
-        assert(actual is Int)
-        assertEquals(expected, actual as Int)
+        assert(actual is Long)
+        assertEquals(expected, actual as Long)
     }
 
     private fun assertDecimalExpression(expected: Double, expr: String) {

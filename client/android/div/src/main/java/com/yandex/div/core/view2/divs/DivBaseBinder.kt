@@ -135,7 +135,7 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         div: DivBase,
-        callback: (Int) -> Unit) {
+        callback: (Long) -> Unit) {
         if (div.width is DivSize.Fixed) {
             subscriber.addSubscription(
                 (div.width.value() as DivFixedSize).value.observe(resolver, callback))

@@ -21,6 +21,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -156,7 +157,7 @@ internal class DivPagerBinder @Inject constructor(
             }
             changePageCallbackForState = UpdateStateChangePageCallback(id, state)
             view.viewPager.registerOnPageChangeCallback(changePageCallbackForState!!)
-            view.currentItem = pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver)
+            view.currentItem = pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
         }
 
         expressionSubscriber.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->

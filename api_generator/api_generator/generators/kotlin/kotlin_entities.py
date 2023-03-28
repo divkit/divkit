@@ -575,8 +575,10 @@ class KotlinPropertyType(PropertyType):
                 return f'{EXPRESSION_TYPE_NAME}.constant({value})'
             return value
 
-        if isinstance(self, (Int, Bool, BoolInt)):
+        if isinstance(self, (Bool, BoolInt)):
             return wrap(default_value)
+        elif isinstance(self, Int):
+            return wrap(str(default_value) if 'L' in str(default_value) else f'{default_value}L')
         elif isinstance(self, Double):
             return wrap(str(default_value) if '.' in str(default_value) else f'{default_value}.0')
         elif isinstance(self, Color):
@@ -667,8 +669,10 @@ class KotlinPropertyType(PropertyType):
                                 prefixed: bool,
                                 mode: GenerationMode,
                                 supports_expressions: bool) -> str:
-        if isinstance(self, (Int, Color)):
+        if isinstance(self, Color):
             return 'Int'
+        if isinstance(self, Int):
+            return 'Long'
         elif isinstance(self, Double):
             return 'Double'
         elif isinstance(self, (Bool, BoolInt)):
@@ -816,7 +820,7 @@ class KotlinPropertyType(PropertyType):
             scheme_list = ', '.join(map(lambda s: f'"{s}"', self.schemes))
             return f'{{ it.hasScheme(listOf({scheme_list})) }}'
         elif isinstance(self, Int):
-            return _number_validator_decl('Int', self.constraint)
+            return _number_validator_decl('Long', self.constraint)
         elif isinstance(self, Double):
             return _number_validator_decl('Double', self.constraint)
         else:

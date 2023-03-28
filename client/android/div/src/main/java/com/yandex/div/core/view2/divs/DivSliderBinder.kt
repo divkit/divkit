@@ -20,7 +20,7 @@ import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
 import kotlin.math.max
-import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 private const val SLIDER_TICKS_OVERLAP_WARNING = "Slider ticks overlap each other."
 
@@ -81,15 +81,15 @@ internal class DivSliderBinder @Inject constructor(
     private fun DivSliderView.observeThumbValue(div: DivSlider, divView: Div2View) {
         val variableName = div.thumbValueVariable ?: return
         val callbacks = object : TwoWayIntegerVariableBinder.Callbacks {
-            override fun onVariableChanged(value: Int?) {
+            override fun onVariableChanged(value: Long?) {
                 setThumbValue(value?.toFloat() ?: 0f, false)
             }
 
-            override fun setViewStateChangeListener(valueUpdater: (Int) -> Unit) {
+            override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 addOnThumbChangedListener(object : SliderView.ChangedListener {
                     override fun onThumbValueChanged(value: Float) {
                         logger.logSliderDrag(divView, this@observeThumbValue, value)
-                        valueUpdater(value.roundToInt())
+                        valueUpdater(value.roundToLong())
                     }
                 })
             }
@@ -184,15 +184,15 @@ internal class DivSliderBinder @Inject constructor(
 
     private fun DivSliderView.observeThumbSecondaryValue(variableName: String, divView: Div2View) {
         val callbacks = object : TwoWayIntegerVariableBinder.Callbacks {
-            override fun onVariableChanged(value: Int?) {
+            override fun onVariableChanged(value: Long?) {
                 setThumbSecondaryValue(value?.toFloat(), false)
             }
 
-            override fun setViewStateChangeListener(valueUpdater: (Int) -> Unit) {
+            override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 addOnThumbChangedListener(object : SliderView.ChangedListener {
                     override fun onThumbSecondaryValueChanged(value: Float?) {
                         logger.logSliderDrag(divView, this@observeThumbSecondaryValue, value)
-                        valueUpdater(value?.roundToInt() ?: 0)
+                        valueUpdater(value?.roundToLong() ?: 0)
                     }
                 })
             }

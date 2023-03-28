@@ -7,8 +7,8 @@ import com.yandex.div.evaluable.REASON_CONVERT_TO_INTEGER
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 
 private const val FUNCTION_NAME = "toInteger"
-private const val NUMBER_MIN_INTEGER = Integer.MIN_VALUE.toDouble()
-private const val NUMBER_MAX_INTEGER = Integer.MAX_VALUE.toDouble()
+private const val NUMBER_MIN_INTEGER = Long.MIN_VALUE.toDouble()
+private const val NUMBER_MAX_INTEGER = Long.MAX_VALUE.toDouble()
 
 internal object NumberToInteger : Function() {
 
@@ -25,7 +25,7 @@ internal object NumberToInteger : Function() {
         if (numberValue < NUMBER_MIN_INTEGER || numberValue > NUMBER_MAX_INTEGER) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_INTEGER)
         }
-        return numberValue.toInt()
+        return numberValue.toLong()
     }
 }
 
@@ -41,7 +41,7 @@ internal object BooleanToInteger : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val booleanValue = args.first() as Boolean
-        return if (booleanValue) 1 else 0
+        return if (booleanValue) 1L else 0L
     }
 }
 
@@ -58,7 +58,7 @@ internal object StringToInteger : Function() {
     override fun evaluate(args: List<Any>): Any {
         val stringValue = args.first() as String
         return try {
-            Integer.parseInt(stringValue)
+            stringValue.toLong()
         } catch (nfe: NumberFormatException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_INTEGER, nfe)
         }

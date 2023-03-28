@@ -43,20 +43,6 @@
             ]
         },
         {
-            "name": "unsigned max integer literal (deprecated)",
-            "expression": "@{2147483647}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "integer",
-                "value": 2147483647
-            },
-            "variables": [],
-            "platforms": [
-                "android"
-            ]
-        },
-        {
             "name": "unsigned max integer literal",
             "expression": "@{toString(9223372036854775807)}",
             "expected": {
@@ -65,22 +51,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "positive max integer literal (deprecated)",
-            "expression": "@{+2147483647}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "integer",
-                "value": 2147483647
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -92,22 +65,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "negative min integer literal (deprecated)",
-            "expression": "@{-2147483648}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "integer",
-                "value": -2147483648
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -119,22 +79,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "value in brackets is overflowed (deprecated)",
-            "expression": "@{-(2147483648)}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "error",
-                "value": "Value 2147483648 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -146,22 +93,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "unsigned overflow integer literal (deprecated)",
-            "expression": "@{2147483648}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "error",
-                "value": "Value 2147483648 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -173,22 +107,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "positive overflow integer literal (deprecated)",
-            "expression": "@{+2147483648}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "error",
-                "value": "Value 2147483648 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -200,22 +121,9 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
-            ]
-        },
-        {
-            "name": "negative overflow integer literal (deprecated)",
-            "expression": "@{-2147483649}",
-            "deprecated": true,
-            "description": "The size of integer was increased.",
-            "expected": {
-                "type": "error",
-                "value": "Value -2147483649 can't be converted to Integer type."
-            },
-            "variables": [],
-            "platforms": [
-                "android"
             ]
         },
         {
@@ -227,6 +135,7 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]

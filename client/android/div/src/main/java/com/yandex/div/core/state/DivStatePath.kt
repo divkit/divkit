@@ -15,7 +15,7 @@ import java.lang.Math.min
  * ignoring other Divs.
  */
 data class DivStatePath @VisibleForTesting internal constructor(
-    val topLevelStateId: Int,
+    val topLevelStateId: Long,
     private val states: MutableList<Pair<String, String>> = mutableListOf()
 ) {
 
@@ -89,7 +89,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
             val list = mutableListOf<Pair<String, String>>()
             val split = path.split("/")
             val topLevelStateId = try {
-                split[0].toInt()
+                split[0].toLong()
             } catch (e: NumberFormatException) {
                 throw PathFormatException("Top level id must be number: $path", e)
             }
@@ -102,7 +102,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
             return DivStatePath(topLevelStateId, list)
         }
 
-        fun fromState(stateId: Int) = DivStatePath(stateId, mutableListOf())
+        fun fromState(stateId: Long) = DivStatePath(stateId, mutableListOf())
 
         /**
          * Search for shared ancestor for two [DivStatePath]. So path equal to
@@ -127,7 +127,7 @@ data class DivStatePath @VisibleForTesting internal constructor(
         internal fun alphabeticalComparator(): Comparator<DivStatePath> {
             return Comparator { lhs, rhs ->
                 if (lhs.topLevelStateId != rhs.topLevelStateId) {
-                    return@Comparator lhs.topLevelStateId - rhs.topLevelStateId
+                    return@Comparator (lhs.topLevelStateId - rhs.topLevelStateId).toInt()
                 }
 
                 val minSize = min(lhs.states.size, rhs.states.size)

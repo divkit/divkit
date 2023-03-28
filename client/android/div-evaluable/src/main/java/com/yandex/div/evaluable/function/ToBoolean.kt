@@ -19,9 +19,9 @@ internal object IntegerToBoolean : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return when (args.first() as Int) {
-            0 -> false
-            1 -> true
+        return when (args.first() as Long) {
+            0L -> false
+            1L -> true
             else -> throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_BOOLEAN)
         }
     }

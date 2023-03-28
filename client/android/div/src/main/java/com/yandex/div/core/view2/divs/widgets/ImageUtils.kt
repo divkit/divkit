@@ -9,6 +9,7 @@ import android.renderscript.ScriptIntrinsicBlur
 import android.view.View
 import androidx.core.view.doOnLayout
 import com.yandex.div.core.dagger.Div2Component
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBlur
@@ -47,7 +48,7 @@ internal fun Bitmap.applyFilters(
 }
 
 internal fun Bitmap.getBlurredBitmap(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver): Bitmap {
-    var radius = blur.radius.evaluate(resolver)
+    var radius = blur.radius.evaluate(resolver).toIntSafely()
     if (radius == 0) {
         return this
     }

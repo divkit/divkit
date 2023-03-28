@@ -80,6 +80,6 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
     private companion object {
         private const val TAG = "DivVisibilityActionDispatcher"
-        private const val LIMITLESS_LOG = 0
+        private const val LIMITLESS_LOG = 0L
     }
 }

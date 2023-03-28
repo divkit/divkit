@@ -37,6 +37,8 @@ private val metrics = Resources.getSystem().displayMetrics
 @Px
 fun dpToPx(@Dimension(unit = Dimension.DP) value: Int): Int = (value * metrics.density).roundToInt()
 @Px
+fun dpToPx(@Dimension(unit = Dimension.DP) value: Long): Int = (value * metrics.density).roundToInt()
+@Px
 fun dpToPx(@Dimension(unit = Dimension.DP) value: Float): Float = value * metrics.density
 
 @Px

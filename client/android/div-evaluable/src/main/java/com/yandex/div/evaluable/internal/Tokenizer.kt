@@ -343,7 +343,7 @@ internal object Tokenizer {
                 state.part(start, state.index)
             }
             val value = try {
-                valueStr.toInt()
+                valueStr.toLong()
             } catch (e: Exception) {
                 throw EvaluableException("Value $valueStr can't be converted to Integer type.")
             }

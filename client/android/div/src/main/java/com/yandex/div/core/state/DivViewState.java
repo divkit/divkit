@@ -10,20 +10,20 @@ import java.util.Map;
  */
 public class DivViewState {
 
-    private final int mCurrentDivStateId;
+    private final long mCurrentDivStateId;
     @NonNull
     private final Map<String, BlockState> mBlockStates;
 
-    DivViewState(int currentDivStateId) {
+    DivViewState(long currentDivStateId) {
         this(currentDivStateId, new ArrayMap<>());
     }
 
-    DivViewState(int currentDivStateId, @NonNull Map<String, BlockState> blockStates) {
+    DivViewState(long currentDivStateId, @NonNull Map<String, BlockState> blockStates) {
         mCurrentDivStateId = currentDivStateId;
         mBlockStates = blockStates;
     }
 
-    public int getCurrentDivStateId() {
+    public long getCurrentDivStateId() {
         return mCurrentDivStateId;
     }
 

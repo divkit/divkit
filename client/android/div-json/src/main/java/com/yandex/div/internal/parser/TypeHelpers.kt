@@ -28,9 +28,9 @@ val TYPE_HELPER_BOOLEAN = object : TypeHelper<Boolean> {
 }
 
 @JvmField
-val TYPE_HELPER_INT = object : TypeHelper<Int> {
-    override val typeDefault = 0
-    override fun isTypeValid(value: Any) = value is Int
+val TYPE_HELPER_INT = object : TypeHelper<Long> {
+    override val typeDefault = 0L
+    override fun isTypeValid(value: Any) = value is Long
 }
 
 @JvmField

@@ -20,7 +20,7 @@ internal object StringLength : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        return (args.first() as String).length
+        return (args.first() as String).length.toLong()
     }
 }
 
@@ -60,13 +60,13 @@ internal object StringSubstring : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val str = args[0] as String
-        val startIndex = args[1] as Int
-        val endIndex = args[2] as Int
+        val startIndex = args[1] as Long
+        val endIndex = args[2] as Long
         if (startIndex < 0 || endIndex > str.length)
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_OUT_OF_BOUNDS)
         if (startIndex > endIndex)
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_INDEXES_ORDER)
-        return str.substring(startIndex, endIndex)
+        return str.substring(startIndex.toInt(), endIndex.toInt())
     }
 }
 
@@ -109,7 +109,7 @@ internal object StringIndex : Function() {
     override fun evaluate(args: List<Any>): Any {
         val str = args[0] as String
         val substring = args[1] as String
-        return str.indexOf(substring, ignoreCase = false)
+        return str.indexOf(substring, ignoreCase = false).toLong()
     }
 }
 
@@ -129,7 +129,7 @@ internal object StringLastIndex : Function() {
     override fun evaluate(args: List<Any>): Any {
         val str = args[0] as String
         val substring = args[1] as String
-        return str.lastIndexOf(substring, ignoreCase = false)
+        return str.lastIndexOf(substring, ignoreCase = false).toLong()
     }
 }
 
@@ -255,12 +255,12 @@ internal object PadStartString : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val string = args[0] as String
-        val length = args[1] as Int
+        val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return buildRepeatableString(leftForRequired, padStr) + string
+        return buildRepeatableString(leftForRequired.toInt(), padStr) + string
     }
 }
 
@@ -277,13 +277,13 @@ internal object PadStartInteger : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val string = (args[0] as Int).toString()
-        val length = args[1] as Int
+        val string = (args[0] as Long).toString()
+        val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return buildRepeatableString(leftForRequired, padStr) + string
+        return buildRepeatableString(leftForRequired.toInt(), padStr) + string
     }
 }
 
@@ -301,12 +301,12 @@ internal object PadEndString : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val string = args[0] as String
-        val length = args[1] as Int
+        val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return string + buildRepeatableString(leftForRequired, padStr)
+        return string + buildRepeatableString(leftForRequired.toInt(), padStr)
     }
 }
 
@@ -323,13 +323,13 @@ internal object PadEndInteger : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val string = (args[0] as Int).toString()
-        val length = args[1] as Int
+        val string = (args[0] as Long).toString()
+        val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return string + buildRepeatableString(leftForRequired, padStr)
+        return string + buildRepeatableString(leftForRequired.toInt(), padStr)
     }
 }
 

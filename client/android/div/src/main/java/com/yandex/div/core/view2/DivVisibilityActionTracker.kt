@@ -74,7 +74,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         }
 
         visibilityActions.groupBy { action: DivVisibilityAction ->
-            return@groupBy action.visibilityDuration.evaluate(scope.expressionResolver).toLong()
+            return@groupBy action.visibilityDuration.evaluate(scope.expressionResolver)
         }.forEach { entry: Map.Entry<Long, List<DivVisibilityAction>> ->
             val (delayMs, actions) = entry
             val actionsToBeTracked = actions.filterTo(ArrayList(actions.size)) { action ->

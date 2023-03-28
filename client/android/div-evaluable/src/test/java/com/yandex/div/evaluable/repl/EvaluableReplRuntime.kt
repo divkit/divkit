@@ -100,7 +100,7 @@ internal object EvaluableReplRuntime {
             ?: throw RuntimeException("Unknown type $type.")
         return try {
             val convertedValue = when (evaluableType) {
-                EvaluableType.INTEGER -> value.toInt()
+                EvaluableType.INTEGER -> value.toLong()
                 EvaluableType.NUMBER -> value.toDouble()
                 EvaluableType.BOOLEAN -> value.toBoolean()
                 EvaluableType.STRING -> value

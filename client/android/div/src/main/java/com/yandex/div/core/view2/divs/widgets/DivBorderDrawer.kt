@@ -17,10 +17,9 @@ import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.util.getCornerRadii
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.ShadowCache
-import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.core.view2.divs.dpToPxF
-import com.yandex.div.core.view2.divs.spToPx
+import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -308,8 +307,8 @@ internal fun DivStroke?.widthPx(expressionResolver: ExpressionResolver, metrics:
     return when(this?.unit?.evaluate(expressionResolver)) {
         DivSizeUnit.DP -> width.evaluate(expressionResolver).dpToPx(metrics)
         DivSizeUnit.SP -> width.evaluate(expressionResolver).spToPx(metrics)
-        DivSizeUnit.PX -> width.evaluate(expressionResolver)
-        else -> this?.width?.evaluate(expressionResolver) ?: 0
+        DivSizeUnit.PX -> width.evaluate(expressionResolver).toIntSafely()
+        else -> this?.width?.evaluate(expressionResolver)?.toIntSafely() ?: 0
     }
 }
 

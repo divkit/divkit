@@ -23,6 +23,7 @@ import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -166,8 +167,8 @@ internal class DivTextBinder @Inject constructor(
 
     private fun DivLineHeightTextView.observeMaxLines(
         resolver: ExpressionResolver,
-        maxLines: Expression<Int>?,
-        minHiddenLines: Expression<Int>?
+        maxLines: Expression<Long>?,
+        minHiddenLines: Expression<Long>?
     ) {
         applyMaxLines(resolver, maxLines, minHiddenLines)
 
@@ -178,8 +179,8 @@ internal class DivTextBinder @Inject constructor(
 
     private fun DivLineHeightTextView.applyMaxLines(
         resolver: ExpressionResolver,
-        maxLinesExpr: Expression<Int>?,
-        minHiddenLinesExpr: Expression<Int>?
+        maxLinesExpr: Expression<Long>?,
+        minHiddenLinesExpr: Expression<Long>?
     ) {
         adaptiveMaxLines?.reset()
 
@@ -187,10 +188,13 @@ internal class DivTextBinder @Inject constructor(
         val minHiddenLines = minHiddenLinesExpr?.evaluate(resolver)
         if (maxLines != null && minHiddenLines != null) {
             adaptiveMaxLines = AdaptiveMaxLines(this).also {
-                it.apply(AdaptiveMaxLines.Params(maxLines = maxLines, minHiddenLines = minHiddenLines))
+                it.apply(AdaptiveMaxLines.Params(
+                        maxLines = maxLines.toIntSafely(),
+                        minHiddenLines = minHiddenLines.toIntSafely()
+                ))
             }
         } else {
-            this.maxLines = maxLines ?: Integer.MAX_VALUE
+            this.maxLines = maxLines?.toIntSafely() ?: Integer.MAX_VALUE
         }
     }
 
@@ -203,7 +207,7 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun DivLineHeightTextView.applyFontSize(resolver: ExpressionResolver, div: DivText) {
-        val fontSize = div.fontSize.evaluate(resolver)
+        val fontSize = div.fontSize.evaluate(resolver).toIntSafely()
         applyFontSize(fontSize, div.fontSizeUnit.evaluate(resolver))
         applyLetterSpacing(div.letterSpacing.evaluate(resolver), fontSize)
     }
@@ -540,7 +544,7 @@ internal class DivTextBinder @Inject constructor(
         private val textView: TextView,
         private val resolver: ExpressionResolver,
         private val text: String,
-        private val fontSize: Int,
+        private val fontSize: Long,
         private val fontFamily: DivFontFamily,
         private val ranges: List<DivText.Range>?,
         private val actions: List<DivAction>?,
@@ -567,7 +571,7 @@ internal class DivTextBinder @Inject constructor(
             if (textView is DivLineHeightTextView) textView.textRoundedBgHelper?.invalidateSpansCache()
             ranges?.forEach { item -> sb.addTextRange(item) }
             images.reversed().forEach {
-                sb.insert(it.start.evaluate(resolver), "#")
+                sb.insert(it.start.evaluate(resolver).toIntSafely(), "#")
             }
 
             images.forEachIndexed { index, image ->
@@ -575,7 +579,8 @@ internal class DivTextBinder @Inject constructor(
                 val height = image.height.toPx(metrics, resolver)
 
                 val offsetY = if (sb.isNotEmpty()) {
-                    val charIndex = if (image.start.evaluate(resolver) == 0) 0 else image.start.evaluate(resolver) - 1
+                    val start = image.start.evaluate(resolver).toIntSafely()
+                    val charIndex = if (start == 0) 0 else start - 1
                     val sizeSpans = sb.getSpans(charIndex, charIndex + 1, AbsoluteSizeSpan::class.java)
                     val paint = textView.paint
                     val scale = if (sizeSpans != null && sizeSpans.isNotEmpty()) {
@@ -589,7 +594,7 @@ internal class DivTextBinder @Inject constructor(
 
                 val span = ImagePlaceholderSpan(width, height, offsetY)
 
-                val start = image.start.evaluate(resolver) + index
+                val start = image.start.evaluate(resolver).toIntSafely() + index
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
 
@@ -607,8 +612,8 @@ internal class DivTextBinder @Inject constructor(
         }
 
         private fun SpannableStringBuilder.addTextRange(range: DivText.Range) {
-            val start = range.start.evaluate(resolver).coerceAtMost(text.length)
-            val end = range.end.evaluate(resolver).coerceAtMost(text.length)
+            val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
+            val end = range.end.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
             if (start > end) return
 
             range.fontSize?.evaluate(resolver)?.let {
@@ -672,7 +677,8 @@ internal class DivTextBinder @Inject constructor(
         ): BitmapImageSpan {
             val imageHeight = range.height.toPx(metrics, resolver)
             val offsetY = if (!isEmpty()) {
-                val charIndex = if (range.start.evaluate(resolver) == 0) 0 else range.start.evaluate(resolver) - 1
+                val start = range.start.evaluate(resolver).toIntSafely()
+                val charIndex = if (start == 0) 0 else start - 1
                 val sizeSpans = getSpans(charIndex, charIndex + 1, AbsoluteSizeSpan::class.java)
                 val paint = textView.paint
                 val scale = if (sizeSpans != null && sizeSpans.isNotEmpty()) {
@@ -702,7 +708,7 @@ internal class DivTextBinder @Inject constructor(
                 super.onSuccess(cachedBitmap)
                 val image = images[index]
                 val span = sb.makeImageSpan(image, cachedBitmap.bitmap)
-                val start = image.start.evaluate(resolver) + index
+                val start = image.start.evaluate(resolver).toIntSafely() + index
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                 textObserver?.invoke(sb)

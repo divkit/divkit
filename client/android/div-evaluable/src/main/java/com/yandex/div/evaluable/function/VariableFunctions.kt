@@ -19,8 +19,8 @@ internal class GetIntegerValue(override val variableProvider: VariableProvider) 
 
     override fun evaluate(args: List<Any>): Any {
         val variableName = args[0] as String
-        val fallbackValue = args[1] as Int
-        val variableValue = variableProvider.get(variableName) as? Int
+        val fallbackValue = args[1] as Long
+        val variableValue = variableProvider.get(variableName) as? Long
 
         return  variableValue ?: fallbackValue
     }
@@ -43,7 +43,7 @@ internal class GetNumberValue(override val variableProvider: VariableProvider) :
     override fun evaluate(args: List<Any>): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Number
-        val variableValue = if (variableProvider.get(variableName) is Int)
+        val variableValue = if (variableProvider.get(variableName) is Long)
             null
         else
             variableProvider.get(variableName) as? Number

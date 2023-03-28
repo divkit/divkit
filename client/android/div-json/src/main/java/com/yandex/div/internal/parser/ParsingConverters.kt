@@ -40,7 +40,7 @@ val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
 }
 val NUMBER_TO_DOUBLE: Converter<Number, Double> = { n: Number -> n.toDouble() }
 
-val NUMBER_TO_INT: Converter<Number, Int> = { n: Number -> n.toInt() }
+val NUMBER_TO_INT: Converter<Number, Long> = { n: Number -> n.toLong() }
 
 fun Number.toBoolean(): Boolean? {
     return when (toInt()) {

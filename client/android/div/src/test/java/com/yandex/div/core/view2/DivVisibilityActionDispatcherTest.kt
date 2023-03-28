@@ -58,7 +58,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching is limited by action`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 2.asExpression())
+        val action = DivVisibilityAction(logId = "action", logLimit = 2L.asExpression())
 
         repeat(4) {
             dispatcher.dispatchAction(divView, mock(), action)
@@ -69,7 +69,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching restores after limit reset`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 2.asExpression())
+        val action = DivVisibilityAction(logId = "action", logLimit = 2L.asExpression())
 
         repeat(4) {
             dispatcher.dispatchAction(divView, mock(), action)
@@ -82,7 +82,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `action dispatching is unlimited by action`() {
-        val action = DivVisibilityAction(logId = "action", logLimit = 0.asExpression())
+        val action = DivVisibilityAction(logId = "action", logLimit = 0L.asExpression())
 
         repeat(10) {
             dispatcher.dispatchAction(divView, mock(), action)

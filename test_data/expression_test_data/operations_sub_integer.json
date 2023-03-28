@@ -23,6 +23,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -78,22 +79,9 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
-      ]
-    },
-    {
-      "name": "1 - 2147483648 => error",
-      "expression": "@{1 - 2147483648}",
-      "deprecated": true,
-      "description": "The size of integer was increased.",
-      "expected": {
-        "type": "error",
-        "value": "Value 2147483648 can't be converted to Integer type."
-      },
-      "variables": [],
-      "platforms": [
-        "android"
       ]
     },
     {
@@ -105,6 +93,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

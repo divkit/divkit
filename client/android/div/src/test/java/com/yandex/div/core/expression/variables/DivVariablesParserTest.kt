@@ -69,7 +69,7 @@ class DivVariablesParserTest {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
         val intVariable = variables[2] as Variable.IntegerVariable
-        Assert.assertEquals(100, intVariable.getValue() as Int)
+        Assert.assertEquals(100, intVariable.getValue() as Long)
     }
 
     @Test

@@ -23,7 +23,7 @@ internal object ParseUnixTime : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val first = args.first()
-        val timestampInSeconds = first as Int
+        val timestampInSeconds = first as Long
         return DateTime(
             timestampMillis = timestampInSeconds * 1000L,
             timezone = TimeZone.getTimeZone("UTC"),
@@ -41,7 +41,7 @@ internal object ParseUnixTimeAsLocal : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val first = args.first()
-        val timestampInSeconds = first as Int
+        val timestampInSeconds = first as Long
         return DateTime(
             timestampMillis = timestampInSeconds * 1000L,
             timezone = TimeZone.getDefault(),
@@ -78,7 +78,7 @@ internal object AddMillis : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val millis = args[1] as Int
+        val millis = args[1] as Long
 
         return DateTime(
             timestampMillis = datetime.timestampMillis + millis,
@@ -100,10 +100,10 @@ internal object SetYear : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         val calendar = datetime.toCalendar()
-        calendar.set(Calendar.YEAR, value)
+        calendar.set(Calendar.YEAR, value.toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -126,13 +126,13 @@ internal object SetMonth : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         if (value > 12 || value < 1) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting month in [1..12], instead got $value.")
         }
         val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MONTH, value - 1)
+        calendar.set(Calendar.MONTH, (value - 1).toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -155,13 +155,13 @@ internal object SetDay : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         val calendar = datetime.toCalendar()
         val daysInMonth: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         when (value) {
-            in 1..daysInMonth -> calendar.set(Calendar.DAY_OF_MONTH, value)
-            -1 -> calendar.set(Calendar.DAY_OF_MONTH, 0)
+            in 1..daysInMonth -> calendar.set(Calendar.DAY_OF_MONTH, value.toInt())
+            -1L -> calendar.set(Calendar.DAY_OF_MONTH, 0)
             else -> throwExceptionOnFunctionEvaluationFailed(name, args, "Unable to set day $value for date $datetime.")
         }
 
@@ -186,14 +186,14 @@ internal object SetHours : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         if (value > 23 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting hours in [0..23], instead got $value.")
         }
         val calendar = datetime.toCalendar()
         calendar.timeInMillis = datetime.timestampMillis
-        calendar.set(Calendar.HOUR_OF_DAY, value)
+        calendar.set(Calendar.HOUR_OF_DAY, value.toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -216,13 +216,13 @@ internal object SetMinutes : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         if (value > 59 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting minutes in [0..59], instead got $value.")
         }
         val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MINUTE, value)
+        calendar.set(Calendar.MINUTE, value.toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -245,13 +245,13 @@ internal object SetSeconds : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         if (value > 59 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting seconds in [0..59], instead got $value.")
         }
         val calendar = datetime.toCalendar()
-        calendar.set(Calendar.SECOND, value)
+        calendar.set(Calendar.SECOND, value.toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -274,14 +274,14 @@ internal object SetMillis : Function() {
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
         val datetime = args[0] as DateTime
-        val value = args[1] as Int
+        val value = args[1] as Long
 
         if (value > 999 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting millis in [0..999], instead got $value.")
         }
 
         val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MILLISECOND, value)
+        calendar.set(Calendar.MILLISECOND, value.toInt())
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
@@ -306,7 +306,7 @@ internal object GetYear : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.YEAR)
+        return calendar.get(Calendar.YEAR).toLong()
     }
 }
 
@@ -326,7 +326,7 @@ internal object GetMonth : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.MONTH) + 1
+        return (calendar.get(Calendar.MONTH) + 1).toLong()
     }
 }
 
@@ -346,7 +346,7 @@ internal object GetDay : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.DAY_OF_MONTH)
+        return calendar.get(Calendar.DAY_OF_MONTH).toLong()
     }
 }
 
@@ -368,7 +368,7 @@ internal object GetDayOfWeek : Function() {
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
 
-        return if (dayOfWeek == 0) 7 else dayOfWeek
+        return if (dayOfWeek == 0) 7L else dayOfWeek.toLong()
     }
 }
 
@@ -388,7 +388,7 @@ internal object GetHours : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.HOUR_OF_DAY)
+        return calendar.get(Calendar.HOUR_OF_DAY).toLong()
     }
 }
 
@@ -408,7 +408,7 @@ internal object GetMinutes : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.MINUTE)
+        return calendar.get(Calendar.MINUTE).toLong()
     }
 }
 
@@ -428,7 +428,7 @@ internal object GetSeconds : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.SECOND)
+        return calendar.get(Calendar.SECOND).toLong()
     }
 }
 
@@ -448,7 +448,7 @@ internal object GetMillis : Function() {
 
         val calendar = datetime.toCalendar()
 
-        return calendar.get(Calendar.MILLISECOND)
+        return calendar.get(Calendar.MILLISECOND).toLong()
     }
 }
 

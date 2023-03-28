@@ -21,9 +21,9 @@ class EntityWithSimpleProperties(
     @JvmField final val booleanInt: Expression<Boolean>? = null,
     @JvmField final val color: Expression<Int>? = null,
     @JvmField final val double: Expression<Double>? = null,
-    @JvmField final val id: Int? = null,
-    @JvmField final val integer: Expression<Int>? = null,
-    @JvmField final val positiveInteger: Expression<Int>? = null, // constraint: number > 0
+    @JvmField final val id: Long? = null,
+    @JvmField final val integer: Expression<Long>? = null,
+    @JvmField final val positiveInteger: Expression<Long>? = null, // constraint: number > 0
     @JvmField final val string: Expression<String>? = null, // at least 1 char
     @JvmField final val url: Expression<Uri>? = null,
 ) : JSONSerializable {
@@ -63,8 +63,8 @@ class EntityWithSimpleProperties(
             )
         }
 
-        private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Int> { it: Int -> it > 0 }
-        private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Int> { it: Int -> it > 0 }
+        private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
+        private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val STRING_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
         private val STRING_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 

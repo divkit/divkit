@@ -16,16 +16,17 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.DivPatchableAdapter
 import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.ReleasingViewPool
-import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
@@ -157,7 +158,7 @@ internal class DivGalleryBinder @Inject constructor(
 
         view.clipChildren = false
         view.setItemDecoration(
-            if (columnCount == 1)
+            if (columnCount == 1L)
                 PaddingItemDecoration(
                     midItemPadding = div.itemSpacing.evaluate(resolver)
                         .dpToPx(metrics),
@@ -185,7 +186,7 @@ internal class DivGalleryBinder @Inject constructor(
             }
         }
 
-        val layoutManager = if (columnCount == 1) {
+        val layoutManager = if (columnCount == 1L) {
             DivLinearLayoutManager(divView, view, div, orientation)
         } else {
             DivGridLayoutManager(divView, view, div, orientation)
@@ -196,7 +197,7 @@ internal class DivGalleryBinder @Inject constructor(
             val id = div.id ?: div.hashCode().toString()
             val galleryState = state.getBlockState(id) as GalleryState?
             val position = galleryState?.visibleItemIndex
-                ?: div.defaultItem.evaluate(resolver)
+                ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset
             view.scrollToPositionInternal(position, offset)
             view.addOnScrollListener(UpdateStateScrollListener(id, state, layoutManager))

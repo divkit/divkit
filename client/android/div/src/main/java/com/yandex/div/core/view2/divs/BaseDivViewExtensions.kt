@@ -21,6 +21,7 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
@@ -74,6 +75,7 @@ import com.yandex.div2.DivStroke
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     val metrics = resources.displayMetrics
@@ -90,8 +92,9 @@ internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionReso
         }
         DivSizeUnit.PX -> {
             setPadding(
-                insets.left.evaluate(resolver), insets.top.evaluate(resolver),
-                insets.right.evaluate(resolver), insets.bottom.evaluate(resolver))
+                    insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
+                    insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
+            )
         }
     }
 }
@@ -144,7 +147,7 @@ internal fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionReso
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
         DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
-        DivSizeUnit.PX -> value.evaluate(resolver)
+        DivSizeUnit.PX -> value.evaluate(resolver).toIntSafely()
     }
 }
 
@@ -152,7 +155,7 @@ internal fun DivWrapContentSize.ConstraintSize.toPx(metrics: DisplayMetrics, res
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
         DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
-        DivSizeUnit.PX -> value.evaluate(resolver)
+        DivSizeUnit.PX -> value.evaluate(resolver).toIntSafely()
     }
 }
 
@@ -167,7 +170,7 @@ internal fun DivRadialGradientFixedCenter.toPxF(
 ): Float = evaluatePxFloatByUnit(value.evaluate(resolver), unit.evaluate(resolver), metrics)
 
 private fun evaluatePxFloatByUnit(
-    value: Int,
+    value: Long,
     unit: DivSizeUnit,
     metrics: DisplayMetrics
 ): Float = when (unit) {
@@ -356,11 +359,11 @@ private fun View.applyBaselineAlignment(baselineAligned: Boolean) {
     }
 }
 
-fun Int?.dpToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics).roundToInt()
+fun Long?.dpToPx(metrics: DisplayMetrics): Int {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
 }
 
-fun Int?.dpToPxF(metrics: DisplayMetrics): Float {
+fun Long?.dpToPxF(metrics: DisplayMetrics): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics)
 }
 
@@ -368,11 +371,11 @@ fun Double?.dpToPx(metrics: DisplayMetrics): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics).roundToInt()
 }
 
-fun Int?.spToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toFloat() ?: 0f, metrics).roundToInt()
+fun Long?.spToPx(metrics: DisplayMetrics): Int {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
 }
 
-fun Int?.spToPxF(metrics: DisplayMetrics): Float {
+fun Long?.spToPxF(metrics: DisplayMetrics): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toFloat() ?: 0f, metrics)
 }
 
@@ -380,8 +383,8 @@ fun Double?.spToPx(metrics: DisplayMetrics): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics).roundToInt()
 }
 
-fun Int?.unitToPx(metrics: DisplayMetrics, unit: DivSizeUnit): Int {
-    return TypedValue.applyDimension(unit.toAndroidUnit(), this?.toFloat() ?: 0f, metrics).roundToInt()
+fun Long?.unitToPx(metrics: DisplayMetrics, unit: DivSizeUnit): Int {
+    return TypedValue.applyDimension(unit.toAndroidUnit(), this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
 }
 
 internal fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
@@ -480,7 +483,7 @@ internal fun DivSizeUnit.toAndroidUnit(): Int {
     }
 }
 
-internal fun TextView.applyLineHeight(lineHeight: Int?, unit: DivSizeUnit) {
+internal fun TextView.applyLineHeight(lineHeight: Long?, unit: DivSizeUnit) {
     val lineSpacingExtra = lineHeight?.let {
         it.unitToPx(resources.displayMetrics, unit) - this.fontHeight
     } ?: 0
@@ -582,7 +585,7 @@ internal fun getTypeface(fontWeight: DivFontWeight, typefaceProvider: DivTypefac
     }
 }
 
-internal fun Int.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float {
+internal fun Long.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float {
     return when (unit) {
         DivSizeUnit.DP -> this.dpToPx(metrics)
         DivSizeUnit.SP -> this.spToPx(metrics)

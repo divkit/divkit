@@ -3,6 +3,7 @@ package com.yandex.div.core.view2
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -40,7 +41,7 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
     override fun visit(data: DivContainer, resolver: ExpressionResolver) = true
 
     override fun visit(data: DivGrid, resolver: ExpressionResolver): Boolean {
-        val columnCount = data.columnCount.evaluate(resolver)
+        val columnCount = data.columnCount.evaluate(resolver).toIntSafely()
         val heights = IntArray(columnCount)
         var column: Int
         var matchParentWidthCount = 0
@@ -54,8 +55,8 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
             }
 
             val div = it.value()
-            val columnSpan = div.columnSpan?.evaluate(resolver) ?: 1
-            val rowSpan = div.rowSpan?.evaluate(resolver) ?: 1
+            val columnSpan = div.columnSpan?.evaluate(resolver)?.toIntSafely() ?: 1
+            val rowSpan = div.rowSpan?.evaluate(resolver)?.toIntSafely() ?: 1
             if (column + columnSpan > columnCount) return false  // a cell laps over column count
 
             for (i in column until column + columnSpan) {

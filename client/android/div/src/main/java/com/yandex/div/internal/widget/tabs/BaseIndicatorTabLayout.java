@@ -174,7 +174,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private int mTabPaddingEnd;
     private int mTabPaddingBottom;
 
-    private int mAnimationDuration = ANIMATION_DURATION;
+    private long mAnimationDuration = ANIMATION_DURATION;
 
     private int mTabTextAppearance;
     private DivTypefaceProvider mTypefaceProvider = DivTypefaceProvider.DEFAULT;
@@ -342,7 +342,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         mTabIndicators.setAnimationType(animationType);
     }
 
-    public void setAnimationDuration(int duration) {
+    public void setAnimationDuration(long duration) {
         mAnimationDuration = duration;
     }
 
@@ -1493,7 +1493,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             }
         }
 
-        void animateSelectedIndicatorToPosition(int position, int duration) {
+        void animateSelectedIndicatorToPosition(int position, long duration) {
             if (mSelectedIndicatorAnimator != null && mSelectedIndicatorAnimator.isRunning()) {
                 mSelectedIndicatorAnimator.cancel();
                 float fraction = mSelectedIndicatorAnimator.getAnimatedFraction();
@@ -1600,7 +1600,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             }
         }
 
-        protected void startSelectedIndicatorSlideAnimation(int position, int duration,
+        protected void startSelectedIndicatorSlideAnimation(int position, long duration,
                                                             int startLeft, int startRight,
                                                             int targetLeft, int targetRight) {
             if (startLeft != targetLeft || startRight != targetRight) {
@@ -1637,7 +1637,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             }
         }
 
-        protected void startSelectedIndicatorFadeAnimation(int position, int duration) {
+        protected void startSelectedIndicatorFadeAnimation(int position, long duration) {
             if (position != mSelectedPosition) {
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
                 animator.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);

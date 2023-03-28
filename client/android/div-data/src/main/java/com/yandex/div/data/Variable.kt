@@ -30,9 +30,9 @@ sealed class Variable {
 
     class IntegerVariable(
         override val name: String,
-        val defaultValue: Int,
+        val defaultValue: Long,
     ) : Variable() {
-        internal var value: Int = defaultValue
+        internal var value: Long = defaultValue
             set(value) {
                 if (field == value) {
                     return
@@ -136,7 +136,7 @@ sealed class Variable {
     fun set(newValue: String) {
         return when (this) {
             is StringVariable -> value = newValue
-            is IntegerVariable -> value = newValue.parseAsInt()
+            is IntegerVariable -> value = newValue.parseAsLong()
             is BooleanVariable -> value = newValue.parseAsBoolean()
             is DoubleVariable -> value = newValue.parseAsDouble()
             is ColorVariable -> {
@@ -159,6 +159,14 @@ sealed class Variable {
             this is ColorVariable && from is ColorVariable -> this.value = from.value
             this is UrlVariable && from is UrlVariable -> this.value = from.value
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
+        }
+    }
+
+    private fun String.parseAsLong(): Long {
+        return try {
+            this.toLong()
+        } catch (e: NumberFormatException) {
+            throw VariableMutationException(cause = e)
         }
     }
 

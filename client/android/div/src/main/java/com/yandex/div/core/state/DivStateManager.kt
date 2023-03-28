@@ -21,13 +21,13 @@ internal class DivStateManager @Inject constructor(
     fun getState(tag: DivDataTag): DivViewState? = synchronized(states) {
         var state = states[tag]
         if (state == null) {
-            state = cache.getRootState(tag.id)?.toInt()?.let { DivViewState(it) }
+            state = cache.getRootState(tag.id)?.toLong()?.let { DivViewState(it) }
             states[tag] = state
         }
         return state
     }
 
-    fun updateState(tag: DivDataTag, stateId: Int, temporary: Boolean) {
+    fun updateState(tag: DivDataTag, stateId: Long, temporary: Boolean) {
         if (DivDataTag.INVALID != tag) {
             synchronized(states) {
                 val state = getState(tag)

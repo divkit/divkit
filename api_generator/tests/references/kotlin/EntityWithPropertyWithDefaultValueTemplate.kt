@@ -17,7 +17,7 @@ import com.yandex.div.data.*
 
 @Mockable
 class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue> {
-    @JvmField final val int: Field<Expression<Int>> // constraint: number >= 0; default value: 0
+    @JvmField final val int: Field<Expression<Long>> // constraint: number >= 0; default value: 0
     @JvmField final val nested: Field<NestedTemplate>
     @JvmField final val url: Field<Expression<Uri>> // valid schemes: [https]; default value: https://yandex.ru
 
@@ -53,15 +53,15 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
 
-        private val INT_DEFAULT_VALUE = Expression.constant(0)
+        private val INT_DEFAULT_VALUE = Expression.constant(0L)
         private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
 
-        private val INT_TEMPLATE_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
-        private val INT_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+        private val INT_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
+        private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
         private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
-        val INT_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
+        val INT_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
         val NESTED_READER: Reader<EntityWithPropertyWithDefaultValue.Nested?> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithPropertyWithDefaultValue.Nested.CREATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
         val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
@@ -72,7 +72,7 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
 
     @Mockable
     class NestedTemplate : JSONSerializable, JsonTemplate<EntityWithPropertyWithDefaultValue.Nested> {
-        @JvmField final val int: Field<Expression<Int>> // constraint: number >= 0; default value: 0
+        @JvmField final val int: Field<Expression<Long>> // constraint: number >= 0; default value: 0
         @JvmField final val nonOptional: Field<Expression<String>>
         @JvmField final val url: Field<Expression<Uri>> // valid schemes: [https]; default value: https://yandex.ru
 
@@ -105,15 +105,15 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         }
 
         companion object {
-            private val INT_DEFAULT_VALUE = Expression.constant(0)
+            private val INT_DEFAULT_VALUE = Expression.constant(0L)
             private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
 
-            private val INT_TEMPLATE_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
-            private val INT_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+            private val INT_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
+            private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
             private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
             private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
-            val INT_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
+            val INT_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
             val NON_OPTIONAL_READER: Reader<Expression<String>> = { key, json, env -> JsonParser.readExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
             val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
 

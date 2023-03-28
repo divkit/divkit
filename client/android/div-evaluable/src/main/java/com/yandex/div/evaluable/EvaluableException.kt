@@ -28,6 +28,11 @@ class MissingVariableException(
     cause: Exception? = null
 ) : EvaluableException("Variable '${variableName}' is missing", cause)
 
+class IntegerOverflow(
+        val expression: String,
+        cause: Exception? = null
+) : EvaluableException("Failed to evaluate [$expression]. $REASON_INTEGER_OVERFLOW", cause)
+
 internal fun throwExceptionOnEvaluationFailed(
     expression: String,
     reason: String,
@@ -42,7 +47,7 @@ internal fun throwExceptionOnFunctionEvaluationFailed(
 ): Nothing = throwExceptionOnEvaluationFailed(functionToMessageFormat(name, args), reason, cause)
 
 
-private fun functionToMessageFormat(name: String, args: List<Any>): String {
+internal fun functionToMessageFormat(name: String, args: List<Any>): String {
     return args.joinToString(prefix = "${name}(", postfix = ")") {
         it.toMessageFormat()
     }

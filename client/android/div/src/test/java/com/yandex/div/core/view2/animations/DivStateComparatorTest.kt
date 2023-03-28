@@ -37,7 +37,7 @@ class DivStateComparatorTest {
         Assert.assertFalse(DivComparator.isDivDataReplaceable(data1, data2, 0, ExpressionResolver.EMPTY))
     }
 
-    private fun readDiv(resource: String, stateId: Int = 0) : DivData {
+    private fun readDiv(resource: String, stateId: Long = 0) : DivData {
         val state = DivData.State(UnitTestData(DIV_STATE_DIR, resource).div, stateId)
         return DivData("log_id", listOf(state))
     }

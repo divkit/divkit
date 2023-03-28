@@ -429,7 +429,7 @@ class Div2View private constructor(
         loadReferences.clear()
     }
 
-    override fun switchToState(stateId: Int, temporary: Boolean) = synchronized(monitor) {
+    override fun switchToState(stateId: Long, temporary: Boolean) = synchronized(monitor) {
         if (stateId != DivData.INVALID_STATE_ID) {
             bindOnAttachRunnable?.cancel()
             forceSwitchToState(stateId, temporary)
@@ -556,7 +556,7 @@ class Div2View private constructor(
         return true
     }
 
-    private fun DivData.stateId(): Int {
+    private fun DivData.stateId(): Long {
         return currentState?.currentDivStateId ?: getInitialStateId()
     }
 
@@ -565,7 +565,7 @@ class Div2View private constructor(
         return states.firstOrNull { it.stateId == stateId }
     }
 
-    private fun forceSwitchToState(stateId: Int, temporary: Boolean): Boolean {
+    private fun forceSwitchToState(stateId: Long, temporary: Boolean): Boolean {
         this.stateId = stateId
 
         val currentStateId = currentState?.currentDivStateId
@@ -594,7 +594,7 @@ class Div2View private constructor(
 
     private fun bindAndUpdateState(
         newState: DivData.State,
-        stateId: Int,
+        stateId: Long,
         temporary: Boolean,
     ) {
         val rootView = view.getChildAt(0)
@@ -605,7 +605,7 @@ class Div2View private constructor(
 
     private fun buildViewAndUpdateState(
         newState: DivData.State,
-        stateId: Int,
+        stateId: Long,
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
@@ -616,7 +616,7 @@ class Div2View private constructor(
 
     private fun buildViewAsyncAndUpdateState(
         newState: DivData.State,
-        stateId: Int,
+        stateId: Long,
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)

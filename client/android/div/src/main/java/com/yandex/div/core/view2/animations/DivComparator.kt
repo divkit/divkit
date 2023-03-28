@@ -19,7 +19,7 @@ import com.yandex.div2.DivText
 
 internal object DivComparator {
 
-    fun isDivDataReplaceable(old: DivData?, new: DivData, stateId: Int,
+    fun isDivDataReplaceable(old: DivData?, new: DivData, stateId: Long,
                              resolver: ExpressionResolver): Boolean {
         if (old == null) {
             return false

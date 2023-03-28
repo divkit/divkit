@@ -19,7 +19,7 @@ internal object IntegerToNumber : Function() {
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
-        val integerValue = args.first() as Int
+        val integerValue = args.first() as Long
         return integerValue.toDouble()
     }
 }

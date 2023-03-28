@@ -206,7 +206,7 @@ class DivComparatorTest {
     }
 
     private fun divGrid(items: List<Div>): Div {
-        return Div.Grid(DivGrid(columnCount = 1.asExpression(), items = items))
+        return Div.Grid(DivGrid(columnCount = 1L.asExpression(), items = items))
     }
 
     private fun divGallery(items: List<Div>): Div {

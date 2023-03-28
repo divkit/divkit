@@ -24,7 +24,7 @@ internal object GetIntervalSeconds : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalSeconds(-1)]. Expecting non-negative number of milliseconds.")
@@ -46,7 +46,7 @@ internal object GetIntervalTotalSeconds : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalTotalSeconds(-1)]. Expecting non-negative number of milliseconds.")
@@ -68,7 +68,7 @@ internal object GetIntervalMinutes : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalMinutes(-1)]. Expecting non-negative number of milliseconds.")
@@ -90,7 +90,7 @@ internal object GetIntervalTotalMinutes : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalTotalMinutes(-1)]. Expecting non-negative number of milliseconds.")
@@ -112,7 +112,7 @@ internal object GetIntervalHours : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalHours(-1)]. Expecting non-negative number of milliseconds.")
@@ -134,7 +134,7 @@ internal object GetIntervalTotalHours : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalTotalHours(-1)]. Expecting non-negative number of milliseconds.")
@@ -156,7 +156,7 @@ internal object GetIntervalTotalDays : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalTotalDays(-1)]. Expecting non-negative number of milliseconds.")
@@ -178,7 +178,7 @@ internal object GetIntervalTotalWeeks : Function() {
 
     @Throws(EvaluableException::class)
     override fun evaluate(args: List<Any>): Any {
-        val duration = args[0] as Int
+        val duration = args[0] as Long
 
         if (duration < 0) {
             throw EvaluableException("Failed to evaluate [getIntervalTotalWeeks(-1)]. Expecting non-negative number of milliseconds.")

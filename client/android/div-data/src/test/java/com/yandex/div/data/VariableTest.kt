@@ -86,7 +86,7 @@ class VariableTest {
     private fun generateAllTypesOfRandomVariables(): List<Variable> {
         return setOf(
             Variable.StringVariable("string_var", Random.nextBytes(4).toString()),
-            Variable.IntegerVariable("int_var", Random.nextInt()),
+            Variable.IntegerVariable("int_var", Random.nextLong()),
             Variable.DoubleVariable("double_var", Random.nextDouble()),
             Variable.BooleanVariable("boolean_var", Random.nextBoolean()),
             Variable.ColorVariable("color_var", Random.nextInt()),

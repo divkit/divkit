@@ -14,10 +14,12 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.applyFontSize
@@ -25,8 +27,6 @@ import com.yandex.div.core.view2.divs.applyLetterSpacing
 import com.yandex.div.core.view2.divs.applyLineHeight
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.applyPaddings
-import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.UiThreadHandler
@@ -62,7 +62,7 @@ internal class DivTabsBinder @Inject constructor(
     private val divPatchCache: DivPatchCache,
     @Named(Names.THEMED_CONTEXT) private val context: Context,
 ) {
-    private var oldDivSelectedTab: Int? = null
+    private var oldDivSelectedTab: Long? = null
 
     init {
         viewPool.register(TAG_TAB_HEADER, TabTitlesLayoutView.TabViewFactory(context), 12)
@@ -152,18 +152,19 @@ internal class DivTabsBinder @Inject constructor(
                 reusableAdapter.setData({ list }, resolver, subscriber)
             }
         } else {
-            setupNewAdapter(div.selectedTab.evaluate(resolver))
+            setupNewAdapter(div.selectedTab.evaluate(resolver).toIntSafely())
         }
 
         div.items.observeFixedHeightChange(resolver, subscriber) {
             view.divTabsAdapter?.notifyStateChanged()
         }
 
-        val selectTab = { selectedTab: Int ->
+        val selectTab = { selectedTab: Long ->
             oldDivSelectedTab = selectedTab
             view.divTabsAdapter?.pager?.let {
-                if (it.currentItemIndex != selectedTab) {
-                    it.smoothScrollTo(selectedTab)
+                val selectedTabInt = selectedTab.toIntSafely()
+                if (it.currentItemIndex != selectedTabInt) {
+                    it.smoothScrollTo(selectedTabInt)
                 }
             }
             Unit
@@ -176,7 +177,8 @@ internal class DivTabsBinder @Inject constructor(
 
             setupNewAdapter(
                 view.divTabsAdapter?.pager?.currentItemIndex
-                ?: div.selectedTab.evaluate(resolver))
+                ?: div.selectedTab.evaluate(resolver).toIntSafely()
+            )
         })
 
         subscriber.addSubscription(div.selectedTab.observe(resolver, selectTab))
@@ -240,7 +242,7 @@ internal class DivTabsBinder @Inject constructor(
             val textPaddings = div.tabTitleStyle.paddings
             val layoutPaddings = div.titlePaddings
             val lineHeight = div.tabTitleStyle.lineHeight?.evaluate(resolver)
-                ?: (div.tabTitleStyle.fontSize.evaluate(resolver) * DEFAULT_LINE_HEIGHT_COEFFICIENT).toInt()
+                ?: (div.tabTitleStyle.fontSize.evaluate(resolver) * DEFAULT_LINE_HEIGHT_COEFFICIENT).toLong()
 
             val height = lineHeight + textPaddings.top.evaluate(resolver) + textPaddings.bottom.evaluate(resolver) + layoutPaddings.top.evaluate(resolver) + layoutPaddings.bottom.evaluate(resolver)
             val metrics = resources.displayMetrics
@@ -309,7 +311,7 @@ internal class DivTabsBinder @Inject constructor(
         metrics: DisplayMetrics,
         resolver: ExpressionResolver
     ): FloatArray {
-        fun Expression<Int>.toCornerRadii() = this.evaluate(resolver).dpToPx(metrics).toFloat()
+        fun Expression<Long>.toCornerRadii() = this.evaluate(resolver).dpToPx(metrics).toFloat()
 
         val defaultRadius = cornerRadius?.toCornerRadii()
             ?: if (cornersRadius == null) BaseIndicatorTabLayout.UNDEFINED_RADIUS else 0f
@@ -383,7 +385,7 @@ private fun DivEdgeInsets.observe(resolver: ExpressionResolver, subscriber: Expr
 
 internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
     val applyStyle = { _: Any? ->
-        val fontSize = style.fontSize.evaluate(resolver)
+        val fontSize = style.fontSize.evaluate(resolver).toIntSafely()
         applyFontSize(fontSize, style.fontSizeUnit.evaluate(resolver))
         applyLetterSpacing(style.letterSpacing.evaluate(resolver), fontSize)
         applyLineHeight(style.lineHeight?.evaluate(resolver), style.fontSizeUnit.evaluate(resolver))

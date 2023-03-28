@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -48,7 +49,7 @@ internal class DivGridBinder @Inject constructor(
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
         view.addSubscription(
-            div.columnCount.observeAndGet(resolver) { columnCount -> view.columnCount = columnCount }
+            div.columnCount.observeAndGet(resolver) { columnCount -> view.columnCount = columnCount.toIntSafely() }
         )
         view.observeContentAlignment(div.contentAlignmentHorizontal, div.contentAlignmentVertical, resolver)
 
@@ -125,18 +126,18 @@ internal class DivGridBinder @Inject constructor(
         applyRowSpan(resolver, div.rowSpan)
     }
 
-    private fun View.applyColumnSpan(resolver: ExpressionResolver, spanExpr: Expression<Int>?) {
+    private fun View.applyColumnSpan(resolver: ExpressionResolver, spanExpr: Expression<Long>?) {
         val params = layoutParams as? DivLayoutParams ?: return
-        val columnSpan = spanExpr?.evaluate(resolver) ?: 1
+        val columnSpan = spanExpr?.evaluate(resolver)?.toIntSafely() ?: 1
         if (params.columnSpan != columnSpan) {
             params.columnSpan = columnSpan
             requestLayout()
         }
     }
 
-    private fun View.applyRowSpan(resolver: ExpressionResolver, spanExpr: Expression<Int>?) {
+    private fun View.applyRowSpan(resolver: ExpressionResolver, spanExpr: Expression<Long>?) {
         val params = layoutParams as? DivLayoutParams ?: return
-        val rowSpan = spanExpr?.evaluate(resolver) ?: 1
+        val rowSpan = spanExpr?.evaluate(resolver)?.toIntSafely() ?: 1
         if (params.rowSpan != rowSpan) {
             params.rowSpan = rowSpan
             requestLayout()

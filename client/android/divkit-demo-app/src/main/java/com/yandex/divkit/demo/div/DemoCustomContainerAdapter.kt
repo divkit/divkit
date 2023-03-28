@@ -34,7 +34,7 @@ class DemoCustomContainerAdapter: DivCustomViewAdapter {
             div.items!!.forEach {
                 val childDivView = getDivChildFactory(divView).createChildView(
                     it,
-                    DivStatePath.fromState(divView.id),
+                    DivStatePath.fromState(divView.id.toLong()),
                     divView
                 )
                 (customView as ViewGroup).addView(childDivView)
@@ -56,7 +56,7 @@ class DemoCustomContainerAdapter: DivCustomViewAdapter {
                         getDivChildFactory(divView).bindChildView(
                             childDivView,
                             childDiv,
-                            DivStatePath.fromState(divView.id),
+                            DivStatePath.fromState(divView.id.toLong()),
                             divView
                         )
                     }

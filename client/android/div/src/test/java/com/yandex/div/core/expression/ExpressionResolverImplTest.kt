@@ -105,7 +105,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `numeric variable accessed via getInt`() {
-        val mutableExpression = mutableExpression<Int>(
+        val mutableExpression = mutableExpression<Long>(
             rawExpression = "@{hundred}",
             typeHelper = TYPE_HELPER_INT,
         )
@@ -114,7 +114,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `int variable access`() {
-        val intValue = mutableExpression<Int>("@{hundred}", TYPE_HELPER_INT).evaluate(underTest)
+        val intValue = mutableExpression<Long>("@{hundred}", TYPE_HELPER_INT).evaluate(underTest)
         Assert.assertEquals(100, intValue)
     }
 
@@ -218,7 +218,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `resolving numeric variable as string will return type default`() {
-        val intValue = mutableExpression<Int>(
+        val intValue = mutableExpression<Long>(
             rawExpression = "@{path}",
             typeHelper = TYPE_HELPER_INT,
             logger = silentLogger
@@ -228,7 +228,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `resolving numeric variable as string will return type default with evaluable`() {
-        val intValue = mutableExpression<Int>(
+        val intValue = mutableExpression<Long>(
             rawExpression = "@{path}",
             typeHelper = TYPE_HELPER_INT,
             logger = silentLogger
@@ -262,7 +262,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `cache entry is deleted after the local variable is changed`() {
-        val mutableExpression = mutableExpression<Int>(
+        val mutableExpression = mutableExpression<Long>(
             rawExpression = "@{some_number}",
             typeHelper = TYPE_HELPER_INT,
         )
@@ -273,7 +273,7 @@ class ExpressionResolverImplTest {
 
     @Test
     fun `cache entry is deleted after the global variable is changed`() {
-        val mutableExpression = mutableExpression<Int>(
+        val mutableExpression = mutableExpression<Long>(
             rawExpression = "@{global_number}",
             typeHelper = TYPE_HELPER_INT,
         )

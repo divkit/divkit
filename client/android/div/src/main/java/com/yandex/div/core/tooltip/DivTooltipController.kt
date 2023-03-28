@@ -173,7 +173,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 }
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
-                if (divTooltip.duration.evaluate(resolver) != 0) {
+                if (divTooltip.duration.evaluate(resolver) != 0L) {
                     mainThreadHandler.postDelayed(divTooltip.duration.evaluate(resolver).toLong()) {
                         hideTooltip(divTooltip.id, div2View)
                     }
