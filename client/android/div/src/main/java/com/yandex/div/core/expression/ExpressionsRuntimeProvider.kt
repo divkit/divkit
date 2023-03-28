@@ -12,6 +12,7 @@ import com.yandex.div.core.expression.variables.toVariable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
+import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div2.DivData
@@ -46,7 +47,11 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     ) {
         data.variables?.forEach {
             val existingVariable = v.getMutableVariable(it.name) ?: run {
-                v.declare(it.toVariable())
+                try {
+                    v.declare(it.toVariable())
+                } catch (e: VariableDeclarationException) {
+                    errorCollector.logError(e)
+                }
                 return@forEach
             }
             val consistent = when (it) {
@@ -75,9 +80,14 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     private fun createRuntimeFor(data: DivData, tag: DivDataTag): ExpressionsRuntime {
+        val errorCollector = errorCollectors.getOrCreate(tag, data)
         val variableController = VariableController().apply {
             data.variables?.forEach { divVariable: DivVariable ->
-                declare(divVariable.toVariable())
+                try {
+                    declare(divVariable.toVariable())
+                } catch (e: VariableDeclarationException) {
+                    errorCollector.logError(e)
+                }
             }
 
             addSource(globalVariableController.variableSource)
@@ -86,7 +96,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider {
             variableName -> variableController.getMutableVariable(variableName)?.getValue()
         })
-        val errorCollector = errorCollectors.getOrCreate(tag, data)
         val expressionResolver = ExpressionResolverImpl(
             variableController,
             evaluatorFactory,

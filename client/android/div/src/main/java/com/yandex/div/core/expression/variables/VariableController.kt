@@ -5,6 +5,7 @@ import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.Assert
 
 import com.yandex.div.json.missingVariable
@@ -115,12 +116,12 @@ internal class VariableController {
         return null
     }
 
+    @Throws(VariableDeclarationException::class)
     fun declare(variable: Variable) {
         val prevVariable = variables.put(variable.name, variable)
         if (prevVariable != null) {
-            Assert.fail("Variable '${variable.name}' already declared!")
             variables[variable.name] = prevVariable
-            return
+            throw VariableDeclarationException("Variable '${variable.name}' already declared!")
         }
         onVariableDeclared(variable)
     }
