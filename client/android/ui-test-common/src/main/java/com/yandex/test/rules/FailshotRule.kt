@@ -33,7 +33,7 @@ class FailshotRule : TestRule {
     }
 
     private fun failshot() {
-        val file = File.createTempFile(FILE_NAME, FILE_TYPE, cacheDir)
+        val file = File.createTempFile(FILE_NAME, FILE_EXTENSION, cacheDir)
         uiDevice.waitForIdle(TimeUnit.SECONDS.toMillis(5L))
         uiDevice.takeScreenshot(file)
         AllureAndroidLifecycle.addAttachment(FILE_NAME, FILE_TYPE, FILE_EXTENSION, file)
