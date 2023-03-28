@@ -15,15 +15,16 @@
       ]
     },
     {
-      "name": "3000000000 * 2000000000 => 6000000000000000000",
-      "expression": "@{3000000000 * 2000000000}",
+      "name": "toString(3000000000 * 2000000000) => '6000000000000000000'",
+      "expression": "@{toString(3000000000 * 2000000000)}",
       "expected": {
-        "type": "integer",
-        "value": 6000000000000000000
+        "type": "string",
+        "value": "6000000000000000000"
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -35,7 +36,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {

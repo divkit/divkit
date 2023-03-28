@@ -1,25 +1,25 @@
-import type { EvalValue, IntegerValue, StringValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type { EvalContext, EvalValue, IntegerValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
 import { BOOLEAN, INTEGER, STRING } from '../const';
 import { escapeRegExp } from '../../utils/escapeRegExp';
 import { valToString } from '../utils';
+import { wrapError } from '../../utils/wrapError';
 
-function len(_vars: VariablesMap, arg: StringValue): EvalValue {
+function len(_ctx: EvalContext, arg: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: arg.value.length
     };
 }
 
-function contains(_vars: VariablesMap, wholeStr: StringValue, partStr: StringValue): EvalValue {
+function contains(_ctx: EvalContext, wholeStr: StringValue, partStr: StringValue): EvalValue {
     return {
         type: BOOLEAN,
         value: wholeStr.value.includes(partStr.value) ? 1 : 0
     };
 }
 
-function substring(_vars: VariablesMap, str: StringValue, start: IntegerValue, end: IntegerValue): EvalValue {
+function substring(_ctx: EvalContext, str: StringValue, start: IntegerValue, end: IntegerValue): EvalValue {
     if (end.value < start.value) {
         throw new Error('Indexes should be in ascending order.');
     }
@@ -33,11 +33,11 @@ function substring(_vars: VariablesMap, str: StringValue, start: IntegerValue, e
 
     return {
         type: STRING,
-        value: str.value.substring(start.value, end.value)
+        value: str.value.substring(Number(start.value), Number(end.value))
     };
 }
 
-function replaceAll(_vars: VariablesMap, str: StringValue, what: StringValue, replacer: StringValue): EvalValue {
+function replaceAll(_ctx: EvalContext, str: StringValue, what: StringValue, replacer: StringValue): EvalValue {
     let res: string;
 
     if (what.value) {
@@ -53,57 +53,65 @@ function replaceAll(_vars: VariablesMap, str: StringValue, what: StringValue, re
     };
 }
 
-function index(_vars: VariablesMap, str: StringValue, what: StringValue): EvalValue {
+function index(_ctx: EvalContext, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: str.value.indexOf(what.value)
     };
 }
 
-function lastIndex(_vars: VariablesMap, str: StringValue, what: StringValue): EvalValue {
+function lastIndex(_ctx: EvalContext, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: str.value.lastIndexOf(what.value)
     };
 }
 
-function trim(_vars: VariablesMap, str: StringValue): EvalValue {
+function trim(_ctx: EvalContext, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.trim()
     };
 }
 
-function trimLeft(_vars: VariablesMap, str: StringValue): EvalValue {
+function trimLeft(_ctx: EvalContext, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.replace(/^\s+/, '')
     };
 }
 
-function trimRight(_vars: VariablesMap, str: StringValue): EvalValue {
+function trimRight(_ctx: EvalContext, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.replace(/\s+$/, '')
     };
 }
 
-function toUpperCase(_vars: VariablesMap, str: StringValue): EvalValue {
+function toUpperCase(_ctx: EvalContext, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.toUpperCase()
     };
 }
 
-function toLowerCase(_vars: VariablesMap, str: StringValue): EvalValue {
+function toLowerCase(_ctx: EvalContext, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.toLowerCase()
     };
 }
 
-function calcPad(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): string {
+function calcPad(
+    ctx: EvalContext,
+    val: StringValue | IntegerValue,
+    len: IntegerValue,
+    pad: StringValue
+): string {
     if (!pad.value.length) {
+        ctx.warnings.push(wrapError(new Error('String for padding is empty.'), {
+            level: 'warn'
+        }));
         return '';
     }
 
@@ -114,19 +122,19 @@ function calcPad(val: StringValue | IntegerValue, len: IntegerValue, pad: String
         part += pad.value;
     }
     if (part.length > 0 && part.length + str.length > len.value) {
-        part = part.substring(0, len.value - str.length);
+        part = part.substring(0, Number(len.value) - Number(str.length));
     }
 
     return part;
 }
 
 function padStart(
-    _vars: VariablesMap,
+    ctx: EvalContext,
     val: StringValue | IntegerValue,
     len: IntegerValue,
     pad: StringValue
 ): EvalValue {
-    const prefix = calcPad(val, len, pad);
+    const prefix = calcPad(ctx, val, len, pad);
 
     return {
         type: STRING,
@@ -135,12 +143,12 @@ function padStart(
 }
 
 function padEnd(
-    _vars: VariablesMap,
+    ctx: EvalContext,
     val: StringValue | IntegerValue,
     len: IntegerValue,
     pad: StringValue
 ): EvalValue {
-    const suffix = calcPad(val, len, pad);
+    const suffix = calcPad(ctx, val, len, pad);
 
     return {
         type: STRING,

@@ -1,5 +1,6 @@
 {{
     import { MAX_INT, MIN_INT } from './const';
+    import { toBigInt } from './bigint';
 
     function buildBinaryExpression(head, tail) {
         return tail.reduce((result, element) => {
@@ -57,12 +58,12 @@
         return res;
     }
 
-    function convertToInt32(str) {
-        var num = parseInt(str, 10);
-        if (num > MAX_INT || num < MIN_INT) {
+    function convertToInt64(str) {
+        try {
+            return toBigInt(str);
+        } catch (_err) {
             throw new Error(`Value ${str} can't be converted to Integer type.`);
         }
-        return num;
     }
 
     function escapeChar(char) {
@@ -159,7 +160,7 @@ StringChar
     / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Integer "integer"
-    = '-'? [0-9]+ { return {type: 'IntegerLiteral', value: convertToInt32(text())}; }
+    = '-'? [0-9]+ { return {type: 'IntegerLiteral', value: convertToInt64(text())}; }
 
 Number "number"
     = '-'? [0-9]* '.' [0-9]+ ( ( 'e' / 'E' ) ( '+' / '-' )? [0-9]+ )? { return {type: 'NumberLiteral', value: parseFloat(text())}; }

@@ -1,13 +1,12 @@
-import type { ColorValue, EvalValue, NumberValue, StringValue } from '../eval';
+import type { ColorValue, EvalContext, EvalValue, NumberValue, StringValue } from '../eval';
 import type { ParsedColor } from '../../utils/correctColor';
-import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { COLOR, NUMBER, STRING } from '../const';
 import { safeConvertColor, stringifyColor } from '../utils';
 
 function colorGetter(
     field: keyof ParsedColor
-): (_vars: VariablesMap, color: StringValue | ColorValue) => EvalValue {
+): (_ctx: EvalContext, color: StringValue | ColorValue) => EvalValue {
     return (_vars, color) => {
         const parsed = safeConvertColor(color.value);
 
@@ -20,7 +19,7 @@ function colorGetter(
 
 function colorSetter(
     field: keyof ParsedColor
-): (_vars: VariablesMap, color: StringValue | ColorValue, val: NumberValue) => EvalValue {
+): (_ctx: EvalContext, color: StringValue | ColorValue, val: NumberValue) => EvalValue {
     return (_vars, color, val) => {
         const parsed = safeConvertColor(color.value);
 
@@ -43,7 +42,7 @@ const setColorRed = colorSetter('r');
 const setColorGreen = colorSetter('g');
 const setColorBlue = colorSetter('b');
 
-function rgb(_vars: VariablesMap, red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue {
+function rgb(_ctx: EvalContext, red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue {
     const parsed: ParsedColor = {
         a: 255,
         r: red.value * 255,
@@ -58,7 +57,7 @@ function rgb(_vars: VariablesMap, red: NumberValue, green: NumberValue, blue: Nu
 }
 
 function argb(
-    _vars: VariablesMap,
+    _ctx: EvalContext,
     alpha: NumberValue,
     red: NumberValue,
     green: NumberValue,

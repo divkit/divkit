@@ -53,20 +53,20 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
             "name": "unsigned max integer literal",
-            "expression": "@{9223372036854775807}",
+            "expression": "@{toString(9223372036854775807)}",
             "expected": {
-                "type": "integer",
-                "value": 9223372036854775807
+                "type": "string",
+                "value": "9223372036854775807"
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -80,20 +80,20 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
             "name": "positive max integer literal",
-            "expression": "@{+9223372036854775807}",
+            "expression": "@{toString(+9223372036854775807)}",
             "expected": {
-                "type": "integer",
-                "value": 9223372036854775807
+                "type": "string",
+                "value": "9223372036854775807"
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -107,20 +107,20 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
             "name": "negative min integer literal",
-            "expression": "@{-9223372036854775808}",
+            "expression": "@{toString(-9223372036854775808)}",
             "expected": {
-                "type": "integer",
-                "value": -9223372036854775808
+                "type": "string",
+                "value": "-9223372036854775808"
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -134,8 +134,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -147,7 +146,8 @@
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -161,8 +161,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -174,7 +173,8 @@
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -188,8 +188,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -201,7 +200,8 @@
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {
@@ -215,8 +215,7 @@
             },
             "variables": [],
             "platforms": [
-                "android",
-                "web"
+                "android"
             ]
         },
         {
@@ -228,7 +227,8 @@
             },
             "variables": [],
             "platforms": [
-                "ios"
+                "ios",
+                "web"
             ]
         },
         {

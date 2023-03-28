@@ -1,5 +1,5 @@
 import type { EvalTypes, EvalValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type { EvalContext } from '../eval';
 
 export type FuncArg = EvalTypes | {
     type: EvalTypes;
@@ -8,7 +8,7 @@ export type FuncArg = EvalTypes | {
 
 export interface Func {
     args: FuncArg[];
-    cb(vars: VariablesMap, ...args: EvalValue[]): EvalValue;
+    cb(ctx: EvalContext, ...args: EvalValue[]): EvalValue;
 }
 
 export const funcs: Map<string, Func[]> = new Map();
@@ -31,7 +31,7 @@ type FuncMatchError = {
 };
 
 // no args
-export function registerFunc(name: string, args: [], cb: (vars?: VariablesMap) => EvalValue): void;
+export function registerFunc(name: string, args: [], cb: (ctx?: EvalContext) => EvalValue): void;
 // one specific arg
 export function registerFunc<
     A0 extends EvalTypes
@@ -39,7 +39,7 @@ export function registerFunc<
     name: string,
     args: [A0],
     cb: (
-        vars: VariablesMap,
+        ctx: EvalContext,
         arg0: Extract<EvalValue, { type: A0 }>
     ) => EvalValue
 ): void;
@@ -51,7 +51,7 @@ export function registerFunc<
     name: string,
     args: [A0, A1],
     cb: (
-        vars: VariablesMap,
+        ctx: EvalContext,
         arg0: Extract<EvalValue, { type: A0 }>,
         arg1: Extract<EvalValue, { type: A1 }>
     ) => EvalValue
@@ -65,7 +65,7 @@ export function registerFunc<
     name: string,
     args: [A0, A1, A2],
     cb: (
-        vars: VariablesMap,
+        ctx: EvalContext,
         arg0: Extract<EvalValue, { type: A0 }>,
         arg1: Extract<EvalValue, { type: A1 }>,
         arg2: Extract<EvalValue, { type: A2 }>
@@ -75,13 +75,13 @@ export function registerFunc<
 export function registerFunc(
     name: string,
     args: FuncArg[],
-    cb: (vars: VariablesMap, ...args: any[]) => EvalValue
+    cb: (ctx: EvalContext, ...args: any[]) => EvalValue
 ): void;
 
 export function registerFunc(
     name: string,
     args: FuncArg[],
-    cb: (vars: VariablesMap, ...args: EvalValue[]) => EvalValue
+    cb: (ctx: EvalContext, ...args: EvalValue[]) => EvalValue
 ): void {
     const desc: Func = {
         args,

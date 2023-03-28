@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "name": "3000 * 2000 => 6000000",
+      "expression": "@{3000 * 2000}",
+      "expected": {
+        "type": "integer",
+        "value": 6000000
+      },
+      "variables": []
+    },
+    {
+      "name": "3000000000 * 2000000000 => 6000000000000000000",
+      "expression": "@{3000000000 * 2000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 6000000000000000000
+      },
+      "expected_warnings": [
+        "Safe integer overflow, values may lose accuracy."
+      ],
+      "variables": []
+    }
+  ]
+}

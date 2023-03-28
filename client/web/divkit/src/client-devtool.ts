@@ -1,7 +1,8 @@
 import type { Variable } from './expressions/variable';
+import type { Node } from './expressions/ast';
+import type { WrappedError } from '../typings/common';
 import { parse } from './expressions/expressions';
 import { evalExpression as evalExpressionInner, EvalResult } from './expressions/eval';
-import { Node } from './expressions/ast';
 import { funcs } from './expressions/funcs/funcs';
 
 export * from './client';
@@ -10,6 +11,16 @@ export function evalExpression(expr: string, opts?: {
     variables?: Map<string, Variable>;
     type?: 'exact' | 'json';
 }): EvalResult {
+    return evalExpressionWithFullResult(expr, opts).result;
+}
+
+export function evalExpressionWithFullResult(expr: string, opts?: {
+    variables?: Map<string, Variable>;
+    type?: 'exact' | 'json';
+}): {
+    result: EvalResult;
+    warnings: WrappedError[];
+} {
     let ast: Node;
     try {
         ast = parse(expr, {
@@ -17,8 +28,11 @@ export function evalExpression(expr: string, opts?: {
         });
     } catch (err) {
         return {
-            type: 'error',
-            value: 'Unable to parse expression'
+            result: {
+                type: 'error',
+                value: 'Unable to parse expression'
+            },
+            warnings: []
         };
     }
     return evalExpressionInner(opts?.variables || new Map(), ast);

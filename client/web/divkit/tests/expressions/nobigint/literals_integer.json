@@ -1,0 +1,67 @@
+{
+  "cases": [
+    {
+      "name": "unsigned integer literal",
+      "expression": "@{123}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": []
+    },
+    {
+      "name": "unsigned max integer literal",
+      "expression": "@{9223372036854775807}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775807
+      },
+      "expected_warnings": [
+        "Safe integer overflow, values may lose accuracy."
+      ],
+      "variables": []
+    },
+    {
+      "name": "positive integer literal",
+      "expression": "@{+123}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": []
+    },
+    {
+      "name": "positive max integer literal",
+      "expression": "@{+9223372036854775807}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775807
+      },
+      "expected_warnings": [
+        "Safe integer overflow, values may lose accuracy."
+      ],
+      "variables": []
+    },
+    {
+      "name": "negative integer literal",
+      "expression": "@{-123}",
+      "expected": {
+        "type": "integer",
+        "value": -123
+      },
+      "variables": []
+    },
+    {
+      "name": "negative min integer literal",
+      "expression": "@{-9223372036854775808}",
+      "expected": {
+        "type": "integer",
+        "value": -9223372036854775808
+      },
+      "expected_warnings": [
+        "Safe integer overflow, values may lose accuracy."
+      ],
+      "variables": []
+    }
+  ]
+}

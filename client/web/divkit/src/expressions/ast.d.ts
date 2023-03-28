@@ -50,7 +50,7 @@ export interface NumberLiteral {
 
 export interface IntegerLiteral {
     type: 'IntegerLiteral';
-    value: number;
+    value: number | bigint;
 }
 
 export interface BooleanLiteral {

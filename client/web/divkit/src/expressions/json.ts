@@ -6,6 +6,7 @@ import { evalExpression, VariablesMap } from './eval';
 import { containsUnsetVariables, dateToString, gatherVarsFromAst, stringifyColor } from './utils';
 import { LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
+import { MAX_INT32, MIN_INT32 } from './const';
 
 class ExpressionBinding {
     private readonly ast: Node;
@@ -25,7 +26,10 @@ class ExpressionBinding {
         }
 
         try {
-            const result = evalExpression(variables, this.ast);
+            const res = evalExpression(variables, this.ast);
+            res.warnings.forEach(logError);
+            const result = res.result;
+
             if (result.type === 'error') {
                 logError(wrapError(new Error('Expression execution error'), {
                     additional: {
@@ -48,6 +52,13 @@ class ExpressionBinding {
                     return stringifyColor(parsed);
                 }
                 logError(wrapError(new Error('Expression execution error')));
+            }
+            if (result.type === 'integer') {
+                if (value > MAX_INT32 || value < MIN_INT32) {
+                    logError(wrapError(new Error('Expression result is out of 32-bit int range')));
+                    return undefined;
+                }
+                return Number(value);
             }
             return value;
         } catch (err) {

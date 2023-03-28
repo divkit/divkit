@@ -1,16 +1,25 @@
-import type { EvalValue, IntegerValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type { EvalContext, EvalValue, IntegerValue } from '../eval';
 import { registerFunc } from './funcs';
 import { INTEGER } from '../const';
+import { toBigInt } from '../bigint';
+import { checkIntegerOverflow } from '../utils';
 
-function getDuration(milliseconds: IntegerValue, delimiter: number, whole?: number): EvalValue {
+function getDuration(ctx: EvalContext, milliseconds: IntegerValue, delimiter: number, whole?: number): EvalValue {
     if (milliseconds.value < 0) {
         throw new Error('Expecting non-negative number of milliseconds.');
     }
 
-    let val = Math.floor(milliseconds.value / delimiter);
+    let val: number | bigint = (toBigInt(milliseconds.value) as bigint) /
+        (toBigInt(delimiter) as bigint);
+
+    checkIntegerOverflow(ctx, val);
+
+    if (typeof val === 'number') {
+        val = Math.floor(val);
+    }
+
     if (whole) {
-        val = val % whole;
+        val = (toBigInt(val) as bigint) % (toBigInt(whole) as bigint);
     }
 
     return {
@@ -28,36 +37,36 @@ const HOURS_IN_DAY = 24;
 const MS_IN_DAY = 1000 * 60 * 60 * 24;
 const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
 
-function getIntervalSeconds(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_SECOND, SECONDS_IN_MINUTE);
+function getIntervalSeconds(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_SECOND, SECONDS_IN_MINUTE);
 }
 
-function getIntervalTotalSeconds(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_SECOND);
+function getIntervalTotalSeconds(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_SECOND);
 }
 
-function getIntervalMinutes(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_MINUTE, MINUTES_IN_HOUR);
+function getIntervalMinutes(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_MINUTE, MINUTES_IN_HOUR);
 }
 
-function getIntervalTotalMinutes(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_MINUTE);
+function getIntervalTotalMinutes(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_MINUTE);
 }
 
-function getIntervalHours(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_HOUR, HOURS_IN_DAY);
+function getIntervalHours(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_HOUR, HOURS_IN_DAY);
 }
 
-function getIntervalTotalHours(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_HOUR);
+function getIntervalTotalHours(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_HOUR);
 }
 
-function getIntervalTotalDays(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_DAY);
+function getIntervalTotalDays(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_DAY);
 }
 
-function getIntervalTotalWeeks(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
-    return getDuration(milliseconds, MS_IN_WEEK);
+function getIntervalTotalWeeks(ctx: EvalContext, milliseconds: IntegerValue): EvalValue {
+    return getDuration(ctx, milliseconds, MS_IN_WEEK);
 }
 
 export function registerInterval(): void {

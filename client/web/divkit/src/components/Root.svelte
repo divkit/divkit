@@ -930,7 +930,11 @@
                     const stores = exprVars.map(name => variables.get(name)).filter(Truthy);
 
                     derived(stores, () => {
-                        return evalExpression(variables, ast);
+                        const res = evalExpression(variables, ast);
+
+                        res.warnings.forEach(logError);
+
+                        return res.result;
                     }).subscribe(conditionResult => {
                         if (conditionResult.type === 'error') {
                             logError(wrapError(new Error('variable_trigger condition execution error'), {

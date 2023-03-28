@@ -1,92 +1,152 @@
-import type { EvalValue, IntegerValue, NumberValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type { EvalContext, EvalValue, IntegerValue, NumberValue } from '../eval';
 import { registerFunc } from './funcs';
-import { INTEGER, MAX_INT, MAX_NUMBER, MIN_INT, MIN_NUMBER, NUMBER } from '../const';
+import { INTEGER, MAX_NUMBER, MIN_NUMBER, NUMBER } from '../const';
 import { checkIntegerOverflow, roundInteger } from '../utils';
+import { absBigInt, bigIntZero, signBigInt, MAX_INT, MIN_INT } from '../bigint';
 
-function div<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
-    if (arg1.value === 0) {
+function divInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): EvalValue {
+    if (arg1.value === bigIntZero) {
         throw new Error('Division by zero is not supported.');
     }
 
-    let res = arg0.value / arg1.value;
-    if (arg0.type === INTEGER) {
-        res = roundInteger(res);
-    }
+    // bigint | number actually
+    let res: number | bigint = (arg0.value as bigint) / (arg1.value as bigint);
+    res = roundInteger(ctx, res);
+    checkIntegerOverflow(ctx, res);
 
     return {
-        type: arg0.type,
+        type: INTEGER,
         value: res
     };
 }
 
-function mod<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
+function divNumber(_ctx: EvalContext, arg0: NumberValue, arg1: NumberValue): EvalValue {
     if (arg1.value === 0) {
         throw new Error('Division by zero is not supported.');
     }
 
-    let res = arg0.value % arg1.value;
-    if (arg0.type === INTEGER) {
-        res = roundInteger(res);
-    }
+    const res = arg0.value / arg1.value;
 
     return {
-        type: arg0.type,
+        type: NUMBER,
         value: res
     };
 }
 
-function mul<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
+function modInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): EvalValue {
+    if (arg1.value === bigIntZero) {
+        throw new Error('Division by zero is not supported.');
+    }
+
+    // bigint | number actually
+    let res: number | bigint = (arg0.value as bigint) % (arg1.value as bigint);
+    res = roundInteger(ctx, res);
+    checkIntegerOverflow(ctx, res);
+
+    return {
+        type: INTEGER,
+        value: res
+    };
+}
+
+function modNumber(_ctx: EvalContext, arg0: NumberValue, arg1: NumberValue): EvalValue {
+    if (arg1.value === 0) {
+        throw new Error('Division by zero is not supported.');
+    }
+
+    const res = arg0.value % arg1.value;
+
+    return {
+        type: NUMBER,
+        value: res
+    };
+}
+
+function mulInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
+    // number | bigint actually
+    let res: bigint = (args.length ? args[0].value : bigIntZero) as bigint;
+    for (let i = 1; i < args.length; ++i) {
+        res *= args[i].value as bigint;
+        res = roundInteger(ctx, res) as bigint;
+        checkIntegerOverflow(ctx, res);
+    }
+
+    return {
+        type: INTEGER,
+        value: res
+    };
+}
+
+function mulNumber(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     let res = args.length ? args[0].value : 0;
     for (let i = 1; i < args.length; ++i) {
         res *= args[i].value;
-        if (args[0].type === INTEGER) {
-            res = roundInteger(res);
-        }
     }
 
     return {
-        type: args[0].type,
+        type: NUMBER,
         value: res
     };
 }
 
-function sub<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
+function subInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
+    // number | bigint actually
+    let res: bigint = (args.length ? args[0].value : bigIntZero) as bigint;
+    for (let i = 1; i < args.length; ++i) {
+        res -= args[i].value as bigint;
+        res = roundInteger(ctx, res) as bigint;
+        checkIntegerOverflow(ctx, res);
+    }
+
+    return {
+        type: INTEGER,
+        value: res
+    };
+}
+
+function subNumber(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     let res = args.length ? args[0].value : 0;
     for (let i = 1; i < args.length; ++i) {
         res -= args[i].value;
-        if (args[0].type === INTEGER) {
-            res = roundInteger(res);
-        }
     }
 
     return {
-        type: args.length ? args[0].type : INTEGER,
+        type: NUMBER,
         value: res
     };
 }
 
-function sum<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
+function sumInteger(ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
+    // number | bigint actually
+    let res = bigIntZero as bigint;
+    for (let i = 0; i < args.length; ++i) {
+        res += args[i].value as bigint;
+        res = roundInteger(ctx, res) as bigint;
+        checkIntegerOverflow(ctx, res);
+    }
+
+    return {
+        type: INTEGER,
+        value: res
+    };
+}
+
+function sumNumber(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     let res = 0;
     for (let i = 0; i < args.length; ++i) {
         res += args[i].value;
-        if (args[0].type === INTEGER) {
-            res = roundInteger(res);
-        }
     }
 
     return {
-        type: args.length ? args[0].type : INTEGER,
+        type: NUMBER,
         value: res
     };
 }
 
-function abs(_vars: VariablesMap, arg: IntegerValue | NumberValue): EvalValue {
-    const res = Math.abs(arg.value);
+function absInteger(ctx: EvalContext, arg: IntegerValue): EvalValue {
+    const res = absBigInt(arg.value);
 
-    if (arg.type === INTEGER) {
-        checkIntegerOverflow(res);
-    }
+    checkIntegerOverflow(ctx, res);
 
     return {
         type: arg.type,
@@ -94,24 +154,69 @@ function abs(_vars: VariablesMap, arg: IntegerValue | NumberValue): EvalValue {
     };
 }
 
-function max<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
+function absNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
+    const res = Math.abs(arg.value);
+
+    return {
+        type: NUMBER,
+        value: res
+    };
+}
+
+function maxInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
+    if (!args.length) {
+        throw new Error('Non empty argument list is required for function \'max\'.');
+    }
+
+    let max = args[0].value;
+    for (let i = 1; i < args.length; ++i) {
+        if (args[i].value > max) {
+            max = args[i].value;
+        }
+    }
+
+    return {
+        type: INTEGER,
+        value: max
+    };
+}
+
+function maxNum(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     if (!args.length) {
         throw new Error('Non empty argument list is required for function \'max\'.');
     }
 
     return {
-        type: args[0].type,
+        type: NUMBER,
         value: Math.max(...args.map(arg => arg.value))
     };
 }
 
-function min<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
+function minInt(_ctx: EvalContext, ...args: IntegerValue[]): EvalValue {
+    if (!args.length) {
+        throw new Error('Non empty argument list is required for function \'min\'.');
+    }
+
+    let min = args[0].value;
+    for (let i = 1; i < args.length; ++i) {
+        if (args[i].value < min) {
+            min = args[i].value;
+        }
+    }
+
+    return {
+        type: INTEGER,
+        value: min
+    };
+}
+
+function minNum(_ctx: EvalContext, ...args: NumberValue[]): EvalValue {
     if (!args.length) {
         throw new Error('Non empty argument list is required for function \'min\'.');
     }
 
     return {
-        type: args[0].type,
+        type: NUMBER,
         value: Math.min(...args.map(arg => arg.value))
     };
 }
@@ -130,21 +235,25 @@ function minNumber(): EvalValue {
     };
 }
 
-function maxInteger(): EvalValue {
+function maxInteger(ctx: EvalContext): EvalValue {
+    checkIntegerOverflow(ctx, MAX_INT);
+
     return {
         type: INTEGER,
         value: MAX_INT
     };
 }
 
-function minInteger(): EvalValue {
+function minInteger(ctx: EvalContext): EvalValue {
+    checkIntegerOverflow(ctx, MIN_INT);
+
     return {
         type: INTEGER,
         value: MIN_INT
     };
 }
 
-function round(_vars: VariablesMap, arg: NumberValue): EvalValue {
+function round(_ctx: EvalContext, arg: NumberValue): EvalValue {
     const sign = Math.sign(arg.value);
 
     return {
@@ -154,108 +263,125 @@ function round(_vars: VariablesMap, arg: NumberValue): EvalValue {
     };
 }
 
-function floor(_vars: VariablesMap, arg: NumberValue): EvalValue {
+function floor(_ctx: EvalContext, arg: NumberValue): EvalValue {
     return {
         type: NUMBER,
         value: Math.floor(arg.value)
     };
 }
 
-function ceil(_vars: VariablesMap, arg: NumberValue): EvalValue {
+function ceil(_ctx: EvalContext, arg: NumberValue): EvalValue {
     return {
         type: NUMBER,
         value: Math.ceil(arg.value)
     };
 }
 
-function signum(_vars: VariablesMap, arg: IntegerValue | NumberValue): EvalValue {
+function signumInteger(_ctx: EvalContext, arg: IntegerValue): EvalValue {
     return {
-        type: arg.type,
+        type: INTEGER,
+        value: signBigInt(arg.value)
+    };
+}
+
+function signumNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
+    return {
+        type: NUMBER,
         value: Math.sign(arg.value)
     };
 }
 
-function copySign<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
-    let res: number;
+function copySignInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): EvalValue {
+    let res: number | bigint;
 
-    if (arg1.value === 0 && arg0.type === INTEGER) {
+    if (arg1.value === bigIntZero) {
         res = arg0.value;
-    } else if (arg0.value === 0 && arg0.type === INTEGER) {
+    } else if (arg0.value === bigIntZero) {
         res = 0;
     } else {
-        let sign = Math.sign(arg1.value);
+        const sign = signBigInt(arg1.value);
 
-        if (arg0.type === NUMBER && sign === 0) {
-            sign = Object.is(sign, 0) ? 1 : -1;
-        }
-
-        res = Math.abs(arg0.value) * sign;
+        // number | bigint actually
+        res = (absBigInt(arg0.value) as bigint) * (sign as bigint);
     }
 
-    if (arg0.type === INTEGER) {
-        checkIntegerOverflow(res);
-    }
+    checkIntegerOverflow(ctx, res);
 
     return {
-        type: arg0.type,
+        type: INTEGER,
+        value: res
+    };
+}
+
+function copySignNumber(_ctx: EvalContext, arg0: NumberValue, arg1: NumberValue): EvalValue {
+    let sign = Math.sign(arg1.value);
+
+    if (sign === 0) {
+        sign = Object.is(sign, 0) ? 1 : -1;
+    }
+
+    const res = Math.abs(arg0.value) * sign;
+
+    return {
+        type: NUMBER,
         value: res
     };
 }
 
 export function registerMath(): void {
-    registerFunc('div', [INTEGER, INTEGER], div);
-    registerFunc('div', [NUMBER, NUMBER], div);
+    registerFunc('div', [INTEGER, INTEGER], divInteger);
+    registerFunc('div', [NUMBER, NUMBER], divNumber);
 
-    registerFunc('mod', [INTEGER, INTEGER], mod);
-    registerFunc('mod', [NUMBER, NUMBER], mod);
+    registerFunc('mod', [INTEGER, INTEGER], modInteger);
+    registerFunc('mod', [NUMBER, NUMBER], modNumber);
 
     registerFunc('mul', [{
         type: INTEGER,
         isVararg: true
-    }], mul);
+    }], mulInteger);
     registerFunc('mul', [{
         type: NUMBER,
         isVararg: true
-    }], mul);
+    }], mulNumber);
 
     registerFunc('sub', [{
         type: INTEGER,
         isVararg: true
-    }], sub);
+    }], subInteger);
     registerFunc('sub', [{
         type: NUMBER,
         isVararg: true
-    }], sub);
+    }], subNumber);
 
     registerFunc('sum', [{
         type: INTEGER,
         isVararg: true
-    }], sum);
+    }], sumInteger);
     registerFunc('sum', [{
         type: NUMBER,
         isVararg: true
-    }], sum);
+    }], sumNumber);
 
-    registerFunc('abs', [INTEGER], abs);
-    registerFunc('abs', [NUMBER], abs);
+    registerFunc('abs', [INTEGER], absInteger);
+    registerFunc('abs', [NUMBER], absNumber);
 
     registerFunc('max', [{
         type: INTEGER,
         isVararg: true
-    }], max);
+    }], maxInt);
     registerFunc('max', [{
         type: NUMBER,
         isVararg: true
-    }], max);
+    }], maxNum);
 
     registerFunc('min', [{
         type: INTEGER,
         isVararg: true
-    }], min);
+    }], minInt);
     registerFunc('min', [{
         type: NUMBER,
         isVararg: true
-    }], min);
+    }], minNum);
 
     registerFunc('maxNumber', [], maxNumber);
     registerFunc('minNumber', [], minNumber);
@@ -267,9 +393,9 @@ export function registerMath(): void {
     registerFunc('floor', [NUMBER], floor);
     registerFunc('ceil', [NUMBER], ceil);
 
-    registerFunc('signum', [NUMBER], signum);
-    registerFunc('signum', [INTEGER], signum);
+    registerFunc('signum', [INTEGER], signumInteger);
+    registerFunc('signum', [NUMBER], signumNumber);
 
-    registerFunc('copySign', [NUMBER, NUMBER], copySign);
-    registerFunc('copySign', [INTEGER, INTEGER], copySign);
+    registerFunc('copySign', [INTEGER, INTEGER], copySignInteger);
+    registerFunc('copySign', [NUMBER, NUMBER], copySignNumber);
 }

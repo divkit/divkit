@@ -605,6 +605,8 @@
     {
       "name": "padStart(12, 3, '') => '12'",
       "expression": "@{padStart(12, 3, '')}",
+      "deprecated": true,
+      "description": "Warning should be checked.",
       "expected": {
         "type": "string",
         "value": "12"
@@ -612,13 +614,29 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
+        "ios"
+      ]
+    },
+    {
+      "name": "padStart(12, 3, '') => '12' (2)",
+      "expression": "@{padStart(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "variables": [],
+      "platforms": [
         "web"
       ]
     },
     {
       "name": "padStart('12', 3, '') => '12'",
       "expression": "@{padStart('12', 3, '')}",
+      "deprecated": true,
+      "description": "Warning should be checked.",
       "expected": {
         "type": "string",
         "value": "12"
@@ -626,7 +644,21 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
+        "ios"
+      ]
+    },
+    {
+      "name": "padStart('12', 3, '') => '12' (2)",
+      "expression": "@{padStart('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "variables": [],
+      "platforms": [
         "web"
       ]
     },
@@ -717,6 +749,8 @@
     {
       "name": "padEnd(12, 3, '') => '12'",
       "expression": "@{padEnd(12, 3, '')}",
+      "deprecated": true,
+      "description": "Warning should be checked.",
       "expected": {
         "type": "string",
         "value": "12"
@@ -724,13 +758,29 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
+        "ios"
+      ]
+    },
+    {
+      "name": "padEnd(12, 3, '') => '12' (2)",
+      "expression": "@{padEnd(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "variables": [],
+      "platforms": [
         "web"
       ]
     },
     {
       "name": "padEnd('12', 3, '') => '12'",
       "expression": "@{padEnd('12', 3, '')}",
+      "deprecated": true,
+      "description": "Warning should be checked.",
       "expected": {
         "type": "string",
         "value": "12"
@@ -738,7 +788,21 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
+        "ios"
+      ]
+    },
+    {
+      "name": "padEnd('12', 3, '') => '12' (2)",
+      "expression": "@{padEnd('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "variables": [],
+      "platforms": [
         "web"
       ]
     }

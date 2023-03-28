@@ -1,11 +1,11 @@
 import { writable } from 'svelte/store';
 import type { Subscriber, Unsubscriber, Writable } from 'svelte/types/runtime/store';
 import type { EvalValue } from './eval';
-import { MAX_INT, MIN_INT } from './const';
 import { parseColor } from '../utils/correctColor';
+import { bigIntZero, toBigInt, MAX_INT, MIN_INT } from './bigint';
 
 export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url';
-export type VariableValue = string | number | boolean;
+export type VariableValue = string | number | bigint | boolean;
 
 export abstract class Variable<ValueType = any, TypeName = VariableType> {
     protected name: string;
@@ -75,23 +75,26 @@ export class StringVariable extends Variable<string, 'string'> {
     }
 }
 
-export class IntegerVariable extends Variable<number, 'integer'> {
+export class IntegerVariable extends Variable<number | bigint, 'integer'> {
     protected convertValue(value: unknown) {
         if (
-            typeof value !== 'number' ||
-            isNaN(value) ||
+            (typeof value !== 'bigint' && typeof value !== 'number') ||
+            typeof value === 'number' &&
+                (
+                    isNaN(value) ||
+                    value !== Math.round(value)
+                ) ||
             value > MAX_INT ||
-            value < MIN_INT ||
-            value !== Math.round(value)
+            value < MIN_INT
         ) {
             throw new Error('Incorrect variable value');
         }
 
-        return value;
+        return toBigInt(value);
     }
 
     protected fromString(val: string) {
-        const res = Number(val);
+        const res = toBigInt(val);
 
         return this.convertValue(res);
     }
@@ -210,7 +213,10 @@ export function createVariable(
 }
 
 export function defaultValueByType(type: keyof typeof TYPE_TO_CLASS): VariableValue {
-    if (type === 'boolean' || type === 'number' || type === 'integer') {
+    if (type === 'integer') {
+        return bigIntZero;
+    }
+    if (type === 'boolean' || type === 'number') {
         return 0;
     }
 

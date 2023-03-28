@@ -23,7 +23,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {

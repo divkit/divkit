@@ -3,10 +3,37 @@ import { valToString } from '../../src/expressions/utils';
 import { parse } from '../../src/expressions/expressions';
 import { createVariable } from '../../src/expressions/variable';
 
+jest.mock('../../src/expressions/bigint', () => {
+    return {
+        hasBigInt: false,
+        MAX_INT: Number('9223372036854775807'),
+        MIN_INT: Number('-9223372036854775808'),
+        toBigInt(val: number) {
+            if (val > Number('9223372036854775807') || val < Number('-9223372036854775808')) {
+                throw new Error('Integer overflow.');
+            }
+            return Number(val);
+        },
+        bigIntZero: 0,
+        absBigInt(val: number) {
+            return Math.abs(val);
+        },
+        signBigInt(val: number) {
+            if (val > 0) {
+                return 1;
+            } else if (val < 0) {
+                return -1;
+            }
+
+            return 0;
+        }
+    };
+});
+
 const path = require('path');
 const fs = require('fs');
 
-const dir = path.resolve(__filename, '../../../../../../test_data/expression_test_data');
+const dir = path.resolve(__dirname, './nobigint');
 
 const tests = fs.readdirSync(dir);
 
@@ -66,7 +93,7 @@ function runCase(item: any) {
     }
 }
 
-describe('expressions', () => {
+describe('expressions-with-out-bigint', () => {
     for (const file of tests) {
         const name = file.replace('.json', '');
         const contents = require(path.resolve(dir, file));
@@ -76,22 +103,17 @@ describe('expressions', () => {
 
             describe(name, () => {
                 for (const item of contents.cases) {
-                    if (item.platforms.includes('web')) {
-                        let name = item.name;
+                    let name = item.name;
 
-                        if (!counter[name]) {
-                            counter[name] = 0;
-                        }
-
-                        name += ` : ${counter[name]++}`;
-
-                        it(name, () => {
-                            runCase(item);
-                        });
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log('skip', file, name, item.name);
+                    if (!counter[name]) {
+                        counter[name] = 0;
                     }
+
+                    name += ` : ${counter[name]++}`;
+
+                    it(name, () => {
+                        runCase(item);
+                    });
                 }
             });
         }

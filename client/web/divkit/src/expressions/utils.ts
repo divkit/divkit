@@ -1,11 +1,11 @@
-import type { EvalValue, EvalValueBase } from './eval';
+import type { EvalContext, EvalValue, EvalValueBase } from './eval';
 import type { Node, Variable } from './ast';
 import type { EvalTypes } from './eval';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';
-import { MAX_INT, MIN_INT } from './const';
 import { parseColor, ParsedColor } from '../utils/correctColor';
 import { padLeft } from '../utils/padLeft';
+import { hasBigInt, MAX_INT, MIN_INT, toBigInt } from './bigint';
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -80,15 +80,30 @@ export function typeToString(type: EvalTypes): string {
     return type.charAt(0).toUpperCase() + type.substring(1);
 }
 
-const int32Array = new Int32Array(1);
-export function roundInteger(val: number): number {
-    int32Array[0] = val;
-    return int32Array[0];
+export function roundInteger(ctx: EvalContext, val: number | bigint): number | bigint {
+    if (hasBigInt) {
+        return toBigInt(val);
+    }
+
+    if (val < 0) {
+        const res = -Math.floor(-val as number);
+        if (res === 0) {
+            // -0 => 0
+            return 0;
+        }
+        return res;
+    }
+
+    return Math.floor(val as number);
 }
 
-export function checkIntegerOverflow(val: number): void {
+export function checkIntegerOverflow(ctx: EvalContext, val: number | bigint): void {
     if (val < MIN_INT || val > MAX_INT) {
         throw new Error('Integer overflow.');
+    }
+
+    if (!hasBigInt && (val > Number.MAX_SAFE_INTEGER || val < Number.MIN_SAFE_INTEGER)) {
+        ctx.safeIntegerOverflow = true;
     }
 }
 

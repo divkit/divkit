@@ -1,6 +1,6 @@
 /* eslint-disable no-else-return */
 
-import {
+import type {
     BinaryExpression, BooleanLiteral, CallExpression, CompareOperator,
     ConditionalExpression, EqualityOperator, FactorOperator, IntegerLiteral,
     LogicalExpression,
@@ -8,12 +8,23 @@ import {
     TemplateLiteral,
     UnaryExpression, Variable
 } from './ast';
+import type { WrappedError } from '../utils/wrapError';
 import { findBestMatchedFunc, Func, funcByArgs } from './funcs/funcs';
-import { evalError, roundInteger, typeToString, valToInternal, valToPreview, valToString } from './utils';
+import {
+    checkIntegerOverflow,
+    evalError,
+    roundInteger,
+    typeToString,
+    valToInternal,
+    valToPreview,
+    valToString
+} from './utils';
 import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
 import { Variable as VariableInstance, variableToValue } from './variable';
 import { walk } from './walk';
+import { toBigInt } from './bigint';
+import { wrapError } from '../utils/wrapError';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
@@ -46,7 +57,7 @@ export interface NumberValue extends EvalValueBase {
 
 export interface IntegerValue extends EvalValueBase {
     type: 'integer';
-    value: number;
+    value: number | bigint;
 }
 
 export interface BooleanValue extends EvalValueBase {
@@ -69,38 +80,46 @@ export interface EvalError {
 
 export type EvalResult = EvalValue | EvalError;
 
+export interface EvalContext {
+    variables: VariablesMap;
+    warnings: WrappedError[];
+    safeIntegerOverflow: boolean;
+}
+
 register();
 
-function evalStringLiteral(vars: VariablesMap, expr: StringLiteral): EvalValue {
+function evalStringLiteral(ctx: EvalContext, expr: StringLiteral): EvalValue {
     return {
         type: STRING,
         value: expr.value
     };
 }
 
-function evalNumberLiteral(vars: VariablesMap, expr: NumberLiteral): EvalValue {
+function evalNumberLiteral(ctx: EvalContext, expr: NumberLiteral): EvalValue {
     return {
         type: NUMBER,
         value: expr.value
     };
 }
 
-function evalIntegerLiteral(vars: VariablesMap, expr: IntegerLiteral): EvalValue {
+function evalIntegerLiteral(ctx: EvalContext, expr: IntegerLiteral): EvalValue {
+    checkIntegerOverflow(ctx, expr.value);
+
     return {
         type: INTEGER,
         value: expr.value
     };
 }
 
-function evalBooleanLiteral(vars: VariablesMap, expr: BooleanLiteral): EvalValue {
+function evalBooleanLiteral(ctx: EvalContext, expr: BooleanLiteral): EvalValue {
     return {
         type: BOOLEAN,
         value: expr.value ? 1 : 0
     };
 }
 
-function evalUnary(vars: VariablesMap, expr: UnaryExpression): EvalValue {
-    const val = valToInternal(evalAny(vars, expr.argument));
+function evalUnary(ctx: EvalContext, expr: UnaryExpression): EvalValue {
+    const val = valToInternal(evalAny(ctx, expr.argument));
 
     switch (expr.operator) {
         case '!':
@@ -117,9 +136,13 @@ function evalUnary(vars: VariablesMap, expr: UnaryExpression): EvalValue {
             const mul = expr.operator === '+' ? 1 : -1;
 
             if (val.type === INTEGER) {
+                const value = (val.value as bigint) * (toBigInt(mul) as bigint);
+
+                checkIntegerOverflow(ctx, value);
+
                 return {
                     type: INTEGER,
-                    value: val.value * mul
+                    value
                 };
             } else if (val.type === NUMBER) {
                 return {
@@ -135,32 +158,32 @@ function evalUnary(vars: VariablesMap, expr: UnaryExpression): EvalValue {
     }
 }
 
-function evalConditional(vars: VariablesMap, expr: ConditionalExpression): EvalValue {
-    const test = valToInternal(evalAny(vars, expr.test));
+function evalConditional(ctx: EvalContext, expr: ConditionalExpression): EvalValue {
+    const test = valToInternal(evalAny(ctx, expr.test));
     if (test.type === BOOLEAN) {
         if (test.value) {
-            return evalAny(vars, expr.consequent);
+            return evalAny(ctx, expr.consequent);
         } else {
-            return evalAny(vars, expr.alternate);
+            return evalAny(ctx, expr.alternate);
         }
     } else {
         evalError(
-            `${valToPreview(test)} ? ${valToPreview(evalAny(vars, expr.consequent))} : ${valToPreview(evalAny(vars, expr.alternate))}`,
+            `${valToPreview(test)} ? ${valToPreview(evalAny(ctx, expr.consequent))} : ${valToPreview(evalAny(ctx, expr.alternate))}`,
             'Ternary must be called with a Boolean value as a condition.'
         );
     }
 }
 
-function evalTemplateLiteral(vars: VariablesMap, expr: TemplateLiteral): EvalValue {
+function evalTemplateLiteral(ctx: EvalContext, expr: TemplateLiteral): EvalValue {
     let result = '';
 
     if (expr.quasis.length === 2 && expr.quasis[0].value === '' && expr.quasis[1].value === '') {
-        return evalAny(vars, expr.expressions[0]);
+        return evalAny(ctx, expr.expressions[0]);
     }
 
     for (let i = 0; i < expr.expressions.length; ++i) {
         result += expr.quasis[i].value;
-        result += valToString(evalAny(vars, expr.expressions[i]));
+        result += valToString(evalAny(ctx, expr.expressions[i]));
     }
     result += expr.quasis[expr.quasis.length - 1].value;
 
@@ -170,8 +193,8 @@ function evalTemplateLiteral(vars: VariablesMap, expr: TemplateLiteral): EvalVal
     };
 }
 
-function evalLogicalExpression(vars: VariablesMap, expr: LogicalExpression): EvalValue {
-    const left = valToInternal(evalAny(vars, expr.left));
+function evalLogicalExpression(ctx: EvalContext, expr: LogicalExpression): EvalValue {
+    const left = valToInternal(evalAny(ctx, expr.left));
     if (left.type !== BOOLEAN) {
         evalError(
             `${valToPreview(left)} ${expr.operator} ...`,
@@ -189,7 +212,7 @@ function evalLogicalExpression(vars: VariablesMap, expr: LogicalExpression): Eva
         };
     }
 
-    const right = valToInternal(evalAny(vars, expr.right));
+    const right = valToInternal(evalAny(ctx, expr.right));
     if (right.type !== BOOLEAN) {
         evalError(
             `${valToPreview(left)} ${expr.operator} ${valToPreview(right)}`,
@@ -250,7 +273,7 @@ function evalBinaryCompare<T extends EvalValue>(operator: CompareOperator, left:
     };
 }
 
-function evalBinarySum<T extends EvalValue>(operator: SumOperator, left: T, right: T): EvalValue {
+function evalBinarySum<T extends EvalValue>(ctx: EvalContext, operator: SumOperator, left: T, right: T): EvalValue {
     if (left.type !== STRING && left.type !== NUMBER && left.type !== INTEGER) {
         evalError(
             `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
@@ -271,20 +294,35 @@ function evalBinarySum<T extends EvalValue>(operator: SumOperator, left: T, righ
         };
     }
 
-    let res = operator === '+' ? left.value + (right.value as number) : left.value - (right.value as number);
+    let res: number | bigint = operator === '+' ?
+        (left.value as bigint) + (right.value as bigint) :
+        (left.value as bigint) - (right.value as bigint);
 
     // integer
     if (left.type === INTEGER) {
-        res = roundInteger(res);
+        try {
+            res = roundInteger(ctx, res);
+            checkIntegerOverflow(ctx, res);
+        } catch (err: any) {
+            evalError(
+                `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
+                err.message
+            );
+        }
     }
 
     return {
         type: left.type,
-        value: res
+        value: res as any
     };
 }
 
-function evalBinaryFactor<T extends EvalValue>(operator: FactorOperator, left: T, right: T): EvalValue {
+function evalBinaryFactor<T extends EvalValue>(
+    ctx: EvalContext,
+    operator: FactorOperator,
+    left: T,
+    right: T
+): EvalValue {
     if (left.type !== INTEGER && left.type !== NUMBER) {
         evalError(
             `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
@@ -292,39 +330,50 @@ function evalBinaryFactor<T extends EvalValue>(operator: FactorOperator, left: T
         );
     }
 
-    let res: number;
+    let res: number | bigint;
     if (operator === '*') {
-        res = left.value * (right.value as number);
+        // bigint | number actually
+        res = (left.value as bigint) * (right.value as bigint);
     } else if (operator === '/' || operator === '%') {
-        if (right.value === 0) {
+        if (Number(right.value) === 0) {
             evalError(
                 `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
                 'Division by zero is not supported.'
             );
         }
         if (operator === '/') {
-            res = left.value / (right.value as number);
+            // bigint | number actually
+            res = (left.value as bigint) / (right.value as bigint);
         } else {
-            res = left.value % (right.value as number);
+            // bigint | number actually
+            res = (left.value as bigint) % (right.value as bigint);
         }
     } else {
         throw new Error(`Unsupported operation ${operator}`);
     }
 
     if (left.type === INTEGER) {
-        res = roundInteger(res);
+        try {
+            res = roundInteger(ctx, res);
+            checkIntegerOverflow(ctx, res);
+        } catch (err: any) {
+            evalError(
+                `${valToPreview(left)} ${operator} ${valToPreview(right)}`,
+                err.message
+            );
+        }
     }
 
     return {
         type: left.type,
-        value: res
+        value: res as any
     };
 }
 
-function evalBinaryExpression(vars: VariablesMap, expr: BinaryExpression): EvalValue {
+function evalBinaryExpression(ctx: EvalContext, expr: BinaryExpression): EvalValue {
     const operator = expr.operator;
-    const left = evalAny(vars, expr.left);
-    const right = evalAny(vars, expr.right);
+    const left = evalAny(ctx, expr.left);
+    const right = evalAny(ctx, expr.right);
 
     if (left.type !== right.type) {
         evalError(
@@ -338,9 +387,9 @@ function evalBinaryExpression(vars: VariablesMap, expr: BinaryExpression): EvalV
     } else if (operator === '>' || operator === '>=' || operator === '<' || operator === '<=') {
         return evalBinaryCompare(operator, left, right);
     } else if (operator === '+' || operator === '-') {
-        return evalBinarySum(operator, left, right);
+        return evalBinarySum(ctx, operator, left, right);
     } else if (operator === '/' || operator === '*' || operator === '%') {
-        return evalBinaryFactor(operator, left, right);
+        return evalBinaryFactor(ctx, operator, left, right);
     }
 
     throw new Error(`Unsupported operation ${operator}`);
@@ -350,12 +399,12 @@ function argsToStr(args: EvalValue[]): string {
     return args.map(valToPreview).join(', ');
 }
 
-function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue {
+function evalCallExpression(ctx: EvalContext, expr: CallExpression): EvalValue {
     const funcName = expr.callee.name;
 
     let func: Func | undefined;
 
-    const args = expr.arguments.map(arg => evalAny(vars, arg));
+    const args = expr.arguments.map(arg => evalAny(ctx, arg));
     const funcKey = funcName + ':' + args.map(arg => arg.type).join('#');
 
     if (!funcByArgs.has(funcKey)) {
@@ -384,16 +433,16 @@ function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue
     }
 
     try {
-        return func.cb(vars, ...args);
+        return func.cb(ctx, ...args);
     } catch (err: any) {
         const prefix = `${funcName}(${argsToStr(args)})`;
         evalError(prefix, err.message);
     }
 }
 
-function evalVariable(vars: VariablesMap, expr: Variable): EvalValue {
+function evalVariable(ctx: EvalContext, expr: Variable): EvalValue {
     const varName = expr.id.name;
-    const variable = vars.get(varName);
+    const variable = ctx.variables.get(varName);
 
     if (variable) {
         return variableToValue(variable);
@@ -416,19 +465,19 @@ const EVAL_MAP = {
     Variable: evalVariable
 };
 
-export function evalAny(vars: VariablesMap, expr: Node): EvalValue {
+export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     if (expr.type in EVAL_MAP) {
-        return EVAL_MAP[expr.type](vars, expr as any);
+        return EVAL_MAP[expr.type](ctx, expr as any);
     }
     throw new Error('Unsupported expression');
 }
 
-function checkVariables(vars: VariablesMap, expr: Node): void {
+function checkVariables(ctx: EvalContext, expr: Node): void {
     let unknownVariableName = '';
 
     walk(expr, {
         Variable(node) {
-            if (!unknownVariableName && !vars.has(node.id.name)) {
+            if (!unknownVariableName && !ctx.variables.has(node.id.name)) {
                 unknownVariableName = node.id.name;
             }
         }
@@ -439,14 +488,37 @@ function checkVariables(vars: VariablesMap, expr: Node): void {
     }
 }
 
-export function evalExpression(vars: VariablesMap, expr: Node): EvalResult {
+export function evalExpression(vars: VariablesMap, expr: Node): {
+    result: EvalResult;
+    warnings: WrappedError[];
+} {
     try {
-        checkVariables(vars, expr);
-        return evalAny(vars, expr);
+        const ctx: EvalContext = {
+            variables: vars,
+            warnings: [],
+            safeIntegerOverflow: false
+        };
+
+        checkVariables(ctx, expr);
+        const result = evalAny(ctx, expr);
+
+        if (ctx.safeIntegerOverflow) {
+            ctx.warnings.push(wrapError(new Error('Safe integer overflow, values may lose accuracy.'), {
+                level: 'warn'
+            }));
+        }
+
+        return {
+            result,
+            warnings: ctx.warnings
+        };
     } catch (err: any) {
         return {
-            type: 'error',
-            value: err.message
+            result: {
+                type: 'error',
+                value: err.message
+            },
+            warnings: []
         };
     }
 }

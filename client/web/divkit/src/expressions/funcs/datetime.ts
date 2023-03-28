@@ -1,5 +1,4 @@
-import type { DatetimeValue, EvalValue, IntegerValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type { DatetimeValue, EvalContext, EvalValue, IntegerValue } from '../eval';
 import { registerFunc } from './funcs';
 import { DATETIME, INTEGER } from '../const';
 import { valToString } from '../utils';
@@ -13,10 +12,10 @@ function getMaxDate(date: Date): number {
     return copy.getUTCDate();
 }
 
-function parseUnixTime(_vars: VariablesMap, arg: IntegerValue): EvalValue {
+function parseUnixTime(_ctx: EvalContext, arg: IntegerValue): EvalValue {
     return {
         type: DATETIME,
-        value: new Date(arg.value * 1000)
+        value: new Date(Number(arg.value) * 1000)
     };
 }
 
@@ -27,32 +26,17 @@ function nowLocal(): EvalValue {
     };
 }
 
-function addMillis(_vars: VariablesMap, datetime: DatetimeValue, milliseconds: IntegerValue): EvalValue {
+function addMillis(_ctx: EvalContext, datetime: DatetimeValue, milliseconds: IntegerValue): EvalValue {
     return {
         type: DATETIME,
-        value: new Date(datetime.value.getTime() + milliseconds.value)
+        value: new Date(datetime.value.getTime() + Number(milliseconds.value))
     };
 }
 
-function setYear(_vars: VariablesMap, datetime: DatetimeValue, year: IntegerValue): EvalValue {
+function setYear(_ctx: EvalContext, datetime: DatetimeValue, year: IntegerValue): EvalValue {
     const copy = new Date(datetime.value);
 
-    copy.setUTCFullYear(year.value);
-
-    return {
-        type: DATETIME,
-        value: copy
-    };
-}
-
-function setMonth(_vars: VariablesMap, datetime: DatetimeValue, month: IntegerValue): EvalValue {
-    if (month.value < 1 || month.value > 12) {
-        throw new Error(`Expecting month in [1..12], instead got ${month.value}.`);
-    }
-
-    const copy = new Date(datetime.value);
-
-    copy.setUTCMonth(month.value - 1);
+    copy.setUTCFullYear(Number(year.value));
 
     return {
         type: DATETIME,
@@ -60,14 +44,15 @@ function setMonth(_vars: VariablesMap, datetime: DatetimeValue, month: IntegerVa
     };
 }
 
-function setDay(_vars: VariablesMap, datetime: DatetimeValue, day: IntegerValue): EvalValue {
-    const copy = new Date(datetime.value);
+function setMonth(_ctx: EvalContext, datetime: DatetimeValue, month: IntegerValue): EvalValue {
+    const intVal = Number(month.value);
 
-    if (day.value <= 0 && day.value !== -1 || day.value > getMaxDate(copy)) {
-        throw new Error(`Unable to set day ${day.value} for date ${valToString(datetime)}.`);
+    if (intVal < 1 || intVal > 12) {
+        throw new Error(`Expecting month in [1..12], instead got ${intVal}.`);
     }
 
-    copy.setUTCDate(day.value === -1 ? 0 : day.value);
+    const copy = new Date(datetime.value);
+    copy.setUTCMonth(intVal - 1);
 
     return {
         type: DATETIME,
@@ -75,14 +60,15 @@ function setDay(_vars: VariablesMap, datetime: DatetimeValue, day: IntegerValue)
     };
 }
 
-function setHours(_vars: VariablesMap, datetime: DatetimeValue, hours: IntegerValue): EvalValue {
-    if (hours.value < 0 || hours.value > 23) {
-        throw new Error(`Expecting hours in [0..23], instead got ${hours.value}.`);
+function setDay(_ctx: EvalContext, datetime: DatetimeValue, day: IntegerValue): EvalValue {
+    const copy = new Date(datetime.value);
+    const intVal = Number(day.value);
+
+    if (intVal <= 0 && intVal !== -1 || intVal > getMaxDate(copy)) {
+        throw new Error(`Unable to set day ${intVal} for date ${valToString(datetime)}.`);
     }
 
-    const copy = new Date(datetime.value);
-
-    copy.setUTCHours(hours.value);
+    copy.setUTCDate(intVal === -1 ? 0 : intVal);
 
     return {
         type: DATETIME,
@@ -90,14 +76,15 @@ function setHours(_vars: VariablesMap, datetime: DatetimeValue, hours: IntegerVa
     };
 }
 
-function setMinutes(_vars: VariablesMap, datetime: DatetimeValue, minutes: IntegerValue): EvalValue {
-    if (minutes.value < 0 || minutes.value > 59) {
-        throw new Error(`Expecting minutes in [0..59], instead got ${minutes.value}.`);
+function setHours(_ctx: EvalContext, datetime: DatetimeValue, hours: IntegerValue): EvalValue {
+    const intVal = Number(hours.value);
+
+    if (intVal < 0 || intVal > 23) {
+        throw new Error(`Expecting hours in [0..23], instead got ${intVal}.`);
     }
 
     const copy = new Date(datetime.value);
-
-    copy.setUTCMinutes(minutes.value);
+    copy.setUTCHours(intVal);
 
     return {
         type: DATETIME,
@@ -105,14 +92,16 @@ function setMinutes(_vars: VariablesMap, datetime: DatetimeValue, minutes: Integ
     };
 }
 
-function setSeconds(_vars: VariablesMap, datetime: DatetimeValue, seconds: IntegerValue): EvalValue {
-    if (seconds.value < 0 || seconds.value > 59) {
-        throw new Error(`Expecting seconds in [0..59], instead got ${seconds.value}.`);
+function setMinutes(_ctx: EvalContext, datetime: DatetimeValue, minutes: IntegerValue): EvalValue {
+    const intVal = Number(minutes.value);
+
+    if (intVal < 0 || intVal > 59) {
+        throw new Error(`Expecting minutes in [0..59], instead got ${intVal}.`);
     }
 
     const copy = new Date(datetime.value);
 
-    copy.setUTCSeconds(seconds.value);
+    copy.setUTCMinutes(intVal);
 
     return {
         type: DATETIME,
@@ -120,14 +109,31 @@ function setSeconds(_vars: VariablesMap, datetime: DatetimeValue, seconds: Integ
     };
 }
 
-function setMillis(_vars: VariablesMap, datetime: DatetimeValue, millis: IntegerValue): EvalValue {
-    if (millis.value < 0 || millis.value > 999) {
-        throw new Error(`Expecting millis in [0..999], instead got ${millis.value}.`);
+function setSeconds(_ctx: EvalContext, datetime: DatetimeValue, seconds: IntegerValue): EvalValue {
+    const intVal = Number(seconds.value);
+
+    if (intVal < 0 || intVal > 59) {
+        throw new Error(`Expecting seconds in [0..59], instead got ${intVal}.`);
     }
 
     const copy = new Date(datetime.value);
+    copy.setUTCSeconds(intVal);
 
-    copy.setUTCMilliseconds(millis.value);
+    return {
+        type: DATETIME,
+        value: copy
+    };
+}
+
+function setMillis(_ctx: EvalContext, datetime: DatetimeValue, millis: IntegerValue): EvalValue {
+    const intVal = Number(millis.value);
+
+    if (intVal < 0 || intVal > 999) {
+        throw new Error(`Expecting millis in [0..999], instead got ${intVal}.`);
+    }
+
+    const copy = new Date(datetime.value);
+    copy.setUTCMilliseconds(intVal);
 
     return {
         type: DATETIME,
@@ -139,7 +145,7 @@ const getter = (
     method: 'getUTCFullYear' | 'getUTCMonth' | 'getUTCDate' | 'getUTCDay' | 'getUTCHours' | 'getUTCMinutes' |
         'getUTCSeconds' | 'getUTCMilliseconds'
 ) => {
-    return (_vars: VariablesMap, datetime: DatetimeValue): EvalValue => {
+    return (_ctx: EvalContext, datetime: DatetimeValue): EvalValue => {
         const copy = new Date(datetime.value.getTime());
 
         let value: number = copy[method]();

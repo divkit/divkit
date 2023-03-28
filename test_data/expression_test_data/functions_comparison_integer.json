@@ -51,7 +51,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -161,7 +162,8 @@
       },
       "variables": [],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {

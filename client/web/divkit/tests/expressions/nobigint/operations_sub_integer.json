@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "name": "123 - 1 => 122",
+      "expression": "@{123 - 1}",
+      "expected": {
+        "type": "integer",
+        "value": 122
+      },
+      "variables": []
+    },
+    {
+      "name": "9223372036854775807 - 1 => 9223372036854775806",
+      "expression": "@{9223372036854775807 - 1}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775806
+      },
+      "expected_warnings": [
+        "Safe integer overflow, values may lose accuracy."
+      ],
+      "variables": []
+    }
+  ]
+}

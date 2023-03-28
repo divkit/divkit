@@ -10,6 +10,7 @@ import type {
     Customization
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
+import type { WrappedError } from './common';
 
 export interface DivkitDebugInstance extends DivkitInstance {
     getDebugVariables(): Map<string, Variable>;
@@ -89,6 +90,14 @@ export function evalExpression(expr: string, opts?: {
     variables?: Map<string, Variable>;
     type?: 'exact' | 'json';
 }): EvalResult;
+
+export function evalExpressionWithFullResult(expr: string, opts?: {
+    variables?: Map<string, Variable>;
+    type?: 'exact' | 'json';
+}): {
+    result: EvalResult;
+    warnings: WrappedError[];
+};
 
 export function valToString(val: EvalValue): string;
 

@@ -1,12 +1,21 @@
-import type { BooleanValue, ColorValue, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
-import type { VariablesMap } from '../eval';
+import type {
+    BooleanValue,
+    ColorValue,
+    EvalContext,
+    EvalValue,
+    IntegerValue,
+    NumberValue,
+    StringValue,
+    UrlValue
+} from '../eval';
 import type { VariableType, VariableValue } from '../variable';
 import { registerFunc } from './funcs';
-import { BOOLEAN, COLOR, INTEGER, MAX_INT, MIN_INT, NUMBER, STRING, URL } from '../const';
+import { BOOLEAN, COLOR, INTEGER, NUMBER, STRING, URL } from '../const';
 import { transformColorValue, valToString } from '../utils';
+import { MAX_INT, MIN_INT, toBigInt } from '../bigint';
 
 function toString(
-    _vars: VariablesMap,
+    _ctx: EvalContext,
     arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue
 ): EvalValue {
     return {
@@ -16,7 +25,7 @@ function toString(
 }
 
 
-function toNumber(_vars: VariablesMap, arg: IntegerValue | StringValue): EvalValue {
+function toNumber(_ctx: EvalContext, arg: IntegerValue | StringValue): EvalValue {
     const num = Number(arg.value);
 
     if (isNaN(num) || !Number.isFinite(num)) {
@@ -30,7 +39,7 @@ function toNumber(_vars: VariablesMap, arg: IntegerValue | StringValue): EvalVal
 }
 
 
-function toIntegerNumber(_vars: VariablesMap, arg: NumberValue): EvalValue {
+function toIntegerNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
     if (arg.value > MAX_INT || arg.value < MIN_INT) {
         throw new Error('Unable to convert value to Integer.');
     }
@@ -39,14 +48,23 @@ function toIntegerNumber(_vars: VariablesMap, arg: NumberValue): EvalValue {
 
     return {
         type: INTEGER,
-        value: num
+        value: toBigInt(num)
     };
 }
 
-function toIntegerString(_vars: VariablesMap, arg: StringValue): EvalValue {
-    const num = Number(arg.value);
+function toIntegerString(_ctx: EvalContext, arg: StringValue): EvalValue {
+    let num: number | bigint;
+    try {
+        num = toBigInt(arg.value);
+    } catch (err) {
+        throw new Error('Unable to convert value to Integer.');
+    }
 
-    if (isNaN(num) || num % 1 !== 0 || num > MAX_INT || num < MIN_INT) {
+    if (
+        (typeof num === 'number' && (isNaN(num) || num % 1 !== 0)) ||
+        num > MAX_INT ||
+        num < MIN_INT
+    ) {
         throw new Error('Unable to convert value to Integer.');
     }
 
@@ -56,26 +74,27 @@ function toIntegerString(_vars: VariablesMap, arg: StringValue): EvalValue {
     };
 }
 
-function toIntegerBoolean(_vars: VariablesMap, arg: BooleanValue): EvalValue {
+function toIntegerBoolean(_ctx: EvalContext, arg: BooleanValue): EvalValue {
     return {
         type: INTEGER,
-        value: arg.value ? 1 : 0
+        value: toBigInt(arg.value ? 1 : 0)
     };
 }
 
 
-function toBooleanInteger(_vars: VariablesMap, arg: IntegerValue): EvalValue {
-    if (arg.value !== 1 && arg.value !== 0) {
+function toBooleanInteger(_ctx: EvalContext, arg: IntegerValue): EvalValue {
+    const intVal = Number(arg.value);
+    if (intVal !== 1 && intVal !== 0) {
         throw new Error('Unable to convert value to Boolean.');
     }
 
     return {
         type: BOOLEAN,
-        value: arg.value
+        value: intVal
     };
 }
 
-function toBooleanString(_vars: VariablesMap, arg: StringValue): EvalValue {
+function toBooleanString(_ctx: EvalContext, arg: StringValue): EvalValue {
     if (arg.value !== 'true' && arg.value !== 'false') {
         throw new Error('Unable to convert value to Boolean.');
     }
@@ -86,21 +105,21 @@ function toBooleanString(_vars: VariablesMap, arg: StringValue): EvalValue {
     };
 }
 
-function toColor(_vars: VariablesMap, arg: StringValue): EvalValue {
+function toColor(_ctx: EvalContext, arg: StringValue): EvalValue {
     return {
         type: COLOR,
         value: transformColorValue(arg.value)
     };
 }
 
-function toUrl(_vars: VariablesMap, arg: StringValue): EvalValue {
+function toUrl(_ctx: EvalContext, arg: StringValue): EvalValue {
     return {
         type: URL,
         value: arg.value
     };
 }
 
-function encodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
+function encodeUri(_ctx: EvalContext, str: StringValue): EvalValue {
     try {
         return {
             type: STRING,
@@ -111,7 +130,7 @@ function encodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
     }
 }
 
-function decodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
+function decodeUri(_ctx: EvalContext, str: StringValue): EvalValue {
     try {
         return {
             type: STRING,
@@ -123,12 +142,12 @@ function decodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
 }
 
 function getValueForced(
-    vars: VariablesMap,
+    ctx: EvalContext,
     varName: StringValue,
     fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue,
     type: VariableType
 ): EvalValue {
-    const variable = vars.get(varName.value);
+    const variable = ctx.variables.get(varName.value);
     let value: VariableValue;
 
     if (variable && variable.getType() === type) {
@@ -149,27 +168,27 @@ function getValueForced(
 }
 
 function getValue(
-    vars: VariablesMap,
+    ctx: EvalContext,
     varName: StringValue,
     fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
 ): EvalValue {
-    return getValueForced(vars, varName, fallback, fallback.type);
+    return getValueForced(ctx, varName, fallback, fallback.type);
 }
 
 function getColorValue(
-    vars: VariablesMap,
+    ctx: EvalContext,
     varName: StringValue,
     fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
 ) {
-    return getValueForced(vars, varName, fallback, 'color');
+    return getValueForced(ctx, varName, fallback, 'color');
 }
 
 function getUrlValue(
-    vars: VariablesMap,
+    ctx: EvalContext,
     varName: StringValue,
     fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
 ) {
-    return getValueForced(vars, varName, fallback, 'url');
+    return getValueForced(ctx, varName, fallback, 'url');
 }
 
 export function registerStd(): void {
