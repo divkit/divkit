@@ -18,10 +18,7 @@
     },
     {
       "$ref": "div-nine-patch-background.json",
-      "$description": "translations.json#/div_nine_patch_background",
-      "platforms": [
-        "web"
-      ]
+      "$description": "translations.json#/div_nine_patch_background"
     }
   ]
 }
