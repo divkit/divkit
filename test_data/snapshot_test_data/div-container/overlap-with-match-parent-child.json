@@ -1,7 +1,8 @@
 {
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "description": "match_parent inside container with orientation: overlap should not affect total size",
   "card": {

@@ -1,7 +1,7 @@
 {
   "platforms": [
     "android",
-    "web"
+    "ios"
   ],
   "description": "match_parent should calculate size without padding",
   "card": {

@@ -1,7 +1,7 @@
 {
   "platforms": [
     "android",
-    "web"
+    "ios"
   ],
   "description": "match_parent should take free space, event if that space is lesser, than the element paddings",
   "card": {
