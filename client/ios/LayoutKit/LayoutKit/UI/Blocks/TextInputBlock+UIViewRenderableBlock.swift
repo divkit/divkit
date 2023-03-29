@@ -17,7 +17,7 @@ extension TextInputBlock {
     inputView.setText(value: textValue, typo: textTypo)
     inputView.setHint(hint)
     inputView.setHighlightColor(highlightColor)
-    inputView.setInputType(inputType)
+    inputView.setKeyboardType(keyboardType)
     inputView.setMultiLineMode(multiLineMode)
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
@@ -36,24 +36,21 @@ extension TextInputBlock {
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private let multiLineInput = UITextView()
   private let singleLineInput = UITextField()
-  private let selectionView = UIPickerView()
   private let hintView = UILabel()
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
-  @Binding private var textValue: String
+  private var textValue: Binding<String>?
   private var selectAllOnFocus = false
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var isRightToLeft = false
-  private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
-    self._textValue = .empty
     super.init(frame: frame)
 
     isRightToLeft = UIView
@@ -77,9 +74,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     hintView.numberOfLines = 0
     hintView.isUserInteractionEnabled = false
     hintView.isHidden = true
-
-    selectionView.delegate = self
-    selectionView.dataSource = self
 
     addSubview(multiLineInput)
     addSubview(singleLineInput)
@@ -119,19 +113,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     return multiLineInput.attributedText.string
   }
 
-  func setInputType(_ type: TextInputBlock.InputType) {
-    switch type {
-    case let .keyboard(type):
-      multiLineInput.inputView = nil
-      multiLineInput.tintColor = nil
-      selectionItems = nil
-      multiLineInput.keyboardType = type.uiType
-      singleLineInput.keyboardType = type.uiType
-    case let .selection(items):
-      selectionItems = items
-      multiLineInput.tintColor = multiLineInput.backgroundColor
-      multiLineInput.inputView = selectionView
-    }
+  func setKeyboardType(_ type: TextInputBlock.KeyboardType) {
+    multiLineInput.keyboardType = type.uiType
+    singleLineInput.keyboardType = type.uiType
   }
 
   func setMultiLineMode(_ multiLineMode: Bool) {
@@ -174,7 +158,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setText(value: Binding<String>, typo: Typo) {
     let textTypo = isRightToLeft ? typo.with(alignment: .right) : typo
-    self._textValue = value
+    self.textValue = value
     let attributedText = value.wrappedValue.with(typo: textTypo)
     multiLineInput.attributedText = attributedText
     singleLineInput.attributedText = attributedText
@@ -274,12 +258,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
 extension TextInputBlockView {
   func inputViewDidBeginEditing(_ view: UIView) {
-    if let pickerView = multiLineInput.inputView as? UIPickerView {
-      let index = selectionItems?.firstIndex { $0.text == textValue } ?? 0
-      pickerView.selectRow(index, inComponent: 0, animated: false)
-      $textValue.setValue(selectionItems?[index].text ?? "", responder: view)
-    }
-
     startListeningTap()
     if selectAllOnFocus {
       view.selectAll(nil)
@@ -289,7 +267,7 @@ extension TextInputBlockView {
 
   func inputViewDidChange(_ view: UIView) {
     updateHintVisibility()
-    $textValue.setValue(currentText, responder: view)
+    textValue?.setValue(currentText, responder: view)
   }
 
   func inputViewDidEndEditing(_: UIView) {
@@ -362,10 +340,6 @@ extension TextInputBlockView: UITextFieldDelegate {
   func textFieldDidEndEditing(_ textField: UITextField) {
     inputViewDidEndEditing(textField)
   }
-
-  func textView(_: UITextView, shouldChangeTextIn _: NSRange, replacementText _: String) -> Bool {
-    selectionItems == nil
-  }
 }
 
 extension TextInputBlockView {
@@ -399,27 +373,7 @@ extension TextInputBlockView {
   }
 }
 
-extension TextInputBlockView: UIPickerViewDataSource {
-  func numberOfComponents(in _: UIPickerView) -> Int {
-    1
-  }
-
-  func pickerView(_: UIPickerView, numberOfRowsInComponent _: Int) -> Int {
-    selectionItems?.count ?? 0
-  }
-
-  func pickerView(_: UIPickerView, didSelectRow row: Int, inComponent _: Int) {
-    $textValue.setValue(selectionItems?[row].text ?? "", responder: self)
-  }
-}
-
-extension TextInputBlockView: UIPickerViewDelegate {
-  func pickerView(_: UIPickerView, titleForRow row: Int, forComponent _: Int) -> String? {
-    selectionItems?[row].value
-  }
-}
-
-extension TextInputBlock.InputType.KeyboardType {
+extension TextInputBlock.KeyboardType {
   fileprivate var uiType: UIKeyboardType {
     switch self {
     case .default:
