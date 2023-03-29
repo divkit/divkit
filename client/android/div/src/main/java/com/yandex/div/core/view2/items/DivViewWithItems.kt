@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.items
 
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,8 +52,12 @@ internal sealed class DivViewWithItems {
             set(value) {
                 checkItem(value, itemCount) {
                     val smoothScroller = object : LinearSmoothScroller(view.context) {
+                        private val MILLISECONDS_PER_INCH = 50f // default is 25f, bigger - slower
                         override fun getHorizontalSnapPreference() = SNAP_TO_START
                         override fun getVerticalSnapPreference() = SNAP_TO_START
+                        override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                            return MILLISECONDS_PER_INCH / displayMetrics.densityDpi
+                        }
                     }
                     smoothScroller.targetPosition = value
                     view.layoutManager?.startSmoothScroll(smoothScroller)

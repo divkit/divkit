@@ -38,10 +38,6 @@ internal object DivItemChangeActionHandler {
         val targetView = view.view.findViewWithTag<View>(id) ?: return false
         val authority = uri.authority
         val viewWithItems = DivViewWithItems.create(targetView, view.expressionResolver) { direction(authority) } ?: return false
-        // TODO(MORDAANDROID-663): Enable navigation for PagingGallery
-        if (!isItemNavigationSupported(viewWithItems)) {
-            return false
-        }
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM ->
                 handleSetCurrentItem(uri, viewWithItems)
@@ -89,12 +85,6 @@ internal object DivItemChangeActionHandler {
         return true
     }
 
-    private fun isItemNavigationSupported(viewWithItems: DivViewWithItems): Boolean {
-        return when (viewWithItems) {
-            is DivViewWithItems.PagingGallery -> false
-            else -> true
-        }
-    }
 }
 
 private fun overflowStrategy(uri: Uri, currentItem: Int, itemCount: Int): OverflowItemStrategy {
