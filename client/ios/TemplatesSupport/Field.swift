@@ -269,10 +269,7 @@ extension Field {
         .resolveValue(context: context, validator: validator)
       return result ?? .failure(NonEmptyArray(.generic))
     case let .link(link):
-      return safeValueForLink(
-        { try context.getArray($0, validator: validator, type: T.Element.self) },
-        link: link
-      )
+      return context.getArray(link, validator: validator, type: T.Element.self)
     }
   }
 

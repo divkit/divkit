@@ -83,15 +83,12 @@ extension Field {
       }
       return .success(value)
     case let .link(link):
-      return safeValueForLink(
-        { try context.templateData.getArray(
-          $0,
-          transform: { (value: U) in
-            expressionTransform(value, transform: transform, validator: nil)
-          },
-          validator: validator
-        ) },
-        link: link
+      return context.templateData.getArray(
+        link,
+        transform: { (value: U) in
+          expressionTransform(value, transform: transform, validator: nil)
+        },
+        validator: validator
       )
     }
   }

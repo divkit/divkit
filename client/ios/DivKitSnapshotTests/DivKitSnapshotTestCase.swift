@@ -30,7 +30,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       return true
     }
     
-    guard let platforms = try? jsonDict.getArray("platforms") else {
+    guard let platforms = jsonDict.getArray("platforms").value else {
       return true
     }
     

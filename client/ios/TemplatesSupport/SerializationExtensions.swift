@@ -165,6 +165,19 @@ extension Context {
       validator: validator
     )
   }
+
+  @inlinable
+  public func getArray<T: TemplateValue & TemplateDeserializable>(
+    _ key: String,
+    validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
+    type: T.Type
+  ) -> DeserializationResult<[T.ResolvedValue]> {
+    templateData.getArray(
+      key,
+      transform: { deserializeTemplate($0, type: type) },
+      validator: validator
+    )
+  }
 }
 
 @inlinable
