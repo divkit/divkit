@@ -28,7 +28,7 @@ public final class RadialGradientView: UIView {
 
   @available(*, unavailable)
   public required init(coder _: NSCoder) {
-    fatalError()
+    fatalError("init(coder:) has not been implemented")
   }
 
   private func setGradientProperties() {

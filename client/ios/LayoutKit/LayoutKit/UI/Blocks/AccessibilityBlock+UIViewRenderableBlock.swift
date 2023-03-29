@@ -59,7 +59,7 @@ private final class AccessibilityBlockView: UIView, BlockViewProtocol,
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
-    fatalError()
+    fatalError("init(coder:) has not been implemented")
   }
 
   func configure(

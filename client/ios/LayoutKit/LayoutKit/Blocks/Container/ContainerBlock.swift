@@ -307,7 +307,8 @@ public final class ContainerBlock: BlockWithLayout {
     }
 
     guard case .intrinsic = widthTrait else {
-      fatalError()
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for resizable block")
+      return 0
     }
 
     if let cached = cached.nonResizableSize, cached.height == nil {
@@ -349,7 +350,8 @@ public final class ContainerBlock: BlockWithLayout {
     }
 
     guard case .intrinsic = widthTrait else {
-      fatalError()
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for resizable block")
+      return 0
     }
 
     if let cached = cached.nonResizableSize, let cachedHeight = cached.height,
@@ -381,17 +383,24 @@ public final class ContainerBlock: BlockWithLayout {
     case .intrinsic:
       return intrinsicContentHeight(forWidth: width)
     case .weighted:
-      fatalError()
+      assertionFailure("cannot get heightOfVerticallyNonResizableBlock for resizable block")
+      return 0
     }
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else { fatalError() }
+    guard case let .weighted(value) = heightTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return LayoutTrait.Weight.default
+    }
     return value
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else { fatalError() }
+    guard case let .weighted(value) = widthTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return LayoutTrait.Weight.default
+    }
     return value
   }
 

@@ -325,7 +325,8 @@ extension DivContainer.Orientation {
     case .horizontal:
       return .horizontal
     case .overlap:
-      fatalError()
+      assertionFailure("layout direction for overlap")
+      return .vertical
     }
   }
 }

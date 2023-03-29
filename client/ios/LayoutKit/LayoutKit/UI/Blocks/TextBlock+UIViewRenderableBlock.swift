@@ -217,7 +217,7 @@ private final class TextBlockView: UIView {
   }
 
   @available(*, unavailable)
-  required init?(coder _: NSCoder) { fatalError() }
+  required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   override func draw(_ rect: CGRect) {
     guard let model = model else { return }

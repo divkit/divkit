@@ -17,13 +17,17 @@ extension BlockWithWidthTrait {
 
   public var widthOfHorizontallyNonResizableBlock: CGFloat {
     if case LayoutTrait.weighted = widthTrait {
-      fatalError()
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for resizable block")
+      return 0
     }
     return intrinsicContentWidth
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else { fatalError() }
+    guard case let .weighted(value) = widthTrait else {
+      assertionFailure("cannot get weightOfHorizontallyResizableBlock for non resizable block")
+      return .default
+    }
     return value
   }
 
@@ -46,13 +50,17 @@ extension BlockWithHeightTrait {
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
     if case LayoutTrait.weighted = heightTrait {
-      fatalError()
+      assertionFailure("cannot get heightOfVerticallyNonResizableBlock for resizable block")
+      return 0
     }
     return intrinsicContentHeight(forWidth: width)
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else { fatalError() }
+    guard case let .weighted(value) = heightTrait else {
+      assertionFailure("cannot get weightOfVerticallyResizableBlock for non resizable block")
+      return .default
+    }
     return value
   }
 

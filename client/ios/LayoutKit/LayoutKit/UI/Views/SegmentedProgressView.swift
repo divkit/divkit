@@ -39,7 +39,7 @@ public final class SegmentedProgressView: UIView {
 
   @available(*, unavailable)
   public required init?(coder _: NSCoder) {
-    fatalError()
+    fatalError("init(coder:) has not been implemented")
   }
 
   private var segmentLayers: [SegmentLayer] = []

@@ -12,7 +12,7 @@ public final class URLActionHandlingView: UIView, UIActionEventPerforming {
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
-    fatalError("")
+    fatalError("init(coder:) has not been implemented")
   }
 
   public func perform(uiActionEvent event: LayoutKit.UIActionEvent, from _: AnyObject) {

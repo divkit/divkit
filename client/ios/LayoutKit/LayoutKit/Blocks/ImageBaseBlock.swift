@@ -60,14 +60,16 @@ extension ImageBaseBlock {
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
     if case .trait(.weighted) = height {
-      fatalError()
+      assertionFailure("cannot get heightOfVerticallyNonResizableBlock for resizable block")
+      return 0
     }
     return intrinsicContentHeight(forWidth: width)
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
     guard case let .trait(.weighted(value)) = height else {
-      fatalError()
+      assertionFailure("cannot get weightOfVerticallyResizableBlock for non resizable block")
+      return .default
     }
     return value
   }
@@ -83,9 +85,11 @@ extension ImagePlaceholder {
     case let .image(image):
       return image.size
     case .color, .view:
-      fatalError()
+      assertionFailure("cannot get size of color or view")
+      return .zero
     @unknown default:
-      fatalError()
+      assertionFailure("cannot get size of unknown image placeholder")
+      return .zero
     }
   }
 }

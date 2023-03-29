@@ -218,7 +218,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   @available(*, unavailable)
-  required init?(coder _: NSCoder) { fatalError() }
+  required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   @objc private func handleTap(recognizer: UITapGestureRecognizer) {
     // Sometimes there are late touches that were performed before layout.

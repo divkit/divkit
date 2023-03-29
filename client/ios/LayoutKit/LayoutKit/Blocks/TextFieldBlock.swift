@@ -236,7 +236,8 @@ public final class TextFieldBlock: Block {
       return value
     case .intrinsic,
          .weighted:
-      fatalError()
+      assertionFailure("cannot get widthOfHorizontallyNonResizableBlock for text block")
+      return 0
     }
   }
 
@@ -249,17 +250,24 @@ public final class TextFieldBlock: Block {
     case let .fixed(value):
       return value
     case .weighted:
-      fatalError()
+      assertionFailure("cannot get heightOfVerticallyNonResizableBlock for weighted block")
+      return 0
     }
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else { fatalError() }
+    guard case let .weighted(value) = heightTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return .default
+    }
     return value
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else { fatalError() }
+    guard case let .weighted(value) = widthTrait else {
+      assertionFailure("try to get weight for non resizable block")
+      return .default
+    }
     return value
   }
 

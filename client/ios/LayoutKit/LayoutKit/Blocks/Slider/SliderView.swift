@@ -189,7 +189,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
-    fatalError()
+    fatalError("init(coder:) has not been implemented")
   }
 
   @objc private func handleTap(_ recognizer: UILongPressGestureRecognizer) {

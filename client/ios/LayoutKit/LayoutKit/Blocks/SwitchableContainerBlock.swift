@@ -119,7 +119,8 @@ public final class SwitchableContainerBlock: Block {
 
   public var widthOfHorizontallyNonResizableBlock: CGFloat {
     guard !isHorizontallyResizable else {
-      fatalError("Should be at least one non resizable block")
+      assertionFailure("Should be at least one non resizable block")
+      return 0
     }
 
     var width: CGFloat = 0
@@ -134,7 +135,8 @@ public final class SwitchableContainerBlock: Block {
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
     guard !isVerticallyResizable else {
-      fatalError("Should be at leat one non resizable block")
+      assertionFailure("Should be at leat one non resizable block")
+      return 0
     }
 
     var height: CGFloat = 0
