@@ -50,12 +50,10 @@ public final class DivInput: DivBase {
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>? // at least 1 char
   public let id: String? // at least 1 char
-  public let inputMethod: DivInputMethod?
   public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets
-  public let mask: DivInputMask?
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets
@@ -205,9 +203,6 @@ public final class DivInput: DivBase {
   static let idValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  static let inputMethodValidator: AnyValueValidator<DivInputMethod> =
-    makeNoOpValueValidator()
-
   static let keyboardTypeValidator: AnyValueValidator<DivInput.KeyboardType> =
     makeNoOpValueValidator()
 
@@ -215,9 +210,6 @@ public final class DivInput: DivBase {
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
-
-  static let maskValidator: AnyValueValidator<DivInputMask> =
     makeNoOpValueValidator()
 
   static let maxVisibleLinesValidator: AnyValueValidator<Int> =
@@ -293,12 +285,10 @@ public final class DivInput: DivBase {
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
     id: String? = nil,
-    inputMethod: DivInputMethod? = nil,
     keyboardType: Expression<KeyboardType>? = nil,
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
-    mask: DivInputMask? = nil,
     maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -336,12 +326,10 @@ public final class DivInput: DivBase {
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
-    self.inputMethod = inputMethod
     self.keyboardType = keyboardType ?? .value(.multiLineText)
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.margins = margins ?? DivEdgeInsets()
-    self.mask = mask
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings ?? DivEdgeInsets()
@@ -409,57 +397,55 @@ extension DivInput: Equatable {
       return false
     }
     guard
-      lhs.inputMethod == rhs.inputMethod,
       lhs.keyboardType == rhs.keyboardType,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.letterSpacing == rhs.letterSpacing,
+      lhs.lineHeight == rhs.lineHeight
     else {
       return false
     }
     guard
-      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask
-    else {
-      return false
-    }
-    guard
       lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings
+      lhs.nativeInterface == rhs.nativeInterface
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectAllOnFocus == rhs.selectAllOnFocus
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips
+      lhs.textVariable == rhs.textVariable
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -491,12 +477,10 @@ extension DivInput: Serializable {
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()
     result["id"] = id
-    result["input_method"] = inputMethod?.toDictionary()
     result["keyboard_type"] = keyboardType.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins.toDictionary()
-    result["mask"] = mask?.toDictionary()
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings.toDictionary()

@@ -106,12 +106,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
   public let hintText: Field<Expression<String>>? // at least 1 char
   public let id: Field<String>? // at least 1 char
-  public let inputMethod: Field<DivInputMethodTemplate>?
   public let keyboardType: Field<Expression<KeyboardType>>? // default value: multi_line_text
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
-  public let mask: Field<DivInputMaskTemplate>?
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -156,12 +154,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         hintColor: try dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
         hintText: try dictionary.getOptionalExpressionField("hint_text"),
         id: try dictionary.getOptionalField("id"),
-        inputMethod: try dictionary.getOptionalField("input_method", templateToType: templateToType),
         keyboardType: try dictionary.getOptionalExpressionField("keyboard_type"),
         letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing"),
         lineHeight: try dictionary.getOptionalExpressionField("line_height"),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        mask: try dictionary.getOptionalField("mask", templateToType: templateToType),
         maxVisibleLines: try dictionary.getOptionalExpressionField("max_visible_lines"),
         nativeInterface: try dictionary.getOptionalField("native_interface", templateToType: templateToType),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -206,12 +202,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     hintColor: Field<Expression<Color>>? = nil,
     hintText: Field<Expression<String>>? = nil,
     id: Field<String>? = nil,
-    inputMethod: Field<DivInputMethodTemplate>? = nil,
     keyboardType: Field<Expression<KeyboardType>>? = nil,
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
-    mask: Field<DivInputMaskTemplate>? = nil,
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
@@ -250,12 +244,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     self.hintColor = hintColor
     self.hintText = hintText
     self.id = id
-    self.inputMethod = inputMethod
     self.keyboardType = keyboardType
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.margins = margins
-    self.mask = mask
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
@@ -295,12 +287,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     let hintColorValue = parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.hintColorValidator) ?? .noValue
     let hintTextValue = parent?.hintText?.resolveOptionalValue(context: context, validator: ResolvedValue.hintTextValidator) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
-    let inputMethodValue = parent?.inputMethod?.resolveOptionalValue(context: context, validator: ResolvedValue.inputMethodValidator, useOnlyLinks: true) ?? .noValue
     let keyboardTypeValue = parent?.keyboardType?.resolveOptionalValue(context: context, validator: ResolvedValue.keyboardTypeValidator) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
-    let maskValue = parent?.mask?.resolveOptionalValue(context: context, validator: ResolvedValue.maskValidator, useOnlyLinks: true) ?? .noValue
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, validator: ResolvedValue.nativeInterfaceValidator, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
@@ -338,12 +328,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
-      inputMethodValue.errorsOrWarnings?.map { .nestedObjectError(field: "input_method", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
-      maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -390,12 +378,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
-      inputMethod: inputMethodValue.value,
       keyboardType: keyboardTypeValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
-      mask: maskValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -440,12 +426,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     var hintColorValue: DeserializationResult<Expression<Color>> = parent?.hintColor?.value() ?? .noValue
     var hintTextValue: DeserializationResult<Expression<String>> = parent?.hintText?.value() ?? .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
-    var inputMethodValue: DeserializationResult<DivInputMethod> = .noValue
     var keyboardTypeValue: DeserializationResult<Expression<DivInput.KeyboardType>> = parent?.keyboardType?.value() ?? .noValue
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
-    var maskValue: DeserializationResult<DivInputMask> = .noValue
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -502,8 +486,6 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         hintTextValue = deserialize(__dictValue, validator: ResolvedValue.hintTextValidator).merged(with: hintTextValue)
       case "id":
         idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
-      case "input_method":
-        inputMethodValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inputMethodValidator, type: DivInputMethodTemplate.self).merged(with: inputMethodValue)
       case "keyboard_type":
         keyboardTypeValue = deserialize(__dictValue, validator: ResolvedValue.keyboardTypeValidator).merged(with: keyboardTypeValue)
       case "letter_spacing":
@@ -512,8 +494,6 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         lineHeightValue = deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator).merged(with: lineHeightValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
-      case "mask":
-        maskValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maskValidator, type: DivInputMaskTemplate.self).merged(with: maskValue)
       case "max_visible_lines":
         maxVisibleLinesValue = deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator).merged(with: maxVisibleLinesValue)
       case "native_interface":
@@ -586,8 +566,6 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         hintTextValue = hintTextValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.hintTextValidator))
       case parent?.id?.link:
         idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
-      case parent?.inputMethod?.link:
-        inputMethodValue = inputMethodValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inputMethodValidator, type: DivInputMethodTemplate.self))
       case parent?.keyboardType?.link:
         keyboardTypeValue = keyboardTypeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.keyboardTypeValidator))
       case parent?.letterSpacing?.link:
@@ -596,8 +574,6 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         lineHeightValue = lineHeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator))
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self))
-      case parent?.mask?.link:
-        maskValue = maskValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maskValidator, type: DivInputMaskTemplate.self))
       case parent?.maxVisibleLines?.link:
         maxVisibleLinesValue = maxVisibleLinesValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator))
       case parent?.nativeInterface?.link:
@@ -644,9 +620,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
-      inputMethodValue = inputMethodValue.merged(with: parent.inputMethod?.resolveOptionalValue(context: context, validator: ResolvedValue.inputMethodValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
-      maskValue = maskValue.merged(with: parent.mask?.resolveOptionalValue(context: context, validator: ResolvedValue.maskValidator, useOnlyLinks: true))
       nativeInterfaceValue = nativeInterfaceValue.merged(with: parent.nativeInterface?.resolveOptionalValue(context: context, validator: ResolvedValue.nativeInterfaceValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
@@ -678,12 +652,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
-      inputMethodValue.errorsOrWarnings?.map { .nestedObjectError(field: "input_method", error: $0) },
       keyboardTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "keyboard_type", error: $0) },
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
-      maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
@@ -730,12 +702,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColor: hintColorValue.value,
       hintText: hintTextValue.value,
       id: idValue.value,
-      inputMethod: inputMethodValue.value,
       keyboardType: keyboardTypeValue.value,
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
-      mask: maskValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
@@ -785,12 +755,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColor: hintColor ?? mergedParent.hintColor,
       hintText: hintText ?? mergedParent.hintText,
       id: id ?? mergedParent.id,
-      inputMethod: inputMethod ?? mergedParent.inputMethod,
       keyboardType: keyboardType ?? mergedParent.keyboardType,
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
-      mask: mask ?? mergedParent.mask,
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
@@ -835,12 +803,10 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       hintColor: merged.hintColor,
       hintText: merged.hintText,
       id: merged.id,
-      inputMethod: merged.inputMethod?.tryResolveParent(templates: templates),
       keyboardType: merged.keyboardType,
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),
-      mask: merged.mask?.tryResolveParent(templates: templates),
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

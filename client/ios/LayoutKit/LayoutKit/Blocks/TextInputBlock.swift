@@ -7,36 +7,19 @@ import CommonCorePublic
 import LayoutKitInterface
 
 public final class TextInputBlock: BlockWithTraits {
-  public enum InputType: Equatable {
-    public enum KeyboardType: Equatable {
-      case `default`
-      case asciiCapable
-      case numbersAndPunctuation
-      case URL
-      case numberPad
-      case phonePad
-      case namePhonePad
-      case emailAddress
-      case decimalPad
-      case twitter
-      case webSearch
-      case asciiCapableNumberPad
-    }
-
-    public struct SelectionItem: Equatable {
-      public let value: String
-      public let text: String
-
-      public init(value: String, text: String) {
-        self.value = value
-        self.text = text
-      }
-    }
-
-    case keyboard(KeyboardType)
-    case selection([SelectionItem])
-
-    public static let `default`: Self = .keyboard(.default)
+  public enum KeyboardType {
+    case `default`
+    case asciiCapable
+    case numbersAndPunctuation
+    case URL
+    case numberPad
+    case phonePad
+    case namePhonePad
+    case emailAddress
+    case decimalPad
+    case twitter
+    case webSearch
+    case asciiCapableNumberPad
   }
 
   public let widthTrait: LayoutTrait
@@ -45,7 +28,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let textValue: Binding<String>
   public let textTypo: Typo
   public let multiLineMode: Bool
-  public let inputType: InputType
+  public let keyboardType: KeyboardType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
@@ -61,7 +44,7 @@ public final class TextInputBlock: BlockWithTraits {
     textValue: Binding<String>,
     textTypo: Typo,
     multiLineMode: Bool = true,
-    inputType: InputType = .default,
+    keyboardType: KeyboardType = .default,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
@@ -76,7 +59,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.textValue = textValue
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
-    self.inputType = inputType
+    self.keyboardType = keyboardType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
@@ -148,7 +131,7 @@ extension TextInputBlock {
       && lhs.textValue.wrappedValue == rhs.textValue.wrappedValue
       && lhs.multiLineMode == rhs.multiLineMode
       && lhs.maxVisibleLines == rhs.maxVisibleLines
-      && lhs.inputType == rhs.inputType
+      && lhs.keyboardType == rhs.keyboardType
       && lhs.selectAllOnFocus == rhs.selectAllOnFocus
       && lhs.highlightColor == rhs.highlightColor
   }
