@@ -25,4 +25,14 @@ internal class VariableSource(
             it.addObserver(observer)
         }
     }
+
+    internal fun removeOnChangeObserver(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            it.removeObserver(observer)
+        }
+    }
+
+    internal fun removeDeclarationObserver(observer: (Variable) -> Unit) {
+        declarationObservers.remove(observer)
+    }
 }
