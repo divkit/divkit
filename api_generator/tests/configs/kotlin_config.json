@@ -4,7 +4,7 @@
     "errorsCollectors": [
         "div-data"
     ],
-    "kotlinAnnotations": [
-        "@Mockable"
-    ]
+    "kotlinAnnotations": {
+        "classes": ["@Mockable"]
+    }
 }

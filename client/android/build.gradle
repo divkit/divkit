@@ -60,7 +60,7 @@ allprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
-            freeCompilerArgs = ['-Xjvm-default=all']
+            freeCompilerArgs = ['-Xjvm-default=all', '-opt-in=com.yandex.div.data.DivModelInternalApi']
             languageVersion = "1.5"
             apiVersion = "1.5"
         }

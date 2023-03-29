@@ -47,3 +47,10 @@ task generateDivModel(type: Exec) {
     inputs.dir schemaPath
     outputs.dir modelPath
 }
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-opt-in=com.yandex.div.data.DivModelInternalApi'
+    }
+}

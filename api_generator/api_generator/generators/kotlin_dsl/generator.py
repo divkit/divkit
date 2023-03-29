@@ -35,7 +35,7 @@ class KotlinDSLGenerator(Generator):
         if entity.generate_as_protocol:
             return Text()
         result = Text()
-        for annotation in self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes:
             result += annotation
         result += f'class {utils.capitalize_camel_case(entity.name)} internal constructor('
         constructor_parameter_declaration = entity.constructor_parameter_declaration.indented(indent_width=4)
@@ -102,7 +102,7 @@ class KotlinDSLGenerator(Generator):
 
     def _entity_enumeration_declaration(self, entity_enumeration: KotlinDSLEntityEnumeration) -> Text:
         result = Text()
-        for annotation in self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes:
             result += annotation
         result += f'sealed interface {entity_enumeration.enumeration_name}{entity_enumeration.supertype_declaration} {{'
         result += '    val type: String'

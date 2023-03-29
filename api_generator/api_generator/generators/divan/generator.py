@@ -24,7 +24,6 @@ class DivanGenerator(Generator):
     def __init__(self, config):
         super(DivanGenerator, self).__init__(config)
         self.kotlin_annotations = config.generation.kotlin_annotations
-        self.top_level_annotations = config.generation.top_level_annotations
         self.translations = translations(DescriptionLanguage.EN)
         self.remove_prefix = config.generation.remove_prefix
         self.supertype_entities = set(
@@ -46,8 +45,9 @@ class DivanGenerator(Generator):
         if entity.generate_as_protocol:
             return Text()
         result_declaration = Text()
+
         result_declaration += entity.header_comment_block(self.translations)
-        for annotation in self.top_level_annotations + self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes + self.kotlin_annotations.top_level_definitions:
             result_declaration += annotation
 
         if entity.is_deprecated:
@@ -95,7 +95,7 @@ class DivanGenerator(Generator):
                     if not declaration.lines:
                         return
                     method_declaration = comment_block
-                    for annotation in self.top_level_annotations:
+                    for annotation in self.kotlin_annotations.top_level_definitions:
                         method_declaration += annotation
                     method_declaration += declaration
                     result_declaration += method_declaration
@@ -133,7 +133,7 @@ class DivanGenerator(Generator):
                     add_methods_declarations(ent=nested_entity)
                 elif isinstance(nested_entity, (DivanEntityEnumeration, DivanStringEnumeration)):
                     name = full_name(nested_entity, self.remove_prefix)
-                    for annotation in self.top_level_annotations:
+                    for annotation in self.kotlin_annotations.top_level_definitions:
                         result_declaration += annotation
                     result_declaration += f'fun {name}.asList() = listOf(this)'
                     result_declaration += EMPTY
@@ -190,14 +190,14 @@ class DivanGenerator(Generator):
         name = utils.capitalize_camel_case(enumeration.name, self.remove_prefix)
         if isinstance(enumeration, DivanStringEnumeration):
             result_declaration += enumeration.header_comment_block(self.translations)
-        for annotation in self.top_level_annotations + self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes + self.kotlin_annotations.top_level_definitions:
             result_declaration += annotation
 
         result_declaration += f'sealed interface {name}'
 
         if with_as_list_method:
             result_declaration += EMPTY
-            for annotation in self.top_level_annotations + self.kotlin_annotations:
+            for annotation in self.kotlin_annotations.classes + self.kotlin_annotations.top_level_definitions:
                 result_declaration += annotation
             result_declaration += f'fun {name}.asList() = listOf(this)'
 
@@ -239,7 +239,7 @@ class DivanGenerator(Generator):
 
     def __generate_enum_values(self, values: Dict[str, List[str]]):
         enum_values_declaration = Text()
-        for annotation in self.top_level_annotations:
+        for annotation in self.kotlin_annotations.top_level_definitions:
             enum_values_declaration += annotation
         enum_values_declaration += 'sealed class EnumValue('
         enum_values_declaration += utils.indented('@JsonValue', level=1, indent_width=4)
@@ -263,7 +263,7 @@ class DivanGenerator(Generator):
 
     def __generate_enum_value_obj(self, value_name: str, enum_names: List[str]) -> Text:
         obj_declaration = Text()
-        for annotation in self.top_level_annotations:
+        for annotation in self.kotlin_annotations.top_level_definitions:
             obj_declaration += annotation
         obj_declaration += f'object {self.format_value_object_name(value_name)} : EnumValue("{value_name}"),'
         for index, name in enumerate(enum_names):
@@ -272,7 +272,7 @@ class DivanGenerator(Generator):
 
     def __generate_scope_extension(self, value_name: str) -> Text:
         extension_declaration = Text()
-        for annotation in self.top_level_annotations:
+        for annotation in self.kotlin_annotations.top_level_definitions:
             extension_declaration += annotation
         object_name = self.format_value_object_name(value_name)
         extension_declaration += f'val DivScope.{utils.snake_case(value_name)}: {object_name}'

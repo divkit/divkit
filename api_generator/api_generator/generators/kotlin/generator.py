@@ -101,7 +101,7 @@ class KotlinGenerator(Generator):
 
     def __main_declaration_header(self, entity: KotlinEntity) -> Text:
         result = Text()
-        for annotation in self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes:
             result += annotation
         data_prefix = 'data '
         if entity.generation_mode.is_template or not self._generate_equality or not entity.instance_properties:
@@ -147,10 +147,14 @@ class KotlinGenerator(Generator):
             if entity.instance_properties:
                 result = add_instance_properties(text=result, is_template=True)
         else:
+            constructor_prefix = ''
+            if self.kotlin_annotations.constructors:
+                constructor_annotations = ', '.join(self.kotlin_annotations.constructors)
+                constructor_prefix = f' {constructor_annotations} constructor '
             if not entity.instance_properties:
-                result += f'{prefix}(){suffix}'
+                result += f'{prefix}{constructor_prefix}(){suffix}'
             else:
-                result += f'{prefix}('
+                result += f'{prefix}{constructor_prefix}('
                 result = add_instance_properties(text=result, is_template=False)
                 result += f'){suffix}'
 
@@ -169,7 +173,7 @@ class KotlinGenerator(Generator):
         declaration_name = utils.capitalize_camel_case(entity_enumeration.name)
         entity_declarations = list(map(utils.capitalize_camel_case, entity_enumeration.entity_names))
         result = Text()
-        for annotation in self.kotlin_annotations:
+        for annotation in self.kotlin_annotations.classes:
             result += annotation
         interfaces = ['JSONSerializable', entity_enumeration.mode.protocol_name(
             lang=GeneratedLanguage.KOTLIN,

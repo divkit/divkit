@@ -52,13 +52,18 @@ class GenerationMode(Enum):
 
 
 class Config:
+    class KotlinAnnotations:
+        def __init__(self, dictionary):
+            self.classes: List[str] = dictionary.get('classes') or []
+            self.constructors: List[str] = dictionary.get('constructors') or []
+            self.top_level_definitions: List[str] = dictionary.get('topLevelDefinitions') or []
+
     class GenerationConfig:
         def __init__(self, dictionary):
             self.lang: GeneratedLanguage = GeneratedLanguage(dictionary['lang'])
             self.header: Text = dictionary.get('header') or ''
             self.errors_collectors: List[str] = dictionary.get('errorsCollectors') or []
-            self.kotlin_annotations: List[str] = dictionary.get('kotlinAnnotations') or []
-            self.top_level_annotations: List[str] = dictionary.get('topLevelAnnotations') or []
+            self.kotlin_annotations: Config.KotlinAnnotations = Config.KotlinAnnotations(dictionary.get('kotlinAnnotations') or {})
             self.generate_equality: bool = dictionary.get('generateEquality') or False
             self.remove_prefix: str = dictionary.get('removePrefix') or ''
             self.supertype_entities: List[str] = dictionary.get('supertypeEntities') or []
@@ -67,7 +72,8 @@ class Config:
         self.schema_path: str = schema_path
         self.output_path: str = output_path
         with open(config_path) as f:
-            self.generation: Config.GenerationConfig = json.loads(f.read(), object_hook=Config.GenerationConfig)
+            dictionary = json.loads(f.read())
+            self.generation: Config.GenerationConfig = Config.GenerationConfig(dictionary)
 
         if generator_path:
             self.generator_hash = sha256_dir(generator_path)
