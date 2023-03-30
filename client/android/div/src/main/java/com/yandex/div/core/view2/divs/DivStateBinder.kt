@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationSet
-import android.widget.FrameLayout
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.transition.Transition
@@ -27,7 +26,6 @@ import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.Fade
 import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.VerticalTranslation
@@ -36,6 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
 import com.yandex.div.state.DivStateCache
@@ -236,9 +235,9 @@ internal class DivStateBinder @Inject constructor(
     }
 
     private fun View.createLayoutParams() {
-        layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT
+        layoutParams = DivLayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         )
     }
 

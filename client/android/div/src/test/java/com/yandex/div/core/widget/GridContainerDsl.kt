@@ -5,6 +5,7 @@ package com.yandex.div.core.widget
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import com.yandex.div.internal.widget.DivLayoutParams
 
 @DslMarker
 @Target(AnnotationTarget.TYPE)

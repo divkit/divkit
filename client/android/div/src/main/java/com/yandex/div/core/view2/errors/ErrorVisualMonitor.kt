@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2.errors
 
-import android.widget.FrameLayout
+import android.view.ViewGroup
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -11,7 +11,6 @@ import com.yandex.div.json.ParsingException
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
-import kotlin.text.StringBuilder
 
 private const val SHOW_LIMIT = 25
 
@@ -28,7 +27,7 @@ internal class ErrorVisualMonitor @Inject constructor(
         }
 
     private val errorModel = ErrorModel(errorCollectors)
-    private var lastConnectionView: FrameLayout? = null
+    private var lastConnectionView: ViewGroup? = null
     private var errorView: ErrorView? = null
 
     init {
@@ -47,7 +46,7 @@ internal class ErrorVisualMonitor @Inject constructor(
         }
     }
 
-    fun connect(root: FrameLayout) {
+    fun connect(root: ViewGroup) {
         lastConnectionView = root
         if (!enabled) {
             return

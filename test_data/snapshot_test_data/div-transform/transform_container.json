@@ -12,6 +12,10 @@
         "state_id": 0,
         "div": {
           "type": "container",
+          "height": {
+            "type": "wrap_content",
+            "constrained": true
+          },
           "content_alignment_horizontal": "center",
           "content_alignment_vertical": "center",
           "items": [

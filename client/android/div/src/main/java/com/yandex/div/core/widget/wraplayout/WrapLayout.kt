@@ -9,9 +9,9 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
 import com.yandex.div.core.widget.AspectView
-import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.dimensionAffecting
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
