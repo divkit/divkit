@@ -221,11 +221,12 @@ extension DivContainer: DivBlockModeling {
       throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
     }
 
+    let widthTrait = makeContentWidthTrait(with: context)
     let aspectRatio = resolveAspectRatio(expressionResolver)
     let containerBlock = try ContainerBlock(
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
-      widthTrait: makeContentWidthTrait(with: context),
+      widthTrait: widthTrait,
       heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
       axialAlignment: axialAlignment,
       crossAlignment: crossAlignment,
@@ -235,14 +236,13 @@ extension DivContainer: DivBlockModeling {
     )
 
     if let aspectRatio = aspectRatio {
-      if orientation == .vertical && layoutMode == .wrap {
-        context.addError(
-          level: .warning,
-          message: "Aspect height is not supported for vertical container with wrap layout mode"
-        )
-      } else {
+      if containerBlock.calculateWidthFirst {
         return AspectBlock(content: containerBlock, aspectRatio: aspectRatio)
       }
+      context.addError(
+        level: .warning,
+        message: "Aspect height is not supported for vertical container with wrap layout mode"
+      )
     }
 
     return containerBlock

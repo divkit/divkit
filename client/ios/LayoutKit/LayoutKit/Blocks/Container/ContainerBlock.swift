@@ -226,7 +226,12 @@ public final class ContainerBlock: BlockWithLayout {
   public var isHorizontallyResizable: Bool { widthTrait.isResizable }
 
   public var calculateWidthFirst: Bool {
-    layoutDirection != .vertical || layoutMode != .wrap
+    switch widthTrait {
+    case .fixed, .weighted:
+      return true
+    case .intrinsic:
+      return !(layoutDirection == .vertical && layoutMode == .wrap)
+    }
   }
 
   public var isVerticallyConstrained: Bool { heightTrait.isConstrained }

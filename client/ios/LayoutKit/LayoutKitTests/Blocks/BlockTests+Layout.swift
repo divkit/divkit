@@ -176,10 +176,22 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.calculateWidthFirst, true)
   }
 
-  func test_calculateWidthFirstForVerticalWrapContainer_EqualsFalse() {
+  func test_calculateWidthFirstForVerticalWrapContainerWithFixedWidth_EqualsTrue() {
     let block = try! ContainerBlock(
       layoutDirection: .vertical,
       layoutMode: .wrap,
+      widthTrait: .fixed(100),
+      children: [TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    XCTAssertEqual(block.calculateWidthFirst, true)
+  }
+
+  func test_calculateWidthFirstForVerticalWrapContainerWithIntrinsicWidth_EqualsFalse() {
+    let block = try! ContainerBlock(
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      widthTrait: .intrinsic,
       children: [TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
