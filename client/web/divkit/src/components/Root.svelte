@@ -820,6 +820,19 @@
                     return;
                 }
 
+                if (
+                    variable.type === 'integer' && typeof variable.value === 'number' &&
+                    (variable.value > Number.MAX_SAFE_INTEGER || variable.value < Number.MIN_SAFE_INTEGER)
+                ) {
+                    logError(wrapError(new Error('The value of the integer variable could lose accuracy'), {
+                        level: 'warn',
+                        additional: {
+                            name: variable.name,
+                            value: variable.value
+                        }
+                    }));
+                }
+
                 try {
                     const varInstance = createVariable(variable.name, variable.type, variable.value);
 
