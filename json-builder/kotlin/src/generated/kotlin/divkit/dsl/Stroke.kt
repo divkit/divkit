@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [stroke].
  * 
- * Required parameters: `color`.
+ * Required properties: `color`.
  */
 @Generated
 class Stroke internal constructor(

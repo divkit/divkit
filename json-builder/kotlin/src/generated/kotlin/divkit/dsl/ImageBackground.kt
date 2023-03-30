@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [imageBackground].
  * 
- * Required parameters: `type, image_url`.
+ * Required properties: `type, image_url`.
  */
 @Generated
 class ImageBackground internal constructor(

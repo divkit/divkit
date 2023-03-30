@@ -22,13 +22,13 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [linearGradient].
  * 
- * Required parameters: `type, colors`.
+ * Required properties: `type, colors`.
  */
 @Generated
 class LinearGradient internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : Background, TextGradient {
+) : TextGradient, Background {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "gradient")

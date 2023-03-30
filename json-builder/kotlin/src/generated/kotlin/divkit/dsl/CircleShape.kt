@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [circleShape].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 class CircleShape internal constructor(

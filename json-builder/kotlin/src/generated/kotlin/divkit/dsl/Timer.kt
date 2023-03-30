@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [timer].
  * 
- * Required parameters: `id`.
+ * Required properties: `id`.
  */
 @Generated
 class Timer internal constructor(

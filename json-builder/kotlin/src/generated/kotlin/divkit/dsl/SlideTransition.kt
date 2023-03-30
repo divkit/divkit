@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [slideTransition].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 class SlideTransition internal constructor(

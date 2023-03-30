@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [action].
  * 
- * Required parameters: `log_id`.
+ * Required properties: `log_id`.
  */
 @Generated
 class Action internal constructor(
@@ -105,7 +105,7 @@ class Action internal constructor(
     /**
      * Can be created using the method [actionMenuItem].
      * 
-     * Required parameters: `text`.
+     * Required properties: `text`.
      */
     @Generated
     class MenuItem internal constructor(

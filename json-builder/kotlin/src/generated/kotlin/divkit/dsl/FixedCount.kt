@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [fixedCount].
  * 
- * Required parameters: `value, type`.
+ * Required properties: `value, type`.
  */
 @Generated
 class FixedCount internal constructor(

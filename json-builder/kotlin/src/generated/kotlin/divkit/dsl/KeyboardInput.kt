@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [keyboardInput].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 class KeyboardInput internal constructor(
@@ -58,7 +58,7 @@ class KeyboardInput internal constructor(
     /**
      * Keyboard type.
      * 
-     * Possible values: [single_line_text, multi_line_text, phone, number, email, uri, decimal].
+     * Possible values: [single_line_text, multi_line_text, phone, number, email, uri].
      */
     @Generated
     sealed interface KeyboardType

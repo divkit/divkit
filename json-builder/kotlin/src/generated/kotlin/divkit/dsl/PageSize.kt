@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [pageSize].
  * 
- * Required parameters: `type, page_width`.
+ * Required properties: `type, page_width`.
  */
 @Generated
 class PageSize internal constructor(

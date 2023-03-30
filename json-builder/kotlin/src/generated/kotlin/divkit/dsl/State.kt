@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [state].
  * 
- * Required parameters: `type, states`.
+ * Required properties: `type, states`.
  */
 @Generated
 class State internal constructor(
@@ -232,7 +232,7 @@ class State internal constructor(
     /**
      * Can be created using the method [stateItem].
      * 
-     * Required parameters: `state_id`.
+     * Required properties: `state_id`.
      */
     @Generated
     class Item internal constructor(

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [selectionInput].
  * 
- * Required parameters: `type, items`.
+ * Required properties: `type, items`.
  */
 @Generated
 class SelectionInput internal constructor(
@@ -56,7 +56,7 @@ class SelectionInput internal constructor(
      * 
      * Can be created using the method [selectionInputItem].
      * 
-     * Required parameters: `text`.
+     * Required properties: `text`.
      */
     @Generated
     class Item internal constructor(

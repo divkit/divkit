@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [separator].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 class Separator internal constructor(
@@ -80,7 +80,7 @@ class Separator internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -294,7 +294,7 @@ class Separator internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -397,7 +397,7 @@ fun DivScope.separator(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -498,7 +498,7 @@ fun DivScope.separatorProps(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -599,7 +599,7 @@ fun TemplateScope.separatorRefs(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -702,7 +702,7 @@ fun Separator.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -858,7 +858,7 @@ fun Separator.evaluate(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -962,7 +962,7 @@ fun Component<Separator>.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.

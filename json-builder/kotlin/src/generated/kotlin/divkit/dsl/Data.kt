@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [data].
  * 
- * Required parameters: `states, log_id`.
+ * Required properties: `states, log_id`.
  */
 @Generated
 class Data internal constructor(
@@ -76,7 +76,7 @@ class Data internal constructor(
     /**
      * Can be created using the method [root].
      * 
-     * Required parameters: `state_id, div`.
+     * Required properties: `state_id, div`.
      */
     @Generated
     class State internal constructor(

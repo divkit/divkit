@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [visibilityAction].
  * 
- * Required parameters: `log_id`.
+ * Required properties: `log_id`.
  */
 @Generated
 class VisibilityAction internal constructor(

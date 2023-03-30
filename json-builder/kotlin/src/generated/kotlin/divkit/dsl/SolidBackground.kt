@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [solidBackground].
  * 
- * Required parameters: `type, color`.
+ * Required properties: `type, color`.
  */
 @Generated
 class SolidBackground internal constructor(
