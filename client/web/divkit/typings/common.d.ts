@@ -21,7 +21,7 @@ export interface DivStrVariable {
 export interface DivIntVariable {
     type: 'integer';
     name: string;
-    value: number;
+    value: number | bigint;
 }
 
 export interface DivNumberVariable {

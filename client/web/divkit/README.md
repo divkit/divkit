@@ -362,6 +362,12 @@ render(({
 });
 ```
 
+### Note about 64-bit integers
+
+DivKit internally uses the `BigInt` type if the current platform supports it (both client-side and server-side). This means that on unsupported platforms, integers will lose precision if the value exceeds 2^53.
+
+Note that built-in functions like `JSON.parse` and `.json()` will parse large values, but the result type will be `number`, not `bigint`. So, for example, if someone fetches data from the server, the values may lose accuracy _outside_ the DivKit library.
+
 ---
 
 [Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Habr tutorial](https://habr.com/ru/company/yandex/blog/683886/).
