@@ -1,11 +1,10 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Element with zero rotation transform",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
@@ -22,7 +21,7 @@
             "ratio": 1
           },
           "transform": {
-              "rotation": 0
+            "rotation": 0
           }
         }
       }

@@ -1,11 +1,10 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Element with rotation transform around center left point",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
@@ -22,15 +21,15 @@
             "ratio": 1
           },
           "transform": {
-              "rotation": 45,
-              "pivot_x": {
-                  "type": "pivot-percentage",
-                  "value": 0
-              },
-              "pivot_y": {
-                  "type": "pivot-percentage",
-                  "value": 50
-              }
+            "rotation": 45,
+            "pivot_x": {
+              "type": "pivot-percentage",
+              "value": 0
+            },
+            "pivot_y": {
+              "type": "pivot-percentage",
+              "value": 50
+            }
           }
         }
       }

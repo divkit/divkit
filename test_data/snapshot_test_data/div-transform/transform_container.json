@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Container with items with rotation transform",
   "platforms": [
     "android",
     "ios",
@@ -23,35 +23,35 @@
               "type": "button",
               "text": "360",
               "transform": {
-                  "rotation": 360
+                "rotation": 360
               }
             },
             {
               "type": "button",
               "text": "30",
               "transform": {
-                  "rotation": 30
+                "rotation": 30
               }
             },
             {
               "type": "button",
               "text": "60",
               "transform": {
-                  "rotation": 60
+                "rotation": 60
               }
             },
             {
               "type": "button",
               "text": "90",
               "transform": {
-                  "rotation": 90
+                "rotation": 90
               }
             },
             {
               "type": "button",
               "text": "270",
               "transform": {
-                  "rotation": 270
+                "rotation": 270
               }
             }
           ]
