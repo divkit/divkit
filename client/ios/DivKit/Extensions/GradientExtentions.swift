@@ -5,7 +5,10 @@ import BasePublic
 import BaseUIPublic
 
 extension Gradient.Linear {
-  init(colors: [Color], angle: Int) {
+  init?(colors: [Color], angle: Int) {
+    guard colors.count >= 2 else {
+      return nil
+    }
     var intermediateColors = colors
     let start = intermediateColors.removeFirst()
     let end = intermediateColors.removeLast()
@@ -37,12 +40,15 @@ extension Gradient.Linear.Direction {
 }
 
 extension Gradient.Radial {
-  init(
+  init?(
     colors: [Color],
     end: Gradient.Radial.Radius,
     centerX: Gradient.Radial.CenterPoint,
     centerY: Gradient.Radial.CenterPoint
   ) {
+    guard colors.count >= 2 else {
+      return nil
+    }
     var intermediateColors = colors
     let centerColor = intermediateColors.removeFirst()
     let outerColor = intermediateColors.removeLast()
