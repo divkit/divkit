@@ -1,5 +1,5 @@
 {
-  "description": "DivContainer with horizontal wrap layout and aspect height. Height must be equal width / 2.",
+  "description": "DivContainer with vertical wrap layout, fixed width and aspect height. Height must be equal width / 2.",
   "platforms": [
     "android",
     "ios",
@@ -12,7 +12,11 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "orientation": "vertical",
           "layout_mode": "wrap",
           "aspect": {
             "ratio": 2
@@ -32,7 +36,7 @@
           "items": [
             {
               "type": "text",
-              "text": "width = match_parent",
+              "text": "width = fixed",
               "font_size": 16,
               "width": {
                 "type": "wrap_content"
@@ -52,7 +56,7 @@
             },
             {
               "type": "text",
-              "text": "orientation = horizontal",
+              "text": "orientation = vertical",
               "font_size": 16,
               "width": {
                 "type": "wrap_content"

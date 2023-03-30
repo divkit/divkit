@@ -9,12 +9,14 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
 import com.yandex.div.core.widget.AspectView
+import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.dimensionAffecting
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 internal open class WrapLayout(context: Context) : DivViewGroup(context), AspectView {
 
@@ -113,26 +115,36 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
 
     private var tempSumCrossSize = 0
 
-    override var aspectRatio by dimensionAffecting(AspectView.DEFAULT_ASPECT_RATIO) { value ->
-        value.coerceAtLeast(AspectView.DEFAULT_ASPECT_RATIO)
-    }
+    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()
         childState = 0
 
-        calculateLines(widthMeasureSpec, heightMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+
+        var heightMode: Int
+        var heightSize: Int
+        var heightSpec: Int
+        if (aspectRatio != DEFAULT_ASPECT_RATIO && widthMode == MeasureSpec.EXACTLY) {
+            heightSize = (widthSize / aspectRatio).roundToInt()
+            heightMode = MeasureSpec.EXACTLY
+            heightSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode)
+        } else {
+            heightSpec = heightMeasureSpec
+            heightMode = MeasureSpec.getMode(heightSpec)
+            heightSize = MeasureSpec.getSize(heightSpec)
+        }
+
+        calculateLines(widthMeasureSpec, heightSpec)
 
         if (isRowDirection) {
-            determineCrossSize(heightMeasureSpec, gravity.toVerticalGravity(), paddingTop + paddingBottom)
+            determineCrossSize(heightSpec, gravity.toVerticalGravity(), paddingTop + paddingBottom)
         } else {
             determineCrossSize(widthMeasureSpec, gravity.toHorizontalGravity(), paddingLeft + paddingRight)
         }
 
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val calculatedMaxWidth =
             if (isRowDirection) largestMainSize else sumOfCrossSize + paddingLeft + paddingRight
         val calculatedMaxHeight =
@@ -146,11 +158,17 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
             childState
         )
 
+        if (isRowDirection && aspectRatio != DEFAULT_ASPECT_RATIO && widthMode != MeasureSpec.EXACTLY) {
+            heightSize = ((widthSizeAndState and View.MEASURED_SIZE_MASK) / aspectRatio).roundToInt()
+            heightMode = MeasureSpec.EXACTLY
+            heightSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode)
+        }
+
         childState = getState(heightMode, childState, heightSize, calculatedMaxHeight,
             MEASURED_STATE_TOO_SMALL shr MEASURED_HEIGHT_STATE_SHIFT)
         val heightSizeAndState = resolveSizeAndState(
             getSize(heightMode, heightSize, calculatedMaxHeight, isRowDirection),
-            heightMeasureSpec,
+            heightSpec,
             childState
         )
 

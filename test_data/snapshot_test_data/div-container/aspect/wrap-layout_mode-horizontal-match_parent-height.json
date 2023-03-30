@@ -1,9 +1,8 @@
 {
-  "description": "DivContainer with horizontal wrap layout and aspect height. Height must be equal width / 2.",
+  "description": "DivContainer with horizontal wrap layout and aspect height. Base height was match_parent. Actual height must be equal width / 2.",
   "platforms": [
     "android",
-    "ios",
-    "web"
+    "ios"
   ],
   "card": {
     "log_id": "test_card",
@@ -12,6 +11,9 @@
         "state_id": 0,
         "div": {
           "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
           "orientation": "horizontal",
           "layout_mode": "wrap",
           "aspect": {

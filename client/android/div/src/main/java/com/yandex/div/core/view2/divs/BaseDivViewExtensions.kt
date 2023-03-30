@@ -74,7 +74,6 @@ import com.yandex.div2.DivStroke
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     val metrics = resources.displayMetrics
@@ -302,9 +301,10 @@ internal fun DivContainer.isVertical(resolver: ExpressionResolver) =
 
 internal fun DivContainer.isWrapContainer(resolver: ExpressionResolver) = when {
     layoutMode.evaluate(resolver) != DivContainer.LayoutMode.WRAP -> false
+    orientation.evaluate(resolver) == DivContainer.Orientation.OVERLAP -> false
     isHorizontal(resolver) -> width.canWrap(resolver)
-    isVertical(resolver) -> height.canWrap(resolver)
-    else -> false
+    height.canWrap(resolver) -> true
+    else -> aspect?.let { it.ratio.evaluate(resolver).toFloat() != AspectView.DEFAULT_ASPECT_RATIO } ?: false
 }
 
 internal fun DivSize.canWrap(resolver: ExpressionResolver) =
