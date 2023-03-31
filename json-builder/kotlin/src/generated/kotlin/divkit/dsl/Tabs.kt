@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [tabs].
  * 
- * Required parameters: `type, items`.
+ * Required properties: `type, items`.
  */
 @Generated
 class Tabs internal constructor(
@@ -275,7 +275,7 @@ class Tabs internal constructor(
      * 
      * Can be created using the method [tabsItem].
      * 
-     * Required parameters: `title, div`.
+     * Required properties: `title, div`.
      */
     @Generated
     class Item internal constructor(

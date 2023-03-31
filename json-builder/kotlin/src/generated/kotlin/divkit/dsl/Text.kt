@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [text].
  * 
- * Required parameters: `type, text`.
+ * Required properties: `type, text`.
  */
 @Generated
 class Text internal constructor(
@@ -105,7 +105,7 @@ class Text internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -390,7 +390,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textEllipsis].
      * 
-     * Required parameters: `text`.
+     * Required properties: `text`.
      */
     @Generated
     class Ellipsis internal constructor(
@@ -445,7 +445,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textImage].
      * 
-     * Required parameters: `url, start`.
+     * Required properties: `url, start`.
      */
     @Generated
     class Image internal constructor(
@@ -515,7 +515,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textRange].
      * 
-     * Required parameters: `start, end`.
+     * Required properties: `start, end`.
      */
     @Generated
     class Range internal constructor(
@@ -637,7 +637,7 @@ class Text internal constructor(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -802,7 +802,7 @@ fun DivScope.text(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -965,7 +965,7 @@ fun DivScope.textProps(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1128,7 +1128,7 @@ fun TemplateScope.textRefs(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1293,7 +1293,7 @@ fun Text.override(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1567,7 +1567,7 @@ fun Text.evaluate(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1733,7 +1733,7 @@ fun Component<Text>.override(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.

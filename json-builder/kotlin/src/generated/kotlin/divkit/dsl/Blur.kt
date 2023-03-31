@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [blur].
  * 
- * Required parameters: `type, radius`.
+ * Required properties: `type, radius`.
  */
 @Generated
 class Blur internal constructor(

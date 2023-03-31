@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [changeSetTransition].
  * 
- * Required parameters: `type, items`.
+ * Required properties: `type, items`.
  */
 @Generated
 class ChangeSetTransition internal constructor(

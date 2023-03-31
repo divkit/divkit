@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [infinityCount].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 object InfinityCount : Count {

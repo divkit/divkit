@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [neighbourPageSize].
  * 
- * Required parameters: `type, neighbour_page_width`.
+ * Required properties: `type, neighbour_page_width`.
  */
 @Generated
 class NeighbourPageSize internal constructor(

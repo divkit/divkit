@@ -31,7 +31,7 @@ class DivInputKeyboardTypeTest {
 
     @Test
     fun checkNumber() {
-        checkType("number", "912302")
+        checkType("number", "912302.")
     }
 
     @Test
@@ -47,11 +47,6 @@ class DivInputKeyboardTypeTest {
     @Test
     fun checkUri() {
         checkType("uri", TEXT_BEFORE_BREAK)
-    }
-
-    @Test
-    fun checkDecimal() {
-        checkType("decimal", "912302.")
     }
 
     private fun checkType(type: String, typedText: String) {

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [scaleTransition].
  * 
- * Required parameters: `type`.
+ * Required properties: `type`.
  */
 @Generated
 class ScaleTransition internal constructor(

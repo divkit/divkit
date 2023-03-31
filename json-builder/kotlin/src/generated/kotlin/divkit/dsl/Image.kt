@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [image].
  * 
- * Required parameters: `type, image_url`.
+ * Required properties: `type, image_url`.
  */
 @Generated
 class Image internal constructor(
@@ -96,7 +96,7 @@ class Image internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -323,7 +323,7 @@ class Image internal constructor(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -462,7 +462,7 @@ fun DivScope.image(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -599,7 +599,7 @@ fun DivScope.imageProps(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -736,7 +736,7 @@ fun TemplateScope.imageRefs(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -875,7 +875,7 @@ fun Image.override(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1099,7 +1099,7 @@ fun Image.evaluate(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1239,7 +1239,7 @@ fun Component<Image>.override(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [custom].
  * 
- * Required parameters: `type, custom_type`.
+ * Required properties: `type, custom_type`.
  */
 @Generated
 class Custom internal constructor(

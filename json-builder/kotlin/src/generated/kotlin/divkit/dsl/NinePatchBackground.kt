@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [ninePatchBackground].
  * 
- * Required parameters: `type, insets, image_url`.
+ * Required properties: `type, insets, image_url`.
  */
 @Generated
 class NinePatchBackground internal constructor(

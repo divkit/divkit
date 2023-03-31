@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [fixedLengthInputMask].
  * 
- * Required parameters: `type, pattern_elements, pattern`.
+ * Required properties: `type, pattern_elements, pattern`.
  */
 @Generated
 class FixedLengthInputMask internal constructor(
@@ -72,7 +72,7 @@ class FixedLengthInputMask internal constructor(
      * 
      * Can be created using the method [fixedLengthInputMaskPatternElement].
      * 
-     * Required parameters: `key`.
+     * Required properties: `key`.
      */
     @Generated
     class PatternElement internal constructor(

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [shadow].
  * 
- * Required parameters: `offset`.
+ * Required properties: `offset`.
  */
 @Generated
 class Shadow internal constructor(
