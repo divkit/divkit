@@ -1,4 +1,4 @@
-package com.yandex.div.core.widget
+package com.yandex.div.internal.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 
-internal class DivLayoutParams: MarginLayoutParams {
+class DivLayoutParams: MarginLayoutParams {
 
     var gravity = DEFAULT_GRAVITY
     var isBaselineAligned = false

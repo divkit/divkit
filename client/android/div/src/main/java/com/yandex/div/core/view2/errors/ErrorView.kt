@@ -7,7 +7,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
-import android.widget.FrameLayout
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -18,7 +19,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.dpToPx
 
 internal class ErrorView(
-    private val root: FrameLayout,
+    private val root: ViewGroup,
     private val errorModel: ErrorModel,
 ) : Disposable {
     private var counterView: AppCompatTextView? = null
@@ -74,9 +75,9 @@ internal class ErrorView(
                 }
             })
 
-        val layoutParams = FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.MATCH_PARENT,
-            FrameLayout.LayoutParams.MATCH_PARENT,
+        val layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT,
         )
         root.addView(view, layoutParams)
         detailsView = view
@@ -117,7 +118,7 @@ internal class ErrorView(
         }
 
         val side = 24.dpToPx()
-        val layoutParams = FrameLayout.LayoutParams(side, side, Gravity.TOP + Gravity.LEFT)
+        val layoutParams = MarginLayoutParams(side, side)
         val sideMargin = 8.dpToPx()
         layoutParams.topMargin = sideMargin
         layoutParams.leftMargin = sideMargin

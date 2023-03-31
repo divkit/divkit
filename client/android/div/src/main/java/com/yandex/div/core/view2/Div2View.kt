@@ -8,7 +8,6 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
@@ -54,6 +53,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
+import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.INVALID_STATE_ID
@@ -79,7 +79,7 @@ class Div2View private constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
-) : FrameLayout(context, attrs, defStyleAttr), DivViewFacade {
+) : FrameContainerLayout(context, attrs, defStyleAttr), DivViewFacade {
 
     internal val div2Component: Div2Component = context.div2Component
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()

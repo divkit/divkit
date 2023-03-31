@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.widget.DivLayoutParams
 import kotlin.math.max
 import kotlin.math.min
 

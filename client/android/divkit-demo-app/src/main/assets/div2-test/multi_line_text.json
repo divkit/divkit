@@ -6,7 +6,8 @@
       "div": {
         "font_size": 16,
         "height": {
-          "type": "wrap_content"
+          "type": "wrap_content",
+          "constrained": true
         },
         "line_height": 20,
         "text": "multi\nline",

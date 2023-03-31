@@ -12,7 +12,6 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
 import com.yandex.div.core.Disposable
@@ -21,6 +20,7 @@ import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -35,7 +35,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), DivBorderSupports, ExpressionSubscriber, TransientView {
+) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, ExpressionSubscriber, TransientView {
 
     var path: DivStatePath? = null
     val stateId: String?

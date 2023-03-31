@@ -11,7 +11,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withTranslation
@@ -26,7 +25,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectView
-import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
@@ -36,6 +34,7 @@ import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.util.spToPx
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -322,10 +321,6 @@ internal fun View.applyAlignment(
 private fun View.applyGravity(newGravity: Int) {
     when (val lp = layoutParams) {
         is DivLayoutParams -> if (lp.gravity != newGravity) {
-            lp.gravity = newGravity
-            requestLayout()
-        }
-        is FrameLayout.LayoutParams -> if (lp.gravity != newGravity) {
             lp.gravity = newGravity
             requestLayout()
         }

@@ -9,9 +9,10 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import com.yandex.div.R
-import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
-import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
+import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.ceil
 import kotlin.math.max

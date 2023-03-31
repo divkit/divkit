@@ -1,11 +1,12 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import android.widget.FrameLayout
+import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.Div
 import javax.inject.Inject
 
@@ -32,10 +33,7 @@ internal class Div2Builder @Inject constructor(
     fun createView(data: Div, divView: Div2View, path: DivStatePath): View {
         val resolver = divView.expressionResolver
         val view = viewCreator.create(data, resolver).apply {
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            )
+            layoutParams = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }
 
         return view

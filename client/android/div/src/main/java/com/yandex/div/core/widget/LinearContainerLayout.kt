@@ -15,6 +15,7 @@ import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.roundToInt
