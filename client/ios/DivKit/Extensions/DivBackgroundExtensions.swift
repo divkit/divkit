@@ -37,7 +37,7 @@ extension DivBackground {
       )
       return .image(image)
     case let .divSolidBackground(solidBackground):
-      return .solidColor(solidBackground.resolveColor(expressionResolver) ?? .black)
+      return solidBackground.resolveColor(expressionResolver).map { .solidColor($0) }
     case let .divNinePatchBackground(ninePatchBackground):
       let image = NinePatchImage(
         imageHolder: imageHolderFactory.make(
