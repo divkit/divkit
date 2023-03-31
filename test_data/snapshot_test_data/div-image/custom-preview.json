@@ -1,9 +1,7 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Image with label_image_preview extension",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "ios"
   ],
   "templates": {},
   "card": {

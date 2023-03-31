@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Image with fixed width and aspect ratio equal to 2 (height = width / 2)",
   "platforms": [
     "android",
     "ios",

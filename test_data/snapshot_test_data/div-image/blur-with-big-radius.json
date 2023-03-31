@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre (android didn't support blur radius > 25 px)",
+  "description": "Images with different big blur radii",
   "platforms": [
     "android",
     "ios",
