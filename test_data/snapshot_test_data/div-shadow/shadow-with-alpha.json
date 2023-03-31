@@ -1,7 +1,6 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Container with centered dark shadow",
   "platforms": [
-    "android",
     "ios",
     "web"
   ],
