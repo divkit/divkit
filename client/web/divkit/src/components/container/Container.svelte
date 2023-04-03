@@ -175,9 +175,11 @@
         if (orientation !== 'horizontal') {
             newChildLayoutParams.parentHAlign = HALIGN_MAP[contentHAlign];
             if (
-                !$jsonHeight ||
-                $jsonHeight.type === 'wrap_content' ||
-                $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+                !aspect && (
+                    !$jsonHeight ||
+                    $jsonHeight.type === 'wrap_content' ||
+                    $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+                )
             ) {
                 newChildLayoutParams.parentVerticalWrapContent = true;
             }
@@ -228,6 +230,7 @@
         {templateContext}
         {layoutParams}
         {additionalPaddings}
+        heightByAspect={Boolean(aspect)}
     >
         {#each items as item}
             <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />

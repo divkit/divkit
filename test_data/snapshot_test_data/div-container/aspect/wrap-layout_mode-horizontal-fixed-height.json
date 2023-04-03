@@ -2,7 +2,8 @@
   "description": "DivContainer with horizontal wrap layout and aspect height. Base height was fixed. Actual height must be equal width / 2.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "test_card",

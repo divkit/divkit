@@ -51,6 +51,7 @@
     export let customPaddings = false;
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
+    export let heightByAspect = false;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
         left: 'start',
@@ -284,7 +285,10 @@
 
         const type = $jsonHeight?.type;
 
-        if (type === 'fixed') {
+        if (heightByAspect) {
+            // auto height
+            // no special css needed, so no special heightType
+        } else if (type === 'fixed') {
             heightNum = correctNonNegativeNumber($jsonHeight?.value, heightNum);
             newHeight = pxToEm(heightNum);
         } else if (type === 'match_parent' && (layoutParams.overlapParent || !layoutParams.parentVerticalWrapContent)) {
