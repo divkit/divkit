@@ -2,11 +2,7 @@
   "anyOf": [
     {
       "$ref": "div-blur.json",
-      "$description": "translations.json#/div_filter",
-      "platforms": [
-        "android",
-        "web"
-      ]
+      "$description": "translations.json#/div_filter"
     }
   ]
 }

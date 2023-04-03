@@ -29,7 +29,8 @@
           "default_value": "false",
           "$description": "translations.json#/div_image_high_priority_preview_show",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ]
         },
         "type": {
@@ -41,11 +42,7 @@
         "tint_mode": {
           "$ref": "div-blend-mode.json",
           "default_value": "source_in",
-          "$description": "translations.json#/div_image_tint_mode",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_image_tint_mode"
         },
         "tint_color": {
           "$ref": "common.json#/color",
@@ -53,11 +50,7 @@
         },
         "appearance_animation": {
           "$ref": "div-fade-transition.json",
-          "$description": "translations.json#/div_image_appearance_animation",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_image_appearance_animation"
         },
         "filters": {
           "type": "array",
@@ -65,11 +58,7 @@
             "$ref": "div-filter.json"
           },
           "minItems": 1,
-          "$description": "translations.json#/div_filter",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_filter"
         }
       }
     }

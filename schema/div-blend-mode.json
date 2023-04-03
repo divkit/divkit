@@ -10,6 +10,7 @@
   ],
   "$description": "translations.json#/div_blend_mode",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ]
 }

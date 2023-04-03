@@ -62,7 +62,8 @@
               "default_value": "sp",
               "$description": "translations.json#/div_tabs_tab_title_style_font_size_unit",
               "platforms": [
-                "android"
+                "android",
+                "ios"
               ]
             },
             "paddings": {
@@ -92,19 +93,11 @@
             },
             "active_font_weight": {
               "$ref": "div-font-weight.json",
-              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight",
-              "platforms": [
-                "android",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight"
             },
             "inactive_font_weight": {
               "$ref": "div-font-weight.json",
-              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight",
-              "platforms": [
-                "android",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight"
             },
             "font_family": {
               "$ref": "div-font-family.json",
@@ -128,27 +121,15 @@
             },
             "inactive_background_color": {
               "$ref": "common.json#/color",
-              "$description": "translations.json#/div_tabs_tab_title_style_inactive_background_color",
-              "platforms": [
-                "android",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_background_color"
             },
             "corner_radius": {
               "$ref": "common.json#/non_negative_integer",
-              "$description": "translations.json#/div_tabs_tab_title_style_corner_radius",
-              "platforms": [
-                "android",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_corner_radius"
             },
             "corners_radius": {
               "$ref": "div-corners-radius.json",
-              "$description": "translations.json#/div_tabs_tab_title_style_corners_radius",
-              "platforms": [
-                "android",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_corners_radius"
             },
             "animation_type": {
               "type": "string",
