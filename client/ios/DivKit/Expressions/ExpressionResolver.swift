@@ -129,7 +129,7 @@ public final class ExpressionResolver {
       let result: T = try AnyCalcExpression(
         parsedExpression,
         constants: self,
-        symbols: getSupportedFunctions(resolver: self)
+        symbols: supportedFunctions
       ).evaluate()
       return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
     } catch let error as CalcExpression.Error {
@@ -161,7 +161,7 @@ public final class ExpressionResolver {
           let value: String = try AnyCalcExpression(
             parsedExpression,
             constants: self,
-            symbols: getSupportedFunctions(resolver: self)
+            symbols: supportedFunctions
           ).evaluate()
           stringValue += value
         } catch let error as CalcExpression.Error {
@@ -255,16 +255,13 @@ extension ExpressionResolver: ConstantsProvider {
   }
 }
 
-private func getSupportedFunctions(resolver: ExpressionResolver)
-  -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
+private let supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
   CastFunctions.allCases.map(\.declaration).flat()
     + StringFunctions.allCases.map(\.declaration).flat()
     + ColorFunctions.allCases.map(\.declaration).flat()
     + DatetimeFunctions.allCases.map(\.declaration).flat()
     + MathFunctions.allCases.map(\.declaration).flat()
     + IntervalFunctions.allCases.map(\.declaration).flat()
-    + ValueFunctions.allCases.map { $0.getDeclaration(resolver: resolver) }.flat()
-}
 
 extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
   fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
