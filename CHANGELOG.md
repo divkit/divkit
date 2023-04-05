@@ -1,3 +1,52 @@
+## 24.0.0
+
+# JSON Schema:
+* Added raw_text_variable for div_input
+* Added new keyboard type
+
+# Android Client:
+
+Breaking changes:
+* Changed Int to Long
+* Inherit Div2View from FrameContainerLayout
+
+Additions:
+* Added new keyboard type
+* Added getValue functions
+* Added size_provider extension
+
+Fixes & Changes:
+* Replaced DivSnappyRecyclerView with DivRecyclerView + PagerSnapHelper
+* Optimization AND expression
+* Opt-in primary constructors of div models
+* Fixed crash on set_state in trigger actions
+
+# iOS Client:
+
+Additions:
+* Added new keyboard type
+
+Fixes & Changes:
+* Increased support version for iOS to 11
+* Increased size of Integer
+* Removed selection input method into DivInput
+* Renamed base modules
+* Fixed string arrays parsing
+* Fixed DivGallery actions handling
+* Fixed CFString parsing
+* Fixed shimmer-view block reuse
+* Fixed constrained logic in wrap container
+
+# Web Client:
+
+Breaking changes:
+* The `setVariable` / `GetVariable` methods have been removed (these methods were deprecated long time ago before opensource, in web version 1.11.0)
+* DivKit now uses `BigInt` internally if it is supported by the current platform. This also means that variable methods such as `subscribe` can now return `bigint` values instead of `number` (and accept such values in json). `integer` values in expressions are now limited to 64 bits instead of 32, and the minimum/maximum value for `integer` variables has been changed. Note that outside of expressions, DivKit restricts values to 32-bit integers, as was the case in previous versions. Also note that the js builtin methods, such as `JSON.parse`, return a simple `number`, so these values may lose accuracy outside the logic of DivKit. Make sure that your values are in the range `-2^53 — 2^53` or a custom json parsing function is used
+
+# Kotlin JSON Builder:
+* Added new keyboard type
+
+
 ## 23.7.0
 
 # Android Client:
