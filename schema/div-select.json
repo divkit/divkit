@@ -1,0 +1,97 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_select",
+  "definitions": {
+    "option": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "$description": "translations.json#/div_select_option_text"
+        },
+        "value": {
+          "type": "string",
+          "$description": "translations.json#/div_select_option_value"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "select"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/option",
+            "$description": "translations.json#/div_select_option"
+          },
+          "minItems": 1
+        },
+        "value_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_select_value_variable"
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "12",
+          "$description": "translations.json#/div_font_size"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "$description": "translations.json#/div_font_size_unit"
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "default_value": "text",
+          "$description": "translations.json#/div_font_family"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "$description": "translations.json#/div_font_weight"
+        },
+        "hint_text": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_select_hint_text"
+        },
+        "hint_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#73000000",
+          "$description": "translations.json#/div_select_hint_color"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_select_line_height"
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "$description": "translations.json#/div_text_color"
+        },
+        "letter_spacing": {
+          "type": "number",
+          "default_value": "0",
+          "$description": "translations.json#/div_select_letter_spacing"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "options",
+    "value_variable"
+  ]
+}

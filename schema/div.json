@@ -61,6 +61,11 @@
     {
       "$ref": "div-input.json",
       "$description": "translations.json#/div_input_short"
+    },
+    {
+      "$ref": "div-select.json",
+      "$description": "translations.json#/div_select",
+      "platforms": []
     }
   ]
 }

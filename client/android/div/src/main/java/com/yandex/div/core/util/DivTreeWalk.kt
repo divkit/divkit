@@ -169,5 +169,6 @@ private val Div.items: List<Div>
             is Div.Pager -> value.items
             is Div.Tabs -> value.items.map { tab -> tab.div }
             is Div.State -> value.states.mapNotNull { state -> state.div }
+            is Div.Select -> TODO()
         }
     }

@@ -49,6 +49,7 @@ internal val Div.type: String
             is Div.Pager -> DivPager.TYPE
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
+            is Div.Select -> TODO()
         }
     }
 

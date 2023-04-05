@@ -1195,6 +1195,42 @@
     "en": "Value of the scale  from which the element starts appearing or at which it finishes disappearing.",
     "ru": "Значение масштаба, с которого начнется появление или на котором закончится исчезновение элемента."
   },
+  "div_select": {
+    "en": "Option list selection element.",
+    "ru": "Элемент для выбора варианта из списка."
+  },
+  "div_select_hint_color": {
+    "en": "Hint color.",
+    "ru": "Цвет подсказки."
+  },
+  "div_select_hint_text": {
+    "en": "Hint text.",
+    "ru": "Текст подсказки."
+  },
+  "div_select_letter_spacing": {
+    "en": "Spacing between characters.",
+    "ru": "Интервал между символами."
+  },
+  "div_select_line_height": {
+    "en": "Line spacing of the text. Units specified in `font_size_unit`.",
+    "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
+  },
+  "div_select_option": {
+    "en": "Option to choose from list.",
+    "ru": "Вариант для выбора из списка."
+  },
+  "div_select_option_text": {
+    "en": "Option text from list to be shown in UI. If not specified, option `value` will be used instead.",
+    "ru": "Текст варианта из списка, который будет виден пользователю. Если не указан, то берётся значение из `value`."
+  },
+  "div_select_option_value": {
+    "en": "Option value from list.",
+    "ru": "Значение варианта из списка."
+  },
+  "div_select_value_variable": {
+    "en": "Variable name to store selected from list option `value`.",
+    "ru": "Название переменной для хранения `value` выбранного варианта из списка."
+  },
   "div_separator": {
     "en": "A separating line between elements.",
     "ru": "Разделительная линия между элементами."
