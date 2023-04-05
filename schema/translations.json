@@ -955,6 +955,14 @@
     "en": "Regular expression with which the character will be validated.",
     "ru": "Регулярное выражение, валидирующее вводимый символ."
   },
+  "div_input_mask_currency": {
+    "en": "Mask for currency with language format.",
+    "ru": "Маска для валюты с региональным форматом."
+  },
+  "div_input_mask_currency_locale": {
+    "en": "IETF BCP 47 language tag for currency mask. Look https://en.wikipedia.org/wiki/IETF_language_tag for more. If not specified, it will be determined automatically.",
+    "ru": "Языковой тег стандарта IETF BCP 47 для маски валюты. Подробнее https://en.wikipedia.org/wiki/IETF_language_tag. Если не задан, то будет определен автоматически."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."

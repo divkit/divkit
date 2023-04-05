@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_input_mask_currency",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "currency"
+      ]
+    },
+    "locale": {
+      "$ref": "common.json#/non_empty_string",
+      "$description": "translations.json#/div_input_mask_currency_locale"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

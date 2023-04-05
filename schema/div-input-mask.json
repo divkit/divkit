@@ -3,6 +3,10 @@
     {
       "$ref": "div-fixed-length-input-mask.json",
       "$description": "translations.json#/div_input_mask_fixed_length"
+    },
+    {
+      "$ref": "div-currency-input-mask.json",
+      "$description": "translations.json#/div_input_mask_currency"
     }
   ]
 }
