@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
 import androidx.core.graphics.applyCanvas
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
 import androidx.core.view.doOnLayout
@@ -53,13 +54,21 @@ internal fun createOrGetVisualCopy(
 }
 
 private fun ImageView.setScreenshotFromView(view: View) {
-    view.doOnLayout {
+    val drawAndSet = {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
             .applyCanvas {
                 translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
                 view.draw(this)
             }
         setImageBitmap(bitmap)
+    }
+
+    if (ViewCompat.isLaidOut(view)) {
+        drawAndSet()
+    } else {
+        view.doOnLayout {
+            drawAndSet()
+        }
     }
 }
 
