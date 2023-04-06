@@ -12,7 +12,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
     public let stateId: Field<String>?
     public let swipeOutActions: Field<[DivActionTemplate]>? // at least 1 elements
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           animationIn: try dictionary.getOptionalField("animation_in", templateToType: templateToType),
@@ -136,11 +136,11 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> StateTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> StateTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> StateTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> StateTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return StateTemplate(
@@ -188,7 +188,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -641,7 +641,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivStateTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivStateTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivStateTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -682,7 +682,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivStateTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivStateTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivStateTemplate(

@@ -18,7 +18,7 @@ public enum DivTextGradientTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTextGradientTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTextGradientTemplate {
     switch self {
     case let .divLinearGradientTemplate(value):
       return .divLinearGradientTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivTextGradientTemplate: TemplateValue {
 }
 
 extension DivTextGradientTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

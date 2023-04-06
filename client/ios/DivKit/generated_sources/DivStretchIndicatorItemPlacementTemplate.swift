@@ -13,7 +13,7 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Temp
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       itemSpacing: try dictionary.getOptionalField("item_spacing", templateToType: templateToType),
@@ -78,7 +78,7 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Temp
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivStretchIndicatorItemPlacementTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivStretchIndicatorItemPlacementTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivStretchIndicatorItemPlacementTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -92,7 +92,7 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Temp
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivStretchIndicatorItemPlacementTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivStretchIndicatorItemPlacementTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivStretchIndicatorItemPlacementTemplate(

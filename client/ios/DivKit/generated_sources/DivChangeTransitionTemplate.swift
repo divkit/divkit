@@ -18,7 +18,7 @@ public enum DivChangeTransitionTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivChangeTransitionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivChangeTransitionTemplate {
     switch self {
     case let .divChangeSetTransitionTemplate(value):
       return .divChangeSetTransitionTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivChangeTransitionTemplate: TemplateValue {
 }
 
 extension DivChangeTransitionTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

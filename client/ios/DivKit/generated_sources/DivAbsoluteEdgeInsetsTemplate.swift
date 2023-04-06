@@ -10,7 +10,7 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, TemplateDeseria
   public let right: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let top: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       bottom: try dictionary.getOptionalExpressionField("bottom"),
       left: try dictionary.getOptionalExpressionField("left"),
@@ -95,11 +95,11 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, TemplateDeseria
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivAbsoluteEdgeInsetsTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivAbsoluteEdgeInsetsTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivAbsoluteEdgeInsetsTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivAbsoluteEdgeInsetsTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

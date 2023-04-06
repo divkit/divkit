@@ -20,6 +20,7 @@ public enum Div {
   case divIndicator(DivIndicator)
   case divSlider(DivSlider)
   case divInput(DivInput)
+  case divSelect(DivSelect)
 
   public var value: Serializable & DivBase {
     switch self {
@@ -50,6 +51,8 @@ public enum Div {
     case let .divSlider(value):
       return value
     case let .divInput(value):
+      return value
+    case let .divSelect(value):
       return value
     }
   }
@@ -83,6 +86,8 @@ public enum Div {
     case let .divSlider(value):
       return value.id
     case let .divInput(value):
+      return value.id
+    case let .divSelect(value):
       return value.id
     }
   }
@@ -119,6 +124,8 @@ extension Div: Equatable {
     case let (.divSlider(l), .divSlider(r)):
       return l == r
     case let (.divInput(l), .divInput(r)):
+      return l == r
+    case let (.divSelect(l), .divSelect(r)):
       return l == r
     default:
       return false

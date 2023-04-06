@@ -10,7 +10,7 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
   public let topLeft: Field<Expression<Int>>? // constraint: number >= 0
   public let topRight: Field<Expression<Int>>? // constraint: number >= 0
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       bottomLeft: try dictionary.getOptionalExpressionField("bottom-left"),
       bottomRight: try dictionary.getOptionalExpressionField("bottom-right"),
@@ -95,11 +95,11 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivCornersRadiusTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivCornersRadiusTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivCornersRadiusTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivCornersRadiusTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

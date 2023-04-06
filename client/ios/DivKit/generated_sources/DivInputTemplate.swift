@@ -8,7 +8,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
   public final class NativeInterfaceTemplate: TemplateValue, TemplateDeserializable {
     public let color: Field<Expression<Color>>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:))
@@ -74,11 +74,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> NativeInterfaceTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> NativeInterfaceTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> NativeInterfaceTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> NativeInterfaceTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
@@ -133,7 +133,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -756,7 +756,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivInputTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivInputTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivInputTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -810,7 +810,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivInputTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivInputTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivInputTemplate(

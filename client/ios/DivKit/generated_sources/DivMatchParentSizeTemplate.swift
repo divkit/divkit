@@ -12,7 +12,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       weight: try dictionary.getOptionalExpressionField("weight")
@@ -61,7 +61,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivMatchParentSizeTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivMatchParentSizeTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivMatchParentSizeTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -74,7 +74,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivMatchParentSizeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivMatchParentSizeTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

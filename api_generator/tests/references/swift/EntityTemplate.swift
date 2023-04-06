@@ -69,7 +69,7 @@ public enum EntityTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityTemplate {
     switch self {
     case let .entityWithArrayTemplate(value):
       return .entityWithArrayTemplate(try value.resolveParent(templates: templates))
@@ -442,7 +442,7 @@ public enum EntityTemplate: TemplateValue {
 }
 
 extension EntityTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

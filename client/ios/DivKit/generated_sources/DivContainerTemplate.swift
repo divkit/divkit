@@ -11,7 +11,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     public let showBetween: Field<Expression<Bool>>? // default value: true
     public let style: Field<DivDrawableTemplate>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           showAtEnd: try dictionary.getOptionalExpressionField("show_at_end"),
@@ -119,11 +119,11 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> SeparatorTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> SeparatorTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> SeparatorTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> SeparatorTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return SeparatorTemplate(
@@ -183,7 +183,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -761,7 +761,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivContainerTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivContainerTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivContainerTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -811,7 +811,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivContainerTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivContainerTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivContainerTemplate(

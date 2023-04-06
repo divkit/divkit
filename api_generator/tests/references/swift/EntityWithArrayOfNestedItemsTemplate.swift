@@ -9,7 +9,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     public let entity: Field<EntityTemplate>?
     public let property: Field<Expression<String>>? // at least 1 char
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           entity: try dictionary.getOptionalField("entity", templateToType: templateToType),
@@ -99,11 +99,11 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> ItemTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ItemTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> ItemTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ItemTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return ItemTemplate(
@@ -120,7 +120,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -192,7 +192,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithArrayOfNestedItemsTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithArrayOfNestedItemsTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithArrayOfNestedItemsTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -205,7 +205,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithArrayOfNestedItemsTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithArrayOfNestedItemsTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return EntityWithArrayOfNestedItemsTemplate(

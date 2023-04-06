@@ -10,7 +10,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
   public final class PropertyTemplate: TemplateValue, TemplateDeserializable {
     public let value: Field<Expression<URL>>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           value: try dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
@@ -76,11 +76,11 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> PropertyTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> PropertyTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> PropertyTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> PropertyTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
@@ -92,7 +92,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -164,7 +164,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithComplexPropertyTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithComplexPropertyTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithComplexPropertyTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -177,7 +177,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithComplexPropertyTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithComplexPropertyTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return EntityWithComplexPropertyTemplate(

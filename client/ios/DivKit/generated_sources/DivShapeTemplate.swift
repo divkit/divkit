@@ -18,7 +18,7 @@ public enum DivShapeTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivShapeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivShapeTemplate {
     switch self {
     case let .divRoundedRectangleShapeTemplate(value):
       return .divRoundedRectangleShapeTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivShapeTemplate: TemplateValue {
 }
 
 extension DivShapeTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

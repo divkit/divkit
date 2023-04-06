@@ -21,7 +21,7 @@ public enum DivSizeTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivSizeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivSizeTemplate {
     switch self {
     case let .divFixedSizeTemplate(value):
       return .divFixedSizeTemplate(try value.resolveParent(templates: templates))
@@ -106,7 +106,7 @@ public enum DivSizeTemplate: TemplateValue {
 }
 
 extension DivSizeTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

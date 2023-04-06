@@ -13,7 +13,7 @@ public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeser
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator)
     )
@@ -33,11 +33,11 @@ public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeser
     return .success(EntityWithoutProperties())
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithoutPropertiesTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithoutPropertiesTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithoutPropertiesTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithoutPropertiesTemplate {
     return self
   }
 }

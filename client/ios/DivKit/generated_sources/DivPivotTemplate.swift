@@ -18,7 +18,7 @@ public enum DivPivotTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPivotTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPivotTemplate {
     switch self {
     case let .divPivotFixedTemplate(value):
       return .divPivotFixedTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivPivotTemplate: TemplateValue {
 }
 
 extension DivPivotTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

@@ -8,7 +8,7 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
   public let stroke: Field<DivStrokeTemplate>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
       stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
@@ -70,11 +70,11 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTextRangeBorderTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTextRangeBorderTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTextRangeBorderTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTextRangeBorderTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTextRangeBorderTemplate(

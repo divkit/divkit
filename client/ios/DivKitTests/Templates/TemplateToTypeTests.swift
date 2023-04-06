@@ -5,7 +5,7 @@ import XCTest
 final class TemplateToTypeTests: XCTestCase {
   private func performTestCase(
     json: String,
-    templateToType: TemplateToType
+    templateToType: [TemplateName: String]
   ) throws {
     let dict = try JSONSerialization.jsonObject(
       with: json.data(using: .utf8)!

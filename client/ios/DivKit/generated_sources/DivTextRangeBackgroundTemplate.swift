@@ -15,7 +15,7 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTextRangeBackgroundTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTextRangeBackgroundTemplate {
     switch self {
     case let .divSolidBackgroundTemplate(value):
       return .divSolidBackgroundTemplate(try value.resolveParent(templates: templates))
@@ -64,7 +64,7 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
 }
 
 extension DivTextRangeBackgroundTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

@@ -52,7 +52,7 @@ class SwiftAccessLevel(str, Enum):
 
 
 def swift_template_deserializable_args_decl(mode: GenerationMode):
-    return ', templateToType: TemplateToType' if mode.is_template else ''
+    return ', templateToType: [TemplateName: String]' if mode.is_template else ''
 
 
 def swift_template_deserializable_args(mode: GenerationMode):
@@ -327,7 +327,7 @@ class SwiftEntity(Entity):
     def resolve_template_declaration(self) -> Text:
         self_type = utils.capitalize_camel_case(self.name)
 
-        result = Text(f'private func mergedWithParent(templates: Templates) throws -> {self_type} {{')
+        result = Text(f'private func mergedWithParent(templates: [TemplateName: Any]) throws -> {self_type} {{')
         props = cast(List[SwiftProperty], self.instance_properties)
         if self.has_parent_property and props:
             compare_with_self_type = ''
@@ -350,7 +350,7 @@ class SwiftEntity(Entity):
             result += '  return self'
         result += '}'
         result += EMPTY
-        result += f'public func resolveParent(templates: Templates) throws -> {self_type} {{'
+        result += f'public func resolveParent(templates: [TemplateName: Any]) throws -> {self_type} {{'
         if any(p.property_type.can_be_templated for p in props):
             result += '  let merged = try mergedWithParent(templates: templates)'
             result += EMPTY
@@ -847,7 +847,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
     def resolve_parent_implementation(self, access_level: SwiftAccessLevel) -> Text:
         access = access_level.value
         name = utils.capitalize_camel_case(self.name)
-        result = Text(f'{access}func resolveParent(templates: Templates) throws -> {name} {{')
+        result = Text(f'{access}func resolveParent(templates: [TemplateName: Any]) throws -> {name} {{')
         result += '  switch self {'
         for name in self._resolved_entity_names:
             lower_name = utils.lower_camel_case(name)

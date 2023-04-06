@@ -15,7 +15,7 @@ public enum DivDrawableTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivDrawableTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivDrawableTemplate {
     switch self {
     case let .divShapeDrawableTemplate(value):
       return .divShapeDrawableTemplate(try value.resolveParent(templates: templates))
@@ -64,7 +64,7 @@ public enum DivDrawableTemplate: TemplateValue {
 }
 
 extension DivDrawableTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

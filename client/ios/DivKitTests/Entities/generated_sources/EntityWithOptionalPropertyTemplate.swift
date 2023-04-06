@@ -14,7 +14,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       property: try dictionary.getOptionalExpressionField("property")
@@ -63,7 +63,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithOptionalPropertyTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithOptionalPropertyTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithOptionalPropertyTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -76,7 +76,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithOptionalPropertyTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithOptionalPropertyTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

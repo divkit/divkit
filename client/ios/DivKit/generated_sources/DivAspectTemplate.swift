@@ -7,7 +7,7 @@ import Serialization
 public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
   public let ratio: Field<Expression<Double>>? // constraint: number > 0
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         ratio: try dictionary.getOptionalExpressionField("ratio")
@@ -73,11 +73,11 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivAspectTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivAspectTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivAspectTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivAspectTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

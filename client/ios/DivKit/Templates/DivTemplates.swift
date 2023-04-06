@@ -4,12 +4,15 @@ import CommonCorePublic
 import Serialization
 
 public struct DivTemplates: Deserializable {
-  public let templates: Templates
-  public let templateToType: TemplateToType
+  public let templates: [TemplateName: Any]
+  public let templateToType: [TemplateName: String]
 
   public static let empty = DivTemplates(dictionary: [:])
 
-  public init(templates: Templates, templatesToType: TemplateToType) {
+  public init(
+    templates: [TemplateName: Any],
+    templatesToType: [TemplateName: String]
+  ) {
     self.templates = templates
     self.templateToType = templatesToType
   }
@@ -53,7 +56,7 @@ extension DivTemplates {
 
   public func parseValue<T: TemplateDeserializable & TemplateValue>(
     type _: T.Type,
-    from dict: TemplateData
+    from dict: [String: Any]
   ) -> DeserializationResult<T.ResolvedValue> {
     let context = TemplatesContext(
       templates: templates,
@@ -90,7 +93,7 @@ extension DivTemplates {
 
 private func mapTemplatesByType(
   templatesDictionary: [String: Any],
-  templateToType: TemplateToType
+  templateToType: [TemplateName: String]
 ) -> [TemplateName: DivTemplate] {
   Dictionary(
     templatesDictionary.keys.compactMap { [templateToType] key in

@@ -14,7 +14,7 @@ public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
@@ -93,7 +93,7 @@ public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivCircleShapeTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivCircleShapeTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivCircleShapeTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -108,7 +108,7 @@ public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivCircleShapeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivCircleShapeTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivCircleShapeTemplate(

@@ -15,7 +15,7 @@ public enum DivFilterTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivFilterTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivFilterTemplate {
     switch self {
     case let .divBlurTemplate(value):
       return .divBlurTemplate(try value.resolveParent(templates: templates))
@@ -64,7 +64,7 @@ public enum DivFilterTemplate: TemplateValue {
 }
 
 extension DivFilterTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

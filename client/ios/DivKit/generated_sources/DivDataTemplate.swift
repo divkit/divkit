@@ -9,7 +9,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     public let div: Field<DivTemplate>?
     public let stateId: Field<Int>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           div: try dictionary.getOptionalField("div", templateToType: templateToType),
@@ -99,11 +99,11 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> StateTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> StateTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> StateTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> StateTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return StateTemplate(
@@ -123,7 +123,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
   static let statesValidator: AnyArrayValueValidator<DivDataTemplate.StateTemplate> =
     makeStrictArrayValidator(minItems: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         logId: try dictionary.getOptionalField("log_id"),
@@ -268,11 +268,11 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivDataTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivDataTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivDataTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivDataTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivDataTemplate(

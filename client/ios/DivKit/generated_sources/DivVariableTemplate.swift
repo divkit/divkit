@@ -30,7 +30,7 @@ public enum DivVariableTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivVariableTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivVariableTemplate {
     switch self {
     case let .stringVariableTemplate(value):
       return .stringVariableTemplate(try value.resolveParent(templates: templates))
@@ -169,7 +169,7 @@ public enum DivVariableTemplate: TemplateValue {
 }
 
 extension DivVariableTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

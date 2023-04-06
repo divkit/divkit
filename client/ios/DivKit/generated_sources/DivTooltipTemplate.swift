@@ -15,7 +15,7 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
   public let offset: Field<DivPointTemplate>?
   public let position: Field<Expression<Position>>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         animationIn: try dictionary.getOptionalField("animation_in", templateToType: templateToType),
@@ -181,11 +181,11 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTooltipTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTooltipTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTooltipTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTooltipTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTooltipTemplate(

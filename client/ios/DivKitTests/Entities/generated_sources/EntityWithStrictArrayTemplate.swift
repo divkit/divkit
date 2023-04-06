@@ -17,7 +17,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
   static let arrayValidator: AnyArrayValueValidator<EntityTemplate> =
     makeStrictArrayValidator(minItems: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -89,7 +89,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithStrictArrayTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithStrictArrayTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithStrictArrayTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -102,7 +102,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithStrictArrayTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithStrictArrayTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return EntityWithStrictArrayTemplate(

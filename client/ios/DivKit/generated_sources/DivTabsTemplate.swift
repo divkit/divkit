@@ -10,7 +10,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     public let title: Field<Expression<String>>? // at least 1 char
     public let titleClickAction: Field<DivActionTemplate>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           div: try dictionary.getOptionalField("div", templateToType: templateToType),
@@ -114,11 +114,11 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> ItemTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ItemTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> ItemTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ItemTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return ItemTemplate(
@@ -151,7 +151,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
     public let paddings: Field<DivEdgeInsetsTemplate>? // default value: DivEdgeInsets(bottom: .value(6), left: .value(8), right: .value(8), top: .value(6))
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         activeBackgroundColor: try dictionary.getOptionalExpressionField("active_background_color", transform: Color.color(withHexString:)),
         activeFontWeight: try dictionary.getOptionalExpressionField("active_font_weight"),
@@ -422,11 +422,11 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> TabTitleStyleTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> TabTitleStyleTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> TabTitleStyleTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> TabTitleStyleTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return TabTitleStyleTemplate(
@@ -493,7 +493,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -1027,7 +1027,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTabsTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTabsTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivTabsTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -1074,7 +1074,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTabsTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTabsTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTabsTemplate(

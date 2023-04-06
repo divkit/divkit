@@ -16,7 +16,7 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
   public let stateDescription: Field<Expression<String>>? // at least 1 char
   public let type: Field<Kind>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       description: try dictionary.getOptionalExpressionField("description"),
       hint: try dictionary.getOptionalExpressionField("hint"),
@@ -127,11 +127,11 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivAccessibilityTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivAccessibilityTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivAccessibilityTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivAccessibilityTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

@@ -144,7 +144,7 @@ extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
 extension Field {
   @inlinable
   func resolveParent<U: TemplateValue>(
-    templates: Templates,
+    templates: [TemplateName: Any],
     validator: AnyArrayValueValidator<U>? = nil
   ) throws -> Field<[U]> where T == [U] {
     switch self {
@@ -174,7 +174,7 @@ extension Field {
   }
 
   @inlinable
-  func tryResolveParent<U: TemplateValue>(templates: Templates) -> Field<[U]>?
+  func tryResolveParent<U: TemplateValue>(templates: [TemplateName: Any]) -> Field<[U]>?
     where T == [U] {
     try? resolveParent(templates: templates)
   }
@@ -185,7 +185,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
   typealias ResolvedValue = T.ResolvedValue
 
   @inlinable
-  func resolveParent(templates: Templates) throws -> Field<T> {
+  func resolveParent(templates: [TemplateName: Any]) throws -> Field<T> {
     switch self {
     case let .link(link):
       return .link(link)
@@ -201,7 +201,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
   ) -> DeserializationResult<ResolvedValue> {
     switch self {
     case let .link(link):
-      let valueDictResult: DeserializationResult<TemplateData> = safeValueForLink(
+      let valueDictResult: DeserializationResult<[String: Any]> = safeValueForLink(
         { try context.templateData.getField($0) },
         link: link
       )
@@ -221,7 +221,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
   }
 
   @inlinable
-  func tryResolveParent(templates: Templates) -> Field<T>? {
+  func tryResolveParent(templates: [TemplateName: Any]) -> Field<T>? {
     switch self {
     case .link:
       return self

@@ -18,7 +18,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivRadialGradientRadiusTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivRadialGradientRadiusTemplate {
     switch self {
     case let .divFixedSizeTemplate(value):
       return .divFixedSizeTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
 }
 
 extension DivRadialGradientRadiusTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

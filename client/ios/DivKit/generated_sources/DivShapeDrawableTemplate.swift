@@ -14,7 +14,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -121,7 +121,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivShapeDrawableTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivShapeDrawableTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivShapeDrawableTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -136,7 +136,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivShapeDrawableTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivShapeDrawableTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivShapeDrawableTemplate(

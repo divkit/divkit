@@ -12,7 +12,7 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
   public let tickInterval: Field<Expression<Int>>? // constraint: number > 0
   public let valueVariable: Field<String>? // at least 1 char
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         duration: try dictionary.getOptionalExpressionField("duration"),
@@ -147,11 +147,11 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTimerTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTimerTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTimerTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTimerTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTimerTemplate(

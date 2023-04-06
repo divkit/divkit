@@ -18,7 +18,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPagerLayoutModeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPagerLayoutModeTemplate {
     switch self {
     case let .divPageSizeTemplate(value):
       return .divPageSizeTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
 }
 
 extension DivPagerLayoutModeTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

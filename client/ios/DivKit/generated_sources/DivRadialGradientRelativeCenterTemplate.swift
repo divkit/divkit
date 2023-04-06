@@ -12,7 +12,7 @@ public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Templ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -81,7 +81,7 @@ public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Templ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivRadialGradientRelativeCenterTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivRadialGradientRelativeCenterTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivRadialGradientRelativeCenterTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -94,7 +94,7 @@ public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Templ
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivRadialGradientRelativeCenterTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivRadialGradientRelativeCenterTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

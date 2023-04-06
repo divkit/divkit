@@ -10,7 +10,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
     public let text: Field<Expression<String>>? // at least 1 char
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           action: try dictionary.getOptionalField("action", templateToType: templateToType),
@@ -106,11 +106,11 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> MenuItemTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> MenuItemTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> MenuItemTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> MenuItemTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return MenuItemTemplate(
@@ -129,7 +129,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
   public let referer: Field<Expression<URL>>?
   public let url: Field<Expression<URL>>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
@@ -277,11 +277,11 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivActionTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivActionTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivActionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivActionTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivActionTemplate(

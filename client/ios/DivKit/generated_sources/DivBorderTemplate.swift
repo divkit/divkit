@@ -11,7 +11,7 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
   public let shadow: Field<DivShadowTemplate>?
   public let stroke: Field<DivStrokeTemplate>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
       cornersRadius: try dictionary.getOptionalField("corners_radius", templateToType: templateToType),
@@ -114,11 +114,11 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivBorderTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivBorderTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivBorderTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivBorderTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivBorderTemplate(

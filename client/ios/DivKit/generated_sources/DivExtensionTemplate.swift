@@ -8,7 +8,7 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
   public let id: Field<String>? // at least 1 char
   public let params: Field<[String: Any]>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         id: try dictionary.getOptionalField("id"),
@@ -87,11 +87,11 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivExtensionTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivExtensionTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivExtensionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivExtensionTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

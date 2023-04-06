@@ -11,7 +11,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
   public let top: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       bottom: try dictionary.getOptionalExpressionField("bottom"),
       left: try dictionary.getOptionalExpressionField("left"),
@@ -109,11 +109,11 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivEdgeInsetsTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivEdgeInsetsTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivEdgeInsetsTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivEdgeInsetsTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

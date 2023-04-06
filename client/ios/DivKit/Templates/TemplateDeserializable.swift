@@ -3,6 +3,6 @@ import Serialization
 public protocol TemplateDeserializable {
   init(
     dictionary: [String: Any],
-    templateToType: TemplateToType
+    templateToType: [TemplateName: String]
   ) throws
 }

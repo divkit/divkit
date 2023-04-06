@@ -16,7 +16,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       value: try dictionary.getOptionalExpressionField("value")
@@ -65,7 +65,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithStringEnumPropertyWithDefaultValueTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -78,7 +78,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

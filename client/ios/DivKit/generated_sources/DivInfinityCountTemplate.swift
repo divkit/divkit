@@ -11,7 +11,7 @@ public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializab
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator)
     )
@@ -31,11 +31,11 @@ public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializab
     return .success(DivInfinityCount())
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivInfinityCountTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivInfinityCountTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivInfinityCountTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivInfinityCountTemplate {
     return self
   }
 }

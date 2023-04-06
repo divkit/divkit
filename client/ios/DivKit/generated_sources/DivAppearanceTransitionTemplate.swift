@@ -24,7 +24,7 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivAppearanceTransitionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivAppearanceTransitionTemplate {
     switch self {
     case let .divAppearanceSetTransitionTemplate(value):
       return .divAppearanceSetTransitionTemplate(try value.resolveParent(templates: templates))
@@ -127,7 +127,7 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
 }
 
 extension DivAppearanceTransitionTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

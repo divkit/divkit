@@ -1,12 +1,14 @@
 public struct TemplatesContext {
-  public let templates: Templates
-  public let templateToType: TemplateToType
-  public var templateData: TemplateData
+  @usableFromInline
+  let templates: [TemplateName: Any]
+  let templateToType: [TemplateName: String]
+  @usableFromInline
+  var templateData: [String: Any]
 
   init(
-    templates: Templates,
-    templateToType: TemplateToType,
-    templateData: TemplateData
+    templates: [TemplateName: Any],
+    templateToType: [TemplateName: String],
+    templateData: [String: Any]
   ) {
     self.templates = templates
     self.templateToType = templateToType

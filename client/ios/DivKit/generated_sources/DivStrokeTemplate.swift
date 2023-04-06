@@ -9,7 +9,7 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let width: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
@@ -101,11 +101,11 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivStrokeTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivStrokeTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivStrokeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivStrokeTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

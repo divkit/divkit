@@ -1,17 +1,15 @@
 import CommonCorePublic
 import Serialization
 
-public typealias TemplateToType = [String: String]
-
-func calculateTemplateToType(in dict: [String: Any]) -> TemplateToType {
-  var unresolved: TemplateToType = [:]
+func calculateTemplateToType(in dict: [String: Any]) -> [TemplateName: String] {
+  var unresolved: [TemplateName: String] = [:]
   for key in dict.keys {
     if let value = dict[key] as? [String: Any], let type = value["type"] as? String {
       unresolved[key] = type
     }
   }
 
-  var result: TemplateToType = [:]
+  var result: [TemplateName: String] = [:]
   for key in unresolved.keys {
     do {
       result[key] = try finalType(for: key, in: unresolved)
@@ -25,7 +23,7 @@ func calculateTemplateToType(in dict: [String: Any]) -> TemplateToType {
 
 private func finalType(
   for type: String,
-  in dict: TemplateToType,
+  in dict: [TemplateName: String],
   analyzedTypes: Set<String> = []
 ) throws -> String {
   guard !analyzedTypes.contains(type) else {

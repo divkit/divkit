@@ -9,7 +9,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
     public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
     public let value: Field<Expression<Int>>? // constraint: number >= 0
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           unit: try dictionary.getOptionalExpressionField("unit"),
@@ -88,11 +88,11 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> ConstraintSizeTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ConstraintSizeTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> ConstraintSizeTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ConstraintSizeTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
@@ -106,7 +106,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       constrained: try dictionary.getOptionalExpressionField("constrained"),
@@ -185,7 +185,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivWrapContentSizeTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivWrapContentSizeTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivWrapContentSizeTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -200,7 +200,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivWrapContentSizeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivWrapContentSizeTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivWrapContentSizeTemplate(

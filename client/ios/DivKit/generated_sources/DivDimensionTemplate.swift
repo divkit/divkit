@@ -8,7 +8,7 @@ public final class DivDimensionTemplate: TemplateValue, TemplateDeserializable {
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let value: Field<Expression<Double>>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         unit: try dictionary.getOptionalExpressionField("unit"),
@@ -87,11 +87,11 @@ public final class DivDimensionTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivDimensionTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivDimensionTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivDimensionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivDimensionTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

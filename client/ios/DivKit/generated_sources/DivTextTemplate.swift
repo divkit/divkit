@@ -11,7 +11,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     public let ranges: Field<[RangeTemplate]>? // at least 1 elements
     public let text: Field<Expression<String>>? // at least 1 char
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
@@ -121,11 +121,11 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> EllipsisTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> EllipsisTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> EllipsisTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> EllipsisTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return EllipsisTemplate(
@@ -145,7 +145,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     public let url: Field<Expression<URL>>?
     public let width: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           height: try dictionary.getOptionalField("height", templateToType: templateToType),
@@ -288,11 +288,11 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> ImageTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ImageTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> ImageTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ImageTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return ImageTemplate(
@@ -323,7 +323,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     public let topOffset: Field<Expression<Int>>? // constraint: number >= 0
     public let underline: Field<Expression<DivLineStyle>>?
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
@@ -584,11 +584,11 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> RangeTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> RangeTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> RangeTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> RangeTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return RangeTemplate(
@@ -668,7 +668,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -1415,7 +1415,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTextTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTextTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivTextTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -1478,7 +1478,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTextTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTextTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTextTemplate(

@@ -8,7 +8,7 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
   public let onFailActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let onSuccessActions: Field<[DivActionTemplate]>? // at least 1 elements
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       onFailActions: try dictionary.getOptionalArray("on_fail_actions", templateToType: templateToType),
       onSuccessActions: try dictionary.getOptionalArray("on_success_actions", templateToType: templateToType)
@@ -71,11 +71,11 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivDownloadCallbacksTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivDownloadCallbacksTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivDownloadCallbacksTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivDownloadCallbacksTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivDownloadCallbacksTemplate(

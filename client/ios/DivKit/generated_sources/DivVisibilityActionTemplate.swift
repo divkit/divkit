@@ -14,7 +14,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
   public let visibilityDuration: Field<Expression<Int>>? // constraint: number >= 0; default value: 800
   public let visibilityPercentage: Field<Expression<Int>>? // constraint: number > 0 && number <= 100; default value: 50
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
@@ -174,11 +174,11 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivVisibilityActionTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivVisibilityActionTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivVisibilityActionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivVisibilityActionTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivVisibilityActionTemplate(

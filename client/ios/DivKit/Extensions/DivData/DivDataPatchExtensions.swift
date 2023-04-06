@@ -53,12 +53,13 @@ extension Div {
     switch self {
     case .divCustom,
          .divGifImage,
+         .divInput,
          .divImage,
          .divIndicator,
+         .divSelect,
          .divSeparator,
          .divSlider,
-         .divText,
-         .divInput:
+         .divText:
       // no children
       return self
     case let .divContainer(value):

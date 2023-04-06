@@ -16,7 +16,7 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
@@ -123,7 +123,7 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivRoundedRectangleShapeTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivRoundedRectangleShapeTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivRoundedRectangleShapeTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -140,7 +140,7 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivRoundedRectangleShapeTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivRoundedRectangleShapeTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivRoundedRectangleShapeTemplate(

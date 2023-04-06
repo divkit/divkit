@@ -9,7 +9,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     public let id: Field<String>?
     public let items: Field<[DivTemplate]>? // at least 1 elements
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           id: try dictionary.getOptionalField("id"),
@@ -91,11 +91,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> ChangeTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> ChangeTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> ChangeTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> ChangeTemplate {
       let merged = try mergedWithParent(templates: templates)
 
       return ChangeTemplate(
@@ -110,7 +110,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
   public let changes: Field<[ChangeTemplate]>? // at least 1 elements
   public let mode: Field<Expression<Mode>>? // default value: partial
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         changes: try dictionary.getOptionalArray("changes", templateToType: templateToType),
@@ -192,11 +192,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivPatchTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivPatchTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPatchTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPatchTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivPatchTemplate(

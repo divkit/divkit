@@ -18,7 +18,7 @@ public enum DivCountTemplate: TemplateValue {
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivCountTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivCountTemplate {
     switch self {
     case let .divInfinityCountTemplate(value):
       return .divInfinityCountTemplate(try value.resolveParent(templates: templates))
@@ -85,7 +85,7 @@ public enum DivCountTemplate: TemplateValue {
 }
 
 extension DivCountTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {

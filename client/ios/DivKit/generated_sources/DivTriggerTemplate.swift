@@ -11,7 +11,7 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
   public let condition: Field<Expression<Bool>>?
   public let mode: Field<Expression<Mode>>? // default value: on_condition
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
@@ -114,11 +114,11 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivTriggerTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivTriggerTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTriggerTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTriggerTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivTriggerTemplate(

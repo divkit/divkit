@@ -10,7 +10,7 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
   public let color: Field<Expression<Color>>? // default value: #000000
   public let offset: Field<DivPointTemplate>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         alpha: try dictionary.getOptionalExpressionField("alpha"),
@@ -118,11 +118,11 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivShadowTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivShadowTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivShadowTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivShadowTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivShadowTemplate(

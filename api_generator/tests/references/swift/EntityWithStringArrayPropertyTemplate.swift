@@ -12,7 +12,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -81,7 +81,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithStringArrayPropertyTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithStringArrayPropertyTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithStringArrayPropertyTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -94,7 +94,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithStringArrayPropertyTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithStringArrayPropertyTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

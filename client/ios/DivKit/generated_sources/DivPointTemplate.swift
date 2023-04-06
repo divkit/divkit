@@ -8,7 +8,7 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
   public let x: Field<DivDimensionTemplate>?
   public let y: Field<DivDimensionTemplate>?
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         x: try dictionary.getOptionalField("x", templateToType: templateToType),
@@ -99,11 +99,11 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivPointTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivPointTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPointTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPointTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivPointTemplate(

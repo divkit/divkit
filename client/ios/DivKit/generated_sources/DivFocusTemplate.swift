@@ -12,7 +12,7 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
     public let right: Field<Expression<String>>? // at least 1 char
     public let up: Field<Expression<String>>? // at least 1 char
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
         down: try dictionary.getOptionalExpressionField("down"),
         forward: try dictionary.getOptionalExpressionField("forward"),
@@ -110,11 +110,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> NextFocusIdsTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> NextFocusIdsTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> NextFocusIdsTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> NextFocusIdsTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
@@ -125,7 +125,7 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
   public let onBlur: Field<[DivActionTemplate]>? // at least 1 elements
   public let onFocus: Field<[DivActionTemplate]>? // at least 1 elements
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       background: try dictionary.getOptionalArray("background", templateToType: templateToType),
       border: try dictionary.getOptionalField("border", templateToType: templateToType),
@@ -230,11 +230,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivFocusTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivFocusTemplate {
     return self
   }
 
-  public func resolveParent(templates: Templates) throws -> DivFocusTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivFocusTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return DivFocusTemplate(

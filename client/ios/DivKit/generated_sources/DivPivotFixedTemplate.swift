@@ -13,7 +13,7 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       unit: try dictionary.getOptionalExpressionField("unit"),
@@ -75,7 +75,7 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivPivotFixedTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivPivotFixedTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivPivotFixedTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -89,7 +89,7 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPivotFixedTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPivotFixedTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

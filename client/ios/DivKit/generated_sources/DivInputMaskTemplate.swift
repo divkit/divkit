@@ -7,18 +7,23 @@ import Serialization
 @frozen
 public enum DivInputMaskTemplate: TemplateValue {
   case divFixedLengthInputMaskTemplate(DivFixedLengthInputMaskTemplate)
+  case divCurrencyInputMaskTemplate(DivCurrencyInputMaskTemplate)
 
   public var value: Any {
     switch self {
     case let .divFixedLengthInputMaskTemplate(value):
       return value
+    case let .divCurrencyInputMaskTemplate(value):
+      return value
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivInputMaskTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivInputMaskTemplate {
     switch self {
     case let .divFixedLengthInputMaskTemplate(value):
       return .divFixedLengthInputMaskTemplate(try value.resolveParent(templates: templates))
+    case let .divCurrencyInputMaskTemplate(value):
+      return .divCurrencyInputMaskTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -40,6 +45,14 @@ public enum DivInputMaskTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divCurrencyInputMaskTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divCurrencyInputMask(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCurrencyInputMask(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -57,6 +70,14 @@ public enum DivInputMaskTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivCurrencyInputMask.type:
+      let result = DivCurrencyInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divCurrencyInputMask(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCurrencyInputMask(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
@@ -64,12 +85,14 @@ public enum DivInputMaskTemplate: TemplateValue {
 }
 
 extension DivInputMaskTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivFixedLengthInputMaskTemplate.type:
       self = .divFixedLengthInputMaskTemplate(try DivFixedLengthInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivCurrencyInputMaskTemplate.type:
+      self = .divCurrencyInputMaskTemplate(try DivCurrencyInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-input-mask_template", representation: dictionary)
     }

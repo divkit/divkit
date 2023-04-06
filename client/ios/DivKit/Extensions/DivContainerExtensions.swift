@@ -400,8 +400,20 @@ extension Div {
     guard value.accessibility.resolveMode(context.expressionResolver) != .exclude
     else { return nil }
     switch self {
-    case .divImage, .divGifImage, .divSeparator, .divContainer, .divGrid, .divGallery, .divPager,
-         .divTabs, .divState, .divCustom, .divIndicator, .divSlider, .divInput:
+    case .divContainer,
+        .divCustom,
+        .divGallery,
+        .divGifImage,
+        .divGrid,
+        .divImage,
+        .divIndicator,
+        .divInput,
+        .divPager,
+        .divTabs,
+        .divSelect,
+        .divSeparator,
+        .divSlider,
+        .divState:
       return value.accessibility.resolveDescription(context.expressionResolver)
     case let .divText(divText):
       let handlerDescription = context

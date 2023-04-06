@@ -10,7 +10,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     public let nonOptional: Field<Expression<String>>?
     public let url: Field<Expression<URL>>? // valid schemes: [https]; default value: https://yandex.ru
 
-    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
           int: try dictionary.getOptionalExpressionField("int"),
@@ -102,11 +102,11 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates: Templates) throws -> NestedTemplate {
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> NestedTemplate {
       return self
     }
 
-    public func resolveParent(templates: Templates) throws -> NestedTemplate {
+    public func resolveParent(templates: [TemplateName: Any]) throws -> NestedTemplate {
       return try mergedWithParent(templates: templates)
     }
   }
@@ -120,7 +120,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       int: try dictionary.getOptionalExpressionField("int"),
@@ -198,7 +198,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> EntityWithPropertyWithDefaultValueTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> EntityWithPropertyWithDefaultValueTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithPropertyWithDefaultValueTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -213,7 +213,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> EntityWithPropertyWithDefaultValueTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> EntityWithPropertyWithDefaultValueTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return EntityWithPropertyWithDefaultValueTemplate(

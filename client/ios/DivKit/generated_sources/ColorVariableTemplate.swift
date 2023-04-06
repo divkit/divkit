@@ -13,7 +13,7 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -103,7 +103,7 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> ColorVariableTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> ColorVariableTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? ColorVariableTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -117,7 +117,7 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> ColorVariableTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> ColorVariableTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

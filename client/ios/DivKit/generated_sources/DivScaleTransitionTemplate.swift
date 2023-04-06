@@ -17,7 +17,7 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       duration: try dictionary.getOptionalExpressionField("duration"),
@@ -131,7 +131,7 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivScaleTransitionTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivScaleTransitionTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivScaleTransitionTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -149,7 +149,7 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivScaleTransitionTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivScaleTransitionTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

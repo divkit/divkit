@@ -4,7 +4,7 @@ import Serialization
 public protocol TemplateValue {
   associatedtype ResolvedValue
 
-  func resolveParent(templates: Templates) throws -> Self
+  func resolveParent(templates: [TemplateName: Any]) throws -> Self
 
   static func resolveValue(
     context: TemplatesContext,
@@ -15,7 +15,7 @@ public protocol TemplateValue {
 
 extension TemplateValue {
   @usableFromInline
-  func tryResolveParent(templates: Templates) -> Self? {
+  func tryResolveParent(templates: [TemplateName: Any]) -> Self? {
     try? resolveParent(templates: templates)
   }
 
@@ -49,13 +49,13 @@ extension Array where Element: TemplateValue {
   @usableFromInline
   typealias ResolvedValue = [Element.ResolvedValue]
 
-  func resolveParent(templates: Templates) throws -> [Element] {
+  func resolveParent(templates: [TemplateName: Any]) throws -> [Element] {
     try resolveParent(templates: templates, validator: nil)
   }
 
   @usableFromInline
   func resolveParent(
-    templates: Templates,
+    templates: [TemplateName: Any],
     validator: AnyArrayValueValidator<Element.ResolvedValue>?
   ) throws -> [Element] {
     let result: [Element] = try enumerated().compactMap {

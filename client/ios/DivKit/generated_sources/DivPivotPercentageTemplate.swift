@@ -12,7 +12,7 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -81,7 +81,7 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivPivotPercentageTemplate {
+  private func mergedWithParent(templates: [TemplateName: Any]) throws -> DivPivotPercentageTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? DivPivotPercentageTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -94,7 +94,7 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivPivotPercentageTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivPivotPercentageTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

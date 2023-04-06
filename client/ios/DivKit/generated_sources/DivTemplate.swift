@@ -20,6 +20,7 @@ public enum DivTemplate: TemplateValue {
   case divIndicatorTemplate(DivIndicatorTemplate)
   case divSliderTemplate(DivSliderTemplate)
   case divInputTemplate(DivInputTemplate)
+  case divSelectTemplate(DivSelectTemplate)
 
   public var value: Any {
     switch self {
@@ -51,10 +52,12 @@ public enum DivTemplate: TemplateValue {
       return value
     case let .divInputTemplate(value):
       return value
+    case let .divSelectTemplate(value):
+      return value
     }
   }
 
-  public func resolveParent(templates: Templates) throws -> DivTemplate {
+  public func resolveParent(templates: [TemplateName: Any]) throws -> DivTemplate {
     switch self {
     case let .divImageTemplate(value):
       return .divImageTemplate(try value.resolveParent(templates: templates))
@@ -84,6 +87,8 @@ public enum DivTemplate: TemplateValue {
       return .divSliderTemplate(try value.resolveParent(templates: templates))
     case let .divInputTemplate(value):
       return .divInputTemplate(try value.resolveParent(templates: templates))
+    case let .divSelectTemplate(value):
+      return .divSelectTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -209,6 +214,14 @@ public enum DivTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divSelectTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSelect(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSelect(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -330,6 +343,14 @@ public enum DivTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivSelect.type:
+      let result = DivSelectTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divSelect(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSelect(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
@@ -337,7 +358,7 @@ public enum DivTemplate: TemplateValue {
 }
 
 extension DivTemplate: TemplateDeserializable {
-  public init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+  public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
@@ -369,6 +390,8 @@ extension DivTemplate: TemplateDeserializable {
       self = .divSliderTemplate(try DivSliderTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivInputTemplate.type:
       self = .divInputTemplate(try DivInputTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivSelectTemplate.type:
+      self = .divSelectTemplate(try DivSelectTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div_template", representation: dictionary)
     }

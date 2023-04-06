@@ -7,7 +7,7 @@ import Serialization
 func readEntityWithResult(
   fileName: String
 ) throws -> DeserializationResult<Entity> {
-  let url = Bundle(for: TemplateToTypeTests.self)
+  let url = Bundle(for: DivKitTests.self)
     .url(forResource: "template_test_data/\(fileName)", withExtension: "json")!
   let data = try Data(contentsOf: url)
   guard let dictionary = try JSONSerialization
@@ -46,7 +46,7 @@ func readEntity<T: TemplateDeserializable & TemplateValue>(
 
 private func mapTemplatesByType(
   templatesDict: [String: Any],
-  templateToType: TemplateToType
+  templateToType: [TemplateName: String]
 ) throws -> [TemplateName: EntityTemplate] {
   Dictionary(
     try templatesDict.keys.compactMap { [templateToType] key in
