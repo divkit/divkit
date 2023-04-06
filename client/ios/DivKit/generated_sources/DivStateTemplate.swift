@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
   public final class StateTemplate: TemplateValue, TemplateDeserializable {
@@ -41,7 +40,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
       self.swipeOutActions = swipeOutActions
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: StateTemplate?) -> DeserializationResult<DivState.State> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: StateTemplate?) -> DeserializationResult<DivState.State> {
       let animationInValue = parent?.animationIn?.resolveOptionalValue(context: context, validator: ResolvedValue.animationInValidator, useOnlyLinks: true) ?? .noValue
       let animationOutValue = parent?.animationOut?.resolveOptionalValue(context: context, validator: ResolvedValue.animationOutValidator, useOnlyLinks: true) ?? .noValue
       let divValue = parent?.div?.resolveOptionalValue(context: context, validator: ResolvedValue.divValidator, useOnlyLinks: true) ?? .noValue
@@ -72,7 +71,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: StateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivState.State> {
+    public static func resolveValue(context: TemplatesContext, parent: StateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivState.State> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -292,7 +291,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivStateTemplate?) -> DeserializationResult<DivState> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivStateTemplate?) -> DeserializationResult<DivState> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -395,7 +394,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivStateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivState> {
+  public static func resolveValue(context: TemplatesContext, parent: DivStateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivState> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -1,7 +1,6 @@
 import CommonCorePublic
 import LayoutKit
 import Serialization
-import TemplatesSupport
 
 extension DivData: DivBlockModeling {
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "rounded_rectangle"
@@ -44,7 +43,7 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
     self.stroke = stroke
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivRoundedRectangleShapeTemplate?) -> DeserializationResult<DivRoundedRectangleShape> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRoundedRectangleShapeTemplate?) -> DeserializationResult<DivRoundedRectangleShape> {
     let backgroundColorValue = parent?.backgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.backgroundColorValidator) ?? .noValue
     let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator, useOnlyLinks: true) ?? .noValue
     let itemHeightValue = parent?.itemHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.itemHeightValidator, useOnlyLinks: true) ?? .noValue
@@ -67,7 +66,7 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivRoundedRectangleShapeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRoundedRectangleShape> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRoundedRectangleShapeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRoundedRectangleShape> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

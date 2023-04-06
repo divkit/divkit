@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "percentage"
@@ -32,7 +31,7 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     self.pageWidth = pageWidth
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPageSizeTemplate?) -> DeserializationResult<DivPageSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPageSizeTemplate?) -> DeserializationResult<DivPageSize> {
     let pageWidthValue = parent?.pageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }
@@ -51,7 +50,7 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPageSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

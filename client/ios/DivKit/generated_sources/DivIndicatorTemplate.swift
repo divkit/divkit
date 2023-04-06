@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
   public typealias Animation = DivIndicator.Animation
@@ -174,7 +173,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivIndicatorTemplate?) -> DeserializationResult<DivIndicator> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivIndicatorTemplate?) -> DeserializationResult<DivIndicator> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let activeItemColorValue = parent?.activeItemColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeItemColorValidator) ?? .noValue
     let activeItemSizeValue = parent?.activeItemSize?.resolveOptionalValue(context: context, validator: ResolvedValue.activeItemSizeValidator) ?? .noValue
@@ -293,7 +292,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivIndicatorTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivIndicator> {
+  public static func resolveValue(context: TemplatesContext, parent: DivIndicatorTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivIndicator> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

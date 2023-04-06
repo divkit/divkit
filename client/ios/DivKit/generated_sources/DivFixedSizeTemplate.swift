@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "fixed"
@@ -36,7 +35,7 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivFixedSizeTemplate?) -> DeserializationResult<DivFixedSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedSizeTemplate?) -> DeserializationResult<DivFixedSize> {
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     var errors = mergeErrors(
@@ -58,7 +57,7 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivFixedSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivFixedSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

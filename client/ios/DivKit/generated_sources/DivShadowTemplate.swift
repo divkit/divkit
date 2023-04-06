@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.19
@@ -36,7 +35,7 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
     self.offset = offset
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivShadowTemplate?) -> DeserializationResult<DivShadow> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivShadowTemplate?) -> DeserializationResult<DivShadow> {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let blurValue = parent?.blur?.resolveOptionalValue(context: context, validator: ResolvedValue.blurValidator) ?? .noValue
     let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
@@ -64,7 +63,7 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivShadowTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivShadow> {
+  public static func resolveValue(context: TemplatesContext, parent: DivShadowTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivShadow> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

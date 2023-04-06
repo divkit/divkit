@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "custom"
@@ -140,7 +139,7 @@ public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivCustomTemplate?) -> DeserializationResult<DivCustom> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCustomTemplate?) -> DeserializationResult<DivCustom> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -240,7 +239,7 @@ public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivCustomTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivCustom> {
+  public static func resolveValue(context: TemplatesContext, parent: DivCustomTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivCustom> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

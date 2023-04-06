@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
   public let x: Field<DivDimensionTemplate>?
@@ -28,7 +27,7 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     self.y = y
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPointTemplate?) -> DeserializationResult<DivPoint> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPointTemplate?) -> DeserializationResult<DivPoint> {
     let xValue = parent?.x?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let yValue = parent?.y?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
@@ -54,7 +53,7 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPointTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPoint> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPointTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPoint> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

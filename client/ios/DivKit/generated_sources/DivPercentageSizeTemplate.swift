@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "percentage"
@@ -32,7 +31,7 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPercentageSizeTemplate?) -> DeserializationResult<DivPercentageSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPercentageSizeTemplate?) -> DeserializationResult<DivPercentageSize> {
     let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -51,7 +50,7 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPercentageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPercentageSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPercentageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPercentageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

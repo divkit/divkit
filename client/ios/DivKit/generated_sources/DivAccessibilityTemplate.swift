@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializable {
   public typealias Kind = DivAccessibility.Kind
@@ -44,7 +43,7 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
     self.type = type
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivAccessibilityTemplate?) -> DeserializationResult<DivAccessibility> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAccessibilityTemplate?) -> DeserializationResult<DivAccessibility> {
     let descriptionValue = parent?.description?.resolveOptionalValue(context: context, validator: ResolvedValue.descriptionValidator) ?? .noValue
     let hintValue = parent?.hint?.resolveOptionalValue(context: context, validator: ResolvedValue.hintValidator) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
@@ -70,7 +69,7 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivAccessibilityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAccessibility> {
+  public static func resolveValue(context: TemplatesContext, parent: DivAccessibilityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAccessibility> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivDownloadCallbacks {
   public let onFailActions: [DivAction]? // at least 1 elements

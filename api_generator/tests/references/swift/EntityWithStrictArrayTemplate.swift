@@ -34,7 +34,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
     self.array = array
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithStrictArrayTemplate?) -> DeserializationResult<EntityWithStrictArray> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithStrictArrayTemplate?) -> DeserializationResult<EntityWithStrictArray> {
     let arrayValue = parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
@@ -53,7 +53,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithStrictArrayTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStrictArray> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithStrictArrayTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStrictArray> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

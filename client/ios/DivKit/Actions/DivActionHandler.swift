@@ -3,7 +3,6 @@ import Foundation
 import BasePublic
 import LayoutKit
 import Serialization
-import TemplatesSupport
 
 public final class DivActionHandler {
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void

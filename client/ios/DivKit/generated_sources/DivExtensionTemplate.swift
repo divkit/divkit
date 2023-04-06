@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
   public let id: Field<String>? // at least 1 char
@@ -28,7 +27,7 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
     self.params = params
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivExtensionTemplate?) -> DeserializationResult<DivExtension> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivExtensionTemplate?) -> DeserializationResult<DivExtension> {
     let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
     let paramsValue = parent?.params?.resolveOptionalValue(context: context, validator: ResolvedValue.paramsValidator) ?? .noValue
     var errors = mergeErrors(
@@ -50,7 +49,7 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivExtensionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivExtension> {
+  public static func resolveValue(context: TemplatesContext, parent: DivExtensionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivExtension> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

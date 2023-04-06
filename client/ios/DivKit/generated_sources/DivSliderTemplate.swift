@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
   public final class TextStyleTemplate: TemplateValue, TemplateDeserializable {
@@ -41,7 +40,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
       self.textColor = textColor
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: TextStyleTemplate?) -> DeserializationResult<DivSlider.TextStyle> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: TextStyleTemplate?) -> DeserializationResult<DivSlider.TextStyle> {
       let fontSizeValue = parent?.fontSize?.resolveValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
       let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeUnitValidator) ?? .noValue
       let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValidator) ?? .noValue
@@ -72,7 +71,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: TextStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlider.TextStyle> {
+    public static func resolveValue(context: TemplatesContext, parent: TextStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlider.TextStyle> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -325,7 +324,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivSliderTemplate?) -> DeserializationResult<DivSlider> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivSliderTemplate?) -> DeserializationResult<DivSlider> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -463,7 +462,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivSliderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlider> {
+  public static func resolveValue(context: TemplatesContext, parent: DivSliderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlider> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

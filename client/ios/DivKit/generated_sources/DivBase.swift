@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public protocol DivBase: DivBlockModeling {
   var accessibility: DivAccessibility { get }

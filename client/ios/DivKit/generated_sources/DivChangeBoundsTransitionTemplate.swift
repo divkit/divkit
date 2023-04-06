@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "change_bounds"
@@ -36,7 +35,7 @@ public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDes
     self.startDelay = startDelay
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivChangeBoundsTransitionTemplate?) -> DeserializationResult<DivChangeBoundsTransition> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivChangeBoundsTransitionTemplate?) -> DeserializationResult<DivChangeBoundsTransition> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
@@ -53,7 +52,7 @@ public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDes
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivChangeBoundsTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivChangeBoundsTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivChangeBoundsTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivChangeBoundsTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

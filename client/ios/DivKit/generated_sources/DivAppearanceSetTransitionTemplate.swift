@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivAppearanceSetTransitionTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "set"
@@ -32,7 +31,7 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue, TemplateDe
     self.items = items
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivAppearanceSetTransitionTemplate?) -> DeserializationResult<DivAppearanceSetTransition> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAppearanceSetTransitionTemplate?) -> DeserializationResult<DivAppearanceSetTransition> {
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -51,7 +50,7 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue, TemplateDe
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivAppearanceSetTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceSetTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivAppearanceSetTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceSetTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

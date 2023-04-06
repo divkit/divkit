@@ -27,7 +27,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
     self.property = property
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithOptionalPropertyTemplate?) -> DeserializationResult<EntityWithOptionalProperty> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithOptionalPropertyTemplate?) -> DeserializationResult<EntityWithOptionalProperty> {
     let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -38,7 +38,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithOptionalPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalProperty> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithOptionalPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

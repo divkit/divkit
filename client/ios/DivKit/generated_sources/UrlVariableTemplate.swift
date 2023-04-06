@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class UrlVariableTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "url"
@@ -36,7 +35,7 @@ public final class UrlVariableTemplate: TemplateValue, TemplateDeserializable {
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: UrlVariableTemplate?) -> DeserializationResult<UrlVariable> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: UrlVariableTemplate?) -> DeserializationResult<UrlVariable> {
     let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
     var errors = mergeErrors(
@@ -62,7 +61,7 @@ public final class UrlVariableTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: UrlVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<UrlVariable> {
+  public static func resolveValue(context: TemplatesContext, parent: UrlVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<UrlVariable> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

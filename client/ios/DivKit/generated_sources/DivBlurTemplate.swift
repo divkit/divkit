@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "blur"
@@ -32,7 +31,7 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
     self.radius = radius
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivBlurTemplate?) -> DeserializationResult<DivBlur> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivBlurTemplate?) -> DeserializationResult<DivBlur> {
     let radiusValue = parent?.radius?.resolveValue(context: context, validator: ResolvedValue.radiusValidator) ?? .noValue
     var errors = mergeErrors(
       radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
@@ -51,7 +50,7 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivBlurTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivBlur> {
+  public static func resolveValue(context: TemplatesContext, parent: DivBlurTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivBlur> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

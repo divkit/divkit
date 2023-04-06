@@ -112,7 +112,7 @@ public enum EntityTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(context: Context, parent: EntityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -277,7 +277,7 @@ public enum EntityTemplate: TemplateValue {
     }
   }
 
-  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
+  private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }

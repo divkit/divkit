@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
   public final class EllipsisTemplate: TemplateValue, TemplateDeserializable {
@@ -37,7 +36,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       self.text = text
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: EllipsisTemplate?) -> DeserializationResult<DivText.Ellipsis> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: EllipsisTemplate?) -> DeserializationResult<DivText.Ellipsis> {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
       let imagesValue = parent?.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true) ?? .noValue
       let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
@@ -65,7 +64,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: EllipsisTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Ellipsis> {
+    public static func resolveValue(context: TemplatesContext, parent: EllipsisTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Ellipsis> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -177,7 +176,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       self.width = width
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: ImageTemplate?) -> DeserializationResult<DivText.Image> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ImageTemplate?) -> DeserializationResult<DivText.Image> {
       let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
       let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
       let tintColorValue = parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator) ?? .noValue
@@ -215,7 +214,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: ImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Image> {
+    public static func resolveValue(context: TemplatesContext, parent: ImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Image> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -382,7 +381,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       self.underline = underline
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: RangeTemplate?) -> DeserializationResult<DivText.Range> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: RangeTemplate?) -> DeserializationResult<DivText.Range> {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
       let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
       let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
@@ -447,7 +446,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: RangeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Range> {
+    public static func resolveValue(context: TemplatesContext, parent: RangeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText.Range> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -838,7 +837,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTextTemplate?) -> DeserializationResult<DivText> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextTemplate?) -> DeserializationResult<DivText> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
     let actionAnimationValue = parent?.actionAnimation?.resolveOptionalValue(context: context, validator: ResolvedValue.actionAnimationValidator, useOnlyLinks: true) ?? .noValue
@@ -1007,7 +1006,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTextTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTextTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivText> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
@@ -44,7 +43,7 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
     self.valueVariable = valueVariable
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTimerTemplate?) -> DeserializationResult<DivTimer> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTimerTemplate?) -> DeserializationResult<DivTimer> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let endActionsValue = parent?.endActions?.resolveOptionalValue(context: context, validator: ResolvedValue.endActionsValidator, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
@@ -78,7 +77,7 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTimerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTimer> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTimerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTimer> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

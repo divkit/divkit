@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "relative"
@@ -32,7 +31,7 @@ public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Templ
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivRadialGradientRelativeCenterTemplate?) -> DeserializationResult<DivRadialGradientRelativeCenter> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientRelativeCenterTemplate?) -> DeserializationResult<DivRadialGradientRelativeCenter> {
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -51,7 +50,7 @@ public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, Templ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivRadialGradientRelativeCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRelativeCenter> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRadialGradientRelativeCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRelativeCenter> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

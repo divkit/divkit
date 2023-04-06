@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
   public let ratio: Field<Expression<Double>>? // constraint: number > 0
@@ -24,7 +23,7 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
     self.ratio = ratio
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivAspectTemplate?) -> DeserializationResult<DivAspect> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAspectTemplate?) -> DeserializationResult<DivAspect> {
     let ratioValue = parent?.ratio?.resolveValue(context: context, validator: ResolvedValue.ratioValidator) ?? .noValue
     var errors = mergeErrors(
       ratioValue.errorsOrWarnings?.map { .nestedObjectError(field: "ratio", error: $0) }
@@ -43,7 +42,7 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivAspectTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAspect> {
+  public static func resolveValue(context: TemplatesContext, parent: DivAspectTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAspect> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

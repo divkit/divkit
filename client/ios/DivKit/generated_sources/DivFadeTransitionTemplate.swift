@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "fade"
@@ -40,7 +39,7 @@ public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializa
     self.startDelay = startDelay
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivFadeTransitionTemplate?) -> DeserializationResult<DivFadeTransition> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFadeTransitionTemplate?) -> DeserializationResult<DivFadeTransition> {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
@@ -60,7 +59,7 @@ public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializa
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivFadeTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFadeTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivFadeTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFadeTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

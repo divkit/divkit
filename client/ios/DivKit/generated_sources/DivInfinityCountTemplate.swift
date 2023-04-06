@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "infinity"
@@ -24,11 +23,11 @@ public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializab
     self.parent = parent
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivInfinityCountTemplate?) -> DeserializationResult<DivInfinityCount> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInfinityCountTemplate?) -> DeserializationResult<DivInfinityCount> {
     return .success(DivInfinityCount())
   }
 
-  public static func resolveValue(context: Context, parent: DivInfinityCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInfinityCount> {
+  public static func resolveValue(context: TemplatesContext, parent: DivInfinityCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInfinityCount> {
     return .success(DivInfinityCount())
   }
 

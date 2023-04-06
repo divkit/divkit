@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 @frozen
 public enum DivRadialGradientCenterTemplate: TemplateValue {
@@ -28,7 +27,7 @@ public enum DivRadialGradientCenterTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(context: Context, parent: DivRadialGradientCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientCenter> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRadialGradientCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientCenter> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -57,7 +56,7 @@ public enum DivRadialGradientCenterTemplate: TemplateValue {
     }
   }
 
-  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientCenter> {
+  private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientCenter> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }

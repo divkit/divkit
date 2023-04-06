@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
   public final class MenuItemTemplate: TemplateValue, TemplateDeserializable {
@@ -33,7 +32,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       self.text = text
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: MenuItemTemplate?) -> DeserializationResult<DivAction.MenuItem> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: MenuItemTemplate?) -> DeserializationResult<DivAction.MenuItem> {
       let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
       let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
@@ -58,7 +57,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: MenuItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAction.MenuItem> {
+    public static func resolveValue(context: TemplatesContext, parent: MenuItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAction.MenuItem> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -164,7 +163,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
     self.url = url
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivActionTemplate?) -> DeserializationResult<DivAction> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionTemplate?) -> DeserializationResult<DivAction> {
     let downloadCallbacksValue = parent?.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true) ?? .noValue
     let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
     let logUrlValue = parent?.logUrl?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator) ?? .noValue
@@ -201,7 +200,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivActionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAction> {
+  public static func resolveValue(context: TemplatesContext, parent: DivActionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAction> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

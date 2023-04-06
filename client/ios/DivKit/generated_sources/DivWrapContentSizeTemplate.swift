@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializable {
   public final class ConstraintSizeTemplate: TemplateValue, TemplateDeserializable {
@@ -29,7 +28,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
       self.value = value
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: ConstraintSizeTemplate?) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ConstraintSizeTemplate?) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
       let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
       let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
       var errors = mergeErrors(
@@ -51,7 +50,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: ConstraintSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
+    public static func resolveValue(context: TemplatesContext, parent: ConstraintSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -128,7 +127,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
     self.minSize = minSize
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivWrapContentSizeTemplate?) -> DeserializationResult<DivWrapContentSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivWrapContentSizeTemplate?) -> DeserializationResult<DivWrapContentSize> {
     let constrainedValue = parent?.constrained?.resolveOptionalValue(context: context, validator: ResolvedValue.constrainedValidator) ?? .noValue
     let maxSizeValue = parent?.maxSize?.resolveOptionalValue(context: context, validator: ResolvedValue.maxSizeValidator, useOnlyLinks: true) ?? .noValue
     let minSizeValue = parent?.minSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minSizeValidator, useOnlyLinks: true) ?? .noValue
@@ -145,7 +144,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivWrapContentSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivWrapContentSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivWrapContentSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivWrapContentSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

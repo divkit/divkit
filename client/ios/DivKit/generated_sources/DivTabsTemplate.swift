@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
   public final class ItemTemplate: TemplateValue, TemplateDeserializable {
@@ -33,7 +32,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       self.titleClickAction = titleClickAction
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: ItemTemplate?) -> DeserializationResult<DivTabs.Item> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<DivTabs.Item> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let titleValue = parent?.title?.resolveValue(context: context, validator: ResolvedValue.titleValidator) ?? .noValue
       let titleClickActionValue = parent?.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true) ?? .noValue
@@ -62,7 +61,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: ItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs.Item> {
+    public static func resolveValue(context: TemplatesContext, parent: ItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs.Item> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -215,7 +214,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       self.paddings = paddings
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: TabTitleStyleTemplate?) -> DeserializationResult<DivTabs.TabTitleStyle> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: TabTitleStyleTemplate?) -> DeserializationResult<DivTabs.TabTitleStyle> {
       let activeBackgroundColorValue = parent?.activeBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeBackgroundColorValidator) ?? .noValue
       let activeFontWeightValue = parent?.activeFontWeight?.resolveOptionalValue(context: context, validator: ResolvedValue.activeFontWeightValidator) ?? .noValue
       let activeTextColorValue = parent?.activeTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeTextColorValidator) ?? .noValue
@@ -277,7 +276,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: TabTitleStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs.TabTitleStyle> {
+    public static func resolveValue(context: TemplatesContext, parent: TabTitleStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs.TabTitleStyle> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -615,7 +614,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTabsTemplate?) -> DeserializationResult<DivTabs> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTabsTemplate?) -> DeserializationResult<DivTabs> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -736,7 +735,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTabsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTabsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTabs> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

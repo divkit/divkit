@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivCornersRadius {
   public let bottomLeft: Expression<Int>? // constraint: number >= 0

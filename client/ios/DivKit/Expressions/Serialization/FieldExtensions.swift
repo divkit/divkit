@@ -2,12 +2,11 @@ import Foundation
 
 import CommonCorePublic
 import Serialization
-import TemplatesSupport
 
 extension Field {
   @inlinable
-  public func resolveValue<E: ValidSerializationValue>(
-    context: Context
+  func resolveValue<E: ValidSerializationValue>(
+    context: TemplatesContext
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveValue(
       context: context,
@@ -16,8 +15,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveValue<E: ValidSerializationValue>(
-    context: Context,
+  func resolveValue<E: ValidSerializationValue>(
+    context: TemplatesContext,
     validator: AnyValueValidator<E>
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveValue(
@@ -28,8 +27,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveValue<E: RawRepresentable>(
-    context: Context,
+  func resolveValue<E: RawRepresentable>(
+    context: TemplatesContext,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E>, E.RawValue == String {
     resolveExpression(
@@ -49,8 +48,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveValue<U: ValidSerializationValue, E>(
-    context: Context,
+  func resolveValue<U: ValidSerializationValue, E>(
+    context: TemplatesContext,
     transform: (U) -> E?,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E> {
@@ -71,8 +70,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveValue<U: ValidSerializationValue, E>(
-    context: Context,
+  func resolveValue<U: ValidSerializationValue, E>(
+    context: TemplatesContext,
     transform: (U) -> E?,
     validator: AnyArrayValueValidator<Expression<E>>
   ) -> DeserializationResult<T> where T == [Expression<E>] {
@@ -94,8 +93,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveOptionalValue<E: ValidSerializationValue>(
-    context: Context
+  func resolveOptionalValue<E: ValidSerializationValue>(
+    context: TemplatesContext
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveOptionalValue(
       context: context,
@@ -104,8 +103,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveOptionalValue<E: ValidSerializationValue>(
-    context: Context,
+  func resolveOptionalValue<E: ValidSerializationValue>(
+    context: TemplatesContext,
     validator: AnyValueValidator<E>
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveOptionalValue(
@@ -116,8 +115,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveOptionalValue<E: RawRepresentable>(
-    context: Context,
+  func resolveOptionalValue<E: RawRepresentable>(
+    context: TemplatesContext,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E>, E.RawValue == String {
     let result = resolveValue(
@@ -133,8 +132,8 @@ extension Field {
   }
 
   @inlinable
-  public func resolveOptionalValue<U: ValidSerializationValue, E>(
-    context: Context,
+  func resolveOptionalValue<U: ValidSerializationValue, E>(
+    context: TemplatesContext,
     transform: (U) -> E?,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E> {
@@ -153,7 +152,7 @@ extension Field {
 
   @usableFromInline
   func resolveExpression<E>(
-    valueForLink: (Link) -> DeserializationResult<T>
+    valueForLink: (TemplatedPropertyLink) -> DeserializationResult<T>
   ) -> DeserializationResult<T> where T == Expression<E> {
     switch self {
     case let .value(value):
@@ -165,8 +164,8 @@ extension Field {
 }
 
 extension Field where T == Expression<CFString> {
-  public func resolveValue(
-    context: Context,
+  func resolveValue(
+    context: TemplatesContext,
     validator: AnyValueValidator<CFString>? = nil
   ) -> DeserializationResult<T> {
     resolveExpression(

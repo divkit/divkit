@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "color"
@@ -36,7 +35,7 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: ColorVariableTemplate?) -> DeserializationResult<ColorVariable> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: ColorVariableTemplate?) -> DeserializationResult<ColorVariable> {
     let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     var errors = mergeErrors(
@@ -62,7 +61,7 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: ColorVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<ColorVariable> {
+  public static func resolveValue(context: TemplatesContext, parent: ColorVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<ColorVariable> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

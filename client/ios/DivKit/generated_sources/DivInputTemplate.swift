@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
   public final class NativeInterfaceTemplate: TemplateValue, TemplateDeserializable {
@@ -25,7 +24,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       self.color = color
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: NativeInterfaceTemplate?) -> DeserializationResult<DivInput.NativeInterface> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: NativeInterfaceTemplate?) -> DeserializationResult<DivInput.NativeInterface> {
       let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       var errors = mergeErrors(
         colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) }
@@ -44,7 +43,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: NativeInterfaceTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInput.NativeInterface> {
+    public static func resolveValue(context: TemplatesContext, parent: NativeInterfaceTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInput.NativeInterface> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -110,9 +109,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
+  public let mask: Field<DivInputMaskTemplate>?
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let rawTextVariable: Field<String>? // at least 1 char
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
@@ -158,9 +159,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing"),
         lineHeight: try dictionary.getOptionalExpressionField("line_height"),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
+        mask: try dictionary.getOptionalField("mask", templateToType: templateToType),
         maxVisibleLines: try dictionary.getOptionalExpressionField("max_visible_lines"),
         nativeInterface: try dictionary.getOptionalField("native_interface", templateToType: templateToType),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
+        rawTextVariable: try dictionary.getOptionalField("raw_text_variable"),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectAllOnFocus: try dictionary.getOptionalExpressionField("select_all_on_focus"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -206,9 +209,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     letterSpacing: Field<Expression<Double>>? = nil,
     lineHeight: Field<Expression<Int>>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
+    mask: Field<DivInputMaskTemplate>? = nil,
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    rawTextVariable: Field<String>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectAllOnFocus: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -248,9 +253,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     self.letterSpacing = letterSpacing
     self.lineHeight = lineHeight
     self.margins = margins
+    self.mask = mask
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
+    self.rawTextVariable = rawTextVariable
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus
     self.selectedActions = selectedActions
@@ -268,7 +275,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivInputTemplate?) -> DeserializationResult<DivInput> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputTemplate?) -> DeserializationResult<DivInput> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -291,9 +298,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
+    let maskValue = parent?.mask?.resolveOptionalValue(context: context, validator: ResolvedValue.maskValidator, useOnlyLinks: true) ?? .noValue
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, validator: ResolvedValue.nativeInterfaceValidator, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
+    let rawTextVariableValue = parent?.rawTextVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.rawTextVariableValidator) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectAllOnFocusValue = parent?.selectAllOnFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.selectAllOnFocusValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -332,9 +341,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+      maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -382,9 +393,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
+      mask: maskValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
+      rawTextVariable: rawTextVariableValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -404,7 +417,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivInputTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInput> {
+  public static func resolveValue(context: TemplatesContext, parent: DivInputTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInput> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -430,9 +443,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
     var letterSpacingValue: DeserializationResult<Expression<Double>> = parent?.letterSpacing?.value() ?? .noValue
     var lineHeightValue: DeserializationResult<Expression<Int>> = parent?.lineHeight?.value() ?? .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var maskValue: DeserializationResult<DivInputMask> = .noValue
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value(validatedBy: ResolvedValue.rawTextVariableValidator) ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectAllOnFocusValue: DeserializationResult<Expression<Bool>> = parent?.selectAllOnFocus?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -494,12 +509,16 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         lineHeightValue = deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator).merged(with: lineHeightValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
+      case "mask":
+        maskValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maskValidator, type: DivInputMaskTemplate.self).merged(with: maskValue)
       case "max_visible_lines":
         maxVisibleLinesValue = deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator).merged(with: maxVisibleLinesValue)
       case "native_interface":
         nativeInterfaceValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nativeInterfaceValidator, type: DivInputTemplate.NativeInterfaceTemplate.self).merged(with: nativeInterfaceValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case "raw_text_variable":
+        rawTextVariableValue = deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator).merged(with: rawTextVariableValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "select_all_on_focus":
@@ -574,12 +593,16 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         lineHeightValue = lineHeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator))
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self))
+      case parent?.mask?.link:
+        maskValue = maskValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maskValidator, type: DivInputMaskTemplate.self))
       case parent?.maxVisibleLines?.link:
         maxVisibleLinesValue = maxVisibleLinesValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.maxVisibleLinesValidator))
       case parent?.nativeInterface?.link:
         nativeInterfaceValue = nativeInterfaceValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nativeInterfaceValidator, type: DivInputTemplate.NativeInterfaceTemplate.self))
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self))
+      case parent?.rawTextVariable?.link:
+        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectAllOnFocus?.link:
@@ -621,6 +644,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
+      maskValue = maskValue.merged(with: parent.mask?.resolveOptionalValue(context: context, validator: ResolvedValue.maskValidator, useOnlyLinks: true))
       nativeInterfaceValue = nativeInterfaceValue.merged(with: parent.nativeInterface?.resolveOptionalValue(context: context, validator: ResolvedValue.nativeInterfaceValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
@@ -656,9 +680,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
       lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+      maskValue.errorsOrWarnings?.map { .nestedObjectError(field: "mask", error: $0) },
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -706,9 +732,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacing: letterSpacingValue.value,
       lineHeight: lineHeightValue.value,
       margins: marginsValue.value,
+      mask: maskValue.value,
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
+      rawTextVariable: rawTextVariableValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -759,9 +787,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacing: letterSpacing ?? mergedParent.letterSpacing,
       lineHeight: lineHeight ?? mergedParent.lineHeight,
       margins: margins ?? mergedParent.margins,
+      mask: mask ?? mergedParent.mask,
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
+      rawTextVariable: rawTextVariable ?? mergedParent.rawTextVariable,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectAllOnFocus: selectAllOnFocus ?? mergedParent.selectAllOnFocus,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -807,9 +837,11 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       letterSpacing: merged.letterSpacing,
       lineHeight: merged.lineHeight,
       margins: merged.margins?.tryResolveParent(templates: templates),
+      mask: merged.mask?.tryResolveParent(templates: templates),
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      rawTextVariable: merged.rawTextVariable,
       rowSpan: merged.rowSpan,
       selectAllOnFocus: merged.selectAllOnFocus,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

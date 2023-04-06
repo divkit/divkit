@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPagerTemplate: TemplateValue, TemplateDeserializable {
   public typealias Orientation = DivPager.Orientation
@@ -154,7 +153,7 @@ public final class DivPagerTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPagerTemplate?) -> DeserializationResult<DivPager> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPagerTemplate?) -> DeserializationResult<DivPager> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -267,7 +266,7 @@ public final class DivPagerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPagerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPager> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPagerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPager> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "stretch"
@@ -32,7 +31,7 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Temp
     self.maxVisibleItems = maxVisibleItems
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivStretchIndicatorItemPlacementTemplate?) -> DeserializationResult<DivStretchIndicatorItemPlacement> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivStretchIndicatorItemPlacementTemplate?) -> DeserializationResult<DivStretchIndicatorItemPlacement> {
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator, useOnlyLinks: true) ?? .noValue
     let maxVisibleItemsValue = parent?.maxVisibleItems?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleItemsValidator) ?? .noValue
     let errors = mergeErrors(
@@ -46,7 +45,7 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Temp
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivStretchIndicatorItemPlacementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivStretchIndicatorItemPlacement> {
+  public static func resolveValue(context: TemplatesContext, parent: DivStretchIndicatorItemPlacementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivStretchIndicatorItemPlacement> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -31,7 +31,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     self.array = array
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithStringArrayPropertyTemplate?) -> DeserializationResult<EntityWithStringArrayProperty> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithStringArrayPropertyTemplate?) -> DeserializationResult<EntityWithStringArrayProperty> {
     let arrayValue = parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator) ?? .noValue
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
@@ -50,7 +50,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithStringArrayPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStringArrayProperty> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithStringArrayPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStringArrayProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

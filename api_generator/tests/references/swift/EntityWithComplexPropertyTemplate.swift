@@ -24,7 +24,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       self.value = value
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: PropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty.Property> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: PropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty.Property> {
       let valueValue = parent?.value?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       var errors = mergeErrors(
         valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -43,7 +43,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: PropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithComplexProperty.Property> {
+    public static func resolveValue(context: TemplatesContext, parent: PropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithComplexProperty.Property> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -109,7 +109,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     self.property = property
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithComplexPropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithComplexPropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty> {
     let propertyValue = parent?.property?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -128,7 +128,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithComplexPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithComplexProperty> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithComplexPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithComplexProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

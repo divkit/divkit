@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "shape_drawable"
@@ -40,7 +39,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     self.stroke = stroke
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivShapeDrawableTemplate?) -> DeserializationResult<DivShapeDrawable> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivShapeDrawableTemplate?) -> DeserializationResult<DivShapeDrawable> {
     let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let shapeValue = parent?.shape?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
@@ -69,7 +68,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivShapeDrawableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivShapeDrawable> {
+  public static func resolveValue(context: TemplatesContext, parent: DivShapeDrawableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivShapeDrawable> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

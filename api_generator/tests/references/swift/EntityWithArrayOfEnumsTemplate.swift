@@ -33,7 +33,7 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeseri
     self.items = items
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayOfEnumsTemplate?) -> DeserializationResult<EntityWithArrayOfEnums> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithArrayOfEnumsTemplate?) -> DeserializationResult<EntityWithArrayOfEnums> {
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator) ?? .noValue
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -52,7 +52,7 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeseri
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithArrayOfEnumsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfEnums> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithArrayOfEnumsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfEnums> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

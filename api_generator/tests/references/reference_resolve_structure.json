@@ -289,6 +289,50 @@
       }
     },
     {
+      "translations.json": {
+        "entity_with_property_with_default_value_nested": {
+          "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+          "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+        },
+        "entity_with_simple_properties": {
+          "en": "Entity with simple properties.",
+          "ru": "Объект с простыми свойствами."
+        },
+        "entity_with_simple_properties_id": {
+          "en": "ID. Can't contain expressions.",
+          "ru": "Идентификатор. Не может содержать выражение."
+        },
+        "entity_with_simple_properties_string": {
+          "en": "String.",
+          "ru": "Строка."
+        },
+        "entity_with_simple_properties_integer": {
+          "en": "Integer.",
+          "ru": "Целое число."
+        },
+        "entity_with_simple_properties_double": {
+          "en": "Floating point number.",
+          "ru": "Число с плавающей точкой."
+        },
+        "entity_with_simple_properties_boolean": {
+          "en": "Boolean property.",
+          "ru": "Логическое значение."
+        },
+        "entity_with_simple_properties_boolean_int": {
+          "en": "Boolean value in numeric format.",
+          "ru": "Логическое значение в числовом формате."
+        },
+        "entity_with_simple_properties_positive_integer": {
+          "en": "Positive integer.",
+          "ru": "Положительное целое число."
+        },
+        "entity_with_simple_properties_color": {
+          "en": "Color.",
+          "ru": "Цвет."
+        }
+      }
+    },
+    {
       "entity.json": {
         "anyOf": [
           {
@@ -348,64 +392,6 @@
           {
             "$ref": "entity_without_properties.json"
           }
-        ]
-      }
-    },
-    {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {
-          "int_prop": {
-            "$ref": "common.json#/non_negative_integer",
-            "default_value": "0"
-          },
-          "url_prop": {
-            "$ref": "common.json#/url",
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru"
-          },
-          "nested": {
-            "type": "object",
-            "properties": {
-              "int": {
-                "alias_dart": "iNum",
-                "$ref": "#/definitions/int_prop"
-              },
-              "url": {
-                "$ref": "#/definitions/url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "$description": "translations.json#/entity_with_property_with_default_value_nested",
-            "required": [
-              "non_optional"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "alias_dart": "iNum",
-            "$ref": "#/definitions/int_prop"
-          },
-          "url": {
-            "$ref": "#/definitions/url_prop"
-          },
-          "nested": {
-            "$ref": "#/definitions/nested"
-          }
-        },
-        "required": [
-          "type"
         ]
       }
     },
@@ -551,6 +537,64 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {
+          "int_prop": {
+            "$ref": "common.json#/non_negative_integer",
+            "default_value": "0"
+          },
+          "url_prop": {
+            "$ref": "common.json#/url",
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru"
+          },
+          "nested": {
+            "type": "object",
+            "properties": {
+              "int": {
+                "alias_dart": "iNum",
+                "$ref": "#/definitions/int_prop"
+              },
+              "url": {
+                "$ref": "#/definitions/url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "$description": "translations.json#/entity_with_property_with_default_value_nested",
+            "required": [
+              "non_optional"
+            ]
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "alias_dart": "iNum",
+            "$ref": "#/definitions/int_prop"
+          },
+          "url": {
+            "$ref": "#/definitions/url_prop"
+          },
+          "nested": {
+            "$ref": "#/definitions/nested"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_strict_array.json": {
         "type": "object",
         "properties": {
@@ -662,50 +706,6 @@
         "required": [
           "type"
         ]
-      }
-    },
-    {
-      "translations.json": {
-        "entity_with_property_with_default_value_nested": {
-          "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-          "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-        },
-        "entity_with_simple_properties": {
-          "en": "Entity with simple properties.",
-          "ru": "Объект с простыми свойствами."
-        },
-        "entity_with_simple_properties_id": {
-          "en": "ID. Can't contain expressions.",
-          "ru": "Идентификатор. Не может содержать выражение."
-        },
-        "entity_with_simple_properties_string": {
-          "en": "String.",
-          "ru": "Строка."
-        },
-        "entity_with_simple_properties_integer": {
-          "en": "Integer.",
-          "ru": "Целое число."
-        },
-        "entity_with_simple_properties_double": {
-          "en": "Floating point number.",
-          "ru": "Число с плавающей точкой."
-        },
-        "entity_with_simple_properties_boolean": {
-          "en": "Boolean property.",
-          "ru": "Логическое значение."
-        },
-        "entity_with_simple_properties_boolean_int": {
-          "en": "Boolean value in numeric format.",
-          "ru": "Логическое значение в числовом формате."
-        },
-        "entity_with_simple_properties_positive_integer": {
-          "en": "Positive integer.",
-          "ru": "Положительное целое число."
-        },
-        "entity_with_simple_properties_color": {
-          "en": "Color.",
-          "ru": "Цвет."
-        }
       }
     }
   ]

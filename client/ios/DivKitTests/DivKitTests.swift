@@ -5,7 +5,6 @@ import DivKit
 import LayoutKit
 import NetworkingPublic
 import Serialization
-import TemplatesSupport
 
 final class DivKitTests: XCTestCase {
   static let cardId = DivCardID(rawValue: cardLogId)
@@ -31,11 +30,11 @@ extension TemplateValue where
   }
 }
 
-private func jsonDictFromFile(named name: String, subdirectory: String?) throws -> TemplateData {
+private func jsonDictFromFile(named name: String, subdirectory: String?) throws -> [String: Any] {
   let bundle = Bundle(for: DivKitTests.self)
   let url = bundle.url(forResource: name, withExtension: "json", subdirectory: subdirectory)!
   let data = try Data(contentsOf: url)
-  return try JSONSerialization.jsonObject(with: data, options: []) as! TemplateData
+  return try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
 }
 
 extension Deserializable {

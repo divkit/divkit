@@ -13,7 +13,6 @@ let package = Package(
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
-    .library(name: "TemplatesSupport", targets: ["TemplatesSupport"]),
   ],
   targets: [
     .target(
@@ -101,7 +100,6 @@ let package = Package(
         "LayoutKit",
         "NetworkingPublic",
         "Serialization",
-        "TemplatesSupport",
       ],
       path: "DivKit",
       exclude: [
@@ -176,24 +174,6 @@ let package = Package(
         "CommonCorePublic",
       ],
       path: "Serialization",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-            "-warnings-as-errors",
-          ]
-        )
-      ]
-    ),
-
-    .target(
-      name: "TemplatesSupport",
-      dependencies: [
-        "CommonCorePublic",
-        "Serialization",
-      ],
-      path: "TemplatesSupport",
       swiftSettings: [
         .unsafeFlags(
           [

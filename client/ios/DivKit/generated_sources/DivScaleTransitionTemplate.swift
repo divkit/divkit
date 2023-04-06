@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "scale"
@@ -48,7 +47,7 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
     self.startDelay = startDelay
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivScaleTransitionTemplate?) -> DeserializationResult<DivScaleTransition> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivScaleTransitionTemplate?) -> DeserializationResult<DivScaleTransition> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
     let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator) ?? .noValue
@@ -74,7 +73,7 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivScaleTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivScaleTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivScaleTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivScaleTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

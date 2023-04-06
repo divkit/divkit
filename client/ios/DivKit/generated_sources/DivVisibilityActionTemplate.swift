@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeserializable {
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
@@ -52,7 +51,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
     self.visibilityPercentage = visibilityPercentage
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivVisibilityActionTemplate?) -> DeserializationResult<DivVisibilityAction> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivVisibilityActionTemplate?) -> DeserializationResult<DivVisibilityAction> {
     let downloadCallbacksValue = parent?.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true) ?? .noValue
     let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
     let logLimitValue = parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue
@@ -92,7 +91,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivVisibilityActionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivVisibilityAction> {
+  public static func resolveValue(context: TemplatesContext, parent: DivVisibilityActionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivVisibilityAction> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

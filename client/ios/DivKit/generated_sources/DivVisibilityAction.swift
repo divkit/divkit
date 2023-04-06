@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivVisibilityAction {
   public let downloadCallbacks: DivDownloadCallbacks?

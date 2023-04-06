@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
   public typealias Mode = DivTrigger.Mode
@@ -34,7 +33,7 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     self.mode = mode
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTriggerTemplate?) -> DeserializationResult<DivTrigger> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTriggerTemplate?) -> DeserializationResult<DivTrigger> {
     let actionsValue = parent?.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
     let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
@@ -63,7 +62,7 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTriggerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTrigger> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTriggerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTrigger> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

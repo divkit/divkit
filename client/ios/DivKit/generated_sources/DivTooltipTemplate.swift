@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
   public typealias Position = DivTooltip.Position
@@ -50,7 +49,7 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
     self.position = position
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTooltipTemplate?) -> DeserializationResult<DivTooltip> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTooltipTemplate?) -> DeserializationResult<DivTooltip> {
     let animationInValue = parent?.animationIn?.resolveOptionalValue(context: context, validator: ResolvedValue.animationInValidator, useOnlyLinks: true) ?? .noValue
     let animationOutValue = parent?.animationOut?.resolveOptionalValue(context: context, validator: ResolvedValue.animationOutValidator, useOnlyLinks: true) ?? .noValue
     let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -95,7 +94,7 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTooltipTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTooltip> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTooltipTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTooltip> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

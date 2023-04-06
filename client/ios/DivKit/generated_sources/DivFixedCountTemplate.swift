@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivFixedCountTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "fixed"
@@ -32,7 +31,7 @@ public final class DivFixedCountTemplate: TemplateValue, TemplateDeserializable 
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivFixedCountTemplate?) -> DeserializationResult<DivFixedCount> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedCountTemplate?) -> DeserializationResult<DivFixedCount> {
     let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -51,7 +50,7 @@ public final class DivFixedCountTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivFixedCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedCount> {
+  public static func resolveValue(context: TemplatesContext, parent: DivFixedCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedCount> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -31,7 +31,7 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
     self.property = property
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithRequiredPropertyTemplate?) -> DeserializationResult<EntityWithRequiredProperty> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithRequiredPropertyTemplate?) -> DeserializationResult<EntityWithRequiredProperty> {
     let propertyValue = parent?.property?.resolveValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     var errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -50,7 +50,7 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithRequiredPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithRequiredProperty> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithRequiredPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithRequiredProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

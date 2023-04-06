@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
   public final class DelimiterStyleTemplate: TemplateValue, TemplateDeserializable {
@@ -27,7 +26,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
       self.orientation = orientation
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: DelimiterStyleTemplate?) -> DeserializationResult<DivSeparator.DelimiterStyle> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: DelimiterStyleTemplate?) -> DeserializationResult<DivSeparator.DelimiterStyle> {
       let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
       let orientationValue = parent?.orientation?.resolveOptionalValue(context: context, validator: ResolvedValue.orientationValidator) ?? .noValue
       let errors = mergeErrors(
@@ -41,7 +40,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: DelimiterStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSeparator.DelimiterStyle> {
+    public static func resolveValue(context: TemplatesContext, parent: DelimiterStyleTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSeparator.DelimiterStyle> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -222,7 +221,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivSeparatorTemplate?) -> DeserializationResult<DivSeparator> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivSeparatorTemplate?) -> DeserializationResult<DivSeparator> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
     let actionAnimationValue = parent?.actionAnimation?.resolveOptionalValue(context: context, validator: ResolvedValue.actionAnimationValidator, useOnlyLinks: true) ?? .noValue
@@ -323,7 +322,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivSeparatorTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSeparator> {
+  public static func resolveValue(context: TemplatesContext, parent: DivSeparatorTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSeparator> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

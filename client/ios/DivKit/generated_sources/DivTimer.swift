@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTimer {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 0

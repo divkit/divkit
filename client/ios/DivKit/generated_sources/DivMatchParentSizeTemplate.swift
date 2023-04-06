@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "match_parent"
@@ -28,7 +27,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     self.weight = weight
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivMatchParentSizeTemplate?) -> DeserializationResult<DivMatchParentSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivMatchParentSizeTemplate?) -> DeserializationResult<DivMatchParentSize> {
     let weightValue = parent?.weight?.resolveOptionalValue(context: context, validator: ResolvedValue.weightValidator) ?? .noValue
     let errors = mergeErrors(
       weightValue.errorsOrWarnings?.map { .nestedObjectError(field: "weight", error: $0) }
@@ -39,7 +38,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivMatchParentSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivMatchParentSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivMatchParentSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivMatchParentSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

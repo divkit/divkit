@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, TemplateDeserializable {
   public typealias Value = DivRadialGradientRelativeRadius.Value
@@ -34,7 +33,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Templ
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivRadialGradientRelativeRadiusTemplate?) -> DeserializationResult<DivRadialGradientRelativeRadius> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientRelativeRadiusTemplate?) -> DeserializationResult<DivRadialGradientRelativeRadius> {
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
@@ -53,7 +52,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, Templ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivRadialGradientRelativeRadiusTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRelativeRadius> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRadialGradientRelativeRadiusTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRelativeRadius> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

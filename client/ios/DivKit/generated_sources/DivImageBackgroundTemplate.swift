@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "image"
@@ -56,7 +55,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     self.scale = scale
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivImageBackgroundTemplate?) -> DeserializationResult<DivImageBackground> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivImageBackgroundTemplate?) -> DeserializationResult<DivImageBackground> {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentHorizontalValidator) ?? .noValue
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
@@ -93,7 +92,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivImageBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivImageBackground> {
+  public static func resolveValue(context: TemplatesContext, parent: DivImageBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivImageBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

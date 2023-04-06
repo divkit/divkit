@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "pivot-fixed"
@@ -32,7 +31,7 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPivotFixedTemplate?) -> DeserializationResult<DivPivotFixed> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPivotFixedTemplate?) -> DeserializationResult<DivPivotFixed> {
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
@@ -46,7 +45,7 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPivotFixedTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPivotFixed> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPivotFixedTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPivotFixed> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

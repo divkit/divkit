@@ -28,7 +28,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       self.property = property
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: ItemTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
       let entityValue = parent?.entity?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let propertyValue = parent?.property?.resolveValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
       var errors = mergeErrors(
@@ -54,7 +54,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: ItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
+    public static func resolveValue(context: TemplatesContext, parent: ItemTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -139,7 +139,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     self.items = items
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayOfNestedItemsTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithArrayOfNestedItemsTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems> {
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -158,7 +158,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithArrayOfNestedItemsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfNestedItems> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithArrayOfNestedItemsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayOfNestedItems> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

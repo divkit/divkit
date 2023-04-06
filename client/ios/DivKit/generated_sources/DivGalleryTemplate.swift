@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
   public typealias CrossContentAlignment = DivGallery.CrossContentAlignment
@@ -170,7 +169,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivGalleryTemplate?) -> DeserializationResult<DivGallery> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivGalleryTemplate?) -> DeserializationResult<DivGallery> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
@@ -288,7 +287,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivGalleryTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGallery> {
+  public static func resolveValue(context: TemplatesContext, parent: DivGalleryTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGallery> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

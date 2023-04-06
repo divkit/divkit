@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeserializable {
   public final class PatternElementTemplate: TemplateValue, TemplateDeserializable {
@@ -33,7 +32,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeser
       self.regex = regex
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: PatternElementTemplate?) -> DeserializationResult<DivFixedLengthInputMask.PatternElement> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: PatternElementTemplate?) -> DeserializationResult<DivFixedLengthInputMask.PatternElement> {
       let keyValue = parent?.key?.resolveValue(context: context, validator: ResolvedValue.keyValidator) ?? .noValue
       let placeholderValue = parent?.placeholder?.resolveOptionalValue(context: context, validator: ResolvedValue.placeholderValidator) ?? .noValue
       let regexValue = parent?.regex?.resolveOptionalValue(context: context, validator: ResolvedValue.regexValidator) ?? .noValue
@@ -58,7 +57,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeser
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: PatternElementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedLengthInputMask.PatternElement> {
+    public static func resolveValue(context: TemplatesContext, parent: PatternElementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedLengthInputMask.PatternElement> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -146,7 +145,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeser
     self.patternElements = patternElements
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivFixedLengthInputMaskTemplate?) -> DeserializationResult<DivFixedLengthInputMask> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedLengthInputMaskTemplate?) -> DeserializationResult<DivFixedLengthInputMask> {
     let alwaysVisibleValue = parent?.alwaysVisible?.resolveOptionalValue(context: context, validator: ResolvedValue.alwaysVisibleValidator) ?? .noValue
     let patternValue = parent?.pattern?.resolveValue(context: context, validator: ResolvedValue.patternValidator) ?? .noValue
     let patternElementsValue = parent?.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) ?? .noValue
@@ -175,7 +174,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeser
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivFixedLengthInputMaskTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedLengthInputMask> {
+  public static func resolveValue(context: TemplatesContext, parent: DivFixedLengthInputMaskTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivFixedLengthInputMask> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

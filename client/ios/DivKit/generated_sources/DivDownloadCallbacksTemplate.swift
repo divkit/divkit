@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserializable {
   public let onFailActions: Field<[DivActionTemplate]>? // at least 1 elements
@@ -24,7 +23,7 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
     self.onSuccessActions = onSuccessActions
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivDownloadCallbacksTemplate?) -> DeserializationResult<DivDownloadCallbacks> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDownloadCallbacksTemplate?) -> DeserializationResult<DivDownloadCallbacks> {
     let onFailActionsValue = parent?.onFailActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onFailActionsValidator, useOnlyLinks: true) ?? .noValue
     let onSuccessActionsValue = parent?.onSuccessActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onSuccessActionsValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
@@ -38,7 +37,7 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivDownloadCallbacksTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivDownloadCallbacks> {
+  public static func resolveValue(context: TemplatesContext, parent: DivDownloadCallbacksTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivDownloadCallbacks> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

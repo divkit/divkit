@@ -177,7 +177,7 @@ class SwiftEntity(Entity):
         return_type = self.resolved_declaration_prefix + utils.capitalize_camel_case(self.resolved_name)
         fun_name = 'private static func resolveOnlyLinks'
         name = utils.capitalize_camel_case(self.name)
-        result += f'{fun_name}(context: Context, parent: {name}?) -> DeserializationResult<{return_type}> {{'
+        result += f'{fun_name}(context: TemplatesContext, parent: {name}?) -> DeserializationResult<{return_type}> {{'
 
         if not template_props:
             result += f'  return .success({return_type}())'
@@ -231,7 +231,7 @@ class SwiftEntity(Entity):
         return_type = self.resolved_declaration_prefix + utils.capitalize_camel_case(self.resolved_name)
         name = utils.capitalize_camel_case(self.name)
         fun_name = 'public static func resolveValue'
-        params = f'context: Context, parent: {name}?, useOnlyLinks: Bool'
+        params = f'context: TemplatesContext, parent: {name}?, useOnlyLinks: Bool'
         result += f'{fun_name}({params}) -> DeserializationResult<{return_type}> {{'
 
         template_props = list(filter(lambda p: p.mode.is_template, self.instance_properties_swift))
@@ -860,7 +860,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
     def resolve_value_implementation(self, access_level: SwiftAccessLevel) -> Text:
         access = access_level.value
         name = utils.capitalize_camel_case(self.name)
-        params = f'context: Context, parent: {name}?, useOnlyLinks: Bool'
+        params = f'context: TemplatesContext, parent: {name}?, useOnlyLinks: Bool'
         return_type = f'DeserializationResult<{self.resolved_prefixed_declaration}>'
         result = Text(f'{access}static func resolveValue({params}) -> {return_type} {{')
         result += '  guard let parent = parent else {'
@@ -888,7 +888,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
 
     @property
     def resolve_unknown_value_implementation(self) -> Text:
-        params = 'context: Context, useOnlyLinks: Bool'
+        params = 'context: TemplatesContext, useOnlyLinks: Bool'
         return_type = f'DeserializationResult<{self.resolved_prefixed_declaration}>'
         result = Text(f'private static func resolveUnknownValue({params}) -> {return_type} {{')
         result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'

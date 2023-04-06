@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivChangeBoundsTransition: DivTransitionBase {
   public static let type: String = "change_bounds"

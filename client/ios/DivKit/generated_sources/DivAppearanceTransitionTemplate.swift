@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 @frozen
 public enum DivAppearanceTransitionTemplate: TemplateValue {
@@ -38,7 +37,7 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(context: Context, parent: DivAppearanceTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivAppearanceTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceTransition> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -83,7 +82,7 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
     }
   }
 
-  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceTransition> {
+  private static func resolveUnknownValue(context: TemplatesContext, useOnlyLinks: Bool) -> DeserializationResult<DivAppearanceTransition> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }

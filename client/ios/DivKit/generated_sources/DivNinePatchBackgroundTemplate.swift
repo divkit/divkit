@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "nine_patch_image"
@@ -36,7 +35,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
     self.insets = insets
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivNinePatchBackgroundTemplate?) -> DeserializationResult<DivNinePatchBackground> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNinePatchBackgroundTemplate?) -> DeserializationResult<DivNinePatchBackground> {
     let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
     let insetsValue = parent?.insets?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
@@ -58,7 +57,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivNinePatchBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivNinePatchBackground> {
+  public static func resolveValue(context: TemplatesContext, parent: DivNinePatchBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivNinePatchBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -29,7 +29,7 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue, 
     self.property = property
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithOptionalStringEnumPropertyTemplate?) -> DeserializationResult<EntityWithOptionalStringEnumProperty> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithOptionalStringEnumPropertyTemplate?) -> DeserializationResult<EntityWithOptionalStringEnumProperty> {
     let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -40,7 +40,7 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue, 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithOptionalStringEnumPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalStringEnumProperty> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithOptionalStringEnumPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalStringEnumProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

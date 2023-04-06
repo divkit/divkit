@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivBorder {
   public let cornerRadius: Expression<Int>? // constraint: number >= 0

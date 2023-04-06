@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
   public final class StateTemplate: TemplateValue, TemplateDeserializable {
@@ -29,7 +28,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       self.stateId = stateId
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: StateTemplate?) -> DeserializationResult<DivData.State> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: StateTemplate?) -> DeserializationResult<DivData.State> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let stateIdValue = parent?.stateId?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
@@ -55,7 +54,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: StateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData.State> {
+    public static func resolveValue(context: TemplatesContext, parent: StateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData.State> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -155,7 +154,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     self.variables = variables
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
     let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
     let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
     let timersValue = parent?.timers?.resolveOptionalValue(context: context, validator: ResolvedValue.timersValidator, useOnlyLinks: true) ?? .noValue
@@ -193,7 +192,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivDataTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData> {
+  public static func resolveValue(context: TemplatesContext, parent: DivDataTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

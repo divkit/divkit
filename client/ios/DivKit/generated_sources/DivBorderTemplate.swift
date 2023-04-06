@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
@@ -36,7 +35,7 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
     self.stroke = stroke
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivBorderTemplate?) -> DeserializationResult<DivBorder> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivBorderTemplate?) -> DeserializationResult<DivBorder> {
     let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
     let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornersRadiusValidator, useOnlyLinks: true) ?? .noValue
     let hasShadowValue = parent?.hasShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.hasShadowValidator) ?? .noValue
@@ -59,7 +58,7 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivBorderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivBorder> {
+  public static func resolveValue(context: TemplatesContext, parent: DivBorderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivBorder> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

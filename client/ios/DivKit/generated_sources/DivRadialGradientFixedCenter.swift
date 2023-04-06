@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRadialGradientFixedCenter {
   public static let type: String = "fixed"

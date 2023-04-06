@@ -14,4 +14,4 @@ xcuserdata/
 local.properties
 
 /client/ios/DivKit/generated_sources/*_hash
-/client/ios/TemplatesSupportTests/generated_sources/*_hash
+/client/ios/DivKitTests/Entities/generated_sources/*_hash

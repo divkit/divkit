@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializable {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
@@ -24,7 +23,7 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
     self.stroke = stroke
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTextRangeBorderTemplate?) -> DeserializationResult<DivTextRangeBorder> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTextRangeBorderTemplate?) -> DeserializationResult<DivTextRangeBorder> {
     let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
     let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
@@ -38,7 +37,7 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTextRangeBorderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTextRangeBorder> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTextRangeBorderTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTextRangeBorder> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

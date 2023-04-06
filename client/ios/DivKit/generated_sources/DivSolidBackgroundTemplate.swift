@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "solid"
@@ -32,7 +31,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     self.color = color
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivSolidBackgroundTemplate?) -> DeserializationResult<DivSolidBackground> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivSolidBackgroundTemplate?) -> DeserializationResult<DivSolidBackground> {
     let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) }
@@ -51,7 +50,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivSolidBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSolidBackground> {
+  public static func resolveValue(context: TemplatesContext, parent: DivSolidBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSolidBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

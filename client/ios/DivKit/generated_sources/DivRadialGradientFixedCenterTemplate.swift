@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRadialGradientFixedCenterTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "fixed"
@@ -36,7 +35,7 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Template
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivRadialGradientFixedCenterTemplate?) -> DeserializationResult<DivRadialGradientFixedCenter> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientFixedCenterTemplate?) -> DeserializationResult<DivRadialGradientFixedCenter> {
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
@@ -58,7 +57,7 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Template
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivRadialGradientFixedCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientFixedCenter> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRadialGradientFixedCenterTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientFixedCenter> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

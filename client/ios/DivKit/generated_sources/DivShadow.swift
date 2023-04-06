@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivShadow {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 0.19

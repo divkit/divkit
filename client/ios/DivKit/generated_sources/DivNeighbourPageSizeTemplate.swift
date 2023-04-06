@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "fixed"
@@ -32,7 +31,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     self.neighbourPageWidth = neighbourPageWidth
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivNeighbourPageSizeTemplate?) -> DeserializationResult<DivNeighbourPageSize> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNeighbourPageSizeTemplate?) -> DeserializationResult<DivNeighbourPageSize> {
     let neighbourPageWidthValue = parent?.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "neighbour_page_width", error: $0) }
@@ -51,7 +50,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivNeighbourPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivNeighbourPageSize> {
+  public static func resolveValue(context: TemplatesContext, parent: DivNeighbourPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivNeighbourPageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

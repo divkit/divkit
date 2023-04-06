@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public protocol DivTransitionBase {
   var duration: Expression<Int> { get } // constraint: number >= 0; default value: 200

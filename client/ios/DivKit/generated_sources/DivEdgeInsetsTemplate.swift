@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable {
   public let bottom: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
@@ -36,7 +35,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     self.unit = unit
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivEdgeInsetsTemplate?) -> DeserializationResult<DivEdgeInsets> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivEdgeInsetsTemplate?) -> DeserializationResult<DivEdgeInsets> {
     let bottomValue = parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue
     let leftValue = parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue
     let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
@@ -59,7 +58,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivEdgeInsetsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivEdgeInsets> {
+  public static func resolveValue(context: TemplatesContext, parent: DivEdgeInsetsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivEdgeInsets> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

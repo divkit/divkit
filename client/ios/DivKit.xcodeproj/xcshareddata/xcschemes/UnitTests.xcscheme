@@ -20,20 +20,6 @@
                ReferencedContainer = "container:DivKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C1CF633286B58810016D0A1"
-               BuildableName = "TemplatesSupportTests.xctest"
-               BlueprintName = "TemplatesSupportTests"
-               ReferencedContainer = "container:DivKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -59,16 +45,6 @@
                BlueprintIdentifier = "8CF329232875D534003F799A"
                BuildableName = "LayoutKitTests.xctest"
                BlueprintName = "LayoutKitTests"
-               ReferencedContainer = "container:DivKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8C1CF633286B58810016D0A1"
-               BuildableName = "TemplatesSupportTests.xctest"
-               BlueprintName = "TemplatesSupportTests"
                ReferencedContainer = "container:DivKit.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
   public let pivotX: Field<DivPivotTemplate>? // default value: .divPivotPercentage(DivPivotPercentage(value: .value(50)))
@@ -28,7 +27,7 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
     self.rotation = rotation
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivTransformTemplate?) -> DeserializationResult<DivTransform> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTransformTemplate?) -> DeserializationResult<DivTransform> {
     let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator, useOnlyLinks: true) ?? .noValue
     let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator, useOnlyLinks: true) ?? .noValue
     let rotationValue = parent?.rotation?.resolveOptionalValue(context: context) ?? .noValue
@@ -45,7 +44,7 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivTransformTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTransform> {
+  public static func resolveValue(context: TemplatesContext, parent: DivTransformTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTransform> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -59,7 +59,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     self.url = url
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithSimplePropertiesTemplate?) -> DeserializationResult<EntityWithSimpleProperties> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithSimplePropertiesTemplate?) -> DeserializationResult<EntityWithSimpleProperties> {
     let booleanValue = parent?.boolean?.resolveOptionalValue(context: context, validator: ResolvedValue.booleanValidator) ?? .noValue
     let booleanIntValue = parent?.booleanInt?.resolveOptionalValue(context: context, validator: ResolvedValue.booleanIntValidator) ?? .noValue
     let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
@@ -94,7 +94,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithSimplePropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithSimpleProperties> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithSimplePropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithSimpleProperties> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class StringVariableTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "string"
@@ -36,7 +35,7 @@ public final class StringVariableTemplate: TemplateValue, TemplateDeserializable
     self.value = value
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: StringVariableTemplate?) -> DeserializationResult<StringVariable> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: StringVariableTemplate?) -> DeserializationResult<StringVariable> {
     let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
@@ -62,7 +61,7 @@ public final class StringVariableTemplate: TemplateValue, TemplateDeserializable
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: StringVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<StringVariable> {
+  public static func resolveValue(context: TemplatesContext, parent: StringVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<StringVariable> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

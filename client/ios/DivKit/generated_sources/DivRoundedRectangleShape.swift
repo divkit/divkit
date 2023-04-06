@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRoundedRectangleShape {
   public static let type: String = "rounded_rectangle"

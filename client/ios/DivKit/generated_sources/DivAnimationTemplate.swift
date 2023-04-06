@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
   public typealias Name = DivAnimation.Name
@@ -54,7 +53,7 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
     self.startValue = startValue
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivAnimationTemplate?) -> DeserializationResult<DivAnimation> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAnimationTemplate?) -> DeserializationResult<DivAnimation> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let endValueValue = parent?.endValue?.resolveOptionalValue(context: context) ?? .noValue
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
@@ -94,7 +93,7 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivAnimationTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAnimation> {
+  public static func resolveValue(context: TemplatesContext, parent: DivAnimationTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivAnimation> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

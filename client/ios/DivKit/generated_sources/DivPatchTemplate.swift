@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
   public final class ChangeTemplate: TemplateValue, TemplateDeserializable {
@@ -29,7 +28,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       self.items = items
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: ChangeTemplate?) -> DeserializationResult<DivPatch.Change> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: ChangeTemplate?) -> DeserializationResult<DivPatch.Change> {
       let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
       let itemsValue = parent?.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
@@ -51,7 +50,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: ChangeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPatch.Change> {
+    public static func resolveValue(context: TemplatesContext, parent: ChangeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPatch.Change> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -130,7 +129,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     self.mode = mode
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivPatchTemplate?) -> DeserializationResult<DivPatch> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPatchTemplate?) -> DeserializationResult<DivPatch> {
     let changesValue = parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
     var errors = mergeErrors(
@@ -152,7 +151,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivPatchTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPatch> {
+  public static func resolveValue(context: TemplatesContext, parent: DivPatchTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPatch> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

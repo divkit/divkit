@@ -32,7 +32,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       self.url = url
     }
 
-    private static func resolveOnlyLinks(context: Context, parent: NestedTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: NestedTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
       let intValue = parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue
       let nonOptionalValue = parent?.nonOptional?.resolveValue(context: context) ?? .noValue
       let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
@@ -57,7 +57,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(context: Context, parent: NestedTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
+    public static func resolveValue(context: TemplatesContext, parent: NestedTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithPropertyWithDefaultValue.Nested> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -141,7 +141,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     self.url = url
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
     let intValue = parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue
     let nestedValue = parent?.nested?.resolveOptionalValue(context: context, validator: ResolvedValue.nestedValidator, useOnlyLinks: true) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
@@ -158,7 +158,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithPropertyWithDefaultValueTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithPropertyWithDefaultValueTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

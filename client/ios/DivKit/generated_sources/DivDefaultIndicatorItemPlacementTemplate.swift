@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "default"
@@ -28,7 +27,7 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Temp
     self.spaceBetweenCenters = spaceBetweenCenters
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivDefaultIndicatorItemPlacementTemplate?) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDefaultIndicatorItemPlacementTemplate?) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
     let spaceBetweenCentersValue = parent?.spaceBetweenCenters?.resolveOptionalValue(context: context, validator: ResolvedValue.spaceBetweenCentersValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       spaceBetweenCentersValue.errorsOrWarnings?.map { .nestedObjectError(field: "space_between_centers", error: $0) }
@@ -39,7 +38,7 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Temp
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivDefaultIndicatorItemPlacementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
+  public static func resolveValue(context: TemplatesContext, parent: DivDefaultIndicatorItemPlacementTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

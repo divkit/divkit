@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "gradient"
@@ -36,7 +35,7 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
     self.colors = colors
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivLinearGradientTemplate?) -> DeserializationResult<DivLinearGradient> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivLinearGradientTemplate?) -> DeserializationResult<DivLinearGradient> {
     let angleValue = parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue
     let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     var errors = mergeErrors(
@@ -58,7 +57,7 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivLinearGradientTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivLinearGradient> {
+  public static func resolveValue(context: TemplatesContext, parent: DivLinearGradientTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivLinearGradient> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

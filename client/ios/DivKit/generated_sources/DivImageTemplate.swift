@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "image"
@@ -200,7 +199,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivImageTemplate?) -> DeserializationResult<DivImage> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivImageTemplate?) -> DeserializationResult<DivImage> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
     let actionAnimationValue = parent?.actionAnimation?.resolveOptionalValue(context: context, validator: ResolvedValue.actionAnimationValidator, useOnlyLinks: true) ?? .noValue
@@ -345,7 +344,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivImage> {
+  public static func resolveValue(context: TemplatesContext, parent: DivImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivImage> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

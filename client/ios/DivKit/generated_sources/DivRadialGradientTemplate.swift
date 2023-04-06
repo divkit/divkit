@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "radial_gradient"
@@ -44,7 +43,7 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
     self.radius = radius
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivRadialGradientTemplate?) -> DeserializationResult<DivRadialGradient> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientTemplate?) -> DeserializationResult<DivRadialGradient> {
     let centerXValue = parent?.centerX?.resolveOptionalValue(context: context, validator: ResolvedValue.centerXValidator, useOnlyLinks: true) ?? .noValue
     let centerYValue = parent?.centerY?.resolveOptionalValue(context: context, validator: ResolvedValue.centerYValidator, useOnlyLinks: true) ?? .noValue
     let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
@@ -72,7 +71,7 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivRadialGradientTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradient> {
+  public static func resolveValue(context: TemplatesContext, parent: DivRadialGradientTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradient> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

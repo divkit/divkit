@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivGifImageTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "gif"
@@ -180,7 +179,7 @@ public final class DivGifImageTemplate: TemplateValue, TemplateDeserializable {
     self.width = width
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivGifImageTemplate?) -> DeserializationResult<DivGifImage> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivGifImageTemplate?) -> DeserializationResult<DivGifImage> {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
     let actionAnimationValue = parent?.actionAnimation?.resolveOptionalValue(context: context, validator: ResolvedValue.actionAnimationValidator, useOnlyLinks: true) ?? .noValue
@@ -310,7 +309,7 @@ public final class DivGifImageTemplate: TemplateValue, TemplateDeserializable {
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivGifImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGifImage> {
+  public static func resolveValue(context: TemplatesContext, parent: DivGifImageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGifImage> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }

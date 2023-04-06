@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivNinePatchBackground {
   public static let type: String = "nine_patch_image"

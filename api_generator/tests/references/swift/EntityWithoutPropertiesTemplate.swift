@@ -23,11 +23,11 @@ public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeser
     self.parent = parent
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: EntityWithoutPropertiesTemplate?) -> DeserializationResult<EntityWithoutProperties> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithoutPropertiesTemplate?) -> DeserializationResult<EntityWithoutProperties> {
     return .success(EntityWithoutProperties())
   }
 
-  public static func resolveValue(context: Context, parent: EntityWithoutPropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithoutProperties> {
+  public static func resolveValue(context: TemplatesContext, parent: EntityWithoutPropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithoutProperties> {
     return .success(EntityWithoutProperties())
   }
 

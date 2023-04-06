@@ -3,7 +3,6 @@
 import CommonCorePublic
 import Foundation
 import Serialization
-import TemplatesSupport
 
 public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializable {
   public typealias Edge = DivSlideTransition.Edge
@@ -46,7 +45,7 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
     self.startDelay = startDelay
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivSlideTransitionTemplate?) -> DeserializationResult<DivSlideTransition> {
+  private static func resolveOnlyLinks(context: TemplatesContext, parent: DivSlideTransitionTemplate?) -> DeserializationResult<DivSlideTransition> {
     let distanceValue = parent?.distance?.resolveOptionalValue(context: context, validator: ResolvedValue.distanceValidator, useOnlyLinks: true) ?? .noValue
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let edgeValue = parent?.edge?.resolveOptionalValue(context: context, validator: ResolvedValue.edgeValidator) ?? .noValue
@@ -69,7 +68,7 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivSlideTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlideTransition> {
+  public static func resolveValue(context: TemplatesContext, parent: DivSlideTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlideTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
