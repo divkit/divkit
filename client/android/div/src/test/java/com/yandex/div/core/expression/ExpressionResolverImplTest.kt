@@ -39,7 +39,8 @@ class ExpressionResolverImplTest {
             Variable.BooleanVariable("logical_true", true),
             Variable.BooleanVariable("logical_false", false),
             Variable.IntegerVariable("some_number", 42),
-            Variable.IntegerVariable("another_number", 954)
+            Variable.IntegerVariable("another_number", 954),
+            Variable.IntegerVariable("timer", 2000)
         ).forEach {
             map[it.name] = it
         }
@@ -327,6 +328,36 @@ class ExpressionResolverImplTest {
         assert(callbackCalled)
     }
 
+    @Test
+    fun `cache work with converter correctly`() {
+        val mutableExpression = mutableExpression<Long>(
+            rawExpression = "@{timer}",
+            typeHelper = TYPE_HELPER_INT,
+        )
+        Assert.assertEquals(2000, mutableExpression.evaluate(underTest))
+        val mutableExpressionWithConverter = mutableExpressionWithConverter<Int, String>(
+            rawExpression = "@{timer}",
+            typeHelper = TYPE_HELPER_STRING,
+            converter = { it.toString() }
+        )
+        Assert.assertEquals("2000", mutableExpressionWithConverter.evaluate(underTest))
+    }
+
+    @Test(expected = ParsingException::class)
+    fun `cache work with validator correctly`() {
+        val mutableExpression = mutableExpression<Long>(
+            rawExpression = "@{timer}",
+            typeHelper = TYPE_HELPER_INT,
+        )
+        Assert.assertEquals(2000, mutableExpression.evaluate(underTest))
+        val mutableExpressionWithValidator = mutableExpression<Long>(
+            rawExpression = "@{timer}",
+            typeHelper = TYPE_HELPER_INT,
+            validator = { false }
+        )
+        mutableExpressionWithValidator.evaluate(underTest)
+    }
+
     private fun <T: Any> mutableExpression(
         rawExpression: String,
         typeHelper: TypeHelper<T>,
@@ -337,6 +368,21 @@ class ExpressionResolverImplTest {
         rawExpression = rawExpression,
         validator = validator,
         converter = { it },
+        logger = logger,
+        typeHelper = typeHelper,
+    )
+
+    private fun <R : Any, T: Any> mutableExpressionWithConverter(
+        rawExpression: String,
+        typeHelper: TypeHelper<T>,
+        converter: Converter<R, T>,
+        logger: ParsingErrorLogger = failFastLogger,
+        validator: (T) -> Boolean = { true },
+    ) = Expression.MutableExpression<R,T>(
+        expressionKey = "some_key",
+        rawExpression = rawExpression,
+        validator = validator,
+        converter = converter,
         logger = logger,
         typeHelper = typeHelper,
     )

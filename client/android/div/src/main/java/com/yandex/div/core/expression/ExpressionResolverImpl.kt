@@ -55,9 +55,6 @@ internal class ExpressionResolverImpl(
         logger: ParsingErrorLogger
     ): T {
         return try {
-            tryFindInCache<T>(rawExpression)?.let {
-                return it
-            }
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
         } catch (e: ParsingException) {
             if (e.reason == ParsingExceptionReason.MISSING_VARIABLE) {
@@ -66,12 +63,6 @@ internal class ExpressionResolverImpl(
             logger.logError(e)
             errorCollector.logError(e)
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
-        }
-    }
-
-    private fun <T : Any> tryFindInCache(rawExpression: String): T? {
-        return evaluationsCache[rawExpression]?.let {
-            it as T
         }
     }
 
@@ -84,7 +75,7 @@ internal class ExpressionResolverImpl(
         fieldType: TypeHelper<T>,
     ): T {
         val result = try {
-            evaluator.eval<R>(evaluable)
+            getEvaluationResult<R>(rawExpression, evaluable)
         } catch (e: EvaluableException) {
             val variableName = tryGetMissingVariableName(e)
 
@@ -98,19 +89,31 @@ internal class ExpressionResolverImpl(
             result as T
         } else {
             safeConvert(expressionKey, rawExpression, converter, result, fieldType)
-                    ?: throw invalidValue(expressionKey, rawExpression, result)
+                ?: throw invalidValue(expressionKey, rawExpression, result)
         }
 
         safeValidate(expressionKey, rawExpression, validator, convertedValue)
 
-        if (evaluable.checkIsCacheable()) {
-            evaluable.variables.forEach { varName ->
-                val expressions = varToExpressions.getOrPut(varName) { mutableSetOf() }
-                expressions.add(rawExpression)
-            }
-            evaluationsCache[rawExpression] = convertedValue
-        }
         return convertedValue
+    }
+
+    private fun <R : Any> getEvaluationResult(
+        rawExpression: String,
+        evaluable: Evaluable
+    ): R {
+        return evaluationsCache[rawExpression]?.let {
+            it as R
+        } ?: run {
+            val evalResult = evaluator.eval<R>(evaluable)
+            if (evaluable.checkIsCacheable()) {
+                evaluable.variables.forEach { varName ->
+                    val expressions = varToExpressions.getOrPut(varName) { mutableSetOf() }
+                    expressions.add(rawExpression)
+                }
+                evaluationsCache[rawExpression] = evalResult
+            }
+            evalResult
+        }
     }
 
     private fun tryGetMissingVariableName(e: EvaluableException): String? {
@@ -138,20 +141,20 @@ internal class ExpressionResolverImpl(
                 converter.invoke(rawValue)
             } catch (e: ClassCastException) {
                 throw typeMismatch(
-                        expressionKey = expressionKey,
-                        rawExpression = rawExpression,
-                        wrongTypeValue = rawValue,
-                        cause = e,
+                    expressionKey = expressionKey,
+                    rawExpression = rawExpression,
+                    wrongTypeValue = rawValue,
+                    cause = e,
                 )
             } catch (e: Exception) {
                 // okay to catch exceptions here cause convertors may
                 // throw different types of errors from common ClassCastException
                 // up to specific NumberFormatException.
                 throw invalidValue(
-                        expressionKey = expressionKey,
-                        rawExpression = rawExpression,
-                        wrongValue = rawValue,
-                        cause = e,
+                    expressionKey = expressionKey,
+                    rawExpression = rawExpression,
+                    wrongValue = rawValue,
+                    cause = e,
                 )
             }
         }
