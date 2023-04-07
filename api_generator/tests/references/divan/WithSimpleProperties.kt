@@ -60,7 +60,7 @@ class WithSimpleProperties internal constructor(
         /**
          * Boolean value in numeric format.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val booleanInt: Property<Boolean>?,
         /**
          * Color.

@@ -360,8 +360,8 @@
     "ru": "Контейнер. Содержит в себе другие элементы и отвечает за их расположение. Позволяет располагать элементы по вертикали, горизонтали и с наложением в определенном порядке, имитируя третье измерение."
   },
   "div_container_aspect": {
-    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.",
-    "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется. В вебе требуется поддержка свойства `aspect-ratio` в css для работы."
+    "en": "Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. \nOn the web, support for the `aspect-ratio` CSS property is required to use this parameter.",
+    "ru": "Фиксированное соотношение размеров контейнера. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется. \nВ вебе для использования этого параметра требуется поддержка свойства CSS `aspect-ratio`."
   },
   "div_container_content_alignment_horizontal": {
     "en": "Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.",
@@ -924,36 +924,8 @@
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_input_mask": {
-    "en": "Text input mask.",
-    "ru": "Маска для текстового поля."
-  },
-  "div_input_mask_fixed_length": {
-    "en": "Text input mask with a fixed amount of characters.",
-    "ru": "Маска для текстового поля с фиксированным количеством символов."
-  },
-  "div_input_mask_fixed_length_always_visible": {
-    "en": "Option to show mask before completion.",
-    "ru": "Опция отображения маски до ее заполнения."
-  },
-  "div_input_mask_fixed_length_pattern": {
-    "en": "Text input mask's format.",
-    "ru": "Формат текстовой маски."
-  },
-  "div_input_mask_fixed_length_pattern_elements": {
-    "en": "Decoding of characters from pattern that are replaceable with user input.",
-    "ru": "Расшифровка символов в паттерне, заменяемых на пользовательский ввод."
-  },
-  "div_input_mask_fixed_length_pattern_elements_key": {
-    "en": "Special character replaceable with user input.",
-    "ru": "Специальный символ, заменяемый на пользовательский ввод."
-  },
-  "div_input_mask_fixed_length_pattern_elements_placeholder": {
-    "en": "Character that is shown in the place of the special character if mask should be always visible.",
-    "ru": "Символ, на который заменяется специальный символ в маске, если она должна всегда быть видимой."
-  },
-  "div_input_mask_fixed_length_pattern_elements_regex": {
-    "en": "Regular expression with which the character will be validated.",
-    "ru": "Регулярное выражение, валидирующее вводимый символ."
+    "en": "Mask for entering text based on the specified template.",
+    "ru": "Маска для ввода текста по заданному шаблону."
   },
   "div_input_mask_currency": {
     "en": "Mask for currency with language format.",
@@ -963,13 +935,41 @@
     "en": "IETF BCP 47 language tag for currency mask. Look https://en.wikipedia.org/wiki/IETF_language_tag for more. If not specified, it will be determined automatically.",
     "ru": "Языковой тег стандарта IETF BCP 47 для маски валюты. Подробнее https://en.wikipedia.org/wiki/IETF_language_tag. Если не задан, то будет определен автоматически."
   },
+  "div_input_mask_fixed_length": {
+    "en": "Mask for entering text with a fixed number of characters.",
+    "ru": "Маска для ввода текста с фиксированным количеством символов."
+  },
+  "div_input_mask_fixed_length_always_visible": {
+    "en": "If this option is enabled, the text field contains the mask before being filled in.",
+    "ru": "Если опция включена, маска отображается в текстовом поле до его заполнения."
+  },
+  "div_input_mask_fixed_length_pattern": {
+    "en": "String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.",
+    "ru": "Строка, которая задает шаблон для ввода текста. Например, для телефонного номера можно использовать шаблон `+7 (###) ###-##-## `."
+  },
+  "div_input_mask_fixed_length_pattern_elements": {
+    "en": "Template decoding is a description of the characters that will be replaced with user input.",
+    "ru": "Расшифровка шаблона — описание символов, вместо которых должен быть подставлен пользовательский ввод."
+  },
+  "div_input_mask_fixed_length_pattern_elements_key": {
+    "en": "A character in the template that will be replaced with a user-defined character.",
+    "ru": "Символ в шаблоне, вместо которого должен быть подставлен символ, введенный пользователем."
+  },
+  "div_input_mask_fixed_length_pattern_elements_placeholder": {
+    "en": "The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.",
+    "ru": "Символ, который отображается в поле ввода на месте, в котором ожидается  ввод пользовательского текста. Используется, если включено отображение маски."
+  },
+  "div_input_mask_fixed_length_pattern_elements_regex": {
+    "en": "Regular expression for validating character inputs. For example, when a mask is digit-only.",
+    "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."
   },
   "div_input_method": {
-    "en": "Data entry method. If nothing is specified, the value will be taken from keyboard_type.",
-    "ru": "Способ ввода данных. Если ничего не указывать, то значение возьмется из keyboard_type."
+    "en": "Data entry method. If the value isn't set, the `keyboard_type` parameter's value is used instead.",
+    "ru": "Способ ввода данных. Если значение не указано, будет использовано значение параметра `keyboard_type`."
   },
   "div_input_native_interface": {
     "en": "Text input line used in the native interface.",
@@ -978,6 +978,10 @@
   "div_input_native_interface_color": {
     "en": "Text input line color.",
     "ru": "Цвет линии ввода текста."
+  },
+  "div_input_raw_text_variable": {
+    "en": "Name of raw value storage variable.",
+    "ru": "Название переменной для хранения необработанного значения."
   },
   "div_input_select_all_on_focus": {
     "en": "Highlighting input text when focused.",
@@ -991,9 +995,9 @@
     "en": "Name of text storage variable.",
     "ru": "Название переменной для хранения текста."
   },
-  "div_input_raw_text_variable": {
-    "en": "Name of raw value storage variable.",
-    "ru": "Название переменной для хранения необработанного значения."
+  "div_keyboard_input": {
+    "en": "Enter data manually using a keyboard.",
+    "ru": "Ввод данных с клавиатуры."
   },
   "div_line_style": {
     "en": "Line style.",
@@ -1230,6 +1234,22 @@
   "div_select_value_variable": {
     "en": "Variable name to store selected from list option `value`.",
     "ru": "Название переменной для хранения `value` выбранного варианта из списка."
+  },
+  "div_selection_input": {
+    "en": "Enter data using a menu selection. \nThe text value of the `div_input` parameter corresponds to the selected menu item. If the value isn't selected, it's taken from `text_variable` instead.",
+    "ru": "Ввод данных с помощью выбора из меню. \nТекстовое значение параметра `div_input` соответствует выбранному пункту из меню. Если значение еще не выбрано, будет использовано значение переменной `text_variable`."
+  },
+  "div_selection_input_item": {
+    "en": "Selectable menu item.",
+    "ru": "Элемент меню, доступный для выбора."
+  },
+  "div_selection_input_item_text": {
+    "en": "The text that's displayed in the input field (the `div_input` parameter). If the value isn't set, the input field is populated with the `div_selection_input_item_value` parameter's value.",
+    "ru": "Текст, который отображается в поле ввода (параметр  `div_input`). Если значение отсутствует, то в поле ввода отобразится значение параметра `div_selection_input_item_value`."
+  },
+  "div_selection_input_item_value": {
+    "en": "Text value of the menu element.",
+    "ru": "Текстовое значение элемента меню."
   },
   "div_separator": {
     "en": "A separating line between elements.",
