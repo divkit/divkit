@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator ith small fixed width and a lot of items. Last item should have minimal size equals 0.5.",
   "platforms": [
     "android",
     "ios",

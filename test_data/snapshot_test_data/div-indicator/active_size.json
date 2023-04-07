@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with active item size equals `2 * inactive_item_size`",
   "platforms": [
     "android",
     "ios",

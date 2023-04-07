@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with 4 items. On the zero step it has rectangle shape. At the first step, height of items is increased. At the second step, of items is increased. At the third step, indicator items change shape to circle. At the fourth step, the radius increases.",
   "platforms": [
     "android",
     "web"

@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with 1dp top and bottom paddings.",
   "platforms": [
     "android",
     "ios",

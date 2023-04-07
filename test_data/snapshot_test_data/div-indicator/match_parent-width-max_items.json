@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Div indicator with mach_parent size. Indicator contains 10 items, all of them has the same size.",
   "platforms": [
     "android",
     "ios",

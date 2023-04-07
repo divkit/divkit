@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with wrap_content items width. All items should fit in the container",
   "platforms": [
     "android",
     "ios",

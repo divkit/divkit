@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with wrap_content height, and top and bottom height equals 10dp. Size of DivIndicator should be item_height(2dp) + top margins (10dp) + bottom margins (10dp)",
   "platforms": [
     "android",
     "ios",

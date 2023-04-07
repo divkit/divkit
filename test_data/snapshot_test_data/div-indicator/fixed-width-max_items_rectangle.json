@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with small fixed width and a lot of rectangle items, which is not fit to indicator shape. Last item should have width and height {0.5*item_size}",
   "platforms": [
     "android",
     "ios",

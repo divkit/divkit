@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "DivIndicator with rectangle items with item placement equals `stretch`",
   "platforms": [
     "android",
     "ios",
