@@ -1,3 +1,9 @@
+## 24.1.0 (April 10, 2023)
+
+Fixes:
+* The `aspect` property in the `container` should work better in combination with the `height` property
+
+
 ## 24.0.0 (April 3, 2023)
 
 Breaking changes:

@@ -1,3 +1,38 @@
+## 24.1.0
+
+# JSON Schema:
+
+Fixes & Changes:
+* Removed selection input schema
+* Updated `platforms` field in schema
+
+# Android Client:
+
+Additions:
+* Implemented aspect height in wrap container
+
+Fixes & Changes:
+* Made gallery scroll slower
+* Removed observers in clearBinding method
+* Fixed visibility animations on disappear
+
+# iOS Client:
+
+Additions:
+* Added aspect support for vertical wrap container
+
+Fixes & Changes:
+* Made solid and gradient background behaviors the same
+* Made initializer for gradient failable
+* Passed elements errors in DeserializationResult for templates
+* Replaced fatalError with assertionFailure where possible
+* Removed selection input implementation
+
+# Web Client:
+
+Fixes:
+* The `aspect` property in the `container` should work better in combination with the `height` property
+
 ## 24.0.0
 
 # JSON Schema:
