@@ -8,9 +8,5 @@
     "multiply",
     "screen"
   ],
-  "$description": "translations.json#/div_blend_mode",
-  "platforms": [
-    "android",
-    "ios"
-  ]
+  "$description": "translations.json#/div_blend_mode"
 }

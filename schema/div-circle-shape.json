@@ -25,6 +25,7 @@
     "type"
   ],
   "platforms": [
-    "android"
+    "android",
+    "web"
   ]
 }
