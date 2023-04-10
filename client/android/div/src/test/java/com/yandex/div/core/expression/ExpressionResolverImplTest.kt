@@ -56,14 +56,13 @@ class ExpressionResolverImplTest {
 
     private val failFastLogger = ParsingErrorLogger { e -> throw e }
     private val silentLogger = ParsingErrorLogger { e -> e.printStackTrace() }
+    private val globalVariableController = GlobalVariableController().apply {
+        declare(*globalVariables.values.toTypedArray())
+    }
     private val externalVariables = VariableController().apply {
         variables.values.forEach {
             declare(it)
         }
-        val globalVariableController = GlobalVariableController()
-        globalVariableController.declare(
-            *globalVariables.values.toTypedArray()
-        )
         addSource(globalVariableController.variableSource)
     }
 
@@ -356,6 +355,20 @@ class ExpressionResolverImplTest {
             validator = { false }
         )
         mutableExpressionWithValidator.evaluate(underTest)
+    }
+
+    @Test
+    fun `on expression changed callback called when variable declared`() {
+        val mutableExpression = mutableExpression<Long>(
+            rawExpression = "@{none_var}",
+            typeHelper = TYPE_HELPER_INT,
+        )
+        var declaredValue = 0L
+        mutableExpression.observeAndGet(underTest) {
+            declaredValue = it
+        }
+        globalVariableController.declare(Variable.IntegerVariable("none_var", 56))
+        Assert.assertEquals(56, declaredValue)
     }
 
     private fun <T: Any> mutableExpression(

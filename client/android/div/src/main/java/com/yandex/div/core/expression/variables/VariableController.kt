@@ -97,9 +97,8 @@ internal class VariableController {
     }
 
     private fun onVariableDeclared(variable: Variable) {
-        Assert.assertMainThread()
+        notifyVariableChanged(variable)
         variable.addObserver(notifyVariableChangedCallback)
-        onChangeObservers[variable.name]?.forEach { it.invoke(variable) }
     }
 
     fun getMutableVariable(name: String): Variable? {
