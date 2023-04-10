@@ -121,8 +121,11 @@ internal class DivImageBinder @Inject constructor(
                                             errorCollector: ErrorCollector,
                                             div: DivImage) {
         div.preview?.let {
-            val callback = { _: Any ->
-                applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
+            val callback = { newPreview: String ->
+                if (!isImageLoaded && newPreview != preview) {
+                    resetImageLoaded()
+                    applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
+                }
             }
 
             addSubscription(it.observeAndGet(resolver, callback))
@@ -134,19 +137,7 @@ internal class DivImageBinder @Inject constructor(
                                           div: DivImage,
                                           errorCollector: ErrorCollector,
                                           synchronous: Boolean) {
-        if (isImageLoaded) {
-            return
-        }
-
-        val newPreview = div.preview?.evaluate(resolver)
-
-        if (preview != null && newPreview == preview) {
-            return
-        }
-
-        resetPreviewLoaded()
-
-        preview = newPreview
+        val newPreview = div.preview?.evaluate(resolver).also { preview = it }
 
         placeholderLoader.applyPlaceholder(
             this,
@@ -185,7 +176,6 @@ internal class DivImageBinder @Inject constructor(
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
         resetImageLoaded()
-        resetPreviewLoaded()
 
         applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
 
@@ -202,6 +192,11 @@ internal class DivImageBinder @Inject constructor(
                     imageLoaded()
                     applyTint(resolver, div.tintColor, div.tintMode)
                     invalidate()
+                }
+
+                override fun onError() {
+                    super.onError()
+                    imageUrl = null
                 }
             }
         )

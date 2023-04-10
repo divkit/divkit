@@ -47,16 +47,6 @@ internal open class DivImageView @JvmOverloads constructor(
         super.setCropToPadding(true)
     }
 
-    override fun resetImageLoaded() {
-        super.resetImageLoaded()
-        imageUrl = null
-    }
-
-    fun resetPreviewLoaded() {
-        super.resetImageLoaded()
-        preview = null
-    }
-
     override fun setAdjustViewBounds(adjustViewBounds: Boolean) = Unit
 
     override fun setCropToPadding(cropToPadding: Boolean) = Unit
