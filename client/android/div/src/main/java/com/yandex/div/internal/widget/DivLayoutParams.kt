@@ -38,6 +38,10 @@ class DivLayoutParams: MarginLayoutParams {
         maxWidth = source.maxWidth
     }
 
+    val horizontalMargins get() = leftMargin + rightMargin
+
+    val verticalMargins get() = topMargin + bottomMargin
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null) return false

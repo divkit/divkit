@@ -1,6 +1,7 @@
 {
   "description": "DivContainer with match_parent width and aspect height. Height must be equal width / 2.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

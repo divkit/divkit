@@ -1,0 +1,81 @@
+{
+  "description": "Container with wrap_content width, vertical orientation and aspect height. Height must be equal width / 2. Container includes element with match_parent height which is not fit in calculated height and mustn't be drawn.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "item": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0FFA0"
+        }
+      ],
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "aspect": {
+            "ratio": 2
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0A0FF"
+            }
+          ],
+          "items": [
+            {
+              "type": "item",
+              "text": "first element with width = 200 and height = 40",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              }
+            },
+            {
+              "type": "item",
+              "text": "second element with match_parent height",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "item",
+              "text": "third element with width = 150 and height = 60",
+              "width": {
+                "type": "fixed",
+                "value": 150
+              },
+              "height": {
+                "type": "fixed",
+                "value": 60
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

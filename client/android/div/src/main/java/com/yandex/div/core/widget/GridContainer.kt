@@ -721,12 +721,6 @@ private class Resettable<T>(private val initializer: () -> T) {
     }
 }
 
-private val DivLayoutParams.verticalMargins: Int
-    inline get() = topMargin + bottomMargin
-
-private val DivLayoutParams.horizontalMargins: Int
-    inline get() = leftMargin + rightMargin
-
 private val DivLayoutParams.rowWeight: Float
     get() = verticalWeight
 

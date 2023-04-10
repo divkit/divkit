@@ -1,0 +1,67 @@
+{
+  "description": "Container with wrap_content width, overlap orientation and aspect height. Base height was fixed and must be ignored, height must be equal width / 2.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 0
+          },
+          "aspect": {
+            "ratio": 2
+          },
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0FFA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": " ",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 200
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#A0A0FF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "width = wrap_content\norientation = overlap\naspect = 2",
+              "font_size": 16
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -198,10 +198,8 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
             }
 
             val item = child.lp
-            val horizontalMargins = item.leftMargin + item.rightMargin
-            val verticalMargins = item.topMargin + item.bottomMargin
-            var horizontalPaddings = parentHorizontalPaddings + horizontalMargins
-            var verticalPaddings = parentVerticalPaddings + verticalMargins
+            var horizontalPaddings = parentHorizontalPaddings + item.horizontalMargins
+            var verticalPaddings = parentVerticalPaddings + item.verticalMargins
 
             if (isRowDirection) {
                 horizontalPaddings += edgeSeparatorsLength
@@ -222,8 +220,8 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
 
             val childMainSize: Int
             val childCrossSize: Int
-            val childWidth = child.measuredWidth + horizontalMargins
-            val childHeight = child.measuredHeight + verticalMargins
+            val childWidth = child.measuredWidth + item.horizontalMargins
+            val childHeight = child.measuredHeight + item.verticalMargins
             if (isRowDirection) {
                 childMainSize = childWidth
                 childCrossSize = childHeight

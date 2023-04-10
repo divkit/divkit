@@ -11,6 +11,10 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.dimensionAffecting
 import com.yandex.div.core.widget.forEach
+import com.yandex.div.core.widget.isAtMost
+import com.yandex.div.core.widget.isExact
+import com.yandex.div.core.widget.isUnspecified
+import com.yandex.div.core.widget.makeExactSpec
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -45,9 +49,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private var maxHeight = 0
     private var childState = 0
 
-    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { value ->
-        value.coerceAtLeast(DEFAULT_ASPECT_RATIO)
-    }
+    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
 
     override fun setForegroundGravity(gravity: Int) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || foregroundGravity == gravity) return
@@ -83,7 +85,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
         val widthSizeAndState = resolveSizeAndState(getDynamicWidth(widthMeasureSpec), widthMeasureSpec, childState)
         val heightSize = getDynamicHeight(widthMeasureSpec, heightSpec, widthSizeAndState and MEASURED_SIZE_MASK)
         if (!isExact(heightSpec)) {
-            if (MeasureSpec.getMode(heightSpec) == MeasureSpec.UNSPECIFIED) {
+            if (isUnspecified(heightSpec)) {
                 heightSpec = makeExactSpec(heightSize)
             }
             remeasureWrapContentConstrainedChildren(widthMeasureSpec, heightSpec)
@@ -101,11 +103,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
         matchParentChildren.clear()
     }
 
-    private fun isExact(measureSpec: Int) = MeasureSpec.getMode(measureSpec) == MeasureSpec.EXACTLY
-
     private val useAspect get() = aspectRatio != DEFAULT_ASPECT_RATIO
-
-    private fun makeExactSpec(size: Int) = MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY)
 
     private fun measureChildWithDefinedSize(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val lp = child.lp
@@ -136,10 +134,10 @@ open class FrameContainerLayout @JvmOverloads constructor(
         }
 
         if (!exactWidth && !matchParentWidth) {
-            maxWidth = max(maxWidth, child.measuredWidth + lp.leftMargin + lp.rightMargin)
+            updateMaxWidth(child.measuredWidth + lp.horizontalMargins)
         }
         if (!exactHeight && !matchParentHeight && !useAspect) {
-            maxHeight = max(maxHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
+            updateMaxHeight(child.measuredHeight + lp.verticalMargins)
         }
     }
 
@@ -149,6 +147,14 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private fun DivLayoutParams.matchDynamicWidth(exactWidth: Boolean) = !exactWidth && width == MATCH_PARENT
 
     private fun DivLayoutParams.matchDynamicHeight(exactHeight: Boolean) = !exactHeight && height == MATCH_PARENT
+
+    private fun updateMaxWidth(childWidth: Int) {
+        maxWidth = max(maxWidth, childWidth)
+    }
+
+    private fun updateMaxHeight(childHeight: Int) {
+        maxHeight = max(maxHeight, childHeight)
+    }
 
     private fun setParentSizeIfNeeded(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (matchParentChildren.isEmpty()) return
@@ -163,8 +169,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
             maxHeight = MeasureSpec.getSize(heightMeasureSpec)
         }
     }
-
-    private fun isAtMost(measureSpec: Int) = MeasureSpec.getMode(measureSpec) == MeasureSpec.AT_MOST
 
     private fun considerMatchParentChildrenInMaxSize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (matchParentChildren.isEmpty()) return
@@ -189,10 +193,10 @@ open class FrameContainerLayout @JvmOverloads constructor(
                 childState = combineMeasuredStates(childState, child.measuredState)
             }
             if (needMeasureWidth) {
-                maxWidth = max(maxWidth, child.measuredWidth + lp.leftMargin + lp.rightMargin)
+                updateMaxWidth(child.measuredWidth + lp.horizontalMargins)
             }
             if (needMeasureHeight) {
-                maxHeight = max(maxHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
+                updateMaxHeight(child.measuredHeight + lp.verticalMargins)
             }
         }
     }
@@ -200,10 +204,10 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private fun considerMatchParentMargins(child: View, exactWidth: Boolean, exactHeight: Boolean) {
         val lp = child.lp
         if (lp.matchDynamicWidth(exactWidth)) {
-            maxWidth = max(maxWidth, lp.leftMargin + lp.rightMargin)
+            updateMaxWidth(lp.horizontalMargins)
         }
         if (lp.matchDynamicHeight(exactHeight)) {
-            maxHeight = max(maxHeight, lp.topMargin + lp.bottomMargin)
+            updateMaxHeight(lp.verticalMargins)
         }
     }
 
@@ -249,8 +253,8 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
     private fun remeasureMatchParentChild(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val lp = child.lp
-        val childHorizontalPadding = horizontalPadding + lp.leftMargin + lp.rightMargin
-        val childVerticalPadding = verticalPadding + lp.topMargin + lp.bottomMargin
+        val childHorizontalPadding = horizontalPadding + lp.horizontalMargins
+        val childVerticalPadding = verticalPadding + lp.verticalMargins
 
         val childWidthMeasureSpec = if (lp.width == MATCH_PARENT) {
             makeExactSpec((measuredWidth - childHorizontalPadding).coerceAtLeast(0))
