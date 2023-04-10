@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
+public final class DivIndicatorTemplate: TemplateValue {
   public typealias Animation = DivIndicator.Animation
 
   public static let type: String = "indicator"

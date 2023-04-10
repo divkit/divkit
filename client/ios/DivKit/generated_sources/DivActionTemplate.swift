@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
-  public final class MenuItemTemplate: TemplateValue, TemplateDeserializable {
+public final class DivActionTemplate: TemplateValue {
+  public final class MenuItemTemplate: TemplateValue {
     public let action: Field<DivActionTemplate>?
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
     public let text: Field<Expression<String>>? // at least 1 char

@@ -84,7 +84,7 @@ public enum DivInputMaskTemplate: TemplateValue {
   }
 }
 
-extension DivInputMaskTemplate: TemplateDeserializable {
+extension DivInputMaskTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType

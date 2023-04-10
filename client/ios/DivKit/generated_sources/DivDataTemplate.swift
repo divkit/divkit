@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
-  public final class StateTemplate: TemplateValue, TemplateDeserializable {
+public final class DivDataTemplate: TemplateValue {
+  public final class StateTemplate: TemplateValue {
     public let div: Field<DivTemplate>?
     public let stateId: Field<Int>?
 

@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
-  public final class NextFocusIdsTemplate: TemplateValue, TemplateDeserializable {
+public final class DivFocusTemplate: TemplateValue {
+  public final class NextFocusIdsTemplate: TemplateValue {
     public let down: Field<Expression<String>>? // at least 1 char
     public let forward: Field<Expression<String>>? // at least 1 char
     public let left: Field<Expression<String>>? // at least 1 char

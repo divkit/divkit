@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
-  public final class ChangeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPatchTemplate: TemplateValue {
+  public final class ChangeTemplate: TemplateValue {
     public let id: Field<String>?
     public let items: Field<[DivTemplate]>? // at least 1 elements
 

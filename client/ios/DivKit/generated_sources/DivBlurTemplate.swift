@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
+public final class DivBlurTemplate: TemplateValue {
   public static let type: String = "blur"
   public let parent: String? // at least 1 char
   public let radius: Field<Expression<Int>>? // constraint: number >= 0

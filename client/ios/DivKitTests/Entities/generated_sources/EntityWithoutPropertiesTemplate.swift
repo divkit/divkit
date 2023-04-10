@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithoutPropertiesTemplate: TemplateValue {
   public static let type: String = "entity_without_properties"
   public let parent: String? // at least 1 char
 

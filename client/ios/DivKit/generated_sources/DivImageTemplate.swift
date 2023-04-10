@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
+public final class DivImageTemplate: TemplateValue {
   public static let type: String = "image"
   public let parent: String? // at least 1 char
   public let accessibility: Field<DivAccessibilityTemplate>?

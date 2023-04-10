@@ -180,7 +180,7 @@ extension Field {
   }
 }
 
-extension Field where T: TemplateValue, T: TemplateDeserializable {
+extension Field where T: TemplateValue {
   @usableFromInline
   typealias ResolvedValue = T.ResolvedValue
 
@@ -257,7 +257,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
 
 extension Field {
   @inlinable
-  func resolveValue<U: TemplateDeserializable & TemplateValue>(
+  func resolveValue<U: TemplateValue>(
     context: TemplatesContext,
     validator: AnyArrayValueValidator<U.ResolvedValue>?,
     useOnlyLinks _: Bool
@@ -275,7 +275,7 @@ extension Field {
   }
 
   @inlinable
-  func resolveOptionalValue<U: TemplateDeserializable & TemplateValue>(
+  func resolveOptionalValue<U: TemplateValue>(
     context: TemplatesContext,
     validator: AnyArrayValueValidator<U.ResolvedValue>? = nil,
     useOnlyLinks: Bool

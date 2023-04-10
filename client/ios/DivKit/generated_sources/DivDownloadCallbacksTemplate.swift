@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserializable {
+public final class DivDownloadCallbacksTemplate: TemplateValue {
   public let onFailActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let onSuccessActions: Field<[DivActionTemplate]>? // at least 1 elements
 

@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithEntityPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_entity_property"
   public let parent: String? // at least 1 char
   public let entity: Field<EntityTemplate>? // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))

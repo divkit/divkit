@@ -118,7 +118,7 @@ public final class DivActionHandler {
     }
   }
 
-  private func parseAction<T: TemplateDeserializable & TemplateValue>(
+  private func parseAction<T: TemplateValue>(
     type _: T.Type,
     json: JSONObject
   ) -> T.ResolvedValue? {

@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class UrlVariableTemplate: TemplateValue, TemplateDeserializable {
+public final class UrlVariableTemplate: TemplateValue {
   public static let type: String = "url"
   public let parent: String? // at least 1 char
   public let name: Field<String>? // at least 1 char

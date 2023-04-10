@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue, TemplateDeserializable {
+public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue {
   public typealias Value = DivRadialGradientRelativeRadius.Value
 
   public static let type: String = "relative"

@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializable {
+public final class DivImageBackgroundTemplate: TemplateValue {
   public static let type: String = "image"
   public let parent: String? // at least 1 char
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0

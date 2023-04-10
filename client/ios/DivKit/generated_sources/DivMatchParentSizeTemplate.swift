@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivMatchParentSizeTemplate: TemplateValue {
   public static let type: String = "match_parent"
   public let parent: String? // at least 1 char
   public let weight: Field<Expression<Double>>? // constraint: number > 0

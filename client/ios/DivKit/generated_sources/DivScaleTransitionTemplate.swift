@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivScaleTransitionTemplate: TemplateValue {
   public static let type: String = "scale"
   public let parent: String? // at least 1 char
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200

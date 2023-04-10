@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class IntegerVariableTemplate: TemplateValue, TemplateDeserializable {
+public final class IntegerVariableTemplate: TemplateValue {
   public static let type: String = "integer"
   public let parent: String? // at least 1 char
   public let name: Field<String>? // at least 1 char

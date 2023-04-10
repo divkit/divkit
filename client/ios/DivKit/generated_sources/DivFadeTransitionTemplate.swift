@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivFadeTransitionTemplate: TemplateValue {
   public static let type: String = "fade"
   public let parent: String? // at least 1 char
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.0

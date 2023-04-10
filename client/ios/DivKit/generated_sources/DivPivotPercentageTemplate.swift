@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPivotPercentageTemplate: TemplateValue {
   public static let type: String = "pivot-percentage"
   public let parent: String? // at least 1 char
   public let value: Field<Expression<Double>>?

@@ -4,6 +4,11 @@ import Serialization
 public protocol TemplateValue {
   associatedtype ResolvedValue
 
+  init(
+    dictionary: [String: Any],
+    templateToType: [TemplateName: String]
+  ) throws
+
   func resolveParent(templates: [TemplateName: Any]) throws -> Self
 
   static func resolveValue(

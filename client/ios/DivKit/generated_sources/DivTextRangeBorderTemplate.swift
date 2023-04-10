@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTextRangeBorderTemplate: TemplateValue {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
   public let stroke: Field<DivStrokeTemplate>?
 

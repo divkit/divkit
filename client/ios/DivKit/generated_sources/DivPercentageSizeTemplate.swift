@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPercentageSizeTemplate: TemplateValue {
   public static let type: String = "percentage"
   public let parent: String? // at least 1 char
   public let value: Field<Expression<Double>>? // constraint: number > 0

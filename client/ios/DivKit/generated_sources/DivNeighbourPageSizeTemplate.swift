@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivNeighbourPageSizeTemplate: TemplateValue {
   public static let type: String = "fixed"
   public let parent: String? // at least 1 char
   public let neighbourPageWidth: Field<DivFixedSizeTemplate>?

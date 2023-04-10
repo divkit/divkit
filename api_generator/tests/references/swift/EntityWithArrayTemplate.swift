@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithArrayTemplate: TemplateValue {
   public static let type: String = "entity_with_array"
   public let parent: String? // at least 1 char
   public let array: Field<[EntityTemplate]>? // at least 1 elements

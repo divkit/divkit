@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
-  public final class StateTemplate: TemplateValue, TemplateDeserializable {
+public final class DivStateTemplate: TemplateValue {
+  public final class StateTemplate: TemplateValue {
     public let animationIn: Field<DivAnimationTemplate>?
     public let animationOut: Field<DivAnimationTemplate>?
     public let div: Field<DivTemplate>?

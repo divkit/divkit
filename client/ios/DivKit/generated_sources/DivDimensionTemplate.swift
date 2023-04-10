@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivDimensionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivDimensionTemplate: TemplateValue {
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let value: Field<Expression<Double>>?
 

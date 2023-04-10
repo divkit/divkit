@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayOfExpressionsTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithArrayOfExpressionsTemplate: TemplateValue {
   public static let type: String = "entity_with_array_of_expressions"
   public let parent: String? // at least 1 char
   public let items: Field<[Expression<String>]>? // at least 1 elements

@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
-  public final class TextStyleTemplate: TemplateValue, TemplateDeserializable {
+public final class DivSliderTemplate: TemplateValue {
+  public final class TextStyleTemplate: TemplateValue {
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular

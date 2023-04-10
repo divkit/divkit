@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializable {
+public final class DivAccessibilityTemplate: TemplateValue {
   public typealias Kind = DivAccessibility.Kind
 
   public typealias Mode = DivAccessibility.Mode

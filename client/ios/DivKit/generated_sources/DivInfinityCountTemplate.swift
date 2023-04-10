@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializable {
+public final class DivInfinityCountTemplate: TemplateValue {
   public static let type: String = "infinity"
   public let parent: String? // at least 1 char
 

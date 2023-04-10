@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPageSizeTemplate: TemplateValue {
   public static let type: String = "percentage"
   public let parent: String? // at least 1 char
   public let pageWidth: Field<DivPercentageSizeTemplate>?

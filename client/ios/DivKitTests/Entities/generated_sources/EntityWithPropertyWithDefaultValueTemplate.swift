@@ -6,8 +6,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, TemplateDeserializable {
-  public final class NestedTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
+  public final class NestedTemplate: TemplateValue {
     public let int: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
     public let nonOptional: Field<Expression<String>>?
     public let url: Field<Expression<URL>>? // valid schemes: [https]; default value: https://yandex.ru

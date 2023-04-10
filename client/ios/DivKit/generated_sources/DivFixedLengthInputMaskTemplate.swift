@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivFixedLengthInputMaskTemplate: TemplateValue, TemplateDeserializable {
-  public final class PatternElementTemplate: TemplateValue, TemplateDeserializable {
+public final class DivFixedLengthInputMaskTemplate: TemplateValue {
+  public final class PatternElementTemplate: TemplateValue {
     public let key: Field<Expression<String>>? // at least 1 char
     public let placeholder: Field<Expression<String>>? // default value: _
     public let regex: Field<Expression<String>>? // at least 1 char

@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
-  public final class NativeInterfaceTemplate: TemplateValue, TemplateDeserializable {
+public final class DivInputTemplate: TemplateValue {
+  public final class NativeInterfaceTemplate: TemplateValue {
     public let color: Field<Expression<Color>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

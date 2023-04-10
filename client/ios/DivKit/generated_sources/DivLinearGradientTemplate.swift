@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializable {
+public final class DivLinearGradientTemplate: TemplateValue {
   public static let type: String = "gradient"
   public let parent: String? // at least 1 char
   public let angle: Field<Expression<Int>>? // constraint: number >= 0 && number <= 360; default value: 0

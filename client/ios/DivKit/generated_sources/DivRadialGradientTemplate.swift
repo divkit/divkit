@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializable {
+public final class DivRadialGradientTemplate: TemplateValue {
   public static let type: String = "radial_gradient"
   public let parent: String? // at least 1 char
   public let centerX: Field<DivRadialGradientCenterTemplate>? // default value: .divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter(value: .value(0.5)))

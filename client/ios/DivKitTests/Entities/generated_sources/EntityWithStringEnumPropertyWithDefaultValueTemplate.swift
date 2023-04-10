@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue {
   public typealias Value = EntityWithStringEnumPropertyWithDefaultValue.Value
 
   public static let type: String = "entity_with_string_enum_property_with_default_value"

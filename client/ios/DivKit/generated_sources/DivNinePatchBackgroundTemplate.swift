@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeserializable {
+public final class DivNinePatchBackgroundTemplate: TemplateValue {
   public static let type: String = "nine_patch_image"
   public let parent: String? // at least 1 char
   public let imageUrl: Field<Expression<URL>>?

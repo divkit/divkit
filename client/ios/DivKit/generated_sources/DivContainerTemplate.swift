@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
-  public final class SeparatorTemplate: TemplateValue, TemplateDeserializable {
+public final class DivContainerTemplate: TemplateValue {
+  public final class SeparatorTemplate: TemplateValue {
     public let showAtEnd: Field<Expression<Bool>>? // default value: false
     public let showAtStart: Field<Expression<Bool>>? // default value: false
     public let showBetween: Field<Expression<Bool>>? // default value: true

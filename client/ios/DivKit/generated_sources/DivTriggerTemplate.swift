@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTriggerTemplate: TemplateValue {
   public typealias Mode = DivTrigger.Mode
 
   public let actions: Field<[DivActionTemplate]>? // at least 1 elements

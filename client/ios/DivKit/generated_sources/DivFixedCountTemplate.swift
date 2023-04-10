@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivFixedCountTemplate: TemplateValue, TemplateDeserializable {
+public final class DivFixedCountTemplate: TemplateValue {
   public static let type: String = "fixed"
   public let parent: String? // at least 1 char
   public let value: Field<Expression<Int>>? // constraint: number >= 0

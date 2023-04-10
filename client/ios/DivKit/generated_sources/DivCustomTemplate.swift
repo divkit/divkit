@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
+public final class DivCustomTemplate: TemplateValue {
   public static let type: String = "custom"
   public let parent: String? // at least 1 char
   public let accessibility: Field<DivAccessibilityTemplate>?

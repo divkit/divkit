@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivChangeSetTransitionTemplate: TemplateValue {
   public static let type: String = "set"
   public let parent: String? // at least 1 char
   public let items: Field<[DivChangeTransitionTemplate]>? // at least 1 elements

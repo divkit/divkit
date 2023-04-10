@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivCircleShapeTemplate: TemplateValue {
   public static let type: String = "circle"
   public let parent: String? // at least 1 char
   public let backgroundColor: Field<Expression<Color>>?

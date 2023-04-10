@@ -4,8 +4,8 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, TemplateDeserializable {
-  public final class ItemTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
+  public final class ItemTemplate: TemplateValue {
     public let entity: Field<EntityTemplate>?
     public let property: Field<Expression<String>>? // at least 1 char
 

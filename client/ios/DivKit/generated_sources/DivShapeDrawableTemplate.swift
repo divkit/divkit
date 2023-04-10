@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializable {
+public final class DivShapeDrawableTemplate: TemplateValue {
   public static let type: String = "shape_drawable"
   public let parent: String? // at least 1 char
   public let color: Field<Expression<Color>>?

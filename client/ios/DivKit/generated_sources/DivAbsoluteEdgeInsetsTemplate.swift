@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, TemplateDeserializable {
+public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
   public let bottom: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let left: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let right: Field<Expression<Int>>? // constraint: number >= 0; default value: 0

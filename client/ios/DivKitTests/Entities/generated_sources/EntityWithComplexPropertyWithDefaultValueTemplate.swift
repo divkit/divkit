@@ -6,8 +6,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateValue, TemplateDeserializable {
-  public final class PropertyTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateValue {
+  public final class PropertyTemplate: TemplateValue {
     public let value: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

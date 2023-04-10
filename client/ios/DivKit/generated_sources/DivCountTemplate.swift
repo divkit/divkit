@@ -84,7 +84,7 @@ public enum DivCountTemplate: TemplateValue {
   }
 }
 
-extension DivCountTemplate: TemplateDeserializable {
+extension DivCountTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType

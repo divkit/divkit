@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
-  public final class DelimiterStyleTemplate: TemplateValue, TemplateDeserializable {
+public final class DivSeparatorTemplate: TemplateValue {
+  public final class DelimiterStyleTemplate: TemplateValue {
     public typealias Orientation = DivSeparator.DelimiterStyle.Orientation
 
     public let color: Field<Expression<Color>>? // default value: #14000000

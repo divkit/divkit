@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivRadialGradientRelativeCenterTemplate: TemplateValue, TemplateDeserializable {
+public final class DivRadialGradientRelativeCenterTemplate: TemplateValue {
   public static let type: String = "relative"
   public let parent: String? // at least 1 char
   public let value: Field<Expression<Double>>?

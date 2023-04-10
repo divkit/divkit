@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializable {
-  public final class ConstraintSizeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivWrapContentSizeTemplate: TemplateValue {
+  public final class ConstraintSizeTemplate: TemplateValue {
     public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
     public let value: Field<Expression<Int>>? // constraint: number >= 0
 

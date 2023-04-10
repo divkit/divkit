@@ -56,7 +56,7 @@ extension Dictionary where Key == String, Value == Any {
   }
 
   @inlinable
-  func getOptionalField<T: TemplateDeserializable>(
+  func getOptionalField<T: TemplateValue>(
     _ key: String,
     templateToType: [TemplateName: String],
     validator: AnyValueValidator<T>? = nil
@@ -111,7 +111,7 @@ extension Dictionary where Key == String, Value == Any {
   }
 
   @inlinable
-  func getOptionalArray<T: TemplateDeserializable>(
+  func getOptionalArray<T: TemplateValue>(
     _ key: String,
     templateToType: [TemplateName: String],
     validator: AnyArrayValueValidator<T>? = nil
@@ -124,10 +124,9 @@ extension Dictionary where Key == String, Value == Any {
   }
 }
 
-/// Deserialization for TemplateDeserializable
 extension Dictionary where Key == String, Value == Any {
   @inlinable
-  func getField<T: TemplateDeserializable>(
+  func getField<T: TemplateValue>(
     _ key: String,
     templateToType: [TemplateName: String],
     validator: AnyValueValidator<T>? = nil
@@ -142,7 +141,7 @@ extension Dictionary where Key == String, Value == Any {
 
 extension TemplatesContext {
   @usableFromInline
-  func deserializeTemplate<T: TemplateValue & TemplateDeserializable>(
+  func deserializeTemplate<T: TemplateValue>(
     _ dict: [String: Any],
     type: T.Type
   ) -> DeserializationResult<T.ResolvedValue> {
@@ -155,7 +154,7 @@ extension TemplatesContext {
   }
 
   @inlinable
-  func getArray<T: TemplateValue & TemplateDeserializable>(
+  func getArray<T: TemplateValue>(
     _ key: String,
     validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
     type: T.Type
@@ -168,7 +167,7 @@ extension TemplatesContext {
   }
 
   @inlinable
-  func getArray<T: TemplateValue & TemplateDeserializable>(
+  func getArray<T: TemplateValue>(
     _ key: String,
     validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
     type: T.Type
@@ -182,7 +181,7 @@ extension TemplatesContext {
 }
 
 @inlinable
-func deserialize<T: TemplateValue & TemplateDeserializable>(
+func deserialize<T: TemplateValue>(
   _ value: Any,
   templates: [TemplateName: Any],
   templateToType: [TemplateName: String],
@@ -201,7 +200,7 @@ func deserialize<T: TemplateValue & TemplateDeserializable>(
 }
 
 @inlinable
-func deserialize<T: TemplateValue & TemplateDeserializable>(
+func deserialize<T: TemplateValue>(
   _ value: Any,
   templates: [TemplateName: Any],
   templateToType: [TemplateName: String],
@@ -220,7 +219,7 @@ func deserialize<T: TemplateValue & TemplateDeserializable>(
 }
 
 @usableFromInline
-func makeTemplateDeserializer<T: TemplateValue & TemplateDeserializable>(
+func makeTemplateDeserializer<T: TemplateValue>(
   templates: [TemplateName: Any],
   templateToType: [TemplateName: String],
   type _: T.Type

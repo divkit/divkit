@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
+public final class DivAspectTemplate: TemplateValue {
   public let ratio: Field<Expression<Double>>? // constraint: number > 0
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

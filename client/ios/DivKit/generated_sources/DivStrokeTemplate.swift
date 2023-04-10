@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivStrokeTemplate: TemplateValue {
   public let color: Field<Expression<Color>>?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let width: Field<Expression<Int>>? // constraint: number >= 0; default value: 1

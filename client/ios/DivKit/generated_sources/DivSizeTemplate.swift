@@ -105,7 +105,7 @@ public enum DivSizeTemplate: TemplateValue {
   }
 }
 
-extension DivSizeTemplate: TemplateDeserializable {
+extension DivSizeTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType

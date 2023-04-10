@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializable {
+public final class DivCornersRadiusTemplate: TemplateValue {
   public let bottomLeft: Field<Expression<Int>>? // constraint: number >= 0
   public let bottomRight: Field<Expression<Int>>? // constraint: number >= 0
   public let topLeft: Field<Expression<Int>>? // constraint: number >= 0

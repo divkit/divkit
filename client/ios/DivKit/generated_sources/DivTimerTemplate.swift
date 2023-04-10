@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTimerTemplate: TemplateValue {
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let endActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let id: Field<String>? // at least 1 char

@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivChangeBoundsTransitionTemplate: TemplateValue {
   public static let type: String = "change_bounds"
   public let parent: String? // at least 1 char
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200

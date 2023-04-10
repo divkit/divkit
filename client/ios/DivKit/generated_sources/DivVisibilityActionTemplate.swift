@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivVisibilityActionTemplate: TemplateValue {
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
   public let logId: Field<String>? // at least 1 char
   public let logLimit: Field<Expression<Int>>? // constraint: number >= 0; default value: 1

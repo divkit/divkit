@@ -63,7 +63,7 @@ public enum DivFilterTemplate: TemplateValue {
   }
 }
 
-extension DivFilterTemplate: TemplateDeserializable {
+extension DivFilterTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType

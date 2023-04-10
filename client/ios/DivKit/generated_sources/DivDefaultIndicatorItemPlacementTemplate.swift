@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, TemplateDeserializable {
+public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
   public static let type: String = "default"
   public let parent: String? // at least 1 char
   public let spaceBetweenCenters: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(15))

@@ -11,9 +11,7 @@ final class DivKitTests: XCTestCase {
   static let cardLogId = "test_card_id"
 }
 
-extension TemplateValue where
-  Self: TemplateDeserializable,
-  ResolvedValue: DivBlockModeling {
+extension TemplateValue where ResolvedValue: DivBlockModeling {
   static func make(
     fromFile filename: String,
     subdirectory: String? = nil,

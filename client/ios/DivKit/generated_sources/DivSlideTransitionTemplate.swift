@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivSlideTransitionTemplate: TemplateValue {
   public typealias Edge = DivSlideTransition.Edge
 
   public static let type: String = "slide"

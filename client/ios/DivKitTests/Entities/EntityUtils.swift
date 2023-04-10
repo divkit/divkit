@@ -37,7 +37,7 @@ func readEntityWithResult(
     .resolveValue(context: context, parent: nil, useOnlyLinks: false)
 }
 
-func readEntity<T: TemplateDeserializable & TemplateValue>(
+func readEntity<T: TemplateValue>(
   _: T.Type,
   fileName: String
 ) throws -> T.ResolvedValue? {

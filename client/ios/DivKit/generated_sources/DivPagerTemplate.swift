@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPagerTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPagerTemplate: TemplateValue {
   public typealias Orientation = DivPager.Orientation
 
   public static let type: String = "pager"

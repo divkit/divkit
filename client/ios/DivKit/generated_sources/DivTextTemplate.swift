@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
-  public final class EllipsisTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTextTemplate: TemplateValue {
+  public final class EllipsisTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
     public let images: Field<[ImageTemplate]>? // at least 1 elements
     public let ranges: Field<[RangeTemplate]>? // at least 1 elements
@@ -137,7 +137,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     }
   }
 
-  public final class ImageTemplate: TemplateValue, TemplateDeserializable {
+  public final class ImageTemplate: TemplateValue {
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
     public let start: Field<Expression<Int>>? // constraint: number >= 0
     public let tintColor: Field<Expression<Color>>?
@@ -306,7 +306,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     }
   }
 
-  public final class RangeTemplate: TemplateValue, TemplateDeserializable {
+  public final class RangeTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
     public let background: Field<DivTextRangeBackgroundTemplate>?
     public let border: Field<DivTextRangeBorderTemplate>?

@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithArrayOfEnumsTemplate: TemplateValue {
   public typealias Item = EntityWithArrayOfEnums.Item
 
   public static let type: String = "entity_with_array_of_enums"

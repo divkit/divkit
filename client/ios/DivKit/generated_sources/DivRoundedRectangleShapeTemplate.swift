@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDeserializable {
+public final class DivRoundedRectangleShapeTemplate: TemplateValue {
   public static let type: String = "rounded_rectangle"
   public let parent: String? // at least 1 char
   public let backgroundColor: Field<Expression<Color>>?

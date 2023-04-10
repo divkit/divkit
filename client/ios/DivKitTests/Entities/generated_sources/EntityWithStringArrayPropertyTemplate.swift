@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithStringArrayPropertyTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithStringArrayPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_string_array_property"
   public let parent: String? // at least 1 char
   public let array: Field<[Expression<String>]>? // at least 1 elements

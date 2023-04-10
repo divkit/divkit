@@ -54,7 +54,7 @@ extension DivTemplates {
     )
   }
 
-  public func parseValue<T: TemplateDeserializable & TemplateValue>(
+  public func parseValue<T: TemplateValue>(
     type _: T.Type,
     from dict: [String: Any]
   ) -> DeserializationResult<T.ResolvedValue> {

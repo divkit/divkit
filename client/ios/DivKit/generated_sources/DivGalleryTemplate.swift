@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
+public final class DivGalleryTemplate: TemplateValue {
   public typealias CrossContentAlignment = DivGallery.CrossContentAlignment
 
   public typealias Orientation = DivGallery.Orientation

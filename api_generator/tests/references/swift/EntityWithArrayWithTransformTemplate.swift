@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithArrayWithTransformTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithArrayWithTransformTemplate: TemplateValue {
   public static let type: String = "entity_with_array_with_transform"
   public let parent: String? // at least 1 char
   public let array: Field<[Expression<Color>]>? // at least 1 elements

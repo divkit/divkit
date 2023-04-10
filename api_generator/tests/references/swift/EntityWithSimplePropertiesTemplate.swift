@@ -4,7 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
-public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol, TemplateDeserializable {
+public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol {
   public static let type: String = "entity_with_simple_properties"
   public let parent: String? // at least 1 char
   public let boolean: Field<Expression<Bool>>?

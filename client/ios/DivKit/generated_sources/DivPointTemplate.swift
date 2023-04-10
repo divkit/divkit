@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
+public final class DivPointTemplate: TemplateValue {
   public let x: Field<DivDimensionTemplate>?
   public let y: Field<DivDimensionTemplate>?
 

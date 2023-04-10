@@ -6,7 +6,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue, TemplateDeserializable {
+public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
   public typealias Property = EntityWithOptionalStringEnumProperty.Property
 
   public static let type: String = "entity_with_optional_string_enum_property"

@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTooltipTemplate: TemplateValue {
   public typealias Position = DivTooltip.Position
 
   public let animationIn: Field<DivAnimationTemplate>?

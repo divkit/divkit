@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
+public final class DivBorderTemplate: TemplateValue {
   public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
   public let cornersRadius: Field<DivCornersRadiusTemplate>?
   public let hasShadow: Field<Expression<Bool>>? // default value: false

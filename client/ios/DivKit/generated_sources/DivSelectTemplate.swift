@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivSelectTemplate: TemplateValue, TemplateDeserializable {
-  public final class OptionTemplate: TemplateValue, TemplateDeserializable {
+public final class DivSelectTemplate: TemplateValue {
+  public final class OptionTemplate: TemplateValue {
     public let text: Field<Expression<String>>?
     public let value: Field<Expression<String>>?
 

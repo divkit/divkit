@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
+public final class DivAnimationTemplate: TemplateValue {
   public typealias Name = DivAnimation.Name
 
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 300

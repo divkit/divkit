@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, TemplateDeserializable {
+public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue {
   public static let type: String = "stretch"
   public let parent: String? // at least 1 char
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(5))

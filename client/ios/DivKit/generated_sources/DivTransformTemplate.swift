@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTransformTemplate: TemplateValue {
   public let pivotX: Field<DivPivotTemplate>? // default value: .divPivotPercentage(DivPivotPercentage(value: .value(50)))
   public let pivotY: Field<DivPivotTemplate>? // default value: .divPivotPercentage(DivPivotPercentage(value: .value(50)))
   public let rotation: Field<Expression<Double>>?

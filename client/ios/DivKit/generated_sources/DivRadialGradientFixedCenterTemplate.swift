@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivRadialGradientFixedCenterTemplate: TemplateValue, TemplateDeserializable {
+public final class DivRadialGradientFixedCenterTemplate: TemplateValue {
   public static let type: String = "fixed"
   public let parent: String? // at least 1 char
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp

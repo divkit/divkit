@@ -4,8 +4,8 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
-  public final class ItemTemplate: TemplateValue, TemplateDeserializable {
+public final class DivTabsTemplate: TemplateValue {
+  public final class ItemTemplate: TemplateValue {
     public let div: Field<DivTemplate>?
     public let title: Field<Expression<String>>? // at least 1 char
     public let titleClickAction: Field<DivActionTemplate>?
@@ -129,7 +129,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     }
   }
 
-  public final class TabTitleStyleTemplate: TemplateValue, TemplateDeserializable {
+  public final class TabTitleStyleTemplate: TemplateValue {
     public typealias AnimationType = DivTabs.TabTitleStyle.AnimationType
 
     public let activeBackgroundColor: Field<Expression<Color>>? // default value: #FFFFDC60

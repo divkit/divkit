@@ -127,10 +127,9 @@ class SwiftGenerator(Generator):
         return self_extensions + sorted(inner_types_extensions)
 
     def __entity_enumeration_extensions_declaration(self, entity_enumeration: EntityEnumeration) -> List[str]:
-        protocol = swift_utils.implemented_swift_protocol(entity_enumeration.mode) or ''
         access_modifier = self._access_level.value
         args_decl = swift_template_deserializable_args_decl(entity_enumeration.mode)
-        deserializable_extension = Text(f'extension {entity_enumeration.prefixed_declaration}: {protocol} {{')
+        deserializable_extension = Text(f'extension {entity_enumeration.prefixed_declaration} {{')
         deserializable_extension += f'  {access_modifier}init(dictionary: [String: Any]{args_decl}) throws {{'
         body = Text()
         if entity_enumeration.mode.is_template:
@@ -261,8 +260,7 @@ class SwiftGenerator(Generator):
         return result
 
     def __main_declaration_header(self, entity: SwiftEntity) -> str:
-        protocols = list(filter(None, [entity.protocol_plus_super_entities(),
-                                       swift_utils.implemented_swift_protocol(entity.generation_mode)]))
+        protocols = list(filter(None, [entity.protocol_plus_super_entities()]))
         conformance = '' if not protocols else f': {", ".join(protocols)}'
         access_modifier = self._access_level.value
         return f'{access_modifier}final class {utils.capitalize_camel_case(entity.name)}{conformance} {{'

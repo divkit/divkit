@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class BooleanVariableTemplate: TemplateValue, TemplateDeserializable {
+public final class BooleanVariableTemplate: TemplateValue {
   public static let type: String = "boolean"
   public let parent: String? // at least 1 char
   public let name: Field<String>? // at least 1 char

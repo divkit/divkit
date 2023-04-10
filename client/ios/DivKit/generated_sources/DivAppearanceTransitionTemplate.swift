@@ -126,7 +126,7 @@ public enum DivAppearanceTransitionTemplate: TemplateValue {
   }
 }
 
-extension DivAppearanceTransitionTemplate: TemplateDeserializable {
+extension DivAppearanceTransitionTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType

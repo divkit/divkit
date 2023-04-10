@@ -147,7 +147,7 @@ public enum DivBackgroundTemplate: TemplateValue {
   }
 }
 
-extension DivBackgroundTemplate: TemplateDeserializable {
+extension DivBackgroundTemplate {
   public init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     let receivedType = try dictionary.getField("type") as String
     let blockType = templateToType[receivedType] ?? receivedType
