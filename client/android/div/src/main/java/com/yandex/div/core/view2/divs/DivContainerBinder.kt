@@ -24,6 +24,7 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -37,7 +38,8 @@ import com.yandex.div2.DivWrapContentSize
 import javax.inject.Inject
 import javax.inject.Provider
 
-private const val INCORRECT_CHILD_SIZE = "Incorrect child size. Container with wrap_content size contains child%s with match_parent size."
+private const val INCORRECT_CHILD_SIZE =
+    "Incorrect child size. Container with wrap_content size contains child with match_parent size."
 private const val INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
     "Container with wrap layout mode contains child%s with %s size along the cross axis."
 private const val MATCH_PARENT_MESSAGE = "match parent"
@@ -112,7 +114,7 @@ internal class DivContainerBinder @Inject constructor(
                 div.checkCrossAxisSize(childDivValue, resolver, errorCollector)
             } else {
                 if (div.hasIncorrectWidth(childDivValue)) childrenWithIncorrectWidth++
-                if (div.hasIncorrectHeight(childDivValue)) childrenWithIncorrectHeight++
+                if (div.hasIncorrectHeight(childDivValue, resolver)) childrenWithIncorrectHeight++
             }
 
             // applying div patch
@@ -358,8 +360,10 @@ internal class DivContainerBinder @Inject constructor(
     private fun DivContainer.hasIncorrectWidth(childDiv: DivBase) =
         width is DivSize.WrapContent && childDiv.width is DivSize.MatchParent
 
-    private fun DivContainer.hasIncorrectHeight(childDiv: DivBase) =
-        height is DivSize.WrapContent && childDiv.height is DivSize.MatchParent
+    private fun DivContainer.hasIncorrectHeight(childDiv: DivBase, resolver: ExpressionResolver) =
+        height is DivSize.WrapContent
+            && aspect?.let { it.ratio.evaluate(resolver).toFloat() == AspectView.DEFAULT_ASPECT_RATIO } ?: true
+            && childDiv.height is DivSize.MatchParent
 
     private fun addIncorrectChildSizeWarning(errorCollector: ErrorCollector) {
         errorCollector.getWarnings().forEach {
