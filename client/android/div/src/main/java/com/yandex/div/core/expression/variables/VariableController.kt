@@ -97,8 +97,8 @@ internal class VariableController {
     }
 
     private fun onVariableDeclared(variable: Variable) {
-        notifyVariableChanged(variable)
         variable.addObserver(notifyVariableChangedCallback)
+        notifyVariableChanged(variable)
     }
 
     fun getMutableVariable(name: String): Variable? {

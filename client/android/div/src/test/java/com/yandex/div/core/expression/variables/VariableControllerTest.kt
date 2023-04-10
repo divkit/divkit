@@ -75,6 +75,21 @@ class VariableControllerTest {
     }
 
     @Test
+    fun `variable changed inside declaration callback`() {
+        val variable = Variable.StringVariable("late_init_variable", "declared_value")
+        var counter = 0
+        subscribe(variable.name) {
+            if (counter < 5) {
+                counter++
+                variable.set("new_value_$counter")
+            }
+        }
+
+        declareVariable(variable)
+        Assert.assertEquals(5, counter)
+    }
+
+    @Test
     fun `null returned when no variable specified`() {
         Assert.assertNull(variableController.getMutableVariable("unknown_variable"))
     }
