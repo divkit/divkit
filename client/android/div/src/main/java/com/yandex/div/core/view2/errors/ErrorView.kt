@@ -17,12 +17,13 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.dpToPx
+import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
     private val root: ViewGroup,
     private val errorModel: ErrorModel,
 ) : Disposable {
-    private var counterView: AppCompatTextView? = null
+    private var counterView: ViewGroup? = null
     private var detailsView: DetailsViewGroup? = null
     private var viewModel: ErrorViewModel? = null
         set(value) {
@@ -55,8 +56,10 @@ internal class ErrorView(
                 counterView = null
             }
 
-            counterView?.text = new.getCounterText()
-            counterView?.setBackgroundResource(new.getCounterBackground())
+            (counterView?.getChildAt(0) as? AppCompatTextView)?.run {
+                text = new.getCounterText()
+                setBackgroundResource(new.getCounterBackground())
+            }
         }
     }
 
@@ -124,8 +127,12 @@ internal class ErrorView(
         layoutParams.leftMargin = sideMargin
         layoutParams.rightMargin = sideMargin
         layoutParams.bottomMargin = sideMargin
-        root.addView(view, layoutParams)
-        counterView = view
+        val counterContainer = FrameContainerLayout(root.context).apply {
+            addView(view, layoutParams)
+        }
+        root.addView(counterContainer,
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        counterView = counterContainer
     }
 
     override fun close() {
