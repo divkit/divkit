@@ -1,6 +1,7 @@
 package com.yandex.div.core
 
 import android.view.View
+import androidx.annotation.AnyThread
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.Div
@@ -20,6 +21,18 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divView: Div2View
     ): View {
         return divView.div2Component.div2Builder.buildView(div, divView, divStatePath)
+    }
+
+    /**
+     * Call to create child div view. And then call bindChildView and ViewGroup.addView by yourself!
+     */
+    @AnyThread
+    fun createUnboundChildView(
+        div: Div,
+        divStatePath: DivStatePath,
+        divView: Div2View
+    ): View {
+        return divView.div2Component.div2Builder.createView(div, divView, divStatePath)
     }
 
     /**
