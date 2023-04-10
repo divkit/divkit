@@ -15,6 +15,7 @@ Fixes & Changes:
 * Made gallery scroll slower
 * Removed observers in clearBinding method
 * Fixed visibility animations on disappear
+* Fixed triggering changes after variable declaration
 
 # iOS Client:
 
