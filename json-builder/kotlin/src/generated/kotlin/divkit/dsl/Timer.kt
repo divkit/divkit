@@ -48,7 +48,7 @@ class Timer internal constructor(
          * Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).
          * Default value: `0`.
          */
-        val duration: Property<Int>?,
+        val duration: Property<Long>?,
         /**
          * Actions performed when the timer ends: when the timer has counted to the `duration` value or the `div-action://timer?action=stop&id=<id>` command has been received.
          */
@@ -64,7 +64,7 @@ class Timer internal constructor(
         /**
          * Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.
          */
-        val tickInterval: Property<Int>?,
+        val tickInterval: Property<Long>?,
         /**
          * Name of the variable where the current timer value is stored. Updated on each count or when the timer commands are called (start, stop, and so on), except the cancel command.
          */
@@ -95,11 +95,11 @@ class Timer internal constructor(
 @Generated
 fun DivScope.timer(
     `use named arguments`: Guard = Guard.instance,
-    duration: Int? = null,
+    duration: Long? = null,
     endActions: List<Action>? = null,
     id: String? = null,
     tickActions: List<Action>? = null,
-    tickInterval: Int? = null,
+    tickInterval: Long? = null,
     valueVariable: String? = null,
 ): Timer = Timer(
     Timer.Properties(
@@ -123,11 +123,11 @@ fun DivScope.timer(
 @Generated
 fun DivScope.timerProps(
     `use named arguments`: Guard = Guard.instance,
-    duration: Int? = null,
+    duration: Long? = null,
     endActions: List<Action>? = null,
     id: String? = null,
     tickActions: List<Action>? = null,
-    tickInterval: Int? = null,
+    tickInterval: Long? = null,
     valueVariable: String? = null,
 ) = Timer.Properties(
     duration = valueOrNull(duration),
@@ -149,11 +149,11 @@ fun DivScope.timerProps(
 @Generated
 fun TemplateScope.timerRefs(
     `use named arguments`: Guard = Guard.instance,
-    duration: ReferenceProperty<Int>? = null,
+    duration: ReferenceProperty<Long>? = null,
     endActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     tickActions: ReferenceProperty<List<Action>>? = null,
-    tickInterval: ReferenceProperty<Int>? = null,
+    tickInterval: ReferenceProperty<Long>? = null,
     valueVariable: ReferenceProperty<String>? = null,
 ) = Timer.Properties(
     duration = duration,
@@ -175,11 +175,11 @@ fun TemplateScope.timerRefs(
 @Generated
 fun Timer.override(
     `use named arguments`: Guard = Guard.instance,
-    duration: Int? = null,
+    duration: Long? = null,
     endActions: List<Action>? = null,
     id: String? = null,
     tickActions: List<Action>? = null,
-    tickInterval: Int? = null,
+    tickInterval: Long? = null,
     valueVariable: String? = null,
 ): Timer = Timer(
     Timer.Properties(
@@ -203,11 +203,11 @@ fun Timer.override(
 @Generated
 fun Timer.defer(
     `use named arguments`: Guard = Guard.instance,
-    duration: ReferenceProperty<Int>? = null,
+    duration: ReferenceProperty<Long>? = null,
     endActions: ReferenceProperty<List<Action>>? = null,
     id: ReferenceProperty<String>? = null,
     tickActions: ReferenceProperty<List<Action>>? = null,
-    tickInterval: ReferenceProperty<Int>? = null,
+    tickInterval: ReferenceProperty<Long>? = null,
     valueVariable: ReferenceProperty<String>? = null,
 ): Timer = Timer(
     Timer.Properties(
@@ -227,8 +227,8 @@ fun Timer.defer(
 @Generated
 fun Timer.evaluate(
     `use named arguments`: Guard = Guard.instance,
-    duration: ExpressionProperty<Int>? = null,
-    tickInterval: ExpressionProperty<Int>? = null,
+    duration: ExpressionProperty<Long>? = null,
+    tickInterval: ExpressionProperty<Long>? = null,
 ): Timer = Timer(
     Timer.Properties(
         duration = duration ?: properties.duration,

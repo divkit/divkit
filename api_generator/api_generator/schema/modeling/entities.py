@@ -779,6 +779,7 @@ class PropertyType(ABC):
 @dataclass
 class Int(PropertyType):
     constraint: Optional[str]
+    long_type: Optional[bool]
 
 
 @dataclass

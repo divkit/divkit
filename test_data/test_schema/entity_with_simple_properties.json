@@ -25,6 +25,7 @@
     },
     "integer": {
       "type": "integer",
+      "long_type": true,
       "$description": "translations.json#/entity_with_simple_properties_integer"
     },
     "double": {

@@ -396,6 +396,64 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {
+          "int_prop": {
+            "$ref": "common.json#/non_negative_integer",
+            "default_value": "0"
+          },
+          "url_prop": {
+            "$ref": "common.json#/url",
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru"
+          },
+          "nested": {
+            "type": "object",
+            "properties": {
+              "int": {
+                "alias_dart": "iNum",
+                "$ref": "#/definitions/int_prop"
+              },
+              "url": {
+                "$ref": "#/definitions/url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "$description": "translations.json#/entity_with_property_with_default_value_nested",
+            "required": [
+              "non_optional"
+            ]
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "alias_dart": "iNum",
+            "$ref": "#/definitions/int_prop"
+          },
+          "url": {
+            "$ref": "#/definitions/url_prop"
+          },
+          "nested": {
+            "$ref": "#/definitions/nested"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_array.json": {
         "type": "object",
         "properties": {
@@ -537,64 +595,6 @@
       }
     },
     {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {
-          "int_prop": {
-            "$ref": "common.json#/non_negative_integer",
-            "default_value": "0"
-          },
-          "url_prop": {
-            "$ref": "common.json#/url",
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru"
-          },
-          "nested": {
-            "type": "object",
-            "properties": {
-              "int": {
-                "alias_dart": "iNum",
-                "$ref": "#/definitions/int_prop"
-              },
-              "url": {
-                "$ref": "#/definitions/url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "$description": "translations.json#/entity_with_property_with_default_value_nested",
-            "required": [
-              "non_optional"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "alias_dart": "iNum",
-            "$ref": "#/definitions/int_prop"
-          },
-          "url": {
-            "$ref": "#/definitions/url_prop"
-          },
-          "nested": {
-            "$ref": "#/definitions/nested"
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
       "entity_with_strict_array.json": {
         "type": "object",
         "properties": {
@@ -671,6 +671,7 @@
           },
           "integer": {
             "type": "integer",
+            "long_type": true,
             "$description": "translations.json#/entity_with_simple_properties_integer"
           },
           "double": {

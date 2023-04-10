@@ -603,7 +603,7 @@ class DivanProperty(Property):
 class DivanPropertyType(PropertyType):
     def declaration(self, prefixed: bool, remove_prefix: str) -> str:
         if isinstance(self, Int):
-            return 'Int'
+            return 'Int' if not self.long_type else 'Long'
         elif isinstance(self, Double):
             return 'Double'
         elif isinstance(self, (Bool, BoolInt)):

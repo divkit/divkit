@@ -474,6 +474,88 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {},
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "alias_dart": "iNum",
+            "$resolved_refs": [
+              "#/definitions/int_prop",
+              "common.json#/non_negative_integer"
+            ],
+            "default_value": "0",
+            "type": "integer",
+            "constraint": "number >= 0"
+          },
+          "url": {
+            "$resolved_refs": [
+              "#/definitions/url_prop",
+              "common.json#/url"
+            ],
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru",
+            "type": "string",
+            "format": "uri"
+          },
+          "nested": {
+            "$resolved_refs": [
+              "#/definitions/nested"
+            ],
+            "type": "object",
+            "properties": {
+              "int": {
+                "alias_dart": "iNum",
+                "$resolved_refs": [
+                  "#/definitions/int_prop",
+                  "common.json#/non_negative_integer"
+                ],
+                "default_value": "0",
+                "type": "integer",
+                "constraint": "number >= 0",
+                "$typename": "int_prop"
+              },
+              "url": {
+                "$resolved_refs": [
+                  "#/definitions/url_prop",
+                  "common.json#/url"
+                ],
+                "schemes": [
+                  "https"
+                ],
+                "default_value": "https://yandex.ru",
+                "type": "string",
+                "format": "uri",
+                "$typename": "url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "non_optional"
+            ],
+            "$typename": "nested",
+            "description_translations": {
+              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+            }
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_array.json": {
         "type": "object",
         "properties": {
@@ -635,88 +717,6 @@
       }
     },
     {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {},
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "alias_dart": "iNum",
-            "$resolved_refs": [
-              "#/definitions/int_prop",
-              "common.json#/non_negative_integer"
-            ],
-            "default_value": "0",
-            "type": "integer",
-            "constraint": "number >= 0"
-          },
-          "url": {
-            "$resolved_refs": [
-              "#/definitions/url_prop",
-              "common.json#/url"
-            ],
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru",
-            "type": "string",
-            "format": "uri"
-          },
-          "nested": {
-            "$resolved_refs": [
-              "#/definitions/nested"
-            ],
-            "type": "object",
-            "properties": {
-              "int": {
-                "alias_dart": "iNum",
-                "$resolved_refs": [
-                  "#/definitions/int_prop",
-                  "common.json#/non_negative_integer"
-                ],
-                "default_value": "0",
-                "type": "integer",
-                "constraint": "number >= 0",
-                "$typename": "int_prop"
-              },
-              "url": {
-                "$resolved_refs": [
-                  "#/definitions/url_prop",
-                  "common.json#/url"
-                ],
-                "schemes": [
-                  "https"
-                ],
-                "default_value": "https://yandex.ru",
-                "type": "string",
-                "format": "uri",
-                "$typename": "url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "non_optional"
-            ],
-            "$typename": "nested",
-            "description_translations": {
-              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-            }
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
       "entity_with_strict_array.json": {
         "type": "object",
         "properties": {
@@ -806,6 +806,7 @@
           },
           "integer": {
             "type": "integer",
+            "long_type": true,
             "description_translations": {
               "en": "Integer.",
               "ru": "Целое число."

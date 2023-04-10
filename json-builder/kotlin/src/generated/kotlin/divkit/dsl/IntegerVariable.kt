@@ -49,7 +49,7 @@ class IntegerVariable internal constructor(
         /**
          * Value.
          */
-        val value: Property<Int>?,
+        val value: Property<Long>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -69,7 +69,7 @@ class IntegerVariable internal constructor(
 fun DivScope.integerVariable(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Int? = null,
+    value: Long? = null,
 ): IntegerVariable = IntegerVariable(
     IntegerVariable.Properties(
         name = valueOrNull(name),
@@ -85,7 +85,7 @@ fun DivScope.integerVariable(
 fun DivScope.integerVariableProps(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Int? = null,
+    value: Long? = null,
 ) = IntegerVariable.Properties(
     name = valueOrNull(name),
     value = valueOrNull(value),
@@ -99,7 +99,7 @@ fun DivScope.integerVariableProps(
 fun TemplateScope.integerVariableRefs(
     `use named arguments`: Guard = Guard.instance,
     name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<Int>? = null,
+    value: ReferenceProperty<Long>? = null,
 ) = IntegerVariable.Properties(
     name = name,
     value = value,
@@ -113,7 +113,7 @@ fun TemplateScope.integerVariableRefs(
 fun IntegerVariable.override(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Int? = null,
+    value: Long? = null,
 ): IntegerVariable = IntegerVariable(
     IntegerVariable.Properties(
         name = valueOrNull(name) ?: properties.name,
@@ -129,7 +129,7 @@ fun IntegerVariable.override(
 fun IntegerVariable.defer(
     `use named arguments`: Guard = Guard.instance,
     name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<Int>? = null,
+    value: ReferenceProperty<Long>? = null,
 ): IntegerVariable = IntegerVariable(
     IntegerVariable.Properties(
         name = name ?: properties.name,

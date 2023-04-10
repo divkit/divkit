@@ -42,6 +42,7 @@
         },
         "value": {
           "supports_expressions": false,
+          "long_type": true,
           "type": "integer",
           "$description": "translations.json#/div_variable_value"
         }

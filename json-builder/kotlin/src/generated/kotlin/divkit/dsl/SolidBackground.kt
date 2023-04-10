@@ -28,7 +28,7 @@ import kotlin.collections.Map
 class SolidBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : Background, TextRangeBackground {
+) : TextRangeBackground, Background {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "solid")

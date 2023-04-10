@@ -1,9 +1,9 @@
 {
   "lang": "divan",
   "header": "@file:Suppress(\n    \"unused\",\n    \"UNUSED_PARAMETER\",\n)\n\npackage divkit.dsl\n\nimport com.fasterxml.jackson.annotation.JsonAnyGetter\nimport com.fasterxml.jackson.annotation.JsonIgnore\nimport com.fasterxml.jackson.annotation.JsonValue\nimport divkit.dsl.annotation.*\nimport divkit.dsl.core.*\nimport divkit.dsl.scope.*\nimport kotlin.Any\nimport kotlin.String\nimport kotlin.Suppress\nimport kotlin.collections.List\nimport kotlin.collections.Map\n",
-  "topLevelAnnotations": [
-    "@Generated"
-  ],
+  "kotlinAnnotations": {
+    "topLevelDefinitions": ["@Generated"]
+  },
   "supertypeEntities": [
     "div"
   ],

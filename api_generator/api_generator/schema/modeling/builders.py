@@ -204,7 +204,7 @@ def type_property_build(dictionary: Dict[str, any],
     if type_value == 'integer':
         if dictionary.get('format') == 'boolean':
             return BoolInt(), []
-        return Int(constraint=number_constraints), []
+        return Int(constraint=number_constraints, long_type=dictionary.get('long_type', False)), []
     elif type_value == 'number':
         return Double(constraint=number_constraints), []
     elif type_value == 'boolean':
