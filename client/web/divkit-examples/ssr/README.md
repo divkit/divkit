@@ -2,9 +2,17 @@
 
 Install the packages first:
 
-```
+```shell
 npm ci
 ```
+
+### Run sample
+
+```shell
+npm start
+```
+
+### Steps for the SSR
 
 On the server side, use the `@divkitframework/divkit/server` module:
 
