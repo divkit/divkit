@@ -37,8 +37,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
      * Maximally ascented child that is baseline-aligned.
      * This is used because we don't know child's top pre-layout.
      */
-    private var maxBaselinedAscent = -1
-    private var maxBaselinedDescent = -1
+    private var maxBaselineAscent = -1
+    private var maxBaselineDescent = -1
 
     @LinearLayoutCompat.OrientationMode
     var orientation = HORIZONTAL
@@ -199,8 +199,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val child = getChildAt(0) ?: return super.getBaseline()
             return child.baseline + child.lp.topMargin + paddingTop
         }
-        if (maxBaselinedAscent != -1) {
-            return maxBaselinedAscent + paddingTop
+        if (maxBaselineAscent != -1) {
+            return maxBaselineAscent + paddingTop
         }
         return super.getBaseline()
     }
@@ -326,7 +326,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     }
 
     private fun hasSignificantHeight(child: View, heightMeasureSpec: Int) =
-        child.lp.height != MATCH_PARENT || isUnspecified(heightMeasureSpec)
+        hasSignificantDimension(child.lp.height, heightMeasureSpec)
 
     private fun measureVerticalFirstTime(
         child: View,
@@ -338,7 +338,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val lp = child.lp
 
         if (lp.height == WRAP_CONTENT_CONSTRAINED) {
-            measureConstrainedChildFirstTime(child, widthMeasureSpec, heightMeasureSpec, considerHeight)
+            measureConstrainedHeightChildFirstTime(child, widthMeasureSpec, heightMeasureSpec, considerHeight)
         } else {
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         }
@@ -352,7 +352,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         totalLength = getMaxLength(totalLength, child.measuredHeight + lp.verticalMargins)
     }
 
-    private fun measureConstrainedChildFirstTime(
+    private fun measureConstrainedHeightChildFirstTime(
         child: View,
         widthMeasureSpec: Int,
         heightMeasureSpec: Int,
@@ -384,7 +384,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private fun considerMatchParentChildrenInMaxWidth(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (isExact(widthMeasureSpec)) return
 
-        // If cross size is defined by children with exact sizes (fixed or wrap_content)
+        // If container's width is defined by children with exact sizes (fixed or wrap_content)
         // we should consider margins of children with match_parent size.
         if (maxCrossSize != 0) {
             crossMatchParentChildren.forEach { maxCrossSize = max(maxCrossSize, it.lp.horizontalMargins) }
@@ -519,211 +519,195 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
      * @param heightMeasureSpec Vertical space requirements as imposed by the parent.
      *
      * @see orientation
-     * @see .onMeasure
+     * @see onMeasure
      */
-    open fun measureHorizontal(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        maxCrossSize = 0
-        var alternativeMaxHeight = 0
-        var weightedMaxHeight = 0
-        var allFillParent = true
-        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
-        var matchHeight = false
-        var skippedMeasure = false
-        maxBaselinedAscent = -1
-        maxBaselinedDescent = -1
-        val isExactly = widthMode == MeasureSpec.EXACTLY
+    private fun measureHorizontal(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        maxBaselineAscent = -1
+        maxBaselineDescent = -1
 
-        // See how wide everyone is. Also remember max height.
+        val exactWidth = isExact(widthMeasureSpec)
+        var heightSpec = when {
+            aspectRatio == DEFAULT_ASPECT_RATIO -> heightMeasureSpec
+            exactWidth -> makeExactSpec((MeasureSpec.getSize(widthMeasureSpec) / aspectRatio).roundToInt())
+            else -> makeExactSpec(0)
+        }
+        var heightSize = MeasureSpec.getSize(heightSpec)
+        val exactHeight = isExact(heightSpec)
+
+        val initialMaxHeight = (if (exactHeight) heightSize else suggestedMinimumHeight).coerceAtLeast(0)
+
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
                 totalLength += dividerWidth
             }
-            val lp = child.lp
-            totalWeight += lp.fixedHorizontalWeight
-            if (widthMode == MeasureSpec.EXACTLY && lp.width == MATCH_PARENT) {
-                // Optimization: don't bother measuring children who are going to use
-                // leftover space. These views will get measured again down below if
-                // there is any leftover space.
-                totalLength += lp.horizontalMargins
-
-                // Baseline alignment requires to measure widgets to obtain the
-                // baseline offset (in particular for TextViews). The following
-                // defeats the optimization mentioned above. Allow the child to
-                // use as much space as it wants because we can shrink things
-                // later (and re-measure).
-                if (lp.isBaselineAligned) {
-                    val freeSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-                    child.measure(freeSpec, freeSpec)
-                } else {
-                    skippedMeasure = true
-                }
-            } else {
-                val oldWidth = lp.width
-                if (oldWidth == MATCH_PARENT || oldWidth == WRAP_CONTENT_CONSTRAINED) {
-                    lp.width = WRAP_CONTENT
-                }
-
-                // Determine how big this child would like to be. If this or
-                // previous children have given a weight, then we allow it to
-                // use all available space (and we will shrink things later
-                // if needed).
-                measureChildWithMargins(child, widthMeasureSpec,
-                    if (totalWeight == 0f) totalLength else 0,
-                    heightMeasureSpec, 0)
-                lp.width = oldWidth
-                val childWidth = child.measuredWidth + lp.horizontalMargins
-                if (isExactly) {
-                    totalLength += childWidth
-                } else {
-                    totalLength = getMaxLength(totalLength, childWidth)
-                }
-                if (lp.width == WRAP_CONTENT_CONSTRAINED) {
-                    constrainedChildren.add(child)
-                    totalConstrainedLength = getMaxLength(totalConstrainedLength, childWidth)
-                }
-            }
-            var matchHeightLocally = false
-            if (heightMode != MeasureSpec.EXACTLY && lp.height == MATCH_PARENT) {
-                // The height of the linear layout will scale, and at least one
-                // child said it wanted to match our height. Set a flag indicating that
-                // we need to remeasure at least that view when we know our height.
-                matchHeight = true
-                matchHeightLocally = true
-            }
-            val margin = lp.verticalMargins
-            val childHeight = child.measuredHeight + margin
-            childMeasuredState = combineMeasuredStates(childMeasuredState, child.measuredState)
-            if (lp.isBaselineAligned) {
-                val childBaseline = child.baseline
-                if (childBaseline != -1) {
-                    maxBaselinedAscent = max(maxBaselinedAscent, childBaseline + lp.topMargin)
-                    maxBaselinedDescent = max(maxBaselinedDescent, childHeight - childBaseline - lp.topMargin)
-                }
-            }
-            maxCrossSize = max(maxCrossSize, childHeight)
-            allFillParent = allFillParent && lp.height == MATCH_PARENT
-            if (lp.fixedHorizontalWeight > 0) {
-                /*
-                 * Heights of weighted Views are bogus if we end up
-                 * remeasuring, so keep them separate.
-                 */
-                weightedMaxHeight = max(weightedMaxHeight,
-                    if (matchHeightLocally) margin else childHeight)
-            } else {
-                alternativeMaxHeight = max(alternativeMaxHeight,
-                    if (matchHeightLocally) margin else childHeight)
-            }
+            totalWeight += child.lp.fixedHorizontalWeight
+            measureChildWithSignificantSizeHorizontal(child, widthMeasureSpec, heightSpec)
         }
+
+        forEachSignificant { considerMatchParentChildMarginsInWidth(it, widthMeasureSpec) }
+
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
             totalLength += dividerWidth
         }
-
-        // Add in our padding
         totalLength += paddingLeft + paddingRight
-        var widthSize = totalLength
+        if (isAtMost(widthMeasureSpec) && totalWeight > 0) {
+            totalLength = max(MeasureSpec.getSize(widthMeasureSpec), totalLength)
+        }
 
-        // Check against our minimum width
-        widthSize = max(widthSize, suggestedMinimumWidth)
+        val widthSizeAndState = resolveSizeAndState(totalLength, widthMeasureSpec, childMeasuredState)
+        if (!exactWidth && aspectRatio != DEFAULT_ASPECT_RATIO) {
+            heightSize = ((widthSizeAndState and MEASURED_SIZE_MASK) / aspectRatio).roundToInt()
+            heightSpec = makeExactSpec(heightSize)
+        }
 
-        // Reconcile our calculated size with the widthMeasureSpec
-        val widthSizeAndState = resolveSizeAndState(widthSize, widthMeasureSpec, 0)
-        widthSize = widthSizeAndState and MEASURED_SIZE_MASK
+        remeasureChildrenHorizontalIfNeeded(widthMeasureSpec, heightSpec, initialMaxHeight)
 
-        // Either expand children with weight to take up available space or
-        // shrink them if they extend beyond our current bounds. If we skipped
-        // measurement on any children, we need to measure them now.
-        var delta = widthSize - totalLength
-        if (skippedMeasure || (delta != 0 && (totalWeight > 0.0f || totalConstrainedLength > 0))) {
-            var weightSum = totalWeight
-            maxBaselinedAscent = -1
-            maxBaselinedDescent = -1
-            maxCrossSize = -1
-            totalLength = 0
-
-            if (delta < 0) {
-                constrainedChildren.sortByDescending { it.minimumWidth / it.measuredWidth.toFloat() }
-                constrainedChildren.forEach { child ->
-                    val lp = child.lp
-                    val oldWidth = child.measuredWidth
-                    val oldWidthWithMargins = oldWidth + lp.horizontalMargins
-                    val share = (oldWidthWithMargins / totalConstrainedLength.toFloat() * delta).roundToInt()
-                    val childWidth = (oldWidth + share).coerceAtLeast(child.minimumWidth)
-
-                    childMeasuredState =
-                        remeasureChildHorizontal(child, heightMeasureSpec, childWidth, childMeasuredState)
-
-                    totalConstrainedLength -= oldWidthWithMargins
-                    delta -= child.measuredWidth - oldWidth
-                }
+        if (!exactHeight && aspectRatio == DEFAULT_ASPECT_RATIO) {
+            setParentCrossSizeIfNeeded(heightSpec)
+            forEachSignificant { considerMatchParentChildInMaxHeight(it, heightSpec, maxCrossSize == 0) }
+            if (maxBaselineAscent != -1) {
+                updateMaxCrossSize(heightSpec, maxBaselineAscent + maxBaselineDescent)
             }
 
-            forEachSignificant { child ->
-                val lp = child.lp
-                val childExtra = lp.fixedHorizontalWeight
-                if (childExtra > 0) {
-                    val share = (childExtra * delta / weightSum).toInt()
-                    weightSum -= childExtra
-                    delta -= share
+            heightSize = resolveSize(
+                maxCrossSize + if (maxCrossSize == initialMaxHeight) 0 else paddingTop + paddingBottom,
+                heightSpec
+            )
+        }
 
-                    val childWidth = if (lp.width != MATCH_PARENT || widthMode != MeasureSpec.EXACTLY) {
-                        child.measuredWidth + share
-                    } else {
-                        share
-                    }.coerceAtLeast(0)
+        forEachSignificant { remeasureDynamicHeightChild(it, makeExactSpec(heightSize)) }
 
-                    // Child may now not fit in vertical dimension.
-                    childMeasuredState =
-                        remeasureChildHorizontal(child, heightMeasureSpec, childWidth, childMeasuredState)
-                }
-                if (isExactly) {
-                    totalLength += child.measuredWidth + lp.horizontalMargins
-                } else {
-                    totalLength = getMaxLength(totalLength, child.measuredWidth + lp.horizontalMargins)
-                }
-                val matchHeightLocally = heightMode != MeasureSpec.EXACTLY && lp.height == MATCH_PARENT
-                val margin = lp.topMargin + lp.bottomMargin
-                val childHeight = child.measuredHeight + margin
-                maxCrossSize = max(maxCrossSize, childHeight)
-                alternativeMaxHeight = max(alternativeMaxHeight,
-                    if (matchHeightLocally) margin else childHeight)
-                allFillParent = allFillParent && lp.height == MATCH_PARENT
-                if (lp.isBaselineAligned) {
-                    val childBaseline = child.baseline
-                    if (childBaseline != -1) {
-                        maxBaselinedAscent = max(maxBaselinedAscent, childBaseline + lp.topMargin)
-                        maxBaselinedDescent = max(maxBaselinedDescent, childHeight - childBaseline - lp.topMargin)
-                    }
-                }
-            }
+        setMeasuredDimension(
+            widthSizeAndState,
+            resolveSizeAndState(heightSize, heightSpec, childMeasuredState shl MEASURED_HEIGHT_STATE_SHIFT)
+        )
+    }
 
-            // Add in our padding
-            totalLength += paddingLeft + paddingRight
+    // At this point we should measure only those children which affect container's final dimensions
+    private fun measureChildWithSignificantSizeHorizontal(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        if (!hasSignificantWidth(child, widthMeasureSpec)) return
+        val lp = child.lp
+
+        if (lp.width == WRAP_CONTENT_CONSTRAINED) {
+            measureChildWithConstrainedWidthFirstTime(child, widthMeasureSpec, heightMeasureSpec)
         } else {
-            alternativeMaxHeight = max(alternativeMaxHeight, weightedMaxHeight)
+            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         }
-        if (!allFillParent && heightMode != MeasureSpec.EXACTLY) {
-            maxCrossSize = alternativeMaxHeight
-        }
-        if (maxBaselinedAscent != -1) {
-            maxCrossSize = max(maxCrossSize, maxBaselinedAscent + maxBaselinedDescent)
-        }
-        maxCrossSize += paddingTop + paddingBottom
-        // Check against our minimum height
-        maxCrossSize = max(maxCrossSize, suggestedMinimumHeight)
-        setMeasuredDimension(widthSizeAndState or (childMeasuredState and MEASURED_STATE_MASK),
-            resolveSizeAndState(maxCrossSize, heightMeasureSpec, (childMeasuredState shl MEASURED_HEIGHT_STATE_SHIFT)))
-        if (matchHeight) {
-            forceUniformHeight(widthMeasureSpec)
+
+        childMeasuredState = combineMeasuredStates(childMeasuredState, child.measuredState)
+        updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
+        updateBaselineOffset(child)
+
+        if (!hasSignificantWidth(child, widthMeasureSpec)) return
+        totalLength = getMaxLength(totalLength, child.measuredWidth + lp.horizontalMargins)
+    }
+
+    private fun hasSignificantWidth(child: View, widthMeasureSpec: Int) =
+        hasSignificantDimension(child.lp.width, widthMeasureSpec)
+
+    private fun hasSignificantDimension(dimension: Int, parentMeasureSpec: Int) =
+        dimension != MATCH_PARENT || isUnspecified(parentMeasureSpec)
+
+    private fun measureChildWithConstrainedWidthFirstTime(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val lp = child.lp
+        lp.width = WRAP_CONTENT
+        measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+        lp.width = WRAP_CONTENT_CONSTRAINED
+
+        totalConstrainedLength = getMaxLength(totalConstrainedLength, child.measuredWidth + lp.horizontalMargins)
+        constrainedChildren.add(child)
+    }
+
+    // If match_parent child has margins it will be drawn even when there's no space for this child itself.
+    // So this size should be considered.
+    private fun considerMatchParentChildMarginsInWidth(child: View, widthMeasureSpec: Int) {
+        if (hasSignificantWidth(child, widthMeasureSpec)) return
+        totalLength = getMaxLength(totalLength, child.lp.horizontalMargins)
+    }
+
+    private fun remeasureChildrenHorizontalIfNeeded(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+        initialMaxHeight: Int
+    ) {
+        val delta = MeasureSpec.getSize(widthMeasureSpec) - totalLength
+        if (needRemeasureChildren(delta, widthMeasureSpec)) {
+            totalLength = 0
+            remeasureConstrainedWidthChildren(heightMeasureSpec, delta)
+            remeasureMatchParentWidthChildren(heightMeasureSpec, initialMaxHeight, delta)
+            totalLength += paddingTop + paddingBottom
         }
     }
 
-    private fun remeasureChildHorizontal(
-        child: View,
-        heightMeasureSpec: Int,
-        width: Int,
-        childState: Int
-    ): Int {
+    private fun remeasureConstrainedWidthChildren(heightMeasureSpec: Int, delta: Int) {
+        if (delta >= 0) return
+
+        var spaceToShrink = delta
+        constrainedChildren.sortByDescending { it.minimumWidth / it.measuredWidth.toFloat() }
+        constrainedChildren.forEach { child ->
+            val lp = child.lp
+            val oldWidth = child.measuredWidth
+            val oldWidthWithMargins = oldWidth + lp.horizontalMargins
+            val share = (oldWidthWithMargins / totalConstrainedLength.toFloat() * spaceToShrink).roundToInt()
+            val childWidth = (oldWidth + share).coerceAtLeast(child.minimumWidth)
+
+            remeasureChildHorizontal(child, heightMeasureSpec, childWidth)
+            childMeasuredState = combineMeasuredStates(childMeasuredState,
+                child.measuredState and MEASURED_STATE_TOO_SMALL and MEASURED_STATE_MASK)
+
+            totalConstrainedLength -= oldWidthWithMargins
+            spaceToShrink -= child.measuredWidth - oldWidth
+        }
+    }
+
+    private fun remeasureMatchParentWidthChildren(heightMeasureSpec: Int, initialMaxHeight: Int, delta: Int) {
+        var freeSpace = delta
+        var weightSum = totalWeight
+        maxCrossSize = initialMaxHeight
+        maxBaselineAscent = -1
+        maxBaselineDescent = -1
+        forEachSignificant { child ->
+            val lp = child.lp
+            when {
+                lp.width != MATCH_PARENT -> Unit
+                delta > 0 -> {
+                    val share = (lp.fixedHorizontalWeight * freeSpace / weightSum).toInt()
+                    weightSum -= lp.fixedHorizontalWeight
+                    freeSpace -= share
+                    remeasureChildHorizontal(child, heightMeasureSpec, share)
+                }
+                else -> remeasureChildHorizontal(child, heightMeasureSpec, 0)
+            }
+
+            updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
+            totalLength = getMaxLength(totalLength, child.measuredWidth + lp.horizontalMargins)
+            updateBaselineOffset(child)
+        }
+    }
+
+    private fun considerMatchParentChildInMaxHeight(child: View, heightMeasureSpec: Int, measureChild: Boolean) {
+        val lp = child.lp
+        if (lp.height != MATCH_PARENT) return
+
+        // If container's height is defined by children with exact sizes (fixed or wrap_content)
+        // we should consider margins of children with match_parent size.
+        if (measureChild) {
+            maxCrossSize = max(maxCrossSize, lp.verticalMargins)
+            return
+        }
+
+        // Otherwise we calculate maximum size of match_parent children content.
+        remeasureChildHorizontal(child, heightMeasureSpec, child.measuredWidth)
+        updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
+    }
+
+    private fun remeasureDynamicHeightChild(child: View, heightMeasureSpec: Int) {
+        val height = child.lp.height
+        if (height != MATCH_PARENT && height != WRAP_CONTENT_CONSTRAINED) return
+        remeasureChildHorizontal(child, heightMeasureSpec, child.measuredWidth)
+    }
+
+    private fun remeasureChildHorizontal(child: View, heightMeasureSpec: Int, width: Int): Int {
         val lp = child.lp
         val childHeightMeasureSpec = getChildMeasureSpec(
             heightMeasureSpec,
@@ -734,27 +718,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         )
 
         child.measure(makeExactSpec(width), childHeightMeasureSpec)
-        return combineMeasuredStates(childState, child.measuredState and MEASURED_STATE_MASK)
-    }
-
-    private fun forceUniformHeight(widthMeasureSpec: Int) {
-        // Pretend that the linear layout has an exact size. This is the measured height of
-        // ourselves. The measured height should be the max height of the children, changed
-        // to accommodate the heightMeasureSpec from the parent
-        val uniformMeasureSpec = makeExactSpec(measuredHeight)
-        forEachSignificant { child ->
-            val lp = child.lp
-            if (lp.height != MATCH_PARENT) return@forEachSignificant
-
-            // Temporarily force children to reuse their old measured width
-            // FIXME: this may not be right for something like wrapping text?
-            val oldWidth = lp.width
-            lp.width = child.measuredWidth
-
-            // Remeasure with new dimensions
-            measureChildWithMargins(child, widthMeasureSpec, 0, uniformMeasureSpec, 0)
-            lp.width = oldWidth
-        }
+        return combineMeasuredStates(childMeasuredState, child.measuredState and MEASURED_STATE_MASK)
     }
 
     private fun updateMaxCrossSize(measureSpec: Int, childSize: Int) {
@@ -770,6 +734,16 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         widthMeasureSpec,
         childMeasuredState
     )
+
+    private fun updateBaselineOffset(child: View) {
+        val lp = child.lp
+        if (!lp.isBaselineAligned) return
+        val childBaseline = child.baseline
+        if (childBaseline == -1) return
+
+        maxBaselineAscent = max(maxBaselineAscent, childBaseline + lp.topMargin)
+        maxBaselineDescent = max(maxBaselineDescent, child.measuredHeight - childBaseline - lp.topMargin)
+    }
 
     private fun forEachSignificant(action: (View) -> Unit) = forEach(true, action)
 
@@ -893,7 +867,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 Gravity.TOP -> {
                     childTop = paddingTop + lp.topMargin
                     if (childBaseline != -1) {
-                        childTop += maxBaselinedAscent - childBaseline - lp.topMargin
+                        childTop += maxBaselineAscent - childBaseline - lp.topMargin
                     }
                 }
                 Gravity.CENTER_VERTICAL ->
