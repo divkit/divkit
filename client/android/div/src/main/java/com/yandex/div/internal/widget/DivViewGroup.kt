@@ -13,6 +13,10 @@ abstract class DivViewGroup @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
+    init {
+        clipToPadding = false
+    }
+
     override fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int) {
         val lp = child.lp
         val childWidthMeasureSpec = getChildMeasureSpec(

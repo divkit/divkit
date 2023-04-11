@@ -1,6 +1,7 @@
 {
   "description": "Overlap container with paddings",
   "platforms": [
+    "android",
     "web"
   ],
   "templates": {
