@@ -3,6 +3,7 @@
   "enum": [
     "fill",
     "no_scale",
-    "fit"
+    "fit",
+    "stretch"
   ]
 }

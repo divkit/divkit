@@ -129,25 +129,30 @@ open class AspectImageView @JvmOverloads constructor(
         val imageHeight = drawable.intrinsicHeight.toFloat()
         val absoluteGravity = GravityCompat.getAbsoluteGravity(gravity, ViewCompat.getLayoutDirection(this))
 
-        val scale = when (imageScale) {
+        val scaleX = when (imageScale) {
             Scale.NO_SCALE -> 1.0f
             Scale.FIT -> min(availableWidth / imageWidth, availableHeight / imageHeight)
             Scale.FILL -> max(availableWidth / imageWidth, availableHeight / imageHeight)
+            Scale.STRETCH -> availableWidth / imageWidth
+        }
+        val scaleY = when (imageScale) {
+            Scale.STRETCH -> availableHeight / imageHeight
+            else -> scaleX
         }
         val translationX = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-            Gravity.CENTER_HORIZONTAL -> (availableWidth - imageWidth * scale) / 2
-            Gravity.RIGHT -> availableWidth - imageWidth * scale
+            Gravity.CENTER_HORIZONTAL -> (availableWidth - imageWidth * scaleX) / 2
+            Gravity.RIGHT -> availableWidth - imageWidth * scaleX
             else -> 0.0f
         }
         val translationY = when (absoluteGravity and Gravity.VERTICAL_GRAVITY_MASK) {
-            Gravity.CENTER_VERTICAL -> (availableHeight - imageHeight * scale) / 2
-            Gravity.BOTTOM -> availableHeight - imageHeight * scale
+            Gravity.CENTER_VERTICAL -> (availableHeight - imageHeight * scaleY) / 2
+            Gravity.BOTTOM -> availableHeight - imageHeight * scaleY
             else -> 0.0f
         }
 
         transformMatrix.apply {
             reset()
-            postScale(scale, scale)
+            postScale(scaleX, scaleY)
             postTranslate(translationX, translationY)
         }
         imageMatrix = transformMatrix
@@ -156,6 +161,7 @@ open class AspectImageView @JvmOverloads constructor(
     enum class Scale {
         NO_SCALE,
         FIT,
-        FILL
+        FILL,
+        STRETCH
     }
 }

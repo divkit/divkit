@@ -546,6 +546,7 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
         DivImageScale.NO_SCALE -> AspectImageView.Scale.NO_SCALE
         DivImageScale.FIT -> AspectImageView.Scale.FIT
         DivImageScale.FILL -> AspectImageView.Scale.FILL
+        DivImageScale.STRETCH -> AspectImageView.Scale.STRETCH
     }
 }
 
