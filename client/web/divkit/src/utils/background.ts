@@ -211,12 +211,17 @@ function image(opts: {
     };
 }
 
-export function imageSize(scale?: ImageScale): string | undefined {
-    if (scale === 'fill' || !scale) {
-        return 'cover';
-    } else if (scale === 'fit') {
+export function imageSize(scale?: ImageScale): string {
+    if (scale === 'fit') {
         return 'contain';
+    } else if (scale === 'stretch') {
+        return 'fill';
+    } else if (scale === 'no_scale') {
+        return 'none';
     }
+
+    // 'fill' and default
+    return 'cover';
 }
 
 export function imagePos(obj: {

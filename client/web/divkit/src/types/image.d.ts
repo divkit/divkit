@@ -3,8 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { FadeTransition } from './base';
 import type { Filter } from './filter';
-
-export type ImageScale = 'no_scale' | 'fill' | 'fit';
+import type { ImageScale } from './imageScale';
 
 export type TintMode = 'source_in' | 'source_atop' | 'darken' | 'lighten' | 'multiply' | 'screen';
 
