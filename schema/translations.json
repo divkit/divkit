@@ -979,7 +979,7 @@
     "en": "Text input line color.",
     "ru": "Цвет линии ввода текста."
   },
-  "div_input_raw_text_variable": {
+  "div_input_mask_raw_text_variable": {
     "en": "Name of raw value storage variable.",
     "ru": "Название переменной для хранения необработанного значения."
   },

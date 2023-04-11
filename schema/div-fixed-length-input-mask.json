@@ -1,55 +1,62 @@
 {
-  "type": "object",
   "$description": "translations.json#/div_input_mask_fixed_length",
-  "properties": {
-    "type": {
-      "type": "string",
-      "enum": [
-        "fixed_length"
-      ]
+  "allOf": [
+    {
+      "$ref": "div-input-mask-base.json"
     },
-    "pattern": {
-      "$ref": "common.json#/non_empty_string",
-      "$description": "translations.json#/div_input_mask_fixed_length_pattern"
-    },
-    "pattern_elements": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements",
-        "properties": {
-          "key": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 1,
-            "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_key"
-          },
-          "regex": {
-            "$ref": "common.json#/non_empty_string",
-            "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_regex"
-          },
-          "placeholder": {
-            "type": "string",
-            "maxLength": 1,
-            "default_value": "_",
-            "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_placeholder"
-          }
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "fixed_length"
+          ]
         },
-        "required": [
-          "key"
-        ]
-      },
-      "minItems": 1,
-      "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements"
-    },
-    "always_visible": {
-      "$ref": "common.json#/boolean_int",
-      "default_value": "false",
-      "$description": "translations.json#/div_input_mask_fixed_length_always_visible"
+        "pattern": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_input_mask_fixed_length_pattern"
+        },
+        "pattern_elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements",
+            "properties": {
+              "key": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1,
+                "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_key"
+              },
+              "regex": {
+                "$ref": "common.json#/non_empty_string",
+                "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_regex"
+              },
+              "placeholder": {
+                "type": "string",
+                "maxLength": 1,
+                "default_value": "_",
+                "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_placeholder"
+              }
+            },
+            "required": [
+              "key"
+            ]
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements"
+        },
+        "always_visible": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_input_mask_fixed_length_always_visible"
+        }
+      }
     }
-  },
+  ],
   "required": [
     "type",
+    "raw_text_variable",
     "pattern",
     "pattern_elements"
   ]

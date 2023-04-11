@@ -1,0 +1,11 @@
+{
+  "protocol_name": "div-input-mask-base",
+  "type": "object",
+  "include_in_documentation_toc": true,
+  "properties": {
+    "raw_text_variable": {
+      "$ref": "div-variable-name.json",
+      "$description": "translations.json#/div_input_mask_raw_text_variable"
+    }
+  }
+}
