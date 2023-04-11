@@ -7,6 +7,7 @@ import { containsUnsetVariables, dateToString, gatherVarsFromAst, stringifyColor
 import { LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
 import { MAX_INT32, MIN_INT32 } from './const';
+import { simpleUnescapeString } from './simpleUnescapeString';
 
 class ExpressionBinding {
     private readonly ast: Node;
@@ -68,6 +69,28 @@ class ExpressionBinding {
     }
 }
 
+class VariableBinding {
+    private readonly variable: string;
+
+    constructor(variable: string) {
+        this.variable = variable;
+    }
+
+    /**
+     * Applies variables into ast
+     * @param variables
+     * @param logError
+     */
+    apply(variables: VariablesMap, logError: LogError): VariableValue | string | undefined {
+        const varInstance = variables.get(this.variable);
+        if (varInstance) {
+            return varInstance.getValue();
+        }
+
+        return undefined;
+    }
+}
+
 export type MaybeMissing<T> = T | (
     T extends (infer U)[] ?
         MaybeMissing<U>[] :
@@ -97,21 +120,39 @@ function prepareVarsObj<T>(
             if (hasExpressions(jsonProp)) {
                 store.hasExpression = true;
 
-                try {
-                    const ast = parse(jsonProp, {
-                        startRule: 'JsonStringContents'
-                    });
-                    const propVars = gatherVarsFromAst(ast);
-                    store.vars.push(...propVars);
+                if (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) {
+                    try {
+                        const ast = parse(jsonProp, {
+                            startRule: 'JsonStringContents'
+                        });
+                        const propVars = gatherVarsFromAst(ast);
+                        store.vars.push(...propVars);
 
-                    return new ExpressionBinding(ast);
-                } catch (err) {
-                    logError(wrapError(new Error('Unable to parse expression'), {
-                        additional: {
-                            expression: jsonProp
-                        }
-                    }));
-                    return undefined;
+                        return new ExpressionBinding(ast);
+                    } catch (err) {
+                        logError(wrapError(new Error('Unable to parse expression'), {
+                            additional: {
+                                expression: jsonProp
+                            }
+                        }));
+                        return undefined;
+                    }
+                } else {
+                    if (jsonProp === '@{}') {
+                        return '';
+                    } else if (jsonProp.startsWith('@{') && jsonProp.endsWith('}')) {
+                        return new VariableBinding(jsonProp.substring(2, jsonProp.length - 1));
+                    }
+                    try {
+                        return simpleUnescapeString(jsonProp);
+                    } catch (err: any) {
+                        logError(wrapError(err as Error, {
+                            additional: {
+                                expression: jsonProp
+                            }
+                        }));
+                        return undefined;
+                    }
                 }
             }
         } else if (Array.isArray(jsonProp)) {
@@ -129,7 +170,15 @@ function prepareVarsObj<T>(
 
 function applyVars(jsonProp: unknown, variables: VariablesMap, logError: LogError): unknown {
     if (jsonProp) {
-        if (jsonProp instanceof ExpressionBinding) {
+        if (
+            (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) &&
+            jsonProp instanceof ExpressionBinding
+        ) {
+            return jsonProp.apply(variables, logError);
+        } else if (
+            (!process.env.ENABLE_EXPRESSIONS && process.env.ENABLE_EXPRESSIONS !== undefined) &&
+            jsonProp instanceof VariableBinding
+        ) {
             return jsonProp.apply(variables, logError);
         } else if (Array.isArray(jsonProp)) {
             return jsonProp.map(it => applyVars(it, variables, logError));

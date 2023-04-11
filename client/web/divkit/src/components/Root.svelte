@@ -353,6 +353,10 @@
     }
 
     function setState(stateId: string | null): void {
+        if (!process.env.ENABLE_COMPONENT_STATE && process.env.ENABLE_COMPONENT_STATE !== undefined) {
+            throw new Error('State is not supported');
+        }
+
         if (!stateId) {
             throw new Error('Missing state id');
         }
@@ -902,36 +906,12 @@
 
     const variableTriggers = json?.card?.variable_triggers;
     if (Array.isArray(variableTriggers)) {
-        variableTriggers.forEach(trigger => {
-            let prevConditionResult = false;
+        if (process.env.ENABLE_EXPRESSIONS) {
+            variableTriggers.forEach(trigger => {
+                let prevConditionResult = false;
 
-            if (typeof trigger.condition !== 'string') {
-                logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
-                    additional: {
-                        condition: trigger.condition
-                    }
-                }));
-                return;
-            }
-
-            const mode = trigger.mode || 'on_condition';
-
-            if (mode !== 'on_variable' && mode !== 'on_condition') {
-                logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
-                    additional: {
-                        mode
-                    }
-                }));
-                return;
-            }
-
-            try {
-                const ast = parse(trigger.condition, {
-                    startRule: 'JsonStringContents'
-                });
-                const exprVars = gatherVarsFromAst(ast);
-                if (!exprVars.length) {
-                    logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                if (typeof trigger.condition !== 'string') {
+                    logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
                         additional: {
                             condition: trigger.condition
                         }
@@ -939,50 +919,78 @@
                     return;
                 }
 
-                waitForVars(exprVars).then(() => {
-                    const stores = exprVars.map(name => variables.get(name)).filter(Truthy);
+                const mode = trigger.mode || 'on_condition';
 
-                    derived(stores, () => {
-                        const res = evalExpression(variables, ast);
-
-                        res.warnings.forEach(logError);
-
-                        return res.result;
-                    }).subscribe(conditionResult => {
-                        if (conditionResult.type === 'error') {
-                            logError(wrapError(new Error('variable_trigger condition execution error'), {
-                                additional: {
-                                    message: conditionResult.value
-                                }
-                            }));
-                            return;
+                if (mode !== 'on_variable' && mode !== 'on_condition') {
+                    logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
+                        additional: {
+                            mode
                         }
+                    }));
+                    return;
+                }
 
-                        if (
-                            // if condition is truthy
-                            conditionResult.value &&
-                            // and trigger mode matches
-                            (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
-                        ) {
-                            trigger.actions.forEach(action => {
-                                const resultAction = getJsonWithVars(action);
-                                if (resultAction.log_id) {
-                                    execAction(resultAction as Action);
-                                }
-                            });
-                        }
-
-                        prevConditionResult = Boolean(conditionResult.value);
+                try {
+                    const ast = parse(trigger.condition, {
+                        startRule: 'JsonStringContents'
                     });
-                });
-            } catch (err) {
-                logError(wrapError(new Error('Unable to parse variable_trigger'), {
-                    additional: {
-                        condition: trigger.condition
+                    const exprVars = gatherVarsFromAst(ast);
+                    if (!exprVars.length) {
+                        logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                            additional: {
+                                condition: trigger.condition
+                            }
+                        }));
+                        return;
                     }
-                }));
-            }
-        });
+
+                    waitForVars(exprVars).then(() => {
+                        const stores = exprVars.map(name => variables.get(name)).filter(Truthy);
+
+                        derived(stores, () => {
+                            const res = evalExpression(variables, ast);
+
+                            res.warnings.forEach(logError);
+
+                            return res.result;
+                        }).subscribe(conditionResult => {
+                            if (conditionResult.type === 'error') {
+                                logError(wrapError(new Error('variable_trigger condition execution error'), {
+                                    additional: {
+                                        message: conditionResult.value
+                                    }
+                                }));
+                                return;
+                            }
+
+                            if (
+                                // if condition is truthy
+                                conditionResult.value &&
+                                // and trigger mode matches
+                                (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
+                            ) {
+                                trigger.actions.forEach(action => {
+                                    const resultAction = getJsonWithVars(action);
+                                    if (resultAction.log_id) {
+                                        execAction(resultAction as Action);
+                                    }
+                                });
+                            }
+
+                            prevConditionResult = Boolean(conditionResult.value);
+                        });
+                    });
+                } catch (err) {
+                    logError(wrapError(new Error('Unable to parse variable_trigger'), {
+                        additional: {
+                            condition: trigger.condition
+                        }
+                    }));
+                }
+            });
+        } else {
+            logError(wrapError(new Error('variable_trigger is not supported')));
+        }
     }
 
     const timers = json?.card?.timers;
@@ -998,20 +1006,23 @@
     }
 
     const states = json?.card?.states;
-    const rootStateDiv: DivStateData | undefined = (states && !hasError) ? {
-        type: 'state',
-        id: 'root',
-        width: {
-            type: 'match_parent',
-        },
-        height: {
-            type: 'match_parent',
-        },
-        states: states.map(state => ({
-            state_id: state.state_id.toString(),
-            div: state.div
-        }))
-    } : undefined;
+    let rootStateDiv: DivBaseData | undefined;
+    if (states && !hasError) {
+        rootStateDiv = (process.env.ENABLE_COMPONENT_STATE || process.env.ENABLE_COMPONENT_STATE === undefined) ? {
+            type: 'state',
+            id: 'root',
+            width: {
+                type: 'match_parent',
+            },
+            height: {
+                type: 'match_parent',
+            },
+            states: states.map(state => ({
+                state_id: state.state_id.toString(),
+                div: state.div
+            }))
+        } : states[0].div;
+    }
 
     /**
      * Fix for the :active pseudo-class on iOS

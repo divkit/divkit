@@ -11,6 +11,29 @@ const { asMarkupPreprocessor } = require('svelte-as-markup-preprocessor');
 
 const isProd = process.env.NODE_ENV === 'production';
 
+const COMPONENTS = [
+    'text',
+    'container',
+    'separator',
+    'image',
+    'gif',
+    'grid',
+    'gallery',
+    'tabs',
+    'state',
+    'pager',
+    'indicator',
+    'slider',
+    'input'
+];
+
+const enabledComponents = new Set(process.env.ENABLED_COMPONENTS?.split(/[,;\s]+/) || COMPONENTS);
+const componentsEnvVars = COMPONENTS.reduce((acc, item) => {
+    acc[`process.env.ENABLE_COMPONENT_${item.toUpperCase()}`] = JSON.stringify(enabledComponents.has(item));
+    return acc;
+}, {});
+const enableExpressions = process.env.ENABLE_EXPRESSIONS !== '0';
+
 const configCommon = ({
     isServer,
     hydratable,
@@ -137,7 +160,9 @@ const configCommon = ({
         // new webpack.IgnorePlugin({resourceRegExp: /\.css$/i})
         new webpack.DefinePlugin({
             'process.env.DEVTOOL': JSON.stringify(Boolean(devtool)),
-            'process.env.IS_PROD': JSON.stringify(isProd)
+            'process.env.IS_PROD': JSON.stringify(isProd),
+            'process.env.ENABLE_EXPRESSIONS': JSON.stringify(enableExpressions),
+            ...componentsEnvVars
         })
     ].filter(Boolean)
 });
