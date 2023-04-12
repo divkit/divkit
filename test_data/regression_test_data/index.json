@@ -1708,13 +1708,13 @@
         "DivInput"
       ],
       "steps": [
-        "Type single-key mask",
-        "Type multi-key mask",
+        "Enter an inappropriate character for the place",
+        "Enter the appropriate character",
         "Switch show/hide placeholders"
       ],
       "expected_results": [
-        "Single-key mask works correctly",
-        "Multi-key mask works correctly",
+        "The symbol did not appear",
+        "The symbol appeared",
         "Placeholders shown/hidden"
       ],
       "file": "input_mask.json"
@@ -1727,7 +1727,7 @@
       "tags": [
         "DivInput"
       ],
-      "file": "input_mask.json"
+      "file": "phone_input_mask.json"
     }
   ]
 }

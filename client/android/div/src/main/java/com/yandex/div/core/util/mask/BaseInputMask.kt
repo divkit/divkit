@@ -3,22 +3,18 @@ package com.yandex.div.core.util.mask
 import java.util.regex.PatternSyntaxException
 import kotlin.math.min
 
-internal class MaskHelper(
-    initialMaskData: MaskData,
-    private val onError: ((Exception) -> Unit)? = null
+internal abstract class BaseInputMask(
+    initialMaskData: MaskData
 ) {
-    private var maskData: MaskData = initialMaskData
+    protected var maskData: MaskData = initialMaskData
+        private set
 
-    private val filters = mutableMapOf<Char, Regex>()
+    protected val filters = mutableMapOf<Char, Regex>()
 
-    private lateinit var destructedValue: List<MaskChar>
-
-    init {
-        updateMaskData(initialMaskData)
-    }
+    protected lateinit var destructedValue: List<MaskChar>
 
     var cursorPosition: Int = 0
-        private set
+        protected set
 
     val rawValue: String
         get() = collectValueRange(0, destructedValue.size - 1)
@@ -51,25 +47,29 @@ internal class MaskHelper(
             return stringBuilder.toString()
         }
 
-    private val firstEmptyHolderIndex: Int
+    protected val firstEmptyHolderIndex: Int
         get() {
             return destructedValue.indexOfFirst { maskChar ->
                 maskChar is MaskChar.Dynamic && maskChar.char == null
             }.let { if (it != -1) it else destructedValue.size }
         }
 
-    fun updateMaskData(newMaskData: MaskData) {
-        val previousRawValue = if (maskData != newMaskData) rawValue else null
+    init {
+        updateMaskData(initialMaskData)
+    }
+
+    open fun updateMaskData(newMaskData: MaskData, restoreValue: Boolean = true) {
+        val previousRawValue = if (maskData != newMaskData && restoreValue) rawValue else null
 
         maskData = newMaskData
 
-        maskData.decoding.forEach { maskKey ->
-            filters.remove(maskKey.key)
+        filters.clear()
 
+        maskData.decoding.forEach { maskKey ->
             try {
                 maskKey.filter?.let { filters[maskKey.key] = Regex(it) }
             } catch (e: PatternSyntaxException) {
-                onError?.invoke(e)
+                onException(e)
             }
         }
 
@@ -87,23 +87,38 @@ internal class MaskHelper(
         }
     }
 
-    fun overrideRawValue(newRawValue: String) {
-        clearRange(0, destructedValue.size - 1)
+    open fun overrideRawValue(newRawValue: String) {
+        clearRange(0, destructedValue.size)
 
         replaceChars(newRawValue, 0)
 
-        cursorPosition = min(min(cursorPosition, destructedValue.size - 1), value.length)
+        cursorPosition = min(cursorPosition, value.length)
     }
 
-    fun applyChangeFrom(newValue: String) {
+    open fun applyChangeFrom(newValue: String, position: Int? = null) {
         val textDiff = TextDiff.build(value, newValue)
+            .let {
+                if (position != null) {
+                    TextDiff(
+                        (position - it.added).coerceAtLeast(0),
+                        it.added,
+                        it.removed
+                    )
+                } else {
+                    it
+                }
+            }
 
         val body = buildBodySubstring(textDiff, newValue)
         val tail = buildTailSubstring(textDiff)
 
         cleanup(textDiff)
 
-        replaceChars(body, firstEmptyHolderIndex)
+        val fehi = firstEmptyHolderIndex
+
+        val maxShift = calculateMaxShift(tail, fehi)
+
+        replaceChars(body, fehi, maxShift)
 
         val tailStart = firstEmptyHolderIndex
 
@@ -120,7 +135,32 @@ internal class MaskHelper(
         return collectValueRange(textDiff.start + textDiff.removed, destructedValue.size - 1)
     }
 
-    private fun cleanup(textDiff: TextDiff) {
+    private fun calculateMaxShift(string: String, start: Int): Int {
+        return if (filters.size <= 1) {
+            var dynamicLeft = 0
+
+            var index = start
+
+            while (index < destructedValue.size) {
+                if (destructedValue[index] is MaskChar.Dynamic) dynamicLeft++
+                index++
+            }
+
+            dynamicLeft - string.length
+        } else {
+            val initialInsertableSubstring = calculateInsertableSubstring(string, start)
+
+            var index = 0
+
+            while (index < destructedValue.size && initialInsertableSubstring == calculateInsertableSubstring(string, start + index)) {
+                index++
+            }
+
+            index - 1
+        }.coerceAtLeast(0)
+    }
+
+    protected fun cleanup(textDiff: TextDiff) {
         if (textDiff.added == 0 && textDiff.removed == 1) {
             var index = textDiff.start
 
@@ -137,13 +177,13 @@ internal class MaskHelper(
             }
         }
 
-        clearRange(textDiff.start, destructedValue.size - 1)
+        clearRange(textDiff.start, destructedValue.size)
     }
 
-    private fun clearRange(start: Int, end: Int) {
+    protected fun clearRange(start: Int, end: Int) {
         var index = start
 
-        while (index <= end) {
+        while (index < end && index < destructedValue.size) {
             val holder = destructedValue[index]
 
             if (holder is MaskChar.Dynamic) holder.char = null
@@ -152,17 +192,22 @@ internal class MaskHelper(
         }
     }
 
-    private fun calculateCursorPosition(textDiff: TextDiff, tailStart: Int) {
+    protected fun calculateCursorPosition(
+        textDiff: TextDiff,
+        tailStart: Int
+    ) {
         val fehi = firstEmptyHolderIndex
 
-        cursorPosition = if (textDiff.start < fehi) {
-            min(nextHolderAfter(tailStart), value.length)
+        val positionByDiff = if (textDiff.start < fehi) {
+            min(firstHolderAfter(tailStart), value.length)
         } else {
             fehi
         }
+
+        cursorPosition = positionByDiff
     }
 
-    internal fun calculateInsertableSubstring(substring: String, start: Int): String {
+    protected fun calculateInsertableSubstring(substring: String, start: Int): String {
         val charsCanBeInsertedStringBuilder = StringBuilder()
 
         var index = start
@@ -191,7 +236,7 @@ internal class MaskHelper(
         return charsCanBeInsertedStringBuilder.toString()
     }
 
-    internal fun collectValueRange(start: Int, end: Int): String {
+    protected fun collectValueRange(start: Int, end: Int): String {
         val tailStringBuilder = StringBuilder()
 
         var index = start
@@ -211,8 +256,10 @@ internal class MaskHelper(
         return tailStringBuilder.toString()
     }
 
-    internal fun replaceChars(substring: String, start: Int) {
-        val trimmedSubstring = calculateInsertableSubstring(substring, start)
+    protected fun replaceChars(substring: String, start: Int, count: Int? = null) {
+        val trimmedSubstring = calculateInsertableSubstring(substring, start).let {
+            if (count != null) it.take(count) else it
+        }
 
         var index = start
 
@@ -232,7 +279,7 @@ internal class MaskHelper(
         }
     }
 
-    private fun nextHolderAfter(start: Int): Int {
+    protected fun firstHolderAfter(start: Int): Int {
         var index = start
 
         while (index < destructedValue.size) {
@@ -247,6 +294,8 @@ internal class MaskHelper(
 
         return index
     }
+
+    abstract fun onException(exception: Exception)
 
     class MaskKey(
         val key: Char,

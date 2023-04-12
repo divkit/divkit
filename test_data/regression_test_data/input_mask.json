@@ -122,7 +122,7 @@
       {
         "name": "mask",
         "type": "string",
-        "value": "+7 (###) ###-##-##"
+        "value": "$#### $####"
       },
       {
         "name": "key_1",
@@ -132,7 +132,7 @@
       {
         "name": "filter_1",
         "type": "string",
-        "value": "\\d"
+        "value": "[a-z]"
       },
       {
         "name": "placeholder_1",
@@ -147,7 +147,7 @@
       {
         "name": "filter_2",
         "type": "string",
-        "value": "[a-zA-Z]"
+        "value": "[A-Z]"
       },
       {
         "name": "placeholder_2",

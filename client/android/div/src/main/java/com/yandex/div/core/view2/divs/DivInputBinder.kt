@@ -7,7 +7,8 @@ import android.widget.EditText
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
-import com.yandex.div.core.util.mask.MaskHelper
+import com.yandex.div.core.util.mask.BaseInputMask
+import com.yandex.div.core.util.mask.FixedLengthInputMask
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
@@ -202,12 +203,12 @@ internal class DivInputBinder @Inject constructor(
     ) {
         removeBoundVariableChangeAction()
 
-        var maskHelper: MaskHelper? = null
+        var inputMask: BaseInputMask? = null
 
         observeMask(div, resolver, divView) {
-            maskHelper = it
+            inputMask = it
 
-            maskHelper?.let { mask ->
+            inputMask?.let { mask ->
                 setText(mask.value)
                 setSelection(mask.cursorPosition)
             }
@@ -215,8 +216,8 @@ internal class DivInputBinder @Inject constructor(
 
         val callbacks = object : TwoWayStringVariableBinder.Callbacks {
             override fun onVariableChanged(value: String?) {
-                val valueToSet = maskHelper?.let {
-                    it.applyChangeFrom(value ?: "")
+                val valueToSet = inputMask?.let {
+                    it.applyChangeFrom(value ?: "", selectionStart)
 
                     it.value
                 } ?: value
@@ -228,16 +229,16 @@ internal class DivInputBinder @Inject constructor(
                 setBoundVariableChangeAction { editable ->
                     val fieldValue = editable?.toString() ?: ""
 
-                    maskHelper?.apply {
+                    inputMask?.apply {
                         if (value != fieldValue) {
-                            applyChangeFrom(text?.toString() ?: "")
+                            applyChangeFrom(text?.toString() ?: "", selectionStart)
 
                             setText(value)
                             setSelection(cursorPosition)
                         }
                     }
 
-                    val valueToUpdate = maskHelper?.rawValue ?: fieldValue
+                    val valueToUpdate = inputMask?.value ?: fieldValue
 
                     valueUpdater(valueToUpdate)
                 }
@@ -251,31 +252,30 @@ internal class DivInputBinder @Inject constructor(
         div: DivInput,
         resolver: ExpressionResolver,
         divView: Div2View,
-        onMaskUpdate: (MaskHelper?) -> Unit
+        onMaskUpdate: (BaseInputMask?) -> Unit
     ) {
-        var maskHelper: MaskHelper? = null
+        var inputMask: BaseInputMask? = null
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val updateMaskData = { _: Any ->
-            val inputMask = div.mask?.value()
+            val divInputMask = div.mask?.value()
 
-            maskHelper = when (inputMask) {
-                null -> null
+            inputMask = when (divInputMask) {
                 is DivFixedLengthInputMask -> {
-                    val maskData = MaskHelper.MaskData(
-                        inputMask.pattern.evaluate(resolver),
-                        inputMask.patternElements.map {
-                            MaskHelper.MaskKey(
+                    val maskData = BaseInputMask.MaskData(
+                        divInputMask.pattern.evaluate(resolver),
+                        divInputMask.patternElements.map {
+                            BaseInputMask.MaskKey(
                                 key = it.key.evaluate(resolver).first(),
                                 filter = it.regex?.evaluate(resolver),
                                 placeholder = it.placeholder.evaluate(resolver).first()
                             )
                         },
-                        inputMask.alwaysVisible.evaluate(resolver)
+                        divInputMask.alwaysVisible.evaluate(resolver)
                     )
 
-                    maskHelper?.apply { updateMaskData(maskData) } ?: MaskHelper(maskData) {
+                    inputMask?.apply { updateMaskData(maskData) } ?: FixedLengthInputMask(maskData) {
                         when (it) {
                             is PatternSyntaxException -> errorCollector.logError(
                                 IllegalArgumentException("Invalid regex pattern '${it.pattern}'.")
@@ -286,11 +286,10 @@ internal class DivInputBinder @Inject constructor(
                 else -> null
             }
 
-            onMaskUpdate(maskHelper)
+            onMaskUpdate(inputMask)
         }
 
         when (val inputMask = div.mask?.value()) {
-            null -> Unit
             is DivFixedLengthInputMask -> {
                 addSubscription(inputMask.pattern.observeAndGet(resolver, updateMaskData))
                 inputMask.patternElements.forEach { patternElement ->
