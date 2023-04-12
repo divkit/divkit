@@ -37,6 +37,9 @@
     },
     {
       "title": "Tab swipe",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivTabs",
         "swipe"
@@ -53,6 +56,9 @@
     },
     {
       "title": "Tab swipe restricted",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivTabs",
         "swipe"
