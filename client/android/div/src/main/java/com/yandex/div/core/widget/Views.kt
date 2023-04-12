@@ -84,3 +84,7 @@ internal fun isAtMost(measureSpec: Int) = View.MeasureSpec.getMode(measureSpec) 
 internal fun isUnspecified(measureSpec: Int) = View.MeasureSpec.getMode(measureSpec) == View.MeasureSpec.UNSPECIFIED
 
 internal fun makeExactSpec(size: Int) = View.MeasureSpec.makeMeasureSpec(size, View.MeasureSpec.EXACTLY)
+
+internal fun makeAtMostSpec(size: Int) = View.MeasureSpec.makeMeasureSpec(size, View.MeasureSpec.AT_MOST)
+
+internal fun makeUnspecifiedSpec() = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

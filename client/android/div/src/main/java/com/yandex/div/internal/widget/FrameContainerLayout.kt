@@ -309,5 +309,5 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
     override fun shouldDelayChildPressedState(): Boolean = false
 
-    override fun generateDefaultLayoutParams() = DivLayoutParams(MATCH_PARENT, MATCH_PARENT)
+    override fun generateDefaultLayoutParams(): LayoutParams = DivLayoutParams(MATCH_PARENT, MATCH_PARENT)
 }

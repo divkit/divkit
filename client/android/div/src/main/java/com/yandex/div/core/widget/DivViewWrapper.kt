@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -21,7 +23,7 @@ internal class DivViewWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr), DivBorderSupports, TransientView {
+) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, TransientView {
 
     override var isTransient = false
         set(value) = invalidateAfter {
@@ -52,12 +54,14 @@ internal class DivViewWrapper @JvmOverloads constructor(
     }
 
     override fun generateLayoutParams(childLayoutParams: LayoutParams?): LayoutParams {
-        val selfLayoutParams = layoutParams ?: WrapperLayoutParams()
+        val selfLayoutParams = generateDefaultLayoutParams()
         return selfLayoutParams.setBy(childLayoutParams)
     }
 
-    override fun generateDefaultLayoutParams(): LayoutParams {
-        return layoutParams ?: WrapperLayoutParams()
+    override fun generateDefaultLayoutParams(): LayoutParams = when (val lp = layoutParams) {
+        is DivLayoutParams -> lp
+        null -> DivLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        else -> super.generateLayoutParams(lp)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -77,18 +81,6 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         child?.layout(0, 0, right - left, bottom - top)
-    }
-
-    @Suppress("unused")
-    class WrapperLayoutParams : MarginLayoutParams {
-
-        constructor() : this(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-
-        constructor(width: Int, height: Int) : super(width, height)
-
-        constructor(source: LayoutParams) : super(source)
-
-        constructor(source: MarginLayoutParams) : super(source)
     }
 
     override val border: DivBorder?
@@ -118,6 +110,11 @@ private fun LayoutParams.setBy(other: LayoutParams?): LayoutParams {
             marginStart = other.marginStart
             marginEnd = other.marginEnd
         }
+    }
+
+    if (this is DivLayoutParams && other is DivLayoutParams) {
+        maxWidth = other.maxWidth
+        maxHeight = other.maxHeight
     }
 
     return this

@@ -29,6 +29,10 @@
         "type": "fixed",
         "value": 156
       },
+      "height": {
+        "type": "wrap_content",
+        "constrained": true
+      },
       "content_alignment_vertical": "center",
       "$action": "button_action",
       "items": [

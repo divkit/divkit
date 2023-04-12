@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
@@ -22,11 +23,11 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.DivPatchableAdapter
 import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.ReleasingViewPool
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor

@@ -1,11 +1,11 @@
 package com.yandex.div.core.view2.divs
 
+import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
-import com.yandex.div.core.view2.divs.gallery.DivLinearLayoutManager
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger

@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs.gallery
 
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.core.view.doOnLayout
@@ -10,12 +11,17 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.widget.makeAtMostSpec
+import com.yandex.div.core.widget.makeExactSpec
+import com.yandex.div.core.widget.makeUnspecifiedSpec
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
+import kotlin.math.min
 
 internal interface DivGalleryItemHelper {
     val divView: Div2View
@@ -240,6 +246,35 @@ internal interface DivGalleryItemHelper {
                 DivAlignmentVertical.CENTER -> DivGallery.CrossContentAlignment.CENTER
                 DivAlignmentVertical.BOTTOM -> DivGallery.CrossContentAlignment.END
             }
+        }
+    }
+
+    fun getChildMeasureSpec(
+        parentSize: Int,
+        parentMode: Int,
+        padding: Int,
+        childDimension: Int,
+        maxSize: Int,
+        canScroll: Boolean
+    ): Int {
+        val size = (parentSize - padding).coerceAtLeast(0)
+        return when (childDimension) {
+            in 0 .. Int.MAX_VALUE -> makeExactSpec(childDimension)
+            RecyclerView.LayoutParams.MATCH_PARENT -> {
+                if (canScroll && parentMode == MeasureSpec.UNSPECIFIED) {
+                    makeUnspecifiedSpec()
+                } else {
+                    MeasureSpec.makeMeasureSpec(size, parentMode)
+                }
+            }
+            RecyclerView.LayoutParams.WRAP_CONTENT -> {
+                if (maxSize == Int.MAX_VALUE) makeUnspecifiedSpec() else makeAtMostSpec(maxSize)
+            }
+            DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> when (parentMode) {
+                MeasureSpec.AT_MOST, MeasureSpec.EXACTLY -> makeAtMostSpec(min(size, maxSize))
+                else -> if (maxSize == Int.MAX_VALUE) makeUnspecifiedSpec() else makeAtMostSpec(maxSize)
+            }
+            else -> makeUnspecifiedSpec()
         }
     }
 }
