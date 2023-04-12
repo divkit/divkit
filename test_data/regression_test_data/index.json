@@ -1290,6 +1290,40 @@
       "file": "single_line_input.json"
     },
     {
+      "title": "Select",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Select item"
+      ],
+      "expected_results": [
+        "When selecting, the text in the input should change."
+      ],
+      "file": "select.json"
+    },
+    {
+      "title": "Select with default item",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Select item"
+      ],
+      "expected_results": [
+        "When selecting, the text in the input should change."
+      ],
+      "file": "select_with_default.json"
+    },
+    {
       "title": "Manage VideoCustom",
       "platforms": [
         "android"

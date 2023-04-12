@@ -67,7 +67,7 @@ extension DivInput: DivBlockModeling {
       textValue: textValue,
       textTypo: textTypo,
       multiLineMode: keyboardType == .multiLineText,
-      keyboardType: keyboardType.system,
+      inputType: keyboardType.system,
       highlightColor: highlightColor,
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
@@ -93,18 +93,18 @@ extension DivAlignmentHorizontal {
 }
 
 extension DivInput.KeyboardType {
-  fileprivate var system: TextInputBlock.KeyboardType {
+  fileprivate var system: TextInputBlock.InputType {
     switch self {
     case .singleLineText, .multiLineText:
       return .default
     case .phone:
-      return .phonePad
+      return .keyboard(.phonePad)
     case .number:
-      return .decimalPad
+      return .keyboard(.decimalPad)
     case .email:
-      return .emailAddress
+      return .keyboard(.emailAddress)
     case .uri:
-      return .URL
+      return .keyboard(.URL)
     }
   }
 }

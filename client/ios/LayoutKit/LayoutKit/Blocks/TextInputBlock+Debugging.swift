@@ -11,7 +11,7 @@ extension TextInputBlock: CustomDebugStringConvertible {
 
     result += "\n  Variable text: \(textValue.wrappedValue)"
 
-    result += "\n  Keyboard type: \(keyboardType)"
+    result += "\n  Input type: \(inputType)"
 
     result += "\n}"
 
