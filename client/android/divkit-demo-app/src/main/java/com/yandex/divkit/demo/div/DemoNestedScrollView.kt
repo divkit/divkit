@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.div
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 
 class DemoNestedScrollView @JvmOverloads constructor(
@@ -16,8 +17,11 @@ class DemoNestedScrollView @JvmOverloads constructor(
 
         val childWidthMeasureSpec: Int = getChildMeasureSpec(parentWidthMeasureSpec,
             paddingLeft + paddingRight, lp.width)
-        val childHeightMeasureSpec: Int = getChildMeasureSpec(parentHeightMeasureSpec,
-            paddingTop + paddingBottom, lp.height)
+        val childHeightMeasureSpec: Int = if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            getChildMeasureSpec(parentHeightMeasureSpec, paddingTop + paddingBottom, lp.height)
+        } else {
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        }
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
@@ -27,8 +31,12 @@ class DemoNestedScrollView @JvmOverloads constructor(
 
         val childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
             paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed, lp.width)
-        val childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
-            paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed, lp.height)
+        val childHeightMeasureSpec = if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            getChildMeasureSpec(parentHeightMeasureSpec,
+                paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed, lp.height)
+        } else {
+            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        }
 
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }

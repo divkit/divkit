@@ -6,10 +6,12 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div2.DivSize
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorScreenshot.takeScreenshot
@@ -35,6 +37,22 @@ class DivEditorUi(
         updateRenderTime()
         activity.takeScreenshot { screenshot: Bitmap ->
             onDiv2ViewDrawnListener?.invoke(screenshot)
+        }
+    }
+
+    init {
+        div2View.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            div2View.divData?.states?.firstOrNull { it.stateId == div2View.currentStateId }?.let {
+                val height = when (it.div.value().height) {
+                    is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
+                    else -> ViewGroup.LayoutParams.WRAP_CONTENT
+                }
+                if (divContainer.layoutParams.height == height) return@addOnLayoutChangeListener
+                divContainer.doOnPreDraw {
+                    divContainer.layoutParams.height = height
+                    divContainer.requestLayout()
+                }
+            }
         }
     }
 
