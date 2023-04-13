@@ -22,7 +22,8 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 
 internal class VideoView(
-    context: Context
+    context: Context,
+    zOrderMode: ZOrderMode = ZOrderMode.ON_TOP,
 ) : FrameLayout(context) {
     private val coroutineScope: CoroutineScope = MainScope()
     private var stubViewObservationJob: Job? = null
@@ -34,7 +35,10 @@ internal class VideoView(
         useController = false
         setShutterBackgroundColor(Color.TRANSPARENT)
         (videoSurfaceView as? SurfaceView)?.apply {
-            setZOrderOnTop(true)
+            when (zOrderMode) {
+                ZOrderMode.ON_TOP -> setZOrderOnTop(true)
+                ZOrderMode.MEDIA_OVERLAY -> setZOrderMediaOverlay(true)
+            }
             setBackgroundColor(Color.TRANSPARENT)
             holder.setFormat(PixelFormat.TRANSPARENT)
         }
@@ -126,7 +130,6 @@ internal class VideoView(
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        assertBoundToViewModel()
         viewModel?.let { pauseObservingViewModel(it) }
     }
 

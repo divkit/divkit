@@ -25,7 +25,7 @@ class VideoCustomAdapter(
     }
 
     override fun createView(div: DivCustom, divView: Div2View): View {
-        return VideoView(divView.context)
+        return VideoView(divView.context, div.videoConfig.zOrderMode)
     }
 
     override fun bindView(view: View, div: DivCustom, divView: Div2View) {
