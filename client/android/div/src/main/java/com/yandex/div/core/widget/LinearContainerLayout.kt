@@ -8,8 +8,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
@@ -23,9 +21,6 @@ import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
-
-/** Class name may be obfuscated by Proguard. Hardcode the string for accessibility usage.  */
-private const val ACCESSIBILITY_CLASS_NAME = "android.widget.LinearLayout"
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 internal open class LinearContainerLayout @JvmOverloads constructor(
@@ -947,16 +942,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
      */
     override fun generateDefaultLayoutParams() =
         if (isVertical) DivLayoutParams(MATCH_PARENT, WRAP_CONTENT) else DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-
-    override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
-        super.onInitializeAccessibilityEvent(event)
-        event.className = ACCESSIBILITY_CLASS_NAME
-    }
-
-    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
-        super.onInitializeAccessibilityNodeInfo(info)
-        info.className = ACCESSIBILITY_CLASS_NAME
-    }
 
     private val isVertical get() = orientation == VERTICAL
 
