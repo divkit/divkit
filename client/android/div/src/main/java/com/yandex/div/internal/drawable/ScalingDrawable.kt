@@ -23,7 +23,7 @@ internal class ScalingDrawable : Drawable() {
     }
 
     enum class ScaleType {
-        NO_SCALE, FIT, FILL
+        NO_SCALE, FIT, FILL, STRETCH
     }
 
     var customScaleType = ScaleType.NO_SCALE
@@ -34,7 +34,8 @@ internal class ScalingDrawable : Drawable() {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     private var thumbTransformMatrix: Matrix = Matrix()
     private var isDirtyRect = false
-    private var scale = 1f
+    private var xScale = 1f
+    private var yScale = 1f
     private var xTranslate = 0f
     private var yTranslate = 0f
 
@@ -78,31 +79,41 @@ internal class ScalingDrawable : Drawable() {
         if (isDirtyRect) {
             val viewWidth = bounds.width().toFloat()
             val viewHeight = bounds.height().toFloat()
-            val horizontalScale = viewWidth / drawableWidth
-            val verticalScale = viewHeight / drawableHeight
-            scale = when (customScaleType) {
-                ScaleType.FILL -> Math.max(horizontalScale, verticalScale)
-                ScaleType.FIT -> Math.min(horizontalScale, verticalScale)
-                else -> 1f
+            xScale = viewWidth / drawableWidth
+            yScale = viewHeight / drawableHeight
+            when (customScaleType) {
+                ScaleType.FILL -> {
+                    xScale = Math.max(xScale, yScale)
+                    yScale = xScale
+                }
+                ScaleType.FIT -> {
+                    xScale = Math.min(xScale, yScale)
+                    yScale = xScale
+                }
+                ScaleType.NO_SCALE -> {
+                    xScale = 1f
+                    yScale = 1f
+                }
+                else -> Unit
             }
 
             // translate
-            val newWidth = drawableWidth * scale
-            val newHeight = drawableHeight * scale
+            val newWidth = drawableWidth * xScale
+            val newHeight = drawableHeight * yScale
             xTranslate = when (alignmentHorizontal) {
-                AlignmentHorizontal.CENTER -> (viewWidth - newWidth) / 2 / scale
-                AlignmentHorizontal.RIGHT -> (viewWidth - newWidth) / scale
+                AlignmentHorizontal.CENTER -> (viewWidth - newWidth) / 2 / xScale
+                AlignmentHorizontal.RIGHT -> (viewWidth - newWidth) / xScale
                 else -> 0f
             }
 
             yTranslate = when (alignmentVertical) {
-                AlignmentVertical.CENTER -> (viewHeight - newHeight) / 2 / scale
-                AlignmentVertical.BOTTOM -> (viewHeight - newHeight) / scale
+                AlignmentVertical.CENTER -> (viewHeight - newHeight) / 2 / yScale
+                AlignmentVertical.BOTTOM -> (viewHeight - newHeight) / yScale
                 else -> 0f
             }
             isDirtyRect = false
         }
-        canvas.scale(scale, scale)
+        canvas.scale(xScale, yScale)
         canvas.translate(xTranslate , yTranslate)
 
         // draw original image

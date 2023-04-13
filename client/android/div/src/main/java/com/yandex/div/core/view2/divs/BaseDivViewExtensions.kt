@@ -386,6 +386,7 @@ internal fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
     return when(this) {
         DivImageScale.FILL -> ScalingDrawable.ScaleType.FILL
         DivImageScale.FIT -> ScalingDrawable.ScaleType.FIT
+        DivImageScale.STRETCH -> ScalingDrawable.ScaleType.STRETCH
         else -> ScalingDrawable.ScaleType.NO_SCALE
     }
 }
