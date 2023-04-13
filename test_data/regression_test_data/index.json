@@ -143,6 +143,9 @@
     },
     {
       "title": "Gallery default item states",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
