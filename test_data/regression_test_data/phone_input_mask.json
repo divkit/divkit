@@ -120,6 +120,11 @@
         "value": "12345"
       },
       {
+        "name": "raw_input",
+        "type": "string",
+        "value": "12345"
+      },
+      {
         "name": "mask",
         "type": "string",
         "value": "+7 (###) ###-##-##"
@@ -173,6 +178,7 @@
               "mask": {
                 "type": "fixed_length",
                 "pattern": "@{mask}",
+                "raw_text_variable": "raw_input",
                 "pattern_elements": [
                   {
                     "key": "@{key}",
