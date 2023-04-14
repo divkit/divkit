@@ -11,6 +11,7 @@ import Pager from './pager/Pager.svelte';
 import Indicator from './indicator/Indicator.svelte';
 import Slider from './slider/Slider.svelte';
 import Input from './input/Input.svelte';
+import Select from './select/Select.svelte';
 
 export const TYPE_MAP: Record<string, typeof SvelteComponent> = {};
 
@@ -64,4 +65,8 @@ if (process.env.ENABLE_COMPONENT_SLIDER || process.env.ENABLE_COMPONENT_SLIDER =
 
 if (process.env.ENABLE_COMPONENT_INPUT || process.env.ENABLE_COMPONENT_INPUT === undefined) {
     TYPE_MAP.input = Input;
+}
+
+if (process.env.ENABLE_COMPONENT_SELECT || process.env.ENABLE_COMPONENT_SELECT === undefined) {
+    TYPE_MAP.select = Select;
 }

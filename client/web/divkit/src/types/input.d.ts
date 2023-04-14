@@ -1,5 +1,4 @@
 import type { DivBaseData } from './base';
-import type { DivActionableData } from './actionable';
 import type { FontWeight } from './text';
 import type { BooleanInt } from '../../typings/common';
 
@@ -24,8 +23,8 @@ export interface FixedLengthInputMask extends MaskBase {
 
 export type InputMask = FixedLengthInputMask;
 
-export interface DivInputData extends DivBaseData, DivActionableData {
-    type: 'type';
+export interface DivInputData extends DivBaseData {
+    type: 'input';
 
     font_size?: number;
     // font_size_unit

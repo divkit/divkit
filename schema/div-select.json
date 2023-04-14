@@ -51,12 +51,20 @@
         "font_size_unit": {
           "$ref": "div-size-unit.json",
           "default_value": "sp",
-          "$description": "translations.json#/div_font_size_unit"
+          "$description": "translations.json#/div_font_size_unit",
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "font_family": {
           "$ref": "div-font-family.json",
           "default_value": "text",
-          "$description": "translations.json#/div_font_family"
+          "$description": "translations.json#/div_font_family",
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "font_weight": {
           "$ref": "div-font-weight.json",

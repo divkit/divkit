@@ -1301,13 +1301,14 @@
     {
       "title": "Select",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
-        "DivInput"
+        "DivSelect"
       ],
       "steps": [
-        "Tap on input field",
+        "Tap on select field",
         "Select item"
       ],
       "expected_results": [
@@ -1318,13 +1319,14 @@
     {
       "title": "Select with default item",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
-        "DivInput"
+        "DivSelect"
       ],
       "steps": [
-        "Tap on input field",
+        "Tap on select field",
         "Select item"
       ],
       "expected_results": [

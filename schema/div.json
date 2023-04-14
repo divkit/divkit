@@ -65,7 +65,7 @@
     {
       "$ref": "div-select.json",
       "$description": "translations.json#/div_select",
-      "platforms": [ "ios" ]
+      "platforms": [ "ios", "web" ]
     }
   ]
 }

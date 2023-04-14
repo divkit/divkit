@@ -24,7 +24,8 @@ const COMPONENTS = [
     'pager',
     'indicator',
     'slider',
-    'input'
+    'input',
+    'select'
 ];
 
 const enabledComponents = new Set(process.env.ENABLED_COMPONENTS?.split(/[,;\s]+/) || COMPONENTS);

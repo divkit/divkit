@@ -58,9 +58,7 @@
               "value_variable": "value_variable",
               "hint_text": "Select country",
               "hint_color": "#888888",
-              "highlight_color": "#e0bae3",
               "line_height": 22,
-              "select_all_on_focus": 1,
               "options": [
                   {
                     "value": "ru",
