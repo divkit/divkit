@@ -1,11 +1,15 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onMount, tick } from 'svelte';
 
     import css from './Input.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivInputData, KeyboardType } from '../../types/input';
+    import type { EdgeInsets } from '../../types/edgeInserts';
+    import type { FixedLengthInputMask } from '../../utils/mask/fixedLengthInputMask';
+    import type { MaybeMissing } from '../../expressions/json';
+    import type { InputMask } from '../../types/input';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -18,6 +22,10 @@
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { updateFixedMask } from '../../utils/updateFixedMask';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;
@@ -29,8 +37,10 @@
     let holder: HTMLElement;
     let isPressed = false;
     let verticalOverflow = false;
+    let fixedMask: FixedLengthInputMask | null = null;
 
-    const variable = rootCtx.getJsonWithVars(json.text_variable);
+    const variable = json.text_variable;
+    const rawVariable = json.mask?.raw_text_variable;
 
     let hasError = false;
     if (!variable) {
@@ -39,9 +49,24 @@
     }
 
     let valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+    let rawValueVariable = rawVariable && rootCtx.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
     let value = '';
-    $: {
-        value = $valueVariable as string;
+
+    const jsonMask = rootCtx.getDerivedFromVars(json.mask);
+    function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {
+        fixedMask = updateFixedMask(mask, rootCtx.logError, fixedMask);
+        if (fixedMask) {
+            runRawValueMask();
+        }
+    }
+    $: updateMaskData($jsonMask);
+
+    $: if (!fixedMask && value !== $valueVariable) {
+        value = $valueVariable;
+    }
+
+    $: if (fixedMask && (fixedMask as FixedLengthInputMask).rawValue !== $rawValueVariable) {
+        runRawValueMask();
     }
 
     const jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
@@ -78,7 +103,7 @@
     let letterSpacing = '';
     $: {
         if (isNumber($jsonLetterSpacing)) {
-            letterSpacing = pxToEm($jsonLetterSpacing / fontSize * 10);
+            letterSpacing = pxToEm($jsonLetterSpacing);
         }
     }
 
@@ -117,10 +142,19 @@
 
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     let maxHeight = '';
+    let selfPadding: EdgeInsets | null = null;
+    let padding = '';
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
-            maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
+            maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) * (fontSize / 10) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
         }
+        selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
+        padding = selfPadding ? edgeInsertsToCss({
+            top: (Number(selfPadding.top) || 0) / fontSize * 10,
+            right: (Number(selfPadding.right) || 0) / fontSize * 10,
+            bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10,
+            left: (Number(selfPadding.left) || 0) / fontSize * 10
+        }) : '';
     }
 
     $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
@@ -143,18 +177,27 @@
     $: stl = {
         '--divkit-input-hint-color': hintColor,
         '--divkit-input-highlight-color': highlightColor,
-        'font-size': pxToEm(fontSize),
         'font-weight': fontWeight,
         'line-height': lineHeight,
         'letter-spacing': letterSpacing,
         color: textColor,
         'max-height': maxHeight
     };
+    $: paddingStl = {
+        'font-size': pxToEm(fontSize),
+        padding
+    };
 
     function onInput(event: Event) {
-        const value = (event.target as HTMLInputElement).value || '';
+        const val = (event.target as HTMLInputElement).value || '';
 
-        valueVariable.setValue(value);
+        if (value !== val) {
+            value = val;
+            valueVariable.setValue(val);
+            if (fixedMask) {
+                runValueMask();
+            }
+        }
 
         checkVerticalOverflow();
     }
@@ -178,8 +221,47 @@
         verticalOverflow = holder.scrollHeight > holder.offsetHeight;
     }
 
+    async function runValueMask(): Promise<void> {
+        if (!input || !fixedMask) {
+            return;
+        }
+
+        fixedMask.applyChangeFrom(value, input.selectionEnd !== null ? input.selectionEnd : undefined);
+
+        rawValueVariable.set(fixedMask.rawValue);
+        $valueVariable = value = fixedMask.value;
+        const cursorPosition = fixedMask.cursorPosition;
+
+        await tick();
+
+        input.selectionStart = input.selectionEnd = cursorPosition;
+    }
+
+    async function runRawValueMask(): Promise<void> {
+        if (!input || !fixedMask) {
+            return;
+        }
+
+        fixedMask.overrideRawValue($rawValueVariable);
+
+        rawValueVariable.set(fixedMask.rawValue);
+        $valueVariable = value = fixedMask.value;
+        const cursorPosition = fixedMask.cursorPosition;
+
+        await tick();
+
+        input.selectionStart = input.selectionEnd = cursorPosition;
+    }
+
     onMount(() => {
         checkVerticalOverflow();
+
+        if (input && fixedMask) {
+            if ($rawValueVariable) {
+                fixedMask.overrideRawValue($rawValueVariable);
+                $valueVariable = value = fixedMask.value;
+            }
+        }
     });
 </script>
 
@@ -189,12 +271,13 @@
         style={stl}
         customDescription={true}
         customActions={'input'}
+        customPaddings={true}
         {json}
         {origJson}
         {templateContext}
         {layoutParams}
     >
-        <span class={css.input__wrapper}>
+        <span class={css.input__wrapper} style={makeStyle(paddingStl)}>
             <span class={css.input__holder} aria-hidden="true" bind:this={holder}>
                 <!--appends zero-space at end-->
                 {value}{#if value.endsWith('\n') || !value}​{/if}
@@ -206,6 +289,7 @@
                     autocomplete="off"
                     autocapitalize="off"
                     aria-label={description}
+                    style={makeStyle({ padding })}
                     {placeholder}
                     {value}
                     on:input={onInput}
@@ -220,6 +304,7 @@
                     autocomplete="off"
                     autocapitalize="off"
                     aria-label={description}
+                    style={makeStyle({ padding })}
                     {placeholder}
                     {value}
                     on:input={onInput}

@@ -104,7 +104,11 @@
         },
         "mask": {
           "$ref": "div-input-mask.json",
-          "$description": "translations.json#/div_input_mask"
+          "$description": "translations.json#/div_input_mask",
+          "platforms": [
+            "android",
+            "web"
+          ]
         }
       }
     }
