@@ -10,7 +10,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4 - 7 => error",
@@ -22,7 +26,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4 * 7 => error",
@@ -34,7 +42,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4 / 7 => error",
@@ -46,7 +58,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4 % 7 => error",
@@ -58,7 +74,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4 ^ 7 => error",
@@ -140,7 +160,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4.0 - 7.0 => error",
@@ -152,7 +176,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4.0 * 7.0 => error",
@@ -164,7 +192,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4.0 / 7.0 => error",
@@ -176,7 +208,11 @@
             "variables": [],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "4.0 % 7.0 => error",
@@ -409,7 +445,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a - b (integer) => error",
@@ -432,7 +472,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a * b (integer) => error",
@@ -455,7 +499,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a / b (integer) => error",
@@ -478,7 +526,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a % b (integer) => error",
@@ -651,7 +703,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a - b => (number) error",
@@ -674,7 +730,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a * b (number) => error",
@@ -697,7 +757,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a / b (number) => error",
@@ -720,7 +784,11 @@
             ],
             "platforms": [
                 "ios"
-            ]
+            ],
+            "unsupported_platforms": {
+                "android": "No supported cause this use-case is going to be removed in future versions.",
+                "web": "No supported cause this use-case is going to be removed in future versions."
+            }
         },
         {
             "name": "a % b (number) => error",

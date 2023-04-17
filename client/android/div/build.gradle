@@ -40,4 +40,5 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
 
     testImplementation "androidx.test:core-ktx:$versions.androidx.test"
+    testImplementation "org.json:json:$versions.json"
 }

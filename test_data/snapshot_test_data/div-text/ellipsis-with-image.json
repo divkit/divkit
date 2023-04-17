@@ -4,6 +4,9 @@
     "ios",
     "android"
   ],
+  "unsupported_platforms": {
+    "web": "It cannot be implemented in css, and the implementation will be too heavy on js."
+  },
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
