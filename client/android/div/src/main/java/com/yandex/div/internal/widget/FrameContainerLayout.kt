@@ -84,10 +84,8 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
         val widthSizeAndState = resolveSizeAndState(getDynamicWidth(widthMeasureSpec), widthMeasureSpec, childState)
         val heightSize = getDynamicHeight(widthMeasureSpec, heightSpec, widthSizeAndState and MEASURED_SIZE_MASK)
-        if (!isExact(heightSpec)) {
-            if (isUnspecified(heightSpec)) {
-                heightSpec = makeExactSpec(heightSize)
-            }
+        if (isUnspecified(heightSpec)) {
+            heightSpec = makeExactSpec(heightSize)
             remeasureWrapContentConstrainedChildren(widthMeasureSpec, heightSpec)
         }
 
@@ -191,6 +189,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
                     (lp.height == MATCH_PARENT && needMeasureHeight))) {
                 measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
                 childState = combineMeasuredStates(childState, child.measuredState)
+                skippedMatchParentChildren -= child
             }
             if (needMeasureWidth) {
                 updateMaxWidth(child.measuredWidth + lp.horizontalMargins)
@@ -245,9 +244,9 @@ open class FrameContainerLayout @JvmOverloads constructor(
     }
 
     private fun remeasureWrapContentConstrainedChild(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (child.lp.height == DivLayoutParams.WRAP_CONTENT_CONSTRAINED &&
-            !skippedMatchParentChildren.contains(child)) {
+        if (child.lp.height == DivLayoutParams.WRAP_CONTENT_CONSTRAINED) {
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+            matchParentChildren -= child
         }
     }
 
