@@ -11,13 +11,14 @@ extension Div {
     case let .divCustom(div): return div.items ?? []
     case let .divState(div): return div.states.compactMap(\.div)
     case .divGifImage,
-        .divImage,
-        .divIndicator,
-        .divInput,
-        .divSelect,
-        .divSeparator,
-        .divSlider,
-        .divText:
+         .divImage,
+         .divIndicator,
+         .divInput,
+         .divSelect,
+         .divSeparator,
+         .divSlider,
+         .divVideo,
+         .divText:
       return []
     }
   }

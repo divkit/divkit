@@ -401,19 +401,20 @@ extension Div {
     else { return nil }
     switch self {
     case .divContainer,
-        .divCustom,
-        .divGallery,
-        .divGifImage,
-        .divGrid,
-        .divImage,
-        .divIndicator,
-        .divInput,
-        .divPager,
-        .divTabs,
-        .divSelect,
-        .divSeparator,
-        .divSlider,
-        .divState:
+         .divCustom,
+         .divGallery,
+         .divGifImage,
+         .divGrid,
+         .divImage,
+         .divIndicator,
+         .divInput,
+         .divPager,
+         .divTabs,
+         .divSelect,
+         .divSeparator,
+         .divSlider,
+         .divVideo,
+         .divState:
       return value.accessibility.resolveDescription(context.expressionResolver)
     case let .divText(divText):
       let handlerDescription = context

@@ -21,6 +21,7 @@ public enum Div {
   case divSlider(DivSlider)
   case divInput(DivInput)
   case divSelect(DivSelect)
+  case divVideo(DivVideo)
 
   public var value: Serializable & DivBase {
     switch self {
@@ -53,6 +54,8 @@ public enum Div {
     case let .divInput(value):
       return value
     case let .divSelect(value):
+      return value
+    case let .divVideo(value):
       return value
     }
   }
@@ -88,6 +91,8 @@ public enum Div {
     case let .divInput(value):
       return value.id
     case let .divSelect(value):
+      return value.id
+    case let .divVideo(value):
       return value.id
     }
   }
@@ -126,6 +131,8 @@ extension Div: Equatable {
     case let (.divInput(l), .divInput(r)):
       return l == r
     case let (.divSelect(l), .divSelect(r)):
+      return l == r
+    case let (.divVideo(l), .divVideo(r)):
       return l == r
     default:
       return false

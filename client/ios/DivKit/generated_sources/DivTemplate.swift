@@ -21,6 +21,7 @@ public enum DivTemplate: TemplateValue {
   case divSliderTemplate(DivSliderTemplate)
   case divInputTemplate(DivInputTemplate)
   case divSelectTemplate(DivSelectTemplate)
+  case divVideoTemplate(DivVideoTemplate)
 
   public var value: Any {
     switch self {
@@ -53,6 +54,8 @@ public enum DivTemplate: TemplateValue {
     case let .divInputTemplate(value):
       return value
     case let .divSelectTemplate(value):
+      return value
+    case let .divVideoTemplate(value):
       return value
     }
   }
@@ -89,6 +92,8 @@ public enum DivTemplate: TemplateValue {
       return .divInputTemplate(try value.resolveParent(templates: templates))
     case let .divSelectTemplate(value):
       return .divSelectTemplate(try value.resolveParent(templates: templates))
+    case let .divVideoTemplate(value):
+      return .divVideoTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -222,6 +227,14 @@ public enum DivTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divVideoTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divVideo(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divVideo(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -351,6 +364,14 @@ public enum DivTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivVideo.type:
+      let result = DivVideoTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divVideo(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divVideo(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
@@ -392,6 +413,8 @@ extension DivTemplate {
       self = .divInputTemplate(try DivInputTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSelectTemplate.type:
       self = .divSelectTemplate(try DivSelectTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivVideoTemplate.type:
+      self = .divVideoTemplate(try DivVideoTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div_template", representation: dictionary)
     }

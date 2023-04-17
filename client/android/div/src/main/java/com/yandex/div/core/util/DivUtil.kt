@@ -50,6 +50,7 @@ internal val Div.type: String
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
             is Div.Select -> TODO()
+            is Div.Video -> TODO()
         }
     }
 

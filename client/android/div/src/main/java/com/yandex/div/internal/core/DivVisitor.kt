@@ -38,6 +38,7 @@ abstract class DivVisitor<T> {
             is Div.Slider -> visit(div.value, resolver)
             is Div.Input -> visit(div.value, resolver)
             is Div.Select -> TODO()
+            is Div.Video -> TODO()
         }
     }
 

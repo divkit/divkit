@@ -59,6 +59,7 @@ extension Div {
          .divSelect,
          .divSeparator,
          .divSlider,
+         .divVideo,
          .divText:
       // no children
       return self

@@ -1,0 +1,78 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_video",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "video"
+          ]
+        },
+        "video_data": {
+          "$ref": "div-video-data.json"
+        },
+        "repeatable": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_repeatable"
+        },
+        "autostart": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_autostart"
+        },
+        "muted": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_muted"
+        },
+        "preview": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_video_preview"
+        },
+        "elapsed_time_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_video_elapsed_time_variable"
+        },
+        "resume_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_video_resume_actions"
+        },
+        "end_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_video_end_actions"
+        },
+        "buffering_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_video_buffering_actions"
+        },
+        "player_settings_payload": {
+          "type": "object",
+          "additionalProperties": true,
+          "$description": "translations.json#/div_video_player_settings_payload"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "video_data"
+  ]
+}

@@ -24,17 +24,18 @@ extension Div {
         urls.append(contentsOf: images.compactMap { $0.resolveUrl(expressionResolver) })
       }
     case .divContainer,
-        .divCustom,
-        .divGallery,
-        .divGrid,
-        .divIndicator,
-        .divInput,
-        .divPager,
-        .divSelect,
-        .divSeparator,
-        .divSlider,
-        .divState,
-        .divTabs:
+         .divCustom,
+         .divGallery,
+         .divGrid,
+         .divIndicator,
+         .divInput,
+         .divPager,
+         .divSelect,
+         .divSeparator,
+         .divSlider,
+         .divState,
+         .divVideo,
+         .divTabs:
       break
     }
     return urls

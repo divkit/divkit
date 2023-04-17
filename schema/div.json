@@ -66,6 +66,11 @@
       "$ref": "div-select.json",
       "$description": "translations.json#/div_select",
       "platforms": [ "ios", "web" ]
+    },
+    {
+      "$ref": "div-video.json",
+      "$description": "translations.json#/div_video",
+      "platforms": []
     }
   ]
 }
