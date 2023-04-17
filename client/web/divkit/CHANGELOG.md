@@ -1,3 +1,13 @@
+## 24.2.0 (April 17, 2023)
+
+Additions:
+* `stretch` image scale type
+* Ability to build custom DivKIt lib with a limited set of components and disabled expressions
+
+Fixes:
+* `no_scale` image scale type should now work properly
+
+
 ## 24.1.0 (April 10, 2023)
 
 Fixes:

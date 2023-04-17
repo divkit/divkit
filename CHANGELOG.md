@@ -1,3 +1,51 @@
+## 24.2.0
+
+# JSON Schema:
+
+Additions:
+* Added stretch image scale type
+* Added div-select.json to schema
+* Added currency mask schema
+
+Changes:
+* Moved raw_text_variable to input mask
+* Updated `platforms` field in schema
+
+# Android Client:
+
+Additions:
+* Implemented wrap_content constrained size for gallery items
+* Implemented stretch image scale type
+* Implemented aspect-based height for vertical and horizontal containers
+
+Fixes & Changes:
+* Fixed base sizes for wrap_content constrained in linear container
+* Skip paddings when content does not fit into container
+* Allowed DivCustom childView creation from any thread
+* Disabled incorrect child height warning when aspect-based size is defined
+* Improved DivImage preview performance
+* Fixed error counter breaking overlap container with match_parent height
+* Fixed expression evaluation cache
+* Fixed linear container accessibility
+
+# iOS Client:
+* Removed TemplateSupport module.
+
+# Web Client:
+
+Additions:
+* `stretch` image scale type
+* Ability to build custom DivKIt lib with a limited set of components and disabled expressions
+
+Fixes:
+* `no_scale` image scale type should now work properly
+
+# Kotlin JSON Builder:
+
+Changes:
+* Changed Int to Long
+
+
 ## 24.1.0
 
 # JSON Schema:
