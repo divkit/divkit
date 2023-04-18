@@ -120,11 +120,7 @@
         },
         "aspect": {
           "$ref": "div-aspect.json",
-          "$description": "translations.json#/div_container_aspect",
-          "platforms": [
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_container_aspect"
         }
       }
     }
