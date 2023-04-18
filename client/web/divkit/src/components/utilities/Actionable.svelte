@@ -39,33 +39,36 @@
     let startTs = -1;
     let startCoords: Coords | null = null;
     let isChanged = false;
+    let hasJSAction = false;
 
-    if (Array.isArray(actions) && actions?.length) {
-        for (let i = 0; i < actions.length; ++i) {
-            const url = actions[i].url;
+    $: {
+        if (Array.isArray(actions) && actions?.length) {
+            for (let i = 0; i < actions.length; ++i) {
+                const url = actions[i].url;
 
-            if (url) {
-                href = url;
-                target = actions[i].target || undefined;
-                break;
+                if (url) {
+                    href = url;
+                    target = actions[i].target || undefined;
+                    break;
+                }
             }
         }
-    }
 
-    if (Array.isArray(actions) && actions?.length && actionCtx.hasAction()) {
-        href = '';
-        rootCtx.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
-            level: 'warn',
-            additional: {
-                actions
-            }
-        }));
-    }
+        if (Array.isArray(actions) && actions?.length && actionCtx.hasAction()) {
+            href = '';
+            rootCtx.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
+                level: 'warn',
+                additional: {
+                    actions
+                }
+            }));
+        }
 
-    let hasJSAction = Boolean(customAction);
-    if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
-        href = '';
-        hasJSAction = true;
+        hasJSAction = Boolean(customAction);
+        if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
+            href = '';
+            hasJSAction = true;
+        }
     }
 
     async function onClick(event: MouseEvent): Promise<void> {
