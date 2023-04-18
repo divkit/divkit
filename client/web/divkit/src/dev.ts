@@ -1,4 +1,8 @@
 import Root from './components/Root.svelte';
+import { SizeProvider } from './extensions/sizeProvider';
+import { lottieExtensionBuilder } from './extensions/lottie';
+import type { DivExtensionClass } from '../typings/common';
+import Lottie from 'lottie-web/build/player/lottie';
 
 const json = {
     "templates": {},
@@ -24,6 +28,10 @@ window.root = new Root({
         json,
         onStat(arg) {
             console.log(arg);
-        }
+        },
+        extensions: new Map<string, DivExtensionClass>([
+            ['size_provider', SizeProvider],
+            ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
+        ])
     }
 });

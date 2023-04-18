@@ -1,3 +1,5 @@
+import type { Variable } from './variables';
+
 export type BooleanInt = 0 | 1 | false | true;
 
 export type TemplateContext = Record<string, unknown>;
@@ -150,4 +152,20 @@ export type Theme = 'system' | 'light' | 'dark';
 export interface Customization {
     galleryLeftClass?: string;
     galleryRightClass?: string;
+}
+
+export interface DivExtensionContext {
+    variables: Map<string, Variable>;
+    logError(error: WrappedError): void;
+}
+
+export interface DivExtensionClass {
+    new(params: object): DivExtension;
+    prototype: DivExtension;
+}
+
+export interface DivExtension {
+    mountView?(node: HTMLElement, context: DivExtensionContext): void;
+
+    unmountView?(node: HTMLElement, context: DivExtensionContext): void;
 }

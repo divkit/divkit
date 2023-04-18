@@ -7,7 +7,7 @@
     import type { Mods, Style } from '../../types/general';
     import type { ActionAnimation, AnyAnimation, DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivBase, DivExtension, TemplateContext } from '../../../typings/common';
     import type { Visibility } from '../../types/base';
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
@@ -40,6 +40,7 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
+    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -71,6 +72,7 @@
 
     let currentNode: HTMLElement;
     let attrs: Record<string, string> | undefined;
+    let extensions: DivExtension[] | null = null;
 
     $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
     let borderStyle: Style = {};
@@ -726,10 +728,30 @@
             });
         }
 
+        if (Array.isArray(json.extensions)) {
+            const ctx = rootCtx.getExtensionContext();
+            extensions = json.extensions.map(it => {
+                const instance = rootCtx.getExtension(it.id, it.params);
+
+                if (instance) {
+                    instance.mountView?.(node, ctx);
+                }
+
+                return instance;
+            }).filter(Truthy);
+        }
+
         return {
             destroy() {
                 if (id) {
                     stateCtx.unregisterChild(id);
+                }
+                if (extensions) {
+                    const ctx = rootCtx.getExtensionContext();
+                    extensions.forEach(it => {
+                        it.unmountView?.(node, ctx);
+                    });
+                    extensions = null;
                 }
                 if (dev) {
                     dev.destroy();

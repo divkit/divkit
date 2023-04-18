@@ -7,7 +7,8 @@ import type {
     ComponentCallback,
     CustomActionCallback,
     Theme,
-    Customization
+    Customization,
+    DivExtensionClass
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
@@ -30,11 +31,17 @@ export function render(opts: {
     platform?: Platform;
     customization?: Customization;
     builtinProtocols?: string[];
+    extensions?: Map<string, DivExtensionClass>;
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';
+
+export {
+    SizeProvider,
+    lottieExtensionBuilder
+} from './extensions';
 
 export interface EvalValueBase {
     type: string;

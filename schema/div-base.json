@@ -95,11 +95,7 @@
         "$ref": "div-extension.json"
       },
       "minItems": 1,
-      "$description": "translations.json#/div_base_extensions",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_base_extensions"
     },
     "transition_triggers": {
       "type": "array",

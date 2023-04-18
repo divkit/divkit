@@ -793,7 +793,8 @@
       "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animations",
@@ -812,7 +813,8 @@
       "title": "Lottie animation (repeate_mode=revese, repeat_count=3)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animations",
@@ -831,7 +833,8 @@
       "title": "Lottie animation (repeat_mode=restart, repeate_count=-1)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Animations",
@@ -1431,7 +1434,8 @@
       "title": "Lottie animations",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "lottie"
@@ -1534,7 +1538,8 @@
     {
       "title": "Visibility transition trigger",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ],
       "file": "animations/transition/transition_triggers_visibility_change.json",
       "steps": [
@@ -1678,7 +1683,8 @@
       "title": "SizeProvider extension",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "extensions",
@@ -1693,7 +1699,8 @@
       "title": "SizeProvider extension (recursive)",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "extensions",

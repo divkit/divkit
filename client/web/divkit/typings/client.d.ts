@@ -6,7 +6,8 @@ import type {
     Platform,
     CustomActionCallback,
     Theme,
-    Customization
+    Customization,
+    DivExtensionClass
 } from './common';
 import type { GlobalVariablesController } from './variables';
 
@@ -22,8 +23,14 @@ export function render(opts: {
     platform?: Platform;
     customization?: Customization;
     builtinProtocols?: string[];
+    extensions?: Map<string, DivExtensionClass>;
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
 }): DivkitInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';
+
+export {
+    SizeProvider,
+    lottieExtensionBuilder
+} from './extensions';

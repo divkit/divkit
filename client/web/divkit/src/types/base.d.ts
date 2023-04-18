@@ -82,6 +82,11 @@ export interface Transform {
     rotation?: number;
 }
 
+export interface Extension {
+    id: string;
+    params?: object;
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -101,7 +106,7 @@ export interface DivBaseData {
     visibility_actions?: VisibilityAction[];
     // tooltips;
     accessibility?: Accessibility;
-    // extensions;
+    extensions?: Extension[];
     transition_in?: AppearanceTransition;
     transition_change?: TransitionChange;
     transition_out?: AppearanceTransition;

@@ -17,11 +17,13 @@
         StatCallback,
         TemplateContext,
         Theme,
-        Customization
+        Customization,
+        DivExtension,
+        DivExtensionContext,
+        DivExtensionClass
     } from '../../typings/common';
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
-    import type { DivStateData } from '../types/state';
     import type { TintMode } from '../types/image';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
@@ -41,7 +43,7 @@
     import { parse } from '../expressions/expressions';
     import { gatherVarsFromAst } from '../expressions/utils';
     import { Truthy } from '../utils/truthy';
-    import { createVariable, TYPE_TO_CLASS, Variable, VariableType, VariableValue } from '../expressions/variable';
+    import { createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
     import {
         getControllerStore,
         getControllerVars,
@@ -58,6 +60,7 @@
     export let mix = '';
     export let customization: Customization = {};
     export let builtinProtocols: string[] = ['http', 'https', 'tel', 'mailto', 'intent'];
+    export let extensions: Map<string, DivExtensionClass> = new Map();
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
@@ -675,6 +678,20 @@
         return builtinSet;
     }
 
+    function getExtension(id: string, params: object | undefined): DivExtension | undefined {
+        const Builder = extensions.get(id);
+        if (Builder) {
+            return new Builder(params || {});
+        }
+    }
+
+    function getExtensionContext(): DivExtensionContext {
+        return {
+            variables,
+            logError
+        };
+    }
+
     setContext<RootCtxValue>(ROOT_CTX, {
         logError,
         logStat,
@@ -697,6 +714,8 @@
         getVariable: getVariableInstance,
         getCustomization,
         getBuiltinProtocols,
+        getExtension,
+        getExtensionContext,
         isDesktop,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined

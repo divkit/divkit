@@ -11,6 +11,7 @@ export function render(opts: {
     mix?: string;
     customization?: unknown;
     builtinProtocols?: unknown;
+    extensions?: unknown;
     onStat?: unknown;
     onCustomAction?: unknown;
     onError?: unknown;
@@ -27,6 +28,7 @@ export function render(opts: {
             mix: opts.mix,
             customization: opts.customization,
             builtinProtocols: opts.builtinProtocols,
+            extensions: opts.extensions,
             onStat: opts.onStat,
             onCustomAction: opts.onCustomAction,
             onError: opts.onError,
@@ -45,3 +47,11 @@ export {
 export {
     createVariable
 } from './expressions/variable';
+
+export {
+    SizeProvider
+} from './extensions/sizeProvider';
+
+export {
+    lottieExtensionBuilder
+} from './extensions/lottie';
