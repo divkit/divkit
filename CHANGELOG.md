@@ -1,3 +1,39 @@
+## 24.3.0
+
+# JSON Schema:
+
+Additions:
+* Added `div-video.json` to schema
+* Actualized supported features on Android
+
+# Android Client:
+
+Additions:
+* Added the ability to stretch background images without saving aspect ratio
+* Added `z-order` modes for `video-custom`
+
+Fixes:
+* Fixed redundant re-measurement in an overlapping container
+* Fixed incorrect name of the `Linear Layout` class in accessibility mode
+* Fixed deletion and insertion bugs in `fixed_length` input masks
+
+# iOS Client:
+
+Additions:
+* Implemented `select` component
+
+# Web Client:
+
+Additions:
+* `extensions` support
+* SizeProvider extension
+* Lottie extension
+* Implemented `select` component
+* Implemented an `input` `mask` for a text with a fixed number of characters
+
+Fixes:
+* Fixed markup update after `url` change in the `action`
+
 ## 24.2.0
 
 # JSON Schema:

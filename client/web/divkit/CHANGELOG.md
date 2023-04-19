@@ -1,3 +1,15 @@
+## 24.3.0 (April 24, 2023)
+
+Additions:
+* `extensions` support
+* SizeProvider extension
+* Lottie extension
+* Implemented `select` component
+* Implemented an `input` `mask` for a text with a fixed number of characters
+
+Fixes:
+* Fixed markup update after `url` change in the `action`
+
 ## 24.2.0 (April 17, 2023)
 
 Additions:
