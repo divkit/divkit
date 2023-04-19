@@ -14,9 +14,12 @@ interface AnimationItem {
 
     addEventListener(type: string, cb: () => void): void;
     destroy(): void;
-    stop(): void;
+    play(name?: string): void;
+    stop(name?: string): void;
+    pause(name?: string): void;
     setDirection(direction: number): void;
-    goToAndPlay(value: number, isFrame?: boolean): void;
+    goToAndStop(value: number, isFrame?: boolean, name?: string): void;
+    goToAndPlay(value: number, isFrame?: boolean, name?: string): void;
 }
 
 interface LoadAnimationParamsWidthPath {
@@ -91,6 +94,7 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                     ++count;
                     if (repeatCount !== -1 && count === repeatCount) {
                         animItem.stop();
+                        animItem.goToAndStop(animItem.totalFrames, true);
                     } else {
                         if (this.params.repeat_mode === 'reverse') {
                             direction *= -1;
