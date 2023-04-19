@@ -10,6 +10,7 @@ import com.yandex.div.core.DivActionHandler;
 import com.yandex.div.core.DivConfiguration;
 import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
+import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
@@ -83,6 +84,9 @@ public interface Div2Component {
 
     @Nullable
     DivCustomViewAdapter getDivCustomViewAdapter();
+
+    @Nullable
+    DivCustomContainerViewAdapter getDivCustomContainerViewAdapter();
 
     @NonNull
     DivExtensionController getExtensionController();

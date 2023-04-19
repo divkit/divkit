@@ -88,7 +88,8 @@ internal object DivPathUtils {
             is DivGrid -> value.items.findRecursively(divId)
             is DivGallery -> value.items.findRecursively(divId)
             is DivPager -> value.items.findRecursively(divId)
-            is DivText, is DivCustom, is DivImage, is DivSlider, is DivInput,
+            is DivCustom -> value.items?.findRecursively(divId)
+            is DivText, is DivImage, is DivSlider, is DivInput,
             is DivGifImage, is DivIndicator, is DivSeparator -> null
             else -> {
                 Assert.fail("Please, add new div $value above")

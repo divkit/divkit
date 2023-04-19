@@ -2,11 +2,12 @@ package com.yandex.div.core
 
 import android.view.View
 import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivCustom
 
-@Deprecated("deprecated", replaceWith = ReplaceWith("DivCustomContainerViewAdapter"))
-interface DivCustomViewAdapter {
+@PublicApi
+interface DivCustomContainerViewAdapter {
 
     /**
      * Create view corresponding to [DivCustom.customType].
@@ -16,7 +17,8 @@ interface DivCustomViewAdapter {
      */
     fun createView(
         div: DivCustom,
-        divView: Div2View
+        divView: Div2View,
+        path: DivStatePath
     ): View
 
     /**
@@ -28,7 +30,8 @@ interface DivCustomViewAdapter {
     fun bindView(
         view: View,
         div: DivCustom,
-        divView: Div2View
+        divView: Div2View,
+        path: DivStatePath
     )
 
     /**

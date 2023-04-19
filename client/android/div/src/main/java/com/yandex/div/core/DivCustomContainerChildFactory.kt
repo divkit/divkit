@@ -8,7 +8,7 @@ import com.yandex.div2.Div
 import javax.inject.Inject
 
 /**
- * DivCustomContainerChildFactory used to create div views in [DivCustomViewAdapter]
+ * DivCustomContainerChildFactory used to create div views in [DivCustomContainerViewAdapter]
  */
 class DivCustomContainerChildFactory @Inject internal constructor (){
 

@@ -1,8 +1,10 @@
 package com.yandex.div.video.custom
 
 import android.view.View
+import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivCustom
@@ -11,7 +13,7 @@ private const val CUSTOM_VIDEO_TYPE = "custom_video"
 
 class VideoCustomAdapter(
     private val videoCustomViewController: VideoCustomViewController
-) : DivCustomViewAdapter {
+) : DivCustomContainerViewAdapter {
 
     override fun preload(
         div: DivCustom,
@@ -24,11 +26,11 @@ class VideoCustomAdapter(
         return DivPreloader.PreloadReference { preloadJob.cancel() }
     }
 
-    override fun createView(div: DivCustom, divView: Div2View): View {
+    override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
         return VideoView(divView.context, div.videoConfig.zOrderMode)
     }
 
-    override fun bindView(view: View, div: DivCustom, divView: Div2View) {
+    override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
         if (view is VideoView) {
             videoCustomViewController.bind(view, div.videoConfig)
         } else {
