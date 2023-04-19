@@ -214,10 +214,28 @@ internal class DivInputBinder @Inject constructor(
             }
         }
 
+        val primaryVariable: String?
+        var secondaryVariable: String? = null
+
+        if (div.mask != null) {
+            val rawTextVariable = div.mask?.value()?.rawTextVariable ?: return
+
+            primaryVariable = rawTextVariable
+            secondaryVariable = div.textVariable
+        } else {
+            primaryVariable = div.textVariable
+        }
+
+        val setSecondVariable = { value: String ->
+            if (secondaryVariable != null) divView.setVariable(secondaryVariable, value)
+        }
+
         val callbacks = object : TwoWayStringVariableBinder.Callbacks {
             override fun onVariableChanged(value: String?) {
                 val valueToSet = inputMask?.let {
-                    it.applyChangeFrom(value ?: "", selectionStart)
+                    it.overrideRawValue(value ?: "")
+
+                    setSecondVariable(it.value)
 
                     it.value
                 } ?: value
@@ -235,17 +253,19 @@ internal class DivInputBinder @Inject constructor(
 
                             setText(value)
                             setSelection(cursorPosition)
+
+                            setSecondVariable(value)
                         }
                     }
 
-                    val valueToUpdate = inputMask?.value ?: fieldValue
+                    val valueToUpdate = inputMask?.rawValue ?: fieldValue
 
                     valueUpdater(valueToUpdate)
                 }
             }
         }
 
-        addSubscription(variableBinder.bindVariable(divView, div.textVariable, callbacks))
+        addSubscription(variableBinder.bindVariable(divView, primaryVariable, callbacks))
     }
 
     private fun DivInputView.observeMask(
