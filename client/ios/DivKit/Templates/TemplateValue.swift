@@ -102,10 +102,22 @@ extension Array where Element: TemplateValue {
     }
     if result.count != count,
        validator?.isPartialDeserializationAllowed == false {
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: self), errors))
+      if let errors = NonEmptyArray(errors) {
+        return .failure(NonEmptyArray(.composite(
+          error: .invalidValue(result: result, from: self),
+          causes: errors
+        )))
+      }
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: self)))
     }
     guard validator?.isValid(result) != false else {
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: self), errors))
+      if let errors = NonEmptyArray(errors) {
+        return .failure(NonEmptyArray(.composite(
+          error: .invalidValue(result: result, from: self),
+          causes: errors
+        )))
+      }
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: self)))
     }
     return errors.isEmpty
       ? .success(result)

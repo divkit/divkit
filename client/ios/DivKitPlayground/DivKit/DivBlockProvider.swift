@@ -99,11 +99,12 @@ final class DivBlockProvider {
           render: divRenderTime.time
         )
         .addingErrorsInfo(errors.map { $0.description } +
-                          context.errorsStorage.errors.map { $0.description })
+                          context.errorsStorage.errors.map { UIStatePayload.Error($0).description })
     } catch {
-      errors = [UIStatePayload.Error(error)] + errors
-      block = makeErrorsBlock(errors.map { $0.description } +
-                              context.errorsStorage.errors.map { $0.description })
+      errors = [UIStatePayload.Error(error as CustomStringConvertible)]
+      + context.errorsStorage.errors.map { UIStatePayload.Error($0 as CustomStringConvertible) }
+      + errors
+      block = makeErrorsBlock(errors.map { $0.description })
       DemoAppLogger.error("Failed to build block: \(error)")
     }
   }
@@ -112,7 +113,7 @@ final class DivBlockProvider {
     do {
       block = try block.updated(withStates: blockStates)
     } catch {
-      errors = [UIStatePayload.Error(error)] + errors
+      errors = [UIStatePayload.Error(error as CustomStringConvertible)] + errors
       block = makeErrorsBlock(errors.map { $0.description })
 
       DemoAppLogger.error("Failed to update block: \(error)")
@@ -140,14 +141,12 @@ final class DivBlockProvider {
       let result = try parseDivDataWithTemplates(json, cardId: cardId)
 
       divData = result.value
-      errors = result.errorsOrWarnings.map {
-        $0.map {
-          let traceback = $0.traceback
-          return UIStatePayload.Error(message: traceback.message, stack: traceback.path)
-        }
-      } ?? []
+      errors = result.errorsOrWarnings?.map { (error: DeserializationError) -> UIStatePayload.Error in
+        return UIStatePayload.Error(error)
+      }
+      ?? []
     } catch {
-      errors = [UIStatePayload.Error(error)]
+      errors = [UIStatePayload.Error(error as CustomStringConvertible)]
       block = makeErrorsBlock(errors.map { "\($0.description)" })
 
       DemoAppLogger.error("Failed to parse DivData: \(error)")
@@ -268,24 +267,33 @@ extension TimeMeasure.Time {
   }
 }
 
-extension DeserializationError {
-  fileprivate var traceback: (message: String, path: [String]) {
-    switch self {
-    case let .nestedObjectError(fieldName, error):
-      let nestedTraceback = error.traceback
-      return (nestedTraceback.message, [fieldName] + nestedTraceback.path)
+extension UIStatePayload.Error {
+  var description: String {
+    return "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))" +
+    (additional.isEmpty ? "" : "\nAdditional: \(additional)")
+  }
+
+  init(_ error: CustomStringConvertible) {
+    switch error {
+    case let deserializationError as DeserializationError:
+      message = deserializationError.errorMessage
+      stack = deserializationError.stack
+      additional = deserializationError.userInfo
     default:
-      return (description, [])
+      message = (error as CustomStringConvertible).description
+      stack = []
+      additional = [:]
     }
   }
 }
 
-extension UIStatePayload.Error {
-  var description: String {
-    return "\(message)\nPath: \(stack?.joined(separator: "/") ?? "nil")"
-  }
-  init(_ error: Error) {
-    message = (error as CustomStringConvertible).description
-    stack = nil
+extension DeserializationError {
+  fileprivate var stack: [String] {
+    switch self {
+    case .nestedObjectError(let field, let error):
+      return [field] + error.stack
+    default:
+      return []
+    }
   }
 }

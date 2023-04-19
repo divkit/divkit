@@ -40,7 +40,8 @@ struct UIStatePayload: Encodable {
 
   struct Error: Encodable {
     let message: String
-    let stack: [String]?
+    let stack: [String]
+    let additional: [String: String]
   }
 
   struct Message: Encodable {

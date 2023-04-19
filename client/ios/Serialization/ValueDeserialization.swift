@@ -48,14 +48,14 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   let result = transform(typedValue)
   guard let resultValue = result.value, validator?.isValid(resultValue) != false else {
-    var errors: NonEmptyArray<DeserializationError> =
-      NonEmptyArray(.invalidValue(result: result.value, value: value))
     if let resultErrors = result.errorsOrWarnings {
-      errors.append(contentsOf: resultErrors)
+      return .failure(NonEmptyArray(.composite(
+        error: .invalidValue(result: result.value, from: value),
+        causes: resultErrors
+      )))
     }
-    return .failure(errors)
+    return .failure(NonEmptyArray(.invalidValue(result: result.value, value: value)))
   }
-
   return result
 }
 
@@ -118,13 +118,19 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   if result.count != resultBeforeTransform.count,
      validator?.isPartialDeserializationAllowed == false {
-    errors.append(.invalidValue(result: result, value: value))
-    return .failure(NonEmptyArray(errors)!)
+    if let errors = NonEmptyArray(errors) {
+      return  .failure(NonEmptyArray(.composite(error: .invalidValue(result: result, from: value), causes: errors)))
+    } else {
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
+    }
   }
 
   guard validator?.isValid(result) != false else {
-    errors.append(.invalidValue(result: result, value: value))
-    return .failure(NonEmptyArray(errors)!)
+    if let errors = NonEmptyArray(errors) {
+      return .failure(NonEmptyArray(.composite(error: .invalidValue(result: result, from: value), causes: errors)))
+    } else {
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
+    }
   }
 
   return errors.isEmpty

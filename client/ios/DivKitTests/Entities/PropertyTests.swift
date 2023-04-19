@@ -78,7 +78,7 @@ final class PropertyTests: XCTestCase {
 
     switch result {
     case let .failure(errors):
-      XCTAssertEqual(errors.count, 2)
+      XCTAssertEqual(errors.count, 1)
     case .partialSuccess, .noValue, .success:
       XCTFail("Error expeced")
     }

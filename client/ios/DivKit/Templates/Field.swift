@@ -92,12 +92,13 @@ extension Field {
       return .noValue
     }
     guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors: NonEmptyArray<DeserializationError> =
-        NonEmptyArray(.invalidValue(result: result.value, value: nil))
       if let resultErrors = result.errorsOrWarnings {
-        errors.append(contentsOf: resultErrors)
+        return .failure(NonEmptyArray(.composite(
+          error: .invalidValue(result: result.value, from: nil),
+          causes: resultErrors
+        )))
       }
-      return .failure(errors)
+      return .failure(NonEmptyArray(.invalidValue(result: result.value, value: nil)))
     }
     return result
   }

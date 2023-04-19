@@ -1,4 +1,5 @@
 @testable import DivKit
+import CommonCorePublic
 
 import XCTest
 
@@ -109,49 +110,43 @@ private let missingRequiredFieldErrors: [DeserializationError] = [
 private let invalidFieldErrors: [DeserializationError] = [
   .nestedObjectError(
     field: statesKey,
-    error: .nestedObjectError(
-      field: "0",
-      error: .nestedObjectError(
-        field: divKey,
-        error: .invalidValue(
-          result: nil,
-          value: [
+    error: .composite(
+      error: .invalidValue(
+        result: [],
+        from: [
+          "state_id": 0,
+          "div": [
             "type": "container",
             "items": [],
-          ]
-        )
-      )
-    )
-  ),
-  .nestedObjectError(
-    field: statesKey,
-    error: .nestedObjectError(
-      field: "0",
-      error: .nestedObjectError(
-        field: divKey,
-        error: .nestedObjectError(
-          field: itemsKey,
-          error: .invalidValue(
-            result: [],
-            value: []
+          ],
+        ]),
+      causes: NonEmptyArray(
+        .nestedObjectError(
+          field: "0",
+          error: .nestedObjectError(
+            field: divKey,
+            error: .composite(
+              error: .invalidValue(
+                result: nil,
+                from: [
+                  "type": "container",
+                  "items": [],
+                ]),
+              causes: NonEmptyArray(
+                .nestedObjectError(
+                  field: itemsKey,
+                  error: .invalidValue(
+                    result: [],
+                    value: []
+                  )
+                )
+              )
+            )
           )
         )
       )
     )
-  ),
-  .nestedObjectError(
-    field: statesKey,
-    error: .invalidValue(
-      result: [],
-      value: [
-        "state_id": 0,
-        "div": [
-          "type": "container",
-          "items": [],
-        ],
-      ]
-    )
-  ),
+  )
 ]
 
 private let typeMismatchErrors: [DeserializationError] = [
@@ -167,41 +162,37 @@ private let typeMismatchErrors: [DeserializationError] = [
 private let missingTypeErrors: [DeserializationError] = [
   .nestedObjectError(
     field: statesKey,
-    error: .nestedObjectError(
-      field: "0",
-      error: .nestedObjectError(
-        field: divKey,
-        error: .invalidValue(
-          result: nil,
-          value: [
+    error: .composite(
+      error: .invalidValue(
+        result: [],
+        from: [
+          "state_id": 0,
+          "div": [
             "type": "unknown_type",
-          ]
+          ],
+        ]
+      ),
+      causes: NonEmptyArray(
+        .nestedObjectError(
+          field: "0",
+          error: .nestedObjectError(
+            field: divKey,
+            error: .composite(
+              error: .invalidValue(
+                result: nil,
+                from: [
+                  "type": "unknown_type",
+                ]
+              ),
+              causes: NonEmptyArray(
+                .requiredFieldIsMissing(field: typeKey)
+              )
+            )
+          )
         )
       )
     )
-  ),
-  .nestedObjectError(
-    field: statesKey,
-    error: .nestedObjectError(
-      field: "0",
-      error: .nestedObjectError(
-        field: divKey,
-        error: .requiredFieldIsMissing(field: typeKey)
-      )
-    )
-  ),
-  .nestedObjectError(
-    field: statesKey,
-    error: .invalidValue(
-      result: [],
-      value: [
-        "state_id": 0,
-        "div": [
-          "type": "unknown_type",
-        ],
-      ]
-    )
-  ),
+  )
 ]
 
 extension DeserializationError: Equatable {
@@ -229,6 +220,8 @@ extension DeserializationError: Equatable {
       return lhsFieldName == rhsFieldName && lhsError == rhsError
     case let (.typeMismatch(lhsExpected, _), .typeMismatch(rhsExpected, _)):
       return lhsExpected == rhsExpected
+    case let (.composite(lhsError, lhsCauses), .composite(rhsError, rhsCauses)):
+      return lhsError == rhsError && lhsCauses == rhsCauses
     default:
       switch lhs {
       case .generic,
@@ -241,10 +234,22 @@ extension DeserializationError: Equatable {
            .invalidValue,
            .requiredFieldIsMissing,
            .nestedObjectError,
+           .composite,
            .noData,
            .unexpectedError:
         return false
       }
+    }
+  }
+}
+
+extension DeserializationError.DerivedError: Equatable {
+  public static func == (lhs: Serialization.DeserializationError.DerivedError, rhs: Serialization.DeserializationError.DerivedError) -> Bool {
+    switch (lhs, rhs) {
+    case (.invalidValue, .invalidValue):
+      return true
+    @unknown default:
+      return false
     }
   }
 }
