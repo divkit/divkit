@@ -33,12 +33,12 @@
             <LinearLayout
                 android:id="@+id/single_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/div2_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </com.yandex.divkit.demo.div.DemoNestedScrollView>
 
