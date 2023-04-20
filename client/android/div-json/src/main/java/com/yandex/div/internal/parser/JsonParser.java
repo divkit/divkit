@@ -57,6 +57,27 @@ public class JsonParser {
     }
 
     @Nullable
+    public static <T> Expression<T> readOptionalExpression(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env,
+            @Nullable final Expression<T> defaultValue,
+            @NonNull final TypeHelper<T> typeHelper) {
+        return readOptionalExpression(jsonObject, key, doNotConvert(), alwaysValid(), logger, env, defaultValue, typeHelper);
+    }
+
+    @Nullable
+    public static Expression<String> readOptionalExpression(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env,
+            @NonNull final TypeHelper<String> typeHelper) {
+        return readOptionalExpression(jsonObject, key, doNotConvert(), IS_STRING, logger, env, typeHelper);
+    }
+
+    @Nullable
     public static <R, T> Expression<T> readOptionalExpression(
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,

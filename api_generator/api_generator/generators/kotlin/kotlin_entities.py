@@ -197,7 +197,6 @@ class KotlinEntity(Entity):
         for p in properties_kotlin:
             validator_or_empty = p.property_type.static_validator_expression(
                 property_name=p.name,
-                optional=p.optional,
                 supports_expressions=p.supports_expressions,
                 with_template_validators=is_template
             )
@@ -208,7 +207,6 @@ class KotlinEntity(Entity):
                 validator_or_empty = cast(KotlinPropertyType, p.property_type.property_type)\
                     .static_validator_expression(
                     property_name=p.name + '_item',
-                    optional=p.optional,
                     supports_expressions=p.supports_expressions,
                     with_template_validators=is_template
                 )
@@ -422,14 +420,12 @@ class KotlinProperty(Property):
         )
         arg_list = ['json', key_value, template_args, creator, transform, kotlin_type.validator_arg(
             property_name=self.name,
-            optional=self.optional,
             with_template_validators=mode.is_template
         )]
 
         if isinstance(kotlin_type, Array):
             arg_list.append(cast(KotlinPropertyType, kotlin_type.property_type).validator_arg(
                 property_name=self.name + '_item',
-                optional=self.optional,
                 with_template_validators=mode.is_template
             ))
 
@@ -488,7 +484,6 @@ class KotlinProperty(Property):
                 list_or_empty = 'List'
                 validator = cast(KotlinPropertyType, self.property_type).validator_arg(
                     property_name=self.name,
-                    optional=self.optional,
                     with_template_validators=False
                 )
                 validator = f', {validator}'
@@ -734,11 +729,10 @@ class KotlinPropertyType(PropertyType):
 
     def static_validator_expression(self,
                                     property_name: str,
-                                    optional: bool,
                                     supports_expressions: bool,
                                     with_template_validators: bool) -> Text:
         result = Text()
-        definition = self.validator_definition(optional) or ''
+        definition = self.validator_definition() or ''
         if not definition:
             return result
 
@@ -786,9 +780,8 @@ class KotlinPropertyType(PropertyType):
 
     def validator_arg(self,
                       property_name: str,
-                      optional: bool,
                       with_template_validators: bool) -> str:
-        if self.validator_definition(optional) is None:
+        if self.validator_definition() is None:
             return ''
         return self.validator_instance_name(property_name, with_template_validators)
 
@@ -797,18 +790,14 @@ class KotlinPropertyType(PropertyType):
         name = utils.constant_upper_case(property_name)
         return f'{name}_TEMPLATE_VALIDATOR' if with_templates else f'{name}_VALIDATOR'
 
-    def validator_definition(self, optional: bool) -> Optional[str]:
+    def validator_definition(self) -> Optional[str]:
         if isinstance(self, Array) and self.min_items > 0:
             return f'{{ it: List<*> -> it.size >= {self.min_items} }}'
-        elif isinstance(self, String) and (
-                self.min_length > 0 or
-                optional or self.regex is not None):
+        elif isinstance(self, String) and (self.min_length > 0 or self.regex is not None):
             expressions = []
             length_field = 'rawLength' if self.formatted else 'length'
-            min_length = self.min_length
-            actual_min_length = 1 if min_length == 0 and optional else min_length
-            if actual_min_length > 0:
-                expressions.append(f'it.{length_field} >= {actual_min_length}')
+            if self.min_length > 0:
+                expressions.append(f'it.{length_field} >= {self.min_length}')
             regex = self.regex
             if regex is not None:
                 escaped_pattern = regex.pattern.replace('\\', '\\\\')
