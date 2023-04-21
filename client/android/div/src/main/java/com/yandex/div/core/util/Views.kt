@@ -1,9 +1,24 @@
 package com.yandex.div.core.util
 
 import android.view.View
+import androidx.core.view.doOnNextLayout
+
+// https://issuetracker.google.com/issues/189446951#comment8
+val View.isActuallyLaidOut: Boolean
+    get() = width > 0 || height > 0
 
 internal val View.isHierarchyLaidOut: Boolean
     get() = farthestLayoutCaller() == null
+
+inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
+    if (isActuallyLaidOut && !isLayoutRequested) {
+        action(this)
+    } else {
+        doOnNextLayout {
+            action(it)
+        }
+    }
+}
 
 internal inline fun View.doOnHierarchyLayout(crossinline action: (view: View) -> Unit) {
     if (isHierarchyLaidOut && !isLayoutRequested) {
@@ -38,7 +53,7 @@ private fun View.farthestLayoutCaller(): View? {
     var view: View? = this
     var caller: View? = null
     while (view != null) {
-        if (!view.isLaidOut) caller = view
+        if (!view.isActuallyLaidOut || view.isLayoutRequested) caller = view
         view = view.parent as? View
     }
     return caller

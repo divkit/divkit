@@ -4,8 +4,9 @@ import android.graphics.Bitmap
 import android.view.View
 import androidx.core.graphics.applyCanvas
 
+// https://issuetracker.google.com/issues/189446951#comment8
 internal val View.isActuallyLaidOut: Boolean
-    get() = width > 0 && height > 0
+    get() = width > 0 || height > 0
 
 internal fun View.drawToBitmap(config: Bitmap.Config = Bitmap.Config.ARGB_8888): Bitmap {
     if (!isActuallyLaidOut) {

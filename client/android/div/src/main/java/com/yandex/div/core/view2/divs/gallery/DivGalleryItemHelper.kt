@@ -4,12 +4,12 @@ import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import androidx.core.view.children
-import androidx.core.view.doOnLayout
 import androidx.core.view.forEach
 import androidx.core.view.marginStart
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.makeAtMostSpec
 import com.yandex.div.core.widget.makeExactSpec
@@ -115,10 +115,10 @@ internal interface DivGalleryItemHelper {
     fun getLayoutManagerOrientation(): Int
 
     fun instantScroll(position: Int, offset: Int = 0) {
-        view.doOnLayout {
+        view.doOnActualLayout {
             if (position == 0) {
                 view.scrollBy(-offset, -offset)
-                return@doOnLayout
+                return@doOnActualLayout
             }
 
             view.scrollBy(-view.scrollX, -view.scrollY)
@@ -138,7 +138,7 @@ internal interface DivGalleryItemHelper {
                 view.scrollBy(view.width, view.height)
             }
 
-            if (targetView == null) return@doOnLayout
+            if (targetView == null) return@doOnActualLayout
 
             val startGap = orientationHelper.getDecoratedStart(targetView) -
                     orientationHelper.startAfterPadding -

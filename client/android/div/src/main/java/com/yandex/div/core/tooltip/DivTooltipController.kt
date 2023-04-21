@@ -11,9 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.postDelayed
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
-import androidx.core.view.doOnLayout
 import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
@@ -21,6 +19,8 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.SafePopupWindow
+import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -70,10 +70,10 @@ internal class DivTooltipController @VisibleForTesting constructor(
         if (tooltips.contains(divTooltip.id)) {
             return
         }
-        anchor.doOnLayout {
+        anchor.doOnActualLayout {
             tryShowTooltip(anchor, divTooltip, div2View)
         }
-        if (!ViewCompat.isLaidOut(anchor) && !anchor.isLayoutRequested) {
+        if (!anchor.isActuallyLaidOut && !anchor.isLayoutRequested) {
             anchor.requestLayout()
         }
     }
@@ -161,7 +161,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         val ticket = divPreloader.preload(div, div2View.expressionResolver) { hasFailures ->
             if (!hasFailures && !tooltipData.dismissed && anchor.isViewAttachedToWindow()
                 && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip)) {
-                tooltipView.doOnLayout {
+                tooltipView.doOnActualLayout {
                     val location = calcPopupLocation(tooltipView, anchor, divTooltip, div2View.expressionResolver)
                     if (fitsInScreen(div2View, tooltipView, location)) {
                         popup.update(location.x, location.y, tooltipView.width, tooltipView.height)

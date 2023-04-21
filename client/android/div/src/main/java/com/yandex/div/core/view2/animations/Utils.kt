@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.transition.Transition
 import androidx.transition.TransitionValues
+import com.yandex.div.core.util.isActuallyLaidOut
 
 internal fun Transition.getViewForAnimate(
     view: View,
@@ -11,7 +12,7 @@ internal fun Transition.getViewForAnimate(
     values: TransitionValues,
     positionKey: String
 ): View {
-    return if (view.isLaidOut) {
+    return if (view.isActuallyLaidOut) {
         createOrGetVisualCopy(view, sceneRoot, this, values.values[positionKey] as IntArray)
     } else {
         view

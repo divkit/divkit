@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
 import androidx.core.graphics.applyCanvas
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
-import androidx.core.view.doOnLayout
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
+import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 
 @MainThread
@@ -63,10 +63,10 @@ private fun ImageView.setScreenshotFromView(view: View) {
         setImageBitmap(bitmap)
     }
 
-    if (ViewCompat.isLaidOut(view)) {
+    if (view.isActuallyLaidOut) {
         drawAndSet()
     } else {
-        view.doOnLayout {
+        view.doOnActualLayout {
             drawAndSet()
         }
     }

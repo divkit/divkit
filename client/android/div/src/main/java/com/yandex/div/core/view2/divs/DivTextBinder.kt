@@ -14,7 +14,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import androidx.core.text.getSpans
-import androidx.core.view.doOnLayout
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
@@ -22,6 +21,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -324,7 +324,7 @@ internal class DivTextBinder @Inject constructor(
         gradient: DivTextGradient?
     ) {
         val metrics = resources.displayMetrics
-        doOnLayout {
+        doOnActualLayout {
             this.paint.shader = when (val gradientBackground = gradient?.value()) {
                 is DivLinearGradient -> LinearGradientDrawable.createLinearGradient(
                     angle = gradientBackground.angle.evaluate(resolver).toFloat(),

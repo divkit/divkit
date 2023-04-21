@@ -59,7 +59,6 @@ class DivTooltipControllerTest {
         on { resources } doReturn resources
         on { width } doReturn 300
         on { height } doReturn 100
-        on { isLaidOut } doReturn true
         on { isAttachedToWindow } doReturn true
         on {
             getLocationInWindow(any())
@@ -85,7 +84,6 @@ class DivTooltipControllerTest {
     private val tooltipView = mock<View> {
         on { width } doReturn 100
         on { height } doReturn 50
-        on { isLaidOut } doReturn true
     }
 
     private val div2Builder = mock<Div2Builder> {

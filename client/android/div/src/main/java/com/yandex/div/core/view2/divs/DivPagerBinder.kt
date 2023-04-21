@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.children
-import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
@@ -20,6 +19,7 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -382,7 +382,7 @@ internal class DivPagerBinder @Inject constructor(
             if (recyclerView.children.count() > 0) {
                 trackVisibleChildren()
             } else {
-                recyclerView.doOnLayout { trackVisibleChildren() }
+                recyclerView.doOnActualLayout { trackVisibleChildren() }
             }
         }
 
