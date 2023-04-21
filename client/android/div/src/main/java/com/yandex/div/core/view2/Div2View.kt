@@ -11,7 +11,6 @@ import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
-import androidx.core.view.doOnLayout
 import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -36,6 +35,7 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
@@ -897,7 +897,7 @@ class Div2View private constructor(
 
         fun runBulkActions() {
             if (childCount == 0) {
-                doOnLayout { bulkActions() }
+                doOnActualLayout { bulkActions() }
                 return
             }
             val currentState = pendingState ?: return

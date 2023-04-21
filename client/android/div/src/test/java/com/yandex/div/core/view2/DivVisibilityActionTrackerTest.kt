@@ -287,7 +287,8 @@ class DivVisibilityActionTrackerTest {
 
     companion object {
         private fun mockView() = mock<View> {
-            on { isLaidOut } doReturn true
+            on { width } doReturn 300
+            on { height } doReturn 100
         }
     }
 }

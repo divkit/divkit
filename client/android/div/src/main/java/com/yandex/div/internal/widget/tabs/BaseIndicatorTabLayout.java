@@ -36,6 +36,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.yandex.div.R;
 import com.yandex.div.core.font.DivTypefaceProvider;
+import com.yandex.div.core.util.ViewsKt;
 import com.yandex.div.internal.Log;
 import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
 import com.yandex.div.internal.util.SizeKt;
@@ -971,7 +972,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             return;
         }
 
-        if (getWindowToken() == null || !ViewCompat.isLaidOut(this)
+        if (getWindowToken() == null || !ViewsKt.isActuallyLaidOut(this)
                 || mTabIndicators.childrenNeedLayout()) {
             // If we don't have a window token, or we haven't been laid out yet just draw the new
             // position now

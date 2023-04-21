@@ -90,8 +90,9 @@ internal object ViewRasterizer {
         return bitmap
     }
 
+    // https://issuetracker.google.com/issues/189446951#comment8
     private val View.isRenderable
-        get() = isLaidOut && width > 0 && height > 0
+        get() = !isLayoutRequested && width > 0 && height > 0
 
     private fun View.rectInWindow(): Rect {
         val locationInWindow = IntArray(2).apply {
