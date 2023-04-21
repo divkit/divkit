@@ -1,0 +1,105 @@
+{
+  "templates": {
+    "pretty_input": {
+      "type": "input",
+      "height": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 16,
+        "top": 10,
+        "right": 16,
+        "bottom": 10
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "hint_color": "#888888",
+      "highlight_color": "#e0bae3",
+      "line_height": 22
+    }
+  },
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "input",
+        "type": "string",
+        "value": "1234567"
+      },
+      {
+        "name": "raw_input",
+        "type": "string",
+        "value": "12345"
+      },
+      {
+        "name": "locale",
+        "type": "string",
+        "value": "en-US"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "top": 8,
+            "bottom": 8
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Raw value: @{input}",
+              "font_size": 20,
+              "margins": {
+                "left": 16,
+                "top": 8,
+                "right": 16,
+                "bottom": 8
+              }
+            },
+            {
+              "type": "pretty_input",
+              "text_variable": "input",
+              "hint_text": "0",
+              "keyboard_type": "number",
+              "mask": {
+                "type": "currency",
+                "raw_text_variable": "raw_input",
+                "locale": "@{locale == '' ? 'en-US' : locale}"
+              }
+            },
+            {
+              "type": "pretty_input",
+              "text_variable": "locale",
+              "hint_text": "Currency locale"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

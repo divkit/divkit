@@ -2,12 +2,14 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
 import android.text.InputType
+import android.text.method.DigitsKeyListener
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.BaseInputMask
+import com.yandex.div.core.util.mask.CurrencyInputMask
 import com.yandex.div.core.util.mask.FixedLengthInputMask
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -16,9 +18,11 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivCurrencyInputMask
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSizeUnit
+import java.util.Locale
 import java.util.regex.PatternSyntaxException
 import javax.inject.Inject
 
@@ -278,11 +282,24 @@ internal class DivInputBinder @Inject constructor(
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
+        val defaultKeyListener = keyListener
+
+        val catchCommonMaskException = { exception: Exception, other: () -> Unit ->
+            when (exception) {
+                is PatternSyntaxException -> errorCollector.logError(
+                    IllegalArgumentException("Invalid regex pattern '${exception.pattern}'.")
+                )
+                else -> other()
+            }
+        }
+
         val updateMaskData = { _: Any ->
             val divInputMask = div.mask?.value()
 
             inputMask = when (divInputMask) {
                 is DivFixedLengthInputMask -> {
+                    keyListener = defaultKeyListener
+
                     val maskData = BaseInputMask.MaskData(
                         divInputMask.pattern.evaluate(resolver),
                         divInputMask.patternElements.map {
@@ -296,14 +313,41 @@ internal class DivInputBinder @Inject constructor(
                     )
 
                     inputMask?.apply { updateMaskData(maskData) } ?: FixedLengthInputMask(maskData) {
-                        when (it) {
-                            is PatternSyntaxException -> errorCollector.logError(
-                                IllegalArgumentException("Invalid regex pattern '${it.pattern}'.")
-                            )
-                        }
+                        catchCommonMaskException(it) { }
                     }
                 }
-                else -> null
+                is DivCurrencyInputMask -> {
+                    val evaluatedLocaleTag = divInputMask.locale?.evaluate(resolver)
+
+                    val locale = if (evaluatedLocaleTag != null) {
+                        Locale.forLanguageTag(evaluatedLocaleTag)
+                            .apply {
+                                val finalLanguageTag = toLanguageTag()
+
+                                if (finalLanguageTag != evaluatedLocaleTag) {
+                                    val exception = IllegalArgumentException("Original locale tag '$evaluatedLocaleTag' is not equals to final one '$finalLanguageTag'")
+
+                                    errorCollector.logWarning(exception)
+                                }
+                            }
+                    } else {
+                        Locale.getDefault()
+                    }
+
+                    keyListener = DigitsKeyListener.getInstance("1234567890.,")
+
+                    inputMask?.apply {
+                        (inputMask as CurrencyInputMask)
+                            .updateCurrencyParams(locale)
+                    } ?: CurrencyInputMask(locale) {
+                        catchCommonMaskException(it) { }
+                    }
+                }
+                else -> {
+                    keyListener = defaultKeyListener
+
+                    null
+                }
             }
 
             onMaskUpdate(inputMask)
@@ -311,7 +355,7 @@ internal class DivInputBinder @Inject constructor(
 
         when (val inputMask = div.mask?.value()) {
             is DivFixedLengthInputMask -> {
-                addSubscription(inputMask.pattern.observeAndGet(resolver, updateMaskData))
+                addSubscription(inputMask.pattern.observe(resolver, updateMaskData))
                 inputMask.patternElements.forEach { patternElement ->
                     addSubscription(patternElement.key.observe(resolver, updateMaskData))
                     patternElement.regex?.let { addSubscription(it.observe(resolver, updateMaskData)) }
@@ -319,7 +363,12 @@ internal class DivInputBinder @Inject constructor(
                 }
                 addSubscription(inputMask.alwaysVisible.observe(resolver, updateMaskData))
             }
+            is DivCurrencyInputMask -> {
+                inputMask.locale?.observe(resolver, updateMaskData)?.let { addSubscription(it) }
+            }
             else -> Unit
         }
+
+        updateMaskData(Unit)
     }
 }

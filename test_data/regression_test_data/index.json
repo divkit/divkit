@@ -1742,6 +1742,16 @@
         "DivInput"
       ],
       "file": "phone_input_mask.json"
+    },
+    {
+      "title": "Currency input mask",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "currency_input_mask.json"
     }
   ]
 }

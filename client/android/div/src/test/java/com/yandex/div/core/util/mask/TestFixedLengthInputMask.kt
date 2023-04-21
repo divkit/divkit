@@ -2,7 +2,7 @@ package com.yandex.div.core.util.mask
 
 internal class TestFixedLengthInputMask(
     initialMaskData: MaskData
-) : FixedLengthInputMask(initialMaskData) {
+) : FixedLengthInputMask(initialMaskData, { })  {
     fun publicCalculateInsertableSubstring(substring: String, start: Int): String =
         calculateInsertableSubstring(substring, start)
 
