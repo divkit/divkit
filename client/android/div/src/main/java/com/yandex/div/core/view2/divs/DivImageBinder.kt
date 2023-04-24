@@ -176,6 +176,7 @@ internal class DivImageBinder @Inject constructor(
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
         resetImageLoaded()
+        loadReference?.cancel()
 
         applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
 
@@ -200,7 +201,9 @@ internal class DivImageBinder @Inject constructor(
                 }
             }
         )
+
         divView.addLoadReference(reference, this)
+        loadReference = reference
     }
 
     private fun DivImageView.applyLoadingFade(
@@ -217,10 +220,10 @@ internal class DivImageBinder @Inject constructor(
             return
         }
 
-        val duration = animation.duration.evaluate(resolver).toLong()
+        val duration = animation.duration.evaluate(resolver)
         val interpolator = animation.interpolator.evaluate(resolver).androidInterpolator
         alpha = animation.alpha.evaluate(resolver).toFloat()
-        val delay = animation.startDelay.evaluate(resolver).toLong()
+        val delay = animation.startDelay.evaluate(resolver)
         this.animate()
             .alpha(maxAlpha)
             .setDuration(duration)

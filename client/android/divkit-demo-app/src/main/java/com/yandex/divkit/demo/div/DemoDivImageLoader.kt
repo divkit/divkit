@@ -15,7 +15,6 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
-import java.util.concurrent.atomic.AtomicInteger
 
 class DemoDivImageLoader(
     context: Context
@@ -43,14 +42,20 @@ class DemoDivImageLoader(
         // Picasso requires starting download on the main thread
         mainHandler.post { picasso.load(imageUri).into(target) }
 
-        return LoadReference { picasso.cancelRequest(target) }
+        return LoadReference {
+            picasso.cancelRequest(target)
+            targets.removeTarget(target)
+        }
     }
 
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val target = ImageViewAdapter(imageView)
         targets.addTarget(target)
         picasso.load(Uri.parse(imageUrl)).into(target)
-        return LoadReference { picasso.cancelRequest(target) }
+        return LoadReference {
+            picasso.cancelRequest(target)
+            targets.removeTarget(target)
+        }
     }
 
     override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
@@ -101,23 +106,19 @@ class DemoDivImageLoader(
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
     }
 
-    inner class TargetList() {
+    inner class TargetList {
         private val activeTargets = ArrayList<Target>()
         val size get() = activeTargets.size
-        private val requestCount = AtomicInteger(0)
 
         fun addTarget(target: Target) {
-            requestCount.incrementAndGet()
             activeTargets.add(target)
         }
 
         fun removeTarget(target: Target) {
-            requestCount.decrementAndGet()
             activeTargets.remove(target)
         }
 
         fun clean() {
-            requestCount.set(0)
             activeTargets.clear()
         }
     }

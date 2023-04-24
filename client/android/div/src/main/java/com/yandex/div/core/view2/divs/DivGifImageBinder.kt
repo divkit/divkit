@@ -17,14 +17,12 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivAspect
 import com.yandex.div2.DivGifImage
 import java.io.File
 import java.io.IOException
@@ -92,11 +90,13 @@ internal class DivGifImageBinder @Inject constructor(
                                               div: DivGifImage,
                                               errorCollector: ErrorCollector) {
         val newGifUrl = div.gifUrl.evaluate(resolver)
-        if (isImageLoaded && newGifUrl == gifUrl) {
+        if (newGifUrl == gifUrl) {
             return
         }
 
-        newGifUrl.applyIfNotEquals(gifUrl) { resetImageLoaded() }
+        resetImageLoaded()
+        loadReference?.cancel()
+
         // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
         placeholderLoader.applyPlaceholder(
             this,
@@ -117,13 +117,14 @@ internal class DivGifImageBinder @Inject constructor(
             }
         )
 
+        gifUrl = newGifUrl
+
         // we don't reuse this because not all clients has bytes cache
         val reference = imageLoader.loadImageBytes(
             newGifUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
-                    gifUrl = newGifUrl
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         loadDrawable(cachedBitmap)
                     } else {
@@ -131,9 +132,16 @@ internal class DivGifImageBinder @Inject constructor(
                         imageLoaded()
                     }
                 }
+
+                override fun onError() {
+                    super.onError()
+                    gifUrl = null
+                }
             }
         )
+
         divView.addLoadReference(reference, this)
+        loadReference = reference
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

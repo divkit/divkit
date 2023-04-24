@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import com.yandex.div.R
+import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.core.view2.drawable.ScaleDrawable
 import com.yandex.div.internal.widget.AspectImageView
@@ -25,6 +26,7 @@ open class LoadableImageView(
 ) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView {
 
     internal var currentBitmapWithoutFilters: Bitmap? = null
+    internal var loadReference: LoadReference? = null
 
     private var imageChangeCallback: (() -> Unit)? = null
 
