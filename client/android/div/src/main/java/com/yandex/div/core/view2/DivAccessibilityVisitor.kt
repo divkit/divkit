@@ -14,6 +14,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -50,6 +51,8 @@ internal class DivAccessibilityVisitor(
     override fun visit(view: DivStateLayout) = updateAccessibilityMode(view, view.divState)
 
     override fun visit(view: DivSliderView) = updateAccessibilityMode(view, view.div)
+
+    override fun visit(view: DivVideoView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: View) {
         val divCustom: DivCustom? = view.getTag(R.id.div_custom_tag) as? DivCustom

@@ -8,20 +8,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.view2.divs.isWrapContainer
-import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
-import com.yandex.div.core.view2.divs.widgets.DivGifImageView
-import com.yandex.div.core.view2.divs.widgets.DivGridLayout
-import com.yandex.div.core.view2.divs.widgets.DivImageView
-import com.yandex.div.core.view2.divs.widgets.DivInputView
-import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
-import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
-import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
-import com.yandex.div.core.view2.divs.widgets.DivSliderView
-import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.core.view2.divs.widgets.*
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.TabsLayout
@@ -42,6 +29,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -50,7 +38,7 @@ import javax.inject.Named
 internal class DivViewCreator @Inject constructor(
         @Named(Names.THEMED_CONTEXT) private val context: Context,
         private val viewPool: ViewPool,
-        private val validator: DivValidator
+        private val validator: DivValidator,
 ) : DivVisitor<View>() {
 
     init {
@@ -69,6 +57,7 @@ internal class DivViewCreator @Inject constructor(
         viewPool.register(TAG_INDICATOR, { DivPagerIndicatorView(context) }, 2)
         viewPool.register(TAG_SLIDER, { DivSliderView(context) }, 2)
         viewPool.register(TAG_INPUT, { DivInputView(context) }, 2)
+        viewPool.register(TAG_VIDEO, { DivVideoView(context) }, 2)
     }
 
     fun create(div: Div, resolver: ExpressionResolver): View {
@@ -124,6 +113,8 @@ internal class DivViewCreator @Inject constructor(
 
     override fun visit(data: DivInput, resolver: ExpressionResolver): View = viewPool.obtain(TAG_INPUT)
 
+    override fun visit(data: DivVideo, resolver: ExpressionResolver): View = viewPool.obtain(TAG_VIDEO)
+
     companion object {
 
         const val TAG_TEXT = "DIV2.TEXT_VIEW"
@@ -141,5 +132,6 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_INDICATOR = "DIV2.INDICATOR"
         const val TAG_SLIDER = "DIV2.SLIDER"
         const val TAG_INPUT = "DIV2.INPUT"
+        const val TAG_VIDEO = "DIV2.VIDEO"
     }
 }

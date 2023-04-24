@@ -1,0 +1,112 @@
+{
+  "card": {
+    "log_id": "news",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "video",
+              "id": "bear_video",
+              "video_data": {
+                "type": "video",
+                "video_sources": [
+                  {
+                    "url": "https://yastatic.net/s3/home/divkit/bears.mp4"
+                  }
+                ]
+              },
+              "repeatable": true,
+              "autostart": true,
+              "muted": true,
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 20000,
+              "min_value": 0,
+              "thumb_value_variable": "video_time",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

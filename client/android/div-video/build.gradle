@@ -1,0 +1,9 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':assertion')
+
+    implementation "com.google.android.exoplayer:exoplayer:$versions.exoPlayer"
+}

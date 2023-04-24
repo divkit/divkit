@@ -18,6 +18,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 
 abstract class DivVisitor<T> {
 
@@ -37,8 +38,8 @@ abstract class DivVisitor<T> {
             is Div.Indicator -> visit(div.value, resolver)
             is Div.Slider -> visit(div.value, resolver)
             is Div.Input -> visit(div.value, resolver)
+            is Div.Video -> visit(div.value, resolver)
             is Div.Select -> TODO()
-            is Div.Video -> TODO()
         }
     }
 
@@ -58,6 +59,7 @@ abstract class DivVisitor<T> {
             is DivIndicator -> visit(div, resolver)
             is DivSlider -> visit(div, resolver)
             is DivInput -> visit(div, resolver)
+            is DivVideo -> visit(div, resolver)
             else -> {
                 Assert.fail("Unsupported div type: ${div.javaClass.simpleName}")
                 null
@@ -92,4 +94,6 @@ abstract class DivVisitor<T> {
     protected abstract fun visit(data: DivSlider, resolver: ExpressionResolver): T
 
     protected abstract fun visit(data: DivInput, resolver: ExpressionResolver): T
+
+    protected abstract fun visit(data: DivVideo, resolver: ExpressionResolver): T
 }

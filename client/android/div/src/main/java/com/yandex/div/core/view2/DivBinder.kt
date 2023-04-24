@@ -20,6 +20,7 @@ import com.yandex.div.core.view2.divs.DivSeparatorBinder
 import com.yandex.div.core.view2.divs.DivSliderBinder
 import com.yandex.div.core.view2.divs.DivStateBinder
 import com.yandex.div.core.view2.divs.DivTextBinder
+import com.yandex.div.core.view2.divs.DivVideoBinder
 import com.yandex.div.core.view2.divs.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
@@ -35,6 +36,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -53,6 +55,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
 @DivScope
@@ -73,6 +76,7 @@ internal class DivBinder @Inject constructor(
     private val indicatorBinder: DivIndicatorBinder,
     private val sliderBinder: DivSliderBinder,
     private val inputBinder: DivInputBinder,
+    private val videoBinder: DivVideoBinder,
     private val extensionController: DivExtensionController,
     private val pagerIndicatorConnector: PagerIndicatorConnector
 ) {
@@ -100,6 +104,7 @@ internal class DivBinder @Inject constructor(
             is Div.Indicator -> bindIndicator(view, div.value, divView)
             is Div.Slider -> bindSlider(view, div.value, divView)
             is Div.Input -> bindInput(view, div.value, divView)
+            is Div.Video -> bindVideo(view, div.value, divView)
         }
 
         // extensionController bound new CustomView in DivCustomBinder after replacing in parent
@@ -167,6 +172,10 @@ internal class DivBinder @Inject constructor(
 
     private fun bindInput(view: View, data: DivInput, divView: Div2View) {
         inputBinder.bindView(view as DivInputView, data, divView)
+    }
+
+    private fun bindVideo(view: View, data: DivVideo, divView: Div2View) {
+        videoBinder.bindView(view as DivVideoView, data, divView)
     }
 
     private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {

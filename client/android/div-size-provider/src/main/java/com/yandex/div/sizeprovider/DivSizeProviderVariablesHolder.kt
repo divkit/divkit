@@ -23,6 +23,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 
 class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber {
 
@@ -83,6 +84,8 @@ class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber 
     override fun visit(data: DivSlider, resolver: ExpressionResolver) = data.observeSize(resolver)
 
     override fun visit(data: DivInput, resolver: ExpressionResolver) = data.observeSize(resolver)
+
+    override fun visit(data: DivVideo, resolver: ExpressionResolver) = data.observeSize(resolver)
 
     private fun DivBase.observeSize(resolver: ExpressionResolver) {
         width.observe(resolver)

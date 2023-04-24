@@ -163,6 +163,7 @@ private val Div.items: List<Div>
             is Div.Slider -> emptyList()
             is Div.Input -> emptyList()
             is Div.Custom -> emptyList()
+            is Div.Video -> emptyList()
             is Div.Container -> value.items
             is Div.Grid -> value.items
             is Div.Gallery -> value.items
@@ -170,6 +171,5 @@ private val Div.items: List<Div>
             is Div.Tabs -> value.items.map { tab -> tab.div }
             is Div.State -> value.states.mapNotNull { state -> state.div }
             is Div.Select -> TODO()
-            is Div.Video -> TODO()
         }
     }

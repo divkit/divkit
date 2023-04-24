@@ -15,6 +15,7 @@ import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivPreloader;
+import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
@@ -126,6 +127,9 @@ public interface Div2Component {
 
     @NonNull
     HistogramReporter getHistogramReporter();
+
+    @NonNull
+    DivPlayerFactory getDivVideoFactory();
 
     @NonNull
     DivCreationTracker getDivCreationTracker();

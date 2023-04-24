@@ -19,6 +19,7 @@ import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
+import com.yandex.div.video.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -64,6 +65,7 @@ fun divConfiguration(
         .supportHyphenation(true)
         .visualErrorsEnabled(true)
         .extension(DivSizeProviderExtensionHandler())
+        .divPlayerFactory(ExoDivPlayerFactory(activity))
 }
 
 fun divContext(

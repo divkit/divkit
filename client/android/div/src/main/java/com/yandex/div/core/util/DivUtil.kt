@@ -31,6 +31,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 
 internal val Div.type: String
     get() {
@@ -42,6 +43,7 @@ internal val Div.type: String
             is Div.Indicator -> DivIndicator.TYPE
             is Div.Slider -> DivSlider.TYPE
             is Div.Input -> DivInput.TYPE
+            is Div.Video -> DivVideo.TYPE
             is Div.Container -> DivContainer.TYPE
             is Div.Grid -> DivGrid.TYPE
             is Div.State -> DivState.TYPE

@@ -50,6 +50,8 @@ internal class ReleaseViewVisitor @Inject constructor(
 
     override fun visit(view: DivSliderView) = releaseInternal(view, view.div)
 
+    override fun visit(view: DivVideoView) = releaseInternal(view, view.div)
+
     override fun visit(view: View) {
         val divCustom: DivCustom? = view.getTag(R.id.div_custom_tag) as? DivCustom
         if (divCustom != null) {

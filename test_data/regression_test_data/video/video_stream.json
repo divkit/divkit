@@ -1,0 +1,49 @@
+{
+  "card": {
+    "log_id": "news",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "video",
+              "id": "stream_video",
+              "video_data": {
+                "type": "stream",
+                "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
+              },
+              "repeatable": true,
+              "autostart": true,
+              "muted": true,
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -25,6 +25,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
 private val NO_CALLBACK = DivImagePreloader.Callback {
@@ -160,6 +161,10 @@ class DivImagePreloader @Inject constructor(
         }
 
         override fun visit(data: DivInput, resolver: ExpressionResolver) {
+            visitBackground(data, resolver)
+        }
+
+        override fun visit(data: DivVideo, resolver: ExpressionResolver) {
             visitBackground(data, resolver)
         }
 

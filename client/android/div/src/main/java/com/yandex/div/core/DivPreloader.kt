@@ -27,6 +27,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -171,6 +172,12 @@ class DivPreloader internal constructor(
         override fun visit(data: DivInput, resolver: ExpressionResolver) {
             imagePreloader?.preloadImage(data, resolver, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
+            extensionController.preprocessExtensions(data, resolver)
+        }
+
+        override fun visit(data: DivVideo, resolver: ExpressionResolver) {
+            imagePreloader?.preloadImage(data, resolver, downloadCallback)
+                    ?.forEach { ticket.addImageReference(it) }
             extensionController.preprocessExtensions(data, resolver)
         }
     }

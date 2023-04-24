@@ -1752,6 +1752,26 @@
         "DivInput"
       ],
       "file": "currency_input_mask.json"
+    },
+    {
+      "title": "Video rewindable",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_rewindable.json"
+    },
+    {
+      "title": "Video stream",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_stream.json"
     }
   ]
 }

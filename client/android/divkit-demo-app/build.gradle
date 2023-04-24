@@ -96,6 +96,7 @@ dependencies {
     implementation project(path: ':utils')
     implementation project(path: ':video-custom')
     implementation project(path: ':div-storage')
+    implementation project(path: ':div-video')
 
     implementation "androidx.browser:browser:$versions.androidx.browser"
     implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"

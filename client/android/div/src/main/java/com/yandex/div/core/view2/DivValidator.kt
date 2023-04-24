@@ -21,6 +21,7 @@ import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
+import com.yandex.div2.DivVideo
 import javax.inject.Inject
 import kotlin.math.max
 
@@ -89,4 +90,6 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
     override fun visit(data: DivSlider, resolver: ExpressionResolver) = true
 
     override fun visit(data: DivInput, resolver: ExpressionResolver) = true
+
+    override fun visit(data: DivVideo, resolver: ExpressionResolver) = true
 }
