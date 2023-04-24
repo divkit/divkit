@@ -16,6 +16,7 @@ Fixes:
 * Fixed redundant re-measurement in an overlapping container
 * Fixed incorrect name of the `Linear Layout` class in accessibility mode
 * Fixed deletion and insertion bugs in `fixed_length` input masks
+* Added workaround for bug in `View.isLaidOut`
 
 # iOS Client:
 
