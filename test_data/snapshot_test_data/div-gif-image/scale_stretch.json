@@ -1,0 +1,29 @@
+{
+  "description": "Gif with stretch scaling image",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gif",
+          "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "scale": "stretch"
+        }
+      }
+    ]
+  }
+}
