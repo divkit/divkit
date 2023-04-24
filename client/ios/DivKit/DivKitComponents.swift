@@ -22,6 +22,7 @@ public final class DivKitComponents {
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
+  public let playerFactory: PlayerFactory
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let disposePool = AutodisposePool()
@@ -37,6 +38,7 @@ public final class DivKitComponents {
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: UpdateCardAction?,
+    playerFactory: PlayerFactory = DefaultPlayerFactory(),
     urlOpener: @escaping UrlOpener,
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
@@ -47,6 +49,7 @@ public final class DivKitComponents {
     self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
+    self.playerFactory = playerFactory
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
@@ -56,7 +59,8 @@ public final class DivKitComponents {
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
-    let updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in })
+    let updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in
+    })
     self.updateAggregator = updateAggregator
     let updateCard: DivActionURLHandler.UpdateCardAction = updateAggregator.aggregate(_:)
 
@@ -171,6 +175,7 @@ public final class DivKitComponents {
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
       variables: variablesStorage.makeVariables(for: cardId),
+      playerFactory: playerFactory,
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )

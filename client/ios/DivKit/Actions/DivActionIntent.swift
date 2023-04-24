@@ -13,6 +13,7 @@ enum DivActionIntent {
   case setNextItem(id: String, overflow: OverflowMode)
   case setPreviousItem(id: String, overflow: OverflowMode)
   case timer(id: String, action: DivTimerAction)
+  case video(id: String, action: DivVideoAction)
 
   public static let scheme = "div-action"
 
@@ -67,6 +68,11 @@ enum DivActionIntent {
         return nil
       }
       self = .timer(id: id, action: action)
+    case "video":
+      guard let id = url.id, let action = url.videoAction else {
+        return nil
+      }
+      self = .video(id: id, action: action)
     default:
       return nil
     }
@@ -126,6 +132,21 @@ extension URL {
       return .reset
     default:
       DivKitLogger.failure("Unknown action '\(action)' for timer.")
+      return nil
+    }
+  }
+
+  fileprivate var videoAction: DivVideoAction? {
+    guard let action = queryParamValue(forName: "action") else {
+      return nil
+    }
+    switch action {
+    case "start":
+      return .play
+    case "pause":
+      return .pause
+    default:
+      DivKitLogger.failure("Unknown action '\(action)' for video.")
       return nil
     }
   }

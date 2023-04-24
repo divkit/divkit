@@ -3,6 +3,7 @@ import Foundation
 import CommonCorePublic
 import DivKit
 import DivKitExtensions
+import LayoutKit
 import NetworkingPublic
 
 enum AppComponents {
@@ -34,6 +35,7 @@ enum AppComponents {
       ),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
+      playerFactory: DefaultPlayerFactory(),
       urlOpener: urlOpener,
       variablesStorage: variablesStorage
     )

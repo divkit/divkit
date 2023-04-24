@@ -5,7 +5,7 @@ import Foundation
 import BasePublic
 import CommonCorePublic
 
-public final class VideoBlock: BlockWithTraits {
+public final class VideoBlockLegacy: BlockWithTraits {
   public struct VideoAssetHolder {
     let url: URL
     let playerItem: AVPlayerItem
@@ -43,7 +43,7 @@ public final class VideoBlock: BlockWithTraits {
   public func getImageHolders() -> [ImageHolder] { [] }
 
   public func equals(_ other: Block) -> Bool {
-    guard let other = other as? VideoBlock else {
+    guard let other = other as? VideoBlockLegacy else {
       return false
     }
 
@@ -51,9 +51,9 @@ public final class VideoBlock: BlockWithTraits {
   }
 }
 
-extension VideoBlock: LayoutCachingDefaultImpl {}
-extension VideoBlock: ElementStateUpdatingDefaultImpl {}
+extension VideoBlockLegacy: LayoutCachingDefaultImpl {}
+extension VideoBlockLegacy: ElementStateUpdatingDefaultImpl {}
 
-public func ==(rhs: VideoBlock, lhs: VideoBlock) -> Bool {
+public func ==(rhs: VideoBlockLegacy, lhs: VideoBlockLegacy) -> Bool {
   rhs.videoAssetHolder.url == lhs.videoAssetHolder.url
 }

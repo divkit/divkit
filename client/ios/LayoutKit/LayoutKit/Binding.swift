@@ -7,7 +7,7 @@ import UIKit
 #endif
 
 @propertyWrapper
-public struct Binding<T: Comparable> {
+public struct Binding<T: Equatable>: Equatable {
   #if os(iOS)
   public typealias ResponderType = UIResponder
   #else
@@ -45,6 +45,10 @@ public struct Binding<T: Comparable> {
     self.value = getValue(name)
     self.getValue = getValue
     self.userInterfaceActionFactory = userInterfaceActionFactory
+  }
+
+  public static func ==(lhs: Binding<T>, rhs: Binding<T>) -> Bool {
+    lhs.value == rhs.value
   }
 }
 

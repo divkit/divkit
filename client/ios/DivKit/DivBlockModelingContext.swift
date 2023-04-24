@@ -24,6 +24,7 @@ public struct DivBlockModelingContext {
   public let stateInterceptors: [String: DivStateInterceptor]
   public let expressionResolver: ExpressionResolver
   public let debugParams: DebugParams
+  public let playerFactory: PlayerFactory
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
@@ -47,6 +48,7 @@ public struct DivBlockModelingContext {
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
     variables: DivVariables = [:],
+    playerFactory: PlayerFactory = DefaultPlayerFactory(),
     debugParams: DebugParams = DebugParams(),
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
@@ -65,6 +67,7 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers
+    self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView

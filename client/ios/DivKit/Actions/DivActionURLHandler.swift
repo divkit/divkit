@@ -99,6 +99,12 @@ public final class DivActionURLHandler {
     case let .setPreviousItem(id, overflow):
       setPreviousItem(id: id, overflow: overflow)
       updateCard(.state(cardId))
+    case let .video(id: id, action: action):
+      blockStateStorage.setState(
+        id: id,
+        state: VideoBlockViewState(state: action == .play ? .playing : .paused)
+      )
+      updateCard(.state(cardId))
     case let .timer(timerId, action):
       performTimerAction(cardId, timerId, action)
     }
