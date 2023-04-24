@@ -27,7 +27,7 @@ import org.robolectric.RuntimeEnvironment
 open class DivBinderTest {
 
     internal val actionBinder = mock<DivActionBinder> {
-        on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull()) }.thenCallRealMethod()
+        on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), any()) }.thenCallRealMethod()
     }
     private val mockComponent = mock<Div2Component>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
         on { actionBinder } doReturn actionBinder

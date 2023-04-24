@@ -15,6 +15,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
@@ -90,7 +91,7 @@ internal object DivPathUtils {
             is DivPager -> value.items.findRecursively(divId)
             is DivCustom -> value.items?.findRecursively(divId)
             is DivText, is DivImage, is DivSlider, is DivInput,
-            is DivGifImage, is DivIndicator, is DivSeparator -> null
+            is DivGifImage, is DivIndicator, is DivSeparator, is DivSelect -> null
             else -> {
                 Assert.fail("Please, add new div $value above")
                 return null

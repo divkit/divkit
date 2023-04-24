@@ -105,6 +105,7 @@ internal class DivInputBinder @Inject constructor(
         val callback = { _: Any -> applyFontSize(div, resolver) }
         addSubscription(div.fontSize.observeAndGet(resolver, callback))
         addSubscription(div.letterSpacing.observe(resolver, callback))
+        addSubscription(div.fontSizeUnit.observe(resolver, callback))
     }
 
     private fun DivInputView.applyFontSize(div: DivInput, resolver: ExpressionResolver) {

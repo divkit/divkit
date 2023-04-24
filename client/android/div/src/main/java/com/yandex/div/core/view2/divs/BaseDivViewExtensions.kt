@@ -14,6 +14,7 @@ import android.view.ViewOutlineProvider
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withTranslation
+import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -22,6 +23,8 @@ import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.DivGestureListener
+import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectView
@@ -465,6 +468,29 @@ internal fun View.applyDivActions(
         actions
     }
     actionBinder.bindDivActions(divView, this, tapActions, longTapActions, doubleTapActions, actionAnimation)
+}
+
+internal fun View.setAnimatedTouchListener(
+    divView: Div2View,
+    divAnimation: DivAnimation?,
+    divGestureListener: DivGestureListener?
+) {
+    val animations = divAnimation?.asTouchListener(divView.expressionResolver, this)
+
+    // Avoid creating GestureDetector if unnecessary cause it's expensive.
+    val gestureDetector = divGestureListener
+        ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
+        ?.let { GestureDetectorCompat(divView.context, divGestureListener) }
+
+    if (animations != null || gestureDetector != null) {
+        //noinspection ClickableViewAccessibility
+        setOnTouchListener { v, event ->
+            animations?.invoke(v, event)
+            gestureDetector?.onTouchEvent(event) ?: false
+        }
+    } else {
+        setOnTouchListener(null)
+    }
 }
 
 internal fun TextView.applyFontSize(fontSize: Int, unit: DivSizeUnit) {

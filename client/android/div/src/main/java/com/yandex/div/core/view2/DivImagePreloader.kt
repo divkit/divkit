@@ -20,6 +20,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
@@ -161,6 +162,10 @@ class DivImagePreloader @Inject constructor(
         }
 
         override fun visit(data: DivInput, resolver: ExpressionResolver) {
+            visitBackground(data, resolver)
+        }
+
+        override fun visit(data: DivSelect, resolver: ExpressionResolver) {
             visitBackground(data, resolver)
         }
 

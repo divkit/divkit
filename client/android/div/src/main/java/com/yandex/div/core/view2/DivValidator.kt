@@ -15,6 +15,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSlider
@@ -90,6 +91,8 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
     override fun visit(data: DivSlider, resolver: ExpressionResolver) = true
 
     override fun visit(data: DivInput, resolver: ExpressionResolver) = true
+
+    override fun visit(data: DivSelect, resolver: ExpressionResolver) = true
 
     override fun visit(data: DivVideo, resolver: ExpressionResolver) = true
 }

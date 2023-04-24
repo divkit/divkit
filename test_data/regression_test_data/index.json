@@ -1303,10 +1303,6 @@
     },
     {
       "title": "Select",
-      "platforms": [
-        "ios",
-        "web"
-      ],
       "tags": [
         "DivSelect"
       ],
@@ -1315,16 +1311,12 @@
         "Select item"
       ],
       "expected_results": [
-        "When selecting, the text in the input should change."
+        "When selecting, the text in the select should change."
       ],
       "file": "select.json"
     },
     {
       "title": "Select with default item",
-      "platforms": [
-        "ios",
-        "web"
-      ],
       "tags": [
         "DivSelect"
       ],
@@ -1333,7 +1325,7 @@
         "Select item"
       ],
       "expected_results": [
-        "When selecting, the text in the input should change."
+        "When selecting, the text in the select should change."
       ],
       "file": "select_with_default.json"
     },

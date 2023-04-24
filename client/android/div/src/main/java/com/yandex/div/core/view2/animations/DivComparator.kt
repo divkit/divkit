@@ -11,7 +11,9 @@ import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivImage
+import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
@@ -76,6 +78,8 @@ internal object DivComparator {
             is DivTabs -> emptyList()
             is DivState -> emptyList()
             is DivCustom -> emptyList()
+            is DivInput -> emptyList()
+            is DivSelect -> emptyList()
             else -> emptyList()
         }
     }

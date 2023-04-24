@@ -26,6 +26,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
@@ -51,7 +52,7 @@ internal val Div.type: String
             is Div.Pager -> DivPager.TYPE
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
-            is Div.Select -> TODO()
+            is Div.Select -> DivSelect.TYPE
             is Div.Video -> TODO()
         }
     }
@@ -124,6 +125,7 @@ internal fun DivBase.containsStateInnerTransitions(): Boolean {
         is DivPager -> false
         is DivTabs -> false
         is DivCustom -> false
+        is DivSelect -> false
         else -> false
     }
 }
@@ -148,6 +150,7 @@ internal val DivBase.isBranch: Boolean
             is DivSlider -> false
             is DivInput -> false
             is DivCustom -> false
+            is DivSelect -> false
             is DivContainer -> true
             is DivGrid -> true
             is DivGallery -> true

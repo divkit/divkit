@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.divs.DivImageBinder
 import com.yandex.div.core.view2.divs.DivIndicatorBinder
 import com.yandex.div.core.view2.divs.DivInputBinder
 import com.yandex.div.core.view2.divs.DivPagerBinder
+import com.yandex.div.core.view2.divs.DivSelectBinder
 import com.yandex.div.core.view2.divs.DivSeparatorBinder
 import com.yandex.div.core.view2.divs.DivSliderBinder
 import com.yandex.div.core.view2.divs.DivStateBinder
@@ -33,6 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -50,6 +52,7 @@ import com.yandex.div2.DivImage
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
@@ -76,6 +79,7 @@ internal class DivBinder @Inject constructor(
     private val indicatorBinder: DivIndicatorBinder,
     private val sliderBinder: DivSliderBinder,
     private val inputBinder: DivInputBinder,
+    private val selectBinder: DivSelectBinder,
     private val videoBinder: DivVideoBinder,
     private val extensionController: DivExtensionController,
     private val pagerIndicatorConnector: PagerIndicatorConnector
@@ -104,6 +108,7 @@ internal class DivBinder @Inject constructor(
             is Div.Indicator -> bindIndicator(view, div.value, divView)
             is Div.Slider -> bindSlider(view, div.value, divView)
             is Div.Input -> bindInput(view, div.value, divView)
+            is Div.Select -> bindSelect(view, div.value, divView)
             is Div.Video -> bindVideo(view, div.value, divView)
         }
 
@@ -172,6 +177,10 @@ internal class DivBinder @Inject constructor(
 
     private fun bindInput(view: View, data: DivInput, divView: Div2View) {
         inputBinder.bindView(view as DivInputView, data, divView)
+    }
+
+    private fun bindSelect(view: View, data: DivSelect, divView: Div2View) {
+        selectBinder.bindView(view as DivSelectView, data, divView)
     }
 
     private fun bindVideo(view: View, data: DivVideo, divView: Div2View) {

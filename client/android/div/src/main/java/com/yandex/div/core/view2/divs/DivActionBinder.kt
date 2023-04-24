@@ -1,30 +1,19 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.LayerDrawable
 import android.view.Gravity
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.ScaleAnimation
 import androidx.annotation.StringDef
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat
-import androidx.core.view.GestureDetectorCompat
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
-import com.yandex.div.core.animation.reversed
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
 import com.yandex.div.core.experiments.Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED
-import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_BLUR
@@ -36,7 +25,6 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.allIsNullOrEmpty
 import com.yandex.div.internal.widget.menu.OverflowMenuWrapper
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
@@ -76,36 +64,22 @@ internal class DivActionBinder @Inject constructor(
         val clickableState = target.isClickable
         val longClickableState = target.isLongClickable
 
-        val touchAnimations = tryConvertToTouchListener(
-            divView, actions, longTapActions, doubleTapActions, actionAnimation, target)
-
         val divGestureListener = DivGestureListener()
         bindLongTapActions(divView, target, longTapActions, actions.isNullOrEmpty())
         bindDoubleTapActions(divView, target, divGestureListener, doubleTapActions)
         // Order is urgent: tap actions depend on double tap actions
         bindTapActions(divView, target, divGestureListener, actions, shouldIgnoreActionMenuItems)
 
-        // Avoid creating GestureDetector if unnecessary cause it's expensive.
-        val gestureDetector = if (divGestureListener.onSingleTapListener != null ||
-            divGestureListener.onDoubleTapListener != null) {
-            GestureDetectorCompat(target.context, divGestureListener)
-        } else {
-            null
-        }
-
-        if (touchAnimations != null || gestureDetector != null) {
-            //noinspection ClickableViewAccessibility
-            target.setOnTouchListener { v, event ->
-                touchAnimations?.invoke(v, event)
-                gestureDetector?.onTouchEvent(event) ?: false
-            }
-        } else {
-            target.setOnTouchListener(null)
-        }
+        target.setAnimatedTouchListener(
+            divView,
+            actionAnimation.takeUnless { allIsNullOrEmpty(actions, longTapActions, doubleTapActions) },
+            divGestureListener
+        )
 
         if (accessibilityEnabled &&
             DivAccessibility.Mode.MERGE == divView.getPropagatedAccessibilityMode(target) &&
-            divView.isDescendantAccessibilityMode(target)) {
+            divView.isDescendantAccessibilityMode(target)
+        ) {
             target.isClickable = clickableState
             target.isLongClickable = longClickableState
         }
@@ -360,154 +334,6 @@ internal class DivActionBinder @Inject constructor(
                     actionsHandled
                 }
             }
-        }
-    }
-
-    private fun tryConvertToTouchListener(
-        divView: Div2View,
-        actions: List<DivAction>?,
-        longTapActions: List<DivAction>?,
-        doubleTapActions: List<DivAction>?,
-        actionAnimation: DivAnimation,
-        view: View,
-    ): ((View, MotionEvent) -> Unit)? {
-        val expressionResolver = divView.expressionResolver
-
-        if (allIsNullOrEmpty(actions, longTapActions, doubleTapActions)) {
-            return null
-        }
-
-        val directAnimation = actionAnimation.toAnimation(expressionResolver, view = view)
-        val reverseAnimation = actionAnimation.toAnimation(expressionResolver, reverse = true)
-
-        if (directAnimation == null && reverseAnimation == null) {
-            return null
-        }
-
-        return { v, event ->
-            if (v.isEnabled && v.isClickable && v.hasOnClickListeners()) {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> directAnimation?.let { v.startAnimation(it) }
-                    MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> reverseAnimation?.let {
-                        v.startAnimation(it)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun DivAnimation.toAnimation(
-        resolver: ExpressionResolver,
-        reverse: Boolean = false,
-        view: View? = null
-    ): Animation? {
-        val animationName = name.evaluate(resolver)
-        val animation = when (animationName) {
-            DivAnimation.Name.SET -> AnimationSet(false).apply {
-                items?.forEach { divAnimation ->
-                    val animation = divAnimation.toAnimation(resolver, reverse, view)
-                    animation?.let { addAnimation(it) }
-                }
-            }
-            DivAnimation.Name.SCALE ->
-                if (reverse) {
-                    createScaleAnimation(
-                        endValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_END_VALUE,
-                        startValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_START_VALUE
-                    )
-                } else {
-                    createScaleAnimation(
-                        startValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_START_VALUE,
-                        endValue?.evaluate(resolver).scaleValue() ?: DEFAULT_SCALE_END_VALUE
-                    )
-                }
-            DivAnimation.Name.NATIVE -> {
-                if (view != null) {
-                    val layers = view.background as? LayerDrawable
-                    val shouldAddAnimation = layers == null || (0 until layers.numberOfLayers).none {
-                        layers.getId(it) == R.drawable.native_animation_background
-                    }
-
-                    if (shouldAddAnimation) {
-                        val drawables = mutableListOf<Drawable>()
-
-                        layers?.let {
-                            for (i in 0 until it.numberOfLayers) {
-                                drawables.add(it.getDrawable(i))
-                            }
-                        } ?: drawables.add(view.background)
-
-                        val animation = ContextCompat.getDrawable(
-                            view.context,
-                            R.drawable.native_animation_background
-                        )
-
-                        animation?.let { drawables.add(it) }
-
-                        val layerDrawable = LayerDrawable(drawables.toTypedArray())
-                        layerDrawable.setId(
-                            drawables.size - 1,
-                            R.drawable.native_animation_background
-                        ) //mark background has animation
-                        view.background = layerDrawable
-                    }
-                }
-                null
-            }
-            DivAnimation.Name.NO_ANIMATION -> null
-            else ->
-                if (reverse) {
-                    AlphaAnimation(
-                        endValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_END_VALUE,
-                        startValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_START_VALUE
-                    )
-                } else {
-                    AlphaAnimation(
-                        startValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_START_VALUE,
-                        endValue?.evaluate(resolver).alphaValue() ?: DEFAULT_ALPHA_END_VALUE
-                    )
-                }
-        }
-
-        if (animationName != DivAnimation.Name.SET) {
-            animation?.interpolator = if (reverse) {
-                interpolator.evaluate(resolver).androidInterpolator.reversed()
-            } else {
-                interpolator.evaluate(resolver).androidInterpolator
-            }
-            animation?.duration = duration.evaluate(resolver).toLong()
-        }
-
-        animation?.startOffset = startDelay.evaluate(resolver).toLong()
-        animation?.fillAfter = true
-
-        return animation
-    }
-
-    private fun createScaleAnimation(startValue: Float, endValue: Float) =
-        ScaleAnimation(
-            startValue, endValue, startValue, endValue,
-            Animation.RELATIVE_TO_SELF, SCALE_PIVOT_VALUE,
-            Animation.RELATIVE_TO_SELF, SCALE_PIVOT_VALUE
-        )
-
-    private companion object {
-        const val MIN_ALPHA_VALUE = 0.0f
-        const val MAX_ALPHA_VALUE = 1.0f
-        const val DEFAULT_ALPHA_START_VALUE = 1f
-        const val DEFAULT_ALPHA_END_VALUE = 0.6f
-
-        const val MIN_SCALE_VALUE = 0.0f
-        const val DEFAULT_SCALE_START_VALUE = 1f
-        const val DEFAULT_SCALE_END_VALUE = 0.95f
-        const val SCALE_PIVOT_VALUE = 0.5f
-
-        private fun Double?.alphaValue(): Float? {
-            return this?.toFloat()?.coerceIn(MIN_ALPHA_VALUE, MAX_ALPHA_VALUE)
-        }
-
-        private fun Double?.scaleValue(): Float? {
-            return this?.toFloat()?.coerceAtLeast(MIN_SCALE_VALUE)
         }
     }
 

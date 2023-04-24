@@ -64,8 +64,7 @@
     },
     {
       "$ref": "div-select.json",
-      "$description": "translations.json#/div_select",
-      "platforms": [ "ios", "web" ]
+      "$description": "translations.json#/div_select"
     },
     {
       "$ref": "div-video.json",
