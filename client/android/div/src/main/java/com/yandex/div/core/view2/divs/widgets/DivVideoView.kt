@@ -68,25 +68,26 @@ internal class DivVideoView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
-        releasePlayer()
+        getPlayerView()?.detach()
         borderDrawer?.release()
     }
 
     override fun onDetachedFromWindow() {
-        releasePlayer()
+        release()
         super.onDetachedFromWindow()
     }
 
-    private fun releasePlayer() {
+    fun getPlayerView(): DivPlayerView? {
         if (this.childCount > 1) {
             KAssert.fail { "More than one player view inside DivVideo" }
         }
         this.getChildAt(0)?.let {
             if (it !is DivPlayerView) {
                 KAssert.fail { "Wrong view type inside DivVideo" }
-                return
+                return null
             }
-            it.detach()
+            return it
         }
+        return null
     }
 }

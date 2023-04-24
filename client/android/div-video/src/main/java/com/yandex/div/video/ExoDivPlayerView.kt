@@ -23,14 +23,20 @@ class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
         this.addView(it)
     }
 
+    private var attachedPlayer: DivPlayer? = null
+
     override fun attach(player: DivPlayer) {
         detach()
         playerView.player = (player as ExoDivPlayer).player
+        attachedPlayer = player
         player.setTargetResolution(this.width, this.height)
     }
 
     override fun detach() {
         playerView.player?.release()
         playerView.player = null
+        attachedPlayer = null
     }
+
+    override fun getAttachedPlayer(): DivPlayer? = attachedPlayer
 }

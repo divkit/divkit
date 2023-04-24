@@ -12,7 +12,7 @@
       {
         "state_id": 0,
         "div": {
-          "type": "gallery",
+          "type": "container",
           "orientation": "vertical",
           "items": [
             {

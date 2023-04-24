@@ -12,12 +12,12 @@
       {
         "state_id": 0,
         "div": {
-          "type": "gallery",
+          "type": "container",
           "orientation": "vertical",
           "items": [
             {
               "type": "video",
-              "id": "bear_video",
+              "id": "bears_video",
               "video_data": {
                 "type": "video",
                 "video_sources": [
@@ -55,7 +55,7 @@
                 "left": 12,
                 "right": 12
               },
-              "max_value": 20000,
+              "max_value": 30000,
               "min_value": 0,
               "thumb_value_variable": "video_time",
               "thumb_style": {
@@ -103,6 +103,75 @@
                   }
                 }
               }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "margins": {
+                    "right": 20
+                  },
+                  "actions": [
+                    {
+                      "log_id": "rewind",
+                      "url": "div-action://set_variable?name=video_time&value=0"
+                    }
+                  ]
+                },
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 44
+                  },
+                  "margins": {
+                    "right": 16
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "play",
+                      "url": "div-action://video?id=bears_video&action=start"
+                    }
+                  ]
+                },
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 44
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "pause",
+                      "url": "div-action://video?id=bears_video&action=pause"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

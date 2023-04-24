@@ -30,6 +30,7 @@ import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
@@ -65,6 +66,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.util.WeakHashMap
+import kotlin.collections.ArrayDeque
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -97,6 +99,8 @@ class Div2View private constructor(
     private val viewToDivBindings = WeakHashMap<View, Div>()
     private val propagatedAccessibilityModes = WeakHashMap<View, DivAccessibility.Mode>()
     private val bulkActionsHandler = BulkActionHandler()
+    private val divVideoActionHandler: DivVideoActionHandler
+        get() = div2Component.divVideoActionHandler
     private val tooltipController: DivTooltipController
         get() = div2Component.tooltipController
     internal val releaseViewVisitor: ReleaseViewVisitor
@@ -815,6 +819,10 @@ class Div2View private constructor(
 
     fun applyTimerCommand(id: String, command: String) {
         divTimerEventDispatcher?.changeState(id, command)
+    }
+
+    fun applyVideoCommand(divId: String, command: String): Boolean {
+        return divVideoActionHandler.handleAction(this, divId, command)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)

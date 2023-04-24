@@ -1746,14 +1746,14 @@
       "file": "currency_input_mask.json"
     },
     {
-      "title": "Video rewindable",
+      "title": "Video with controls",
       "platforms": [
         "android"
       ],
       "tags": [
         "DivVideo"
       ],
-      "file": "video/video_rewindable.json"
+      "file": "video/video_with_controls.json"
     },
     {
       "title": "Video stream",

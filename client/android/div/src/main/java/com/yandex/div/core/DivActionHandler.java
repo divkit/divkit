@@ -28,6 +28,7 @@ public class DivActionHandler {
     private static final String AUTHORITY_HIDE_TOOLTIP = "hide_tooltip";
     private static final String AUTHORITY_SET_VARIABLE = "set_variable";
     private static final String AUTHORITY_TIMER = "timer";
+    private static final String AUTHORITY_VIDEO = "video";
 
     private static final String PARAM_STATE_ID = "state_id";
     private static final String PARAM_ID = "id";
@@ -223,6 +224,26 @@ public class DivActionHandler {
 
             div2View.applyTimerCommand(id, command);
             return true;
+        } else if (AUTHORITY_VIDEO.equals(action)) {
+            Div2View div2View = (view instanceof Div2View) ? (Div2View) view : null;
+            if (div2View == null) {
+                Assert.fail("Handler view is not instance of Div2View");
+                return false;
+            }
+
+            String id = uri.getQueryParameter("id");
+            if (id == null) {
+                Assert.fail("Video action has no id param");
+                return false;
+            }
+
+            String command = uri.getQueryParameter("action");
+            if (command == null) {
+                Assert.fail("Video action has no action param");
+                return false;
+            }
+
+            return div2View.applyVideoCommand(id, command);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, view);
         }
