@@ -963,6 +963,10 @@
     "en": "Regular expression for validating character inputs. For example, when a mask is digit-only.",
     "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
   },
+  "div_input_mask_raw_text_variable": {
+    "en": "Name of raw value storage variable.",
+    "ru": "Название переменной для хранения необработанного значения."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."
@@ -978,10 +982,6 @@
   "div_input_native_interface_color": {
     "en": "Text input line color.",
     "ru": "Цвет линии ввода текста."
-  },
-  "div_input_mask_raw_text_variable": {
-    "en": "Name of raw value storage variable.",
-    "ru": "Название переменной для хранения необработанного значения."
   },
   "div_input_select_all_on_focus": {
     "en": "Highlighting input text when focused.",
@@ -1931,45 +1931,41 @@
     "en": "Video playback element.",
     "ru": "Элемент для проигрывания видео."
   },
-  "div_video_repeatable": {
-    "en": "When set to true, the video will repeat.",
-    "ru": "При установке в true видео будет повторяться."
-  },
   "div_video_autostart": {
     "en": "When set to true, the video will automatically start playing. It will work on the web if the video is played without sound.",
     "ru": "При установке в true видео будет автоматически запускать проигрывание. В вебе будет работать при условии, если видео проигрывается без звука."
-  },
-  "div_video_muted": {
-    "en": "When set to true, the video will be played without sound.",
-    "ru": "При установке в true видео будет проигрываться без звука."
-  },
-  "div_video_elapsed_time_variable": {
-    "en": "The variable stores how many seconds have passed since the beginning of the video.",
-    "ru": "В переменной хранится сколько секунд прошло с начала видео."
-  },
-  "div_video_resume_actions": {
-    "en": "Actions that are performed when playback resumes.",
-    "ru": "Действия, которые выполняются, когда проигрывание возобновляется."
-  },
-  "div_video_end_actions": {
-    "en": "Actions that are performed when the video ends.",
-    "ru": "Действия, которые выполняются, когда видео заканчивается."
   },
   "div_video_buffering_actions": {
     "en": "Actions that are performed when a video is paused for loading.",
     "ru": "Действия, которые выполняются, когда видео приостанавливается для загрузки."
   },
-  "div_video_preview": {
-    "en": "Preview of the video encoded in `base64'. It will be shown until the video is ready for playback. `data url` format: `data:[;base64],<data>`",
-    "ru": "Превью видео, закодированное в `base64`. Будет показано до момента, когда видео готово к воспроизведению. Формат `data url`: `data:[;base64],<data>`"
+  "div_video_elapsed_time_variable": {
+    "en": "The variable stores how many seconds have passed since the beginning of the video.",
+    "ru": "В переменной хранится сколько секунд прошло с начала видео."
+  },
+  "div_video_end_actions": {
+    "en": "Actions that are performed when the video ends.",
+    "ru": "Действия, которые выполняются, когда видео заканчивается."
+  },
+  "div_video_muted": {
+    "en": "When set to true, the video will be played without sound.",
+    "ru": "При установке в true видео будет проигрываться без звука."
   },
   "div_video_player_settings_payload": {
     "en": "It is intended for storing additional information that can be used inside the player.",
     "ru": "Предназначено для хранения дополнительной информации, которая может быть использована внутри плеера."
   },
-  "div_video_video_data": {
-    "en": "Video content.",
-    "ru": "Содержимое видео."
+  "div_video_preview": {
+    "en": "Preview of the video encoded in `base64'. It will be shown until the video is ready for playback. `data url` format: `data:[;base64],<data>`",
+    "ru": "Превью видео, закодированное в `base64`. Будет показано до момента, когда видео готово к воспроизведению. Формат `data url`: `data:[;base64],<data>`"
+  },
+  "div_video_repeatable": {
+    "en": "When set to true, the video will repeat.",
+    "ru": "При установке в true видео будет повторяться."
+  },
+  "div_video_resume_actions": {
+    "en": "Actions that are performed when playback resumes.",
+    "ru": "Действия, которые выполняются, когда проигрывание возобновляется."
   },
   "div_video_stream": {
     "en": "Data for stream display.",
@@ -1983,25 +1979,13 @@
     "en": "Data for video display.",
     "ru": "Данные для показа видео."
   },
+  "div_video_video_data": {
+    "en": "Video content.",
+    "ru": "Содержимое видео."
+  },
   "div_video_video_source": {
     "en": "Description of one video. Contains a link to the video, codec, resolution.",
     "ru": "Описание одного видео. Содержит ссылку на видео, кодек, разрешение."
-  },
-  "div_video_video_source_url": {
-    "en": "The property contains a link to a video file available for playback or download.",
-    "ru": "Свойство содержит ссылку на видеофайл, доступного для воспроизведения или загрузки."
-  },
-  "div_video_video_source_resolution": {
-    "en": "Video resolution.",
-    "ru": "Разрешение видео."
-  },
-  "div_video_video_source_resolution_width": {
-    "en": "Contains information about the resolution width of the video file.",
-    "ru": "Содержит информацию о ширине разрешения видеофайла."
-  },
-  "div_video_video_source_resolution_height": {
-    "en": "Contains information about the resolution height of the video file.",
-    "ru": "Содержит информацию о высоте разрешения видеофайла."
   },
   "div_video_video_source_codec": {
     "en": "Specifies the codec (encoder/decoder) used for the video file.",
@@ -2010,6 +1994,22 @@
   "div_video_video_source_mime_type": {
     "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the video file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
     "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для видеофайла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
+  },
+  "div_video_video_source_resolution": {
+    "en": "Video resolution.",
+    "ru": "Разрешение видео."
+  },
+  "div_video_video_source_resolution_height": {
+    "en": "Contains information about the resolution height of the video file.",
+    "ru": "Содержит информацию о высоте разрешения видеофайла."
+  },
+  "div_video_video_source_resolution_width": {
+    "en": "Contains information about the resolution width of the video file.",
+    "ru": "Содержит информацию о ширине разрешения видеофайла."
+  },
+  "div_video_video_source_url": {
+    "en": "The property contains a link to a video file available for playback or download.",
+    "ru": "Свойство содержит ссылку на видеофайл, доступного для воспроизведения или загрузки."
   },
   "div_visibility": {
     "en": "Element visibility:<li>`visible` — the element is visible;</li><li>`invisible` — the element is invisible, but a place is reserved for it;</li><li>`gone` — the element is invisible, a place isn't reserved.</li>",
