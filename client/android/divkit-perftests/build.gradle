@@ -1,3 +1,5 @@
+import com.yandex.div.gradle.FileExtensions
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -28,8 +30,6 @@ dependencies {
 
     testImplementation "junit:junit:$versions.junit"
 
-    implementation "com.yandex:pulse:$versions.pulse"
-    androidTestImplementation "com.yandex.mobile.perftests:perftests-runner:$versions.perftests"
     androidTestImplementation "androidx.test:runner:$versions.androidx.test"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
@@ -67,4 +67,8 @@ task assemblePerfTests() {
     }
 
     dependsOn("assembleDebug", "assembleDebugAndroidTest")
+}
+
+FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
+    apply from: it
 }
