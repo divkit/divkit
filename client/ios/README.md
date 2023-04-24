@@ -24,10 +24,13 @@ DivKit supports [Swift Package Manager](https://www.swift.org/package-manager/) 
 
 Use this repository to install DivKit using Swift Package Manager: https://github.com/divkit/divkit-ios.git.
 
-Use `DivKit` podspec to install DivKit using CocoaPods:
-```bash
-pod 'DivKit'
-pod install
+Add `DivKit` pod into your application `Podfile` to install DivKit using CocoaPods:
+```
+source 'https://github.com/divkit/divkit-ios.git'
+
+target 'MyApp' do
+  pod 'DivKit'
+end
 ```
 
 ## DivKit Project
