@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`default_value test_invalid_value_presented_directly 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "int": -1,
-    "nested": Object {
+    "nested": {
       "int": -1,
       "non_optional": "Some text",
       "url": "http://notsecure.yandex.ru",
@@ -12,24 +12,24 @@ Object {
     "type": "entity_with_property_with_default_value",
     "url": "http://notsecure.yandex.ru",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`default_value test_invalid_value_presented_directly 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`default_value test_invalid_value_referenced_by_link 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "int": -1,
     "int_value": -1,
-    "nested": Object {
+    "nested": {
       "int": -1,
       "non_optional": "Some text",
       "url": "http://notsecure.yandex.ru",
@@ -38,7 +38,7 @@ Object {
     "url": "http://notsecure.yandex.ru",
     "url_value": "http://notsecure.yandex.ru",
   },
-  "templateContext": Object {
+  "templateContext": {
     "int_value": -1,
     "url_value": "http://notsecure.yandex.ru",
   },

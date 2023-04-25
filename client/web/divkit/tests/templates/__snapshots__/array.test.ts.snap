@@ -1,120 +1,120 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`array test_array_empty 1`] = `
-Object {
-  "json": Object {
-    "array": Array [],
+{
+  "json": {
+    "array": [],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`array test_array_invalid_items 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {},
+{
+  "json": {
+    "array": [
+      {},
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`array test_array_invalid_items_in_data 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {},
+{
+  "json": {
+    "array": [
+      {},
     ],
-    "link": Array [
-      Object {},
+    "link": [
+      {},
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {},
+  "templateContext": {
+    "link": [
+      {},
     ],
   },
 }
 `;
 
 exports[`array test_array_missing_data 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
+      {
         "type": "entity_with_complex_property",
       },
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
-exports[`array test_array_missing_data 2`] = `Array []`;
+exports[`array test_array_missing_data 2`] = `[]`;
 
 exports[`array test_array_missing_one_link 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link_1": Object {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link_1": Object {
+  "templateContext": {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
   },
 }
 `;
 
-exports[`array test_array_missing_one_link 2`] = `Array []`;
+exports[`array test_array_missing_one_link 2`] = `[]`;
 
 exports[`array test_array_nested 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "array": Array [
-          Object {
-            "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "array": [
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
           },
-          Object {
-            "property": Object {
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
@@ -123,17 +123,17 @@ Object {
         "type": "entity_with_array",
       },
     ],
-    "link": Array [
-      Object {
-        "array": Array [
-          Object {
-            "property": Object {
+    "link": [
+      {
+        "array": [
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
           },
-          Object {
-            "property": Object {
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
@@ -144,18 +144,18 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {
-        "array": Array [
-          Object {
-            "property": Object {
+  "templateContext": {
+    "link": [
+      {
+        "array": [
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
           },
-          Object {
-            "property": Object {
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
@@ -169,19 +169,19 @@ Object {
 `;
 
 exports[`array test_array_nested_with_internal_link 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "array": Array [
-          Object {
-            "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "array": [
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
           },
-          Object {
-            "property": Object {
+          {
+            "property": {
               "value": "https://ya.ru",
             },
             "type": "entity_with_complex_property",
@@ -190,15 +190,15 @@ Object {
         "type": "entity_with_array",
       },
     ],
-    "nested_array_link": Array [
-      Object {
-        "property": Object {
+    "nested_array_link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -206,16 +206,16 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "nested_array_link": Array [
-      Object {
-        "property": Object {
+  "templateContext": {
+    "nested_array_link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -226,17 +226,17 @@ Object {
 `;
 
 exports[`array test_array_not_templated 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -244,49 +244,49 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`array test_array_not_templated 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`array test_array_one_invalid_item 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {},
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {},
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link_1": Object {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link_1": Object {
+  "templateContext": {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
   },
@@ -294,17 +294,17 @@ Object {
 `;
 
 exports[`array test_array_with_complex_items_with_internal_links 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -314,7 +314,7 @@ Object {
     "link_2": "https://ya.ru",
     "type": "entity_with_array",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link_1": "https://ya.ru",
     "link_2": "https://ya.ru",
   },
@@ -322,55 +322,55 @@ Object {
 `;
 
 exports[`array test_array_with_heterogeneous_items 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
+      {
         "property": "Some text",
         "type": "entity_with_required_property",
       },
-      Object {
+      {
         "property": "second",
         "type": "entity_with_string_enum_property",
       },
     ],
-    "link": Array [
-      Object {
-        "property": Object {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
+      {
         "property": "Some text",
         "type": "entity_with_required_property",
       },
-      Object {
+      {
         "property": "second",
         "type": "entity_with_string_enum_property",
       },
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {
-        "property": Object {
+  "templateContext": {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
+      {
         "property": "Some text",
         "type": "entity_with_required_property",
       },
-      Object {
+      {
         "property": "second",
         "type": "entity_with_string_enum_property",
       },
@@ -380,20 +380,20 @@ Object {
 `;
 
 exports[`array test_array_with_heterogeneous_items_with_internal_links 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
+      {
         "property": "Some text",
         "type": "entity_with_required_property",
       },
-      Object {
+      {
         "property": "second",
         "type": "entity_with_string_enum_property",
       },
@@ -403,7 +403,7 @@ Object {
     "r_r_link": "second",
     "type": "entity_with_array",
   },
-  "templateContext": Object {
+  "templateContext": {
     "c_link": "https://ya.ru",
     "r_link": "Some text",
     "r_r_link": "second",
@@ -412,35 +412,35 @@ Object {
 `;
 
 exports[`array test_array_with_internal_links 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link_1": Object {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link_1": Object {
+  "templateContext": {
+    "link_1": {
       "value": "https://ya.ru",
     },
-    "link_2": Object {
+    "link_2": {
       "value": "https://ya.ru",
     },
   },
@@ -448,31 +448,31 @@ Object {
 `;
 
 exports[`array test_array_with_link 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link": Array [
-      Object {
-        "property": Object {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -480,16 +480,16 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {
-        "property": Object {
+  "templateContext": {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -500,16 +500,16 @@ Object {
 `;
 
 exports[`array test_array_with_nested_templated_array 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "gallery_items_link": Array [
-          Object {
+{
+  "json": {
+    "array": [
+      {
+        "gallery_items_link": [
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
-          Object {
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
@@ -517,14 +517,14 @@ Object {
         "type": "gallery",
       },
     ],
-    "tabs_items_link": Array [
-      Object {
-        "gallery_items_link": Array [
-          Object {
+    "tabs_items_link": [
+      {
+        "gallery_items_link": [
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
-          Object {
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
@@ -534,15 +534,15 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {
-    "tabs_items_link": Array [
-      Object {
-        "gallery_items_link": Array [
-          Object {
+  "templateContext": {
+    "tabs_items_link": [
+      {
+        "gallery_items_link": [
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
-          Object {
+          {
             "item_link": "https://ya.ru",
             "type": "gallery_item",
           },
@@ -555,17 +555,17 @@ Object {
 `;
 
 exports[`array test_array_with_override_in_items 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "c_0",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "c_0",
@@ -574,38 +574,38 @@ Object {
     "link_override": "https://ya.ru",
     "type": "entity_with_array",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link_override": "https://ya.ru",
   },
 }
 `;
 
 exports[`array test_array_with_override_in_template 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link_override": Array [
-      Object {
-        "property": Object {
+    "link_override": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -613,16 +613,16 @@ Object {
     ],
     "type": "t_0",
   },
-  "templateContext": Object {
-    "link_override": Array [
-      Object {
-        "property": Object {
+  "templateContext": {
+    "link_override": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -633,44 +633,44 @@ Object {
 `;
 
 exports[`array test_array_with_templated_items 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "link": "https://ya.ru",
         "type": "c_0",
       },
-      Object {
+      {
         "link": "https://ya.ru",
         "type": "c_0",
       },
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`array test_array_with_templated_items 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`array test_array_without_link 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -678,6 +678,6 @@ Object {
     ],
     "type": "entity_with_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;

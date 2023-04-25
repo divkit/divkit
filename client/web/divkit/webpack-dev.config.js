@@ -50,6 +50,7 @@ const configCommon = isServer => ({
     },
     resolve: {
         extensions: ['.ts', '.js', '.svelte', '.d.ts'],
+        conditionNames: ['...',  'svelte']
     },
     module: {
         rules: [

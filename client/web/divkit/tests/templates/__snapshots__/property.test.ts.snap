@@ -1,163 +1,163 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`property test_property_not_templated 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "property": "Some text",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`property test_property_not_templated 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`property test_property_not_templated_invalid 1`] = `
-Object {
-  "json": Object {
-    "property": Object {
+{
+  "json": {
+    "property": {
       "url": "",
     },
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`property test_property_not_templated_invalid 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`property test_property_template_unknown_type 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link": "Some text",
     "property": "Some text",
     "type": "t_0",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link": "Some text",
   },
 }
 `;
 
 exports[`property test_property_unknown_type 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link": "Some text",
     "type": "t_0",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`property test_property_unknown_type 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`property test_property_with_link 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link": "Some text",
     "property": "Some text",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link": "Some text",
   },
 }
 `;
 
 exports[`property test_property_with_link_invalid 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link": "",
     "property": "",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link": "",
   },
 }
 `;
 
 exports[`property test_property_with_link_missing_data 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
-exports[`property test_property_with_link_missing_data 2`] = `Array []`;
+exports[`property test_property_with_link_missing_data 2`] = `[]`;
 
 exports[`property test_property_with_override 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "property": "Some text",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {
+  "templateContext": {
     "property": "Some text",
   },
 }
 `;
 
-exports[`property test_property_with_override 2`] = `Array []`;
+exports[`property test_property_with_override 2`] = `[]`;
 
 exports[`property test_property_with_override_in_template 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link_override": "Some text",
     "property": "Some text",
     "type": "t_0",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link_override": "Some text",
   },
 }
 `;
 
 exports[`property test_property_without_link 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "property": "Some text",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`property test_property_without_link_invalid 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "property": "",
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`property test_property_without_link_missing_data 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "type": "entity_with_required_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;

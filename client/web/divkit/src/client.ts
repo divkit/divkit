@@ -1,21 +1,31 @@
 import Root from './components/Root.svelte';
-import type { Platform, Theme } from '../typings/common';
+import type {
+    ComponentCallback,
+    CustomActionCallback,
+    Customization,
+    DivExtensionClass,
+    DivJson,
+    ErrorCallback,
+    Platform,
+    StatCallback,
+    Theme
+} from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 
 export function render(opts: {
     target: HTMLElement;
-    json: unknown;
+    json: DivJson;
     id: string;
     hydrate?: boolean;
     globalVariablesController?: GlobalVariablesController;
     mix?: string;
-    customization?: unknown;
-    builtinProtocols?: unknown;
-    extensions?: unknown;
-    onStat?: unknown;
-    onCustomAction?: unknown;
-    onError?: unknown;
-    onComponent?: unknown;
+    customization?: Customization;
+    builtinProtocols?: string[];
+    extensions?: Map<string, DivExtensionClass>;
+    onStat?: StatCallback;
+    onCustomAction?: CustomActionCallback;
+    onError?: ErrorCallback;
+    onComponent?: ComponentCallback;
     platform?: Platform;
     theme?: Theme;
 }) {

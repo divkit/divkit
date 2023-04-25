@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`strict_array test_referenced_strict_array_with_non_object_item 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
+{
+  "json": {
+    "array": [
       0,
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link": Array [
+    "link": [
       0,
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -23,11 +23,11 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {
-    "link": Array [
+  "templateContext": {
+    "link": [
       0,
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -38,25 +38,25 @@ Object {
 `;
 
 exports[`strict_array test_referenced_strict_array_with_non_resolvable_item 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link": Array [
-      Object {
+    "link": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -64,13 +64,13 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {
+  "templateContext": {
+    "link": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -81,17 +81,17 @@ Object {
 `;
 
 exports[`strict_array test_strict_array_happy_case 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -99,44 +99,44 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`strict_array test_strict_array_happy_case 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`strict_array test_strict_array_happy_case_referenced 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
-        "property": Object {
+{
+  "json": {
+    "array": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
     ],
-    "link": Array [
-      Object {
-        "property": Object {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -144,16 +144,16 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {
-    "link": Array [
-      Object {
-        "property": Object {
+  "templateContext": {
+    "link": [
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -164,12 +164,12 @@ Object {
 `;
 
 exports[`strict_array test_strict_array_with_non_object_item 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
+{
+  "json": {
+    "array": [
       0,
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -177,51 +177,51 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`strict_array test_strict_array_with_non_object_item 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`strict_array test_strict_array_with_non_object_item_ref 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
+{
+  "json": {
+    "array": [
       0,
-      Object {
+      {
         "link": "https://ya.ru",
         "type": "t_0",
       },
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`strict_array test_strict_array_with_non_object_item_ref 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`strict_array test_strict_array_with_non_resolvable_item 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "type": "entity_with_complex_property",
       },
-      Object {
-        "property": Object {
+      {
+        "property": {
           "value": "https://ya.ru",
         },
         "type": "entity_with_complex_property",
@@ -229,39 +229,39 @@ Object {
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`strict_array test_strict_array_with_non_resolvable_item 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`strict_array test_strict_array_with_non_resolvable_item_ref 1`] = `
-Object {
-  "json": Object {
-    "array": Array [
-      Object {
+{
+  "json": {
+    "array": [
+      {
         "type": "t_0",
       },
-      Object {
+      {
         "link": "https://ya.ru",
         "type": "t_0",
       },
     ],
     "type": "entity_with_strict_array",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`strict_array test_strict_array_with_non_resolvable_item_ref 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]

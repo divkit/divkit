@@ -254,8 +254,8 @@ function evalBinaryCompare<T extends EvalValue>(operator: CompareOperator, left:
     }
 
     let res: boolean;
-    const leftVal = left.type === DATETIME ? left.value.getTime() : left.value;
-    const rightVal = right.type === DATETIME ? right.value.getTime() : right.value;
+    const leftVal = (left.type === DATETIME ? left.value.getTime() : left.value) as number;
+    const rightVal = (right.type === DATETIME ? right.value.getTime() : right.value) as number;
 
     if (operator === '>') {
         res = leftVal > rightVal;

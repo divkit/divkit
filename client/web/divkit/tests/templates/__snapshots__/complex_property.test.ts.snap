@@ -1,80 +1,80 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`complex_property test_complex_property_not_templated 1`] = `
-Object {
-  "json": Object {
-    "property": Object {
+{
+  "json": {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`complex_property test_complex_property_not_templated 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]
 `;
 
 exports[`complex_property test_complex_property_with_internal_link 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link": "https://ya.ru",
-    "property": Object {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link": "https://ya.ru",
   },
 }
 `;
 
 exports[`complex_property test_complex_property_with_internal_link_missing_data 1`] = `
-Object {
-  "json": Object {
-    "property": Object {},
+{
+  "json": {
+    "property": {},
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
-exports[`complex_property test_complex_property_with_internal_link_missing_data 2`] = `Array []`;
+exports[`complex_property test_complex_property_with_internal_link_missing_data 2`] = `[]`;
 
 exports[`complex_property test_complex_property_with_internal_link_override_in_template 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "link_override": "https://ya.ru",
-    "property": Object {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "t_0",
   },
-  "templateContext": Object {
+  "templateContext": {
     "link_override": "https://ya.ru",
   },
 }
 `;
 
 exports[`complex_property test_complex_property_with_link 1`] = `
-Object {
-  "json": Object {
-    "link": Object {
+{
+  "json": {
+    "link": {
       "value": "https://ya.ru",
     },
-    "property": Object {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {
-    "link": Object {
+  "templateContext": {
+    "link": {
       "value": "https://ya.ru",
     },
   },
@@ -82,29 +82,29 @@ Object {
 `;
 
 exports[`complex_property test_complex_property_with_link_missing_data 1`] = `
-Object {
-  "json": Object {
+{
+  "json": {
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
-exports[`complex_property test_complex_property_with_link_missing_data 2`] = `Array []`;
+exports[`complex_property test_complex_property_with_link_missing_data 2`] = `[]`;
 
 exports[`complex_property test_complex_property_with_override_in_template 1`] = `
-Object {
-  "json": Object {
-    "link_override": Object {
+{
+  "json": {
+    "link_override": {
       "value": "https://ya.ru",
     },
-    "property": Object {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "t_0",
   },
-  "templateContext": Object {
-    "link_override": Object {
+  "templateContext": {
+    "link_override": {
       "value": "https://ya.ru",
     },
   },
@@ -112,40 +112,40 @@ Object {
 `;
 
 exports[`complex_property test_complex_property_without_link 1`] = `
-Object {
-  "json": Object {
-    "property": Object {
+{
+  "json": {
+    "property": {
       "value": "https://ya.ru",
     },
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`complex_property test_complex_property_without_link_missing_data 1`] = `
-Object {
-  "json": Object {
-    "property": Object {},
+{
+  "json": {
+    "property": {},
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`complex_property test_invalid_complex_property_not_templated 1`] = `
-Object {
-  "json": Object {
-    "property": Object {},
+{
+  "json": {
+    "property": {},
     "type": "entity_with_complex_property",
   },
-  "templateContext": Object {},
+  "templateContext": {},
 }
 `;
 
 exports[`complex_property test_invalid_complex_property_not_templated 2`] = `
-Array [
-  Array [
+[
+  [
     [Error: No such template],
   ],
 ]

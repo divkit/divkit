@@ -512,6 +512,7 @@
         {layoutParams}
         customActions={'tabs'}
     >
+        <!-- svelte-ignore a11y-interactive-supports-focus -->
         <div
             bind:this={tabsElem}
             class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"

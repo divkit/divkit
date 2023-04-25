@@ -55,7 +55,7 @@ class ExpressionBinding {
                 logError(wrapError(new Error('Expression execution error')));
             }
             if (result.type === 'integer') {
-                if (value > MAX_INT32 || value < MIN_INT32) {
+                if ((value as number) > MAX_INT32 || (value as number) < MIN_INT32) {
                     logError(wrapError(new Error('Expression result is out of 32-bit int range')));
                     return undefined;
                 }

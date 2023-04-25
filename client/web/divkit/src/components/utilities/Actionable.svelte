@@ -181,6 +181,7 @@
         <slot />
     </a>
 {:else}
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <span
         use:use
         class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"

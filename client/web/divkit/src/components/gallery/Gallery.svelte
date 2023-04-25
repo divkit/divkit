@@ -449,6 +449,7 @@
         </div>
         {#if orientation === 'horizontal'}
             {#if hasScrollLeft && shouldCheckArrows}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="{leftClass || `${css.gallery__arrow} ${css.gallery__arrow_left}`}" on:click={() => scroll('left')}>
                     {#if !leftClass}
                         <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
@@ -458,6 +459,7 @@
                 </div>
             {/if}
             {#if hasScrollRight && shouldCheckArrows}
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="{rightClass || `${css.gallery__arrow} ${css.gallery__arrow_right}`}" on:click={() => scroll('right')}>
                     {#if !rightClass}
                         <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
