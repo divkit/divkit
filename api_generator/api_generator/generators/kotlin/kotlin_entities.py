@@ -871,7 +871,11 @@ class CaseNaming:
         if isinstance(self, Suffix):
             return name + 'Case'
         elif isinstance(self, RemoveCommonPart):
-            return name[len(self.prefix):len(name) - len(self.suffix)]
+            reduced_name = name[len(self.prefix):len(name) - len(self.suffix)]
+            # Add `Case` suffix in templates to match the naming of corresponding enumeration inner classes.
+            if self.prefix == '' and self.suffix == 'template':
+                return reduced_name + 'Case'
+            return reduced_name
 
 
 class Suffix(CaseNaming):
