@@ -272,6 +272,19 @@ Default value is `['http', 'https', 'tel', 'mailto', 'intent']`
 
 Components with an action containing a protocol from the list will be rendered as `<a>`, and clicking on them will be processed by the browser. Protocols outside the list will cause the element to be rendered as a button-like, and clicking on them causes an 'onCustomAction'.
 
+### extensions
+
+`Map<string, DivExtensionClass>`, optional.
+
+Allows to modify components behaviour by a custom code. DivKit contains several built-in extensions, that can be enabled with this property.
+
+Extensions are client-side only. One can render some json on a server, than hydrate it on a client with extensions, but if these extensions modify components look, users may notice this change on a page load.
+
+Also be aware of new releases (even minor and patch versions). Built-in extensions will remain compatible with the new code, but a custom ones can broke with it. Simple extenions, like setting attributes on a component DOM-node less likely broke, but a heavier ones, that depends on a DOM tree, tag names, events or something are on your own risk.
+
+[Enabling built-in extensions](../divkit-examples/extensions-builtin/)
+
+[Building of a new extension](../divkit-examples/extensions-handmade/)
 
 #### theme (EXPERIMENTAL)
 
