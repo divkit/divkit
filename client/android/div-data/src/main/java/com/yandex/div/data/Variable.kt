@@ -40,6 +40,11 @@ sealed class Variable {
                 field = value
                 notifyVariableChanged(this)
             }
+
+        @MainThread
+        fun set(newValue: Long) {
+            value = newValue
+        }
     }
 
     class BooleanVariable(
@@ -53,6 +58,11 @@ sealed class Variable {
                 field = value
                 notifyVariableChanged(this)
             }
+
+        @MainThread
+        fun set(newValue: Boolean) {
+            value = newValue
+        }
     }
 
     class DoubleVariable(override val name: String,
@@ -65,6 +75,11 @@ sealed class Variable {
                 field = value
                 notifyVariableChanged(this)
             }
+
+        @MainThread
+        fun set(newValue: Double) {
+            value = newValue
+        }
     }
 
     class ColorVariable(
@@ -80,6 +95,14 @@ sealed class Variable {
                 field = value
                 notifyVariableChanged(this)
             }
+
+        @MainThread
+        @Throws(VariableMutationException::class)
+        fun set(newValue: Color) {
+            val color = STRING_TO_COLOR_INT(newValue) ?: throw VariableMutationException(
+                    "Wrong value format for color variable: '$newValue'")
+            value = Color(color)
+        }
     }
 
     class UrlVariable(
@@ -94,6 +117,11 @@ sealed class Variable {
                 field = value
                 notifyVariableChanged(this)
             }
+
+        @MainThread
+        fun set(newValue: Uri) {
+            value = newValue
+        }
     }
 
     fun getValue(): Any {
