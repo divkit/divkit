@@ -1,5 +1,5 @@
-import Foundation
 import CoreMedia
+import Foundation
 import UIKit
 
 import CommonCorePublic
@@ -115,7 +115,7 @@ private final class VideoBlockView: BlockView {
     }
 
     if oldValue.elapsedTime != model.elapsedTime {
-      model.elapsedTime.flatMap { player?.seek(to: .init(value: CMTimeValue($0.wrappedValue), timescale: 1)) }
+      model.elapsedTime.flatMap { player?.seek(to: .init(value: $0.wrappedValue)) }
     }
   }
 

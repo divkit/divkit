@@ -1748,7 +1748,8 @@
     {
       "title": "Video with controls",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "DivVideo"
@@ -1758,7 +1759,8 @@
     {
       "title": "Video stream",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "DivVideo"

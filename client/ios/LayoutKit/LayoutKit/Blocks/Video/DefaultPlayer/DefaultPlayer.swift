@@ -32,11 +32,11 @@ public final class DefaultPlayer: Player {
 
   private func configureObservers() {
     player.addPeriodicTimeObserver(
-      forInterval: CMTime(seconds: 1, preferredTimescale: 1),
+      forInterval: CMTimeMake(value: 1000, timescale: 1000),
       queue: .main
     ) { [weak self] time in
       guard let self = self else { return }
-      self.eventPipe.send(.currentTimeUpdate(time: Int(time.seconds)))
+      self.eventPipe.send(.currentTimeUpdate(time: Int(time.seconds * 1000)))
     }
 
     NotificationCenter.default

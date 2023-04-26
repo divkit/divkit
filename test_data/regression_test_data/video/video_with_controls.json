@@ -122,6 +122,9 @@
                     "type": "fixed",
                     "value": 50
                   },
+                  "aspect": {
+                    "ratio": 1
+                  },
                   "margins": {
                     "right": 20
                   },
@@ -138,6 +141,9 @@
                   "width": {
                     "type": "fixed",
                     "value": 44
+                  },
+                  "aspect": {
+                    "ratio": 1
                   },
                   "margins": {
                     "right": 16
@@ -159,6 +165,9 @@
                   "width": {
                     "type": "fixed",
                     "value": 44
+                  },
+                  "aspect": {
+                    "ratio": 1
                   },
                   "paddings": {
                     "top": 3,
