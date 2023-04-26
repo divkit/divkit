@@ -2,7 +2,7 @@
     import { getContext, onDestroy, onMount } from 'svelte';
     import { get } from 'svelte/store';
     import type { DivkitInstance } from '@divkitframework/divkit/typings/common';
-    import { render } from '@divkitframework/divkit/client-devtool';
+    import { render, SizeProvider, lottieExtensionBuilder } from '@divkitframework/divkit/client-devtool';
     import '@divkitframework/divkit/dist/client.css';
     import ViewportSelect from './ViewportSelect.svelte';
     import PlatformSelect from './PlatformSelect.svelte';
@@ -23,6 +23,7 @@
     import { webViewerErrors } from '../data/webViewerErrors';
     import { sampleWarningStore } from '../data/sampleWarningStore';
     import { templatesCheck } from '../utils/templatesCheck';
+    import Lottie from 'lottie-web/build/player/lottie_light';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -115,6 +116,10 @@
             json,
             id: 'test',
             platform,
+            extensions: new Map<string, DivExtensionClass>([
+                ['size_provider', SizeProvider],
+                ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
+            ]),
             onError(event) {
                 const additional = event.error.additional || {};
 

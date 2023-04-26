@@ -45,12 +45,12 @@
     function onSave(): void {
         alreadySaved = true;
 
-        save().then(setUuid);
+        promise = save().then(setUuid);
     }
 
     onMount(() => {
         if (alreadySaved) {
-            save().then(setUuid);
+            promise = save().then(setUuid);
         }
     });
 </script>
@@ -110,7 +110,7 @@
             </div>
         {:catch err}
             <div class="links-popup__content">
-                {err}
+                {$l10n('loadError')}
             </div>
         {/await}
     {:else}

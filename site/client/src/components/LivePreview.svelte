@@ -2,8 +2,9 @@
     import { onMount } from 'svelte';
     import type { Platform, DivkitInstance } from '@divkitframework/divkit/typings/common';
     import { jsonStore } from '../data/jsonStore';
-    import { render } from '@divkitframework/divkit/client-devtool';
+    import { render, SizeProvider, lottieExtensionBuilder } from '@divkitframework/divkit/client-devtool';
     import '@divkitframework/divkit/dist/client.css';
+    import Lottie from 'lottie-web/build/player/lottie_light';
 
     export let platform: Platform = 'auto';
 
@@ -23,7 +24,11 @@
             target: rootPreview,
             json,
             id: 'test',
-            platform
+            platform,
+            extensions: new Map<string, DivExtensionClass>([
+                ['size_provider', SizeProvider],
+                ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
+            ])
         });
     }
 
