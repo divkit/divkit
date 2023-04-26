@@ -2,6 +2,7 @@
   "description": "Gif with stretch scaling image",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {},

@@ -26,10 +26,9 @@ extension DivImageScale {
       return .aspectFill
     case .fit:
       return .aspectFit
-    case .noScale:
-      return .noScale
     case .stretch:
-      // not supported
+      return .resize
+    case .noScale:
       return .noScale
     }
   }

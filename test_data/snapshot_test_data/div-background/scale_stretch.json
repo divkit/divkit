@@ -2,6 +2,7 @@
   "description": "Text with image background with stretch scaling",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {},

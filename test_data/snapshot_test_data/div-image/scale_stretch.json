@@ -2,6 +2,7 @@
   "description": "Image with stretch scaling image",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {},
