@@ -1,3 +1,25 @@
+## 24.4.0
+
+# Android Client:
+
+Additions:
+* Added overload for variable set functions
+* Added `DivVideo` implementation
+* Added `DivSelect` implementation
+* Added currency mask
+* Added `DivCustomContainerViewAdapter` with `DivStatePath` propagation to implementations
+* Support `raw_text_variable` for masks
+
+Fixes:
+* Fixed generator creating optional fields with validators when not needed
+* Fix cards feed size in demo-app
+* Fixed image loading race condition
+
+# iOS Client:
+
+Additions:
+* Added video block implementation
+
 ## 24.3.0
 
 # JSON Schema:
