@@ -49,11 +49,24 @@ public final class VideoBlock: BlockWithTraits {
       return false
     }
 
-    return self == other
+    return self.model == other.model && self.state == other.state
   }
 
   public var debugDescription: String = ""
 }
 
 extension VideoBlock: LayoutCachingDefaultImpl {}
-extension VideoBlock: ElementStateUpdatingDefaultImpl {}
+
+extension VideoBlock: ElementStateUpdating {
+  public func updated(withStates states: BlocksState) throws -> Self {
+    guard let state: VideoBlockViewState = states.getState(at: model.path) else { return self }
+
+    return Self(
+      widthTrait: widthTrait,
+      heightTrait: heightTrait,
+      model: model,
+      state: state,
+      playerFactory: playerFactory
+    )
+  }
+}

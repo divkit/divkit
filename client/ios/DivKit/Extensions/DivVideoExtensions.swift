@@ -1,7 +1,7 @@
 import BaseTinyPublic
+import CoreMedia
 import Foundation
 import LayoutKit
-import CoreMedia
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -27,7 +27,7 @@ extension DivVideo: DivBlockModeling {
       autoPlay: autostart,
       repeatable: repeatable,
       isMuted: muted,
-      startPosition: elapsedTime.flatMap { CMTime.init(value: $0.wrappedValue) } ?? .zero,
+      startPosition: elapsedTime.flatMap { CMTime(value: $0.wrappedValue) } ?? .zero,
       settingsPayload: playerSettingsPayload ?? [:]
     )
 
@@ -49,7 +49,7 @@ extension DivVideo: DivBlockModeling {
     }
 
     let state: VideoBlockViewState = videoContext.blockStateStorage
-      .getState(videoContext.parentPath) ?? .init(state: .playing)
+      .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
 
     return VideoBlock(
       widthTrait: width.makeLayoutTrait(with: resolver),
