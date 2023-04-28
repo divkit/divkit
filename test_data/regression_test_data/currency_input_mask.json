@@ -72,7 +72,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Raw value: @{input}",
+              "text": "Raw value: @{raw_input}",
               "font_size": 20,
               "margins": {
                 "left": 16,

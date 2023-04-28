@@ -25,13 +25,14 @@ internal class CurrencyInputMask(
         get() = replace(' ', ' ')
 
     fun updateCurrencyParams(locale: Locale) {
-        val currentValue = currencyFormatter.parse(value) ?: 0
+        val nonEmptyValue = rawValue.let { it.ifBlank { "0" } }
+        val currentValue = currencyFormatter.parse(nonEmptyValue) ?: 0
 
         currencyFormatter = NumberFormat.getCurrencyInstance(locale).clearFormatter()
 
-        invalidateMaskDataForFormatted(currentValue)
+        val newValue = currentValue.toString().replace('.', decimalFormatSymbols.decimalSeparator)
 
-        applyChangeFrom(currencyFormatter.format(currentValue))
+        applyChangeFrom(newValue)
     }
 
     private fun invalidateMaskDataForFormatted(forValue: Number) {
@@ -52,6 +53,14 @@ internal class CurrencyInputMask(
         )
 
         updateMaskData(MaskData(maskPattern, decoding, maskData.alwaysVisible), false)
+    }
+
+    override fun overrideRawValue(newRawValue: String) {
+        val parsed = currencyFormatter.parse(newRawValue) ?: 0
+
+        invalidateMaskDataForFormatted(parsed)
+
+        super.overrideRawValue(newRawValue)
     }
 
     override fun applyChangeFrom(newValue: String, position: Int?) {
