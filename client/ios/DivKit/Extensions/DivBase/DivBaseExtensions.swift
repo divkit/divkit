@@ -58,6 +58,7 @@ extension DivBase {
       .getState(context.parentPath) ?? .default
     let background = getBackground(focusState)
     let border = getBorder(focusState)
+    let anchorPoint = transform.makeAnchorPoint(expressionResolver: expressionResolver)
 
     block = applyBackground(
       background,
@@ -72,6 +73,11 @@ extension DivBase {
       shadow: border.makeBlockShadow(with: expressionResolver),
       visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
       tooltips: try makeTooltips(context: context)
+    )
+    .addingTransform(
+      transform: transform.resolveRotation(expressionResolver)
+        .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
+      anchorPoint: anchorPoint
     )
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
@@ -89,17 +95,10 @@ extension DivBase {
         )
       )
 
-    let anchorPoint = transform.makeAnchorPoint(expressionResolver: expressionResolver)
-
     return applyExtensionHandlersAfterBaseProperties(
       to: block,
       extensionHandlers: extensionHandlers,
       context: context
-    )
-    .addingTransform(
-      transform: transform.resolveRotation(expressionResolver)
-        .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
-      anchorPoint: anchorPoint
     )
   }
 
