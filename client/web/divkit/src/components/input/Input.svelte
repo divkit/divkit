@@ -234,7 +234,9 @@
 
         await tick();
 
-        input.selectionStart = input.selectionEnd = cursorPosition;
+        if (document.activeElement === input) {
+            input.selectionStart = input.selectionEnd = cursorPosition;
+        }
     }
 
     async function runRawValueMask(): Promise<void> {
@@ -250,7 +252,9 @@
 
         await tick();
 
-        input.selectionStart = input.selectionEnd = cursorPosition;
+        if (document.activeElement === input) {
+            input.selectionStart = input.selectionEnd = cursorPosition;
+        }
     }
 
     onMount(() => {
