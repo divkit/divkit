@@ -1,0 +1,160 @@
+{
+  "templates": {
+    "empty_block": {
+      "type": "text",
+      "text": "   ",
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "height": {
+        "type": "fixed",
+        "value": 100
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "value_variable",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Select"
+            },
+            {
+              "type": "subtitle",
+              "text": "Allows you to select an option from a predefined list.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "subtitle",
+              "text": "Options may have different values for user and application.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "paddings": {
+                "left": 24,
+                "right": 24
+              },
+              "items": [
+                {
+                  "type": "select",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "top": 10,
+                    "right": 16,
+                    "bottom": 10
+                  },
+                  "alpha": 1.0,
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0e000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 8
+                  },
+                  "font_size": 16,
+                  "font_weight": "medium",
+                  "text_color": "#000000",
+                  "value_variable": "value_variable",
+                  "hint_text": "Select option",
+                  "hint_color": "#888888",
+                  "line_height": 22,
+                  "options": [
+                    {
+                      "value": ""
+                    },
+                    {
+                      "value": "value_for_option_1",
+                      "text": "Option 1"
+                    },
+                    {
+                      "value": "value_for_option_2",
+                      "text": "Option 2"
+                    },
+                    {
+                      "value": "value_for_option_3",
+                      "text": "Option 3"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " ",
+                  "height": {
+                    "type": "fixed",
+                    "value": 16
+                  }
+                },
+                {
+                  "type": "text",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "font_size": 16,
+                  "text_color": "#000000",
+                  "text": "Value: @{value_variable}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
