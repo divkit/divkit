@@ -9,7 +9,7 @@ struct ConstrainedBlockSize {
 }
 
 extension ConstrainedBlockSize {
-  var normalizedDecrease: CGFloat { blockDecrease / coefficient }
+  var normalizedDecrease: CGFloat { blockDecrease.safeDivide(coefficient) }
   var blockDecrease: CGFloat { size - minSize }
 }
 
@@ -66,7 +66,7 @@ func decreaseConstrainedBlockSizes(
   for (index, blockSize) in sortedBlockSizes {
     let decrease = min(
       blockSize.normalizedDecrease - summaryBlockDecrease,
-      lengthToDecrease / sumCoefficients
+      lengthToDecrease.safeDivide(sumCoefficients)
     )
     lengthToDecrease -= decrease * sumCoefficients
     summaryBlockDecrease += decrease
@@ -83,7 +83,7 @@ private func sort(blockSizes: [ConstrainedBlockSize])
     ConstrainedBlockSize(
       size: $0.size,
       minSize: $0.minSize,
-      coefficient: $0.size / minBlockSize
+      coefficient: $0.size.safeDivide(minBlockSize)
     )
   }
   return (
@@ -92,4 +92,10 @@ private func sort(blockSizes: [ConstrainedBlockSize])
       $0.element.normalizedDecrease < $1.element.normalizedDecrease
     }
   )
+}
+
+private extension CGFloat {
+  func safeDivide(_ divider: CGFloat) -> CGFloat {
+    divider.isZero ? 0 : (self / divider)
+  }
 }

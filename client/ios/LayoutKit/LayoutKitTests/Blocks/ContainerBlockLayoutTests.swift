@@ -911,6 +911,19 @@ final class ContainerBlockLayoutTests: XCTestCase {
   }
 
   // MARK: Constrained elements layout tests
+  
+  func test_WhenConstrainedItemsWithZeroSize_ProducedZeroSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 0, minSize: 0),
+          ConstrainedBlockSize(size: 0, minSize: 0),
+        ],
+        lengthToDecrease: 10000
+      ))
+
+    XCTAssertEqual(blockSizes, [0, 0])
+  }
 
   func test_WhenTwoConstrainedElementsWithEqualMinSizesDecreasedToMinSizes() {
     let blockSizes =
