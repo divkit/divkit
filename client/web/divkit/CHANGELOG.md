@@ -9,6 +9,7 @@ Additions:
 
 Fixes:
 * Fixed markup update after `url` change in the `action`
+* Fixed size-related properties of `input` (`paddings`, `border_radius`, `letter_spacing` and others), previously they incorrectly depended on the `font_size` property
 
 ## 24.2.0 (April 17, 2023)
 

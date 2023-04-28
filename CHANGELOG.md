@@ -56,6 +56,7 @@ Additions:
 
 Fixes:
 * Fixed markup update after `url` change in the `action`
+* Fixed size-related properties of `input` (`paddings`, `border_radius`, `letter_spacing` and others), previously they incorrectly depended on the `font_size` property
 
 ## 24.2.0
 
@@ -599,7 +600,7 @@ Fixed:
 * Implement separators in wrap container
 * Implemented tint_mode for images in div-text
 * Fixed applying patches in demo app
-* Fixed escaping symbols processing in expressions 
+* Fixed escaping symbols processing in expressions
 * Fixed expression result convertion for string properties
 
 ## iOS Client:
