@@ -85,7 +85,7 @@ private final class VideoBlockView: BlockView {
     }
   }
 
-  var observer: ElementStateObserver?
+  weak var observer: ElementStateObserver?
   var playerFactory: PlayerFactory?
   var effectiveBackgroundColor: UIColor?
 
