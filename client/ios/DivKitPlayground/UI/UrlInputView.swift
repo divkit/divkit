@@ -53,6 +53,8 @@ struct UrlInputView: View {
         }
       }
       .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
+    }.onTapGesture {
+      hideKeyboard()
     }
   }
 }
@@ -84,3 +86,11 @@ private struct LinkStyle: ButtonStyle {
       .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
   }
 }
+
+private extension View {
+  func hideKeyboard() {
+    let resign = #selector(UIResponder.resignFirstResponder)
+    UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+  }
+}
+
