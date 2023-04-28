@@ -1,4 +1,16 @@
 {
+  "templates": {
+    "control_button": {
+      "type": "image",
+      "height": {
+        "type": "fixed",
+        "value": 44
+      },
+      "width": {
+        "type": "wrap_content"
+      }
+    }
+  },
   "card": {
     "log_id": "news",
     "variables": [
@@ -22,6 +34,7 @@
                 "type": "video",
                 "video_sources": [
                   {
+                    "type": "video_source",
                     "url": "https://yastatic.net/s3/home/divkit/bears.mp4"
                   }
                 ]
@@ -116,15 +129,8 @@
               "content_alignment_horizontal": "center",
               "items": [
                 {
-                  "type": "image",
+                  "type": "control_button",
                   "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
-                  "width": {
-                    "type": "fixed",
-                    "value": 50
-                  },
-                  "aspect": {
-                    "ratio": 1
-                  },
                   "margins": {
                     "right": 20
                   },
@@ -136,15 +142,8 @@
                   ]
                 },
                 {
-                  "type": "image",
+                  "type": "control_button",
                   "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
-                  "width": {
-                    "type": "fixed",
-                    "value": 44
-                  },
-                  "aspect": {
-                    "ratio": 1
-                  },
                   "margins": {
                     "right": 16
                   },
@@ -160,15 +159,8 @@
                   ]
                 },
                 {
-                  "type": "image",
+                  "type": "control_button",
                   "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
-                  "width": {
-                    "type": "fixed",
-                    "value": 44
-                  },
-                  "aspect": {
-                    "ratio": 1
-                  },
                   "paddings": {
                     "top": 3,
                     "bottom": 3
