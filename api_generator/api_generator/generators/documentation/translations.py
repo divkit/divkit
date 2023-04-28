@@ -127,8 +127,8 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Список возможных значений:"
     },
     "div_generator_web": {
-        "en": "browser",
-        "ru": "браузер"
+        "en": "web",
+        "ru": "веб"
     }
 }
 

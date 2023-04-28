@@ -929,11 +929,11 @@
   },
   "div_input_mask_currency": {
     "en": "Mask for currency with language format.",
-    "ru": "Маска для валюты с региональным форматом."
+    "ru": "Маска для ввода валютных значений в заданном региональном формате."
   },
   "div_input_mask_currency_locale": {
     "en": "IETF BCP 47 language tag for currency mask. Look https://en.wikipedia.org/wiki/IETF_language_tag for more. If not specified, it will be determined automatically.",
-    "ru": "Языковой тег стандарта IETF BCP 47 для маски валюты. Подробнее https://en.wikipedia.org/wiki/IETF_language_tag. Если не задан, то будет определен автоматически."
+    "ru": "Тег языка, которому должен соответствовать формат валюты, по [стандарту IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). Если язык не задан, он будет определен автоматически."
   },
   "div_input_mask_fixed_length": {
     "en": "Mask for entering text with a fixed number of characters.",
@@ -965,7 +965,7 @@
   },
   "div_input_mask_raw_text_variable": {
     "en": "Name of raw value storage variable.",
-    "ru": "Название переменной для хранения необработанного значения."
+    "ru": "Имя переменной для хранения необработанного значения."
   },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
@@ -1201,7 +1201,7 @@
   },
   "div_select": {
     "en": "Option list selection element.",
-    "ru": "Элемент для выбора варианта из списка."
+    "ru": "Список вариантов, из которых можно выбрать одно значение."
   },
   "div_select_hint_color": {
     "en": "Hint color.",
@@ -1217,23 +1217,23 @@
   },
   "div_select_line_height": {
     "en": "Line spacing of the text. Units specified in `font_size_unit`.",
-    "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
+    "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных параметром `font_size_unit`."
   },
   "div_select_option": {
     "en": "Option to choose from list.",
-    "ru": "Вариант для выбора из списка."
+    "ru": "Вариант выбора в списке."
   },
   "div_select_option_text": {
     "en": "Option text from list to be shown in UI. If not specified, option `value` will be used instead.",
-    "ru": "Текст варианта из списка, который будет виден пользователю. Если не указан, то берётся значение из `value`."
+    "ru": "Текстовое описание варианта, которое отображается в списке. Если не указано, то берется значение параметра `value`."
   },
   "div_select_option_value": {
     "en": "Option value from list.",
-    "ru": "Значение варианта из списка."
+    "ru": "Значение, которое соответствует варианту выбора."
   },
   "div_select_value_variable": {
     "en": "Variable name to store selected from list option `value`.",
-    "ru": "Название переменной для хранения `value` выбранного варианта из списка."
+    "ru": "Имя переменной, которая хранит значение `value` выбранного варианта."
   },
   "div_selection_input": {
     "en": "Enter data using a menu selection. \nThe text value of the `div_input` parameter corresponds to the selected menu item. If the value isn't selected, it's taken from `text_variable` instead.",
@@ -1940,8 +1940,8 @@
     "ru": "Действия, которые выполняются, когда видео приостанавливается для загрузки."
   },
   "div_video_elapsed_time_variable": {
-    "en": "The variable stores how many seconds have passed since the beginning of the video.",
-    "ru": "В переменной хранится сколько секунд прошло с начала видео."
+    "en": "The variable stores how many milliseconds have passed since the beginning of the video.",
+    "ru": "В переменной хранится сколько миллисекунд прошло с начала видео."
   },
   "div_video_end_actions": {
     "en": "Actions that are performed when the video ends.",
