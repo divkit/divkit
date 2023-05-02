@@ -963,6 +963,38 @@
     "en": "Regular expression for validating character inputs. For example, when a mask is digit-only.",
     "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
   },
+  "div_input_validators": {
+    "en": "Validators for text value.",
+    "ru": "Валидатор для проверки соответствия значения поля заданным условиям."
+  },
+  "div_input_validators_label_id": {
+    "en": "ID of the text div containing the error message, which will also be used for accessibility.",
+    "ru": "ID текстового элемента содержащего сообщение об ошибке, которое также будет использовано для доступности."
+  },
+  "div_input_validators_allow_empty": {
+    "en": "Whether an empty value is correct. By default, false.",
+    "ru": "Является ли пустое значение корректным. По умолчанию false."
+  },
+  "div_input_validators_variable": {
+    "en": "Name of validation storage variable.",
+    "ru": "Переменная для хранения корректности значения поля."
+  },
+  "div_input_validators_regex": {
+    "en": "Regex validator.",
+    "ru": "Валидатор на основе регулярных выражений."
+  },
+  "div_input_validators_regex_pattern": {
+    "en": "Regex pattern for matching.",
+    "ru": "Паттерн регулярного выражения, которому должно соответствовать значение поля."
+  },
+  "div_input_validators_expression": {
+    "en": "Expression validator.",
+    "ru": "Валидатор на основе выражений."
+  },
+  "div_input_validators_expression_condition": {
+    "en": "Expression condition for evaluating.",
+    "ru": "Условие валидности значения."
+  },
   "div_input_mask_raw_text_variable": {
     "en": "Name of raw value storage variable.",
     "ru": "Имя переменной для хранения необработанного значения."

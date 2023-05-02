@@ -109,6 +109,14 @@
             "android",
             "web"
           ]
+        },
+        "validators": {
+          "type": "array",
+          "$description": "translations.json#/div_input_validators",
+          "platforms": [],
+          "items": {
+            "$ref": "div-input-validator.json"
+          }
         }
       }
     }
