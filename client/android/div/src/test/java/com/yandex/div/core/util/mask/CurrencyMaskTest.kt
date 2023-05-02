@@ -227,7 +227,7 @@ class CurrencyMaskTest {
 
         currencyMask.applyChangesFromWithNbsp("", 0)
 
-        currencyMask.assertMask("0", 1)
+        currencyMask.assertMask("", 0)
     }
 
     @Test
@@ -300,6 +300,15 @@ class CurrencyMaskTest {
         currencyMask.applyChangesFromWithNbsp("12345", 2)
 
         currencyMask.assertMask("12 345", 2)
+    }
+
+    @Test
+    fun `change locale with empty value`() {
+        val currencyMask = createCurrencyMask(deutschLocale)
+
+        currencyMask.updateCurrencyParams(russianLocale)
+
+        currencyMask.assertMask("", 0)
     }
 
     private fun createCurrencyMask(locale: Locale = russianLocale): CurrencyInputMask {

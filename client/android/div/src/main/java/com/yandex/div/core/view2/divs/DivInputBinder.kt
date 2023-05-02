@@ -263,7 +263,7 @@ internal class DivInputBinder @Inject constructor(
                         }
                     }
 
-                    val valueToUpdate = inputMask?.rawValue ?: fieldValue
+                    val valueToUpdate = inputMask?.rawValue?.replace(',', '.') ?: fieldValue
 
                     valueUpdater(valueToUpdate)
                 }

@@ -25,12 +25,11 @@ internal class CurrencyInputMask(
         get() = replace(' ', ' ')
 
     fun updateCurrencyParams(locale: Locale) {
-        val nonEmptyValue = rawValue.let { it.ifBlank { "0" } }
-        val currentValue = currencyFormatter.parse(nonEmptyValue) ?: 0
+        val currentValue = rawValue.replace(decimalFormatSymbols.decimalSeparator, '.')
 
         currencyFormatter = NumberFormat.getCurrencyInstance(locale).clearFormatter()
 
-        val newValue = currentValue.toString().replace('.', decimalFormatSymbols.decimalSeparator)
+        val newValue = currentValue.replace('.', decimalFormatSymbols.decimalSeparator)
 
         applyChangeFrom(newValue)
     }
@@ -74,12 +73,19 @@ internal class CurrencyInputMask(
 
         val clearedValue = newValue.toValidFormat(diff)
 
+        val numberValue = currencyFormatter.parse(
+            when {
+                clearedValue.startsWith(decimalSeparator) ->
+                    decimalFormatSymbols.zeroDigit + clearedValue
+                clearedValue.isBlank() -> decimalFormatSymbols.zeroDigit.toString()
+                else -> clearedValue
+            }
+        ) ?: 0
+
         cleanup(diff)
 
-        val rawValue = currencyFormatter.parse(clearedValue) ?: 0
-
         if (needInvalidateMask) {
-            invalidateMaskDataForFormatted(rawValue)
+            invalidateMaskDataForFormatted(numberValue)
         }
 
         replaceChars(clearedValue, 0)
@@ -89,7 +95,7 @@ internal class CurrencyInputMask(
                 position ?: cursorPosition
             } else {
                 abs(value.length - (newValue.length - (position ?: cursorPosition)))
-            }
+            }.coerceAtMost(value.length)
     }
 
     private fun NumberFormat.clearFormatter(): NumberFormat {
@@ -102,8 +108,6 @@ internal class CurrencyInputMask(
     }
 
     private fun String.toValidFormat(diff: TextDiff): String {
-        if (isBlank()) return decimalFormatSymbols.zeroDigit.toString()
-
         val separatorChar = decimalFormatSymbols.decimalSeparator
 
         var separatorOutOfDiffIndex: Int = -1
@@ -192,7 +196,19 @@ internal class CurrencyInputMask(
             }
         }
             .reversed()
-            .trimStart(decimalFormatSymbols.zeroDigit)
+            .let {
+                index = it.indexOfFirst { char -> char != decimalFormatSymbols.zeroDigit }
+
+                if (index <= 0) return@let it
+
+                val firstNotZeroChar = it[index]
+
+                if (firstNotZeroChar == decimalFormatSymbols.decimalSeparator) {
+                    it.drop(index - 1)
+                } else {
+                    it.drop(index)
+                }
+            }
     }
 
     private fun inDiff(diff: TextDiff, index: Int): Boolean =
