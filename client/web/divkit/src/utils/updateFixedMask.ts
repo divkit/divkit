@@ -1,16 +1,16 @@
-import type { MaybeMissing } from '../expressions/json';
-import type { InputMask } from '../types/input';
 import type { LogError } from './wrapError';
 import type { MaskData } from './mask/baseInputMask';
 import { FixedLengthInputMask } from './mask/fixedLengthInputMask';
+import { MaybeMissing } from '../expressions/json';
+import { FixedLengthInputMask as FixedLengthInputMaskType } from '../types/input';
 
 export function updateFixedMask(
-    mask: MaybeMissing<InputMask> | undefined,
+    mask: MaybeMissing<FixedLengthInputMaskType>,
     logError: LogError,
     oldValue?: FixedLengthInputMask | null
 ): FixedLengthInputMask | null {
     if (
-        mask?.type === 'fixed_length' && typeof mask.pattern === 'string' && Array.isArray(mask.pattern_elements) &&
+        typeof mask.pattern === 'string' && Array.isArray(mask.pattern_elements) &&
         mask.pattern_elements.every(it => it.key && typeof it.key === 'string')
     ) {
         const maskData: MaskData = {

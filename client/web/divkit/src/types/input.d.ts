@@ -21,7 +21,12 @@ export interface FixedLengthInputMask extends MaskBase {
     always_visible?: BooleanInt;
 }
 
-export type InputMask = FixedLengthInputMask;
+export interface CurrencyInputMask extends MaskBase {
+    type: 'currency';
+    locale?: string;
+}
+
+export type InputMask = FixedLengthInputMask | CurrencyInputMask;
 
 export interface DivInputData extends DivBaseData {
     type: 'input';

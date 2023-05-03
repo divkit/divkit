@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getContext, onMount, tick } from 'svelte';
+    import type { HTMLAttributes } from 'svelte/elements';
 
     import css from './Input.module.css';
 
@@ -26,6 +27,9 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { makeStyle } from '../../utils/makeStyle';
     import { updateFixedMask } from '../../utils/updateFixedMask';
+    import { BaseInputMask } from '../../utils/mask/baseInputMask';
+    import { updateCurrencyMask } from '../../utils/updateCurrencyMask';
+    import { CurrencyInputMask } from '../../utils/mask/currencyInputMask';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;
@@ -37,7 +41,7 @@
     let holder: HTMLElement;
     let isPressed = false;
     let verticalOverflow = false;
-    let fixedMask: FixedLengthInputMask | null = null;
+    let inputMask: BaseInputMask | null = null;
 
     const variable = json.text_variable;
     const rawVariable = json.mask?.raw_text_variable;
@@ -54,18 +58,23 @@
 
     const jsonMask = rootCtx.getDerivedFromVars(json.mask);
     function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {
-        fixedMask = updateFixedMask(mask, rootCtx.logError, fixedMask);
-        if (fixedMask) {
+        if (mask?.type === 'fixed_length') {
+            inputMask = updateFixedMask(mask, rootCtx.logError, inputMask as FixedLengthInputMask);
+        } else if (mask?.type === 'currency') {
+            inputMask = updateCurrencyMask(mask, rootCtx.logError, inputMask as CurrencyInputMask);
+        }
+
+        if (inputMask) {
             runRawValueMask();
         }
     }
     $: updateMaskData($jsonMask);
 
-    $: if (!fixedMask && value !== $valueVariable) {
+    $: if (!inputMask && value !== $valueVariable) {
         value = $valueVariable;
     }
 
-    $: if (fixedMask && (fixedMask as FixedLengthInputMask).rawValue !== $rawValueVariable) {
+    $: if (inputMask && inputMask.rawValue !== $rawValueVariable) {
         runRawValueMask();
     }
 
@@ -130,10 +139,17 @@
     };
     let keyboardType = 'multi_line_text';
     let inputType = 'text';
+    const isSupportInputMode = document && 'inputMode' in document.createElement('input');
+    let inputMode: HTMLAttributes<HTMLInputElement>['inputmode'] = undefined;
     $: {
         if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
             inputType = KEYBOARD_MAP[$jsonKeyboardType as KeyboardType];
             keyboardType = $jsonKeyboardType;
+        }
+
+        if ($jsonMask?.type === 'currency') {
+            inputType = isSupportInputMode ? 'text' : 'tel';
+            inputMode = 'decimal';
         }
     }
 
@@ -194,7 +210,7 @@
         if (value !== val) {
             value = val;
             valueVariable.setValue(val);
-            if (fixedMask) {
+            if (inputMask) {
                 runValueMask();
             }
         }
@@ -222,15 +238,15 @@
     }
 
     async function runValueMask(): Promise<void> {
-        if (!input || !fixedMask) {
+        if (!input || !inputMask) {
             return;
         }
 
-        fixedMask.applyChangeFrom(value, input.selectionEnd !== null ? input.selectionEnd : undefined);
+        inputMask.applyChangeFrom(value, input.selectionEnd !== null ? input.selectionEnd : undefined);
 
-        rawValueVariable.set(fixedMask.rawValue);
-        $valueVariable = value = fixedMask.value;
-        const cursorPosition = fixedMask.cursorPosition;
+        rawValueVariable.set(inputMask.rawValue);
+        $valueVariable = value = inputMask.value;
+        const cursorPosition = inputMask.cursorPosition;
 
         await tick();
 
@@ -240,15 +256,15 @@
     }
 
     async function runRawValueMask(): Promise<void> {
-        if (!input || !fixedMask) {
+        if (!input || !inputMask) {
             return;
         }
 
-        fixedMask.overrideRawValue($rawValueVariable);
+        inputMask.overrideRawValue($rawValueVariable);
 
-        rawValueVariable.set(fixedMask.rawValue);
-        $valueVariable = value = fixedMask.value;
-        const cursorPosition = fixedMask.cursorPosition;
+        rawValueVariable.set(inputMask.rawValue);
+        $valueVariable = value = inputMask.value;
+        const cursorPosition = inputMask.cursorPosition;
 
         await tick();
 
@@ -260,10 +276,10 @@
     onMount(() => {
         checkVerticalOverflow();
 
-        if (input && fixedMask) {
+        if (input && inputMask) {
             if ($rawValueVariable) {
-                fixedMask.overrideRawValue($rawValueVariable);
-                $valueVariable = value = fixedMask.value;
+                inputMask.overrideRawValue($rawValueVariable);
+                $valueVariable = value = inputMask.value;
             }
         }
     });
@@ -304,6 +320,7 @@
                 <input
                     bind:this={input}
                     type={inputType}
+                    inputmode={inputMode}
                     class={css.input__input}
                     autocomplete="off"
                     autocapitalize="off"

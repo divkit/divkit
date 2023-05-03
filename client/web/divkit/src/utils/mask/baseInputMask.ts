@@ -83,8 +83,8 @@ export abstract class BaseInputMask {
 
     abstract onException(exception: WrappedError): void;
 
-    updateMaskData(newMaskData: MaskData): void {
-        const previousRawValue = this.rawValue;
+    updateMaskData(newMaskData: MaskData, restoreValue = true): void {
+        const previousRawValue = this.maskData !== newMaskData && restoreValue ? this.rawValue : null;
 
         this.filters = new Map();
         this.maskData = newMaskData;
@@ -119,7 +119,9 @@ export abstract class BaseInputMask {
             return new MaskCharStatic(maskChar);
         });
 
-        this.overrideRawValue(previousRawValue);
+        if (previousRawValue !== null) {
+            this.overrideRawValue(previousRawValue);
+        }
     }
 
     overrideRawValue(newRawValue: string): void {
