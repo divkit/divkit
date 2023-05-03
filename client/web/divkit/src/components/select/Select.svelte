@@ -55,7 +55,7 @@
             return it.value === $valueVariable;
         });
         if (item) {
-            selectText = item.text || item.value;
+            selectText = typeof item.text === 'string' ? item.text : item.value;
         } else {
             selectText = '';
             if ($valueVariable) {
@@ -127,7 +127,7 @@
     }
 
     $: mods = {
-        hint: !$valueVariable
+        hint: !selectText
     };
     $: stl = {
         '--divkit-input-hint-color': hintColor,
@@ -153,7 +153,7 @@
     >
         <span class={css['select__select-text']} style={makeStyle({ padding })} aria-hidden="true">
             <!--Space holder should have height even it has no value-->
-            {($valueVariable ? selectText : hint) || '​'}
+            {selectText || hint || '​'}
         </span>
 
         <select class={css.select__select} aria-label={description} bind:value={$valueVariable}>
