@@ -12,7 +12,7 @@ import com.yandex.div.storage.util.closeSilently
 import com.yandex.div.storage.util.endTransactionSilently
 import java.io.Closeable
 
-internal class StorageStatementExecutor(
+internal open class StorageStatementExecutor(
         private val dbProvider: () -> DatabaseOpenHelper.Database,
 ) {
     /**
