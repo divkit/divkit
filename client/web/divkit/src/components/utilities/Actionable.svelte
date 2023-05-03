@@ -68,6 +68,14 @@
         if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
             href = '';
             hasJSAction = true;
+        } else if (!href && Array.isArray(actions) && actions?.length) {
+            hasJSAction = true;
+            rootCtx.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
+                level: 'warn',
+                additional: {
+                    actions
+                }
+            }));
         }
     }
 
