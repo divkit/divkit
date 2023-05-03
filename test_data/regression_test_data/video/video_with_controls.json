@@ -2,12 +2,12 @@
   "templates": {
     "control_button": {
       "type": "image",
-      "height": {
-        "type": "fixed",
-        "value": 44
+      "aspect": {
+        "ratio": 1
       },
       "width": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 44
       }
     }
   },
