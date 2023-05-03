@@ -337,6 +337,7 @@ internal class DivGalleryBinder @Inject constructor(
         override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
             holder.bind(div2View, activeItems[position], path)
             holder.rootView.setTag(R.id.div_gallery_item_index, position)
+            divBinder.attachIndicators()
         }
     }
 
