@@ -64,8 +64,7 @@ extension DivBase {
       background,
       to: block,
       imageHolderFactory: context.imageHolderFactory,
-      expressionResolver: expressionResolver,
-      metalImageRenderingEnabled: context.flagsInfo.metalImageRenderingEnabled
+      expressionResolver: expressionResolver
     )
     .addingDecorations(
       boundary: border.makeBoundaryTrait(with: expressionResolver),
@@ -223,8 +222,7 @@ extension DivBase {
     _ backgrounds: [DivBackground]?,
     to block: Block,
     imageHolderFactory: ImageHolderFactory,
-    expressionResolver: ExpressionResolver,
-    metalImageRenderingEnabled: Bool
+    expressionResolver: ExpressionResolver
   ) -> Block {
     guard let backgrounds = backgrounds else {
       return block
@@ -234,8 +232,7 @@ extension DivBase {
     if backgrounds.count == 1 {
       guard let background = backgrounds[0].makeBlockBackground(
         with: imageHolderFactory,
-        expressionResolver: expressionResolver,
-        metalImageRenderingEnabled: metalImageRenderingEnabled
+        expressionResolver: expressionResolver
       ) else {
         return block
       }
@@ -248,8 +245,7 @@ extension DivBase {
     let blockBackgrounds = backgrounds.compactMap {
       $0.makeBlockBackground(
         with: imageHolderFactory,
-        expressionResolver: expressionResolver,
-        metalImageRenderingEnabled: metalImageRenderingEnabled
+        expressionResolver: expressionResolver
       )
     }
     guard let background = blockBackgrounds.composite() else {

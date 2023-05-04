@@ -28,11 +28,7 @@ enum AppComponents {
         sizeProviderExtensionHandler,
         ShimmerImagePreviewExtension(),
       ],
-      flagsInfo: DivFlagsInfo(
-        isTextSelectingEnabled: true,
-        appendVariablesEnabled: true,
-        metalImageRenderingEnabled: true
-      ),
+      flagsInfo: DivFlagsInfo(),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
       playerFactory: DefaultPlayerFactory(),

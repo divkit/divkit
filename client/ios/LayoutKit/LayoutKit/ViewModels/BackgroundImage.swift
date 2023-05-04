@@ -6,20 +6,17 @@ public struct BackgroundImage {
   let contentMode: ImageContentMode
   let alpha: Double
   let effects: [ImageEffect]
-  let metalImageRenderingEnabled: Bool
 
   public init(
     imageHolder: ImageHolder,
     contentMode: ImageContentMode = .default,
     alpha: Double = 1.0,
-    effects: [ImageEffect] = [],
-    metalImageRenderingEnabled: Bool = false
+    effects: [ImageEffect] = []
   ) {
     self.imageHolder = imageHolder
     self.contentMode = contentMode
     self.alpha = alpha
     self.effects = effects
-    self.metalImageRenderingEnabled = metalImageRenderingEnabled
   }
 }
 

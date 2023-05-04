@@ -41,7 +41,6 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
       tintColor: resolveTintColor(expressionResolver),
       tintMode: resolveTintMode(expressionResolver).tintMode,
       effects: makeEffects(with: expressionResolver),
-      metalImageRenderingEnabled: context.flagsInfo.metalImageRenderingEnabled,
       appearanceAnimation: appearanceAnimation?.makeAppearanceAnimation(with: expressionResolver)
     )
   }

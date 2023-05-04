@@ -10,7 +10,6 @@ extension ImageBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
-      metalImageRenderingEnabled: metalImageRenderingEnabled,
       accessibilityElement: accessibilityElement
     )
   }

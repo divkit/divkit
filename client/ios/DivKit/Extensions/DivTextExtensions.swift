@@ -100,8 +100,7 @@ extension DivText: DivBlockModeling {
       images: images,
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: resolveSelectable(context.expressionResolver) && context.flagsInfo
-        .isTextSelectingEnabled
+      canSelect: resolveSelectable(context.expressionResolver)
     )
   }
 

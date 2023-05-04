@@ -24,16 +24,19 @@ open class DivKitSnapshotTestCase: XCTestCase {
     rootDirectory: String
   ) -> Bool {
     guard
-      let jsonDict = jsonDict(fileName: file.name, subdirectory: rootDirectory + "/" + file.subdirectory)
+      let jsonDict = jsonDict(
+        fileName: file.name,
+        subdirectory: rootDirectory + "/" + file.subdirectory
+      )
     else {
       // json is invalid, test should be added into the test suite
       return true
     }
-    
+
     guard let platforms = jsonDict.getArray("platforms").value else {
       return true
     }
-    
+
     return platforms.contains { $0 as? String == "ios" }
   }
 
@@ -54,11 +57,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
-      flagsInfo: .init(
-        isTextSelectingEnabled: false,
-        appendVariablesEnabled: true,
-        metalImageRenderingEnabled: true
-      ),
+      flagsInfo: DivFlagsInfo(),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
       updateCardAction: nil,
       urlOpener: { _ in }

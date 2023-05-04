@@ -14,7 +14,6 @@ public final class ImageBlock: ImageBaseBlock {
   public let effects: [ImageEffect]
   public let accessibilityElement: AccessibilityElement?
   public let appearanceAnimation: TransitioningAnimation?
-  public let metalImageRenderingEnabled: Bool
 
   public init(
     imageHolder: ImageHolder,
@@ -24,7 +23,6 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color?,
     tintMode: TintMode?,
     effects: [ImageEffect] = [],
-    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -35,7 +33,6 @@ public final class ImageBlock: ImageBaseBlock {
     self.tintColor = tintColor
     self.tintMode = tintMode
     self.effects = effects
-    self.metalImageRenderingEnabled = metalImageRenderingEnabled
     self.accessibilityElement = accessibilityElement
     self.appearanceAnimation = appearanceAnimation
   }
@@ -48,7 +45,6 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color? = nil,
     tintMode: TintMode? = nil,
     effects: [ImageEffect] = [],
-    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -60,7 +56,6 @@ public final class ImageBlock: ImageBaseBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
-      metalImageRenderingEnabled: metalImageRenderingEnabled,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation
     )
@@ -73,7 +68,6 @@ public final class ImageBlock: ImageBaseBlock {
     tintColor: Color? = nil,
     tintMode: TintMode? = nil,
     effects: [ImageEffect] = [],
-    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -85,7 +79,6 @@ public final class ImageBlock: ImageBaseBlock {
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects,
-      metalImageRenderingEnabled: metalImageRenderingEnabled,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation
     )

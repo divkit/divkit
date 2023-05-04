@@ -89,7 +89,7 @@ extension BackgroundView {
       view = ColoredView()
 
     case let .image(backgroundImage):
-      if backgroundImage.metalImageRenderingEnabled {
+      if !backgroundImage.effects.isEmpty {
         view = RemoteImageViewContainer(contentView: MetalImageView())
       } else {
         view = RemoteImageViewContainer(contentView: RemoteImageView())
