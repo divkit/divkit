@@ -9,7 +9,7 @@ public enum DivInputMask {
   case divFixedLengthInputMask(DivFixedLengthInputMask)
   case divCurrencyInputMask(DivCurrencyInputMask)
 
-  public var value: Serializable {
+  public var value: Serializable & DivInputMaskBase {
     switch self {
     case let .divFixedLengthInputMask(value):
       return value

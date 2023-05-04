@@ -113,7 +113,6 @@ public final class DivInputTemplate: TemplateValue {
   public let maxVisibleLines: Field<Expression<Int>>? // constraint: number > 0
   public let nativeInterface: Field<NativeInterfaceTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
-  public let rawTextVariable: Field<String>? // at least 1 char
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
@@ -125,6 +124,7 @@ public final class DivInputTemplate: TemplateValue {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
+  public let validators: Field<[DivInputValidatorTemplate]>? // at least 1 elements
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>? // at least 1 elements
@@ -163,7 +163,6 @@ public final class DivInputTemplate: TemplateValue {
         maxVisibleLines: try dictionary.getOptionalExpressionField("max_visible_lines"),
         nativeInterface: try dictionary.getOptionalField("native_interface", templateToType: templateToType),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        rawTextVariable: try dictionary.getOptionalField("raw_text_variable"),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectAllOnFocus: try dictionary.getOptionalExpressionField("select_all_on_focus"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -175,6 +174,7 @@ public final class DivInputTemplate: TemplateValue {
         transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
         transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
         transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
+        validators: try dictionary.getOptionalArray("validators", templateToType: templateToType),
         visibility: try dictionary.getOptionalExpressionField("visibility"),
         visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
         visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
@@ -213,7 +213,6 @@ public final class DivInputTemplate: TemplateValue {
     maxVisibleLines: Field<Expression<Int>>? = nil,
     nativeInterface: Field<NativeInterfaceTemplate>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
-    rawTextVariable: Field<String>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectAllOnFocus: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -225,6 +224,7 @@ public final class DivInputTemplate: TemplateValue {
     transitionIn: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
+    validators: Field<[DivInputValidatorTemplate]>? = nil,
     visibility: Field<Expression<DivVisibility>>? = nil,
     visibilityAction: Field<DivVisibilityActionTemplate>? = nil,
     visibilityActions: Field<[DivVisibilityActionTemplate]>? = nil,
@@ -257,7 +257,6 @@ public final class DivInputTemplate: TemplateValue {
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings
-    self.rawTextVariable = rawTextVariable
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus
     self.selectedActions = selectedActions
@@ -269,6 +268,7 @@ public final class DivInputTemplate: TemplateValue {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.validators = validators
     self.visibility = visibility
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -302,7 +302,6 @@ public final class DivInputTemplate: TemplateValue {
     let maxVisibleLinesValue = parent?.maxVisibleLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxVisibleLinesValidator) ?? .noValue
     let nativeInterfaceValue = parent?.nativeInterface?.resolveOptionalValue(context: context, validator: ResolvedValue.nativeInterfaceValidator, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
-    let rawTextVariableValue = parent?.rawTextVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.rawTextVariableValidator) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectAllOnFocusValue = parent?.selectAllOnFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.selectAllOnFocusValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -314,6 +313,7 @@ public final class DivInputTemplate: TemplateValue {
     let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true) ?? .noValue
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    let validatorsValue = parent?.validators?.resolveOptionalValue(context: context, validator: ResolvedValue.validatorsValidator, useOnlyLinks: true) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityValidator) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -345,7 +345,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
-      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -357,6 +356,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      validatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "validators", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -397,7 +397,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
-      rawTextVariable: rawTextVariableValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -409,6 +408,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      validators: validatorsValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -447,7 +447,6 @@ public final class DivInputTemplate: TemplateValue {
     var maxVisibleLinesValue: DeserializationResult<Expression<Int>> = parent?.maxVisibleLines?.value() ?? .noValue
     var nativeInterfaceValue: DeserializationResult<DivInput.NativeInterface> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
-    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value(validatedBy: ResolvedValue.rawTextVariableValidator) ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectAllOnFocusValue: DeserializationResult<Expression<Bool>> = parent?.selectAllOnFocus?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -459,6 +458,7 @@ public final class DivInputTemplate: TemplateValue {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
+    var validatorsValue: DeserializationResult<[DivInputValidator]> = .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
@@ -517,8 +517,6 @@ public final class DivInputTemplate: TemplateValue {
         nativeInterfaceValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nativeInterfaceValidator, type: DivInputTemplate.NativeInterfaceTemplate.self).merged(with: nativeInterfaceValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
-      case "raw_text_variable":
-        rawTextVariableValue = deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator).merged(with: rawTextVariableValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "select_all_on_focus":
@@ -541,6 +539,8 @@ public final class DivInputTemplate: TemplateValue {
         transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionOutValidator, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
+      case "validators":
+        validatorsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.validatorsValidator, type: DivInputValidatorTemplate.self).merged(with: validatorsValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue, validator: ResolvedValue.visibilityValidator).merged(with: visibilityValue)
       case "visibility_action":
@@ -601,8 +601,6 @@ public final class DivInputTemplate: TemplateValue {
         nativeInterfaceValue = nativeInterfaceValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nativeInterfaceValidator, type: DivInputTemplate.NativeInterfaceTemplate.self))
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self))
-      case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectAllOnFocus?.link:
@@ -625,6 +623,8 @@ public final class DivInputTemplate: TemplateValue {
         transitionOutValue = transitionOutValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionOutValidator, type: DivAppearanceTransitionTemplate.self))
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator))
+      case parent?.validators?.link:
+        validatorsValue = validatorsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.validatorsValidator, type: DivInputValidatorTemplate.self))
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.visibilityValidator))
       case parent?.visibilityAction?.link:
@@ -653,6 +653,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionChangeValue = transitionChangeValue.merged(with: parent.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true))
       transitionInValue = transitionInValue.merged(with: parent.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true))
       transitionOutValue = transitionOutValue.merged(with: parent.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true))
+      validatorsValue = validatorsValue.merged(with: parent.validators?.resolveOptionalValue(context: context, validator: ResolvedValue.validatorsValidator, useOnlyLinks: true))
       visibilityActionValue = visibilityActionValue.merged(with: parent.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true))
       visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true))
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
@@ -684,7 +685,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_visible_lines", error: $0) },
       nativeInterfaceValue.errorsOrWarnings?.map { .nestedObjectError(field: "native_interface", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
-      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -696,6 +696,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      validatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "validators", error: $0) },
       visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
       visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
@@ -736,7 +737,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLinesValue.value,
       nativeInterface: nativeInterfaceValue.value,
       paddings: paddingsValue.value,
-      rawTextVariable: rawTextVariableValue.value,
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
@@ -748,6 +748,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionIn: transitionInValue.value,
       transitionOut: transitionOutValue.value,
       transitionTriggers: transitionTriggersValue.value,
+      validators: validatorsValue.value,
       visibility: visibilityValue.value,
       visibilityAction: visibilityActionValue.value,
       visibilityActions: visibilityActionsValue.value,
@@ -791,7 +792,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: maxVisibleLines ?? mergedParent.maxVisibleLines,
       nativeInterface: nativeInterface ?? mergedParent.nativeInterface,
       paddings: paddings ?? mergedParent.paddings,
-      rawTextVariable: rawTextVariable ?? mergedParent.rawTextVariable,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectAllOnFocus: selectAllOnFocus ?? mergedParent.selectAllOnFocus,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -803,6 +803,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionIn: transitionIn ?? mergedParent.transitionIn,
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
+      validators: validators ?? mergedParent.validators,
       visibility: visibility ?? mergedParent.visibility,
       visibilityAction: visibilityAction ?? mergedParent.visibilityAction,
       visibilityActions: visibilityActions ?? mergedParent.visibilityActions,
@@ -841,7 +842,6 @@ public final class DivInputTemplate: TemplateValue {
       maxVisibleLines: merged.maxVisibleLines,
       nativeInterface: merged.nativeInterface?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),
-      rawTextVariable: merged.rawTextVariable,
       rowSpan: merged.rowSpan,
       selectAllOnFocus: merged.selectAllOnFocus,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
@@ -853,6 +853,7 @@ public final class DivInputTemplate: TemplateValue {
       transitionIn: merged.transitionIn?.tryResolveParent(templates: templates),
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
+      validators: merged.validators?.tryResolveParent(templates: templates),
       visibility: merged.visibility,
       visibilityAction: merged.visibilityAction?.tryResolveParent(templates: templates),
       visibilityActions: merged.visibilityActions?.tryResolveParent(templates: templates),

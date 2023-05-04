@@ -56,7 +56,6 @@
   ],
   "required": [
     "type",
-    "raw_text_variable",
     "pattern",
     "pattern_elements"
   ]

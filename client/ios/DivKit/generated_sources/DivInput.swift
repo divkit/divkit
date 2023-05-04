@@ -56,7 +56,6 @@ public final class DivInput: DivBase {
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets
-  public let rawTextVariable: String? // at least 1 char
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
@@ -68,6 +67,7 @@ public final class DivInput: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
+  public let validators: [DivInputValidator]? // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
@@ -224,9 +224,6 @@ public final class DivInput: DivBase {
   static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
 
-  static let rawTextVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -258,6 +255,9 @@ public final class DivInput: DivBase {
     makeNoOpValueValidator()
 
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
+    makeArrayValidator(minItems: 1)
+
+  static let validatorsValidator: AnyArrayValueValidator<DivInputValidator> =
     makeArrayValidator(minItems: 1)
 
   static let visibilityValidator: AnyValueValidator<DivVisibility> =
@@ -299,7 +299,6 @@ public final class DivInput: DivBase {
     maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
-    rawTextVariable: String? = nil,
     rowSpan: Expression<Int>? = nil,
     selectAllOnFocus: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
@@ -311,6 +310,7 @@ public final class DivInput: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
+    validators: [DivInputValidator]? = nil,
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -342,7 +342,6 @@ public final class DivInput: DivBase {
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings ?? DivEdgeInsets()
-    self.rawTextVariable = rawTextVariable
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
@@ -354,6 +353,7 @@ public final class DivInput: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
+    self.validators = validators
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -423,34 +423,34 @@ extension DivInput: Equatable {
     guard
       lhs.nativeInterface == rhs.nativeInterface,
       lhs.paddings == rhs.paddings,
-      lhs.rawTextVariable == rhs.rawTextVariable
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
-      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.selectedActions == rhs.selectedActions,
+      lhs.textColor == rhs.textColor
     else {
       return false
     }
     guard
-      lhs.textColor == rhs.textColor,
       lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
+      lhs.validators == rhs.validators,
       lhs.visibility == rhs.visibility
     else {
       return false
@@ -497,7 +497,6 @@ extension DivInput: Serializable {
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings.toDictionary()
-    result["raw_text_variable"] = rawTextVariable
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["select_all_on_focus"] = selectAllOnFocus.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
@@ -509,6 +508,7 @@ extension DivInput: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
+    result["validators"] = validators?.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

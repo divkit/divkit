@@ -20,7 +20,6 @@
     }
   ],
   "required": [
-    "type",
-    "raw_text_variable"
+    "type"
   ]
 }

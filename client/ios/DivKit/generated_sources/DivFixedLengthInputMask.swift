@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivFixedLengthInputMask {
+public final class DivFixedLengthInputMask: DivInputMaskBase {
   public final class PatternElement {
     public let key: Expression<String> // at least 1 char
     public let placeholder: Expression<String> // default value: _
@@ -46,6 +46,7 @@ public final class DivFixedLengthInputMask {
   public let alwaysVisible: Expression<Bool> // default value: false
   public let pattern: Expression<String> // at least 1 char
   public let patternElements: [PatternElement] // at least 1 elements
+  public let rawTextVariable: String // at least 1 char
 
   public func resolveAlwaysVisible(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumericValue(expression: alwaysVisible) ?? false
@@ -64,14 +65,19 @@ public final class DivFixedLengthInputMask {
   static let patternElementsValidator: AnyArrayValueValidator<DivFixedLengthInputMask.PatternElement> =
     makeArrayValidator(minItems: 1)
 
+  static let rawTextVariableValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
+
   init(
     alwaysVisible: Expression<Bool>? = nil,
     pattern: Expression<String>,
-    patternElements: [PatternElement]
+    patternElements: [PatternElement],
+    rawTextVariable: String
   ) {
     self.alwaysVisible = alwaysVisible ?? .value(false)
     self.pattern = pattern
     self.patternElements = patternElements
+    self.rawTextVariable = rawTextVariable
   }
 }
 
@@ -82,6 +88,11 @@ extension DivFixedLengthInputMask: Equatable {
       lhs.alwaysVisible == rhs.alwaysVisible,
       lhs.pattern == rhs.pattern,
       lhs.patternElements == rhs.patternElements
+    else {
+      return false
+    }
+    guard
+      lhs.rawTextVariable == rhs.rawTextVariable
     else {
       return false
     }
@@ -97,6 +108,7 @@ extension DivFixedLengthInputMask: Serializable {
     result["always_visible"] = alwaysVisible.toValidSerializationValue()
     result["pattern"] = pattern.toValidSerializationValue()
     result["pattern_elements"] = patternElements.map { $0.toDictionary() }
+    result["raw_text_variable"] = rawTextVariable
     return result
   }
 }

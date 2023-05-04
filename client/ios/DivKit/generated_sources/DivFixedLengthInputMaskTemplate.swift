@@ -116,6 +116,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   public let alwaysVisible: Field<Expression<Bool>>? // default value: false
   public let pattern: Field<Expression<String>>? // at least 1 char
   public let patternElements: Field<[PatternElementTemplate]>? // at least 1 elements
+  public let rawTextVariable: Field<String>? // at least 1 char
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -126,7 +127,8 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         alwaysVisible: try dictionary.getOptionalExpressionField("always_visible"),
         pattern: try dictionary.getOptionalExpressionField("pattern"),
-        patternElements: try dictionary.getOptionalArray("pattern_elements", templateToType: templateToType)
+        patternElements: try dictionary.getOptionalArray("pattern_elements", templateToType: templateToType),
+        rawTextVariable: try dictionary.getOptionalField("raw_text_variable")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-fixed-length-input-mask_template." + field, representation: representation)
@@ -137,22 +139,26 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     parent: String?,
     alwaysVisible: Field<Expression<Bool>>? = nil,
     pattern: Field<Expression<String>>? = nil,
-    patternElements: Field<[PatternElementTemplate]>? = nil
+    patternElements: Field<[PatternElementTemplate]>? = nil,
+    rawTextVariable: Field<String>? = nil
   ) {
     self.parent = parent
     self.alwaysVisible = alwaysVisible
     self.pattern = pattern
     self.patternElements = patternElements
+    self.rawTextVariable = rawTextVariable
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedLengthInputMaskTemplate?) -> DeserializationResult<DivFixedLengthInputMask> {
     let alwaysVisibleValue = parent?.alwaysVisible?.resolveOptionalValue(context: context, validator: ResolvedValue.alwaysVisibleValidator) ?? .noValue
     let patternValue = parent?.pattern?.resolveValue(context: context, validator: ResolvedValue.patternValidator) ?? .noValue
     let patternElementsValue = parent?.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) ?? .noValue
+    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context, validator: ResolvedValue.rawTextVariableValidator) ?? .noValue
     var errors = mergeErrors(
       alwaysVisibleValue.errorsOrWarnings?.map { .nestedObjectError(field: "always_visible", error: $0) },
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) },
-      patternElementsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern_elements", error: $0) }
+      patternElementsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern_elements", error: $0) },
+      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
     )
     if case .noValue = patternValue {
       errors.append(.requiredFieldIsMissing(field: "pattern"))
@@ -160,16 +166,21 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     if case .noValue = patternElementsValue {
       errors.append(.requiredFieldIsMissing(field: "pattern_elements"))
     }
+    if case .noValue = rawTextVariableValue {
+      errors.append(.requiredFieldIsMissing(field: "raw_text_variable"))
+    }
     guard
       let patternNonNil = patternValue.value,
-      let patternElementsNonNil = patternElementsValue.value
+      let patternElementsNonNil = patternElementsValue.value,
+      let rawTextVariableNonNil = rawTextVariableValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedLengthInputMask(
       alwaysVisible: alwaysVisibleValue.value,
       pattern: patternNonNil,
-      patternElements: patternElementsNonNil
+      patternElements: patternElementsNonNil,
+      rawTextVariable: rawTextVariableNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -181,6 +192,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     var alwaysVisibleValue: DeserializationResult<Expression<Bool>> = parent?.alwaysVisible?.value() ?? .noValue
     var patternValue: DeserializationResult<Expression<String>> = parent?.pattern?.value() ?? .noValue
     var patternElementsValue: DeserializationResult<[DivFixedLengthInputMask.PatternElement]> = .noValue
+    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value(validatedBy: ResolvedValue.rawTextVariableValidator) ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "always_visible":
@@ -189,12 +201,16 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
         patternValue = deserialize(__dictValue, validator: ResolvedValue.patternValidator).merged(with: patternValue)
       case "pattern_elements":
         patternElementsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self).merged(with: patternElementsValue)
+      case "raw_text_variable":
+        rawTextVariableValue = deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator).merged(with: rawTextVariableValue)
       case parent?.alwaysVisible?.link:
         alwaysVisibleValue = alwaysVisibleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alwaysVisibleValidator))
       case parent?.pattern?.link:
         patternValue = patternValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.patternValidator))
       case parent?.patternElements?.link:
         patternElementsValue = patternElementsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self))
+      case parent?.rawTextVariable?.link:
+        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator))
       default: break
       }
     }
@@ -204,7 +220,8 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     var errors = mergeErrors(
       alwaysVisibleValue.errorsOrWarnings?.map { .nestedObjectError(field: "always_visible", error: $0) },
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) },
-      patternElementsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern_elements", error: $0) }
+      patternElementsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern_elements", error: $0) },
+      rawTextVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "raw_text_variable", error: $0) }
     )
     if case .noValue = patternValue {
       errors.append(.requiredFieldIsMissing(field: "pattern"))
@@ -212,16 +229,21 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     if case .noValue = patternElementsValue {
       errors.append(.requiredFieldIsMissing(field: "pattern_elements"))
     }
+    if case .noValue = rawTextVariableValue {
+      errors.append(.requiredFieldIsMissing(field: "raw_text_variable"))
+    }
     guard
       let patternNonNil = patternValue.value,
-      let patternElementsNonNil = patternElementsValue.value
+      let patternElementsNonNil = patternElementsValue.value,
+      let rawTextVariableNonNil = rawTextVariableValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivFixedLengthInputMask(
       alwaysVisible: alwaysVisibleValue.value,
       pattern: patternNonNil,
-      patternElements: patternElementsNonNil
+      patternElements: patternElementsNonNil,
+      rawTextVariable: rawTextVariableNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -237,7 +259,8 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
       parent: nil,
       alwaysVisible: alwaysVisible ?? mergedParent.alwaysVisible,
       pattern: pattern ?? mergedParent.pattern,
-      patternElements: patternElements ?? mergedParent.patternElements
+      patternElements: patternElements ?? mergedParent.patternElements,
+      rawTextVariable: rawTextVariable ?? mergedParent.rawTextVariable
     )
   }
 
@@ -248,7 +271,8 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
       parent: nil,
       alwaysVisible: merged.alwaysVisible,
       pattern: merged.pattern,
-      patternElements: try merged.patternElements?.resolveParent(templates: templates)
+      patternElements: try merged.patternElements?.resolveParent(templates: templates),
+      rawTextVariable: merged.rawTextVariable
     )
   }
 }
