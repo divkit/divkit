@@ -69,7 +69,12 @@
     let padding = '';
     $: {
         selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
-        padding = selfPadding ? edgeInsertsToCss(selfPadding) : '';
+        padding = selfPadding ? edgeInsertsToCss({
+            top: (Number(selfPadding.top) || 0) / fontSize * 10,
+            right: (Number(selfPadding.right) || 0) / fontSize * 10,
+            bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10,
+            left: (Number(selfPadding.left) || 0) / fontSize * 10
+        }) : '';
     }
 
     const jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
@@ -131,11 +136,19 @@
     };
     $: stl = {
         '--divkit-input-hint-color': hintColor,
-        'font-size': pxToEm(fontSize),
         'font-weight': fontWeight,
-        'line-height': lineHeight,
-        'letter-spacing': letterSpacing,
         color: textColor
+    };
+    $: innerStl = {
+        padding,
+        'font-size': pxToEm(fontSize),
+        'line-height': lineHeight,
+        'letter-spacing': letterSpacing
+    };
+    $: selectStl = {
+        'font-size': pxToEm(fontSize),
+        'line-height': lineHeight,
+        'letter-spacing': letterSpacing
     };
 </script>
 
@@ -151,12 +164,12 @@
         {templateContext}
         {layoutParams}
     >
-        <span class={css['select__select-text']} style={makeStyle({ padding })} aria-hidden="true">
+        <span class={css['select__select-text']} style={makeStyle(innerStl)} aria-hidden="true">
             <!--Space holder should have height even it has no value-->
             {selectText || hint || '​'}
         </span>
 
-        <select class={css.select__select} aria-label={description} bind:value={$valueVariable}>
+        <select class={css.select__select} aria-label={description} bind:value={$valueVariable} style={makeStyle(selectStl)}>
             {#each filteredItems as item}
                 <option class={css.select__option} value={item.value}>{item.text || item.value}</option>
             {/each}
