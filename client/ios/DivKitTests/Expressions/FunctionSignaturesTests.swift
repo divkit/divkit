@@ -11,7 +11,7 @@ final class FunctionSignaturesTests: XCTestCase {
 }
 
 private func doTest(_ testDto: SuiteDTO.TestDTO) {
-  guard let function = findFunction(name: testDto.functionName) else {
+  guard let function = functions[testDto.functionName] else {
     XCTFail("Function \(testDto.functionName) is not found")
     return
   }
@@ -22,14 +22,19 @@ private func doTest(_ testDto: SuiteDTO.TestDTO) {
   )
 }
 
-private func findFunction(name: String) -> Function? {
-  DatetimeFunctions.allCases.first { $0.rawValue == name }?.function ??
-    ColorFunctions.allCases.first { $0.rawValue == name }?.function ??
-    StringFunctions.allCases.first { $0.rawValue == name }?.function ??
-    CastFunctions.allCases.first { $0.rawValue == name }?.function ??
-    MathFunctions.allCases.first { $0.rawValue == name }?.function ??
-    IntervalFunctions.allCases.first { $0.rawValue == name }?.function
-}
+private let functions: [String: Function] = {
+  var result = [String: Function]()
+  DatetimeFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  ColorFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  StringFunctions.allCases.forEach { result[$0.rawValue] = $0.function}
+  CastFunctions.allCases.forEach { result[$0.rawValue] = $0.function  }
+  MathFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  IntervalFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  ValueFunctions.allCases.forEach {
+    result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(variables: [:]))
+  }
+  return result
+}()
 
 private var signatures: [SuiteDTO.TestDTO] {
   (

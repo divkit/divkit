@@ -247,21 +247,24 @@ public final class ExpressionResolver {
       initializer: initializer
     )
   }
+
+  private lazy var supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
+    _supportedFunctions + ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }.flat()
 }
 
-extension ExpressionResolver: ConstantsProvider {
-  func getValue(_ name: String) -> Any? {
-    getVariableValue(name)
-  }
-}
-
-private let supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
+private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
   CastFunctions.allCases.map(\.declaration).flat()
     + StringFunctions.allCases.map(\.declaration).flat()
     + ColorFunctions.allCases.map(\.declaration).flat()
     + DatetimeFunctions.allCases.map(\.declaration).flat()
     + MathFunctions.allCases.map(\.declaration).flat()
     + IntervalFunctions.allCases.map(\.declaration).flat()
+
+extension ExpressionResolver: ConstantsProvider {
+  func getValue(_ name: String) -> Any? {
+    getVariableValue(name)
+  }
+}
 
 extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
   fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
