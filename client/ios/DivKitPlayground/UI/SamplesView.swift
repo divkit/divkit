@@ -56,6 +56,7 @@ final class SampleModel {
     url: URL,
     divKitComponents: DivKitComponents
   ) {
+      print(url, "🍀")
     cardId = DivCardID(rawValue: url.path)
     jsonData = try? Data(contentsOf: url)
     self.divKitComponents = divKitComponents

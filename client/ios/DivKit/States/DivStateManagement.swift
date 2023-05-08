@@ -1,4 +1,5 @@
 import Foundation
+import BaseTinyPublic
 
 public protocol DivStateManagement: DivStateUpdater {
   func getStateManagerForCard(cardId: DivCardID) -> DivStateManager

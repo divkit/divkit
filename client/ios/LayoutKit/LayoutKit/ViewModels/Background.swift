@@ -1,5 +1,6 @@
 import CommonCorePublic
 import LayoutKitInterface
+import UIKit
 
 public enum Background: Equatable {
   case solidColor(Color)

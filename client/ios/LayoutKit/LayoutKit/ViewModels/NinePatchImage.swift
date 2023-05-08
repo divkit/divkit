@@ -1,4 +1,5 @@
 import CommonCorePublic
+import UIKit
 
 public struct NinePatchImage {
   let imageHolder: ImageHolder

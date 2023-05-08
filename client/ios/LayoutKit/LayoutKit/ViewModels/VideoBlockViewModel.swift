@@ -1,4 +1,5 @@
 import BaseTinyPublic
+import UIKit
 
 public struct VideoBlockViewModel: Equatable {
   public let videoData: VideoData

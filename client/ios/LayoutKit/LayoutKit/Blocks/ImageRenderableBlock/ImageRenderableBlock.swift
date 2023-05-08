@@ -1,6 +1,6 @@
 import CoreGraphics
 import Foundation
-
+import UIKit
 import CommonCorePublic
 
 public protocol ImageRenderableBlock: Block {

@@ -1,6 +1,6 @@
 import CoreGraphics
 import Foundation
-
+import UIKit
 import BasePublic
 import BaseUIPublic
 import CommonCorePublic

@@ -1,5 +1,5 @@
 import CoreGraphics
-
+import UIKit
 import CommonCorePublic
 
 public struct TabSeparatorStyle: Equatable {

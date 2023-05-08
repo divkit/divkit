@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public enum VideoData: Equatable {
   case stream(URL)
