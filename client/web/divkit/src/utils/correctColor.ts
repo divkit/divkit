@@ -8,7 +8,7 @@ import { padLeft } from './padLeft';
  * @returns Color with opacity if it has correct format, or defaultColor elsewhere
  */
 export function correctColor(color: string | undefined, alpha = 1, defaultColor = 'transparent'): string {
-    color = (color || '').toLowerCase();
+    color = (typeof color === 'string' && color || '').toLowerCase();
 
     if (color.charAt(0) !== '#') {
         return defaultColor;

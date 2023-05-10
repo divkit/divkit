@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getContext, onDestroy, tick } from 'svelte';
+    import { writable } from 'svelte/store';
 
     import css from './Tabs.module.css';
     import rootCss from '../Root.module.css';
@@ -7,10 +8,11 @@
     import type { Mods } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivTabsData } from '../../types/tabs';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { Action, DivBase, TemplateContext } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { SwitchElements, Overflow } from '../../types/switch-elements';
     import type { TabItem } from '../../types/tabs';
+    import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -43,8 +45,39 @@
 
     let hasError = false;
     $: items = json.items || [];
+    interface ChildInfo {
+        index: number;
+        title: MaybeMissing<string> | undefined;
+        title_click_action?: MaybeMissing<Action> | undefined;
+    }
+    let childStore = writable<ChildInfo[]>([]);
+    $: if (Array.isArray(items) && items.length) {
+        let children: ChildInfo[] = [];
+
+        items.forEach((item, index) => {
+            const part = rootCtx.getJsonWithVars({
+                index,
+                title: item.title,
+                title_click_action: item.title_click_action,
+            });
+            if (part.title && typeof part.title === 'string') {
+                children.push(part as ChildInfo);
+            } else {
+                rootCtx.logError(wrapError(new Error('Incorrect title for the tab'), {
+                    additional: {
+                        index
+                    }
+                }));
+            }
+        });
+
+        childStore.set(children);
+    } else {
+        childStore.set([]);
+    }
+
     $: {
-        if (!items?.length || !Array.isArray(items)) {
+        if (!$childStore?.length) {
             hasError = true;
             rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "tabs"')));
         } else {
@@ -78,16 +111,23 @@
     const jsonSelectedTab = rootCtx.getJsonWithVars(json.selected_tab);
     let selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
-    $: {
-        if (!hasError && (selected < 0 || selected >= items.length)) {
-            rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
-                additional: {
-                    selected: json.selected_tab,
-                    length: items.length
-                }
-            }));
-            selected = selected < 0 ? 0 : items.length - 1;
-        }
+    $: if (!hasError && (selected < 0 || selected >= items.length)) {
+        rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
+            additional: {
+                selected: json.selected_tab,
+                length: items.length
+            }
+        }));
+        selected = selected < 0 ? 0 : items.length - 1;
+    }
+
+    $: if (!hasError && !$childStore.some(it => selected === it.index)) {
+        rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
+            additional: {
+                selected: json.selected_tab
+            }
+        }));
+        selected = $childStore[0]?.index || 0;
     }
 
     $: jsonTabStyle = rootCtx.getDerivedFromVars(json.tab_title_style);
@@ -252,18 +292,21 @@
     }
 
     function moveSelected(shift: number, focus = false): void {
-        const len = items?.length;
+        const len = $childStore?.length;
         if (!len) {
             return;
         }
+        const indices = $childStore.map(it => it.index);
+        const selectedIndex = indices.indexOf(selected);
 
-        let newSelected = selected + shift;
+        let newSelectedIndex = selectedIndex + shift;
 
-        if (newSelected >= len) {
-            newSelected = 0;
-        } else if (newSelected < 0) {
-            newSelected = len - 1;
+        if (newSelectedIndex >= len) {
+            newSelectedIndex = 0;
+        } else if (newSelectedIndex < 0) {
+            newSelectedIndex = len - 1;
         }
+        const newSelected = indices[newSelectedIndex];
 
         setSelected(newSelected, focus);
     }
@@ -532,7 +575,8 @@
             style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing) : ''}
             on:keydown={onTabKeydown}
         >
-            {#each items as item, index}
+            {#each $childStore as item}
+                {@const index = item.index}
                 {@const isSelected = index === selected}
 
                 <Actionable
@@ -576,7 +620,9 @@
                 on:touchend={isSwipeEnabled ? onTouchEnd : undefined}
                 on:touchcancel={isSwipeEnabled ? onTouchEnd : undefined}
             >
-                {#each items as item, index}
+                {#each $childStore as item}
+                    {@const index = item.index}
+
                     <div
                         class={genClassName('tabs__panel', css, {
                             visible: visiblePanels[index]
@@ -587,7 +633,7 @@
                         style="left: {index * 100}%"
                     >
                         {#if showedPanels[index]}
-                            <Unknown div={item.div} {templateContext} layoutParams={childLayoutParams} />
+                            <Unknown div={items[index].div} {templateContext} layoutParams={childLayoutParams} />
                         {/if}
                     </div>
                 {/each}

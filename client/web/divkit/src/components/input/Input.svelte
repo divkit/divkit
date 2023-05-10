@@ -234,7 +234,11 @@
     }
 
     function checkVerticalOverflow(): void {
-        verticalOverflow = holder.scrollHeight > holder.offsetHeight;
+        if (holder) {
+            verticalOverflow = holder.scrollHeight > holder.offsetHeight;
+        } else {
+            verticalOverflow = false;
+        }
     }
 
     async function runValueMask(): Promise<void> {
