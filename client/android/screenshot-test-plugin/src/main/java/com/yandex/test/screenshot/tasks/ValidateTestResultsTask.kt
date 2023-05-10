@@ -1,12 +1,16 @@
 package com.yandex.test.screenshot.tasks
 
 import com.android.builder.core.BuilderConstants
-import com.android.builder.model.AndroidProject
 import com.google.protobuf.TextFormat
 import com.google.testing.platform.proto.api.core.TestResultProto.TestResult
 import com.google.testing.platform.proto.api.core.TestStatusProto.TestStatus
 import com.google.testing.platform.proto.api.core.TestSuiteResultProto.TestSuiteResult
-import com.yandex.test.util.*
+import com.yandex.test.util.FileOutput
+import com.yandex.test.util.Logger
+import com.yandex.test.util.android
+import com.yandex.test.util.filterKeysIn
+import com.yandex.test.util.filterKeysNotIn
+import com.yandex.test.util.reportDir
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -117,7 +121,7 @@ open class ValidateTestResultsTask : DefaultTask() {
                     }
 
                     val defaultDir = buildDirectory.get()
-                        .dir(AndroidProject.FD_OUTPUTS)
+                        .dir("outputs")
                         .dir(BuilderConstants.FD_ANDROID_RESULTS)
 
                     return customDir ?: defaultDir

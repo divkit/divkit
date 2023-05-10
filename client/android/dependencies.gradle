@@ -6,7 +6,7 @@ ext.versions = [
         festReflect                     : '1.4.1',
         googleAutoService               : '1.0',
         googleTestingPlatform           : '0.0.8-alpha07',
-        gradlePlugin                    : '7.1.3',
+        gradlePlugin                    : '7.4.2',
         gson                            : '2.8.7',
         hamcrestJUnit                   : '2.0.0.0',
         hamcrestLibrary                 : '2.2',

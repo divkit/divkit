@@ -1,6 +1,5 @@
 package com.yandex.test.screenshot.tasks
 
-import com.android.builder.model.AndroidProject
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -17,7 +16,7 @@ import java.io.File
 open class GenerateScreenshotConfigTask : DefaultTask() {
 
     @get:OutputDirectory
-    val outputDir = File(project.buildDir, "${AndroidProject.FD_GENERATED}/source/screenshots")
+    val outputDir = File(project.buildDir, "generated/source/screenshots")
 
     private val screenshots = project.extensions.getByType(ScreenshotTestPluginExtension::class.java)
 
