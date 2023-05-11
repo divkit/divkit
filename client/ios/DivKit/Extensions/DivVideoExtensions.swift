@@ -5,6 +5,11 @@ import LayoutKit
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    guard let playerFactory = context.playerFactory else {
+      DivKitLogger.warning("There is no player factory in the context")
+      return EmptyBlock()
+    }
+
     let resumeActions = resumeActions?
       .compactMap { $0.makeUiAction(context: context.actionContext) } ?? []
     let bufferingActions = bufferingActions?.compactMap {
@@ -56,7 +61,7 @@ extension DivVideo: DivBlockModeling {
       heightTrait: height.makeLayoutTrait(with: resolver),
       model: model,
       state: state,
-      playerFactory: context.playerFactory
+      playerFactory: playerFactory
     )
   }
 }

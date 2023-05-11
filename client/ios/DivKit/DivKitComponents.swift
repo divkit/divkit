@@ -22,7 +22,7 @@ public final class DivKitComponents {
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
-  public let playerFactory: PlayerFactory
+  public let playerFactory: PlayerFactory?
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let disposePool = AutodisposePool()
@@ -38,7 +38,7 @@ public final class DivKitComponents {
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: UpdateCardAction?,
-    playerFactory: PlayerFactory = DefaultPlayerFactory(),
+    playerFactory: PlayerFactory? = nil,
     urlOpener: @escaping UrlOpener,
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
@@ -49,7 +49,7 @@ public final class DivKitComponents {
     self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
-    self.playerFactory = playerFactory
+    self.playerFactory = playerFactory ?? defaultPlayerFactory
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
@@ -217,3 +217,9 @@ func makeImageHolderFactory(requestPerformer: URLRequestPerforming) -> ImageHold
     )
   )
 }
+
+#if os(iOS)
+let defaultPlayerFactory: PlayerFactory? = DefaultPlayerFactory()
+#else
+let defaultPlayerFactory: PlayerFactory? = nil
+#endif
