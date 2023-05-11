@@ -8,9 +8,6 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
@@ -26,14 +23,8 @@ class ExoDivPlayer(
     val player: ExoPlayer by lazy {
         SimpleExoPlayer.Builder(context).build()
     }
-    private val mediaDataSourceFactory by lazy {
-        DefaultDataSourceFactory(context)
-    }
-    private val hlsFactory by lazy {
-        HlsMediaSource.Factory(mediaDataSourceFactory)
-    }
-    private val fileFactory by lazy {
-        ProgressiveMediaSource.Factory(mediaDataSourceFactory)
+    private val mediaSourceAbstractFactory by lazy {
+        ExoDivMediaSourceAbstractFactory(context)
     }
 
     private val observers = ObserverList<DivPlayer.Observer>()
@@ -129,18 +120,16 @@ class ExoDivPlayer(
         currentSource = minSourceGreaterThanTarget ?: src.first()
 
         currentSource?.let { source ->
-            val mediaItem = MediaItem.Builder()
-                .setMimeType(source.mimeType)
-                .setUri(source.url)
-                .build()
-            val factory = when (source) {
-                is DivVideoSource.StreamVideoSource -> hlsFactory
-                is DivVideoSource.FileVideoSource -> fileFactory
-            }
-            val mediaSource = factory.createMediaSource(mediaItem)
+            mediaSourceAbstractFactory.create(source.url.toString())?.let { factory ->
+                val mediaItem = MediaItem.Builder()
+                    .setMimeType(source.mimeType)
+                    .setUri(source.url)
+                    .build()
+                val mediaSource = factory.createMediaSource(mediaItem)
 
-            player.setMediaSource(mediaSource)
-            player.prepare()
+                player.setMediaSource(mediaSource)
+                player.prepare()
+            }
         }
     }
 
