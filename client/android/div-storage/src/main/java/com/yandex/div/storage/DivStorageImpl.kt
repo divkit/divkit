@@ -46,7 +46,6 @@ import java.io.Closeable
 import java.nio.charset.StandardCharsets
 
 private const val DB_NAME = "div-storage.db"
-private const val RETRY_COUNT = 1
 
 @Mockable
 internal class DivStorageImpl(
@@ -58,12 +57,10 @@ internal class DivStorageImpl(
             context, DB_NAME, DB_VERSION, this::onCreate, this::onUpgrade
     )
     @VisibleForTesting  // TODO: ticket for make a private pls
-    final var statementExecutor: StorageStatementExecutor = StorageStatementExecutor {
+    val statementExecutor: StorageStatementExecutor = StorageStatementExecutor {
         openHelper.writableDatabase
     }
-        private set
-
-    private var cardSaveUseCase = SingleTransactionCardSavePerformer(statementExecutor)
+    private val cardSaveUseCase = SingleTransactionCardSavePerformer(statementExecutor)
 
 
     @VisibleForTesting
@@ -112,8 +109,6 @@ internal class DivStorageImpl(
     )
 
     override fun loadData(ids: List<String>): LoadDataResult<DivStorage.RestoredRawData> {
-        val actionDesc = "Load data"
-
         val usedGroups = mutableSetOf<String>()
         val cards = ArrayList<DivStorage.RestoredRawData>(ids.size)
         val exceptions = mutableListOf<StorageException>()
@@ -122,38 +117,26 @@ internal class DivStorageImpl(
             ids.isEmpty() -> null
             else -> "$COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
         }
-        for (illegalStateRetryCount in 0 .. RETRY_COUNT) {
-            try {
-                val cardsReadState = readStateFor {
-                    query(TABLE_CARDS, null, selection, null, null, null, null, null)
-                }
-                cardsReadState.use {
-                    val cursor = it.cursor
-
-                    if (cursor.count == 0 || !cursor.moveToFirst()) {
-                        return LoadDataResult(emptyList(), exceptions)
-                    }
-
-                    do {
-                        val rawData = cursor.getRestoredRawData(exceptions)
-
-                        if (rawData != null) {
-                            cards.add(rawData)
-                            usedGroups.add(rawData.groupId)
-                        }
-                    } while (cursor.moveToNext())
-                }
-                break
-            } catch (e: IllegalStateException) {
-                if (illegalStateRetryCount == RETRY_COUNT) {
-                    exceptions.add(e.toStorageException(actionDesc))
-                } else {
-                    cards.clear()
-                    exceptions.clear()
-                    usedGroups.clear()
-                }
-            }
+        val cardsReadState = readStateFor {
+            query(TABLE_CARDS, null, selection, null, null, null, null, null)
         }
+        cardsReadState.use {
+            val cursor = it.cursor
+
+            if (cursor.count == 0 || !cursor.moveToFirst()) {
+                return LoadDataResult(emptyList(), exceptions)
+            }
+
+            do {
+                val rawData = cursor.getRestoredRawData(exceptions)
+
+                if (rawData != null) {
+                    cards.add(rawData)
+                    usedGroups.add(rawData.groupId)
+                }
+            } while (cursor.moveToNext())
+        }
+
         return LoadDataResult(cards, exceptions)
     }
 
@@ -174,29 +157,20 @@ internal class DivStorageImpl(
 
     @WorkerThread
     override fun readTemplates(templateHashes: Set<String>): LoadDataResult<RawTemplateData> {
-        val actionDesc = "Read templates with hashes: $templateHashes"
-
         val exceptions = mutableListOf<StorageException>()
         var templates = emptyList<RawTemplateData>()
 
-        for (illegalStateRetryCount in 0 .. RETRY_COUNT) {
-            try {
-                val readState = readStateFor {
-                    rawQuery("$SELECT_TEMPLATES_BY_HASHES  ${templateHashes.asSqlList()}", emptyArray())
-                }
-
-                templates = readState.use {
-                    it.cursor.getTemplates()
-                }
-                break
-            } catch (e: SQLException) {
-                exceptions.add(e.toStorageException(actionDesc))
-                break
-            } catch (e: IllegalStateException) {
-                if (illegalStateRetryCount == RETRY_COUNT) {
-                    exceptions.add(e.toStorageException(actionDesc))
-                }
+        try {
+            val readState = readStateFor {
+                rawQuery("$SELECT_TEMPLATES_BY_HASHES  ${templateHashes.asSqlList()}", emptyArray())
             }
+
+            templates = readState.use {
+                it.cursor.getTemplates()
+            }
+        } catch (e: SQLException) {
+            val actionDesc = "Read templates with hashes: $templateHashes"
+            exceptions.add(e.toStorageException(actionDesc))
         }
 
         return LoadDataResult(templates, exceptions)
@@ -213,24 +187,14 @@ internal class DivStorageImpl(
     @Throws(DivStorageErrorException::class)
     override fun isCardExists(id: String, groupId: String): Boolean {
         var result = false
-        for (illegalStateRetryCount in 0 .. 1) {
-            val executionResult = statementExecutor.execute(
+        val executionResult = statementExecutor.execute(
                 StorageStatements.isCardExists(cardId = id, groupId) {
                     result = it
                 }
-            )
+        )
 
-            if (executionResult.errors.isNotEmpty() &&
-                executionResult.errors.first().cause is IllegalStateException && illegalStateRetryCount == 0) {
-                updateStatementExecutor()
-                continue
-            }
-
-            if (!executionResult.isSuccessful && executionResult.errors.isNotEmpty()) {
-                throw executionResult.errors.first().toStorageException("Check card exists", id)
-            } else {
-                break
-            }
+        if (!executionResult.isSuccessful && executionResult.errors.isNotEmpty()) {
+            throw executionResult.errors.first().toStorageException("Check card exists", id)
         }
 
         return result
@@ -239,24 +203,14 @@ internal class DivStorageImpl(
     @Throws(DivStorageErrorException::class)
     override fun isTemplateExists(templateHash: String): Boolean {
         var result = false
-        for (illegalStateRetryCount in 0 .. 1) {
-            val executionResult = statementExecutor.execute(
+        val executionResult = statementExecutor.execute(
                 StorageStatements.isTemplateExists(templateHash) {
                     result = it
                 }
-            )
+        )
 
-            if (executionResult.errors.isNotEmpty() && (executionResult.errors.first().cause is
-                    IllegalStateException) && illegalStateRetryCount == 0) {
-                updateStatementExecutor()
-                continue
-            }
-
-            if (!executionResult.isSuccessful && executionResult.errors.isNotEmpty()) {
-                throw executionResult.errors.first().toStorageException("Check template $templateHash exists")
-            } else {
-                break
-            }
+        if (!executionResult.isSuccessful && executionResult.errors.isNotEmpty()) {
+            throw executionResult.errors.first().toStorageException("Check template $templateHash exists")
         }
 
         return result
@@ -265,24 +219,18 @@ internal class DivStorageImpl(
     override fun readTemplateReferences(): LoadDataResult<DivStorage.TemplateReference> {
         val actionDesc = "Template references"
 
-        for (illegalStateRetryCount in 0 .. RETRY_COUNT) {
-            try {
-                val readState = readStateFor {
-                    query(TABLE_TEMPLATE_REFERENCES, null, null, null, null, null, null, null)
-                }
-                val results = readState.use {
-                    it.cursor.getTemplateReferences()
-                }
-                return LoadDataResult(results)
-            } catch (e: SQLException) {
-                return LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
-            } catch (e: IllegalStateException) {
-                if (illegalStateRetryCount == RETRY_COUNT) {
-                    return LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
-                }
+        try {
+            val readState = readStateFor {
+                query(TABLE_TEMPLATE_REFERENCES, null, null, null, null, null, null, null)
             }
+            val results = readState.use {
+                it.cursor.getTemplateReferences()
+            }
+            return LoadDataResult(results)
+        } catch (e: SQLException) {
+            return LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
         }
-        return LoadDataResult(emptyList(), listOf())
+
     }
 
     private fun Cursor.getRestoredRawData(
@@ -345,14 +293,11 @@ internal class DivStorageImpl(
         val templates = ArrayList<RawTemplateData>(count)
 
         do {
-            val data = getBlob(indexOf(COLUMN_TEMPLATE_DATA))
-            if (data != null) {
-                val template = RawTemplateData(
+            val template = RawTemplateData(
                     hash = getString(indexOf(COLUMN_TEMPLATE_HASH)),
-                    data = data
-                )
-                templates.add(template)
-            }
+                    data = getBlob(indexOf(COLUMN_TEMPLATE_DATA))
+            )
+            templates.add(template)
         } while (moveToNext())
 
         return templates
@@ -457,13 +402,6 @@ internal class DivStorageImpl(
     private fun readStateFor(func: DatabaseOpenHelper.Database.() -> Cursor): ReadState {
         val db = openHelper.readableDatabase
         return ReadState(db) { db.run(func) }
-    }
-
-    private fun updateStatementExecutor() {
-        statementExecutor = StorageStatementExecutor {
-            openHelper.writableDatabase
-        }
-        cardSaveUseCase = SingleTransactionCardSavePerformer(statementExecutor)
     }
 
     private fun Cursor.indexOf(columnName: String): Int {

@@ -1,6 +1,7 @@
 package com.yandex.div.storage
 
 import android.os.SystemClock
+import androidx.annotation.VisibleForTesting
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.ParsingException
@@ -16,7 +17,7 @@ import org.json.JSONObject
 import java.util.Calendar
 import javax.inject.Provider
 
-internal class DivDataRepositoryImpl(
+internal open class DivDataRepositoryImpl(
         private val divStorage: DivStorage,
         private val templateContainer: TemplatesContainer,
         private val histogramRecorder: HistogramRecorder,
@@ -28,6 +29,8 @@ internal class DivDataRepositoryImpl(
 
     private var areCardsSynchronizedWithInMemory = false
     private var cardsWithErrors = mapOf<String, List<DivDataRepositoryException>>()
+    @VisibleForTesting
+    internal open val forceUsingStorage = false
 
     override fun put(payload: DivDataRepository.Payload): DivDataRepositoryResult {
         val exceptions = mutableListOf<DivDataRepositoryException>()
@@ -110,10 +113,10 @@ internal class DivDataRepositoryImpl(
     )
 
     override fun getAll(): DivDataRepositoryResult {
-        if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty()) {
+        if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty() && !forceUsingStorage) {
             return DivDataRepositoryResult(inMemoryData.values.toList(), emptyList())
         }
-        val cardsToRequest = if (areCardsSynchronizedWithInMemory) {
+        val cardsToRequest = if (areCardsSynchronizedWithInMemory && !forceUsingStorage) {
             cardsWithErrors.keys
         } else {
             emptySet()

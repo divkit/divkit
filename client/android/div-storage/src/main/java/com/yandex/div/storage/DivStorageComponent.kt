@@ -29,6 +29,7 @@ interface DivStorageComponent {
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
                     LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
+                experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride: Boolean = true,
         ): DivStorageComponent = createInternal(
                 context,
                 histogramReporter,
@@ -36,6 +37,7 @@ interface DivStorageComponent {
                 errorLogger,
                 cardErrorTransformer,
                 parsingHistogramReporter,
+                experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride,
         )
 
         internal fun createInternal(
@@ -46,9 +48,10 @@ interface DivStorageComponent {
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
                     LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
+                useDatabaseManager: Boolean = true,
         ): InternalStorageComponent {
             val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
-                AndroidDatabaseOpenHelper(c, name, version, ccb, ucb)
+                AndroidDatabaseOpenHelper(c, name, version, ccb, ucb, useDatabaseManager)
             }
             val divStorage = DivStorageImpl(
                     context,

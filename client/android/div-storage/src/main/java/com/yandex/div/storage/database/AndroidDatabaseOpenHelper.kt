@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteStatement
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.internal.Assert
 import com.yandex.div.storage.database.DatabaseOpenHelper.CreateCallback
 import com.yandex.div.storage.database.DatabaseOpenHelper.UpgradeCallback
 import java.io.IOException
+
 /**
  * Impl for [DatabaseOpenHelper] for android framework
  * [SQLiteDatabase].
@@ -20,9 +22,11 @@ internal class AndroidDatabaseOpenHelper(
     name: String,
     version: Int,
     ccb: CreateCallback,
-    ucb: UpgradeCallback
+    ucb: UpgradeCallback,
+    private val useDatabaseManager: Boolean  = true,
 ) : DatabaseOpenHelper {
     private val mSQLiteOpenHelper: SQLiteOpenHelper
+    private val databaseManager: DatabaseManager
 
     /**
      * [SQLiteOpenHelper]'s refcount is broken:
@@ -59,21 +63,30 @@ internal class AndroidDatabaseOpenHelper(
                 db.setForeignKeyConstraintsEnabled(true)
             }
         }
+        databaseManager = DatabaseManager(mSQLiteOpenHelper)
     }
 
     // to prevent close for concurrent user of the same database object
     override val readableDatabase: DatabaseOpenHelper.Database
         get() {
-            synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
-                return wrapDataBase(mSQLiteOpenHelper.readableDatabase)
+            return if (useDatabaseManager) {
+                wrapDataBase(databaseManager.openReadableDatabase())
+            } else {
+                synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
+                    wrapDataBase(mSQLiteOpenHelper.readableDatabase)
+                }
             }
         }
 
     // to prevent close for concurrent user of the same database object
     override val writableDatabase: DatabaseOpenHelper.Database
         get() {
-            synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
-                return wrapDataBase(mSQLiteOpenHelper.writableDatabase)
+            return if (useDatabaseManager) {
+                wrapDataBase(databaseManager.openWritableDatabase())
+            } else {
+                synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
+                    wrapDataBase(mSQLiteOpenHelper.writableDatabase)
+                }
             }
         }
 
@@ -134,6 +147,11 @@ internal class AndroidDatabaseOpenHelper(
 
         @Throws(IOException::class)
         override fun close() {
+            if (useDatabaseManager) {
+                databaseManager.closeDatabase(mDb)
+                return
+            }
+
             synchronized(mOpenCloseLock) {
                 if (--mOpenCloseInfo.currentlyOpenedCount > 0) {
                     ++mOpenCloseInfo.postponedCloseCount
@@ -153,5 +171,55 @@ internal class AndroidDatabaseOpenHelper(
     private class OpenCloseInfo {
         var currentlyOpenedCount = 0
         var postponedCloseCount = 0
+    }
+
+    private class DatabaseManager(
+        private val databaseHelper: SQLiteOpenHelper,
+    ) {
+        private val readableUsers = mutableSetOf<Thread>()
+        private var readableUsersCount = 0
+        private var readableDatabase: SQLiteDatabase? = null
+
+        private val writableUsers = mutableSetOf<Thread>()
+        private var writableUsersCount = 0
+        private var writableDatabase: SQLiteDatabase? = null
+
+        @Synchronized
+        fun openWritableDatabase(): SQLiteDatabase {
+            writableDatabase = databaseHelper.writableDatabase
+            writableUsersCount++
+            writableUsers.add(Thread.currentThread())
+            return writableDatabase!!
+        }
+
+        @Synchronized
+        fun openReadableDatabase(): SQLiteDatabase {
+            readableDatabase = databaseHelper.readableDatabase
+            readableUsersCount++
+            readableUsers.add(Thread.currentThread())
+            return readableDatabase!!
+        }
+
+        @Synchronized
+        fun closeDatabase(mDb: SQLiteDatabase) {
+            if (mDb == writableDatabase) {
+                writableUsers.remove(Thread.currentThread())
+                if (writableUsers.isEmpty()) {
+                    while (writableUsersCount-- > 0) {
+                        writableDatabase!!.close()
+                    }
+                }
+            } else if (mDb == readableDatabase) {
+                readableUsers.remove(Thread.currentThread())
+                if (readableUsers.isEmpty()) {
+                    while (readableUsersCount-- > 0) {
+                        readableDatabase!!.close()
+                    }
+                }
+            } else {
+                Assert.fail("Trying to close unknown database from DatabaseManager")
+                mDb.close()
+            }
+        }
     }
 }
