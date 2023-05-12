@@ -8,11 +8,11 @@ import CommonCorePublic
 public final class VideoBlockLegacy: BlockWithTraits {
   public struct VideoAssetHolder {
     let url: URL
-    let playerItem: AVPlayerItem
+    let playerItem: Future<AVPlayerItem>
 
     public init(
       url: URL,
-      playerItem: AVPlayerItem
+      playerItem: Future<AVPlayerItem>
     ) {
       self.url = url
       self.playerItem = playerItem
