@@ -10,7 +10,7 @@ public final class ImageBlock: ImageBaseBlock {
   public let height: ImageBlockHeight
   public let contentMode: ImageContentMode
   public let tintColor: Color?
-  public let tintMode: TintMode?
+  public let tintMode: TintMode
   public let effects: [ImageEffect]
   public let accessibilityElement: AccessibilityElement?
   public let appearanceAnimation: TransitioningAnimation?
@@ -21,7 +21,7 @@ public final class ImageBlock: ImageBaseBlock {
     height: ImageBlockHeight,
     contentMode: ImageContentMode,
     tintColor: Color?,
-    tintMode: TintMode?,
+    tintMode: TintMode,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
@@ -43,7 +43,7 @@ public final class ImageBlock: ImageBaseBlock {
     heightTrait: LayoutTrait = .intrinsic,
     contentMode: ImageContentMode = .default,
     tintColor: Color? = nil,
-    tintMode: TintMode? = nil,
+    tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
@@ -66,7 +66,7 @@ public final class ImageBlock: ImageBaseBlock {
     size: CGSize,
     contentMode: ImageContentMode = .default,
     tintColor: Color? = nil,
-    tintMode: TintMode? = nil,
+    tintMode: TintMode = .sourceIn,
     effects: [ImageEffect] = [],
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil

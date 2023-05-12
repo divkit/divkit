@@ -13,7 +13,7 @@ extension ImageBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let remoteImageViewContainer = view as! RemoteImageViewContainer
-    if (!effects.isEmpty || tintMode != nil) && !remoteImageViewContainer.contentView
+    if (!effects.isEmpty || tintMode != .sourceIn) && !remoteImageViewContainer.contentView
       .isKind(of: MetalImageView.self) {
       remoteImageViewContainer.contentView = MetalImageView()
     }
