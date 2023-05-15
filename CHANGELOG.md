@@ -1,3 +1,38 @@
+## 25.0.0
+
+# JSON Schema:
+
+* Added `input` `valdator`
+* Moved `input` mask's `raw_text_variable` into the base `mask`
+
+# Android Client:
+
+Fixes:
+
+* Fixed crash at hardware accelerated bitmap animation
+* Fixed binding indicator with pager within gallery items
+* Fixed various DivStorage concurrency issues
+* Fixed various currency input mask issues
+
+# iOS Client:
+
+* Removed metal, selecting feature flags
+* Supported getValue functions
+* Supported stretch parameter for DivImage
+
+# Web Client:
+
+Additions:
+* Supported expressions in `tabs` title
+* Added `currency` mask for the `input`
+
+Fixes:
+* Fixed `select` sizes, paddings and other size-related properties
+* Fixed `select` `hint` show logic to match other platforms
+* Fixed several cases with incorrect json processing (color is not a string, etc)
+* Changed `actions` without `url` processing logic to match other platforms (previusly they was ignored as incorrect)
+* Fixed `input` cursor logic for the Safari (for the iOS in partucular)
+
 ## 24.4.0
 
 # Android Client:

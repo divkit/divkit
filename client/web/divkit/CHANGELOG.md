@@ -1,3 +1,19 @@
+## 25.0.0 (May 11, 2023)
+
+# Web Client:
+
+Additions:
+* Supported expressions in `tabs` title
+* Added `currency` mask for the `input`
+
+Fixes:
+* Fixed `select` sizes, paddings and other size-related properties
+* Fixed `select` `hint` show logic to match other platforms
+* Fixed several cases with incorrect json processing (color is not a string, etc)
+* Changed `actions` without `url` processing logic to match other platforms (previusly they was ignored as incorrect)
+* Fixed `input` cursor logic with `mask` for the Safari (for the iOS in partucular)
+
+
 ## 24.3.0 (April 24, 2023)
 
 Additions:
