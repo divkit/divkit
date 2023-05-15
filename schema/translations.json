@@ -1999,6 +1999,14 @@
     "en": "Actions that are performed when playback resumes.",
     "ru": "Действия, которые выполняются, когда проигрывание возобновляется."
   },
+  "div_video_pause_actions": {
+    "en": "Actions that are performed when a playback is paused.",
+    "ru": "Действия, которые выполняются при приостановке воспроизведения."
+  },
+  "div_video_fatal_actions": {
+    "en": "Actions that are performed when it is impossible to continue playback due to an error in the player.",
+    "ru": "Действия, которые выполняются, когда невозможно продолжить воспроизведение из-за ошибки плеера."
+  },
   "div_video_stream": {
     "en": "Data for stream display.",
     "ru": "Данные для показа видео."
