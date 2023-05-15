@@ -1,0 +1,136 @@
+{
+  "description": "DivSelect element with basic properties",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "value_variable_1",
+        "type": "string",
+        "value": "value"
+      },
+      {
+        "name": "value_variable_2",
+        "type": "string",
+        "value": "another_value"
+      },
+      {
+        "name": "value_variable_3",
+        "type": "string",
+        "value": "default_value"
+      },
+      {
+        "name": "value_variable_4",
+        "type": "string",
+        "value": "nonexistent_value"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "test_select",
+              "value_variable": "value_variable_1"
+            },
+            {
+              "type": "test_select",
+              "margins": {
+                "left": 64
+              },
+              "value_variable": "value_variable_2"
+            },
+            {
+              "type": "test_select",
+              "value_variable": "value_variable_3"
+            },
+            {
+              "type": "test_select",
+              "value_variable": "value_variable_4"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "test_select": {
+      "type": "select",
+      "options": [
+        {
+          "text": "",
+          "value": "default_value"
+        },
+        {
+          "value": "value"
+        },
+        {
+          "text": "Another value",
+          "value": "another_value"
+        },
+        {
+          "text": "nonexistent_value",
+          "value": "this should not be displayed"
+        },
+        {
+          "text": "some_value",
+          "value": "some_value"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 12,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 8,
+        "top": 16,
+        "right": 24,
+        "bottom": 16
+      },
+      "alpha": 0.8,
+      "alignment_horizontal": "left",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFCC"
+        }
+      ],
+      "border": {
+        "corner_radius": 12,
+        "has_shadow": 1,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_color": "#444444",
+      "hint_text": "initial_hint",
+      "hint_color": "#AAAAAA",
+      "highlight_color": "#CCCCFF",
+      "line_height": 60,
+      "letter_spacing": 1.5
+    }
+  }
+}

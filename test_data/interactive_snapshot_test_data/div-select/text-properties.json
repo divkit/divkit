@@ -1,0 +1,227 @@
+{
+  "description": "DivSelect switching font properties, showing and hiding hint",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "value_variable",
+          "type": "string",
+          "value": "initial_value"
+        },
+        {
+          "name": "font_size",
+          "type": "integer",
+          "value": 20
+        },
+        {
+          "name": "font_size_unit",
+          "type": "string",
+          "value": "sp"
+        },
+        {
+          "name": "font_family",
+          "type": "string",
+          "value": "text"
+        },
+        {
+          "name": "font_weight",
+          "type": "string",
+          "value": "medium"
+        },
+        {
+          "name": "text_color",
+          "type": "color",
+          "value": "#444444"
+        },
+        {
+          "name": "letter_spacing",
+          "type": "number",
+          "value": 0
+        },
+        {
+          "name": "hint_text",
+          "type": "string",
+          "value": "initial_hint"
+        },
+        {
+          "name": "hint_color",
+          "type": "color",
+          "value": "#AAAAAA"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "select",
+            "options": [
+              {
+                "text": "",
+                "value": "show_hint"
+              },
+              {
+                "text": "text",
+                "value": "initial_value"
+              }
+            ],
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "alignment_horizontal": "center",
+            "alignment_vertical": "center",
+            "border": {
+              "corner_radius": 8,
+              "stroke": {
+                "color": "#0000FF"
+              }
+            },
+            "value_variable": "value_variable",
+            "font_size": "@{font_size}",
+            "font_size_unit": "@{font_size_unit}",
+            "font_family": "@{font_family}",
+            "font_weight": "@{font_weight}",
+            "text_color": "@{text_color}",
+            "letter_spacing": "@{letter_spacing}",
+            "hint_text": "@{hint_text}",
+            "hint_color": "@{hint_color}"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=font_size&value=32",
+          "log_id": "font_size"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=px",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=dp",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=font_weight&value=bold",
+          "log_id": "font_weight"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=font_family&value=display",
+          "log_id": "font_family"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text_color&value=%230000FF",
+          "log_id": "text_color"
+        },
+        {
+          "url": "div-action://set_variable?name=letter_spacing&value=1.5",
+          "log_id": "letter_spacing"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=value_variable&value=show_hint",
+          "log_id": "show_hint"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=hint_color&value=%23AAAAFF",
+          "log_id": "hint_color"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=value_variable&value=initial_value",
+          "log_id": "restore: value_variable"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size&value=20",
+          "log_id": "restore: font_size"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=sp",
+          "log_id": "restore: font_size_unit"
+        },
+        {
+          "url": "div-action://set_variable?name=font_weight&value=medium",
+          "log_id": "restore: font_weight"
+        },
+        {
+          "url": "div-action://set_variable?name=font_family&value=text",
+          "log_id": "restore: font_family"
+        },
+        {
+          "url": "div-action://set_variable?name=text_color&value=%23444444",
+          "log_id": "restore: text_color"
+        },
+        {
+          "url": "div-action://set_variable?name=letter_spacing&value=0",
+          "log_id": "restore: letter_spacing"
+        },
+        {
+          "url": "div-action://set_variable?name=hint_text&value=initial_hint",
+          "log_id": "restore: hint_text"
+        },
+        {
+          "url": "div-action://set_variable?name=hint_color&value=%23AAAAAA",
+          "log_id": "restore: hint_color"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
