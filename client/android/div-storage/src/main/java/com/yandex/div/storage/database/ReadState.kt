@@ -6,8 +6,8 @@ import java.io.Closeable
 import javax.inject.Provider
 
 internal class ReadState constructor(
-        private val database: DatabaseOpenHelper.Database,
-        private val cursorProvider: Provider<Cursor>
+    private val onCloseState: () -> Unit = { },
+        private val cursorProvider: Provider<Cursor>,
 ) : Closeable {
     private var _cursor: Cursor? = null
     val cursor: Cursor
@@ -22,6 +22,6 @@ internal class ReadState constructor(
 
     override fun close() {
         IOUtils.closeCursorSilently(_cursor)
-        IOUtils.closeSilently(database)
+        onCloseState()
     }
 }

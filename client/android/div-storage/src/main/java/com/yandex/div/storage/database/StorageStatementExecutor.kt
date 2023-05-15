@@ -104,7 +104,7 @@ private class ClosableSqlCompiler(private val db: DatabaseOpenHelper.Database) :
     }
 
     override fun compileQuery(sql: String, vararg selectionArgs: String): ReadState {
-        return ReadState(db) {
+        return ReadState {
             db.rawQuery(sql, selectionArgs).also { createdCursors.add(it) }
         }
     }
@@ -120,5 +120,4 @@ private class ClosableSqlCompiler(private val db: DatabaseOpenHelper.Database) :
         }
         createdCursors.clear()
     }
-
 }

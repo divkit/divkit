@@ -401,7 +401,7 @@ internal class DivStorageImpl(
     @WorkerThread
     private fun readStateFor(func: DatabaseOpenHelper.Database.() -> Cursor): ReadState {
         val db = openHelper.readableDatabase
-        return ReadState(db) { db.run(func) }
+        return ReadState({ db.closeSilently() }, { db.run(func) })
     }
 
     private fun Cursor.indexOf(columnName: String): Int {
