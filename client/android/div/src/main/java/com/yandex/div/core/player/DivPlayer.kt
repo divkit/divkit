@@ -8,17 +8,32 @@ interface DivPlayer {
         /**
          * Called when playback resumes.
          */
-        fun onResume() = Unit
+        fun onPlay() = Unit
 
         /**
-         * Called when playback was interrupted.
+         * Called when playback has been paused by an action.
          */
-        fun onPause(reason: DivVideoPauseReason) = Unit
+        fun onPause() = Unit
+
+        /**
+         * Called when playback has been paused due to the end of the buffer.
+         */
+        fun onBuffering() = Unit
+
+        /**
+         * Called at the end of playback. Never called if video source is repeatable.
+         */
+        fun onEnd() = Unit
+
+        /**
+         * Called when engine is unable to play due to internal error.
+         */
+        fun onFatal() = Unit
 
         /**
          * Called every second, passes the current playback time.
          */
-        fun onCurrentTimeUpdate(timeMs: Long) = Unit
+        fun onCurrentTimeChange(timeMs: Long) = Unit
     }
 
     fun addObserver(observer: Observer) = Unit

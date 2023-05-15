@@ -11,7 +11,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
-import com.yandex.div.core.player.DivVideoPauseReason
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.internal.KAssert
 
@@ -36,29 +35,27 @@ class ExoDivPlayer(
     private val playerPauseListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             if (isPlaying) {
-                observers.forEach { it.onResume() }
+                observers.forEach { it.onPlay() }
                 startUpdatingPlaybackTime()
             } else {
-                observers.forEach { it.onPause(DivVideoPauseReason.PAUSE_CLICKED) }
+                observers.forEach { it.onPause() }
             }
         }
 
         override fun onPlaybackStateChanged(state: Int) {
-            val case = when (state) {
-                Player.STATE_BUFFERING -> DivVideoPauseReason.BUFFER_OVER
-                Player.STATE_ENDED -> DivVideoPauseReason.VIDEO_OVER
-                else -> null
-            }
-            case?.let {
-                observers.forEach { observer ->
-                    observer.onPause(case)
+            if (state != Player.STATE_BUFFERING && state != Player.STATE_ENDED) return
+            observers.forEach {
+                when (state) {
+                    Player.STATE_BUFFERING -> it.onBuffering()
+                    Player.STATE_ENDED -> it.onEnd()
+                    else -> Unit
                 }
             }
         }
 
         override fun onPlayerError(error: ExoPlaybackException) {
             observers.forEach {
-                it.onPause(DivVideoPauseReason.ERROR)
+                it.onFatal()
             }
         }
     }
@@ -74,7 +71,7 @@ class ExoDivPlayer(
 
     private fun updatePlaybackTime() {
         observers.forEach {
-            it.onCurrentTimeUpdate(player.currentPosition)
+            it.onCurrentTimeChange(player.currentPosition)
         }
     }
 

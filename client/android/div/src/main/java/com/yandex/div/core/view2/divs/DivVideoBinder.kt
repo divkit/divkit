@@ -5,7 +5,6 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
-import com.yandex.div.core.player.DivVideoPauseReason
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.view2.Div2View
@@ -52,25 +51,21 @@ internal class DivVideoBinder @Inject constructor(
         baseBinder.bindView(view, div, oldDiv, divView)
 
         val playerListener = object : DivPlayer.Observer {
-            override fun onResume() {
+            override fun onPlay() {
                 div.resumeActions?.forEach { divAction ->
                     divView.let { divActionHandler.handleAction(divAction, it) }
                 }
             }
 
-            override fun onPause(reason: DivVideoPauseReason) {
-                when (reason) {
-                    DivVideoPauseReason.BUFFER_OVER -> {
-                        div.bufferingActions?.forEach { divAction ->
-                            divView.let { divActionHandler.handleAction(divAction, it) }
-                        }
-                    }
-                    DivVideoPauseReason.VIDEO_OVER -> {
-                        div.endActions?.forEach { divAction ->
-                            divView.let { divActionHandler.handleAction(divAction, it) }
-                        }
-                    }
-                    else -> Unit
+            override fun onBuffering() {
+                div.bufferingActions?.forEach { divAction ->
+                    divView.let { divActionHandler.handleAction(divAction, it) }
+                }
+            }
+
+            override fun onEnd() {
+                div.endActions?.forEach { divAction ->
+                    divView.let { divActionHandler.handleAction(divAction, it) }
                 }
             }
         }
@@ -97,7 +92,7 @@ internal class DivVideoBinder @Inject constructor(
 
             override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 player.addObserver(object : DivPlayer.Observer {
-                    override fun onCurrentTimeUpdate(timeMs: Long) {
+                    override fun onCurrentTimeChange(timeMs: Long) {
                         valueUpdater(timeMs)
                     }
                 })
