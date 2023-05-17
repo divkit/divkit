@@ -815,8 +815,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val layoutDirection = ViewCompat.getLayoutDirection(this)
             val absoluteGravity = GravityCompat.getAbsoluteGravity(gravity, layoutDirection)
             val childLeft = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-                Gravity.CENTER_HORIZONTAL ->
-                    paddingLeft + (childSpace - childWidth) / 2 + lp.leftMargin - lp.rightMargin
+                Gravity.CENTER_HORIZONTAL -> {
+                    paddingLeft + (childSpace - childWidth + lp.leftMargin - lp.rightMargin) / 2
+                }
                 Gravity.RIGHT -> childRight - childWidth - lp.rightMargin
                 Gravity.LEFT -> paddingLeft + lp.leftMargin
                 else -> paddingLeft + lp.leftMargin
@@ -890,23 +891,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                         childTop += maxBaselineAscent - childBaseline - lp.topMargin
                     }
                 }
-                Gravity.CENTER_VERTICAL ->
-                    // Removed support for baseline alignment when layout_gravity or
-                    // gravity == center_vertical. See bug #1038483.
-                    // Keep the code around if we need to re-enable this feature
-                    // if (childBaseline != -1) {
-                    //     // Align baselines vertically only if the child is smaller than us
-                    //     if (childSpace - childHeight > 0) {
-                    //         childTop = paddingTop + (childSpace / 2) - childBaseline;
-                    //     } else {
-                    //         childTop = paddingTop + (childSpace - childHeight) / 2;
-                    //     }
-                    // } else {
-                    childTop = paddingTop + (childSpace - childHeight) / 2 +
-                        lp.topMargin - lp.bottomMargin
-                Gravity.BOTTOM -> {
-                    childTop = childBottom - childHeight - lp.bottomMargin
+                Gravity.CENTER_VERTICAL -> {
+                    childTop = paddingTop + (childSpace - childHeight + lp.topMargin - lp.bottomMargin) / 2
                 }
+                Gravity.BOTTOM -> childTop = childBottom - childHeight - lp.bottomMargin
                 else -> childTop = paddingTop
             }
             if (hasDividerBeforeChildAt(childIndex)) {

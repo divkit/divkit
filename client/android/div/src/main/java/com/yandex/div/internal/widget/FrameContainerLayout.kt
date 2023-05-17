@@ -291,14 +291,16 @@ open class FrameContainerLayout @JvmOverloads constructor(
             val absoluteGravity = Gravity.getAbsoluteGravity(lp.gravity, layoutDirection)
             val verticalGravity = lp.gravity and Gravity.VERTICAL_GRAVITY_MASK
             val childLeft = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-                Gravity.CENTER_HORIZONTAL -> parentLeft + (parentRight - parentLeft - width) / 2 +
-                        lp.leftMargin - lp.rightMargin
+                Gravity.CENTER_HORIZONTAL -> {
+                    parentLeft + (parentRight - parentLeft - width + lp.leftMargin - lp.rightMargin) / 2
+                }
                 Gravity.RIGHT -> parentRight - width - lp.rightMargin
                 else -> parentLeft + lp.leftMargin
             }
             val childTop = when (verticalGravity) {
-                Gravity.CENTER_VERTICAL -> parentTop + (parentBottom - parentTop - height) / 2 +
-                        lp.topMargin - lp.bottomMargin
+                Gravity.CENTER_VERTICAL -> {
+                    parentTop + (parentBottom - parentTop - height + lp.topMargin - lp.bottomMargin) / 2
+                }
                 Gravity.BOTTOM -> parentBottom - height - lp.bottomMargin
                 else -> parentTop + lp.topMargin
             }
