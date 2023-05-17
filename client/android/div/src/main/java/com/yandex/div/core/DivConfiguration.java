@@ -51,8 +51,6 @@ public class DivConfiguration {
     private final DivCustomViewFactory mDivCustomViewFactory;
     @Nullable
     private final DivCustomViewAdapter mDivCustomViewAdapter;
-    @Nullable
-    private final DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
     @NonNull
     private final DivPlayerFactory mDivPlayerFactory;
     @NonNull
@@ -96,7 +94,6 @@ public class DivConfiguration {
             @NonNull DivVisibilityChangeListener divVisibilityChangeListener,
             @NonNull DivCustomViewFactory divCustomViewFactory,
             @Nullable DivCustomViewAdapter divCustomViewAdapter,
-            @Nullable DivCustomContainerViewAdapter divCustomContainerViewAdapter,
             @NonNull DivPlayerFactory divPlayerFactory,
             @NonNull DivTooltipRestrictor tooltipRestrictor,
             @NonNull List<DivExtensionHandler> extensionHandlers,
@@ -128,7 +125,6 @@ public class DivConfiguration {
         mDivVisibilityChangeListener = divVisibilityChangeListener;
         mDivCustomViewFactory = divCustomViewFactory;
         mDivCustomViewAdapter = divCustomViewAdapter;
-        mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
         mDivPlayerFactory = divPlayerFactory;
         mTooltipRestrictor = tooltipRestrictor;
         mExtensionHandlers = extensionHandlers;
@@ -209,12 +205,6 @@ public class DivConfiguration {
     @Nullable
     public DivCustomViewAdapter getDivCustomViewAdapter() {
         return mDivCustomViewAdapter;
-    }
-
-    @Provides
-    @Nullable
-    public DivCustomContainerViewAdapter getDivCustomContainerViewAdapter() {
-        return mDivCustomContainerViewAdapter;
     }
 
     @Provides
@@ -363,8 +353,6 @@ public class DivConfiguration {
         @Nullable
         private DivCustomViewAdapter mDivCustomViewAdapter;
         @Nullable
-        private DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
-        @Nullable
         private DivPlayerFactory mDivPlayerFactory;
         @Nullable
         private DivTooltipRestrictor mTooltipRestrictor;
@@ -459,7 +447,7 @@ public class DivConfiguration {
         }
 
         /**
-         * @deprecated use {@link #divCustomContainerViewAdapter}
+         * @deprecated use {@link #divCustomViewAdapter}
          */
         @Deprecated
         @NonNull
@@ -468,20 +456,9 @@ public class DivConfiguration {
             return this;
         }
 
-        /**
-         * @deprecated use {@link #divCustomContainerViewAdapter}
-         */
-        @Deprecated
         @NonNull
         public Builder divCustomViewAdapter(@NonNull DivCustomViewAdapter divCustomViewAdapter) {
             mDivCustomViewAdapter = divCustomViewAdapter;
-            return this;
-        }
-
-        @NonNull
-        public Builder divCustomContainerViewAdapter(
-                @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter) {
-            mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
             return this;
         }
 
@@ -628,7 +605,6 @@ public class DivConfiguration {
                             DivVisibilityChangeListener.STUB : mDivVisibilityChangeListener,
                     mDivCustomViewFactory == null ? DivCustomViewFactory.STUB : mDivCustomViewFactory,
                     mDivCustomViewAdapter,
-                    mDivCustomContainerViewAdapter,
                     mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,

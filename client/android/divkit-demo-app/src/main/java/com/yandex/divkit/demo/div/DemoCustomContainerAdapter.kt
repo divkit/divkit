@@ -10,14 +10,13 @@ import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter.Companion.getDivChildFactory
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivCustom
 
-class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
+class DemoCustomContainerAdapter: DivCustomViewAdapter {
 
     private val factories = mapOf(
         "new_custom_card_1" to { context: Context -> context.createCustomCard() },
@@ -28,7 +27,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     override fun isCustomTypeSupported(type: String): Boolean = type in factories.keys
     override fun release(view: View, div: DivCustom) = Unit
 
-    override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+    override fun createView(div: DivCustom, divView: Div2View): View {
         val customView = factories[div.customType]?.invoke(divView.context)
             ?: throw IllegalStateException("Can not create view for unsupported custom type ${div.customType}")
         if (div.customType == "new_custom_container_1" && div.items != null) {
@@ -44,7 +43,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
         return customView
     }
 
-    override fun bindView(customView: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
+    override fun bindView(customView: View, div: DivCustom, divView: Div2View) {
         when(div.customType) {
             "new_custom_container_1" -> {
                 if (div.items != null && customView is ViewGroup) {

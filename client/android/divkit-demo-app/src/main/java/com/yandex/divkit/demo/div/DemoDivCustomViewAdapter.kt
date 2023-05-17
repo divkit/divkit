@@ -3,10 +3,8 @@ package com.yandex.divkit.demo.div
 import android.content.Context
 import android.util.Log
 import android.view.View
-import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.rive.OkHttpDivRiveNetworkDelegate
 import com.yandex.div.rive.RiveCustomViewAdapter
@@ -20,7 +18,7 @@ private const val TAG = "DivCustomViewAdapter"
 class DemoDivCustomViewAdapter(
     baseContext: Context,
     videoCustomViewController: VideoCustomViewController
-): DivCustomContainerViewAdapter {
+): DivCustomViewAdapter {
 
     private val demoCustomContainerAdapter: DemoCustomContainerAdapter = DemoCustomContainerAdapter()
     private val videoCustomAdapter = VideoCustomAdapter(videoCustomViewController)
@@ -39,18 +37,18 @@ class DemoDivCustomViewAdapter(
         return DivPreloader.PreloadReference.EMPTY
     }
 
-    override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+    override fun createView(div: DivCustom, divView: Div2View): View {
         for (adapter in adapters) {
             if (adapter.isCustomTypeSupported(div.customType)) {
-                return adapter.createView(div, divView, path)
+                return adapter.createView(div, divView)
             }
         }
-        return demoCustomContainerAdapter.createView(div, divView, path)
+        return demoCustomContainerAdapter.createView(div, divView)
     }
 
-    override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
+    override fun bindView(view: View, div: DivCustom, divView: Div2View) {
         Log.d(TAG, "binding view ${div.id} of type ${div.customType}")
-        dispatch(div) { bindView(view, div, divView, path) }
+        dispatch(div) { bindView(view, div, divView) }
     }
 
     override fun isCustomTypeSupported(type: String): Boolean = adapters.any { it.isCustomTypeSupported(type) }
@@ -60,7 +58,7 @@ class DemoDivCustomViewAdapter(
         Log.d(TAG, "custom view released!")
     }
 
-    private inline fun dispatch(div: DivCustom, block: DivCustomContainerViewAdapter.() -> Unit) {
+    private inline fun dispatch(div: DivCustom, block: DivCustomViewAdapter.() -> Unit) {
         for (adapter in adapters) {
             if (adapter.isCustomTypeSupported(div.customType)) {
                 block(adapter)

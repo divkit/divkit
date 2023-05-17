@@ -6,8 +6,6 @@ import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
-
-import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.experiments.Experiment;
@@ -86,9 +84,8 @@ abstract class Div2Module {
     static DivPreloader provideDivPreloader(
             @NonNull DivImagePreloader imagePreloader,
             @Nullable DivCustomViewAdapter customViewAdapter,
-            @Nullable DivCustomContainerViewAdapter customContainerViewAdapter,
             @NonNull DivExtensionController extensionController
     ) {
-        return new DivPreloader(imagePreloader, customViewAdapter, customContainerViewAdapter, extensionController);
+        return new DivPreloader(imagePreloader, customViewAdapter, extensionController);
     }
 }

@@ -5,7 +5,7 @@ import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivCustom
 
-@Deprecated("deprecated", replaceWith = ReplaceWith("DivCustomContainerViewAdapter"))
+@PublicApi
 interface DivCustomViewAdapter {
 
     /**

@@ -104,7 +104,7 @@ internal class DivBinder @Inject constructor(
             is Div.Pager -> bindPager(view, div.value, divView, path)
             is Div.Tabs -> bindTabs(view, div.value, divView, path)
             is Div.State -> bindState(view, div.value, divView, path)
-            is Div.Custom -> bindCustom(view, div.value, divView, path)
+            is Div.Custom -> bindCustom(view, div.value, divView)
             is Div.Indicator -> bindIndicator(view, div.value, divView)
             is Div.Slider -> bindSlider(view, div.value, divView)
             is Div.Input -> bindInput(view, div.value, divView)
@@ -163,8 +163,8 @@ internal class DivBinder @Inject constructor(
         stateBinder.bindView(view as DivStateLayout, data, divView, path)
     }
 
-    private fun bindCustom(view: View, data: DivCustom, divView: Div2View, path: DivStatePath) {
-        customBinder.bindView(view, data, divView, path)
+    private fun bindCustom(view: View, data: DivCustom, divView: Div2View) {
+        customBinder.bindView(view, data, divView)
     }
 
     private fun bindIndicator(view: View, data: DivIndicator, divView: Div2View) {

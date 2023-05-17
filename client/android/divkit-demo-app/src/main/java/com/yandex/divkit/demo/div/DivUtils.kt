@@ -39,7 +39,7 @@ fun divConfiguration(
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
         .divCustomViewFactory(DemoDivCustomViewFactory())
-        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
+        .divCustomViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableAccessibility(true)

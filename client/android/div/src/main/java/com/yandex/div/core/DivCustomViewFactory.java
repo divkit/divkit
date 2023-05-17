@@ -8,7 +8,7 @@ import com.yandex.div2.DivCustom;
 
 /**
  * Used to implement host-specific views
- * @deprecated use {@link DivCustomContainerChildFactory}.
+ * @deprecated use {@link DivCustomViewAdapter}.
  */
 @Deprecated
 public interface DivCustomViewFactory {

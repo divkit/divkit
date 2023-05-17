@@ -89,7 +89,6 @@ internal object DivPathUtils {
             is DivGrid -> value.items.findRecursively(divId)
             is DivGallery -> value.items.findRecursively(divId)
             is DivPager -> value.items.findRecursively(divId)
-            is DivCustom -> value.items?.findRecursively(divId)
             is DivText, is DivImage, is DivSlider, is DivInput,
             is DivGifImage, is DivIndicator, is DivSeparator, is DivSelect -> null
             else -> {

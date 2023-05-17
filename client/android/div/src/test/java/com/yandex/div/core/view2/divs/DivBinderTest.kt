@@ -53,7 +53,7 @@ open class DivBinderTest {
     private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(
-        ReleaseViewVisitor(divView, null, null,
+        ReleaseViewVisitor(divView, null,
             divExtensionController)
     ).apply {
         whenever(divView.releaseViewVisitor).doReturn(this)

@@ -5,10 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import app.rive.runtime.kotlin.core.Rive
-import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivCustom
 import java.util.concurrent.ExecutorService
@@ -23,7 +21,7 @@ class RiveCustomViewAdapter private constructor(
     private val loadExecutor: ExecutorService,
     private val logger: DivRiveLogger,
     localResProvider: DivRiveLocalResProvider
-) : DivCustomContainerViewAdapter {
+) : DivCustomViewAdapter {
     private val repo = DivRiveRepository(maxCacheSize, context, networkDelegate, localResProvider)
     private val handler = Handler(Looper.getMainLooper())
     private val holderMap = mutableMapOf<DivCustom, RiveAnimationLoadHolder>()
@@ -38,11 +36,11 @@ class RiveCustomViewAdapter private constructor(
         return DivPreloader.PreloadReference { loader.cancel() }
     }
 
-    override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+    override fun createView(div: DivCustom, divView: Div2View): View {
         return DivRiveContainer(divView.context)
     }
 
-    override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
+    override fun bindView(view: View, div: DivCustom, divView: Div2View) {
         if (view is DivRiveContainer) {
             getLoader(div).setView(view)
         }
