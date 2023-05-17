@@ -2007,49 +2007,33 @@
     "en": "Actions that are performed when it is impossible to continue playback due to an error in the player.",
     "ru": "Действия, которые выполняются, когда невозможно продолжить воспроизведение из-за ошибки плеера."
   },
-  "div_video_stream": {
-    "en": "Data for stream display.",
-    "ru": "Данные для показа видео."
+  "div_video_source": {
+    "en": "Description of a single media file. Contains a link to the source, mime type, bitrate, resolution.",
+    "ru": "Описание одного медиа файла. Содержит ссылку на источник, mime тип, битрейт, разрешение."
   },
-  "div_video_stream_url": {
-    "en": "Contains a link to the stream.",
-    "ru": "Содержит ссылку на стрим."
+  "div_video_source_mime_type": {
+    "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
+    "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для медиа файла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
   },
-  "div_video_video": {
-    "en": "Data for video display.",
-    "ru": "Данные для показа видео."
+  "div_video_source_bitrate": {
+    "en": "Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.",
+    "ru": "Свойство медиафайла, которое определяет скорость передачи данных в потоке видео. Битрейт измеряется в килобитах в секунду (kbps) и указывает, сколько данных передается за единицу времени."
   },
-  "div_video_video_data": {
-    "en": "Video content.",
-    "ru": "Содержимое видео."
+  "div_video_source_resolution": {
+    "en": "Media file Resolution.",
+    "ru": "Разрешение медиа файла."
   },
-  "div_video_video_source": {
-    "en": "Description of one video. Contains a link to the video, codec, resolution.",
-    "ru": "Описание одного видео. Содержит ссылку на видео, кодек, разрешение."
+  "div_video_source_resolution_height": {
+    "en": "Contains information about the resolution height of the Media file.",
+    "ru": "Содержит информацию о высоте разрешения медиа файла."
   },
-  "div_video_video_source_codec": {
-    "en": "Specifies the codec (encoder/decoder) used for the video file.",
-    "ru": "Определяет используемый кодек (кодировщик/декодировщик) для видеофайла."
-  },
-  "div_video_video_source_mime_type": {
-    "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the video file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
-    "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для видеофайла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
-  },
-  "div_video_video_source_resolution": {
-    "en": "Video resolution.",
-    "ru": "Разрешение видео."
-  },
-  "div_video_video_source_resolution_height": {
-    "en": "Contains information about the resolution height of the video file.",
-    "ru": "Содержит информацию о высоте разрешения видеофайла."
-  },
-  "div_video_video_source_resolution_width": {
+  "div_video_source_resolution_width": {
     "en": "Contains information about the resolution width of the video file.",
-    "ru": "Содержит информацию о ширине разрешения видеофайла."
+    "ru": "Содержит информацию о ширине разрешения медиа файла."
   },
-  "div_video_video_source_url": {
-    "en": "The property contains a link to a video file available for playback or download.",
-    "ru": "Свойство содержит ссылку на видеофайл, доступного для воспроизведения или загрузки."
+  "div_video_source_url": {
+    "en": "The property contains a link to a media file available for playback or download.",
+    "ru": "Свойство содержит ссылку на медиа файл, доступного для воспроизведения или загрузки."
   },
   "div_visibility": {
     "en": "Element visibility:<li>`visible` — the element is visible;</li><li>`invisible` — the element is invisible, but a place is reserved for it;</li><li>`gone` — the element is invisible, a place isn't reserved.</li>",

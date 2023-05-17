@@ -13,8 +13,13 @@
             "video"
           ]
         },
-        "video_data": {
-          "$ref": "div-video-data.json"
+        "video_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "div-video-source.json",
+            "$description": "translations.json#/div_video_source"
+          },
+          "minItems": 1
         },
         "repeatable": {
           "$ref": "common.json#/boolean_int",
@@ -89,6 +94,6 @@
   ],
   "required": [
     "type",
-    "video_data"
+    "video_sources"
   ]
 }

@@ -12,14 +12,13 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
-import com.yandex.div2.DivVideoData
 import javax.inject.Inject
 
 @DivScope
 internal class DivVideoBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
-    private val divActionHandler: DivActionHandler,
+    private val divActionHandler: DivActionHandler
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
         val oldDiv = view.div
@@ -77,9 +76,9 @@ internal class DivVideoBinder @Inject constructor(
     }
 
     private fun DivVideoView.observeElapsedTime(
-            div: DivVideo,
-            divView: Div2View,
-            player: DivPlayer
+        div: DivVideo,
+        divView: Div2View,
+        player: DivPlayer
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -104,28 +103,17 @@ internal class DivVideoBinder @Inject constructor(
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
-    return when (this.videoData) {
-        is DivVideoData.Video -> {
-            (this.videoData as DivVideoData.Video).value.videoSources.map {
-                DivVideoSource.FileVideoSource(
-                    url = it.url.evaluate(resolver),
-                    codec = it.codec?.evaluate(resolver),
-                    mimeType = it.mimeType?.evaluate(resolver),
-                    resolution = it.resolution?.let { resolution ->
-                        DivVideoResolution(
-                                resolution.width.evaluate(resolver).toInt(),
-                                resolution.height.evaluate(resolver).toInt()
-                        )
-                    }
+    return videoSources.map {
+        DivVideoSource(
+            url = it.url.evaluate(resolver),
+            mimeType = it.mimeType.evaluate(resolver),
+            resolution = it.resolution?.let { resolution ->
+                DivVideoResolution(
+                    resolution.width.evaluate(resolver).toInt(),
+                    resolution.height.evaluate(resolver).toInt()
                 )
-            }
-        }
-        is DivVideoData.Stream -> {
-            listOf(
-                DivVideoSource.StreamVideoSource(
-                    url = (this.videoData as DivVideoData.Stream).value.url.evaluate(resolver)
-                )
-            )
-        }
+            },
+            bitrate = it.bitrate?.evaluate(resolver)
+        )
     }
 }

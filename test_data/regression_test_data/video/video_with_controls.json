@@ -5,6 +5,7 @@
       "aspect": {
         "ratio": 1
       },
+      "scale": "fit",
       "width": {
         "type": "fixed",
         "value": 44
@@ -12,7 +13,7 @@
     }
   },
   "card": {
-    "log_id": "news",
+    "log_id": "video",
     "variables": [
       {
         "name": "video_time",
@@ -30,15 +31,13 @@
             {
               "type": "video",
               "id": "bears_video",
-              "video_data": {
-                "type": "video",
-                "video_sources": [
-                  {
-                    "type": "video_source",
-                    "url": "https://yastatic.net/s3/home/divkit/bears.mp4"
-                  }
-                ]
-              },
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                  "mime_type": "video/mp4"
+                }
+              ],
               "repeatable": true,
               "autostart": true,
               "muted": true,

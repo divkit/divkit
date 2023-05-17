@@ -11,11 +11,11 @@
         },
         "width": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_video_video_source_resolution_width"
+          "$description": "translations.json#/div_video_source_resolution_width"
         },
         "height": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_video_video_source_resolution_height"
+          "$description": "translations.json#/div_video_source_resolution_height"
         }
       },
       "required": [
@@ -35,23 +35,24 @@
     },
     "url": {
       "$ref": "common.json#/url",
-      "$description": "translations.json#/div_video_video_source_url"
+      "$description": "translations.json#/div_video_source_url"
     },
     "resolution": {
       "$ref": "#/definitions/resolution",
-      "$description": "translations.json#/div_video_video_source_resolution"
-    },
-    "codec": {
-      "type": "string",
-      "$description": "translations.json#/div_video_video_source_codec"
+      "$description": "translations.json#/div_video_source_resolution"
     },
     "mime_type": {
       "type": "string",
-      "$description": "translations.json#/div_video_video_source_mime_type"
+      "$description": "translations.json#/div_video_source_mime_type"
+    },
+    "bitrate": {
+      "type": "integer",
+      "$description": "translations.json#/div_video_source_bitrate"
     }
   },
   "required": [
     "type",
-    "url"
+    "url",
+    "mime_type"
   ]
 }
