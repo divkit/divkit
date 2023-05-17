@@ -73,6 +73,14 @@
       "minItems": 1,
       "$description": "translations.json#/div_base_visibility_actions"
     },
+    "disappear_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-disappear-action.json"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_base_disappear_actions"
+    },
     "tooltips": {
       "type": "array",
       "items": {

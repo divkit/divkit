@@ -283,6 +283,10 @@
     "en": "Actions when an element appears on the screen.",
     "ru": "Действия при появлении элемента на экране."
   },
+  "div_base_disappear_actions": {
+    "en": "Actions when an element disappears from the screen.",
+    "ru": "Действия при исчезновении элемента с экрана."
+  },
   "div_base_width": {
     "en": "Element width.",
     "ru": "Ширина элемента."
@@ -2043,7 +2047,7 @@
     "en": "Actions performed when an element becomes visible.",
     "ru": "Действия, которые выполняются, когда элемент становится видимым."
   },
-  "div_visibility_action_log_limit": {
+  "div_log_limit": {
     "en": "Limit on the number of loggings. If `0`, the limit is removed.",
     "ru": "Ограничение на количество логирований. При `0` ограничение снимается."
   },
@@ -2054,6 +2058,18 @@
   "div_visibility_action_visibility_percentage": {
     "en": "Percentage of the visible part of an element that triggers `visibility-action`.",
     "ru": "Процент видимой части элемента, при котором срабатывает `visibility-action`."
+  },
+  "div_disappear_action": {
+    "en": "Actions performed when an element becomes invisible.",
+    "ru": "Действия, которые выполняются, когда элемент становится невидимым."
+  },
+  "div_disappear_action_disappear_duration": {
+    "en": "Time in milliseconds during which an element must be invisible to trigger `disappear-action`.",
+    "ru": "Время в миллисекундах, в течение которого элемент должен быть не виден, чтобы сработал `disappear-action`."
+  },
+  "div_disappear_action_visibility_percentage": {
+    "en": "Percentage of the visible part of an element that triggers `disappear-action`.",
+    "ru": "Процент видимой части элемента, при котором срабатывает `disappear-action`."
   },
   "div_wrap_content_size": {
     "en": "The size of an element adjusts to its contents.",

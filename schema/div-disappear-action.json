@@ -5,18 +5,18 @@
     },
     {
       "type": "object",
-      "$description": "translations.json#/div_visibility_action",
+      "$description": "translations.json#/div_disappear_action",
       "properties": {
         "visibility_percentage": {
           "type": "integer",
-          "constraint": "number > 0 && number <= 100",
-          "default_value": "50",
-          "$description": "translations.json#/div_visibility_action_visibility_percentage"
+          "constraint": "number >= 0 && number < 100",
+          "default_value": "0",
+          "$description": "translations.json#/div_disappear_action_visibility_percentage"
         },
-        "visibility_duration": {
+        "disappear_duration": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "800",
-          "$description": "translations.json#/div_visibility_action_visibility_duration"
+          "$description": "translations.json#/div_disappear_action_disappear_duration"
         },
         "log_limit": {
           "$ref": "common.json#/non_negative_integer",
