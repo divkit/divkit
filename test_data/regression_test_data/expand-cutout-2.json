@@ -102,7 +102,7 @@
                         ]
                       },
                       {
-                        "type": "container",
+                        "type": "separator",
                         "margins": {
                           "bottom": 8,
                           "top": 10,
@@ -125,10 +125,12 @@
                             "color": "#ddffee"
                           }
                         ],
+                        "delimiter_style": {
+                          "color": "#ddffee"
+                        },
                         "visibility_action": {
                           "log_id": "content_item_show"
-                        },
-                        "items": []
+                        }
                       }
                     ]
                   }

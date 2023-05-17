@@ -104,7 +104,6 @@
               "id": "item_two",
               "text": "Old - 'data_change', new - []",
               "transition_animation_selector": "data_change",
-              "transition_triggers": [],
               "transition_in": {
                 "type": "fade",
                 "alpha": 0,

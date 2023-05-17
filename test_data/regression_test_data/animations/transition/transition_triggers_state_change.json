@@ -150,7 +150,6 @@
                     "content_alignment_vertical": "center",
                     "preload_required": 1,
                     "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
-                    "transition_triggers": [],
                     "transition_in": {
                       "type": "fade",
                       "alpha": 1.0,

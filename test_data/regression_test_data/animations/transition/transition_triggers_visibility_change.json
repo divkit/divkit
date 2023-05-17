@@ -311,7 +311,6 @@
               },
               "alignment_horizontal": "center",
               "alignment_vertical": "center",
-              "transition_triggers": [],
               "transition_in": {
                 "type": "fade",
                 "alpha": 0,
