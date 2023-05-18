@@ -3,11 +3,15 @@ import UIKit
 
 public final class DefaultPlayerView: UIView, PlayerView {
   public func attach(player: Player) {
-    guard let player = (player as? DefaultPlayer)?.player else {
+    guard let engine = (player as? VideoEngineProvider)?.videoEngine else {
       assertionFailure("Can't use DefaultPlayerView with not with DefaultPlayer")
       return
     }
-    player.bind(to: playerLayer)
+
+    switch engine.type {
+      case let .avPlayer(player):
+        player.bind(to: playerLayer)
+    }
   }
 
   private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }

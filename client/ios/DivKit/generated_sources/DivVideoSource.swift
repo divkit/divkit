@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivVideoDataVideoSource {
+public final class DivVideoSource {
   public final class Resolution {
     public static let type: String = "resolution"
     public let height: Expression<Int> // constraint: number > 0
@@ -34,13 +34,13 @@ public final class DivVideoDataVideoSource {
   }
 
   public static let type: String = "video_source"
-  public let codec: Expression<String>?
-  public let mimeType: Expression<String>?
+  public let bitrate: Expression<Int>?
+  public let mimeType: Expression<String>
   public let resolution: Resolution?
   public let url: Expression<URL>
 
-  public func resolveCodec(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: codec, initializer: { $0 })
+  public func resolveBitrate(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumericValue(expression: bitrate)
   }
 
   public func resolveMimeType(_ resolver: ExpressionResolver) -> String? {
@@ -51,22 +51,16 @@ public final class DivVideoDataVideoSource {
     resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
   }
 
-  static let codecValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
-  static let mimeTypeValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
-  static let resolutionValidator: AnyValueValidator<DivVideoDataVideoSource.Resolution> =
+  static let resolutionValidator: AnyValueValidator<DivVideoSource.Resolution> =
     makeNoOpValueValidator()
 
   init(
-    codec: Expression<String>? = nil,
-    mimeType: Expression<String>? = nil,
+    bitrate: Expression<Int>? = nil,
+    mimeType: Expression<String>,
     resolution: Resolution? = nil,
     url: Expression<URL>
   ) {
-    self.codec = codec
+    self.bitrate = bitrate
     self.mimeType = mimeType
     self.resolution = resolution
     self.url = url
@@ -74,10 +68,10 @@ public final class DivVideoDataVideoSource {
 }
 
 #if DEBUG
-extension DivVideoDataVideoSource: Equatable {
-  public static func ==(lhs: DivVideoDataVideoSource, rhs: DivVideoDataVideoSource) -> Bool {
+extension DivVideoSource: Equatable {
+  public static func ==(lhs: DivVideoSource, rhs: DivVideoSource) -> Bool {
     guard
-      lhs.codec == rhs.codec,
+      lhs.bitrate == rhs.bitrate,
       lhs.mimeType == rhs.mimeType,
       lhs.resolution == rhs.resolution
     else {
@@ -93,12 +87,12 @@ extension DivVideoDataVideoSource: Equatable {
 }
 #endif
 
-extension DivVideoDataVideoSource: Serializable {
+extension DivVideoSource: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["codec"] = codec?.toValidSerializationValue()
-    result["mime_type"] = mimeType?.toValidSerializationValue()
+    result["bitrate"] = bitrate?.toValidSerializationValue()
+    result["mime_type"] = mimeType.toValidSerializationValue()
     result["resolution"] = resolution?.toDictionary()
     result["url"] = url.toValidSerializationValue()
     return result
@@ -106,8 +100,8 @@ extension DivVideoDataVideoSource: Serializable {
 }
 
 #if DEBUG
-extension DivVideoDataVideoSource.Resolution: Equatable {
-  public static func ==(lhs: DivVideoDataVideoSource.Resolution, rhs: DivVideoDataVideoSource.Resolution) -> Bool {
+extension DivVideoSource.Resolution: Equatable {
+  public static func ==(lhs: DivVideoSource.Resolution, rhs: DivVideoSource.Resolution) -> Bool {
     guard
       lhs.height == rhs.height,
       lhs.width == rhs.width
@@ -119,7 +113,7 @@ extension DivVideoDataVideoSource.Resolution: Equatable {
 }
 #endif
 
-extension DivVideoDataVideoSource.Resolution: Serializable {
+extension DivVideoSource.Resolution: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type

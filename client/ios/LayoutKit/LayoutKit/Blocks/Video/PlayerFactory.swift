@@ -2,7 +2,7 @@ import Foundation
 import CoreMedia
 
 public protocol PlayerFactory {
-  func makePlayer(data: PlayerData?, config: PlaybackConfig?) -> Player
+  func makePlayer(data: VideoData?, config: PlaybackConfig?) -> Player
   func makePlayerView() -> PlayerView
 }
 
@@ -27,7 +27,7 @@ public struct PlaybackConfig: Equatable {
     self.settingsPayload = settingsPayload
   }
 
-  static let `default` = PlaybackConfig(
+  public static let `default` = PlaybackConfig(
     autoPlay: true,
     repeatable: false,
     isMuted: false,

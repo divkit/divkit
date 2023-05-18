@@ -3,33 +3,21 @@ import Foundation
 import AVFoundation
 
 public protocol Player {
-  var signal: Signal<Event> { get }
+  var signal: Signal<PlayerEvent> { get }
 
-  func set(data: PlayerData, config: PlaybackConfig)
+  func set(data: VideoData, config: PlaybackConfig)
   func play()
   func pause()
   func set(isMuted: Bool)
   func seek(to position: CMTime)
 }
 
-public enum Event {
-  case bufferOver
-  case error
-  case videoOver
-  case currentTimeUpdate(time: Int)
-  case started
-}
+public enum PlayerEvent {
+  case pause
+  case buffering
+  case play
+  case end
+  case fatal
 
-public enum PlayerData: Equatable {
-  case video(Video)
-  case stream(URL)
-
-  public var playerItem: AVPlayerItem {
-    switch self {
-    case .video(let video):
-      return AVPlayerItem(url: video.url)
-    case .stream(let url):
-      return AVPlayerItem(url: url)
-    }
-  }
+  case currentTimeUpdate(_ ms: Int)
 }

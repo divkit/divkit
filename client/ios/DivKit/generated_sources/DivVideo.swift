@@ -18,12 +18,14 @@ public final class DivVideo: DivBase {
   public let elapsedTimeVariable: String? // at least 1 char
   public let endActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
+  public let fatalActions: [DivAction]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String? // at least 1 char
   public let margins: DivEdgeInsets
   public let muted: Expression<Bool> // default value: false
   public let paddings: DivEdgeInsets
+  public let pauseActions: [DivAction]? // at least 1 elements
   public let playerSettingsPayload: [String: Any]?
   public let preview: Expression<String>? // at least 1 char
   public let repeatable: Expression<Bool> // default value: false
@@ -36,7 +38,7 @@ public final class DivVideo: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
-  public let videoData: DivVideoData
+  public let videoSources: [DivVideoSource] // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
@@ -118,6 +120,9 @@ public final class DivVideo: DivBase {
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
+  static let fatalActionsValidator: AnyArrayValueValidator<DivAction> =
+    makeArrayValidator(minItems: 1)
+
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
@@ -135,6 +140,9 @@ public final class DivVideo: DivBase {
 
   static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
+
+  static let pauseActionsValidator: AnyArrayValueValidator<DivAction> =
+    makeArrayValidator(minItems: 1)
 
   static let playerSettingsPayloadValidator: AnyValueValidator<[String: Any]> =
     makeNoOpValueValidator()
@@ -172,6 +180,9 @@ public final class DivVideo: DivBase {
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
 
+  static let videoSourcesValidator: AnyArrayValueValidator<DivVideoSource> =
+    makeArrayValidator(minItems: 1)
+
   static let visibilityValidator: AnyValueValidator<DivVisibility> =
     makeNoOpValueValidator()
 
@@ -197,12 +208,14 @@ public final class DivVideo: DivBase {
     elapsedTimeVariable: String? = nil,
     endActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
+    fatalActions: [DivAction]? = nil,
     focus: DivFocus? = nil,
     height: DivSize? = nil,
     id: String? = nil,
     margins: DivEdgeInsets? = nil,
     muted: Expression<Bool>? = nil,
     paddings: DivEdgeInsets? = nil,
+    pauseActions: [DivAction]? = nil,
     playerSettingsPayload: [String: Any]? = nil,
     preview: Expression<String>? = nil,
     repeatable: Expression<Bool>? = nil,
@@ -215,7 +228,7 @@ public final class DivVideo: DivBase {
     transitionIn: DivAppearanceTransition? = nil,
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
-    videoData: DivVideoData,
+    videoSources: [DivVideoSource],
     visibility: Expression<DivVisibility>? = nil,
     visibilityAction: DivVisibilityAction? = nil,
     visibilityActions: [DivVisibilityAction]? = nil,
@@ -233,12 +246,14 @@ public final class DivVideo: DivBase {
     self.elapsedTimeVariable = elapsedTimeVariable
     self.endActions = endActions
     self.extensions = extensions
+    self.fatalActions = fatalActions
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.margins = margins ?? DivEdgeInsets()
     self.muted = muted ?? .value(false)
     self.paddings = paddings ?? DivEdgeInsets()
+    self.pauseActions = pauseActions
     self.playerSettingsPayload = playerSettingsPayload
     self.preview = preview
     self.repeatable = repeatable ?? .value(false)
@@ -251,7 +266,7 @@ public final class DivVideo: DivBase {
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
-    self.videoData = videoData
+    self.videoSources = videoSources
     self.visibility = visibility ?? .value(.visible)
     self.visibilityAction = visibilityAction
     self.visibilityActions = visibilityActions
@@ -292,55 +307,57 @@ extension DivVideo: Equatable {
       return false
     }
     guard
+      lhs.fatalActions == rhs.fatalActions,
       lhs.focus == rhs.focus,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.margins == rhs.margins,
-      lhs.muted == rhs.muted,
-      lhs.paddings == rhs.paddings
+      lhs.muted == rhs.muted
     else {
       return false
     }
     guard
-      lhs.preview == rhs.preview,
+      lhs.paddings == rhs.paddings,
+      lhs.pauseActions == rhs.pauseActions,
+      lhs.preview == rhs.preview
+    else {
+      return false
+    }
+    guard
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions
+      lhs.resumeActions == rhs.resumeActions,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
-      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.videoData == rhs.videoData
+      lhs.videoSources == rhs.videoSources,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -366,12 +383,14 @@ extension DivVideo: Serializable {
     result["elapsed_time_variable"] = elapsedTimeVariable
     result["end_actions"] = endActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
+    result["fatal_actions"] = fatalActions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
     result["margins"] = margins.toDictionary()
     result["muted"] = muted.toValidSerializationValue()
     result["paddings"] = paddings.toDictionary()
+    result["pause_actions"] = pauseActions?.map { $0.toDictionary() }
     result["player_settings_payload"] = playerSettingsPayload
     result["preview"] = preview?.toValidSerializationValue()
     result["repeatable"] = repeatable.toValidSerializationValue()
@@ -384,7 +403,7 @@ extension DivVideo: Serializable {
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
-    result["video_data"] = videoData.toDictionary()
+    result["video_sources"] = videoSources.map { $0.toDictionary() }
     result["visibility"] = visibility.toValidSerializationValue()
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }

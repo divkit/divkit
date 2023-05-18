@@ -1,25 +1,30 @@
 import Foundation
 
-public enum VideoData: Equatable {
-  case stream(URL)
-  case video([Video])
+public struct VideoData: Equatable {
+  public let videos: [Video]
+
+  public init(videos: [Video] = []) {
+    self.videos = videos
+  }
 }
 
 public struct Video: Equatable {
-  let url: URL
-  let resolution: CGSize
-  let codec: String?
-  let mimeType: String?
+  public let url: URL
+
+  public let resolution: CGSize?
+  public let bitrate: Double?
+
+  public let mimeType: String
 
   public init(
     url: URL,
-    resolution: CGSize = .zero,
-    codec: String? = nil,
+    resolution: CGSize? = nil,
+    bitrate: Double? = nil,
     mimeType: String? = nil
   ) {
     self.url = url
+    self.bitrate = bitrate
     self.resolution = resolution
-    self.codec = codec
-    self.mimeType = mimeType
+    self.mimeType = mimeType ?? ""
   }
 }

@@ -26,7 +26,7 @@ extension DivVideo: DivBlockModeling {
       Binding<Int>(context: context, name: $0)
     }
     let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
-    let videoData = videoData.makeVideoData(resolver: resolver)
+    let videoData = VideoData(videos: videoSources.map { $0.makeVideo(resolver: resolver) })
 
     let playbackConfig = PlaybackConfig(
       autoPlay: autostart,
@@ -66,27 +66,18 @@ extension DivVideo: DivBlockModeling {
   }
 }
 
-extension DivVideoData {
-  func makeVideoData(resolver: ExpressionResolver) -> VideoData {
-    switch self {
-    case let .divVideoDataStream(stream):
-      return .stream(stream.resolveUrl(resolver)!)
-    case let .divVideoDataVideo(videos):
-      return .video(videos.videoSources.map {
-        let resolution: CGSize? = $0.resolution.flatMap { resolution in
-          CGSize(
-            width: resolution.resolveWidth(resolver) ?? 0,
-            height: resolution.resolveHeight(resolver) ?? 0
-          )
-        }
-        return LayoutKit.Video(
-          url: $0.resolveUrl(resolver)!,
-          resolution: resolution ?? .zero,
-          codec: $0.resolveCodec(resolver),
-          mimeType: $0.resolveMimeType(resolver)
-        )
-      })
+extension DivVideoSource {
+  func makeVideo(resolver: ExpressionResolver) -> Video {
+    let resolution: CGSize? = resolution.flatMap { resolution in
+      CGSize(
+        width: resolution.resolveWidth(resolver) ?? 0,
+        height: resolution.resolveHeight(resolver) ?? 0
+      )
     }
+    return Video(url: resolveUrl(resolver)!,
+                 resolution: resolution,
+                 bitrate: resolveBitrate(resolver).flatMap { Double($0) },
+                 mimeType: resolveMimeType(resolver))
   }
 }
 

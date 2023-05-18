@@ -38,7 +38,6 @@ private final class VideoBlockView: BlockView {
   }
 
   private var model: VideoBlockViewModel = .zero
-  private var needsUpdatePlayerData: Bool = true
   private var playerSignal: Disposable?
 
   private lazy var player: Player? = {
@@ -48,17 +47,18 @@ private final class VideoBlockView: BlockView {
     )
 
     playerSignal = player?.signal.addObserver { [weak self] event in
-      guard let self = self else { return }
-      switch event {
-      case let .currentTimeUpdate(time: time):
-        self.model.elapsedTime?.setValue(time, responder: self)
-      case .videoOver:
-        self.observer?.elementStateChanged(self.state, forPath: self.model.path)
-        self.model.endActions.perform(sendingFrom: self)
-      case .bufferOver, .error:
-        break
-      case .started:
-        break
+      onMainThread {
+        guard let self = self else { return }
+
+        switch event {
+          case let .currentTimeUpdate(time):
+            self.model.elapsedTime?.setValue(Int(time), responder: self)
+          case .end:
+            self.observer?.elementStateChanged(self.state, forPath: self.model.path)
+            self.model.endActions.perform(sendingFrom: self)
+          default: // TODO
+            break
+        }
       }
     }
 
@@ -89,29 +89,12 @@ private final class VideoBlockView: BlockView {
   var playerFactory: PlayerFactory?
   var effectiveBackgroundColor: UIColor?
 
-  private func updatePlayerData() {
-    needsUpdatePlayerData = false
-    switch model.videoData {
-    case let .stream(url):
-      player?.set(data: .stream(url), config: model.playbackConfig)
-    case let .video(video):
-      guard let video = video.min(by: { lhs, rhs in
-        abs(lhs.resolution.area - (videoView?.bounds.size.area ?? 0)) <
-          abs(rhs.resolution.area - (videoView?.bounds.size.area ?? 0))
-      }) else {
-        return
-      }
-      player?.set(data: .video(video), config: model.playbackConfig)
-    }
-  }
-
   func configure(with model: VideoBlockViewModel) {
     let oldValue = self.model
     self.model = model
 
     if model.videoData != oldValue.videoData {
-      needsUpdatePlayerData = true
-      setNeedsLayout()
+      player?.set(data: model.videoData, config: model.playbackConfig)
     }
 
     if oldValue.elapsedTime != model.elapsedTime {
@@ -122,9 +105,6 @@ private final class VideoBlockView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
     videoView?.frame = bounds
-    if needsUpdatePlayerData, videoView?.frame != .zero {
-      updatePlayerData()
-    }
   }
 
   func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
@@ -132,7 +112,7 @@ private final class VideoBlockView: BlockView {
 
 extension VideoBlockViewModel {
   fileprivate static let zero: Self = VideoBlockViewModel(
-    videoData: .video([]),
+    videoData: VideoData(videos: []),
     playbackConfig: .default,
     path: .init("")
   )
