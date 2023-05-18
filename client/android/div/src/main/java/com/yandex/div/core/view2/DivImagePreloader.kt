@@ -10,23 +10,6 @@ import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
-import com.yandex.div2.DivBase
-import com.yandex.div2.DivContainer
-import com.yandex.div2.DivCustom
-import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
-import com.yandex.div2.DivGrid
-import com.yandex.div2.DivImage
-import com.yandex.div2.DivIndicator
-import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
-import com.yandex.div2.DivSelect
-import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivSlider
-import com.yandex.div2.DivState
-import com.yandex.div2.DivTabs
-import com.yandex.div2.DivText
-import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
 private val NO_CALLBACK = DivImagePreloader.Callback {
@@ -39,21 +22,20 @@ class DivImagePreloader @Inject constructor(
     private val imageLoader: DivImageLoader
 ) {
 
-    @Deprecated("deprecated", replaceWith = ReplaceWith("DivPreloader.preload"))
+    @Deprecated("deprecated", replaceWith = ReplaceWith("DivPreloader.preloadImage"))
     fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {
         val downloadCallback = DivPreloader.DownloadCallback(callback.toPreloadCallback())
         val ref = PreloadVisitor(downloadCallback, resolver).preload(div)
         downloadCallback.onFullPreloadStarted()
-        return ref
+        return ref.asTicket()
     }
 
     fun preloadImage(
-        div: DivBase,
+        div: Div,
         resolver: ExpressionResolver,
         callback: DivPreloader.DownloadCallback
     ): List<LoadReference> {
-        val ref = PreloadVisitor(callback, resolver, visitContainers = false).preload(div)
-        return ref
+        return PreloadVisitor(callback, resolver, visitContainers = false).preload(div)
     }
 
     private fun preloadImage(url: String, callback: DivPreloader.DownloadCallback, references: ArrayList<LoadReference>) {
@@ -72,114 +54,88 @@ class DivImagePreloader @Inject constructor(
         private val visitContainers: Boolean = true,
     ) : DivVisitor<Unit>() {
         private val references = ArrayList<LoadReference>()
-        private val ticket = TicketImpl()
-        fun preload(div: Div): Ticket {
-            visit(div, resolver)
-            references.forEach { ticket.addReference(it) }
-            return ticket
-        }
 
-        fun preload(div: DivBase): List<LoadReference> {
+        fun preload(div: Div): List<LoadReference> {
             visit(div, resolver)
             return references
         }
 
-        override fun visit(data: DivText, resolver: ExpressionResolver) {
+        override fun defaultVisit(data: Div, resolver: ExpressionResolver) {
             visitBackground(data, resolver)
-            data.images?.forEach { preloadImage(it.url.evaluate(resolver).toString(), callback, references) }
         }
 
-        override fun visit(data: DivImage, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-            if (data.preloadRequired.evaluate(resolver)) {
-                preloadImage(data.imageUrl.evaluate(resolver).toString(), callback, references)
+        override fun visit(data: Div.Text, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
+            data.value.images?.forEach { preloadImage(it.url.evaluate(resolver).toString(), callback, references) }
+        }
+
+        override fun visit(data: Div.Image, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
+            if (data.value.preloadRequired.evaluate(resolver)) {
+                preloadImage(data.value.imageUrl.evaluate(resolver).toString(), callback, references)
             }
         }
 
-        override fun visit(data: DivGifImage, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-            if (data.preloadRequired.evaluate(resolver)) {
-                preloadImageBytes(data.gifUrl.evaluate(resolver).toString(), callback, references)
+        override fun visit(data: Div.GifImage, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
+            if (data.value.preloadRequired.evaluate(resolver)) {
+                preloadImageBytes(data.value.gifUrl.evaluate(resolver).toString(), callback, references)
             }
         }
 
-        override fun visit(data: DivSeparator, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivContainer, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.Container, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.items.forEach { visit(it, resolver) }
+                data.value.items.forEach { visit(it, resolver) }
             }
         }
 
-        override fun visit(data: DivGrid, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.items.forEach { visit(it, resolver) }
+                data.value.items.forEach { visit(it, resolver) }
             }
         }
 
-        override fun visit(data: DivGallery, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.items.forEach { visit(it, resolver) }
+                data.value.items.forEach { visit(it, resolver) }
             }
         }
 
-        override fun visit(data: DivPager, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.items.forEach { visit(it, resolver) }
+                data.value.items.forEach { visit(it, resolver) }
             }
         }
 
-        override fun visit(data: DivTabs, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.items.forEach { visit(it.div, resolver) }
+                data.value.items.forEach { visit(it.div, resolver) }
             }
         }
 
-        override fun visit(data: DivState, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
+        override fun visit(data: Div.State, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
             if (visitContainers) {
-                data.states.forEach { state -> state.div?.let { div -> visit(div, resolver) } }
+                data.value.states.forEach { state -> state.div?.let { div -> visit(div, resolver) } }
             }
         }
 
-        override fun visit(data: DivCustom, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivIndicator, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivSlider, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivInput, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivSelect, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        override fun visit(data: DivVideo, resolver: ExpressionResolver) {
-            visitBackground(data, resolver)
-        }
-
-        private fun visitBackground(data: DivBase, resolver: ExpressionResolver) {
-            data.background?.forEach { background ->
+        private fun visitBackground(data: Div, resolver: ExpressionResolver) {
+            data.value().background?.forEach { background ->
                 if (background is DivBackground.Image && background.value.preloadRequired.evaluate(resolver)) {
                     preloadImage(background.value.imageUrl.evaluate(resolver).toString(), callback, references)
                 }
             }
         }
+    }
+
+    interface Ticket {
+        fun cancel()
     }
 
     private class TicketImpl : Ticket {
@@ -195,15 +151,17 @@ class DivImagePreloader @Inject constructor(
         }
     }
 
+    internal fun List<LoadReference>.asTicket(): Ticket {
+        return TicketImpl().apply {
+            forEach { addReference(it) }
+        }
+    }
+
     fun interface Callback {
         fun finish(hasErrors: Boolean)
     }
 
     fun Callback.toPreloadCallback(): DivPreloader.Callback {
         return DivPreloader.Callback { hasErrors -> this@toPreloadCallback.finish(hasErrors) }
-    }
-
-    interface Ticket {
-        fun cancel()
     }
 }

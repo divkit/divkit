@@ -13,22 +13,6 @@ import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivContainer
-import com.yandex.div2.DivCustom
-import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
-import com.yandex.div2.DivGrid
-import com.yandex.div2.DivImage
-import com.yandex.div2.DivIndicator
-import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
-import com.yandex.div2.DivSelect
-import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivSlider
-import com.yandex.div2.DivState
-import com.yandex.div2.DivTabs
-import com.yandex.div2.DivText
-import com.yandex.div2.DivVideo
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -80,107 +64,46 @@ class DivPreloader internal constructor(
             return ticket
         }
 
-        override fun visit(data: DivText, resolver: ExpressionResolver) {
+        override fun defaultVisit(data: Div, resolver: ExpressionResolver) {
             imagePreloader?.preloadImage(data, resolver, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
+            extensionController.preprocessExtensions(data.value(), resolver)
         }
 
-        override fun visit(data: DivImage, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Container, resolver: ExpressionResolver) {
+            data.value.items.forEach { visit(it, resolver) }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivGifImage, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
+            data.value.items.forEach { visit(it, resolver) }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivSeparator, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
+            data.value.items.forEach { visit(it, resolver) }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivContainer, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items.forEach { visit(it, resolver) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
+            data.value.items.forEach { visit(it, resolver) }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivGrid, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items.forEach { visit(it, resolver) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {
+            data.value.items.forEach { visit(it.div, resolver) }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivGallery, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items.forEach { visit(it, resolver) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.State, resolver: ExpressionResolver) {
+            data.value.states.forEach { state -> state.div?.let { div -> visit(div, resolver) } }
+            defaultVisit(data, resolver)
         }
 
-        override fun visit(data: DivPager, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items.forEach { visit(it, resolver) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivTabs, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items.forEach { visit(it.div, resolver) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivState, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.states.forEach { state -> state.div?.let { div -> visit(div, resolver) } }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivCustom, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            data.items?.forEach { visit(it, resolver) }
-            customViewAdapter?.preload(data, callback)?.let { ticket.addReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivIndicator, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivSlider, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivInput, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
-        }
-
-        override fun visit(data: DivSelect, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)        }
-
-        override fun visit(data: DivVideo, resolver: ExpressionResolver) {
-            imagePreloader?.preloadImage(data, resolver, downloadCallback)
-                    ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data, resolver)
+        override fun visit(data: Div.Custom, resolver: ExpressionResolver) {
+            data.value.items?.forEach { visit(it, resolver) }
+            customViewAdapter?.preload(data.value, callback)?.let { ticket.addReference(it) }
+            defaultVisit(data, resolver)
         }
     }
 

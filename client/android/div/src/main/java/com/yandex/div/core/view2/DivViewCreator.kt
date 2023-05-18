@@ -29,23 +29,7 @@ import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContainer.Orientation
-import com.yandex.div2.DivCustom
-import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
-import com.yandex.div2.DivGrid
-import com.yandex.div2.DivImage
-import com.yandex.div2.DivIndicator
-import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
-import com.yandex.div2.DivSelect
-import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivSlider
-import com.yandex.div2.DivState
-import com.yandex.div2.DivTabs
-import com.yandex.div2.DivText
-import com.yandex.div2.DivVideo
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -85,57 +69,29 @@ internal class DivViewCreator @Inject constructor(
         }
     }
 
-    override fun visit(data: DivText, resolver: ExpressionResolver): View = viewPool.obtain(TAG_TEXT)
+    override fun defaultVisit(data: Div, resolver: ExpressionResolver): View =
+        viewPool.obtain(data.getTag(resolver))
 
-    override fun visit(data: DivImage, resolver: ExpressionResolver): View = viewPool.obtain(TAG_IMAGE)
+    override fun visit(data: Div.Separator, resolver: ExpressionResolver): View =
+        DivSeparatorView(context)
 
-    override fun visit(data: DivGifImage, resolver: ExpressionResolver): View = viewPool.obtain(TAG_GIF_IMAGE)
-
-    override fun visit(data: DivSeparator, resolver: ExpressionResolver): View = DivSeparatorView(context)
-
-    override fun visit(data: DivContainer, resolver: ExpressionResolver): View {
-        val orientation = data.orientation.evaluate(resolver)
-        val view: ViewGroup = when {
-            data.isWrapContainer(resolver) -> viewPool.obtain(TAG_WRAP_CONTAINER)
-            orientation == Orientation.OVERLAP -> viewPool.obtain(TAG_OVERLAP_CONTAINER)
-            else -> viewPool.obtain(TAG_LINEAR_CONTAINER)
-        }
-        data.items.forEach { childData ->
+    override fun visit(data: Div.Container, resolver: ExpressionResolver): View {
+        val view = defaultVisit(data, resolver) as ViewGroup
+        data.value.items.forEach { childData ->
             view.addView(create(childData, resolver))
         }
         return view
     }
 
-    override fun visit(data: DivGrid, resolver: ExpressionResolver): View {
-        val view: DivGridLayout = viewPool.obtain(TAG_GRID)
-        data.items.forEach { childData ->
+    override fun visit(data: Div.Grid, resolver: ExpressionResolver): View {
+        val view = defaultVisit(data, resolver) as ViewGroup
+        data.value.items.forEach { childData ->
             view.addView(create(childData, resolver))
         }
         return view
     }
-
-    override fun visit(data: DivGallery, resolver: ExpressionResolver): View = viewPool.obtain(TAG_GALLERY)
-
-    override fun visit(data: DivPager, resolver: ExpressionResolver): View = viewPool.obtain(TAG_PAGER)
-
-    override fun visit(data: DivTabs, resolver: ExpressionResolver): View = viewPool.obtain(TAG_TABS)
-
-    override fun visit(data: DivState, resolver: ExpressionResolver): View = viewPool.obtain(TAG_STATE)
-
-    override fun visit(data: DivCustom, resolver: ExpressionResolver): View = viewPool.obtain(TAG_CUSTOM)
-
-    override fun visit(data: DivIndicator, resolver: ExpressionResolver): View = viewPool.obtain(TAG_INDICATOR)
-
-    override fun visit(data: DivSlider, resolver: ExpressionResolver): View = viewPool.obtain(TAG_SLIDER)
-
-    override fun visit(data: DivInput, resolver: ExpressionResolver): View = viewPool.obtain(TAG_INPUT)
-
-    override fun visit(data: DivSelect, resolver: ExpressionResolver): View = viewPool.obtain(TAG_SELECT)
-
-    override fun visit(data: DivVideo, resolver: ExpressionResolver): View = viewPool.obtain(TAG_VIDEO)
 
     companion object {
-
         const val TAG_TEXT = "DIV2.TEXT_VIEW"
         const val TAG_IMAGE = "DIV2.IMAGE_VIEW"
         const val TAG_GIF_IMAGE = "DIV2.IMAGE_GIF_VIEW"
@@ -153,5 +109,29 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_INPUT = "DIV2.INPUT"
         const val TAG_SELECT = "DIV2.SELECT"
         const val TAG_VIDEO = "DIV2.VIDEO"
+
+        private fun Div.getTag(resolver: ExpressionResolver) =
+            when (this) {
+                is Div.Container -> when {
+                    value.isWrapContainer(resolver) -> TAG_WRAP_CONTAINER
+                    value.orientation.evaluate(resolver) == Orientation.OVERLAP -> TAG_OVERLAP_CONTAINER
+                    else -> TAG_LINEAR_CONTAINER
+                }
+                is Div.Custom -> TAG_CUSTOM
+                is Div.Gallery -> TAG_GALLERY
+                is Div.GifImage -> TAG_GIF_IMAGE
+                is Div.Grid -> TAG_GRID
+                is Div.Image -> TAG_IMAGE
+                is Div.Indicator -> TAG_INDICATOR
+                is Div.Input -> TAG_INPUT
+                is Div.Pager -> TAG_PAGER
+                is Div.Select -> TAG_SELECT
+                is Div.Slider -> TAG_SLIDER
+                is Div.State -> TAG_STATE
+                is Div.Tabs -> TAG_TABS
+                is Div.Text -> TAG_TEXT
+                is Div.Video -> TAG_VIDEO
+                is Div.Separator -> ""
+            }
     }
 }

@@ -10,6 +10,7 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.Releasable
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
@@ -46,7 +47,11 @@ internal class ReleaseViewVisitor @Inject constructor(
 
     override fun visit(view: DivStateLayout) = releaseInternal(view, view.divState)
 
+    override fun visit(view: TabsLayout) = releaseInternal(view, view.div)
+
     override fun visit(view: DivSliderView) = releaseInternal(view, view.div)
+
+    override fun visit(view: DivSelectView) = releaseInternal(view, view.div)
 
     override fun visit(view: DivVideoView) = releaseInternal(view, view.div)
 

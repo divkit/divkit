@@ -93,7 +93,7 @@ internal class DivBinder @Inject constructor(
 
         extensionController.beforeBindView(divView, view, div.value())
 
-        when (div) {
+        return when (div) {
             is Div.Text -> bindText(view, div.value, divView)
             is Div.Image -> bindImage(view, div.value, divView)
             is Div.GifImage -> bindGifImage(view, div.value, divView)
@@ -110,11 +110,11 @@ internal class DivBinder @Inject constructor(
             is Div.Input -> bindInput(view, div.value, divView)
             is Div.Select -> bindSelect(view, div.value, divView)
             is Div.Video -> bindVideo(view, div.value, divView)
-        }
-
-        // extensionController bound new CustomView in DivCustomBinder after replacing in parent
-        if (div !is Div.Custom) {
-            extensionController.bindView(divView, view, div.value())
+        }.also {
+            // extensionController bound new CustomView in DivCustomBinder after replacing in parent
+            if (div !is Div.Custom) {
+                extensionController.bindView(divView, view, div.value())
+            }
         }
     }
 

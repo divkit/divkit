@@ -223,8 +223,8 @@ internal class DivStateBinder @Inject constructor(
         val incomingDiv = incomingState.div
         val resolver = divView.expressionResolver
         val transition = if (divState.allowsTransitionsOnStateChange(resolver)
-            && (outgoingDiv?.value()?.containsStateInnerTransitions() == true
-                    || incomingDiv?.value()?.containsStateInnerTransitions() == true)) {
+            && (outgoingDiv?.containsStateInnerTransitions() == true
+                    || incomingDiv?.containsStateInnerTransitions() == true)) {
             val transitionBuilder = divView.viewComponent.transitionBuilder
             val transitionHolder = divView.viewComponent.stateTransitionHolder
             setupTransitions(transitionBuilder, transitionHolder, incomingState, outgoingState, resolver)
