@@ -932,11 +932,11 @@
     "ru": "Маска для ввода текста по заданному шаблону."
   },
   "div_input_mask_currency": {
-    "en": "Mask for currency with language format.",
+    "en": "Mask for entering currency in the specified regional format.",
     "ru": "Маска для ввода валютных значений в заданном региональном формате."
   },
   "div_input_mask_currency_locale": {
-    "en": "IETF BCP 47 language tag for currency mask. Look https://en.wikipedia.org/wiki/IETF_language_tag for more. If not specified, it will be determined automatically.",
+    "en": "Language tag that the currency format should match, as per [IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). If the language is not set, it is defined automatically.",
     "ru": "Тег языка, которому должен соответствовать формат валюты, по [стандарту IETF BCP 47](https://en.wikipedia.org/wiki/IETF_language_tag). Если язык не задан, он будет определен автоматически."
   },
   "div_input_mask_fixed_length": {
@@ -967,40 +967,8 @@
     "en": "Regular expression for validating character inputs. For example, when a mask is digit-only.",
     "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
   },
-  "div_input_validators": {
-    "en": "Validators for text value.",
-    "ru": "Валидатор для проверки соответствия значения поля заданным условиям."
-  },
-  "div_input_validators_label_id": {
-    "en": "ID of the text div containing the error message, which will also be used for accessibility.",
-    "ru": "ID текстового элемента содержащего сообщение об ошибке, которое также будет использовано для доступности."
-  },
-  "div_input_validators_allow_empty": {
-    "en": "Whether an empty value is correct. By default, false.",
-    "ru": "Является ли пустое значение корректным. По умолчанию false."
-  },
-  "div_input_validators_variable": {
-    "en": "Name of validation storage variable.",
-    "ru": "Переменная для хранения корректности значения поля."
-  },
-  "div_input_validators_regex": {
-    "en": "Regex validator.",
-    "ru": "Валидатор на основе регулярных выражений."
-  },
-  "div_input_validators_regex_pattern": {
-    "en": "Regex pattern for matching.",
-    "ru": "Паттерн регулярного выражения, которому должно соответствовать значение поля."
-  },
-  "div_input_validators_expression": {
-    "en": "Expression validator.",
-    "ru": "Валидатор на основе выражений."
-  },
-  "div_input_validators_expression_condition": {
-    "en": "Expression condition for evaluating.",
-    "ru": "Условие валидности значения."
-  },
   "div_input_mask_raw_text_variable": {
-    "en": "Name of raw value storage variable.",
+    "en": "Name of the variable to store the unprocessed value.",
     "ru": "Имя переменной для хранения необработанного значения."
   },
   "div_input_max_visible_lines": {
@@ -1030,6 +998,38 @@
   "div_input_text_variable": {
     "en": "Name of text storage variable.",
     "ru": "Название переменной для хранения текста."
+  },
+  "div_input_validators": {
+    "en": "Validators for text value.",
+    "ru": "Валидатор для проверки соответствия значения поля заданным условиям."
+  },
+  "div_input_validators_allow_empty": {
+    "en": "Whether an empty value is correct. By default, false.",
+    "ru": "Является ли пустое значение корректным. По умолчанию false."
+  },
+  "div_input_validators_expression": {
+    "en": "Expression validator.",
+    "ru": "Валидатор на основе выражений."
+  },
+  "div_input_validators_expression_condition": {
+    "en": "Expression condition for evaluating.",
+    "ru": "Условие валидности значения."
+  },
+  "div_input_validators_label_id": {
+    "en": "ID of the text div containing the error message, which will also be used for accessibility.",
+    "ru": "ID текстового элемента содержащего сообщение об ошибке, которое также будет использовано для доступности."
+  },
+  "div_input_validators_regex": {
+    "en": "Regex validator.",
+    "ru": "Валидатор на основе регулярных выражений."
+  },
+  "div_input_validators_regex_pattern": {
+    "en": "Regex pattern for matching.",
+    "ru": "Паттерн регулярного выражения, которому должно соответствовать значение поля."
+  },
+  "div_input_validators_variable": {
+    "en": "Name of validation storage variable.",
+    "ru": "Переменная для хранения корректности значения поля."
   },
   "div_keyboard_input": {
     "en": "Enter data manually using a keyboard.",
@@ -1236,7 +1236,7 @@
     "ru": "Значение масштаба, с которого начнется появление или на котором закончится исчезновение элемента."
   },
   "div_select": {
-    "en": "Option list selection element.",
+    "en": "List of options with only one to be selected.",
     "ru": "Список вариантов, из которых можно выбрать одно значение."
   },
   "div_select_hint_color": {
@@ -1252,23 +1252,23 @@
     "ru": "Интервал между символами."
   },
   "div_select_line_height": {
-    "en": "Line spacing of the text. Units specified in `font_size_unit`.",
+    "en": "Line spacing of the text. Measured in units set in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных параметром `font_size_unit`."
   },
   "div_select_option": {
-    "en": "Option to choose from list.",
+    "en": "List option.",
     "ru": "Вариант выбора в списке."
   },
   "div_select_option_text": {
-    "en": "Option text from list to be shown in UI. If not specified, option `value` will be used instead.",
+    "en": "Text description of the option displayed in the list. If not set, `value` is used instead.",
     "ru": "Текстовое описание варианта, которое отображается в списке. Если не указано, то берется значение параметра `value`."
   },
   "div_select_option_value": {
-    "en": "Option value from list.",
+    "en": "Value matching the option.",
     "ru": "Значение, которое соответствует варианту выбора."
   },
   "div_select_value_variable": {
-    "en": "Variable name to store selected from list option `value`.",
+    "en": "Name of the variable that stores the selected option value (`value`).",
     "ru": "Имя переменной, которая хранит значение `value` выбранного варианта."
   },
   "div_selection_input": {
@@ -1964,64 +1964,64 @@
     "ru": "Значение."
   },
   "div_video": {
-    "en": "Video playback element.",
-    "ru": "Элемент для проигрывания видео."
+    "en": "Video.",
+    "ru": "Видеоролик."
   },
   "div_video_autostart": {
-    "en": "When set to true, the video will automatically start playing. It will work on the web if the video is played without sound.",
-    "ru": "При установке в true видео будет автоматически запускать проигрывание. В вебе будет работать при условии, если видео проигрывается без звука."
+    "en": "This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.",
+    "ru": "Опция включает автоматическое воспроизведение видео. В вебе видео запускается при условии, что включена опция воспроизведения без звука."
   },
   "div_video_buffering_actions": {
-    "en": "Actions that are performed when a video is paused for loading.",
-    "ru": "Действия, которые выполняются, когда видео приостанавливается для загрузки."
+    "en": "Actions performed during video loading.",
+    "ru": "Действия, которые выполняются во время загрузки видео."
   },
   "div_video_elapsed_time_variable": {
-    "en": "The variable stores how many milliseconds have passed since the beginning of the video.",
-    "ru": "В переменной хранится сколько миллисекунд прошло с начала видео."
+    "en": "Time interval from the video beginning to the current position in milliseconds.",
+    "ru": "Интервал времени с начала видеоролика до текущей позиции в миллисекундах."
   },
   "div_video_end_actions": {
-    "en": "Actions that are performed when the video ends.",
-    "ru": "Действия, которые выполняются, когда видео заканчивается."
-  },
-  "div_video_muted": {
-    "en": "When set to true, the video will be played without sound.",
-    "ru": "При установке в true видео будет проигрываться без звука."
-  },
-  "div_video_player_settings_payload": {
-    "en": "It is intended for storing additional information that can be used inside the player.",
-    "ru": "Предназначено для хранения дополнительной информации, которая может быть использована внутри плеера."
-  },
-  "div_video_preview": {
-    "en": "Preview of the video encoded in `base64'. It will be shown until the video is ready for playback. `data url` format: `data:[;base64],<data>`",
-    "ru": "Превью видео, закодированное в `base64`. Будет показано до момента, когда видео готово к воспроизведению. Формат `data url`: `data:[;base64],<data>`"
-  },
-  "div_video_repeatable": {
-    "en": "When set to true, the video will repeat.",
-    "ru": "При установке в true видео будет повторяться."
-  },
-  "div_video_resume_actions": {
-    "en": "Actions that are performed when playback resumes.",
-    "ru": "Действия, которые выполняются, когда проигрывание возобновляется."
-  },
-  "div_video_pause_actions": {
-    "en": "Actions that are performed when a playback is paused.",
-    "ru": "Действия, которые выполняются при приостановке воспроизведения."
+    "en": "Actions performed after the video ends.",
+    "ru": "Действия, которые выполняются после окончания видео."
   },
   "div_video_fatal_actions": {
     "en": "Actions that are performed when it is impossible to continue playback due to an error in the player.",
     "ru": "Действия, которые выполняются, когда невозможно продолжить воспроизведение из-за ошибки плеера."
   },
+  "div_video_muted": {
+    "en": "This option mutes video.",
+    "ru": "Опция отключает звук при воспроизведении видео."
+  },
+  "div_video_pause_actions": {
+    "en": "Actions that are performed when a playback is paused.",
+    "ru": "Действия, которые выполняются при приостановке воспроизведения."
+  },
+  "div_video_player_settings_payload": {
+    "en": "Additional information that can be used in the player.",
+    "ru": "Дополнительная информация, которая может быть использована внутри плеера."
+  },
+  "div_video_preview": {
+    "en": "Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`",
+    "ru": "Превью видео, закодированное в `base64`. Будет показано до момента, когда видео готово к воспроизведению. Формат `data url`: `data:[;base64],<data>`"
+  },
+  "div_video_repeatable": {
+    "en": "This option turns on video repeat.",
+    "ru": "Опция включает повторное воспроизведение видео после окончания."
+  },
+  "div_video_resume_actions": {
+    "en": "Actions performed when video playback resumes.",
+    "ru": "Действия, которые выполняются при возобновлении воспроизведения видео."
+  },
   "div_video_source": {
     "en": "Description of a single media file. Contains a link to the source, mime type, bitrate, resolution.",
     "ru": "Описание одного медиа файла. Содержит ссылку на источник, mime тип, битрейт, разрешение."
   },
-  "div_video_source_mime_type": {
-    "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
-    "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для медиа файла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
-  },
   "div_video_source_bitrate": {
     "en": "Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.",
     "ru": "Свойство медиафайла, которое определяет скорость передачи данных в потоке видео. Битрейт измеряется в килобитах в секунду (kbps) и указывает, сколько данных передается за единицу времени."
+  },
+  "div_video_source_mime_type": {
+    "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
+    "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для медиа файла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
   },
   "div_video_source_resolution": {
     "en": "Media file Resolution.",
@@ -2038,6 +2038,50 @@
   "div_video_source_url": {
     "en": "The property contains a link to a media file available for playback or download.",
     "ru": "Свойство содержит ссылку на медиа файл, доступного для воспроизведения или загрузки."
+  },
+  "div_video_stream": {
+    "en": "Video data stream for playback.",
+    "ru": "Поток видеоданных для воспроизведения."
+  },
+  "div_video_stream_url": {
+    "en": "Video stream link.",
+    "ru": "Ссылка на поток видеоданных."
+  },
+  "div_video_video": {
+    "en": "Video data for playback.",
+    "ru": "Видеоданные для воспроизведения."
+  },
+  "div_video_video_data": {
+    "en": "Video contents.",
+    "ru": "Содержимое видео."
+  },
+  "div_video_video_source": {
+    "en": "Video description. Contains the video link, codec, and resolution.",
+    "ru": "Описание видеоролика. Содержит ссылку на видео, кодек, разрешение."
+  },
+  "div_video_video_source_codec": {
+    "en": "Defines the codec (coder/decoder) used for the video file.",
+    "ru": "Определяет используемый кодек (кодировщик/декодировщик) для видеофайла."
+  },
+  "div_video_video_source_mime_type": {
+    "en": "Video file MIME type (Multipurpose Internet Mail Extensions) — String used to define the file type and correct processing.",
+    "ru": "MIME-тип (Multipurpose Internet Mail Extensions) видеофайла — строка, которая используется для определения типа файла и его правильной обработки."
+  },
+  "div_video_video_source_resolution": {
+    "en": "Video resolution.",
+    "ru": "Разрешение видео."
+  },
+  "div_video_video_source_resolution_height": {
+    "en": "Video frame height.",
+    "ru": "Высота кадра видеофайла."
+  },
+  "div_video_video_source_resolution_width": {
+    "en": "Video frame width.",
+    "ru": "Ширина кадра видеофайла."
+  },
+  "div_video_video_source_url": {
+    "en": "Link to the video file available for playback or download.",
+    "ru": "Ссылка на видеофайл, доступный для воспроизведения или загрузки."
   },
   "div_visibility": {
     "en": "Element visibility:<li>`visible` — the element is visible;</li><li>`invisible` — the element is invisible, but a place is reserved for it;</li><li>`gone` — the element is invisible, a place isn't reserved.</li>",
