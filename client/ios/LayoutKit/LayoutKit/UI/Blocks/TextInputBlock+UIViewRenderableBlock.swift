@@ -66,6 +66,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.backgroundColor = .clear
     multiLineInput.textContainerInset = .zero
     multiLineInput.delegate = self
+    multiLineInput.textContainerInset = .zero
+    multiLineInput.textContainer.lineFragmentPadding = 0
 
     singleLineInput.isHidden = true
     singleLineInput.autocorrectionType = .no
@@ -457,4 +459,4 @@ extension TextInputBlock.InputType.KeyboardType {
 
 private let additionalOffset = 25.0
 private let singleLineCusorOffset = 2.0
-private let multiLineCusorOffset = 5.0
+private let multiLineCusorOffset = 0.0
