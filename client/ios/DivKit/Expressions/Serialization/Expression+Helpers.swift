@@ -77,10 +77,6 @@ func deserialize<T: ValidSerializationValue, U>(
     )))
   }
 
-  if case let .value(value) = result, validator?.isValid(value) == false {
-    return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
-  }
-
   return .success(result)
 }
 
