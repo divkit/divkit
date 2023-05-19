@@ -1,12 +1,16 @@
 package com.yandex.div.video
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SeekParameters
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
@@ -29,6 +33,7 @@ class ExoDivPlayer(
     private val observers = ObserverList<DivPlayer.Observer>()
     private val updateTimeHandler = Handler(Looper.getMainLooper())
     private var currentSource: DivVideoSource? = null
+    private var needToRenderFrameExplicitly = false
 
     private var targetResolutionArea = 0
 
@@ -44,6 +49,8 @@ class ExoDivPlayer(
 
         override fun onPlaybackStateChanged(state: Int) {
             if (state != Player.STATE_BUFFERING && state != Player.STATE_ENDED) return
+            if (state == Player.STATE_ENDED) needToRenderFrameExplicitly = true
+
             observers.forEach {
                 when (state) {
                     Player.STATE_BUFFERING -> it.onBuffering()
@@ -60,6 +67,32 @@ class ExoDivPlayer(
         }
     }
 
+    private val playerActivityCallback = object : Application.ActivityLifecycleCallbacks {
+        override fun onActivityPaused(activity: Activity) = Unit
+
+        override fun onActivityStarted(activity: Activity) = Unit
+
+        override fun onActivityDestroyed(activity: Activity) {
+            (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(this)
+        }
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+
+        override fun onActivityStopped(activity: Activity) = Unit
+
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+
+        override fun onActivityResumed(activity: Activity) {
+            if (needToRenderFrameExplicitly) {
+                needToRenderFrameExplicitly = false
+                player.setSeekParameters(SeekParameters.CLOSEST_SYNC)
+                seek(player.currentPosition)
+                pause()
+                player.setSeekParameters(SeekParameters.EXACT)
+            }
+        }
+    }
+
     init {
         if (src.isNotEmpty()) {
             player.addListener(playerPauseListener)
@@ -67,6 +100,8 @@ class ExoDivPlayer(
         } else {
             KAssert.fail { "Attempt to create a player with an empty source" }
         }
+
+        (context.applicationContext as Application).registerActivityLifecycleCallbacks(playerActivityCallback)
     }
 
     private fun updatePlaybackTime() {
@@ -165,5 +200,6 @@ class ExoDivPlayer(
 
     override fun release() {
         player.release()
+        (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(playerActivityCallback)
     }
 }
