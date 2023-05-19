@@ -69,7 +69,10 @@
     {
       "$ref": "div-video.json",
       "$description": "translations.json#/div_video",
-      "platforms": []
+      "platforms": [
+        "android",
+        "ios"
+      ]
     }
   ]
 }
