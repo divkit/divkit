@@ -51,7 +51,12 @@
         "style": {
           "$ref": "div-drawable.json",
           "$description": "translations.json#/div_container_separator_style"
-        }
+        },
+        "margins": {
+          "$ref": "div-edge-insets.json",
+          "$description": "translations.json#/div_base_margins",
+          "platforms": []
+        }    
       },
       "required": [
         "style"
