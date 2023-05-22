@@ -51,6 +51,8 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
+import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivDimension
 import com.yandex.div2.DivDrawable
@@ -344,6 +346,24 @@ internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivA
         DivAlignmentVertical.CENTER -> Gravity.CENTER_VERTICAL
         DivAlignmentVertical.BOTTOM -> Gravity.BOTTOM
         else -> Gravity.TOP
+    }
+
+    return horizontalGravity or verticalGravity
+}
+
+internal fun evaluateGravity(horizontal: DivContentAlignmentHorizontal?, vertical: DivContentAlignmentVertical?): Int {
+    val horizontalGravity = when (horizontal) {
+        DivContentAlignmentHorizontal.LEFT -> Gravity.LEFT
+        DivContentAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
+        DivContentAlignmentHorizontal.RIGHT -> Gravity.RIGHT
+        else -> Gravity.LEFT // TODO(grechka62): support additional variants
+    }
+
+    val verticalGravity = when (vertical) {
+        DivContentAlignmentVertical.TOP -> Gravity.TOP
+        DivContentAlignmentVertical.CENTER -> Gravity.CENTER_VERTICAL
+        DivContentAlignmentVertical.BOTTOM -> Gravity.BOTTOM
+        else -> Gravity.TOP // TODO(grechka62): support additional variants
     }
 
     return horizontalGravity or verticalGravity
@@ -825,4 +845,19 @@ internal fun View.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAs
             aspectRatio = ratio.toFloat()
         }
     )
+}
+
+internal fun DivContentAlignmentHorizontal.toAlignmentHorizontal(): DivAlignmentHorizontal = when (this) {
+    DivContentAlignmentHorizontal.LEFT -> DivAlignmentHorizontal.LEFT
+    DivContentAlignmentHorizontal.CENTER -> DivAlignmentHorizontal.CENTER
+    DivContentAlignmentHorizontal.RIGHT -> DivAlignmentHorizontal.RIGHT
+    else -> DivAlignmentHorizontal.LEFT
+}
+
+internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVertical = when (this) {
+    DivContentAlignmentVertical.TOP -> DivAlignmentVertical.TOP
+    DivContentAlignmentVertical.CENTER -> DivAlignmentVertical.CENTER
+    DivContentAlignmentVertical.BOTTOM -> DivAlignmentVertical.BOTTOM
+    DivContentAlignmentVertical.BASELINE -> DivAlignmentVertical.BASELINE
+    else -> DivAlignmentVertical.TOP
 }

@@ -79,12 +79,12 @@
           ]
         },
         "content_alignment_vertical": {
-          "$ref": "div-alignment-vertical.json",
+          "$ref": "div-content-alignment-vertical.json",
           "default_value": "top",
           "$description": "translations.json#/div_container_content_alignment_vertical"
         },
         "content_alignment_horizontal": {
-          "$ref": "div-alignment-horizontal.json",
+          "$ref": "div-content-alignment-horizontal.json",
           "default_value": "left",
           "$description": "translations.json#/div_container_content_alignment_horizontal"
         },

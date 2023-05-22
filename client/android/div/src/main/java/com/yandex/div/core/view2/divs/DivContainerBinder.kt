@@ -35,6 +35,8 @@ import com.yandex.div2.DivContainer
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivWrapContentSize
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -305,19 +307,19 @@ internal class DivContainerBinder @Inject constructor(
         val applyAlignments = { _: Any ->
             val childAlignmentHorizontal = childDivValue.alignmentHorizontal
             val alignmentHorizontal = when {
-                childAlignmentHorizontal != null -> childAlignmentHorizontal
+                childAlignmentHorizontal != null -> childAlignmentHorizontal.evaluate(resolver)
                 div.isWrapContainer(resolver) -> null
-                else -> div.contentAlignmentHorizontal
+                else -> div.contentAlignmentHorizontal.evaluate(resolver).toAlignmentHorizontal()
             }
 
             val childAlignmentVertical = childDivValue.alignmentVertical
             val alignmentVertical = when {
-                childAlignmentVertical != null -> childAlignmentVertical
+                childAlignmentVertical != null -> childAlignmentVertical.evaluate(resolver)
                 div.isWrapContainer(resolver) -> null
-                else -> div.contentAlignmentVertical
+                else -> div.contentAlignmentVertical.evaluate(resolver).toAlignmentVertical()
             }
 
-            childView.applyAlignment(alignmentHorizontal?.evaluate(resolver), alignmentVertical?.evaluate(resolver))
+            childView.applyAlignment(alignmentHorizontal, alignmentVertical)
         }
 
         expressionSubscriber.addSubscription(

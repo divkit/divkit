@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "enum": [
+    "left",
+    "center",
+    "right",
+    "space-between",
+    "space-around",
+    "space-evenly"
+  ]
+}
