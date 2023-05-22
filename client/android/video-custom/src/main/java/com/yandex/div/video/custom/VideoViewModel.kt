@@ -26,6 +26,10 @@ internal interface VideoViewModel {
 
     fun onVideoRepeat()
 
+    fun onDetached()
+
+    fun release()
+
     fun freezePlayback()
 
     fun unfreezePlayback()
@@ -35,6 +39,7 @@ internal class MutableVideoViewModel(
     private val videoConfig: VideoConfig,
     private val cache: VideoCache,
     private val actionNotifier: VideoCustomActionNotifier,
+    private val viewController: VideoCustomViewController,
     context: Context,
 ) : VideoViewModel {
     private val viewModelScope = CoroutineScope(Dispatchers.Default)
@@ -118,7 +123,12 @@ internal class MutableVideoViewModel(
         savedIsPlaying = null
     }
 
-    fun release() {
+    override fun onDetached() {
+        player.stop()
+        viewController.unbind(this)
+    }
+
+    override fun release() {
         videoConfig.id?.let { id ->
             if (!isVideoShown) {
                 actionNotifier.notifyPlaybackFinished(id, player.currentPosition)

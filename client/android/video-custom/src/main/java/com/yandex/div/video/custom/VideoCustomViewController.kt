@@ -29,6 +29,11 @@ class VideoCustomViewController(
         viewModel.configureVideo()
     }
 
+    internal fun unbind(viewModel: VideoViewModel) {
+        viewModels.remove(viewModel)
+        viewModel.release()
+    }
+
     internal fun release(view: VideoView) {
         val viewModel = viewModels.find { it == view.viewModel }
         if (viewModel != null) {
@@ -94,6 +99,7 @@ class VideoCustomViewController(
             config,
             cache,
             actionNotifier,
+            this@VideoCustomViewController,
             context
         ).also { viewModels.add(it) }
     }
