@@ -311,7 +311,6 @@ internal class DivGalleryBinder @Inject constructor(
 
         init {
             setHasStableIds(true)
-            updateActiveItems()
             subscribeOnElements()
         }
 

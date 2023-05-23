@@ -20,7 +20,11 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
 
     private val activityMap = mutableMapOf<Div, Boolean>()
 
-    fun updateActiveItems() {
+    init {
+        updateActiveItems()
+    }
+
+    private fun updateActiveItems() {
         _activeItems.clear()
         activityMap.clear()
 
