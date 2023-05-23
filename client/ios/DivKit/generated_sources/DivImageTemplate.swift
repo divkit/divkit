@@ -21,6 +21,7 @@ public final class DivImageTemplate: TemplateValue {
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: center
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let filters: Field<[DivFilterTemplate]>? // at least 1 elements
@@ -72,6 +73,7 @@ public final class DivImageTemplate: TemplateValue {
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
         contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         filters: try dictionary.getOptionalArray("filters", templateToType: templateToType),
@@ -123,6 +125,7 @@ public final class DivImageTemplate: TemplateValue {
     columnSpan: Field<Expression<Int>>? = nil,
     contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     filters: Field<[DivFilterTemplate]>? = nil,
@@ -168,6 +171,7 @@ public final class DivImageTemplate: TemplateValue {
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal
     self.contentAlignmentVertical = contentAlignmentVertical
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.filters = filters
@@ -214,6 +218,7 @@ public final class DivImageTemplate: TemplateValue {
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentHorizontalValidator) ?? .noValue
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let filtersValue = parent?.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true) ?? .noValue
@@ -258,6 +263,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
@@ -311,6 +317,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       filters: filtersValue.value,
@@ -362,6 +369,7 @@ public final class DivImageTemplate: TemplateValue {
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
     var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var filtersValue: DeserializationResult<[DivFilter]> = .noValue
@@ -421,6 +429,8 @@ public final class DivImageTemplate: TemplateValue {
         contentAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator).merged(with: contentAlignmentHorizontalValue)
       case "content_alignment_vertical":
         contentAlignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator).merged(with: contentAlignmentVerticalValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "doubletap_actions":
         doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
       case "extensions":
@@ -507,6 +517,8 @@ public final class DivImageTemplate: TemplateValue {
         contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator))
       case parent?.contentAlignmentVertical?.link:
         contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.doubletapActions?.link:
         doubletapActionsValue = doubletapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self))
       case parent?.extensions?.link:
@@ -577,6 +589,7 @@ public final class DivImageTemplate: TemplateValue {
       aspectValue = aspectValue.merged(with: parent.aspect?.resolveOptionalValue(context: context, validator: ResolvedValue.aspectValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       filtersValue = filtersValue.merged(with: parent.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true))
@@ -610,6 +623,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
@@ -663,6 +677,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       filters: filtersValue.value,
@@ -719,6 +734,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       extensions: extensions ?? mergedParent.extensions,
       filters: filters ?? mergedParent.filters,
@@ -770,6 +786,7 @@ public final class DivImageTemplate: TemplateValue {
       columnSpan: merged.columnSpan,
       contentAlignmentHorizontal: merged.contentAlignmentHorizontal,
       contentAlignmentVertical: merged.contentAlignmentVertical,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       filters: merged.filters?.tryResolveParent(templates: templates),

@@ -37,6 +37,7 @@ public final class DivInput: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let fontFamily: Expression<DivFontFamily> // default value: text
@@ -170,6 +171,9 @@ public final class DivInput: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
@@ -280,6 +284,7 @@ public final class DivInput: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     fontFamily: Expression<DivFontFamily>? = nil,
@@ -323,6 +328,7 @@ public final class DivInput: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.fontFamily = fontFamily ?? .value(.text)
@@ -380,84 +386,89 @@ extension DivInput: Equatable {
     }
     guard
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height,
-      lhs.highlightColor == rhs.highlightColor
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.highlightColor == rhs.highlightColor,
       lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id
+      lhs.hintText == rhs.hintText
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.keyboardType == rhs.keyboardType,
-      lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
+      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask,
-      lhs.maxVisibleLines == rhs.maxVisibleLines
+      lhs.mask == rhs.mask
     else {
       return false
     }
     guard
+      lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.textColor == rhs.textColor
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators,
-      lhs.visibility == rhs.visibility
+      lhs.validators == rhs.validators
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -478,6 +489,7 @@ extension DivInput: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["font_family"] = fontFamily.toValidSerializationValue()

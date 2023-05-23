@@ -163,6 +163,7 @@ public final class DivStateTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultStateId: Field<Expression<String>>?
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let divId: Field<String>?
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
@@ -200,6 +201,7 @@ public final class DivStateTemplate: TemplateValue {
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         defaultStateId: try dictionary.getOptionalExpressionField("default_state_id"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         divId: try dictionary.getOptionalField("div_id"),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -237,6 +239,7 @@ public final class DivStateTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     defaultStateId: Field<Expression<String>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     divId: Field<String>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -268,6 +271,7 @@ public final class DivStateTemplate: TemplateValue {
     self.border = border
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
+    self.disappearActions = disappearActions
     self.divId = divId
     self.extensions = extensions
     self.focus = focus
@@ -300,6 +304,7 @@ public final class DivStateTemplate: TemplateValue {
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let defaultStateIdValue = parent?.defaultStateId?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultStateIdValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let divIdValue = parent?.divId?.resolveOptionalValue(context: context, validator: ResolvedValue.divIdValidator) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
@@ -330,6 +335,7 @@ public final class DivStateTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       divIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "div_id", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -369,6 +375,7 @@ public final class DivStateTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultStateId: defaultStateIdValue.value,
+      disappearActions: disappearActionsValue.value,
       divId: divIdValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -406,6 +413,7 @@ public final class DivStateTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var defaultStateIdValue: DeserializationResult<Expression<String>> = parent?.defaultStateId?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var divIdValue: DeserializationResult<String> = parent?.divId?.value(validatedBy: ResolvedValue.divIdValidator) ?? .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -445,6 +453,8 @@ public final class DivStateTemplate: TemplateValue {
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "default_state_id":
         defaultStateIdValue = deserialize(__dictValue, validator: ResolvedValue.defaultStateIdValidator).merged(with: defaultStateIdValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "div_id":
         divIdValue = deserialize(__dictValue, validator: ResolvedValue.divIdValidator).merged(with: divIdValue)
       case "extensions":
@@ -503,6 +513,8 @@ public final class DivStateTemplate: TemplateValue {
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.defaultStateId?.link:
         defaultStateIdValue = defaultStateIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.defaultStateIdValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.divId?.link:
         divIdValue = divIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.divIdValidator))
       case parent?.extensions?.link:
@@ -552,6 +564,7 @@ public final class DivStateTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -577,6 +590,7 @@ public final class DivStateTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       divIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "div_id", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -616,6 +630,7 @@ public final class DivStateTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultStateId: defaultStateIdValue.value,
+      disappearActions: disappearActionsValue.value,
       divId: divIdValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -658,6 +673,7 @@ public final class DivStateTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       defaultStateId: defaultStateId ?? mergedParent.defaultStateId,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       divId: divId ?? mergedParent.divId,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
@@ -695,6 +711,7 @@ public final class DivStateTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       defaultStateId: merged.defaultStateId,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       divId: merged.divId,
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),

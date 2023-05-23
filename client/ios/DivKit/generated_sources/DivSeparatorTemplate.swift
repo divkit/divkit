@@ -92,6 +92,7 @@ public final class DivSeparatorTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let delimiterStyle: Field<DelimiterStyleTemplate>?
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
@@ -130,6 +131,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       border: try dictionary.getOptionalField("border", templateToType: templateToType),
       columnSpan: try dictionary.getOptionalExpressionField("column_span"),
       delimiterStyle: try dictionary.getOptionalField("delimiter_style", templateToType: templateToType),
+      disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
       doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
       extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
       focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -166,6 +168,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     delimiterStyle: Field<DelimiterStyleTemplate>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -199,6 +202,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     self.border = border
     self.columnSpan = columnSpan
     self.delimiterStyle = delimiterStyle
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
@@ -233,6 +237,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let delimiterStyleValue = parent?.delimiterStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.delimiterStyleValidator, useOnlyLinks: true) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
@@ -265,6 +270,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       delimiterStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "delimiter_style", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -298,6 +304,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       delimiterStyle: delimiterStyleValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -337,6 +344,7 @@ public final class DivSeparatorTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var delimiterStyleValue: DeserializationResult<DivSeparator.DelimiterStyle> = .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -381,6 +389,8 @@ public final class DivSeparatorTemplate: TemplateValue {
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "delimiter_style":
         delimiterStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.delimiterStyleValidator, type: DivSeparatorTemplate.DelimiterStyleTemplate.self).merged(with: delimiterStyleValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "doubletap_actions":
         doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
       case "extensions":
@@ -443,6 +453,8 @@ public final class DivSeparatorTemplate: TemplateValue {
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.delimiterStyle?.link:
         delimiterStyleValue = delimiterStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.delimiterStyleValidator, type: DivSeparatorTemplate.DelimiterStyleTemplate.self))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.doubletapActions?.link:
         doubletapActionsValue = doubletapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self))
       case parent?.extensions?.link:
@@ -494,6 +506,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       delimiterStyleValue = delimiterStyleValue.merged(with: parent.delimiterStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.delimiterStyleValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
@@ -523,6 +536,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       delimiterStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "delimiter_style", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -556,6 +570,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       delimiterStyle: delimiterStyleValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -600,6 +615,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       delimiterStyle: delimiterStyle ?? mergedParent.delimiterStyle,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
@@ -639,6 +655,7 @@ public final class DivSeparatorTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       delimiterStyle: merged.delimiterStyle?.tryResolveParent(templates: templates),
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),

@@ -222,6 +222,7 @@ public final class DivTabs: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let dynamicHeight: Expression<Bool> // default value: false
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -320,6 +321,9 @@ public final class DivTabs: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let dynamicHeightValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
@@ -412,6 +416,7 @@ public final class DivTabs: DivBase {
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
+    disappearActions: [DivDisappearAction]?,
     dynamicHeight: Expression<Bool>?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
@@ -448,6 +453,7 @@ public final class DivTabs: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.dynamicHeight = dynamicHeight ?? .value(false)
     self.extensions = extensions
     self.focus = focus
@@ -498,68 +504,69 @@ extension DivTabs: Equatable {
     }
     guard
       lhs.columnSpan == rhs.columnSpan,
-      lhs.dynamicHeight == rhs.dynamicHeight,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.dynamicHeight == rhs.dynamicHeight
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.hasSeparator == rhs.hasSeparator,
-      lhs.height == rhs.height
+      lhs.hasSeparator == rhs.hasSeparator
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.items == rhs.items,
-      lhs.margins == rhs.margins
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.selectedTab == rhs.selectedTab,
-      lhs.separatorColor == rhs.separatorColor
+      lhs.selectedTab == rhs.selectedTab
     else {
       return false
     }
     guard
+      lhs.separatorColor == rhs.separatorColor,
       lhs.separatorPaddings == rhs.separatorPaddings,
-      lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled,
-      lhs.tabTitleStyle == rhs.tabTitleStyle
+      lhs.switchTabsByContentSwipeEnabled == rhs.switchTabsByContentSwipeEnabled
     else {
       return false
     }
     guard
+      lhs.tabTitleStyle == rhs.tabTitleStyle,
       lhs.titlePaddings == rhs.titlePaddings,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -581,6 +588,7 @@ extension DivTabs: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["dynamic_height"] = dynamicHeight.toValidSerializationValue()
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()

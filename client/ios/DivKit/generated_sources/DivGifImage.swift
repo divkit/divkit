@@ -19,6 +19,7 @@ public final class DivGifImage: DivBase {
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -136,6 +137,9 @@ public final class DivGifImage: DivBase {
   static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
     makeNoOpValueValidator()
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -222,6 +226,7 @@ public final class DivGifImage: DivBase {
     columnSpan: Expression<Int>? = nil,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     contentAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
@@ -261,6 +266,7 @@ public final class DivGifImage: DivBase {
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.center)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
@@ -322,61 +328,62 @@ extension DivGifImage: Equatable {
     }
     guard
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.doubletapActions == rhs.doubletapActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.gifUrl == rhs.gifUrl,
-      lhs.height == rhs.height
+      lhs.gifUrl == rhs.gifUrl
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor,
-      lhs.preloadRequired == rhs.preloadRequired
+      lhs.placeholderColor == rhs.placeholderColor
     else {
       return false
     }
     guard
+      lhs.preloadRequired == rhs.preloadRequired,
       lhs.preview == rhs.preview,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scale == rhs.scale,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -404,6 +411,7 @@ extension DivGifImage: Serializable {
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()

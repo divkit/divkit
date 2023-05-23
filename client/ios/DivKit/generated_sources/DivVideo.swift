@@ -15,6 +15,7 @@ public final class DivVideo: DivBase {
   public let border: DivBorder
   public let bufferingActions: [DivAction]? // at least 1 elements
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let elapsedTimeVariable: String? // at least 1 char
   public let endActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
@@ -111,6 +112,9 @@ public final class DivVideo: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let elapsedTimeVariableValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
@@ -205,6 +209,7 @@ public final class DivVideo: DivBase {
     border: DivBorder? = nil,
     bufferingActions: [DivAction]? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     elapsedTimeVariable: String? = nil,
     endActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
@@ -243,6 +248,7 @@ public final class DivVideo: DivBase {
     self.border = border ?? DivBorder()
     self.bufferingActions = bufferingActions
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.elapsedTimeVariable = elapsedTimeVariable
     self.endActions = endActions
     self.extensions = extensions
@@ -300,64 +306,69 @@ extension DivVideo: Equatable {
       return false
     }
     guard
+      lhs.disappearActions == rhs.disappearActions,
       lhs.elapsedTimeVariable == rhs.elapsedTimeVariable,
-      lhs.endActions == rhs.endActions,
-      lhs.extensions == rhs.extensions
+      lhs.endActions == rhs.endActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.fatalActions == rhs.fatalActions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.margins == rhs.margins,
-      lhs.muted == rhs.muted
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.muted == rhs.muted,
       lhs.paddings == rhs.paddings,
-      lhs.pauseActions == rhs.pauseActions,
-      lhs.preview == rhs.preview
+      lhs.pauseActions == rhs.pauseActions
     else {
       return false
     }
     guard
+      lhs.preview == rhs.preview,
       lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.resumeActions == rhs.resumeActions
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.videoSources == rhs.videoSources,
-      lhs.visibility == rhs.visibility
+      lhs.videoSources == rhs.videoSources
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -380,6 +391,7 @@ extension DivVideo: Serializable {
     result["border"] = border.toDictionary()
     result["buffering_actions"] = bufferingActions?.map { $0.toDictionary() }
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["elapsed_time_variable"] = elapsedTimeVariable
     result["end_actions"] = endActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }

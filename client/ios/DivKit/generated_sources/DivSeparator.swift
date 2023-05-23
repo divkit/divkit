@@ -50,6 +50,7 @@ public final class DivSeparator: DivBase {
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let delimiterStyle: DelimiterStyle
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -128,6 +129,9 @@ public final class DivSeparator: DivBase {
   static let delimiterStyleValidator: AnyValueValidator<DivSeparator.DelimiterStyle> =
     makeNoOpValueValidator()
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -200,6 +204,7 @@ public final class DivSeparator: DivBase {
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
     delimiterStyle: DelimiterStyle? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
@@ -232,6 +237,7 @@ public final class DivSeparator: DivBase {
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
     self.delimiterStyle = delimiterStyle ?? DivSeparator.DelimiterStyle()
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
@@ -282,53 +288,54 @@ extension DivSeparator: Equatable {
     guard
       lhs.columnSpan == rhs.columnSpan,
       lhs.delimiterStyle == rhs.delimiterStyle,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -353,6 +360,7 @@ extension DivSeparator: Serializable {
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["delimiter_style"] = delimiterStyle.toDictionary()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()

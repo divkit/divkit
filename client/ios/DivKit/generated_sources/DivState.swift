@@ -48,6 +48,7 @@ public final class DivState: DivBase {
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let defaultStateId: Expression<String>?
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let divId: String?
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -126,6 +127,9 @@ public final class DivState: DivBase {
   static let defaultStateIdValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let divIdValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
@@ -198,6 +202,7 @@ public final class DivState: DivBase {
     border: DivBorder?,
     columnSpan: Expression<Int>?,
     defaultStateId: Expression<String>?,
+    disappearActions: [DivDisappearAction]?,
     divId: String?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
@@ -228,6 +233,7 @@ public final class DivState: DivBase {
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
+    self.disappearActions = disappearActions
     self.divId = divId
     self.extensions = extensions
     self.focus = focus
@@ -272,53 +278,54 @@ extension DivState: Equatable {
     guard
       lhs.columnSpan == rhs.columnSpan,
       lhs.defaultStateId == rhs.defaultStateId,
-      lhs.divId == rhs.divId
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.divId == rhs.divId,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.states == rhs.states
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.states == rhs.states,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -341,6 +348,7 @@ extension DivState: Serializable {
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["default_state_id"] = defaultStateId?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["div_id"] = divId
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()

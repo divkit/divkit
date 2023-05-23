@@ -16,6 +16,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let bufferingActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let elapsedTimeVariable: Field<String>? // at least 1 char
   public let endActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
@@ -61,6 +62,7 @@ public final class DivVideoTemplate: TemplateValue {
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         bufferingActions: try dictionary.getOptionalArray("buffering_actions", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         elapsedTimeVariable: try dictionary.getOptionalField("elapsed_time_variable"),
         endActions: try dictionary.getOptionalArray("end_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
@@ -106,6 +108,7 @@ public final class DivVideoTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     bufferingActions: Field<[DivActionTemplate]>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     elapsedTimeVariable: Field<String>? = nil,
     endActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
@@ -145,6 +148,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.border = border
     self.bufferingActions = bufferingActions
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.elapsedTimeVariable = elapsedTimeVariable
     self.endActions = endActions
     self.extensions = extensions
@@ -185,6 +189,7 @@ public final class DivVideoTemplate: TemplateValue {
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let bufferingActionsValue = parent?.bufferingActions?.resolveOptionalValue(context: context, validator: ResolvedValue.bufferingActionsValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let elapsedTimeVariableValue = parent?.elapsedTimeVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.elapsedTimeVariableValidator) ?? .noValue
     let endActionsValue = parent?.endActions?.resolveOptionalValue(context: context, validator: ResolvedValue.endActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
@@ -223,6 +228,7 @@ public final class DivVideoTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       bufferingActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "buffering_actions", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       elapsedTimeVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "elapsed_time_variable", error: $0) },
       endActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "end_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -270,6 +276,7 @@ public final class DivVideoTemplate: TemplateValue {
       border: borderValue.value,
       bufferingActions: bufferingActionsValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       elapsedTimeVariable: elapsedTimeVariableValue.value,
       endActions: endActionsValue.value,
       extensions: extensionsValue.value,
@@ -315,6 +322,7 @@ public final class DivVideoTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var bufferingActionsValue: DeserializationResult<[DivAction]> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var elapsedTimeVariableValue: DeserializationResult<String> = parent?.elapsedTimeVariable?.value(validatedBy: ResolvedValue.elapsedTimeVariableValidator) ?? .noValue
     var endActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
@@ -363,6 +371,8 @@ public final class DivVideoTemplate: TemplateValue {
         bufferingActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.bufferingActionsValidator, type: DivActionTemplate.self).merged(with: bufferingActionsValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "elapsed_time_variable":
         elapsedTimeVariableValue = deserialize(__dictValue, validator: ResolvedValue.elapsedTimeVariableValidator).merged(with: elapsedTimeVariableValue)
       case "end_actions":
@@ -437,6 +447,8 @@ public final class DivVideoTemplate: TemplateValue {
         bufferingActionsValue = bufferingActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.bufferingActionsValidator, type: DivActionTemplate.self))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.elapsedTimeVariable?.link:
         elapsedTimeVariableValue = elapsedTimeVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.elapsedTimeVariableValidator))
       case parent?.endActions?.link:
@@ -501,6 +513,7 @@ public final class DivVideoTemplate: TemplateValue {
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       bufferingActionsValue = bufferingActionsValue.merged(with: parent.bufferingActions?.resolveOptionalValue(context: context, validator: ResolvedValue.bufferingActionsValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       endActionsValue = endActionsValue.merged(with: parent.endActions?.resolveOptionalValue(context: context, validator: ResolvedValue.endActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       fatalActionsValue = fatalActionsValue.merged(with: parent.fatalActions?.resolveOptionalValue(context: context, validator: ResolvedValue.fatalActionsValidator, useOnlyLinks: true))
@@ -531,6 +544,7 @@ public final class DivVideoTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       bufferingActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "buffering_actions", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       elapsedTimeVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "elapsed_time_variable", error: $0) },
       endActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "end_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -578,6 +592,7 @@ public final class DivVideoTemplate: TemplateValue {
       border: borderValue.value,
       bufferingActions: bufferingActionsValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       elapsedTimeVariable: elapsedTimeVariableValue.value,
       endActions: endActionsValue.value,
       extensions: extensionsValue.value,
@@ -628,6 +643,7 @@ public final class DivVideoTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       bufferingActions: bufferingActions ?? mergedParent.bufferingActions,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       elapsedTimeVariable: elapsedTimeVariable ?? mergedParent.elapsedTimeVariable,
       endActions: endActions ?? mergedParent.endActions,
       extensions: extensions ?? mergedParent.extensions,
@@ -673,6 +689,7 @@ public final class DivVideoTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       bufferingActions: merged.bufferingActions?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       elapsedTimeVariable: merged.elapsedTimeVariable,
       endActions: merged.endActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),

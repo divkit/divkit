@@ -6,6 +6,7 @@ import Serialization
 
 public final class DivContainerTemplate: TemplateValue {
   public final class SeparatorTemplate: TemplateValue {
+    public let margins: Field<DivEdgeInsetsTemplate>?
     public let showAtEnd: Field<Expression<Bool>>? // default value: false
     public let showAtStart: Field<Expression<Bool>>? // default value: false
     public let showBetween: Field<Expression<Bool>>? // default value: true
@@ -14,6 +15,7 @@ public final class DivContainerTemplate: TemplateValue {
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
         self.init(
+          margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
           showAtEnd: try dictionary.getOptionalExpressionField("show_at_end"),
           showAtStart: try dictionary.getOptionalExpressionField("show_at_start"),
           showBetween: try dictionary.getOptionalExpressionField("show_between"),
@@ -25,11 +27,13 @@ public final class DivContainerTemplate: TemplateValue {
     }
 
     init(
+      margins: Field<DivEdgeInsetsTemplate>? = nil,
       showAtEnd: Field<Expression<Bool>>? = nil,
       showAtStart: Field<Expression<Bool>>? = nil,
       showBetween: Field<Expression<Bool>>? = nil,
       style: Field<DivDrawableTemplate>? = nil
     ) {
+      self.margins = margins
       self.showAtEnd = showAtEnd
       self.showAtStart = showAtStart
       self.showBetween = showBetween
@@ -37,11 +41,13 @@ public final class DivContainerTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: SeparatorTemplate?) -> DeserializationResult<DivContainer.Separator> {
+      let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
       let showAtEndValue = parent?.showAtEnd?.resolveOptionalValue(context: context, validator: ResolvedValue.showAtEndValidator) ?? .noValue
       let showAtStartValue = parent?.showAtStart?.resolveOptionalValue(context: context, validator: ResolvedValue.showAtStartValidator) ?? .noValue
       let showBetweenValue = parent?.showBetween?.resolveOptionalValue(context: context, validator: ResolvedValue.showBetweenValidator) ?? .noValue
       let styleValue = parent?.style?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
+        marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
         showAtEndValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_at_end", error: $0) },
         showAtStartValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_at_start", error: $0) },
         showBetweenValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_between", error: $0) },
@@ -56,6 +62,7 @@ public final class DivContainerTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivContainer.Separator(
+        margins: marginsValue.value,
         showAtEnd: showAtEndValue.value,
         showAtStart: showAtStartValue.value,
         showBetween: showBetweenValue.value,
@@ -68,12 +75,15 @@ public final class DivContainerTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
+      var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
       var showAtEndValue: DeserializationResult<Expression<Bool>> = parent?.showAtEnd?.value() ?? .noValue
       var showAtStartValue: DeserializationResult<Expression<Bool>> = parent?.showAtStart?.value() ?? .noValue
       var showBetweenValue: DeserializationResult<Expression<Bool>> = parent?.showBetween?.value() ?? .noValue
       var styleValue: DeserializationResult<DivDrawable> = .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
+        case "margins":
+          marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
         case "show_at_end":
           showAtEndValue = deserialize(__dictValue, validator: ResolvedValue.showAtEndValidator).merged(with: showAtEndValue)
         case "show_at_start":
@@ -82,6 +92,8 @@ public final class DivContainerTemplate: TemplateValue {
           showBetweenValue = deserialize(__dictValue, validator: ResolvedValue.showBetweenValidator).merged(with: showBetweenValue)
         case "style":
           styleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDrawableTemplate.self).merged(with: styleValue)
+        case parent?.margins?.link:
+          marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self))
         case parent?.showAtEnd?.link:
           showAtEndValue = showAtEndValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.showAtEndValidator))
         case parent?.showAtStart?.link:
@@ -94,9 +106,11 @@ public final class DivContainerTemplate: TemplateValue {
         }
       }
       if let parent = parent {
+        marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
         styleValue = styleValue.merged(with: parent.style?.resolveValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
+        marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
         showAtEndValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_at_end", error: $0) },
         showAtStartValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_at_start", error: $0) },
         showBetweenValue.errorsOrWarnings?.map { .nestedObjectError(field: "show_between", error: $0) },
@@ -111,6 +125,7 @@ public final class DivContainerTemplate: TemplateValue {
         return .failure(NonEmptyArray(errors)!)
       }
       let result = DivContainer.Separator(
+        margins: marginsValue.value,
         showAtEnd: showAtEndValue.value,
         showAtStart: showAtStartValue.value,
         showBetween: showBetweenValue.value,
@@ -127,6 +142,7 @@ public final class DivContainerTemplate: TemplateValue {
       let merged = try mergedWithParent(templates: templates)
 
       return SeparatorTemplate(
+        margins: merged.margins?.tryResolveParent(templates: templates),
         showAtEnd: merged.showAtEnd,
         showAtStart: merged.showAtStart,
         showBetween: merged.showBetween,
@@ -154,6 +170,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
@@ -200,6 +217,7 @@ public final class DivContainerTemplate: TemplateValue {
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
         contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -246,6 +264,7 @@ public final class DivContainerTemplate: TemplateValue {
     columnSpan: Field<Expression<Int>>? = nil,
     contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -286,6 +305,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal
     self.contentAlignmentVertical = contentAlignmentVertical
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
@@ -327,6 +347,7 @@ public final class DivContainerTemplate: TemplateValue {
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentHorizontalValidator) ?? .noValue
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
@@ -366,6 +387,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -414,6 +436,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -460,6 +483,7 @@ public final class DivContainerTemplate: TemplateValue {
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
     var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -513,6 +537,8 @@ public final class DivContainerTemplate: TemplateValue {
         contentAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator).merged(with: contentAlignmentHorizontalValue)
       case "content_alignment_vertical":
         contentAlignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator).merged(with: contentAlignmentVerticalValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "doubletap_actions":
         doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
       case "extensions":
@@ -589,6 +615,8 @@ public final class DivContainerTemplate: TemplateValue {
         contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator))
       case parent?.contentAlignmentVertical?.link:
         contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.doubletapActions?.link:
         doubletapActionsValue = doubletapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self))
       case parent?.extensions?.link:
@@ -650,6 +678,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspectValue = aspectValue.merged(with: parent.aspect?.resolveOptionalValue(context: context, validator: ResolvedValue.aspectValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
@@ -684,6 +713,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -732,6 +762,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -783,6 +814,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
@@ -829,6 +861,7 @@ public final class DivContainerTemplate: TemplateValue {
       columnSpan: merged.columnSpan,
       contentAlignmentHorizontal: merged.contentAlignmentHorizontal,
       contentAlignmentVertical: merged.contentAlignmentVertical,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),

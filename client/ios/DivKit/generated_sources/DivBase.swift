@@ -12,6 +12,7 @@ public protocol DivBase: DivBlockModeling {
   var background: [DivBackground]? { get } // at least 1 elements
   var border: DivBorder { get }
   var columnSpan: Expression<Int>? { get } // constraint: number >= 0
+  var disappearActions: [DivDisappearAction]? { get } // at least 1 elements
   var extensions: [DivExtension]? { get } // at least 1 elements
   var focus: DivFocus? { get }
   var height: DivSize { get } // default value: .divWrapContentSize(DivWrapContentSize())

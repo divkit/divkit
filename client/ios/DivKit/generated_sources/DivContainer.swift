@@ -19,6 +19,7 @@ public final class DivContainer: DivBase {
   }
 
   public final class Separator {
+    public let margins: DivEdgeInsets
     public let showAtEnd: Expression<Bool> // default value: false
     public let showAtStart: Expression<Bool> // default value: false
     public let showBetween: Expression<Bool> // default value: true
@@ -36,6 +37,9 @@ public final class DivContainer: DivBase {
       resolver.resolveNumericValue(expression: showBetween) ?? true
     }
 
+    static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
+      makeNoOpValueValidator()
+
     static let showAtEndValidator: AnyValueValidator<Bool> =
       makeNoOpValueValidator()
 
@@ -46,11 +50,13 @@ public final class DivContainer: DivBase {
       makeNoOpValueValidator()
 
     init(
+      margins: DivEdgeInsets? = nil,
       showAtEnd: Expression<Bool>? = nil,
       showAtStart: Expression<Bool>? = nil,
       showBetween: Expression<Bool>? = nil,
       style: DivDrawable
     ) {
+      self.margins = margins ?? DivEdgeInsets()
       self.showAtEnd = showAtEnd ?? .value(false)
       self.showAtStart = showAtStart ?? .value(false)
       self.showBetween = showBetween ?? .value(true)
@@ -72,6 +78,7 @@ public final class DivContainer: DivBase {
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -177,6 +184,9 @@ public final class DivContainer: DivBase {
   static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
     makeNoOpValueValidator()
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -266,6 +276,7 @@ public final class DivContainer: DivBase {
     columnSpan: Expression<Int>?,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     contentAlignmentVertical: Expression<DivAlignmentVertical>?,
+    disappearActions: [DivDisappearAction]?,
     doubletapActions: [DivAction]?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
@@ -305,6 +316,7 @@ public final class DivContainer: DivBase {
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.left)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.top)
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.focus = focus
@@ -366,61 +378,62 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.doubletapActions == rhs.doubletapActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode,
-      lhs.lineSeparator == rhs.lineSeparator
+      lhs.layoutMode == rhs.layoutMode
     else {
       return false
     }
     guard
+      lhs.lineSeparator == rhs.lineSeparator,
       lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.separator == rhs.separator,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -448,6 +461,7 @@ extension DivContainer: Serializable {
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
@@ -481,13 +495,14 @@ extension DivContainer: Serializable {
 extension DivContainer.Separator: Equatable {
   public static func ==(lhs: DivContainer.Separator, rhs: DivContainer.Separator) -> Bool {
     guard
+      lhs.margins == rhs.margins,
       lhs.showAtEnd == rhs.showAtEnd,
-      lhs.showAtStart == rhs.showAtStart,
-      lhs.showBetween == rhs.showBetween
+      lhs.showAtStart == rhs.showAtStart
     else {
       return false
     }
     guard
+      lhs.showBetween == rhs.showBetween,
       lhs.style == rhs.style
     else {
       return false
@@ -500,6 +515,7 @@ extension DivContainer.Separator: Equatable {
 extension DivContainer.Separator: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
+    result["margins"] = margins.toDictionary()
     result["show_at_end"] = showAtEnd.toValidSerializationValue()
     result["show_at_start"] = showAtStart.toValidSerializationValue()
     result["show_between"] = showBetween.toValidSerializationValue()

@@ -24,6 +24,7 @@ public final class DivIndicator: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
@@ -128,6 +129,9 @@ public final class DivIndicator: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
@@ -218,6 +222,7 @@ public final class DivIndicator: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     height: DivSize? = nil,
@@ -256,6 +261,7 @@ public final class DivIndicator: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
@@ -312,67 +318,68 @@ extension DivIndicator: Equatable {
     guard
       lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.inactiveItemColor == rhs.inactiveItemColor,
-      lhs.inactiveMinimumShape == rhs.inactiveMinimumShape,
-      lhs.inactiveShape == rhs.inactiveShape
+      lhs.inactiveMinimumShape == rhs.inactiveMinimumShape
     else {
       return false
     }
     guard
+      lhs.inactiveShape == rhs.inactiveShape,
       lhs.itemsPlacement == rhs.itemsPlacement,
-      lhs.margins == rhs.margins,
-      lhs.minimumItemSize == rhs.minimumItemSize
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.minimumItemSize == rhs.minimumItemSize,
       lhs.paddings == rhs.paddings,
-      lhs.pagerId == rhs.pagerId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.pagerId == rhs.pagerId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.shape == rhs.shape,
-      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters
+      lhs.shape == rhs.shape
     else {
       return false
     }
     guard
+      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -397,6 +404,7 @@ extension DivIndicator: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
