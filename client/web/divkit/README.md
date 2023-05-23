@@ -1,6 +1,6 @@
 ## DivKit for the Web
 
-![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-47.7%20KB-brightgreen)
+![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-60.5%20KB-brightgreen)
 
 ### Installation
 
