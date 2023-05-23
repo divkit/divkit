@@ -1,4 +1,3 @@
-
 import { correctTintMode } from '../../src/utils/correctTintMode';
 
 describe('correctTintMode', () => {

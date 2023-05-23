@@ -21,6 +21,7 @@
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctTintMode } from '../../utils/correctTintMode';
     import { getCssFilter } from '../../utils/filters';
+    import { prepareBase64 } from '../../utils/prepareBase64';
 
     export let json: Partial<DivImageData> = {};
     export let templateContext: TemplateContext;
@@ -72,11 +73,7 @@
         const preview = $jsonPreview;
 
         if ((state === STATE_LOADING || state === STATE_ERROR) && preview) {
-            if (preview.startsWith('data:')) {
-                backgroundImage = `url("${htmlFilter(preview)}")`;
-            } else {
-                backgroundImage = `url("data:image/jpg;base64,${htmlFilter(preview)}")`;
-            }
+            backgroundImage = `url("${prepareBase64(preview)}")`;
         } else {
             backgroundImage = '';
         }

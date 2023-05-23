@@ -87,7 +87,11 @@
         "player_settings_payload": {
           "type": "object",
           "additionalProperties": true,
-          "$description": "translations.json#/div_video_player_settings_payload"
+          "$description": "translations.json#/div_video_player_settings_payload",
+          "platforms": [
+            "android",
+            "ios"
+          ]
         }
       }
     }

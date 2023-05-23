@@ -1748,10 +1748,6 @@
     },
     {
       "title": "Video with controls",
-      "platforms": [
-        "android",
-        "ios"
-      ],
       "tags": [
         "DivVideo"
       ],

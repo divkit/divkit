@@ -25,6 +25,7 @@
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
+    import type { VideoElements } from '../types/video';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, RootCtxValue, Running } from '../context/root';
@@ -437,6 +438,40 @@
         }
     }
 
+    function callVideoAction(id: string | null, action: string | null): void {
+        if (id) {
+            const instance = getInstance<VideoElements>(id);
+
+            if (instance) {
+                if (action === 'start') {
+                    instance.start();
+                } else if (action === 'pause') {
+                    instance.pause();
+                } else {
+                    logError(wrapError(new Error('Unknown video action'), {
+                        additional: {
+                            id,
+                            action
+                        }
+                    }));
+                }
+            } else {
+                logError(wrapError(new Error('Video component is not found'), {
+                    additional: {
+                        id,
+                        action
+                    }
+                }));
+            }
+        } else {
+            logError(wrapError(new Error('Missing id in video action'), {
+                additional: {
+                    action
+                }
+            }));
+        }
+    }
+
     export function execAction(action: MaybeMissing<Action | VisibilityAction>): void {
         const actionUrl = action.url ? String(action.url) : '';
 
@@ -500,6 +535,9 @@
                             }));
                         }
                         break;
+                    case 'video':
+                        callVideoAction(params.get('id'), params.get('action'));
+                        break;
                     default:
                         logError(wrapError(new Error('Unknown type of action'), {
                             additional: {
@@ -518,7 +556,7 @@
     }
 
     async function execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void> {
-        if (!actions) {
+        if (!actions || !Array.isArray(actions)) {
             return;
         }
 

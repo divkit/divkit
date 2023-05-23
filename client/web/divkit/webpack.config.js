@@ -7,26 +7,11 @@ const { typescript/*, postcss*/ } = require('svelte-preprocess');
 const { asMarkupPreprocessor } = require('svelte-as-markup-preprocessor');
 // const cssModules = require('svelte-preprocess-cssmodules');
 
+const {COMPONENTS} = require('./src/components');
+
 // const { version } = require('../package.json');
 
 const isProd = process.env.NODE_ENV === 'production';
-
-const COMPONENTS = [
-    'text',
-    'container',
-    'separator',
-    'image',
-    'gif',
-    'grid',
-    'gallery',
-    'tabs',
-    'state',
-    'pager',
-    'indicator',
-    'slider',
-    'input',
-    'select'
-];
 
 const enabledComponents = new Set(process.env.ENABLED_COMPONENTS?.split(/[,;\s]+/) || COMPONENTS);
 const componentsEnvVars = COMPONENTS.reduce((acc, item) => {

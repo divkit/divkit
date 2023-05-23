@@ -1,6 +1,5 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
-import type { BooleanInt } from '../../typings/common';
 
 export interface SelectItem {
     // text = value
