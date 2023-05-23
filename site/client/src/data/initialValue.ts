@@ -72,7 +72,7 @@ export const DEFAULT_JSON_VALUE = `{
                         {
                             "type": "tutorialCard",
                             "title": "DivKit",
-                            "body": "What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using Devkit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.",
+                            "body": "What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using DivKit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.",
                             "links": [
                                 {
                                     "type": "link",
@@ -188,7 +188,7 @@ export function getJson() {
                         }),
                         thelper.tutorialCard({
                             title: 'DivKit',
-                            body: 'What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using Devkit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.',
+                            body: 'What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using DivKit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.',
                             links: [
                                 thelper.link({
                                     text: 'More about DivKit',
