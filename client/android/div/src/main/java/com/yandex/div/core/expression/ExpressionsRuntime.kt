@@ -13,7 +13,6 @@ internal class ExpressionsRuntime(
 
     fun clearBinding() {
         triggersController.clearBinding()
-        variableController.removeGlobalObservers()
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
