@@ -112,9 +112,20 @@ export interface VisibilityAction {
     log_limit?: number;
 }
 
+export interface DisappearAction {
+    log_id: string;
+    url?: string;
+    referer?: string;
+    payload?: Record<string, string>;
+    visibility_percentage?: number;
+    disappear_duration?: number;
+    // download_callbacks
+    log_limit?: number;
+}
+
 export type StatCallback = (details: {
     type: string;
-    action: Action | VisibilityAction;
+    action: Action | VisibilityAction | DisappearAction;
 }) => void;
 
 export type CustomActionCallback = (action: Action & { url: string }) => void;

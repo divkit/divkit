@@ -79,7 +79,10 @@
         "$ref": "div-disappear-action.json"
       },
       "minItems": 1,
-      "$description": "translations.json#/div_base_disappear_actions"
+      "$description": "translations.json#/div_base_disappear_actions",
+      "platforms": [
+        "web"
+      ]
     },
     "tooltips": {
       "type": "array",

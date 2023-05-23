@@ -705,9 +705,15 @@
                 json.visibility_action && [json.visibility_action]
             );
 
-        if (Array.isArray(visibilityActions) && visibilityActions.length) {
+        const disappearActions = layoutParams.fakeElement ? [] : json.disappear_actions;
+
+        if (
+            Array.isArray(visibilityActions) && visibilityActions.length ||
+            Array.isArray(disappearActions) && disappearActions.length
+        ) {
             visibilityAction(node, {
                 visibilityActions,
+                disappearActions,
                 rootCtx
             });
         }

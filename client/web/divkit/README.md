@@ -222,12 +222,12 @@ function onError(detauls: {
 
 Function, optional.
 
-Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action`).
+Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action(s)` and `disappear_actions`).
 
 ```ts
 function onStat(details: {
-    type: 'click' | 'visible';
-    action: Action | VisibilityAction;
+    type: 'click' | 'visible' | 'disappear';
+    action: Action | VisibilityAction | DisappearAction;
 }) {
 }
 ```

@@ -3,7 +3,7 @@ import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
-import type { VisibilityAction } from './visibilityAction';
+import type { DisappearAction, VisibilityAction } from './visibilityAction';
 import type { Dimension } from './sizes';
 import type { Action } from '../../typings/common';
 
@@ -104,6 +104,7 @@ export interface DivBaseData {
     visibility?: Visibility;
     visibility_action?: VisibilityAction;
     visibility_actions?: VisibilityAction[];
+    disappear_actions?: DisappearAction[];
     // tooltips;
     accessibility?: Accessibility;
     extensions?: Extension[];
