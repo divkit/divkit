@@ -1955,6 +1955,10 @@
     "en": "Variable — HEX color as a string.",
     "ru": "Переменная — цвет в формате HEX, представленный в виде строки."
   },
+  "div_variable_json": {
+    "en": "Variable — any json object.",
+    "ru": "Переменная — произвольный json объект."
+  },
   "div_variable_integer": {
     "en": "An integer variable.",
     "ru": "Целочисленная переменная."

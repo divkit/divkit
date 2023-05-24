@@ -317,6 +317,246 @@
       ],
       "result_type": "boolean",
       "platforms": [ "android", "web", "ios" ]
+    },
+    {
+      "name": "getJsonString(json, vararg string) string",
+      "function_name": "getJsonString",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "string",
+      "platforms": []
+    },
+    {
+      "name": "getJsonNumber(json, vararg string) number",
+      "function_name": "getJsonNumber",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "number",
+      "platforms": []
+    },
+    {
+      "name": "getJsonInteger(json, vararg string) integer",
+      "function_name": "getJsonInteger",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "integer",
+      "platforms": []
+    },
+    {
+      "name": "getJsonBoolean(json, vararg string) boolean",
+      "function_name": "getJsonBoolean",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "boolean",
+      "platforms": []
+    },
+    {
+      "name": "getJsonColor(json, vararg string) color",
+      "function_name": "getJsonColor",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "color",
+      "platforms": []
+    },
+    {
+      "name": "getJsonUrl(json, vararg string) url",
+      "function_name": "getJsonUrl",
+      "doc": "Returns a property from a json object.",
+      "arguments": [
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptString(string, json, vararg string) string",
+      "function_name": "getJsonOptString",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Fallback if property does not exist or a property value is not a string."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "string",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptNumber(number, json, vararg string) number",
+      "function_name": "getJsonOptNumber",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "number",
+              "doc": "Fallback if property does not exist or a property value is not a number."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "number",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptInteger(integer, json, vararg string) integer",
+      "function_name": "getJsonOptInteger",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "integer",
+              "doc": "Fallback if property does not exist or a property value is not an integer."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "integer",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptBoolean(boolean, json, vararg string) boolean",
+      "function_name": "getJsonOptBoolean",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "boolean",
+              "doc": "Fallback if property does not exist or a property value is not a boolean."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "boolean",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptColor(color, json, vararg string) color",
+      "function_name": "getJsonOptColor",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "color",
+              "doc": "Fallback if property does not exist or a property value is not a color."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "color",
+      "platforms": []
+    },
+    {
+      "name": "getJsonOptUrl(url, json, vararg string) url",
+      "function_name": "getJsonOptUrl",
+      "doc": "Returns a property from a json object with fallback.",
+      "arguments": [
+          {
+              "type": "url",
+              "doc": "Fallback if property does not exist or a property value is not an url."
+          },
+          {
+              "type": "json",
+              "doc": "A json object."
+          },
+          {
+              "type": "string",
+              "vararg": true,
+              "doc": "Json path."
+          }
+      ],
+      "result_type": "url",
+      "platforms": []
     }
   ]
 }

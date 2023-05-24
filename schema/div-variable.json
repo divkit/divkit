@@ -153,6 +153,32 @@
         "name",
         "value"
       ]
+    },
+    "json_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_json",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "json"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "object",
+          "additionalProperties": true,
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
     }
   },
   "anyOf": [
@@ -173,6 +199,10 @@
     },
     {
       "$ref": "#/definitions/url_variable"
+    },
+    {
+      "$ref": "#/definitions/json_variable",
+      "platforms": []
     }
   ]
 }
