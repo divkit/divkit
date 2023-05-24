@@ -1,6 +1,7 @@
 package com.yandex.div.core.dagger;
 
 import android.content.Context;
+import android.os.Build;
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
@@ -75,7 +76,11 @@ abstract class Div2Module {
     @DivScope
     @NonNull
     static RenderScript provideRenderScript(@NonNull @Named(Names.CONTEXT) Context context) {
-        return RenderScript.create(context);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return RenderScript.create(context);
+        }
+        return RenderScript.createMultiContext(context, RenderScript.ContextType.NORMAL,
+                RenderScript.CREATE_FLAG_NONE, context.getApplicationInfo().targetSdkVersion);
     }
 
     @Provides
