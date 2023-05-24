@@ -1,3 +1,35 @@
+## 25.1.0
+
+# JSON Schema:
+
+Additions:
+* Added `pause_actions` and `fatal_actions` to `div-video`
+
+Changes:
+* Combined `stream` and `video` source types in `div-video`
+
+# Android Client:
+
+Additions:
+* Supported `DivVideo`
+
+Fixes & Changes:
+* Fixed center alignment of elements with margins in containers
+* Rolled back of `DivCustomContainerViewAdapter`
+* Fixed double closing of `DivStorage` database on cards removing
+* Extended API of `DivPlayer.Observer`
+* Fixed array validation at JSON parsing
+
+# iOS Client:
+
+Additions:
+* Supported `DivVideo`
+
+# TypeScript JSON Builder:
+
+Updates:
+* Optimized `rewriteTemplateVersions`
+
 ## 25.0.0
 
 # JSON Schema:
