@@ -32,6 +32,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVideo
+import java.util.Collections.min
 
 internal val Div.type: String
     get() {
@@ -90,13 +91,30 @@ internal fun requestHierarchyLayout(v : View) {
 }
 
 internal fun DivBorder.getCornerRadii(
+    widthPx: Float,
+    heightPx: Float,
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
 ): FloatArray {
-    val topLeft = (cornersRadius?.topLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val topRight = (cornersRadius?.topRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val bottomLeft = (cornersRadius?.bottomLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val bottomRight = (cornersRadius?.bottomRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+
+    var topLeft = (cornersRadius?.topLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var topRight = (cornersRadius?.topRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var bottomLeft = (cornersRadius?.bottomLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var bottomRight = (cornersRadius?.bottomRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+
+    val top = topLeft + topRight
+    val bottom = bottomLeft + bottomRight
+    val left = topLeft + bottomLeft
+    val right = topRight + bottomRight
+
+    val f = min(listOf(widthPx / top, widthPx / bottom, heightPx / left, heightPx / right))
+
+    if (f > 0 && f < 1) {
+        topLeft *= f
+        topRight *= f
+        bottomLeft *= f
+        bottomRight *= f
+    }
 
     return floatArrayOf(
         topLeft, topLeft,
