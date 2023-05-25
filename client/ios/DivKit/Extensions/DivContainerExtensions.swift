@@ -272,11 +272,15 @@ extension DivContainer: DivBlockModeling {
     guard let separator = separator else {
       return nil
     }
-    let separatorBlock = try separator.style.makeBlock(context: context, corners: .all)
+    let separatorBlock = try separator.style.makeBlock(
+      context: context, corners: .all
+    ).addingEdgeInsets(separator.margins.makeEdgeInsets(with: context.expressionResolver))
+
     let style = ContainerBlock.Child(
       content: separatorBlock,
       crossAlignment: .center
     )
+
     return ContainerBlock.Separator(
       style: style,
       showAtEnd: separator.resolveShowAtEnd(context.expressionResolver),
@@ -291,11 +295,15 @@ extension DivContainer: DivBlockModeling {
     guard let lineSeparator = lineSeparator else {
       return nil
     }
-    let lineSeparatorBlock = try lineSeparator.style.makeBlock(context: context, corners: .all)
+    let lineSeparatorBlock = try lineSeparator.style.makeBlock(
+      context: context, corners: .all
+    ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(with: context.expressionResolver))
+
     let style = ContainerBlock.Child(
       content: lineSeparatorBlock,
       crossAlignment: .center
     )
+
     return ContainerBlock.Separator(
       style: style,
       showAtEnd: lineSeparator.resolveShowAtEnd(context.expressionResolver),
