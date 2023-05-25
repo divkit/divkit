@@ -67,17 +67,19 @@ extension DivVideo: DivBlockModeling {
 }
 
 extension DivVideoSource {
-  func makeVideo(resolver: ExpressionResolver) -> Video {
+  public func makeVideo(resolver: ExpressionResolver) -> Video {
     let resolution: CGSize? = resolution.flatMap { resolution in
       CGSize(
         width: resolution.resolveWidth(resolver) ?? 0,
         height: resolution.resolveHeight(resolver) ?? 0
       )
     }
-    return Video(url: resolveUrl(resolver)!,
-                 resolution: resolution,
-                 bitrate: resolveBitrate(resolver).flatMap { Double($0) },
-                 mimeType: resolveMimeType(resolver))
+    return Video(
+      url: resolveUrl(resolver)!,
+      resolution: resolution,
+      bitrate: resolveBitrate(resolver).flatMap { Double($0) },
+      mimeType: resolveMimeType(resolver)
+    )
   }
 }
 
