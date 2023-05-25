@@ -22,7 +22,7 @@ struct SimpleDivView: UIViewRepresentable {
   func updateUIView(_: UIView, context _: Context) {}
 }
 
-private final class SimpleDivUIView: UIView {
+final class SimpleDivUIView: UIView {
   private let cardId: DivCardID
   private let jsonData: Data?
   private let divKitComponents: DivKitComponents
