@@ -245,6 +245,19 @@ function onCustomAction(action: Action): void {
 }
 ```
 
+#### typefaceProvider
+
+Function, optional.
+
+Callback for a custom `font-family` css property value.
+
+```ts
+function typefaceProvider(fontFamily: string, opts?: {
+    fontWeight?: number;
+}): string {
+}
+```
+
 #### platform
 
 `desktop` | `touch` | `auto`

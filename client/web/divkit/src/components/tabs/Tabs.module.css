@@ -23,6 +23,7 @@
     line-height: var(--divkit-tabs-line-height, 1.25);
     letter-spacing: var(--divkit-tabs-letter-spacing, 0);
     font-weight: var(--divkit-tabs-inactive-font-weight, 400);
+    font-family: var(--divkit-tabs-inactive-font-family, inherit);
     border-radius: var(--divkit-tabs-border-radius, 100em);
     cursor: pointer;
     user-select: none;
@@ -40,6 +41,7 @@
     color: var(--divkit-tabs-active-text-color, rgba(0, 0, 0, .8));
     cursor: default;
     font-weight: var(--divkit-tabs-active-font-weight, 400);
+    font-family: var(--divkit-tabs-active-font-family, inherit);
 }
 
 .tabs__item_selected.tabs__item_actionable {

@@ -2,7 +2,8 @@ import type {
     DivJson,
     ErrorCallback,
     Platform,
-    Customization
+    Customization,
+    TypefaceProvider
 } from './common';
 
 export function render(opts: {
@@ -13,4 +14,5 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     onError?: ErrorCallback;
+    typefaceProvider?: TypefaceProvider;
 }): string;

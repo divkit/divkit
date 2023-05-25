@@ -54,6 +54,7 @@
         font_size: json.font_size,
         letter_spacing: json.letter_spacing,
         font_weight: json.font_weight,
+        font_family: json.font_family,
         text_color: json.text_color,
         underline: json.underline,
         strike: json.strike,

@@ -1,6 +1,6 @@
 import type { Readable, Writable } from 'svelte/types/runtime/store';
 import type { WrappedError } from '../utils/wrapError';
-import type { Action, DivBase, DivExtension, DivExtensionContext, TemplateContext } from '../../typings/common';
+import type { Action, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider } from '../../typings/common';
 import type { VisibilityAction } from '../types/visibilityAction';
 import type { DivBaseData } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
@@ -39,6 +39,7 @@ export interface RootCtxValue {
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
     getExtensionContext(): DivExtensionContext;
+    typefaceProvider: TypefaceProvider;
     isDesktop: Readable<boolean>;
 
     // Devtool

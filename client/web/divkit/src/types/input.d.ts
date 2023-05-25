@@ -33,7 +33,7 @@ export interface DivInputData extends DivBaseData {
 
     font_size?: number;
     // font_size_unit
-    // font_family
+    font_family?: string;
     font_weight?: FontWeight;
     text_color?: string;
     text_variable: string;

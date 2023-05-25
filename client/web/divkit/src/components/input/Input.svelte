@@ -94,9 +94,18 @@
     }
 
     const jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
+    const jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
     let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
+        if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
+            fontFamily = rootCtx.typefaceProvider($jsonFontFamily, {
+                fontWeight: fontWeight || 400
+            });
+        } else {
+            fontFamily = '';
+        }
     }
 
     const jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
@@ -194,6 +203,7 @@
         '--divkit-input-hint-color': hintColor,
         '--divkit-input-highlight-color': highlightColor,
         'font-weight': fontWeight,
+        'font-family': fontFamily,
         'line-height': lineHeight,
         'letter-spacing': letterSpacing,
         color: textColor,

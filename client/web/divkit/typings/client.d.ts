@@ -7,7 +7,8 @@ import type {
     CustomActionCallback,
     Theme,
     Customization,
-    DivExtensionClass
+    DivExtensionClass,
+    TypefaceProvider
 } from './common';
 import type { GlobalVariablesController } from './variables';
 
@@ -20,6 +21,7 @@ export function render(opts: {
     onStat?: StatCallback;
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;
+    typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     customization?: Customization;
     builtinProtocols?: string[];

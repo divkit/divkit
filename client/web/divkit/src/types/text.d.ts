@@ -16,6 +16,7 @@ export type Truncate = 'none' | 'end';
 
 export interface TextStyles {
     font_size?: number;
+    font_family?: string;
     // font_size_unit
     letter_spacing?: number;
     font_weight?: FontWeight;

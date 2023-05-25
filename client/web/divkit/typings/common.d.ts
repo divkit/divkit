@@ -150,6 +150,10 @@ export type ErrorCallback = (details: {
     error: WrappedError;
 }) => void;
 
+export type TypefaceProvider = (fontFamily: string, opts?: {
+    fontWeight?: number;
+}) => string;
+
 export interface DivkitInstance {
     $destroy(): void;
     execAction(action: Action | VisibilityAction): void;

@@ -93,9 +93,18 @@
     }
 
     const jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
+    const jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
     let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
+        if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
+            fontFamily = rootCtx.typefaceProvider($jsonFontFamily, {
+                fontWeight: fontWeight || 400
+            });
+        } else {
+            fontFamily = '';
+        }
     }
 
     const jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
@@ -137,6 +146,7 @@
     $: stl = {
         '--divkit-input-hint-color': hintColor,
         'font-weight': fontWeight,
+        'font-family': fontFamily,
         color: textColor
     };
     $: innerStl = {

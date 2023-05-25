@@ -8,7 +8,8 @@ import type {
     ErrorCallback,
     Platform,
     StatCallback,
-    Theme
+    Theme,
+    TypefaceProvider
 } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 
@@ -26,6 +27,7 @@ export function render(opts: {
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;
     onComponent?: ComponentCallback;
+    typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     theme?: Theme;
 }) {
@@ -43,6 +45,7 @@ export function render(opts: {
             onCustomAction: opts.onCustomAction,
             onError: opts.onError,
             onComponent: opts.onComponent,
+            typefaceProvider: opts.typefaceProvider,
             platform: opts.platform,
             theme: opts.theme
         },

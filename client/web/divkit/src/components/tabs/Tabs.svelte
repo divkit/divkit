@@ -190,16 +190,32 @@
     }
 
     let tabActiveFontWeight: number | undefined = undefined;
+    let tabActiveFontFamily = '';
     $: {
         tabActiveFontWeight = correctFontWeight(tabStyle.active_font_weight || tabStyle.font_weight, tabActiveFontWeight);
+        if (tabStyle.font_family && typeof tabStyle.font_family === 'string') {
+            tabActiveFontFamily = rootCtx.typefaceProvider(tabStyle.font_family, {
+                fontWeight: tabActiveFontWeight || 400
+            });
+        } else {
+            tabActiveFontFamily = '';
+        }
     }
 
     let tabInactiveFontWeight: number | undefined = undefined;
+    let tabInactiveFontFamily = '';
     $: {
         tabInactiveFontWeight = correctFontWeight(
             tabStyle.inactive_font_weight || tabStyle.font_weight,
             tabInactiveFontWeight
         );
+        if (tabStyle.font_family && typeof tabStyle.font_family === 'string') {
+            tabInactiveFontFamily = rootCtx.typefaceProvider(tabStyle.font_family, {
+                fontWeight: tabInactiveFontWeight || 400
+            });
+        } else {
+            tabInactiveFontFamily = '';
+        }
     }
 
     let tabActiveTextColor = '';
@@ -567,6 +583,8 @@
             style:--divkit-tabs-letter-spacing={tabLetterSpacing}
             style:--divkit-tabs-active-font-weight={tabActiveFontWeight || ''}
             style:--divkit-tabs-inactive-font-weight={tabInactiveFontWeight || ''}
+            style:--divkit-tabs-active-font-family={tabActiveFontFamily || ''}
+            style:--divkit-tabs-inactive-font-family={tabInactiveFontFamily || ''}
             style:--divkit-tabs-active-text-color={tabActiveTextColor}
             style:--divkit-tabs-inactive-text-color={tabInactiveTextColor}
             style:--divkit-tabs-active-background-color={tabActiveBackground}

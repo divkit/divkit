@@ -20,7 +20,8 @@
         Customization,
         DivExtension,
         DivExtensionContext,
-        DivExtensionClass
+        DivExtensionClass,
+        TypefaceProvider
     } from '../../typings/common';
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
@@ -66,6 +67,7 @@
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
+    export let typefaceProvider: TypefaceProvider = _fontFamily => '';
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -754,6 +756,7 @@
         getBuiltinProtocols,
         getExtension,
         getExtensionContext,
+        typefaceProvider,
         isDesktop,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
