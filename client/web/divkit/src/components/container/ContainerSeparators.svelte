@@ -75,27 +75,32 @@
     // eslint-disable-next-line max-params
     function appendSeparator(
         separators: SeparatorItem[],
-        separatorStyle: DrawableStyle,
+        separatorStyle: SeparatorStyle,
         box0: Box,
         box1: Box,
         containingBox: Box,
         crossAxis: boolean
     ) {
+        const leftMargin = separatorStyle.margins.left;
+        const rightMargin = separatorStyle.margins.right;
+        const topMargin = separatorStyle.margins.top;
+        const bottomMargin = separatorStyle.margins.bottom;
+
         if (crossAxis) {
             separators.push({
-                top: box0.bottom,
-                left: containingBox.left,
-                width: containingBox.right - containingBox.left,
-                height: box1.top - box0.bottom,
-                style: separatorStyle
+                top: box0.bottom + topMargin,
+                left: containingBox.left + leftMargin,
+                width: Math.max(0, containingBox.right - containingBox.left - leftMargin - rightMargin),
+                height: box1.top - box0.bottom - topMargin - bottomMargin,
+                style: separatorStyle.style
             });
         } else {
             separators.push({
-                top: containingBox.top,
-                left: box0.right,
-                width: box1.left - box0.right,
-                height: containingBox.bottom - containingBox.top,
-                style: separatorStyle
+                top: containingBox.top + topMargin,
+                left: box0.right + leftMargin,
+                width: box1.left - box0.right - leftMargin - rightMargin,
+                height: Math.max(0, containingBox.bottom - containingBox.top - topMargin - bottomMargin),
+                style: separatorStyle.style
             });
         }
     }
@@ -116,12 +121,12 @@
         if (separator?.show_at_start) {
             appendSeparator(
                 separators,
-                separator.style,
+                separator,
                 // only right and bottom is used
                 {
                     top: 0,
-                    right: boxes[0].left - separator.style.width,
-                    bottom: boxes[0].top - separator.style.height,
+                    right: boxes[0].left - separator.style.width - separator.margins.left - separator.margins.right,
+                    bottom: boxes[0].top - separator.style.height - separator.margins.top - separator.margins.bottom,
                     left: 0
                 },
                 boxes[0],
@@ -133,7 +138,7 @@
             for (let i = 0; i < boxes.length - 1; ++i) {
                 appendSeparator(
                     separators,
-                    separator.style,
+                    separator,
                     boxes[i],
                     boxes[i + 1],
                     containingBox,
@@ -146,14 +151,14 @@
 
             appendSeparator(
                 separators,
-                separator.style,
+                separator,
                 lastBox,
                 // only top and left is used
                 {
-                    top: lastBox.bottom + separator.style.height,
+                    top: lastBox.bottom + separator.style.height + separator.margins.top + separator.margins.bottom,
                     right: 0,
                     bottom: 0,
-                    left: lastBox.right + separator.style.width
+                    left: lastBox.right + separator.style.width + separator.margins.left + separator.margins.right
                 },
                 containingBox,
                 crossAxis

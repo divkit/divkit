@@ -4,6 +4,7 @@ import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { BooleanInt } from '../../typings/common';
 import type { Drawable } from './drawable';
 import type { DivAspect } from './image';
+import type { EdgeInsets } from './edgeInserts';
 
 export type ContainerOrientation = 'vertical' | 'horizontal' | 'overlap';
 
@@ -14,6 +15,7 @@ export interface ContainerSeparator {
     show_at_end?: BooleanInt;
     show_between?: BooleanInt;
     style: Drawable;
+    margins?: EdgeInsets;
 }
 
 export interface DivContainerData extends DivBaseData, DivActionableData {

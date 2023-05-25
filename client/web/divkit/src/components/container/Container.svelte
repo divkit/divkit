@@ -8,7 +8,7 @@
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
-    import type { SeparatorStyle } from '../../utils/container';
+    import { SeparatorStyle, prepareMargins } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
@@ -109,7 +109,8 @@
                     show_at_start: Boolean($jsonSeparator.show_at_start ?? false),
                     show_at_end: Boolean($jsonSeparator.show_at_end ?? false),
                     show_between: Boolean($jsonSeparator.show_between ?? true),
-                    style
+                    style,
+                    margins: prepareMargins($jsonSeparator.margins)
                 };
             } else {
                 separator = null;
@@ -134,7 +135,8 @@
                     show_at_start: Boolean($jsonLineSeparator.show_at_start ?? false),
                     show_at_end: Boolean($jsonLineSeparator.show_at_end ?? false),
                     show_between: Boolean($jsonLineSeparator.show_between ?? true),
-                    style
+                    style,
+                    margins: prepareMargins($jsonLineSeparator.margins)
                 };
             } else {
                 lineSeparator = null;
