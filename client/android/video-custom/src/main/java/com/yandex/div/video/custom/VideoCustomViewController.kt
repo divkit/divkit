@@ -25,8 +25,6 @@ class VideoCustomViewController(
         }
         val viewModel = provideViewModel(config)
         view.bindToViewModel(viewModel)
-
-        viewModel.configureVideo()
     }
 
     internal fun unbind(viewModel: VideoViewModel) {

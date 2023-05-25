@@ -31,8 +31,10 @@ import kotlin.math.max
 internal class VideoView(
     context: Context,
     zOrderMode: ZOrderMode = ZOrderMode.ON_TOP,
+    private val videoCustomViewController: VideoCustomViewController,
 ) : FrameLayout(context) {
     private val coroutineScope: CoroutineScope = MainScope()
+    private var videoConfig: VideoConfig? = null
     private var stubViewObservationJob: Job? = null
 
     var viewModel: VideoViewModel? = null
@@ -117,7 +119,6 @@ internal class VideoView(
             super.onPlaybackStateChanged(state)
             when (state)  {
                 STATE_READY -> if (playerView.parent == null) {
-                    stubImageView.setImageBitmap(null)
                     stubImageView.isVisible = false
                     addView(playerView)
                 }
@@ -130,6 +131,7 @@ internal class VideoView(
     fun bindToViewModel(model: VideoViewModel) {
         viewModel?.let { stopObservingViewModel(it) }
         viewModel = model
+        videoConfig = (model as MutableVideoViewModel).videoConfig
 
         if (isAttachedToWindow) {
             resumeObservingViewModel(model)
@@ -168,8 +170,11 @@ internal class VideoView(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        assertBoundToViewModel()
-        viewModel?.let { resumeObservingViewModel(it) }
+        if (viewModel != null) {
+            viewModel?.let { resumeObservingViewModel(it) }
+        } else {
+            videoConfig?.let { videoCustomViewController.bind(this, it) }
+        }
         (context.applicationContext as Application)
             .registerActivityLifecycleCallbacks(playerActivityCallback)
     }
@@ -177,6 +182,8 @@ internal class VideoView(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         viewModel?.let { stopObservingViewModel(it) }
+        viewModel = null
+        stubImageView.isVisible = true
         (context.applicationContext as Application)
             .unregisterActivityLifecycleCallbacks(playerActivityCallback)
     }

@@ -36,7 +36,7 @@ internal interface VideoViewModel {
 }
 
 internal class MutableVideoViewModel(
-    private val videoConfig: VideoConfig,
+    val videoConfig: VideoConfig,
     private val cache: VideoCache,
     private val actionNotifier: VideoCustomActionNotifier,
     private val viewController: VideoCustomViewController,
@@ -68,6 +68,7 @@ internal class MutableVideoViewModel(
                 stubImageInternal.value = stubImage
             }
         }
+        configureVideo()
     }
 
     override val stubImageIfVisible: Flow<Bitmap?>
