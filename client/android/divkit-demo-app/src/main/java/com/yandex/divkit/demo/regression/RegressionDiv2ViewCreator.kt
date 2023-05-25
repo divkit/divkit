@@ -51,7 +51,7 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                 )
                 .extension(DivShimmerExtensionHandler())
                 .divCustomViewFactory(DemoDivCustomViewFactory())
-                .divCustomViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
+                .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
                 .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider))
                 .divStateChangeListener(transitionScheduler)
                 .divDataChangeListener(transitionScheduler)

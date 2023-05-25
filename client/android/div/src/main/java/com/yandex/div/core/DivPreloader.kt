@@ -21,12 +21,14 @@ import java.util.concurrent.atomic.AtomicInteger
 class DivPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,
     private val customViewAdapter: DivCustomViewAdapter?,
+    private val customContainerViewAdapter: DivCustomContainerViewAdapter?,
     private val extensionController: DivExtensionController
 ) {
 
     constructor(context: Div2Context) : this(
         imagePreloader = context.div2Component.imagePreloader,
         customViewAdapter = context.div2Component.divCustomViewAdapter,
+        customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
         extensionController = context.div2Component.extensionController
     )
 
@@ -38,6 +40,7 @@ class DivPreloader internal constructor(
     ) : this(
         imagePreloader = imagePreloader,
         customViewAdapter = customViewAdapter,
+        customContainerViewAdapter = null,
         extensionController = DivExtensionController(extensionHandlers)
     )
 
@@ -103,6 +106,7 @@ class DivPreloader internal constructor(
         override fun visit(data: Div.Custom, resolver: ExpressionResolver) {
             data.value.items?.forEach { visit(it, resolver) }
             customViewAdapter?.preload(data.value, callback)?.let { ticket.addReference(it) }
+            customContainerViewAdapter?.preload(data.value, callback)?.let { ticket.addReference(it) }
             defaultVisit(data, resolver)
         }
     }

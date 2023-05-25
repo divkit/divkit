@@ -1,5 +1,6 @@
 package com.yandex.div.core
 
+import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.DivImagePreloader
@@ -24,9 +25,11 @@ import java.util.Arrays
 class DivPreloaderTest {
 
     private val divCustomViewAdapter = mock<DivCustomViewAdapter>()
+    private val divCustomContainerViewAdapter = mock<DivCustomContainerViewAdapter>()
     private val divImagePreloader = mock<DivImagePreloader>()
 
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
+    private val extensionHandlersController = DivExtensionController(extensionHandlers)
 
     private val text = mock<DivText>()
     private val divText = Div.Text(text)
@@ -46,7 +49,8 @@ class DivPreloaderTest {
     private val divContainer = Div.Container(container)
 
     private val underTest: DivPreloader =
-        DivPreloader(divImagePreloader, divCustomViewAdapter, extensionHandlers)
+        DivPreloader(divImagePreloader, divCustomViewAdapter, divCustomContainerViewAdapter,
+                extensionHandlersController)
 
     @Test
     fun `preload div background`() {
@@ -70,6 +74,7 @@ class DivPreloaderTest {
         underTest.preload(divCustom, mock())
 
         verify(divCustomViewAdapter).preload(eq(custom), any())
+        verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
 
     @Test
@@ -77,6 +82,7 @@ class DivPreloaderTest {
         underTest.preload(divContainer, mock())
 
         verify(divCustomViewAdapter).preload(eq(custom), any())
+        verify(divCustomContainerViewAdapter).preload(eq(custom), any())
     }
 
     @Test
