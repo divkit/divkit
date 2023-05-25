@@ -126,7 +126,7 @@ sealed class Variable {
         }
     }
 
-    class JsonVariable(
+    class DictVariable(
         override val name: String,
         val defaultValue: JSONObject,
     ) : Variable() {
@@ -153,7 +153,7 @@ sealed class Variable {
             is DoubleVariable -> value
             is ColorVariable -> value
             is UrlVariable -> value
-            is JsonVariable -> value
+            is DictVariable -> value
         }
     }
 
@@ -165,7 +165,7 @@ sealed class Variable {
             is DoubleVariable -> defaultValue
             is ColorVariable -> defaultValue
             is UrlVariable -> defaultValue
-            is JsonVariable -> defaultValue
+            is DictVariable -> defaultValue
         }
     }
 
@@ -196,7 +196,7 @@ sealed class Variable {
                 value = Color(color)
             }
             is UrlVariable -> value = newValue.parseAsUri()
-            is JsonVariable -> value = newValue.parseAsJson()
+            is DictVariable -> value = newValue.parseAsJsonObject()
         }
     }
 
@@ -210,7 +210,7 @@ sealed class Variable {
             this is DoubleVariable && from is DoubleVariable -> this.value = from.value
             this is ColorVariable && from is ColorVariable -> this.value = from.value
             this is UrlVariable && from is UrlVariable -> this.value = from.value
-            this is JsonVariable && from is JsonVariable -> this.value = from.value
+            this is DictVariable && from is DictVariable -> this.value = from.value
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
         }
     }
@@ -255,7 +255,7 @@ sealed class Variable {
         }
     }
 
-    private fun String.parseAsJson(): JSONObject {
+    private fun String.parseAsJsonObject(): JSONObject {
         return try {
             JSONObject(this)
         } catch (e: JSONException) {

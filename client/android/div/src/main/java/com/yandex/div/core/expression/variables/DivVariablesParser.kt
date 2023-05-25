@@ -60,9 +60,9 @@ internal fun DivVariable.toVariable(): Variable {
                 this.value.name, this.value.value
             )
         }
-        is DivVariable.Json -> {
-            Variable.JsonVariable(
-                    this.value.name, this.value.value
+        is DivVariable.Dict -> {
+            Variable.DictVariable(
+                this.value.name, this.value.value
             )
         }
     }

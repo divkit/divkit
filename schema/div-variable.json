@@ -154,9 +154,9 @@
         "value"
       ]
     },
-    "json_variable": {
+    "dict_variable": {
       "type": "object",
-      "$description": "translations.json#/div_variable_json",
+      "$description": "translations.json#/div_variable_dict",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
@@ -165,7 +165,7 @@
         "type": {
           "type": "string",
           "enum": [
-            "json"
+            "dict"
           ]
         },
         "value": {
@@ -201,7 +201,7 @@
       "$ref": "#/definitions/url_variable"
     },
     {
-      "$ref": "#/definitions/json_variable",
+      "$ref": "#/definitions/dict_variable",
       "platforms": []
     }
   ]

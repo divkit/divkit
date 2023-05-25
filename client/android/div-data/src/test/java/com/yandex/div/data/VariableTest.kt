@@ -92,8 +92,7 @@ class VariableTest {
             Variable.BooleanVariable("boolean_var", Random.nextBoolean()),
             Variable.ColorVariable("color_var", Random.nextInt()),
             Variable.UrlVariable("url_var", Uri.parse(Random.nextBytes(4).toString())),
-            Variable.JsonVariable("json_var", JSONObject().put(Random.nextBytes(4).toString(), Random.nextLong())),
+            Variable.DictVariable("dict_var", JSONObject().put(Random.nextBytes(4).toString(), Random.nextLong())),
         ).toList()
     }
 }
-
