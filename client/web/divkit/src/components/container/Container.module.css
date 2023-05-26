@@ -23,6 +23,18 @@
     justify-content: flex-end;
 }
 
+.container_orientation_vertical.container_valign_space-between {
+    justify-content: space-between;
+}
+
+.container_orientation_vertical.container_valign_space-around {
+    justify-content: space-around;
+}
+
+.container_orientation_vertical.container_valign_space-evenly {
+    justify-content: space-evenly;
+}
+
 /*.container_orientation_horizontal {
 }*/
 
@@ -36,6 +48,18 @@
 
 .container_orientation_horizontal.container_halign_right {
     justify-content: flex-end;
+}
+
+.container_orientation_horizontal.container_halign_space-between {
+    justify-content: space-between;
+}
+
+.container_orientation_horizontal.container_halign_space-around {
+    justify-content: space-around;
+}
+
+.container_orientation_horizontal.container_halign_space-evenly {
+    justify-content: space-evenly;
 }
 
 .container_orientation_overlap {

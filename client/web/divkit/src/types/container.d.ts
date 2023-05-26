@@ -1,6 +1,9 @@
 import type { DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
-import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
+import type {
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical
+} from './alignment';
 import type { BooleanInt } from '../../typings/common';
 import type { Drawable } from './drawable';
 import type { DivAspect } from './image';
@@ -20,8 +23,8 @@ export interface ContainerSeparator {
 
 export interface DivContainerData extends DivBaseData, DivActionableData {
     type: 'container';
-    content_alignment_horizontal?: AlignmentHorizontal;
-    content_alignment_vertical?: AlignmentVertical;
+    content_alignment_horizontal?: ContentAlignmentHorizontal;
+    content_alignment_vertical?: ContentAlignmentVertical;
     orientation?: ContainerOrientation;
     items: DivBaseData[];
     // auto_animations_enabled
