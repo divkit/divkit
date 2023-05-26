@@ -1013,11 +1013,11 @@
   },
   "div_input_validators": {
     "en": "Validators for text value.",
-    "ru": "Валидатор для проверки соответствия значения поля заданным условиям."
+    "ru": "Валидатор, который проверяет значение поля на соответствие заданным условиям."
   },
   "div_input_validators_allow_empty": {
     "en": "Whether an empty value is correct. By default, false.",
-    "ru": "Является ли пустое значение корректным. По умолчанию false."
+    "ru": "Определяет, является ли пустое значение поля корректным."
   },
   "div_input_validators_expression": {
     "en": "Expression validator.",
@@ -1029,7 +1029,7 @@
   },
   "div_input_validators_label_id": {
     "en": "ID of the text div containing the error message, which will also be used for accessibility.",
-    "ru": "ID текстового элемента содержащего сообщение об ошибке, которое также будет использовано для доступности."
+    "ru": "ID текстового элемента, содержащего сообщение об ошибке. Сообщение также будет использовано для обеспечения доступности."
   },
   "div_input_validators_regex": {
     "en": "Regex validator.",
@@ -1037,7 +1037,7 @@
   },
   "div_input_validators_regex_pattern": {
     "en": "Regex pattern for matching.",
-    "ru": "Паттерн регулярного выражения, которому должно соответствовать значение поля."
+    "ru": "Регулярное выражение (паттерн), которому должно соответствовать значение поля."
   },
   "div_input_validators_variable": {
     "en": "Name of validation storage variable.",
