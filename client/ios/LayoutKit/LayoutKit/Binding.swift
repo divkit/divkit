@@ -48,7 +48,7 @@ public struct Binding<T: Equatable>: Equatable {
   }
 
   public static func ==(lhs: Binding<T>, rhs: Binding<T>) -> Bool {
-    lhs.value == rhs.value
+    lhs.name == rhs.name && lhs.value == rhs.value
   }
 }
 

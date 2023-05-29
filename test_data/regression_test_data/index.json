@@ -1707,7 +1707,8 @@
       "title": "Input mask",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -1728,7 +1729,8 @@
       "title": "Phone input mask",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivInput"

@@ -60,17 +60,22 @@ extension DivInput: DivBlockModeling {
       $0.uiAction(context: context.actionContext)
     }
 
+    let maskValidator = mask?.makeMaskValidator(context.expressionResolver)
+    let rawTextValue: Binding<String>? = mask?.makeRawVariable(context)
+
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
+      rawTextValue: rawTextValue,
       textTypo: textTypo,
       multiLineMode: keyboardType == .multiLineText,
       inputType: keyboardType.system,
       highlightColor: highlightColor,
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
+      maskValidator: maskValidator,
       path: context.parentPath,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
@@ -106,5 +111,40 @@ extension DivInput.KeyboardType {
     case .uri:
       return .keyboard(.URL)
     }
+  }
+}
+
+extension DivInputMask {
+  fileprivate func makeMaskValidator(_ resolver: ExpressionResolver) -> MaskValidator? {
+    switch self {
+    case let .divFixedLengthInputMask(divFixedLengthInputMask):
+      return MaskValidator(
+        pattern: divFixedLengthInputMask.resolvePattern(resolver) ?? "",
+        alwaysVisible: divFixedLengthInputMask.resolveAlwaysVisible(resolver),
+        patternElements: divFixedLengthInputMask.patternElements
+          .map { $0.makePatternElement(resolver) }
+      )
+    case .divCurrencyInputMask:
+      return nil
+    }
+  }
+
+  fileprivate func makeRawVariable(_ context: DivBlockModelingContext) -> Binding<String>? {
+    switch self {
+    case let .divFixedLengthInputMask(divFixedLengthInputMask):
+      return .init(context: context, name: divFixedLengthInputMask.rawTextVariable)
+    case .divCurrencyInputMask:
+      return nil
+    }
+  }
+}
+
+extension DivFixedLengthInputMask.PatternElement {
+  fileprivate func makePatternElement(_ resolver: ExpressionResolver) -> PatternElement {
+    PatternElement(
+      key: (resolveKey(resolver) ?? "").first!,
+      regex: try! NSRegularExpression(pattern: resolveRegex(resolver) ?? ""),
+      placeholder: resolvePlaceholder(resolver).first!
+    )
   }
 }

@@ -15,7 +15,12 @@ extension TextInputBlock {
   ) {
     let inputView = view as! TextInputBlockView
     inputView.setInputType(inputType)
-    inputView.setText(value: textValue, typo: textTypo)
+    inputView.setText(
+      textValue: textValue,
+      rawTextValue: rawTextValue,
+      typo: textTypo,
+      mask: maskValidator
+    )
     inputView.setHint(hint)
     inputView.setHighlightColor(highlightColor)
     inputView.setMultiLineMode(multiLineMode)
@@ -42,13 +47,17 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
   @Binding private var textValue: String
+  private var rawTextValue: Binding<String>?
   private var selectAllOnFocus = false
+  private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var isRightToLeft = false
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
+  private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private let disposePool = AutodisposePool()
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -174,19 +183,70 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.observer = observer
   }
 
-  func setText(value: Binding<String>, typo: Typo) {
-    let textTypo = isRightToLeft ? typo.with(alignment: .right) : typo
-    self._textValue = value
-    let attributedText: String
-    if let selectionItems = selectionItems {
-      attributedText = selectionItems.first { $0.value == value.wrappedValue }?.text ?? ""
-    } else {
-      attributedText = value.wrappedValue
+  func setText(
+    textValue: Binding<String>,
+    rawTextValue: Binding<String>?,
+    typo: Typo,
+    mask: MaskValidator?
+  ) {
+    let updateTextData: (String) -> Void = { [weak self] in
+      guard let self else { return }
+      let textTypo = self.isRightToLeft ? typo.with(alignment: .right) : typo
+      let attributedText = $0.with(typo: textTypo)
+      self.multiLineInput.attributedText = attributedText
+      self.singleLineInput.attributedText = attributedText
+      self.multiLineInput.typingAttributes = typo.attributes
+      self.singleLineInput.typingAttributes = typo.attributes
     }
-    multiLineInput.attributedText = attributedText.with(typo: textTypo)
-    singleLineInput.attributedText = attributedText.with(typo: textTypo)
-    multiLineInput.typingAttributes = typo.attributes
-    singleLineInput.typingAttributes = typo.attributes
+
+    if let mask = mask, let rawTextValue = rawTextValue {
+      self._textValue = textValue
+      self.rawTextValue = rawTextValue
+      if maskedViewModel == nil {
+        self.maskedViewModel = MaskedInputViewModel(
+          rawText: rawTextValue.wrappedValue,
+          maskValidator: mask,
+          signal: userInputPipe.signal
+        )
+        maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
+          guard let self, let position else { return }
+          self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
+          if let textFieldPosition = self.singleLineInput.position(
+            from: self.singleLineInput.beginningOfDocument,
+            offset: position.rawValue
+          ) {
+            self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
+              from: textFieldPosition,
+              to: textFieldPosition
+            )
+          }
+        }.dispose(in: disposePool)
+        maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
+          guard let self = self else { return }
+          self.rawTextValue?.setValue(input, responder: self)
+        }.dispose(in: disposePool)
+        maskedViewModel?.$text.currentAndNewValues
+          .addObserver { [weak self] input in
+            guard let self = self else { return }
+            updateTextData(input)
+            self._textValue.setValue(input, responder: self)
+          }.dispose(in: disposePool)
+      } else {
+        maskedViewModel?.rawText = rawTextValue.wrappedValue
+        maskedViewModel?.maskValidator = mask
+      }
+    } else {
+      self._textValue = textValue
+
+      let text: String
+      if let selectionItems = self.selectionItems {
+        text = selectionItems.first { $0.value == textValue.wrappedValue }?.text ?? ""
+      } else {
+        text = textValue.wrappedValue
+      }
+
+      updateTextData(text)
+    }
     updateHintVisibility()
     updateMultiLineOffset()
   }
@@ -340,6 +400,23 @@ extension TextInputBlockView {
     guard let path = path else { return }
     observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
   }
+
+  private func inputViewReplaceTextIn(view _: UIView, range: NSRange, text: String) -> Bool {
+    if maskedViewModel != nil {
+      if text == "" {
+        if range.length == 0 {
+          userInputPipe.send(.clear(pos: range.upperBound))
+        } else {
+          userInputPipe
+            .send(.clearRange(range: range.lowerBound..<range.upperBound))
+        }
+      } else {
+        userInputPipe.send(.insert(string: text, range: range.lowerBound..<range.upperBound))
+      }
+      return false
+    }
+    return true
+  }
 }
 
 extension TextInputBlockView: UITextViewDelegate {
@@ -354,6 +431,15 @@ extension TextInputBlockView: UITextViewDelegate {
 
   func textViewDidEndEditing(_ textView: UITextView) {
     inputViewDidEndEditing(textView)
+  }
+
+  func textView(
+    _: UITextView,
+    shouldChangeTextIn _: NSRange,
+    replacementText text: String
+  ) -> Bool {
+    let range = multiLineInput.selectedRange
+    return inputViewReplaceTextIn(view: self, range: range, text: text)
   }
 }
 
@@ -370,8 +456,18 @@ extension TextInputBlockView: UITextFieldDelegate {
     inputViewDidEndEditing(textField)
   }
 
-  func textView(_: UITextView, shouldChangeTextIn _: NSRange, replacementText _: String) -> Bool {
-    selectionItems == nil
+  func textField(
+    _ textField: UITextField,
+    shouldChangeCharactersIn range: NSRange,
+    replacementString string: String
+  ) -> Bool {
+    guard let selectionRange = textField.selectedTextRange else {
+      return inputViewReplaceTextIn(view: textField, range: range, text: string)
+    }
+    let location = textField.offset(from: textField.beginningOfDocument, to: selectionRange.start)
+    let length = textField.offset(from: selectionRange.start, to: selectionRange.end)
+    let range = NSRange(location: location, length: length)
+    return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
 }
 

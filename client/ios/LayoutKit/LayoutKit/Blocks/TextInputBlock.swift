@@ -43,12 +43,14 @@ public final class TextInputBlock: BlockWithTraits {
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
   public let textValue: Binding<String>
+  public let rawTextValue: Binding<String>?
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
+  public let maskValidator: MaskValidator?
   public let path: UIElementPath
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
@@ -59,12 +61,14 @@ public final class TextInputBlock: BlockWithTraits {
     heightTrait: LayoutTrait = .intrinsic,
     hint: NSAttributedString,
     textValue: Binding<String>,
+    rawTextValue: Binding<String>?,
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
+    maskValidator: MaskValidator? = nil,
     path: UIElementPath,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
@@ -74,12 +78,14 @@ public final class TextInputBlock: BlockWithTraits {
     self.heightTrait = heightTrait
     self.hint = hint
     self.textValue = textValue
+    self.rawTextValue = rawTextValue
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
+    self.maskValidator = maskValidator
     self.path = path
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions

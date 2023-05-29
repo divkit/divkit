@@ -57,6 +57,7 @@ extension DivSelect: DivBlockModeling {
       heightTrait: makeContentHeightTrait(with: context),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
+      rawTextValue: nil,
       textTypo: textTypo,
       inputType: makeInputType(context.expressionResolver),
       path: context.parentPath,
