@@ -80,7 +80,7 @@ internal open class SuperLineHeightTextView @JvmOverloads constructor(
         }
         if (shouldAddExtraSpacing && availableWidth > 0
                 && lineSpacingExtra > 0
-                && !TextUtils.isEmpty(text)
+                && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(hint))
                 && layout.lineCount == 1) {
             lineSpacingExtraTop = (lineSpacingExtra / 2f).roundToInt()
             lineSpacingExtraBottom = lineSpacingExtra.toInt() / 2
