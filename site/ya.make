@@ -1,1 +1,0 @@
-OWNER(g:divkit-web)
