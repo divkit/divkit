@@ -106,10 +106,8 @@ subprojects {
             }
         }
 
-        if (project.hasProperty("teamcity.version")) {
-            project.tasks.withType(PublishToMavenRepository) { task ->
-                task.finalizedBy(reportBuildNumberToTeamcity)
-            }
+        project.tasks.withType(PublishToMavenRepository) { task ->
+            task.finalizedBy(reportBuildNumber)
         }
 
         project.tasks.withType(PublishToMavenLocal) { task ->
@@ -145,9 +143,9 @@ task reportVersion {
     }
 }
 
-task reportBuildNumberToTeamcity {
+task reportBuildNumber {
     doLast {
-        println "##teamcity[buildNumber \'${rootProject.property('divkitVersionName')}\']"
+        println "buildNumber ${rootProject.property('divkitVersionName')}"
     }
 }
 
