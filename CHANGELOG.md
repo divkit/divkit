@@ -1,3 +1,37 @@
+## 25.2.0
+
+# JSON Schema:
+
+Additions:
+* Added `disappear_actions`
+* Added new variable type: `dict`
+* Added new types of content-alignment: `space-between`, `space-around`, `space-evenly`
+* Added new property of container separators: `margins`
+
+# Android Client:
+
+Additions:
+* Supported multiple `RenderScript` contexts
+
+Fixes:
+* Fixed patch applying to pager
+* Fixed animation of disappearing views
+* Fixed black screen and state saving after detach in video-custom
+* Fixed black screen at the end of playback after onPause
+* Fixed `VariableController` potential memory leaks
+
+# iOS Client:
+
+Fixes:
+* Fixed cursor offset in `DivInput`
+* Deserialization optimization
+
+# Web Client:
+
+Additions:
+* `disappear_actions` is now supported
+* Added a new `video` component
+
 ## 25.1.0
 
 # JSON Schema:

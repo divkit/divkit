@@ -1,3 +1,9 @@
+## 25.2.0 (May 29, 2023)
+
+Additions:
+* `disappear_actions` is now supported
+* Added a new `video` component
+
 ## 25.0.0 (May 11, 2023)
 
 # Web Client:
