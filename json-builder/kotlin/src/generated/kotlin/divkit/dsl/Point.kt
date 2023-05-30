@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [point].
  * 
- * Required properties: `y, x`.
+ * Required parameters: `y, x`.
  */
 @Generated
 class Point internal constructor(

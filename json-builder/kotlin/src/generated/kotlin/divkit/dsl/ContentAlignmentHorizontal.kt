@@ -18,20 +18,10 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Infinite number of repetitions.
- * 
- * Can be created using the method [infinityCount].
- * 
- * Required parameters: `type`.
+ * Possible values: [left, center, right, space-between, space-around, space-evenly].
  */
 @Generated
-object InfinityCount : Count {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "infinity")
-}
+sealed interface ContentAlignmentHorizontal
 
 @Generated
-fun DivScope.infinityCount(): InfinityCount = InfinityCount
-
-@Generated
-fun InfinityCount.asList() = listOf(this)
+fun ContentAlignmentHorizontal.asList() = listOf(this)

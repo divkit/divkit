@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [linearGradient].
  * 
- * Required properties: `type, colors`.
+ * Required parameters: `type, colors`.
  */
 @Generated
 class LinearGradient internal constructor(

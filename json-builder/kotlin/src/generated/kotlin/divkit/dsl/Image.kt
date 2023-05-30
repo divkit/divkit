@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [image].
  * 
- * Required properties: `type, image_url`.
+ * Required parameters: `type, image_url`.
  */
 @Generated
 class Image internal constructor(
@@ -51,6 +51,7 @@ class Image internal constructor(
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             contentAlignmentHorizontal = additive.contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
             contentAlignmentVertical = additive.contentAlignmentVertical ?: properties.contentAlignmentVertical,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             filters = additive.filters ?: properties.filters,
@@ -96,7 +97,7 @@ class Image internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -147,6 +148,10 @@ class Image internal constructor(
          * Default value: `center`.
          */
         val contentAlignmentVertical: Property<AlignmentVertical>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Action when double-clicking on an element.
          */
@@ -286,6 +291,7 @@ class Image internal constructor(
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("content_alignment_horizontal", contentAlignmentHorizontal)
             result.tryPutProperty("content_alignment_vertical", contentAlignmentVertical)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("filters", filters)
@@ -323,7 +329,7 @@ class Image internal constructor(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -335,6 +341,7 @@ class Image internal constructor(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -382,6 +389,7 @@ fun DivScope.image(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
@@ -427,6 +435,7 @@ fun DivScope.image(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
@@ -462,7 +471,7 @@ fun DivScope.image(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -474,6 +483,7 @@ fun DivScope.image(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -521,6 +531,7 @@ fun DivScope.imageProps(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
@@ -565,6 +576,7 @@ fun DivScope.imageProps(
     columnSpan = valueOrNull(columnSpan),
     contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
     contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+    disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     filters = valueOrNull(filters),
@@ -599,7 +611,7 @@ fun DivScope.imageProps(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -611,6 +623,7 @@ fun DivScope.imageProps(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -658,6 +671,7 @@ fun TemplateScope.imageRefs(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
@@ -702,6 +716,7 @@ fun TemplateScope.imageRefs(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     filters = filters,
@@ -736,7 +751,7 @@ fun TemplateScope.imageRefs(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -748,6 +763,7 @@ fun TemplateScope.imageRefs(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -795,6 +811,7 @@ fun Image.override(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
@@ -840,6 +857,7 @@ fun Image.override(
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         filters = valueOrNull(filters) ?: properties.filters,
@@ -875,7 +893,7 @@ fun Image.override(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -887,6 +905,7 @@ fun Image.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -934,6 +953,7 @@ fun Image.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
@@ -979,6 +999,7 @@ fun Image.defer(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         filters = filters ?: properties.filters,
@@ -1064,6 +1085,7 @@ fun Image.evaluate(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         filters = properties.filters,
@@ -1099,7 +1121,7 @@ fun Image.evaluate(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1111,6 +1133,7 @@ fun Image.evaluate(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -1158,6 +1181,7 @@ fun Component<Image>.override(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     filters: List<Filter>? = null,
@@ -1204,6 +1228,7 @@ fun Component<Image>.override(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         filters = valueOrNull(filters),
@@ -1239,7 +1264,7 @@ fun Component<Image>.override(
  * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1251,6 +1276,7 @@ fun Component<Image>.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param filters Image filters.
@@ -1298,6 +1324,7 @@ fun Component<Image>.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
@@ -1344,6 +1371,7 @@ fun Component<Image>.defer(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = disappearActions,
         doubletapActions = doubletapActions,
         extensions = extensions,
         filters = filters,
@@ -1430,6 +1458,7 @@ fun Component<Image>.evaluate(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = null,
         doubletapActions = null,
         extensions = null,
         filters = null,

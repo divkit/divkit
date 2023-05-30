@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [custom].
  * 
- * Required properties: `type, custom_type`.
+ * Required parameters: `type, custom_type`.
  */
 @Generated
 class Custom internal constructor(
@@ -45,6 +45,7 @@ class Custom internal constructor(
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             customProps = additive.customProps ?: properties.customProps,
             customType = additive.customType ?: properties.customType,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
@@ -105,6 +106,10 @@ class Custom internal constructor(
          * Subtype of an element for a host application.
          */
         val customType: Property<String>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
@@ -197,6 +202,7 @@ class Custom internal constructor(
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("custom_props", customProps)
             result.tryPutProperty("custom_type", customType)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
@@ -231,6 +237,7 @@ class Custom internal constructor(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -263,6 +270,7 @@ fun DivScope.custom(
     columnSpan: Int? = null,
     customProps: Map<String, Any>? = null,
     customType: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -293,6 +301,7 @@ fun DivScope.custom(
         columnSpan = valueOrNull(columnSpan),
         customProps = valueOrNull(customProps),
         customType = valueOrNull(customType),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -325,6 +334,7 @@ fun DivScope.custom(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -357,6 +367,7 @@ fun DivScope.customProps(
     columnSpan: Int? = null,
     customProps: Map<String, Any>? = null,
     customType: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -386,6 +397,7 @@ fun DivScope.customProps(
     columnSpan = valueOrNull(columnSpan),
     customProps = valueOrNull(customProps),
     customType = valueOrNull(customType),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
@@ -417,6 +429,7 @@ fun DivScope.customProps(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -449,6 +462,7 @@ fun TemplateScope.customRefs(
     columnSpan: ReferenceProperty<Int>? = null,
     customProps: ReferenceProperty<Map<String, Any>>? = null,
     customType: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -478,6 +492,7 @@ fun TemplateScope.customRefs(
     columnSpan = columnSpan,
     customProps = customProps,
     customType = customType,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     height = height,
@@ -509,6 +524,7 @@ fun TemplateScope.customRefs(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -541,6 +557,7 @@ fun Custom.override(
     columnSpan: Int? = null,
     customProps: Map<String, Any>? = null,
     customType: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -571,6 +588,7 @@ fun Custom.override(
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         customProps = valueOrNull(customProps) ?: properties.customProps,
         customType = valueOrNull(customType) ?: properties.customType,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
@@ -603,6 +621,7 @@ fun Custom.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -635,6 +654,7 @@ fun Custom.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     customProps: ReferenceProperty<Map<String, Any>>? = null,
     customType: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -665,6 +685,7 @@ fun Custom.defer(
         columnSpan = columnSpan ?: properties.columnSpan,
         customProps = customProps ?: properties.customProps,
         customType = customType ?: properties.customType,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
@@ -715,6 +736,7 @@ fun Custom.evaluate(
         columnSpan = columnSpan ?: properties.columnSpan,
         customProps = properties.customProps,
         customType = properties.customType,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         height = properties.height,
@@ -747,6 +769,7 @@ fun Custom.evaluate(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -779,6 +802,7 @@ fun Component<Custom>.override(
     columnSpan: Int? = null,
     customProps: Map<String, Any>? = null,
     customType: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -810,6 +834,7 @@ fun Component<Custom>.override(
         columnSpan = valueOrNull(columnSpan),
         customProps = valueOrNull(customProps),
         customType = valueOrNull(customType),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -842,6 +867,7 @@ fun Component<Custom>.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param customProps Element data for a host application.
  * @param customType Subtype of an element for a host application.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -874,6 +900,7 @@ fun Component<Custom>.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     customProps: ReferenceProperty<Map<String, Any>>? = null,
     customType: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -905,6 +932,7 @@ fun Component<Custom>.defer(
         columnSpan = columnSpan,
         customProps = customProps,
         customType = customType,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         height = height,
@@ -956,6 +984,7 @@ fun Component<Custom>.evaluate(
         columnSpan = columnSpan,
         customProps = null,
         customType = null,
+        disappearActions = null,
         extensions = null,
         focus = null,
         height = null,

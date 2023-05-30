@@ -18,34 +18,39 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Actions performed when an element becomes visible.
+ * Actions performed when an element becomes invisible.
  * 
- * Can be created using the method [visibilityAction].
+ * Can be created using the method [disappearAction].
  * 
  * Required parameters: `log_id`.
  */
 @Generated
-class VisibilityAction internal constructor(
+class DisappearAction internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    operator fun plus(additive: Properties): VisibilityAction = VisibilityAction(
+    operator fun plus(additive: Properties): DisappearAction = DisappearAction(
         Properties(
+            disappearDuration = additive.disappearDuration ?: properties.disappearDuration,
             downloadCallbacks = additive.downloadCallbacks ?: properties.downloadCallbacks,
             logId = additive.logId ?: properties.logId,
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
             url = additive.url ?: properties.url,
-            visibilityDuration = additive.visibilityDuration ?: properties.visibilityDuration,
             visibilityPercentage = additive.visibilityPercentage ?: properties.visibilityPercentage,
         )
     )
 
     class Properties internal constructor(
+        /**
+         * Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+         * Default value: `800`.
+         */
+        val disappearDuration: Property<Int>?,
         /**
          * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
          */
@@ -72,26 +77,21 @@ class VisibilityAction internal constructor(
          */
         val url: Property<Url>?,
         /**
-         * Time in milliseconds during which an element must be visible to trigger `visibility-action`.
-         * Default value: `800`.
-         */
-        val visibilityDuration: Property<Int>?,
-        /**
-         * Percentage of the visible part of an element that triggers `visibility-action`.
-         * Default value: `50`.
+         * Percentage of the visible part of an element that triggers `disappear-action`.
+         * Default value: `0`.
          */
         val visibilityPercentage: Property<Int>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
+            result.tryPutProperty("disappear_duration", disappearDuration)
             result.tryPutProperty("download_callbacks", downloadCallbacks)
             result.tryPutProperty("log_id", logId)
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
             result.tryPutProperty("url", url)
-            result.tryPutProperty("visibility_duration", visibilityDuration)
             result.tryPutProperty("visibility_percentage", visibilityPercentage)
             return result
         }
@@ -99,198 +99,198 @@ class VisibilityAction internal constructor(
 }
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun DivScope.visibilityAction(
+fun DivScope.disappearAction(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     url: Url? = null,
-    visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
-): VisibilityAction = VisibilityAction(
-    VisibilityAction.Properties(
+): DisappearAction = DisappearAction(
+    DisappearAction.Properties(
+        disappearDuration = valueOrNull(disappearDuration),
         downloadCallbacks = valueOrNull(downloadCallbacks),
         logId = valueOrNull(logId),
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
         url = valueOrNull(url),
-        visibilityDuration = valueOrNull(visibilityDuration),
         visibilityPercentage = valueOrNull(visibilityPercentage),
     )
 )
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun DivScope.visibilityActionProps(
+fun DivScope.disappearActionProps(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     url: Url? = null,
-    visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
-) = VisibilityAction.Properties(
+) = DisappearAction.Properties(
+    disappearDuration = valueOrNull(disappearDuration),
     downloadCallbacks = valueOrNull(downloadCallbacks),
     logId = valueOrNull(logId),
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
     url = valueOrNull(url),
-    visibilityDuration = valueOrNull(visibilityDuration),
     visibilityPercentage = valueOrNull(visibilityPercentage),
 )
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun TemplateScope.visibilityActionRefs(
+fun TemplateScope.disappearActionRefs(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: ReferenceProperty<Int>? = null,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
     url: ReferenceProperty<Url>? = null,
-    visibilityDuration: ReferenceProperty<Int>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
-) = VisibilityAction.Properties(
+) = DisappearAction.Properties(
+    disappearDuration = disappearDuration,
     downloadCallbacks = downloadCallbacks,
     logId = logId,
     logLimit = logLimit,
     payload = payload,
     referer = referer,
     url = url,
-    visibilityDuration = visibilityDuration,
     visibilityPercentage = visibilityPercentage,
 )
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun VisibilityAction.override(
+fun DisappearAction.override(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     url: Url? = null,
-    visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
-): VisibilityAction = VisibilityAction(
-    VisibilityAction.Properties(
+): DisappearAction = DisappearAction(
+    DisappearAction.Properties(
+        disappearDuration = valueOrNull(disappearDuration) ?: properties.disappearDuration,
         downloadCallbacks = valueOrNull(downloadCallbacks) ?: properties.downloadCallbacks,
         logId = valueOrNull(logId) ?: properties.logId,
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
         url = valueOrNull(url) ?: properties.url,
-        visibilityDuration = valueOrNull(visibilityDuration) ?: properties.visibilityDuration,
         visibilityPercentage = valueOrNull(visibilityPercentage) ?: properties.visibilityPercentage,
     )
 )
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun VisibilityAction.defer(
+fun DisappearAction.defer(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: ReferenceProperty<Int>? = null,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
     url: ReferenceProperty<Url>? = null,
-    visibilityDuration: ReferenceProperty<Int>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
-): VisibilityAction = VisibilityAction(
-    VisibilityAction.Properties(
+): DisappearAction = DisappearAction(
+    DisappearAction.Properties(
+        disappearDuration = disappearDuration ?: properties.disappearDuration,
         downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
         logId = logId ?: properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
         url = url ?: properties.url,
-        visibilityDuration = visibilityDuration ?: properties.visibilityDuration,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
     )
 )
 
 /**
+ * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
- * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
- * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
+ * @param visibilityPercentage Percentage of the visible part of an element that triggers `disappear-action`.
  */
 @Generated
-fun VisibilityAction.evaluate(
+fun DisappearAction.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    disappearDuration: ExpressionProperty<Int>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
     url: ExpressionProperty<Url>? = null,
-    visibilityDuration: ExpressionProperty<Int>? = null,
     visibilityPercentage: ExpressionProperty<Int>? = null,
-): VisibilityAction = VisibilityAction(
-    VisibilityAction.Properties(
+): DisappearAction = DisappearAction(
+    DisappearAction.Properties(
+        disappearDuration = disappearDuration ?: properties.disappearDuration,
         downloadCallbacks = properties.downloadCallbacks,
         logId = properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,
         url = url ?: properties.url,
-        visibilityDuration = visibilityDuration ?: properties.visibilityDuration,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
     )
 )
 
 @Generated
-fun VisibilityAction.asList() = listOf(this)
+fun DisappearAction.asList() = listOf(this)

@@ -18,44 +18,49 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.
+ * Video.
  * 
- * Can be created using the method [pager].
+ * Can be created using the method [video].
  * 
- * Required parameters: `type, layout_mode, items`.
+ * Required parameters: `video_sources, type`.
  */
 @Generated
-class Pager internal constructor(
+class Video internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "pager")
+        mapOf("type" to "video")
     )
 
-    operator fun plus(additive: Properties): Pager = Pager(
+    operator fun plus(additive: Properties): Video = Video(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            autostart = additive.autostart ?: properties.autostart,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            bufferingActions = additive.bufferingActions ?: properties.bufferingActions,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
-            defaultItem = additive.defaultItem ?: properties.defaultItem,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
+            elapsedTimeVariable = additive.elapsedTimeVariable ?: properties.elapsedTimeVariable,
+            endActions = additive.endActions ?: properties.endActions,
             extensions = additive.extensions ?: properties.extensions,
+            fatalActions = additive.fatalActions ?: properties.fatalActions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
-            itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
-            items = additive.items ?: properties.items,
-            layoutMode = additive.layoutMode ?: properties.layoutMode,
             margins = additive.margins ?: properties.margins,
-            orientation = additive.orientation ?: properties.orientation,
+            muted = additive.muted ?: properties.muted,
             paddings = additive.paddings ?: properties.paddings,
-            restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
+            pauseActions = additive.pauseActions ?: properties.pauseActions,
+            playerSettingsPayload = additive.playerSettingsPayload ?: properties.playerSettingsPayload,
+            preview = additive.preview ?: properties.preview,
+            repeatable = additive.repeatable ?: properties.repeatable,
+            resumeActions = additive.resumeActions ?: properties.resumeActions,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -64,6 +69,7 @@ class Pager internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            videoSources = additive.videoSources ?: properties.videoSources,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -90,6 +96,11 @@ class Pager internal constructor(
          */
         val alpha: Property<Double>?,
         /**
+         * This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
+         * Default value: `false`.
+         */
+        val autostart: Property<Boolean>?,
+        /**
          * Element background. It can contain multiple layers.
          */
         val background: Property<List<Background>>?,
@@ -98,22 +109,33 @@ class Pager internal constructor(
          */
         val border: Property<Border>?,
         /**
+         * Actions performed during video loading.
+         */
+        val bufferingActions: Property<List<Action>>?,
+        /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
         val columnSpan: Property<Int>?,
-        /**
-         * Ordinal number of the pager element that will be opened by default.
-         * Default value: `0`.
-         */
-        val defaultItem: Property<Int>?,
         /**
          * Actions when an element disappears from the screen.
          */
         val disappearActions: Property<List<DisappearAction>>?,
         /**
+         * Time interval from the video beginning to the current position in milliseconds.
+         */
+        val elapsedTimeVariable: Property<String>?,
+        /**
+         * Actions performed after the video ends.
+         */
+        val endActions: Property<List<Action>>?,
+        /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
         val extensions: Property<List<Extension>>?,
+        /**
+         * Actions that are performed when it is impossible to continue playback due to an error in the player.
+         */
+        val fatalActions: Property<List<Action>>?,
         /**
          * Parameters when focusing on an element or losing focus.
          */
@@ -128,36 +150,39 @@ class Pager internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Spacing between elements.
-         * Default value: `{"type": "fixed","value":0}`.
-         */
-        val itemSpacing: Property<FixedSize>?,
-        /**
-         * Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
-         */
-        val items: Property<List<Div>>?,
-        /**
-         * Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
-         */
-        val layoutMode: Property<PagerLayoutMode>?,
-        /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
         /**
-         * Pager orientation.
-         * Default value: `horizontal`.
+         * This option mutes video.
+         * Default value: `false`.
          */
-        val orientation: Property<Orientation>?,
+        val muted: Property<Boolean>?,
         /**
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+         * Actions that are performed when a playback is paused.
+         */
+        val pauseActions: Property<List<Action>>?,
+        /**
+         * Additional information that can be used in the player.
+         */
+        val playerSettingsPayload: Property<Map<String, Any>>?,
+        /**
+         * Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+         */
+        val preview: Property<String>?,
+        /**
+         * This option turns on video repeat.
          * Default value: `false`.
          */
-        val restrictParentScroll: Property<Boolean>?,
+        val repeatable: Property<Boolean>?,
+        /**
+         * Actions performed when video playback resumes.
+         */
+        val resumeActions: Property<List<Action>>?,
         /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
@@ -190,6 +215,7 @@ class Pager internal constructor(
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
         val transitionTriggers: Property<List<TransitionTrigger>>?,
+        val videoSources: Property<List<VideoSource>>?,
         /**
          * Element visibility.
          * Default value: `visible`.
@@ -216,22 +242,27 @@ class Pager internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("autostart", autostart)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("buffering_actions", bufferingActions)
             result.tryPutProperty("column_span", columnSpan)
-            result.tryPutProperty("default_item", defaultItem)
             result.tryPutProperty("disappear_actions", disappearActions)
+            result.tryPutProperty("elapsed_time_variable", elapsedTimeVariable)
+            result.tryPutProperty("end_actions", endActions)
             result.tryPutProperty("extensions", extensions)
+            result.tryPutProperty("fatal_actions", fatalActions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
-            result.tryPutProperty("item_spacing", itemSpacing)
-            result.tryPutProperty("items", items)
-            result.tryPutProperty("layout_mode", layoutMode)
             result.tryPutProperty("margins", margins)
-            result.tryPutProperty("orientation", orientation)
+            result.tryPutProperty("muted", muted)
             result.tryPutProperty("paddings", paddings)
-            result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
+            result.tryPutProperty("pause_actions", pauseActions)
+            result.tryPutProperty("player_settings_payload", playerSettingsPayload)
+            result.tryPutProperty("preview", preview)
+            result.tryPutProperty("repeatable", repeatable)
+            result.tryPutProperty("resume_actions", resumeActions)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
@@ -240,6 +271,7 @@ class Pager internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("video_sources", videoSources)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -247,14 +279,6 @@ class Pager internal constructor(
             return result
         }
     }
-
-    /**
-     * Pager orientation.
-     * 
-     * Possible values: [horizontal, vertical].
-     */
-    @Generated
-    sealed interface Orientation
 }
 
 /**
@@ -262,22 +286,27 @@ class Pager internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -292,28 +321,33 @@ class Pager internal constructor(
  * @param width Element width.
  */
 @Generated
-fun DivScope.pager(
+fun DivScope.video(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    bufferingActions: List<Action>? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    elapsedTimeVariable: String? = null,
+    endActions: List<Action>? = null,
     extensions: List<Extension>? = null,
+    fatalActions: List<Action>? = null,
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    muted: Boolean? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
+    pauseActions: List<Action>? = null,
+    playerSettingsPayload: Map<String, Any>? = null,
+    preview: String? = null,
+    repeatable: Boolean? = null,
+    resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -322,32 +356,38 @@ fun DivScope.pager(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Video = Video(
+    Video.Properties(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        autostart = valueOrNull(autostart),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        bufferingActions = valueOrNull(bufferingActions),
         columnSpan = valueOrNull(columnSpan),
-        defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
+        elapsedTimeVariable = valueOrNull(elapsedTimeVariable),
+        endActions = valueOrNull(endActions),
         extensions = valueOrNull(extensions),
+        fatalActions = valueOrNull(fatalActions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
-        itemSpacing = valueOrNull(itemSpacing),
-        items = valueOrNull(items),
-        layoutMode = valueOrNull(layoutMode),
         margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
+        muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
-        restrictParentScroll = valueOrNull(restrictParentScroll),
+        pauseActions = valueOrNull(pauseActions),
+        playerSettingsPayload = valueOrNull(playerSettingsPayload),
+        preview = valueOrNull(preview),
+        repeatable = valueOrNull(repeatable),
+        resumeActions = valueOrNull(resumeActions),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -356,6 +396,7 @@ fun DivScope.pager(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -368,22 +409,27 @@ fun DivScope.pager(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -398,28 +444,33 @@ fun DivScope.pager(
  * @param width Element width.
  */
 @Generated
-fun DivScope.pagerProps(
+fun DivScope.videoProps(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    bufferingActions: List<Action>? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    elapsedTimeVariable: String? = null,
+    endActions: List<Action>? = null,
     extensions: List<Extension>? = null,
+    fatalActions: List<Action>? = null,
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    muted: Boolean? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
+    pauseActions: List<Action>? = null,
+    playerSettingsPayload: Map<String, Any>? = null,
+    preview: String? = null,
+    repeatable: Boolean? = null,
+    resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -428,31 +479,37 @@ fun DivScope.pagerProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-) = Pager.Properties(
+) = Video.Properties(
     accessibility = valueOrNull(accessibility),
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    autostart = valueOrNull(autostart),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    bufferingActions = valueOrNull(bufferingActions),
     columnSpan = valueOrNull(columnSpan),
-    defaultItem = valueOrNull(defaultItem),
     disappearActions = valueOrNull(disappearActions),
+    elapsedTimeVariable = valueOrNull(elapsedTimeVariable),
+    endActions = valueOrNull(endActions),
     extensions = valueOrNull(extensions),
+    fatalActions = valueOrNull(fatalActions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
-    itemSpacing = valueOrNull(itemSpacing),
-    items = valueOrNull(items),
-    layoutMode = valueOrNull(layoutMode),
     margins = valueOrNull(margins),
-    orientation = valueOrNull(orientation),
+    muted = valueOrNull(muted),
     paddings = valueOrNull(paddings),
-    restrictParentScroll = valueOrNull(restrictParentScroll),
+    pauseActions = valueOrNull(pauseActions),
+    playerSettingsPayload = valueOrNull(playerSettingsPayload),
+    preview = valueOrNull(preview),
+    repeatable = valueOrNull(repeatable),
+    resumeActions = valueOrNull(resumeActions),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
@@ -461,6 +518,7 @@ fun DivScope.pagerProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    videoSources = valueOrNull(videoSources),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -472,22 +530,27 @@ fun DivScope.pagerProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -502,28 +565,33 @@ fun DivScope.pagerProps(
  * @param width Element width.
  */
 @Generated
-fun TemplateScope.pagerRefs(
+fun TemplateScope.videoRefs(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    bufferingActions: ReferenceProperty<List<Action>>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    elapsedTimeVariable: ReferenceProperty<String>? = null,
+    endActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    pauseActions: ReferenceProperty<List<Action>>? = null,
+    playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preview: ReferenceProperty<String>? = null,
+    repeatable: ReferenceProperty<Boolean>? = null,
+    resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -532,31 +600,37 @@ fun TemplateScope.pagerRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-) = Pager.Properties(
+) = Video.Properties(
     accessibility = accessibility,
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    autostart = autostart,
     background = background,
     border = border,
+    bufferingActions = bufferingActions,
     columnSpan = columnSpan,
-    defaultItem = defaultItem,
     disappearActions = disappearActions,
+    elapsedTimeVariable = elapsedTimeVariable,
+    endActions = endActions,
     extensions = extensions,
+    fatalActions = fatalActions,
     focus = focus,
     height = height,
     id = id,
-    itemSpacing = itemSpacing,
-    items = items,
-    layoutMode = layoutMode,
     margins = margins,
-    orientation = orientation,
+    muted = muted,
     paddings = paddings,
-    restrictParentScroll = restrictParentScroll,
+    pauseActions = pauseActions,
+    playerSettingsPayload = playerSettingsPayload,
+    preview = preview,
+    repeatable = repeatable,
+    resumeActions = resumeActions,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     tooltips = tooltips,
@@ -565,6 +639,7 @@ fun TemplateScope.pagerRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    videoSources = videoSources,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -576,22 +651,27 @@ fun TemplateScope.pagerRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -606,28 +686,33 @@ fun TemplateScope.pagerRefs(
  * @param width Element width.
  */
 @Generated
-fun Pager.override(
+fun Video.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    bufferingActions: List<Action>? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    elapsedTimeVariable: String? = null,
+    endActions: List<Action>? = null,
     extensions: List<Extension>? = null,
+    fatalActions: List<Action>? = null,
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    muted: Boolean? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
+    pauseActions: List<Action>? = null,
+    playerSettingsPayload: Map<String, Any>? = null,
+    preview: String? = null,
+    repeatable: Boolean? = null,
+    resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -636,32 +721,38 @@ fun Pager.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Video = Video(
+    Video.Properties(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        autostart = valueOrNull(autostart) ?: properties.autostart,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        bufferingActions = valueOrNull(bufferingActions) ?: properties.bufferingActions,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
-        defaultItem = valueOrNull(defaultItem) ?: properties.defaultItem,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
+        elapsedTimeVariable = valueOrNull(elapsedTimeVariable) ?: properties.elapsedTimeVariable,
+        endActions = valueOrNull(endActions) ?: properties.endActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
+        fatalActions = valueOrNull(fatalActions) ?: properties.fatalActions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
-        itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
-        items = valueOrNull(items) ?: properties.items,
-        layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
         margins = valueOrNull(margins) ?: properties.margins,
-        orientation = valueOrNull(orientation) ?: properties.orientation,
+        muted = valueOrNull(muted) ?: properties.muted,
         paddings = valueOrNull(paddings) ?: properties.paddings,
-        restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
+        pauseActions = valueOrNull(pauseActions) ?: properties.pauseActions,
+        playerSettingsPayload = valueOrNull(playerSettingsPayload) ?: properties.playerSettingsPayload,
+        preview = valueOrNull(preview) ?: properties.preview,
+        repeatable = valueOrNull(repeatable) ?: properties.repeatable,
+        resumeActions = valueOrNull(resumeActions) ?: properties.resumeActions,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -670,6 +761,7 @@ fun Pager.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        videoSources = valueOrNull(videoSources) ?: properties.videoSources,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -682,22 +774,27 @@ fun Pager.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -712,28 +809,33 @@ fun Pager.override(
  * @param width Element width.
  */
 @Generated
-fun Pager.defer(
+fun Video.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    bufferingActions: ReferenceProperty<List<Action>>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    elapsedTimeVariable: ReferenceProperty<String>? = null,
+    endActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    pauseActions: ReferenceProperty<List<Action>>? = null,
+    playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preview: ReferenceProperty<String>? = null,
+    repeatable: ReferenceProperty<Boolean>? = null,
+    resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -742,32 +844,38 @@ fun Pager.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Video = Video(
+    Video.Properties(
         accessibility = accessibility ?: properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        autostart = autostart ?: properties.autostart,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        bufferingActions = bufferingActions ?: properties.bufferingActions,
         columnSpan = columnSpan ?: properties.columnSpan,
-        defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = disappearActions ?: properties.disappearActions,
+        elapsedTimeVariable = elapsedTimeVariable ?: properties.elapsedTimeVariable,
+        endActions = endActions ?: properties.endActions,
         extensions = extensions ?: properties.extensions,
+        fatalActions = fatalActions ?: properties.fatalActions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
-        itemSpacing = itemSpacing ?: properties.itemSpacing,
-        items = items ?: properties.items,
-        layoutMode = layoutMode ?: properties.layoutMode,
         margins = margins ?: properties.margins,
-        orientation = orientation ?: properties.orientation,
+        muted = muted ?: properties.muted,
         paddings = paddings ?: properties.paddings,
-        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        pauseActions = pauseActions ?: properties.pauseActions,
+        playerSettingsPayload = playerSettingsPayload ?: properties.playerSettingsPayload,
+        preview = preview ?: properties.preview,
+        repeatable = repeatable ?: properties.repeatable,
+        resumeActions = resumeActions ?: properties.resumeActions,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
@@ -776,6 +884,7 @@ fun Pager.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        videoSources = videoSources ?: properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -787,47 +896,54 @@ fun Pager.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
- * @param orientation Pager orientation.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param muted This option mutes video.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
 @Generated
-fun Pager.evaluate(
+fun Video.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    defaultItem: ExpressionProperty<Int>? = null,
-    orientation: ExpressionProperty<Pager.Orientation>? = null,
-    restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    muted: ExpressionProperty<Boolean>? = null,
+    preview: ExpressionProperty<String>? = null,
+    repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Video = Video(
+    Video.Properties(
         accessibility = properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        autostart = autostart ?: properties.autostart,
         background = properties.background,
         border = properties.border,
+        bufferingActions = properties.bufferingActions,
         columnSpan = columnSpan ?: properties.columnSpan,
-        defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = properties.disappearActions,
+        elapsedTimeVariable = properties.elapsedTimeVariable,
+        endActions = properties.endActions,
         extensions = properties.extensions,
+        fatalActions = properties.fatalActions,
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
-        itemSpacing = properties.itemSpacing,
-        items = properties.items,
-        layoutMode = properties.layoutMode,
         margins = properties.margins,
-        orientation = orientation ?: properties.orientation,
+        muted = muted ?: properties.muted,
         paddings = properties.paddings,
-        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
+        pauseActions = properties.pauseActions,
+        playerSettingsPayload = properties.playerSettingsPayload,
+        preview = preview ?: properties.preview,
+        repeatable = repeatable ?: properties.repeatable,
+        resumeActions = properties.resumeActions,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
@@ -836,6 +952,7 @@ fun Pager.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        videoSources = properties.videoSources,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -848,22 +965,27 @@ fun Pager.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -878,28 +1000,33 @@ fun Pager.evaluate(
  * @param width Element width.
  */
 @Generated
-fun Component<Pager>.override(
+fun Component<Video>.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    bufferingActions: List<Action>? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
+    elapsedTimeVariable: String? = null,
+    endActions: List<Action>? = null,
     extensions: List<Extension>? = null,
+    fatalActions: List<Action>? = null,
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    muted: Boolean? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
+    pauseActions: List<Action>? = null,
+    playerSettingsPayload: Map<String, Any>? = null,
+    preview: String? = null,
+    repeatable: Boolean? = null,
+    resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
@@ -908,33 +1035,39 @@ fun Component<Pager>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    videoSources: List<VideoSource>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Component<Pager> = Component(
+): Component<Video> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Video.Properties(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        autostart = valueOrNull(autostart),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        bufferingActions = valueOrNull(bufferingActions),
         columnSpan = valueOrNull(columnSpan),
-        defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
+        elapsedTimeVariable = valueOrNull(elapsedTimeVariable),
+        endActions = valueOrNull(endActions),
         extensions = valueOrNull(extensions),
+        fatalActions = valueOrNull(fatalActions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
-        itemSpacing = valueOrNull(itemSpacing),
-        items = valueOrNull(items),
-        layoutMode = valueOrNull(layoutMode),
         margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
+        muted = valueOrNull(muted),
         paddings = valueOrNull(paddings),
-        restrictParentScroll = valueOrNull(restrictParentScroll),
+        pauseActions = valueOrNull(pauseActions),
+        playerSettingsPayload = valueOrNull(playerSettingsPayload),
+        preview = valueOrNull(preview),
+        repeatable = valueOrNull(repeatable),
+        resumeActions = valueOrNull(resumeActions),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
@@ -943,6 +1076,7 @@ fun Component<Pager>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        videoSources = valueOrNull(videoSources),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -955,22 +1089,27 @@ fun Component<Pager>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param bufferingActions Actions performed during video loading.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
+ * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
+ * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
+ * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param pauseActions Actions that are performed when a playback is paused.
+ * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
+ * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -985,28 +1124,33 @@ fun Component<Pager>.override(
  * @param width Element width.
  */
 @Generated
-fun Component<Pager>.defer(
+fun Component<Video>.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    bufferingActions: ReferenceProperty<List<Action>>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
+    elapsedTimeVariable: ReferenceProperty<String>? = null,
+    endActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
+    fatalActions: ReferenceProperty<List<Action>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    muted: ReferenceProperty<Boolean>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
+    pauseActions: ReferenceProperty<List<Action>>? = null,
+    playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preview: ReferenceProperty<String>? = null,
+    repeatable: ReferenceProperty<Boolean>? = null,
+    resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1015,33 +1159,39 @@ fun Component<Pager>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    videoSources: ReferenceProperty<List<VideoSource>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-): Component<Pager> = Component(
+): Component<Video> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Video.Properties(
         accessibility = accessibility,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        autostart = autostart,
         background = background,
         border = border,
+        bufferingActions = bufferingActions,
         columnSpan = columnSpan,
-        defaultItem = defaultItem,
         disappearActions = disappearActions,
+        elapsedTimeVariable = elapsedTimeVariable,
+        endActions = endActions,
         extensions = extensions,
+        fatalActions = fatalActions,
         focus = focus,
         height = height,
         id = id,
-        itemSpacing = itemSpacing,
-        items = items,
-        layoutMode = layoutMode,
         margins = margins,
-        orientation = orientation,
+        muted = muted,
         paddings = paddings,
-        restrictParentScroll = restrictParentScroll,
+        pauseActions = pauseActions,
+        playerSettingsPayload = playerSettingsPayload,
+        preview = preview,
+        repeatable = repeatable,
+        resumeActions = resumeActions,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         tooltips = tooltips,
@@ -1050,6 +1200,7 @@ fun Component<Pager>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        videoSources = videoSources,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1061,48 +1212,55 @@ fun Component<Pager>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
- * @param orientation Pager orientation.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param muted This option mutes video.
+ * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
+ * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param visibility Element visibility.
  */
 @Generated
-fun Component<Pager>.evaluate(
+fun Component<Video>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    defaultItem: ExpressionProperty<Int>? = null,
-    orientation: ExpressionProperty<Pager.Orientation>? = null,
-    restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    muted: ExpressionProperty<Boolean>? = null,
+    preview: ExpressionProperty<String>? = null,
+    repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
-): Component<Pager> = Component(
+): Component<Video> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Video.Properties(
         accessibility = null,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        autostart = autostart,
         background = null,
         border = null,
+        bufferingActions = null,
         columnSpan = columnSpan,
-        defaultItem = defaultItem,
         disappearActions = null,
+        elapsedTimeVariable = null,
+        endActions = null,
         extensions = null,
+        fatalActions = null,
         focus = null,
         height = null,
         id = null,
-        itemSpacing = null,
-        items = null,
-        layoutMode = null,
         margins = null,
-        orientation = orientation,
+        muted = muted,
         paddings = null,
-        restrictParentScroll = restrictParentScroll,
+        pauseActions = null,
+        playerSettingsPayload = null,
+        preview = preview,
+        repeatable = repeatable,
+        resumeActions = null,
         rowSpan = rowSpan,
         selectedActions = null,
         tooltips = null,
@@ -1111,6 +1269,7 @@ fun Component<Pager>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        videoSources = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
@@ -1119,13 +1278,10 @@ fun Component<Pager>.evaluate(
 )
 
 @Generated
-operator fun Component<Pager>.plus(additive: Pager.Properties): Component<Pager> = Component(
+operator fun Component<Video>.plus(additive: Video.Properties): Component<Video> = Component(
     template = template,
     properties = additive.mergeWith(properties)
 )
 
 @Generated
-fun Pager.asList() = listOf(this)
-
-@Generated
-fun Pager.Orientation.asList() = listOf(this)
+fun Video.asList() = listOf(this)

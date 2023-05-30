@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [tooltip].
  * 
- * Required properties: `position, id, div`.
+ * Required parameters: `position, id, div`.
  */
 @Generated
 class Tooltip internal constructor(

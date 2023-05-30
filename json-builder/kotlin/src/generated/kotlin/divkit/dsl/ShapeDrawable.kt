@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [shapeDrawable].
  * 
- * Required properties: `type, shape, color`.
+ * Required parameters: `type, shape, color`.
  */
 @Generated
 class ShapeDrawable internal constructor(
@@ -46,7 +46,7 @@ class ShapeDrawable internal constructor(
         /**
          * Fill color.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val color: Property<Color>?,
         /**
          * Shape.
@@ -55,7 +55,7 @@ class ShapeDrawable internal constructor(
         /**
          * Stroke style.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val stroke: Property<Stroke>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {

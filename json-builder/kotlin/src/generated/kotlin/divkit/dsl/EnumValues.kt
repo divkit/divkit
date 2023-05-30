@@ -84,6 +84,7 @@ object BlankEnumValue : EnumValue("_blank"),
 @Generated
 object LeftEnumValue : EnumValue("left"),
     AlignmentHorizontal,
+    ContentAlignmentHorizontal,
     SlideTransition.Edge,
     Tooltip.Position
 
@@ -91,29 +92,35 @@ object LeftEnumValue : EnumValue("left"),
 object CenterEnumValue : EnumValue("center"),
     AlignmentHorizontal,
     AlignmentVertical,
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical,
     Gallery.CrossContentAlignment
 
 @Generated
 object RightEnumValue : EnumValue("right"),
     AlignmentHorizontal,
+    ContentAlignmentHorizontal,
     SlideTransition.Edge,
     Tooltip.Position
 
 @Generated
 object TopEnumValue : EnumValue("top"),
     AlignmentVertical,
+    ContentAlignmentVertical,
     SlideTransition.Edge,
     Tooltip.Position
 
 @Generated
 object BottomEnumValue : EnumValue("bottom"),
     AlignmentVertical,
+    ContentAlignmentVertical,
     SlideTransition.Edge,
     Tooltip.Position
 
 @Generated
 object BaselineEnumValue : EnumValue("baseline"),
-    AlignmentVertical
+    AlignmentVertical,
+    ContentAlignmentVertical
 
 @Generated
 object FadeEnumValue : EnumValue("fade"),
@@ -216,6 +223,21 @@ object OverlapEnumValue : EnumValue("overlap"),
     Container.Orientation
 
 @Generated
+object SpaceBetweenEnumValue : EnumValue("space-between"),
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical
+
+@Generated
+object SpaceAroundEnumValue : EnumValue("space-around"),
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical
+
+@Generated
+object SpaceEvenlyEnumValue : EnumValue("space-evenly"),
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical
+
+@Generated
 object DisplayEnumValue : EnumValue("display"),
     FontFamily
 
@@ -262,6 +284,10 @@ object FitEnumValue : EnumValue("fit"),
     ImageScale
 
 @Generated
+object StretchEnumValue : EnumValue("stretch"),
+    ImageScale
+
+@Generated
 object WormEnumValue : EnumValue("worm"),
     Indicator.Animation
 
@@ -271,33 +297,27 @@ object SliderEnumValue : EnumValue("slider"),
 
 @Generated
 object SingleLineTextEnumValue : EnumValue("single_line_text"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object MultiLineTextEnumValue : EnumValue("multi_line_text"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object PhoneEnumValue : EnumValue("phone"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object NumberEnumValue : EnumValue("number"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object EmailEnumValue : EnumValue("email"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object UriEnumValue : EnumValue("uri"),
-    Input.KeyboardType,
-    KeyboardInput.KeyboardType
+    Input.KeyboardType
 
 @Generated
 object SingleEnumValue : EnumValue("single"),
@@ -570,6 +590,18 @@ val DivScope.overlap: OverlapEnumValue
     get() = OverlapEnumValue
 
 @Generated
+val DivScope.space_between: SpaceBetweenEnumValue
+    get() = SpaceBetweenEnumValue
+
+@Generated
+val DivScope.space_around: SpaceAroundEnumValue
+    get() = SpaceAroundEnumValue
+
+@Generated
+val DivScope.space_evenly: SpaceEvenlyEnumValue
+    get() = SpaceEvenlyEnumValue
+
+@Generated
 val DivScope.display: DisplayEnumValue
     get() = DisplayEnumValue
 
@@ -612,6 +644,10 @@ val DivScope.no_scale: NoScaleEnumValue
 @Generated
 val DivScope.fit: FitEnumValue
     get() = FitEnumValue
+
+@Generated
+val DivScope.stretch: StretchEnumValue
+    get() = StretchEnumValue
 
 @Generated
 val DivScope.worm: WormEnumValue

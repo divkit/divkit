@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [indicator].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class Indicator internal constructor(
@@ -47,6 +47,7 @@ class Indicator internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
@@ -85,13 +86,13 @@ class Indicator internal constructor(
          * Active indicator color.
          * Default value: `#ffdc60`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val activeItemColor: Property<Color>?,
         /**
          * A size multiplier for an active indicator.
          * Default value: `1.3`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val activeItemSize: Property<Double>?,
         /**
          * Active indicator shape.
@@ -128,6 +129,10 @@ class Indicator internal constructor(
          */
         val columnSpan: Property<Int>?,
         /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
+        /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
         val extensions: Property<List<Extension>>?,
@@ -148,7 +153,7 @@ class Indicator internal constructor(
          * Indicator color.
          * Default value: `#33919cb5`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val inactiveItemColor: Property<Color>?,
         /**
          * Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
@@ -170,7 +175,7 @@ class Indicator internal constructor(
          * A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
          * Default value: `0.5`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val minimumItemSize: Property<Double>?,
         /**
          * Internal margins from the element stroke.
@@ -192,13 +197,13 @@ class Indicator internal constructor(
          * Indicator shape.
          * Default value: `{"type":"rounded_rectangle"}`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val shape: Property<Shape>?,
         /**
          * Spacing between indicator centers.
          * Default value: `{"type": "fixed","value":15}`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val spaceBetweenCenters: Property<FixedSize>?,
         /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -257,6 +262,7 @@ class Indicator internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
@@ -308,6 +314,7 @@ class Indicator internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -349,6 +356,7 @@ fun DivScope.indicator(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -388,6 +396,7 @@ fun DivScope.indicator(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -429,6 +438,7 @@ fun DivScope.indicator(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -470,6 +480,7 @@ fun DivScope.indicatorProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -508,6 +519,7 @@ fun DivScope.indicatorProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
@@ -548,6 +560,7 @@ fun DivScope.indicatorProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -589,6 +602,7 @@ fun TemplateScope.indicatorRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -627,6 +641,7 @@ fun TemplateScope.indicatorRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     height = height,
@@ -667,6 +682,7 @@ fun TemplateScope.indicatorRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -708,6 +724,7 @@ fun Indicator.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -747,6 +764,7 @@ fun Indicator.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
@@ -788,6 +806,7 @@ fun Indicator.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -829,6 +848,7 @@ fun Indicator.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -868,6 +888,7 @@ fun Indicator.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
@@ -937,6 +958,7 @@ fun Indicator.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         height = properties.height,
@@ -978,6 +1000,7 @@ fun Indicator.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -1019,6 +1042,7 @@ fun Component<Indicator>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -1059,6 +1083,7 @@ fun Component<Indicator>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -1100,6 +1125,7 @@ fun Component<Indicator>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -1141,6 +1167,7 @@ fun Component<Indicator>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -1181,6 +1208,7 @@ fun Component<Indicator>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         height = height,
@@ -1251,6 +1279,7 @@ fun Component<Indicator>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        disappearActions = null,
         extensions = null,
         focus = null,
         height = null,

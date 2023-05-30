@@ -18,23 +18,23 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Pager. It contains a horizontal set of cards that can be scrolled page by page. It shows the main page and the beginning of the next one.
+ * List of options with only one to be selected.
  * 
- * Can be created using the method [pager].
+ * Can be created using the method [select].
  * 
- * Required parameters: `type, layout_mode, items`.
+ * Required parameters: `value_variable, type, options`.
  */
 @Generated
-class Pager internal constructor(
+class Select internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Div {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "pager")
+        mapOf("type" to "select")
     )
 
-    operator fun plus(additive: Properties): Pager = Pager(
+    operator fun plus(additive: Properties): Select = Select(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
@@ -43,27 +43,32 @@ class Pager internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
-            defaultItem = additive.defaultItem ?: properties.defaultItem,
             disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
+            fontFamily = additive.fontFamily ?: properties.fontFamily,
+            fontSize = additive.fontSize ?: properties.fontSize,
+            fontSizeUnit = additive.fontSizeUnit ?: properties.fontSizeUnit,
+            fontWeight = additive.fontWeight ?: properties.fontWeight,
             height = additive.height ?: properties.height,
+            hintColor = additive.hintColor ?: properties.hintColor,
+            hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
-            itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
-            items = additive.items ?: properties.items,
-            layoutMode = additive.layoutMode ?: properties.layoutMode,
+            letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
+            lineHeight = additive.lineHeight ?: properties.lineHeight,
             margins = additive.margins ?: properties.margins,
-            orientation = additive.orientation ?: properties.orientation,
+            options = additive.options ?: properties.options,
             paddings = additive.paddings ?: properties.paddings,
-            restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
+            textColor = additive.textColor ?: properties.textColor,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            valueVariable = additive.valueVariable ?: properties.valueVariable,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -102,11 +107,6 @@ class Pager internal constructor(
          */
         val columnSpan: Property<Int>?,
         /**
-         * Ordinal number of the pager element that will be opened by default.
-         * Default value: `0`.
-         */
-        val defaultItem: Property<Int>?,
-        /**
          * Actions when an element disappears from the screen.
          */
         val disappearActions: Property<List<DisappearAction>>?,
@@ -119,45 +119,61 @@ class Pager internal constructor(
          */
         val focus: Property<Focus>?,
         /**
+         * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+         * Default value: `text`.
+         */
+        val fontFamily: Property<FontFamily>?,
+        /**
+         * Font size.
+         * Default value: `12`.
+         */
+        val fontSize: Property<Int>?,
+        /**
+         * Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+         * Default value: `sp`.
+         */
+        val fontSizeUnit: Property<SizeUnit>?,
+        /**
+         * Style.
+         * Default value: `regular`.
+         */
+        val fontWeight: Property<FontWeight>?,
+        /**
          * Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
          * Default value: `{"type": "wrap_content"}`.
          */
         val height: Property<Size>?,
         /**
+         * Hint color.
+         * Default value: `#73000000`.
+         */
+        val hintColor: Property<Color>?,
+        /**
+         * Hint text.
+         */
+        val hintText: Property<String>?,
+        /**
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
         /**
-         * Spacing between elements.
-         * Default value: `{"type": "fixed","value":0}`.
+         * Spacing between characters.
+         * Default value: `0`.
          */
-        val itemSpacing: Property<FixedSize>?,
+        val letterSpacing: Property<Double>?,
         /**
-         * Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
+         * Line spacing of the text. Measured in units set in `font_size_unit`.
          */
-        val items: Property<List<Div>>?,
-        /**
-         * Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
-         */
-        val layoutMode: Property<PagerLayoutMode>?,
+        val lineHeight: Property<Int>?,
         /**
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
-        /**
-         * Pager orientation.
-         * Default value: `horizontal`.
-         */
-        val orientation: Property<Orientation>?,
+        val options: Property<List<Option>>?,
         /**
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
-        /**
-         * If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
-         * Default value: `false`.
-         */
-        val restrictParentScroll: Property<Boolean>?,
         /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
@@ -166,6 +182,11 @@ class Pager internal constructor(
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
         val selectedActions: Property<List<Action>>?,
+        /**
+         * Text color.
+         * Default value: `#FF000000`.
+         */
+        val textColor: Property<Color>?,
         /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
@@ -190,6 +211,10 @@ class Pager internal constructor(
          * Animation starting triggers. Default value: `[state_change, visibility_change]`.
          */
         val transitionTriggers: Property<List<TransitionTrigger>>?,
+        /**
+         * Name of the variable that stores the selected option value (`value`).
+         */
+        val valueVariable: Property<String>?,
         /**
          * Element visibility.
          * Default value: `visible`.
@@ -219,27 +244,32 @@ class Pager internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
-            result.tryPutProperty("default_item", defaultItem)
             result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
+            result.tryPutProperty("font_family", fontFamily)
+            result.tryPutProperty("font_size", fontSize)
+            result.tryPutProperty("font_size_unit", fontSizeUnit)
+            result.tryPutProperty("font_weight", fontWeight)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hint_color", hintColor)
+            result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
-            result.tryPutProperty("item_spacing", itemSpacing)
-            result.tryPutProperty("items", items)
-            result.tryPutProperty("layout_mode", layoutMode)
+            result.tryPutProperty("letter_spacing", letterSpacing)
+            result.tryPutProperty("line_height", lineHeight)
             result.tryPutProperty("margins", margins)
-            result.tryPutProperty("orientation", orientation)
+            result.tryPutProperty("options", options)
             result.tryPutProperty("paddings", paddings)
-            result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
+            result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transition_change", transitionChange)
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("value_variable", valueVariable)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -249,12 +279,47 @@ class Pager internal constructor(
     }
 
     /**
-     * Pager orientation.
+     * List option.
      * 
-     * Possible values: [horizontal, vertical].
+     * Can be created using the method [selectOption].
+     * 
+     * Required parameters: `value`.
      */
     @Generated
-    sealed interface Orientation
+    class Option internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): Option = Option(
+            Properties(
+                text = additive.text ?: properties.text,
+                value = additive.value ?: properties.value,
+            )
+        )
+
+        class Properties internal constructor(
+            /**
+             * Text description of the option displayed in the list. If not set, `value` is used instead.
+             */
+            val text: Property<String>?,
+            /**
+             * Value matching the option.
+             */
+            val value: Property<String>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("text", text)
+                result.tryPutProperty("value", value)
+                return result
+            }
+        }
+    }
+
 }
 
 /**
@@ -265,34 +330,38 @@ class Pager internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun DivScope.pager(
+fun DivScope.select(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
@@ -301,33 +370,38 @@ fun DivScope.pager(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    fontFamily: FontFamily? = null,
+    fontSize: Int? = null,
+    fontSizeUnit: SizeUnit? = null,
+    fontWeight: FontWeight? = null,
     height: Size? = null,
+    hintColor: Color? = null,
+    hintText: String? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
+    letterSpacing: Double? = null,
+    lineHeight: Int? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    textColor: Color? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Select = Select(
+    Select.Properties(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
@@ -335,27 +409,32 @@ fun DivScope.pager(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
-        defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        fontFamily = valueOrNull(fontFamily),
+        fontSize = valueOrNull(fontSize),
+        fontSizeUnit = valueOrNull(fontSizeUnit),
+        fontWeight = valueOrNull(fontWeight),
         height = valueOrNull(height),
+        hintColor = valueOrNull(hintColor),
+        hintText = valueOrNull(hintText),
         id = valueOrNull(id),
-        itemSpacing = valueOrNull(itemSpacing),
-        items = valueOrNull(items),
-        layoutMode = valueOrNull(layoutMode),
+        letterSpacing = valueOrNull(letterSpacing),
+        lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
+        options = valueOrNull(options),
         paddings = valueOrNull(paddings),
-        restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
+        textColor = valueOrNull(textColor),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        valueVariable = valueOrNull(valueVariable),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -371,34 +450,38 @@ fun DivScope.pager(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun DivScope.pagerProps(
+fun DivScope.selectProps(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
@@ -407,32 +490,37 @@ fun DivScope.pagerProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    fontFamily: FontFamily? = null,
+    fontSize: Int? = null,
+    fontSizeUnit: SizeUnit? = null,
+    fontWeight: FontWeight? = null,
     height: Size? = null,
+    hintColor: Color? = null,
+    hintText: String? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
+    letterSpacing: Double? = null,
+    lineHeight: Int? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    textColor: Color? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-) = Pager.Properties(
+) = Select.Properties(
     accessibility = valueOrNull(accessibility),
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
@@ -440,27 +528,32 @@ fun DivScope.pagerProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
-    defaultItem = valueOrNull(defaultItem),
     disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
+    fontFamily = valueOrNull(fontFamily),
+    fontSize = valueOrNull(fontSize),
+    fontSizeUnit = valueOrNull(fontSizeUnit),
+    fontWeight = valueOrNull(fontWeight),
     height = valueOrNull(height),
+    hintColor = valueOrNull(hintColor),
+    hintText = valueOrNull(hintText),
     id = valueOrNull(id),
-    itemSpacing = valueOrNull(itemSpacing),
-    items = valueOrNull(items),
-    layoutMode = valueOrNull(layoutMode),
+    letterSpacing = valueOrNull(letterSpacing),
+    lineHeight = valueOrNull(lineHeight),
     margins = valueOrNull(margins),
-    orientation = valueOrNull(orientation),
+    options = valueOrNull(options),
     paddings = valueOrNull(paddings),
-    restrictParentScroll = valueOrNull(restrictParentScroll),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
+    textColor = valueOrNull(textColor),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transitionChange = valueOrNull(transitionChange),
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    valueVariable = valueOrNull(valueVariable),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -475,34 +568,38 @@ fun DivScope.pagerProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun TemplateScope.pagerRefs(
+fun TemplateScope.selectRefs(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
@@ -511,32 +608,37 @@ fun TemplateScope.pagerRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontSize: ReferenceProperty<Int>? = null,
+    fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
+    fontWeight: ReferenceProperty<FontWeight>? = null,
     height: ReferenceProperty<Size>? = null,
+    hintColor: ReferenceProperty<Color>? = null,
+    hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
+    letterSpacing: ReferenceProperty<Double>? = null,
+    lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textColor: ReferenceProperty<Color>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-) = Pager.Properties(
+) = Select.Properties(
     accessibility = accessibility,
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
@@ -544,27 +646,32 @@ fun TemplateScope.pagerRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
-    defaultItem = defaultItem,
     disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
+    fontFamily = fontFamily,
+    fontSize = fontSize,
+    fontSizeUnit = fontSizeUnit,
+    fontWeight = fontWeight,
     height = height,
+    hintColor = hintColor,
+    hintText = hintText,
     id = id,
-    itemSpacing = itemSpacing,
-    items = items,
-    layoutMode = layoutMode,
+    letterSpacing = letterSpacing,
+    lineHeight = lineHeight,
     margins = margins,
-    orientation = orientation,
+    options = options,
     paddings = paddings,
-    restrictParentScroll = restrictParentScroll,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
+    textColor = textColor,
     tooltips = tooltips,
     transform = transform,
     transitionChange = transitionChange,
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    valueVariable = valueVariable,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -579,34 +686,38 @@ fun TemplateScope.pagerRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun Pager.override(
+fun Select.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
@@ -615,33 +726,38 @@ fun Pager.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    fontFamily: FontFamily? = null,
+    fontSize: Int? = null,
+    fontSizeUnit: SizeUnit? = null,
+    fontWeight: FontWeight? = null,
     height: Size? = null,
+    hintColor: Color? = null,
+    hintText: String? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
+    letterSpacing: Double? = null,
+    lineHeight: Int? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    textColor: Color? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Select = Select(
+    Select.Properties(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
@@ -649,27 +765,32 @@ fun Pager.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
-        defaultItem = valueOrNull(defaultItem) ?: properties.defaultItem,
         disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
+        fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
+        fontSize = valueOrNull(fontSize) ?: properties.fontSize,
+        fontSizeUnit = valueOrNull(fontSizeUnit) ?: properties.fontSizeUnit,
+        fontWeight = valueOrNull(fontWeight) ?: properties.fontWeight,
         height = valueOrNull(height) ?: properties.height,
+        hintColor = valueOrNull(hintColor) ?: properties.hintColor,
+        hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
-        itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
-        items = valueOrNull(items) ?: properties.items,
-        layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
+        letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
+        lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
         margins = valueOrNull(margins) ?: properties.margins,
-        orientation = valueOrNull(orientation) ?: properties.orientation,
+        options = valueOrNull(options) ?: properties.options,
         paddings = valueOrNull(paddings) ?: properties.paddings,
-        restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        textColor = valueOrNull(textColor) ?: properties.textColor,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        valueVariable = valueOrNull(valueVariable) ?: properties.valueVariable,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -685,34 +806,38 @@ fun Pager.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun Pager.defer(
+fun Select.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
@@ -721,33 +846,38 @@ fun Pager.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontSize: ReferenceProperty<Int>? = null,
+    fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
+    fontWeight: ReferenceProperty<FontWeight>? = null,
     height: ReferenceProperty<Size>? = null,
+    hintColor: ReferenceProperty<Color>? = null,
+    hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
+    letterSpacing: ReferenceProperty<Double>? = null,
+    lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textColor: ReferenceProperty<Color>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Select = Select(
+    Select.Properties(
         accessibility = accessibility ?: properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
@@ -755,27 +885,32 @@ fun Pager.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
-        defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         height = height ?: properties.height,
+        hintColor = hintColor ?: properties.hintColor,
+        hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
-        itemSpacing = itemSpacing ?: properties.itemSpacing,
-        items = items ?: properties.items,
-        layoutMode = layoutMode ?: properties.layoutMode,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
         margins = margins ?: properties.margins,
-        orientation = orientation ?: properties.orientation,
+        options = options ?: properties.options,
         paddings = paddings ?: properties.paddings,
-        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
+        textColor = textColor ?: properties.textColor,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transitionChange = transitionChange ?: properties.transitionChange,
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        valueVariable = valueVariable ?: properties.valueVariable,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -788,26 +923,38 @@ fun Pager.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
- * @param orientation Pager orientation.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param textColor Text color.
  * @param visibility Element visibility.
  */
 @Generated
-fun Pager.evaluate(
+fun Select.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    defaultItem: ExpressionProperty<Int>? = null,
-    orientation: ExpressionProperty<Pager.Orientation>? = null,
-    restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
+    hintColor: ExpressionProperty<Color>? = null,
+    hintText: ExpressionProperty<String>? = null,
+    letterSpacing: ExpressionProperty<Double>? = null,
+    lineHeight: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
-): Pager = Pager(
-    Pager.Properties(
+): Select = Select(
+    Select.Properties(
         accessibility = properties.accessibility,
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
@@ -815,27 +962,32 @@ fun Pager.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
-        defaultItem = defaultItem ?: properties.defaultItem,
         disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
+        fontFamily = fontFamily ?: properties.fontFamily,
+        fontSize = fontSize ?: properties.fontSize,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         height = properties.height,
+        hintColor = hintColor ?: properties.hintColor,
+        hintText = hintText ?: properties.hintText,
         id = properties.id,
-        itemSpacing = properties.itemSpacing,
-        items = properties.items,
-        layoutMode = properties.layoutMode,
+        letterSpacing = letterSpacing ?: properties.letterSpacing,
+        lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
-        orientation = orientation ?: properties.orientation,
+        options = properties.options,
         paddings = properties.paddings,
-        restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
+        textColor = textColor ?: properties.textColor,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        valueVariable = properties.valueVariable,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -851,34 +1003,38 @@ fun Pager.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun Component<Pager>.override(
+fun Component<Select>.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     alignmentHorizontal: AlignmentHorizontal? = null,
@@ -887,34 +1043,39 @@ fun Component<Pager>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    defaultItem: Int? = null,
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
+    fontFamily: FontFamily? = null,
+    fontSize: Int? = null,
+    fontSizeUnit: SizeUnit? = null,
+    fontWeight: FontWeight? = null,
     height: Size? = null,
+    hintColor: Color? = null,
+    hintText: String? = null,
     id: String? = null,
-    itemSpacing: FixedSize? = null,
-    items: List<Div>? = null,
-    layoutMode: PagerLayoutMode? = null,
+    letterSpacing: Double? = null,
+    lineHeight: Int? = null,
     margins: EdgeInsets? = null,
-    orientation: Pager.Orientation? = null,
+    options: List<Select.Option>? = null,
     paddings: EdgeInsets? = null,
-    restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    textColor: Color? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    valueVariable: String? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Component<Pager> = Component(
+): Component<Select> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Select.Properties(
         accessibility = valueOrNull(accessibility),
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
@@ -922,27 +1083,32 @@ fun Component<Pager>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
-        defaultItem = valueOrNull(defaultItem),
         disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
+        fontFamily = valueOrNull(fontFamily),
+        fontSize = valueOrNull(fontSize),
+        fontSizeUnit = valueOrNull(fontSizeUnit),
+        fontWeight = valueOrNull(fontWeight),
         height = valueOrNull(height),
+        hintColor = valueOrNull(hintColor),
+        hintText = valueOrNull(hintText),
         id = valueOrNull(id),
-        itemSpacing = valueOrNull(itemSpacing),
-        items = valueOrNull(items),
-        layoutMode = valueOrNull(layoutMode),
+        letterSpacing = valueOrNull(letterSpacing),
+        lineHeight = valueOrNull(lineHeight),
         margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
+        options = valueOrNull(options),
         paddings = valueOrNull(paddings),
-        restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
+        textColor = valueOrNull(textColor),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        valueVariable = valueOrNull(valueVariable),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -958,34 +1124,38 @@ fun Component<Pager>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param itemSpacing Spacing between elements.
- * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
- * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textColor Text color.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param valueVariable Name of the variable that stores the selected option value (`value`).
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
  * @param width Element width.
  */
 @Generated
-fun Component<Pager>.defer(
+fun Component<Select>.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Accessibility>? = null,
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
@@ -994,34 +1164,39 @@ fun Component<Pager>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    defaultItem: ReferenceProperty<Int>? = null,
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
+    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontSize: ReferenceProperty<Int>? = null,
+    fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
+    fontWeight: ReferenceProperty<FontWeight>? = null,
     height: ReferenceProperty<Size>? = null,
+    hintColor: ReferenceProperty<Color>? = null,
+    hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    itemSpacing: ReferenceProperty<FixedSize>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
+    letterSpacing: ReferenceProperty<Double>? = null,
+    lineHeight: ReferenceProperty<Int>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Pager.Orientation>? = null,
+    options: ReferenceProperty<List<Select.Option>>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textColor: ReferenceProperty<Color>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    valueVariable: ReferenceProperty<String>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
-): Component<Pager> = Component(
+): Component<Select> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Select.Properties(
         accessibility = accessibility,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
@@ -1029,27 +1204,32 @@ fun Component<Pager>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
-        defaultItem = defaultItem,
         disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        fontSizeUnit = fontSizeUnit,
+        fontWeight = fontWeight,
         height = height,
+        hintColor = hintColor,
+        hintText = hintText,
         id = id,
-        itemSpacing = itemSpacing,
-        items = items,
-        layoutMode = layoutMode,
+        letterSpacing = letterSpacing,
+        lineHeight = lineHeight,
         margins = margins,
-        orientation = orientation,
+        options = options,
         paddings = paddings,
-        restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
+        textColor = textColor,
         tooltips = tooltips,
         transform = transform,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        valueVariable = valueVariable,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1062,27 +1242,39 @@ fun Component<Pager>.defer(
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param defaultItem Ordinal number of the pager element that will be opened by default.
- * @param orientation Pager orientation.
- * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
+ * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
+ * @param hintColor Hint color.
+ * @param hintText Hint text.
+ * @param letterSpacing Spacing between characters.
+ * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param textColor Text color.
  * @param visibility Element visibility.
  */
 @Generated
-fun Component<Pager>.evaluate(
+fun Component<Select>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    defaultItem: ExpressionProperty<Int>? = null,
-    orientation: ExpressionProperty<Pager.Orientation>? = null,
-    restrictParentScroll: ExpressionProperty<Boolean>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
+    hintColor: ExpressionProperty<Color>? = null,
+    hintText: ExpressionProperty<String>? = null,
+    letterSpacing: ExpressionProperty<Double>? = null,
+    lineHeight: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
-): Component<Pager> = Component(
+): Component<Select> = Component(
     template = template,
-    properties = Pager.Properties(
+    properties = Select.Properties(
         accessibility = null,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
@@ -1090,27 +1282,32 @@ fun Component<Pager>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
-        defaultItem = defaultItem,
         disappearActions = null,
         extensions = null,
         focus = null,
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        fontSizeUnit = fontSizeUnit,
+        fontWeight = fontWeight,
         height = null,
+        hintColor = hintColor,
+        hintText = hintText,
         id = null,
-        itemSpacing = null,
-        items = null,
-        layoutMode = null,
+        letterSpacing = letterSpacing,
+        lineHeight = lineHeight,
         margins = null,
-        orientation = orientation,
+        options = null,
         paddings = null,
-        restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         selectedActions = null,
+        textColor = textColor,
         tooltips = null,
         transform = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        valueVariable = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
@@ -1119,13 +1316,105 @@ fun Component<Pager>.evaluate(
 )
 
 @Generated
-operator fun Component<Pager>.plus(additive: Pager.Properties): Component<Pager> = Component(
+operator fun Component<Select>.plus(additive: Select.Properties): Component<Select> = Component(
     template = template,
     properties = additive.mergeWith(properties)
 )
 
 @Generated
-fun Pager.asList() = listOf(this)
+fun Select.asList() = listOf(this)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun DivScope.selectOption(
+    `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
+    value: String? = null,
+): Select.Option = Select.Option(
+    Select.Option.Properties(
+        text = valueOrNull(text),
+        value = valueOrNull(value),
+    )
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun DivScope.selectOptionProps(
+    `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
+    value: String? = null,
+) = Select.Option.Properties(
+    text = valueOrNull(text),
+    value = valueOrNull(value),
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun TemplateScope.selectOptionRefs(
+    `use named arguments`: Guard = Guard.instance,
+    text: ReferenceProperty<String>? = null,
+    value: ReferenceProperty<String>? = null,
+) = Select.Option.Properties(
+    text = text,
+    value = value,
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun Select.Option.override(
+    `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
+    value: String? = null,
+): Select.Option = Select.Option(
+    Select.Option.Properties(
+        text = valueOrNull(text) ?: properties.text,
+        value = valueOrNull(value) ?: properties.value,
+    )
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun Select.Option.defer(
+    `use named arguments`: Guard = Guard.instance,
+    text: ReferenceProperty<String>? = null,
+    value: ReferenceProperty<String>? = null,
+): Select.Option = Select.Option(
+    Select.Option.Properties(
+        text = text ?: properties.text,
+        value = value ?: properties.value,
+    )
+)
+
+/**
+ * @param text Text description of the option displayed in the list. If not set, `value` is used instead.
+ * @param value Value matching the option.
+ */
+@Generated
+fun Select.Option.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    text: ExpressionProperty<String>? = null,
+    value: ExpressionProperty<String>? = null,
+): Select.Option = Select.Option(
+    Select.Option.Properties(
+        text = text ?: properties.text,
+        value = value ?: properties.value,
+    )
+)
 
 @Generated
-fun Pager.Orientation.asList() = listOf(this)
+fun Select.Option.asList() = listOf(this)

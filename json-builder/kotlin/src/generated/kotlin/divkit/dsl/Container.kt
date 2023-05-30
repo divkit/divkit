@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [container].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class Container internal constructor(
@@ -50,6 +50,7 @@ class Container internal constructor(
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             contentAlignmentHorizontal = additive.contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
             contentAlignmentVertical = additive.contentAlignmentVertical ?: properties.contentAlignmentVertical,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
@@ -92,7 +93,7 @@ class Container internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -114,7 +115,8 @@ class Container internal constructor(
          */
         val alpha: Property<Double>?,
         /**
-         * Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+         * Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+        On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
          */
         val aspect: Property<Aspect>?,
         /**
@@ -133,12 +135,16 @@ class Container internal constructor(
          * Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
          * Default value: `left`.
          */
-        val contentAlignmentHorizontal: Property<AlignmentHorizontal>?,
+        val contentAlignmentHorizontal: Property<ContentAlignmentHorizontal>?,
         /**
          * Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
          * Default value: `top`.
          */
-        val contentAlignmentVertical: Property<AlignmentVertical>?,
+        val contentAlignmentVertical: Property<ContentAlignmentVertical>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Action when double-clicking on an element.
          */
@@ -257,6 +263,7 @@ class Container internal constructor(
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("content_alignment_horizontal", contentAlignmentHorizontal)
             result.tryPutProperty("content_alignment_vertical", contentAlignmentVertical)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
@@ -304,7 +311,7 @@ class Container internal constructor(
     /**
      * Can be created using the method [containerSeparator].
      * 
-     * Required properties: `style`.
+     * Required parameters: `style`.
      */
     @Generated
     class Separator internal constructor(
@@ -316,6 +323,7 @@ class Container internal constructor(
 
         operator fun plus(additive: Properties): Separator = Separator(
             Properties(
+                margins = additive.margins ?: properties.margins,
                 showAtEnd = additive.showAtEnd ?: properties.showAtEnd,
                 showAtStart = additive.showAtStart ?: properties.showAtStart,
                 showBetween = additive.showBetween ?: properties.showBetween,
@@ -324,6 +332,10 @@ class Container internal constructor(
         )
 
         class Properties internal constructor(
+            /**
+             * External margins from the element stroke.
+             */
+            val margins: Property<EdgeInsets>?,
             /**
              * Enables displaying the separator after the last item.
              * Default value: `false`.
@@ -347,6 +359,7 @@ class Container internal constructor(
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
+                result.tryPutProperty("margins", margins)
                 result.tryPutProperty("show_at_end", showAtEnd)
                 result.tryPutProperty("show_at_start", showAtStart)
                 result.tryPutProperty("show_between", showBetween)
@@ -361,17 +374,19 @@ class Container internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -412,8 +427,9 @@ fun DivScope.row(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -452,6 +468,7 @@ fun DivScope.row(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -481,17 +498,19 @@ fun DivScope.row(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -532,8 +551,9 @@ fun DivScope.row(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -572,6 +592,7 @@ fun DivScope.row(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -601,17 +622,19 @@ fun DivScope.row(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -652,8 +675,9 @@ fun DivScope.column(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -692,6 +716,7 @@ fun DivScope.column(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -721,17 +746,19 @@ fun DivScope.column(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -772,8 +799,9 @@ fun DivScope.column(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -812,6 +840,7 @@ fun DivScope.column(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -841,17 +870,19 @@ fun DivScope.column(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -892,8 +923,9 @@ fun DivScope.stack(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -932,6 +964,7 @@ fun DivScope.stack(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -961,17 +994,19 @@ fun DivScope.stack(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1012,8 +1047,9 @@ fun DivScope.stack(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1052,6 +1088,7 @@ fun DivScope.stack(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -1082,17 +1119,19 @@ fun DivScope.stack(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1133,8 +1172,9 @@ fun DivScope.container(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1175,6 +1215,7 @@ fun DivScope.container(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -1206,17 +1247,19 @@ fun DivScope.container(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1257,8 +1300,9 @@ fun DivScope.containerProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1298,6 +1342,7 @@ fun DivScope.containerProps(
     columnSpan = valueOrNull(columnSpan),
     contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
     contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+    disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
@@ -1328,17 +1373,19 @@ fun DivScope.containerProps(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1379,8 +1426,9 @@ fun TemplateScope.containerRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1420,6 +1468,7 @@ fun TemplateScope.containerRefs(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -1450,17 +1499,19 @@ fun TemplateScope.containerRefs(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1501,8 +1552,9 @@ fun Container.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1543,6 +1595,7 @@ fun Container.override(
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -1574,17 +1627,19 @@ fun Container.override(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1625,8 +1680,9 @@ fun Container.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1667,6 +1723,7 @@ fun Container.defer(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
@@ -1714,8 +1771,8 @@ fun Container.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
     layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -1735,6 +1792,7 @@ fun Container.evaluate(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -1766,17 +1824,19 @@ fun Container.evaluate(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1817,8 +1877,9 @@ fun Component<Container>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
+    contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
+    contentAlignmentVertical: ContentAlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1860,6 +1921,7 @@ fun Component<Container>.override(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -1891,17 +1953,19 @@ fun Component<Container>.override(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param aspect Fixed aspect ratio of the container. The element's height is calculated based on the width, ignoring the `height` parameter's value. 
+On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1942,8 +2006,9 @@ fun Component<Container>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
-    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1985,6 +2050,7 @@ fun Component<Container>.defer(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = disappearActions,
         doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
@@ -2032,8 +2098,8 @@ fun Component<Container>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
     layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
@@ -2054,6 +2120,7 @@ fun Component<Container>.evaluate(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = null,
         doubletapActions = null,
         extensions = null,
         focus = null,
@@ -2097,6 +2164,7 @@ fun Container.LayoutMode.asList() = listOf(this)
 fun Container.Orientation.asList() = listOf(this)
 
 /**
+ * @param margins External margins from the element stroke.
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
  * @param showBetween Enables displaying the separator between items.
@@ -2105,12 +2173,14 @@ fun Container.Orientation.asList() = listOf(this)
 @Generated
 fun DivScope.containerSeparator(
     `use named arguments`: Guard = Guard.instance,
+    margins: EdgeInsets? = null,
     showAtEnd: Boolean? = null,
     showAtStart: Boolean? = null,
     showBetween: Boolean? = null,
     style: Drawable? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
+        margins = valueOrNull(margins),
         showAtEnd = valueOrNull(showAtEnd),
         showAtStart = valueOrNull(showAtStart),
         showBetween = valueOrNull(showBetween),
@@ -2119,6 +2189,7 @@ fun DivScope.containerSeparator(
 )
 
 /**
+ * @param margins External margins from the element stroke.
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
  * @param showBetween Enables displaying the separator between items.
@@ -2127,11 +2198,13 @@ fun DivScope.containerSeparator(
 @Generated
 fun DivScope.containerSeparatorProps(
     `use named arguments`: Guard = Guard.instance,
+    margins: EdgeInsets? = null,
     showAtEnd: Boolean? = null,
     showAtStart: Boolean? = null,
     showBetween: Boolean? = null,
     style: Drawable? = null,
 ) = Container.Separator.Properties(
+    margins = valueOrNull(margins),
     showAtEnd = valueOrNull(showAtEnd),
     showAtStart = valueOrNull(showAtStart),
     showBetween = valueOrNull(showBetween),
@@ -2139,6 +2212,7 @@ fun DivScope.containerSeparatorProps(
 )
 
 /**
+ * @param margins External margins from the element stroke.
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
  * @param showBetween Enables displaying the separator between items.
@@ -2147,11 +2221,13 @@ fun DivScope.containerSeparatorProps(
 @Generated
 fun TemplateScope.containerSeparatorRefs(
     `use named arguments`: Guard = Guard.instance,
+    margins: ReferenceProperty<EdgeInsets>? = null,
     showAtEnd: ReferenceProperty<Boolean>? = null,
     showAtStart: ReferenceProperty<Boolean>? = null,
     showBetween: ReferenceProperty<Boolean>? = null,
     style: ReferenceProperty<Drawable>? = null,
 ) = Container.Separator.Properties(
+    margins = margins,
     showAtEnd = showAtEnd,
     showAtStart = showAtStart,
     showBetween = showBetween,
@@ -2159,6 +2235,7 @@ fun TemplateScope.containerSeparatorRefs(
 )
 
 /**
+ * @param margins External margins from the element stroke.
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
  * @param showBetween Enables displaying the separator between items.
@@ -2167,12 +2244,14 @@ fun TemplateScope.containerSeparatorRefs(
 @Generated
 fun Container.Separator.override(
     `use named arguments`: Guard = Guard.instance,
+    margins: EdgeInsets? = null,
     showAtEnd: Boolean? = null,
     showAtStart: Boolean? = null,
     showBetween: Boolean? = null,
     style: Drawable? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
+        margins = valueOrNull(margins) ?: properties.margins,
         showAtEnd = valueOrNull(showAtEnd) ?: properties.showAtEnd,
         showAtStart = valueOrNull(showAtStart) ?: properties.showAtStart,
         showBetween = valueOrNull(showBetween) ?: properties.showBetween,
@@ -2181,6 +2260,7 @@ fun Container.Separator.override(
 )
 
 /**
+ * @param margins External margins from the element stroke.
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
  * @param showBetween Enables displaying the separator between items.
@@ -2189,12 +2269,14 @@ fun Container.Separator.override(
 @Generated
 fun Container.Separator.defer(
     `use named arguments`: Guard = Guard.instance,
+    margins: ReferenceProperty<EdgeInsets>? = null,
     showAtEnd: ReferenceProperty<Boolean>? = null,
     showAtStart: ReferenceProperty<Boolean>? = null,
     showBetween: ReferenceProperty<Boolean>? = null,
     style: ReferenceProperty<Drawable>? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
+        margins = margins ?: properties.margins,
         showAtEnd = showAtEnd ?: properties.showAtEnd,
         showAtStart = showAtStart ?: properties.showAtStart,
         showBetween = showBetween ?: properties.showBetween,
@@ -2215,6 +2297,7 @@ fun Container.Separator.evaluate(
     showBetween: ExpressionProperty<Boolean>? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
+        margins = properties.margins,
         showAtEnd = showAtEnd ?: properties.showAtEnd,
         showAtStart = showAtStart ?: properties.showAtStart,
         showBetween = showBetween ?: properties.showBetween,

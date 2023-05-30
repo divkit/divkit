@@ -17,8 +17,11 @@ import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.Map
 
+/**
+ * Possible values: [top, center, bottom, baseline, space-between, space-around, space-evenly].
+ */
 @Generated
-sealed interface InputMethod
+sealed interface ContentAlignmentVertical
 
 @Generated
-fun InputMethod.asList() = listOf(this)
+fun ContentAlignmentVertical.asList() = listOf(this)

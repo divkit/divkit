@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [extension].
  * 
- * Required properties: `id`.
+ * Required parameters: `id`.
  */
 @Generated
 class Extension internal constructor(

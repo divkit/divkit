@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [gifImage].
  * 
- * Required properties: `type, gif_url`.
+ * Required parameters: `type, gif_url`.
  */
 @Generated
 class GifImage internal constructor(
@@ -49,6 +49,7 @@ class GifImage internal constructor(
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             contentAlignmentHorizontal = additive.contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
             contentAlignmentVertical = additive.contentAlignmentVertical ?: properties.contentAlignmentVertical,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
@@ -87,7 +88,7 @@ class GifImage internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -134,6 +135,10 @@ class GifImage internal constructor(
          * Default value: `center`.
          */
         val contentAlignmentVertical: Property<AlignmentVertical>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Action when double-clicking on an element.
          */
@@ -257,6 +262,7 @@ class GifImage internal constructor(
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("content_alignment_horizontal", contentAlignmentHorizontal)
             result.tryPutProperty("content_alignment_vertical", contentAlignmentVertical)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
@@ -290,7 +296,7 @@ class GifImage internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -301,6 +307,7 @@ class GifImage internal constructor(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -343,6 +350,7 @@ fun DivScope.gifImage(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -383,6 +391,7 @@ fun DivScope.gifImage(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -414,7 +423,7 @@ fun DivScope.gifImage(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -425,6 +434,7 @@ fun DivScope.gifImage(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -467,6 +477,7 @@ fun DivScope.gifImageProps(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -506,6 +517,7 @@ fun DivScope.gifImageProps(
     columnSpan = valueOrNull(columnSpan),
     contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
     contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+    disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
@@ -536,7 +548,7 @@ fun DivScope.gifImageProps(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -547,6 +559,7 @@ fun DivScope.gifImageProps(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -589,6 +602,7 @@ fun TemplateScope.gifImageRefs(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -628,6 +642,7 @@ fun TemplateScope.gifImageRefs(
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -658,7 +673,7 @@ fun TemplateScope.gifImageRefs(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -669,6 +684,7 @@ fun TemplateScope.gifImageRefs(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -711,6 +727,7 @@ fun GifImage.override(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -751,6 +768,7 @@ fun GifImage.override(
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -782,7 +800,7 @@ fun GifImage.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -793,6 +811,7 @@ fun GifImage.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -835,6 +854,7 @@ fun GifImage.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -875,6 +895,7 @@ fun GifImage.defer(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
@@ -949,6 +970,7 @@ fun GifImage.evaluate(
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -980,7 +1002,7 @@ fun GifImage.evaluate(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -991,6 +1013,7 @@ fun GifImage.evaluate(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1033,6 +1056,7 @@ fun Component<GifImage>.override(
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1074,6 +1098,7 @@ fun Component<GifImage>.override(
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -1105,7 +1130,7 @@ fun Component<GifImage>.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1116,6 +1141,7 @@ fun Component<GifImage>.override(
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal image alignment.
  * @param contentAlignmentVertical Vertical image alignment.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1158,6 +1184,7 @@ fun Component<GifImage>.defer(
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1199,6 +1226,7 @@ fun Component<GifImage>.defer(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = disappearActions,
         doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
@@ -1274,6 +1302,7 @@ fun Component<GifImage>.evaluate(
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
+        disappearActions = null,
         doubletapActions = null,
         extensions = null,
         focus = null,

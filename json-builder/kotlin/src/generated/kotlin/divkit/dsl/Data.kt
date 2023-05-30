@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [data].
  * 
- * Required properties: `states, log_id`.
+ * Required parameters: `states, log_id`.
  */
 @Generated
 class Data internal constructor(
@@ -49,7 +49,7 @@ class Data internal constructor(
          * Events that trigger transition animations.
          * Default value: `none`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Triggers for changing variables.
@@ -76,7 +76,7 @@ class Data internal constructor(
     /**
      * Can be created using the method [root].
      * 
-     * Required properties: `state_id, div`.
+     * Required parameters: `state_id, div`.
      */
     @Generated
     class State internal constructor(

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [tabs].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class Tabs internal constructor(
@@ -43,6 +43,7 @@ class Tabs internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             dynamicHeight = additive.dynamicHeight ?: properties.dynamicHeight,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
@@ -104,6 +105,10 @@ class Tabs internal constructor(
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
         val columnSpan: Property<Int>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Updating height when changing the active element. In the browser, the value is always `true`.
          * Default value: `false`.
@@ -238,6 +243,7 @@ class Tabs internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("dynamic_height", dynamicHeight)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
@@ -275,7 +281,7 @@ class Tabs internal constructor(
      * 
      * Can be created using the method [tabsItem].
      * 
-     * Required properties: `title, div`.
+     * Required parameters: `title, div`.
      */
     @Generated
     class Item internal constructor(
@@ -407,7 +413,7 @@ class Tabs internal constructor(
              * Style. Use `active_font_weight` and `inactive_font_weight` instead.
              * Default value: `regular`.
              */
-            @Deprecated("Marked as deprecated in json schema")
+            @Deprecated("Marked as deprecated in the JSON schema ")
             val fontWeight: Property<FontWeight>?,
             /**
              * Background color of the inactive tab title.
@@ -486,6 +492,7 @@ class Tabs internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -525,6 +532,7 @@ fun DivScope.tabs(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -562,6 +570,7 @@ fun DivScope.tabs(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         dynamicHeight = valueOrNull(dynamicHeight),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -601,6 +610,7 @@ fun DivScope.tabs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -640,6 +650,7 @@ fun DivScope.tabsProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -676,6 +687,7 @@ fun DivScope.tabsProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    disappearActions = valueOrNull(disappearActions),
     dynamicHeight = valueOrNull(dynamicHeight),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
@@ -714,6 +726,7 @@ fun DivScope.tabsProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -753,6 +766,7 @@ fun TemplateScope.tabsRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -789,6 +803,7 @@ fun TemplateScope.tabsRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    disappearActions = disappearActions,
     dynamicHeight = dynamicHeight,
     extensions = extensions,
     focus = focus,
@@ -827,6 +842,7 @@ fun TemplateScope.tabsRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -866,6 +882,7 @@ fun Tabs.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -903,6 +920,7 @@ fun Tabs.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         dynamicHeight = valueOrNull(dynamicHeight) ?: properties.dynamicHeight,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -942,6 +960,7 @@ fun Tabs.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -981,6 +1000,7 @@ fun Tabs.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1018,6 +1038,7 @@ fun Tabs.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
         dynamicHeight = dynamicHeight ?: properties.dynamicHeight,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
@@ -1087,6 +1108,7 @@ fun Tabs.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = properties.disappearActions,
         dynamicHeight = dynamicHeight ?: properties.dynamicHeight,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -1126,6 +1148,7 @@ fun Tabs.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1165,6 +1188,7 @@ fun Component<Tabs>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     dynamicHeight: Boolean? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -1203,6 +1227,7 @@ fun Component<Tabs>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         dynamicHeight = valueOrNull(dynamicHeight),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -1242,6 +1267,7 @@ fun Component<Tabs>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1281,6 +1307,7 @@ fun Component<Tabs>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     dynamicHeight: ReferenceProperty<Boolean>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1319,6 +1346,7 @@ fun Component<Tabs>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        disappearActions = disappearActions,
         dynamicHeight = dynamicHeight,
         extensions = extensions,
         focus = focus,
@@ -1389,6 +1417,7 @@ fun Component<Tabs>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        disappearActions = null,
         dynamicHeight = dynamicHeight,
         extensions = null,
         focus = null,

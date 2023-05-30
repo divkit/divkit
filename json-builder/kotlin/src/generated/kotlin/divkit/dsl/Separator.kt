@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [separator].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class Separator internal constructor(
@@ -47,6 +47,7 @@ class Separator internal constructor(
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             delimiterStyle = additive.delimiterStyle ?: properties.delimiterStyle,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
@@ -80,7 +81,7 @@ class Separator internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -117,6 +118,10 @@ class Separator internal constructor(
          * Separator display settings.
          */
         val delimiterStyle: Property<DelimiterStyle>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Action when double-clicking on an element.
          */
@@ -215,6 +220,7 @@ class Separator internal constructor(
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("delimiter_style", delimiterStyle)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
@@ -294,7 +300,7 @@ class Separator internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -303,6 +309,7 @@ class Separator internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -338,6 +345,7 @@ fun DivScope.separator(
     border: Border? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -371,6 +379,7 @@ fun DivScope.separator(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         delimiterStyle = valueOrNull(delimiterStyle),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -397,7 +406,7 @@ fun DivScope.separator(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -406,6 +415,7 @@ fun DivScope.separator(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -441,6 +451,7 @@ fun DivScope.separatorProps(
     border: Border? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -473,6 +484,7 @@ fun DivScope.separatorProps(
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     delimiterStyle = valueOrNull(delimiterStyle),
+    disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
@@ -498,7 +510,7 @@ fun DivScope.separatorProps(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -507,6 +519,7 @@ fun DivScope.separatorProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -542,6 +555,7 @@ fun TemplateScope.separatorRefs(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -574,6 +588,7 @@ fun TemplateScope.separatorRefs(
     border = border,
     columnSpan = columnSpan,
     delimiterStyle = delimiterStyle,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     extensions = extensions,
     focus = focus,
@@ -599,7 +614,7 @@ fun TemplateScope.separatorRefs(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -608,6 +623,7 @@ fun TemplateScope.separatorRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -643,6 +659,7 @@ fun Separator.override(
     border: Border? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -676,6 +693,7 @@ fun Separator.override(
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         delimiterStyle = valueOrNull(delimiterStyle) ?: properties.delimiterStyle,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -702,7 +720,7 @@ fun Separator.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -711,6 +729,7 @@ fun Separator.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -746,6 +765,7 @@ fun Separator.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -779,6 +799,7 @@ fun Separator.defer(
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         delimiterStyle = delimiterStyle ?: properties.delimiterStyle,
+        disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
@@ -832,6 +853,7 @@ fun Separator.evaluate(
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         delimiterStyle = properties.delimiterStyle,
+        disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -858,7 +880,7 @@ fun Separator.evaluate(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -867,6 +889,7 @@ fun Separator.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -902,6 +925,7 @@ fun Component<Separator>.override(
     border: Border? = null,
     columnSpan: Int? = null,
     delimiterStyle: Separator.DelimiterStyle? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -936,6 +960,7 @@ fun Component<Separator>.override(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         delimiterStyle = valueOrNull(delimiterStyle),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -962,7 +987,7 @@ fun Component<Separator>.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -971,6 +996,7 @@ fun Component<Separator>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param delimiterStyle Separator display settings.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -1006,6 +1032,7 @@ fun Component<Separator>.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     delimiterStyle: ReferenceProperty<Separator.DelimiterStyle>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1040,6 +1067,7 @@ fun Component<Separator>.defer(
         border = border,
         columnSpan = columnSpan,
         delimiterStyle = delimiterStyle,
+        disappearActions = disappearActions,
         doubletapActions = doubletapActions,
         extensions = extensions,
         focus = focus,
@@ -1094,6 +1122,7 @@ fun Component<Separator>.evaluate(
         border = null,
         columnSpan = columnSpan,
         delimiterStyle = null,
+        disappearActions = null,
         doubletapActions = null,
         extensions = null,
         focus = null,

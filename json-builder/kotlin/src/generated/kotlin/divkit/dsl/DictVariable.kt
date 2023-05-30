@@ -18,23 +18,23 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * An integer variable.
+ * Variable — any json object.
  * 
- * Can be created using the method [integerVariable].
+ * Can be created using the method [dictVariable].
  * 
  * Required parameters: `value, name`.
  */
 @Generated
-class IntegerVariable internal constructor(
+class DictVariable internal constructor(
     @JsonIgnore
     val properties: Properties,
 ) : Variable {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "integer")
+        mapOf("type" to "dict")
     )
 
-    operator fun plus(additive: Properties): IntegerVariable = IntegerVariable(
+    operator fun plus(additive: Properties): DictVariable = DictVariable(
         Properties(
             name = additive.name ?: properties.name,
             value = additive.value ?: properties.value,
@@ -49,7 +49,7 @@ class IntegerVariable internal constructor(
         /**
          * Value.
          */
-        val value: Property<Long>?,
+        val value: Property<Map<String, Any>>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -66,12 +66,12 @@ class IntegerVariable internal constructor(
  * @param value Value.
  */
 @Generated
-fun DivScope.integerVariable(
+fun DivScope.dictVariable(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Long? = null,
-): IntegerVariable = IntegerVariable(
-    IntegerVariable.Properties(
+    value: Map<String, Any>? = null,
+): DictVariable = DictVariable(
+    DictVariable.Properties(
         name = valueOrNull(name),
         value = valueOrNull(value),
     )
@@ -82,11 +82,11 @@ fun DivScope.integerVariable(
  * @param value Value.
  */
 @Generated
-fun DivScope.integerVariableProps(
+fun DivScope.dictVariableProps(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Long? = null,
-) = IntegerVariable.Properties(
+    value: Map<String, Any>? = null,
+) = DictVariable.Properties(
     name = valueOrNull(name),
     value = valueOrNull(value),
 )
@@ -96,11 +96,11 @@ fun DivScope.integerVariableProps(
  * @param value Value.
  */
 @Generated
-fun TemplateScope.integerVariableRefs(
+fun TemplateScope.dictVariableRefs(
     `use named arguments`: Guard = Guard.instance,
     name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<Long>? = null,
-) = IntegerVariable.Properties(
+    value: ReferenceProperty<Map<String, Any>>? = null,
+) = DictVariable.Properties(
     name = name,
     value = value,
 )
@@ -110,12 +110,12 @@ fun TemplateScope.integerVariableRefs(
  * @param value Value.
  */
 @Generated
-fun IntegerVariable.override(
+fun DictVariable.override(
     `use named arguments`: Guard = Guard.instance,
     name: String? = null,
-    value: Long? = null,
-): IntegerVariable = IntegerVariable(
-    IntegerVariable.Properties(
+    value: Map<String, Any>? = null,
+): DictVariable = DictVariable(
+    DictVariable.Properties(
         name = valueOrNull(name) ?: properties.name,
         value = valueOrNull(value) ?: properties.value,
     )
@@ -126,16 +126,16 @@ fun IntegerVariable.override(
  * @param value Value.
  */
 @Generated
-fun IntegerVariable.defer(
+fun DictVariable.defer(
     `use named arguments`: Guard = Guard.instance,
     name: ReferenceProperty<String>? = null,
-    value: ReferenceProperty<Long>? = null,
-): IntegerVariable = IntegerVariable(
-    IntegerVariable.Properties(
+    value: ReferenceProperty<Map<String, Any>>? = null,
+): DictVariable = DictVariable(
+    DictVariable.Properties(
         name = name ?: properties.name,
         value = value ?: properties.value,
     )
 )
 
 @Generated
-fun IntegerVariable.asList() = listOf(this)
+fun DictVariable.asList() = listOf(this)
