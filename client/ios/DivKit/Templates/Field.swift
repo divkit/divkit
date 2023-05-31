@@ -1,3 +1,4 @@
+import Foundation
 import CoreFoundation
 
 import CommonCorePublic
