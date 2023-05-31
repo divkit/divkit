@@ -2,7 +2,6 @@ package com.yandex.div.dsl
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.yandex.div.dsl.context.TemplateContext
 import com.yandex.div.dsl.context.card
 import com.yandex.div.dsl.context.define
 import com.yandex.div.dsl.context.override
@@ -37,6 +36,7 @@ import com.yandex.div.dsl.model.template
 import com.yandex.div.dsl.serializer.toJsonNode
 import com.yandex.div.dsl.type.BoolInt
 import com.yandex.div.dsl.type.color
+import divkit.dsl.readResource
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -59,7 +59,7 @@ class DistrictCardTest {
         val galleryTailActionLinkRef = reference<DivAction>("gallery_tail_action_link")
         val tailTextLinkRef = reference<String>("tail_text_link")
 
-        val templates: TemplateContext<Div> = templates<Div> {
+        val templates = templates {
             define(
                 "title_text",
                 divText(
