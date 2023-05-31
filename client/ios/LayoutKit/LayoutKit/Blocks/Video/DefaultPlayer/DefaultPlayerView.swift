@@ -2,6 +2,8 @@ import AVFoundation
 import UIKit
 
 public final class DefaultPlayerView: UIView, PlayerView {
+  public func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
+
   public func attach(player: Player) {
     guard let engine = (player as? VideoEngineProvider)?.videoEngine else {
       assertionFailure("Can't use DefaultPlayerView with not with DefaultPlayer")
@@ -9,8 +11,8 @@ public final class DefaultPlayerView: UIView, PlayerView {
     }
 
     switch engine.type {
-      case let .avPlayer(player):
-        player.bind(to: playerLayer)
+    case let .avPlayer(player):
+      player.bind(to: playerLayer)
     }
   }
 

@@ -2,9 +2,10 @@ import Foundation
 
 #if os(iOS)
 
+import CommonCorePublic
 import UIKit
 
-public protocol PlayerView: UIView {
+public protocol PlayerView: VisibleBoundsTrackingView {
   func attach(player: Player)
 }
 
