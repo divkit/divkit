@@ -56,6 +56,18 @@
           "$ref": "div-variable-name.json",
           "$description": "translations.json#/div_input_text_variable"
         },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "$description": "translations.json#/div_text_text_alignment_horizontal",
+          "platforms": []
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "bottom",
+          "$description": "translations.json#/div_text_text_alignment_vertical",
+          "platforms": []
+        },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_input_line_height"
