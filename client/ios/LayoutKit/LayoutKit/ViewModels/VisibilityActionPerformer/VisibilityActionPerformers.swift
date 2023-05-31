@@ -1,15 +1,6 @@
 import CoreGraphics
 import Foundation
 
-import CommonCorePublic
-
-struct VisibilityCheckParam {
-  let requiredVisibilityDuration: TimeInterval
-  let targetPercentage: Int
-  let limiter: VisibilityAction.Limiter
-  let action: Action
-}
-
 public final class VisibilityActionPerformers {
   private let actionPerformers: [VisibilityActionPerformer]
 
@@ -17,10 +8,15 @@ public final class VisibilityActionPerformers {
     actionPerformers = visibilityCheckParams.map(VisibilityActionPerformer.init)
   }
 
-  func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
-    let visibleAreaPercentage = bounds.isEmpty ? 0 : Int(to.area * 100 / bounds.area)
+  func onVisibleBoundsChanged(from: CGRect, to: CGRect, bounds: CGRect) {
+    let visibleAreaPercentageBefore = bounds.isEmpty ? 0 : Int(from.area * 100 / bounds.area)
+    let visibleAreaPercentageAfter = bounds.isEmpty ? 0 : Int(to.area * 100 / bounds.area)
+
     for performer in actionPerformers {
-      performer.onVisibleBoundsChanged(visibleAreaPercentage: visibleAreaPercentage)
+      performer.onVisibleBoundsChanged(
+        visibleAreaPercentageBefore: visibleAreaPercentageBefore,
+        visibleAreaPercentageAfter: visibleAreaPercentageAfter
+      )
     }
   }
 }
@@ -28,10 +24,11 @@ public final class VisibilityActionPerformers {
 extension VisibilityActionPerformer {
   fileprivate convenience init(visibilityCheckParam: VisibilityCheckParam) {
     self.init(
-      requiredVisibilityDuration: visibilityCheckParam.requiredVisibilityDuration,
+      requiredDuration: visibilityCheckParam.requiredDuration,
       targetVisibilityPercentage: visibilityCheckParam.targetPercentage,
       limiter: visibilityCheckParam.limiter,
-      action: visibilityCheckParam.action
+      action: visibilityCheckParam.action,
+      type: visibilityCheckParam.type
     )
   }
 }

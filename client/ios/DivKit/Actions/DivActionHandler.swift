@@ -61,6 +61,8 @@ public final class DivActionHandler {
       action = parseAction(type: DivActionTemplate.self, json: params.action)
     case .visibility:
       action = parseAction(type: DivVisibilityActionTemplate.self, json: params.action)
+    case .disappear:
+      action = parseAction(type: DivDisappearActionTemplate.self, json: params.action)
     }
     guard let action = action else {
       return
@@ -100,7 +102,7 @@ public final class DivActionHandler {
         switch source {
         case .tap, .custom:
           urlOpener(url)
-        case .visibility:
+        case .visibility, .disappear:
           // For visibility actions url is treated as logUrl.
           let referer = action.resolveReferer(expressionResolver)
           logger.log(url: url, referer: referer, payload: action.payload)
@@ -113,7 +115,7 @@ public final class DivActionHandler {
       logger.log(url: logUrl, referer: referer, payload: action.payload)
     }
 
-    if source == .visibility {
+    if source == .visibility || source == .disappear {
       trackVisibility(action.logId, cardId)
     }
   }

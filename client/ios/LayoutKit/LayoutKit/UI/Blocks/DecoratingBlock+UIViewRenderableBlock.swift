@@ -312,26 +312,24 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 
-    if !model.visibilityActions.isEmpty {
-      visibilityActionPerformers = VisibilityActionPerformers(
-        visibilityCheckParams: model.visibilityActions
-          .map { visibilityAction -> VisibilityCheckParam in
-            VisibilityCheckParam(
-              requiredVisibilityDuration: visibilityAction.requiredVisibilityDuration,
-              targetPercentage: visibilityAction.targetPercentage,
-              limiter: visibilityAction.limiter,
-              action: { [unowned self] in
-                UIActionEvent(
-                  uiAction: visibilityAction.uiAction,
-                  originalSender: self
-                ).sendFrom(self)
-              }
-            )
-          }
+    visibilityActionPerformers = model.visibilityActions.isEmpty
+      ? nil
+      : VisibilityActionPerformers(
+        visibilityCheckParams: model.visibilityActions.map { visibilityAction in
+          VisibilityCheckParam(
+            requiredDuration: visibilityAction.requiredDuration,
+            targetPercentage: visibilityAction.targetPercentage,
+            limiter: visibilityAction.limiter,
+            action: { [unowned self] in
+              UIActionEvent(
+                uiAction: visibilityAction.uiAction,
+                originalSender: self
+              ).sendFrom(self)
+            },
+            type: visibilityAction.actionType
+          )
+        }
       )
-    } else {
-      visibilityActionPerformers = nil
-    }
 
     tapRecognizer.isEnabled = model.shouldHandleTap
     doubleTapRecognizer.isEnabled = model.shouldHandleDoubleTap
@@ -399,8 +397,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
     passVisibleBoundsChanged(from: from, to: to)
-    guard !model.visibilityActions.isEmpty else { return }
-    visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
+
+    if !model.visibilityActions.isEmpty {
+      visibilityActionPerformers?.onVisibleBoundsChanged(from: from, to: to, bounds: bounds)
+    }
   }
 
   func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {

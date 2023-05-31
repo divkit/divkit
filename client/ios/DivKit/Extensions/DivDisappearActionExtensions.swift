@@ -3,8 +3,8 @@ import Foundation
 import CommonCorePublic
 import LayoutKit
 
-extension DivVisibilityAction {
-  func makeVisibilityAction(
+extension DivDisappearAction {
+  func makeDisappearAction(
     context: DivBlockModelingContext,
     index: Int
   ) -> VisibilityAction? {
@@ -17,7 +17,7 @@ extension DivVisibilityAction {
     return VisibilityAction(
       uiAction: uiAction,
       requiredDuration: TimeInterval(
-        resolveVisibilityDuration(expressionResolver)
+        resolveDisappearDuration(expressionResolver)
       ) / 1000,
       targetPercentage: resolveVisibilityPercentage(expressionResolver),
       limiter: ActionLimiter(
@@ -29,7 +29,7 @@ extension DivVisibilityAction {
           context.visibilityCounter.incrementCount(for: uiAction.path)
         }
       ),
-      actionType: .appear
+      actionType: .disappear
     )
   }
 
@@ -38,7 +38,7 @@ extension DivVisibilityAction {
     index: Int
   ) -> UserInterfaceAction? {
     let payloads = [
-      makeDivActionPayload(cardId: context.cardId, source: .visibility),
+      makeDivActionPayload(cardId: context.cardId, source: .disappear),
       makeJsonPayload(),
     ].compactMap { $0 }
     if payloads.isEmpty {
@@ -51,7 +51,7 @@ extension DivVisibilityAction {
   }
 }
 
-extension DivVisibilityAction: DivActionBase {
+extension DivDisappearAction: DivActionBase {
   public var logUrl: Expression<URL>? {
     nil
   }

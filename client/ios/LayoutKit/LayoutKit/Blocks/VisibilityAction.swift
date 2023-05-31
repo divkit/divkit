@@ -1,45 +1,35 @@
 import CoreGraphics
 import Foundation
 
-import BasePublic
 import LayoutKitInterface
 
 public struct VisibilityAction {
-  public struct Limiter {
-    let canSend: () -> Bool
-    let markSent: Action
-
-    public init(
-      canSend: @escaping () -> Bool,
-      markSent: @escaping Action
-    ) {
-      self.canSend = canSend
-      self.markSent = markSent
-    }
-  }
-
   let uiAction: UserInterfaceAction
-  let requiredVisibilityDuration: TimeInterval
+  let requiredDuration: TimeInterval
   let targetPercentage: Int
-  let limiter: Limiter
+  let limiter: ActionLimiter
+  let actionType: VisibilityActionType
 
   public init(
     uiAction: UserInterfaceAction,
-    requiredVisibilityDuration: TimeInterval,
+    requiredDuration: TimeInterval,
     targetPercentage: Int,
-    limiter: Limiter
+    limiter: ActionLimiter,
+    actionType: VisibilityActionType
   ) {
     self.uiAction = uiAction
-    self.requiredVisibilityDuration = requiredVisibilityDuration
+    self.requiredDuration = requiredDuration
     self.targetPercentage = targetPercentage
     self.limiter = limiter
+    self.actionType = actionType
   }
 }
 
 extension VisibilityAction: Equatable {
   public static func ==(_ lhs: VisibilityAction, _ rhs: VisibilityAction) -> Bool {
     lhs.uiAction == rhs.uiAction
-      && lhs.requiredVisibilityDuration == rhs.requiredVisibilityDuration
+      && lhs.requiredDuration == rhs.requiredDuration
       && lhs.targetPercentage == rhs.targetPercentage
+      && lhs.actionType == rhs.actionType
   }
 }

@@ -52,7 +52,8 @@ extension DivBase {
     // Properties should be applied in specific order.
     // For example, shadow should be applied to block with border
     // and alpha should be applied to block with border and shadow.
-    let visibilityActions = makeVisibilityActions(context: context)
+    var visibilityActions = makeVisibilityActions(context: context)
+    visibilityActions += makeDisappearActions(context: context)
 
     let focusState: FocusViewState = context.blockStateStorage
       .getState(context.parentPath) ?? .default
@@ -137,6 +138,17 @@ extension DivBase {
       .compactMap { index, action in
         action.makeVisibilityAction(context: context, index: index)
       }
+  }
+
+  private func makeDisappearActions(
+    context: DivBlockModelingContext
+  ) -> [VisibilityAction] {
+    disappearActions?
+      .enumerated()
+      .compactMap { index, action in
+        action.makeDisappearAction(context: context, index: index)
+      }
+    ?? []
   }
 
   private func makeAccessibilityElement(

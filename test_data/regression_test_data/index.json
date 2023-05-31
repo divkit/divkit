@@ -868,6 +868,25 @@
       "file": "gallery/gallery_swipe.json"
     },
     {
+      "title": "disappear actions in gallery",
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Disappear_actions"
+      ],
+      "steps": [
+        "Scroll the gallery",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Gallery data was opened",
+        "items disappear logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+      ],
+      "file": "gallery/gallery_swipe_disappear_action.json"
+    },
+    {
       "title": "Visibility_actions in pager",
       "tags": [
         "Visibility_actions",
@@ -1754,6 +1773,18 @@
         "DivVideo"
       ],
       "file": "video/video_with_controls.json"
+    },
+    {
+      "title": "disappear action with video",
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "DivVideo",
+        "Disappear action"
+      ],
+      "file": "video/video_with_controls_in_gallery.json"
     },
     {
       "title": "Video stream",

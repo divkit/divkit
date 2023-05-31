@@ -407,8 +407,9 @@ extension DecoratingBlock: CustomDebugStringConvertible {
         visibilityActionDescription +=
           "      payload: \(uiAction.payload.debugDescription.indented())\n"
         visibilityActionDescription +=
-          "   Required visibility duration: \(action.requiredVisibilityDuration)\n"
+          "   Required visibility duration: \(action.requiredDuration)\n"
         visibilityActionDescription += "   Target percentage: \(action.targetPercentage)\n"
+        visibilityActionDescription += "   Action type: \(action.actionType)\n"
       }
       decorations.append(visibilityActionDescription)
     }

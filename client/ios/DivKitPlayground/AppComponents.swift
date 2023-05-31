@@ -30,6 +30,14 @@ enum AppComponents {
       ],
       flagsInfo: DivFlagsInfo(),
       patchProvider: DemoPatchProvider(),
+      trackVisibility: { logId, cardId in
+        print(
+          """
+          logId = \(logId)
+          cardId = \(cardId.debugDescription)
+          """
+        )
+      },
       updateCardAction: updateCardAction,
       playerFactory: DefaultPlayerFactory(),
       urlOpener: urlOpener,

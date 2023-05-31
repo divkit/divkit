@@ -5,6 +5,17 @@ import LayoutKit
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    try applyBaseProperties(
+      to: { try makeBaseBlock(context: context) },
+      context: context,
+      actions: nil,
+      actionAnimation: nil,
+      doubleTapActions: nil,
+      longTapActions: nil
+    )
+  }
+
+  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     guard let playerFactory = context.playerFactory else {
       DivKitLogger.warning("There is no player factory in the context")
       return EmptyBlock()

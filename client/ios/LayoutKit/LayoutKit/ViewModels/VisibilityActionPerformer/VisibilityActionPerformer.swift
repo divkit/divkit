@@ -2,42 +2,68 @@ import Foundation
 
 import CommonCorePublic
 
+public enum VisibilityActionType: String {
+  case appear
+  case disappear
+}
+
 final class VisibilityActionPerformer {
   private var visibilityTimer: TimerType?
-  private let requiredVisibilityDuration: TimeInterval
+  private let requiredDuration: TimeInterval
   private let targetPercentage: Int
-  private let limiter: VisibilityAction.Limiter
+  private let limiter: ActionLimiter
   private let action: Action
   private let timerScheduler: Scheduling
+  private let type: VisibilityActionType
 
   init(
-    requiredVisibilityDuration: TimeInterval,
+    requiredDuration: TimeInterval,
     targetVisibilityPercentage: Int,
-    limiter: VisibilityAction.Limiter,
+    limiter: ActionLimiter,
     action: @escaping Action,
+    type: VisibilityActionType,
     timerScheduler: Scheduling = TimerScheduler()
   ) {
-    self.requiredVisibilityDuration = requiredVisibilityDuration
+    self.requiredDuration = requiredDuration
     self.targetPercentage = targetVisibilityPercentage
     self.limiter = limiter
     self.action = action
+    self.type = type
     self.timerScheduler = timerScheduler
   }
 
-  func onVisibleBoundsChanged(visibleAreaPercentage: Int) {
-    guard visibleAreaPercentage >= targetPercentage else {
-      visibilityTimer?.invalidate()
-      visibilityTimer = nil
-      return
+  func onVisibleBoundsChanged(
+    visibleAreaPercentageBefore: Int,
+    visibleAreaPercentageAfter: Int
+  ) {
+    switch type {
+    case .appear:
+      guard visibleAreaPercentageAfter >= targetPercentage else {
+        invalidateTimer()
+        return
+      }
+    case .disappear:
+      guard visibleAreaPercentageAfter <= targetPercentage,
+            visibleAreaPercentageBefore > visibleAreaPercentageAfter
+      else {
+        invalidateTimer()
+        return
+      }
     }
+
     guard visibilityTimer == nil, limiter.canSend() else { return }
     visibilityTimer = timerScheduler.makeTimer(
-      delay: requiredVisibilityDuration,
+      delay: requiredDuration,
       handler: { [weak self] in
         self?.limiter.markSent()
         self?.action()
       }
     )
+  }
+
+  private func invalidateTimer() {
+    visibilityTimer?.invalidate()
+    visibilityTimer = nil
   }
 
   deinit {
