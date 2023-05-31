@@ -1,9 +1,3 @@
-#if os(iOS)
-import UIKit
-#elseif os(macOS)
-import AppKit
-#endif
-
 import LayoutKit
 
 public struct DebugParams {

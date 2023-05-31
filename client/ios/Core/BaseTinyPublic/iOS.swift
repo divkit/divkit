@@ -1,7 +1,7 @@
 // Copyright 2021 Yandex LLC. All rights reserved.
 
 import CoreGraphics
-import UIKit
+@_exported import UIKit
 
 public typealias Color = RGBAColor
 public typealias SystemColor = UIColor
