@@ -1,4 +1,5 @@
 import CoreFoundation
+import Foundation
 
 import CommonCorePublic
 import Serialization

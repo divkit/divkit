@@ -1,4 +1,4 @@
-@_exported import CommonCorePublic
+import CommonCorePublic
 import LayoutKit
 
 public enum CardIDTag {}
