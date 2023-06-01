@@ -506,7 +506,15 @@
                         if (name && value !== null) {
                             const variableInstance = variables.get(name);
                             if (variableInstance) {
-                                variableInstance.set(value);
+                                if (variableInstance.getType() === 'dict') {
+                                    logError(wrapError(new Error('Setting dict variables is not supported'), {
+                                        additional: {
+                                            name
+                                        }
+                                    }));
+                                } else {
+                                    variableInstance.set(value);
+                                }
                             } else {
                                 logError(wrapError(new Error('Cannot find variable'), {
                                     additional: {

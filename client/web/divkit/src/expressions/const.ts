@@ -11,3 +11,4 @@ export const BOOLEAN = 'boolean';
 export const COLOR = 'color';
 export const URL = 'url';
 export const DATETIME = 'datetime';
+export const DICT = 'dict';

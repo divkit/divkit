@@ -4,6 +4,7 @@ import { registerStrings } from './strings';
 import { registerMath } from './math';
 import { registerColors } from './colors';
 import { registerInterval } from './interval';
+import { registerDict } from './dict';
 
 export function register(): void {
     registerStd();
@@ -12,4 +13,5 @@ export function register(): void {
     registerStrings();
     registerMath();
     registerColors();
+    registerDict();
 }

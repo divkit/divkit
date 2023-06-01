@@ -415,7 +415,9 @@
         }
       ],
       "result_type": "string",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictNumber(dict, vararg string) number",
@@ -433,7 +435,9 @@
         }
       ],
       "result_type": "number",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictInteger(dict, vararg string) integer",
@@ -451,7 +455,9 @@
         }
       ],
       "result_type": "integer",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictBoolean(dict, vararg string) boolean",
@@ -469,7 +475,9 @@
         }
       ],
       "result_type": "boolean",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictColor(dict, vararg string) color",
@@ -487,7 +495,9 @@
         }
       ],
       "result_type": "color",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictUrl(dict, vararg string) url",
@@ -505,7 +515,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptString(string, dict, vararg string) string",
@@ -527,7 +539,9 @@
         }
       ],
       "result_type": "string",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptNumber(number, dict, vararg string) number",
@@ -549,7 +563,9 @@
         }
       ],
       "result_type": "number",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptInteger(integer, dict, vararg string) integer",
@@ -571,7 +587,9 @@
         }
       ],
       "result_type": "integer",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptBoolean(boolean, dict, vararg string) boolean",
@@ -593,7 +611,9 @@
         }
       ],
       "result_type": "boolean",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptColor(color, dict, vararg string) color",
@@ -615,7 +635,33 @@
         }
       ],
       "result_type": "color",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getDictOptColor(string, dict, vararg string) color",
+      "function_name": "getDictOptColor",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getDictOptUrl(url, dict, vararg string) url",
@@ -637,7 +683,33 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getDictOptUrl(string, dict, vararg string) url",
+      "function_name": "getDictOptUrl",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
