@@ -168,8 +168,8 @@ public final class DivContainerTemplate: TemplateValue {
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
-  public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
+  public let contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? // default value: left
+  public let contentAlignmentVertical: Field<Expression<DivContentAlignmentVertical>>? // default value: top
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
@@ -262,8 +262,8 @@ public final class DivContainerTemplate: TemplateValue {
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
-    contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
-    contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
+    contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? = nil,
+    contentAlignmentVertical: Field<Expression<DivContentAlignmentVertical>>? = nil,
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
@@ -481,8 +481,8 @@ public final class DivContainerTemplate: TemplateValue {
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
-    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
-    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivContentAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
+    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivContentAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue

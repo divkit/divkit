@@ -46,6 +46,9 @@ public final class ContainerBlock: BlockWithLayout {
     case center
     case trailing
     case baseline
+    case spaceBetween
+    case spaceAround
+    case spaceEvenly
   }
 
   public struct Separator: Equatable {
@@ -551,6 +554,10 @@ extension ContainerBlock.CrossAlignment {
       return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
     case .trailing:
       return availableSpace - contentSize
+    // TODO: @bugperson should be implemented here DIVKIT-2378
+    default:
+      assertionFailure("Others alignments not supported yet")
+      return 0
     }
   }
 }

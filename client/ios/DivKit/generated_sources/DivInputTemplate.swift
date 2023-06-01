@@ -117,6 +117,8 @@ public final class DivInputTemplate: TemplateValue {
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
+  public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: bottom
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textVariable: Field<String>? // at least 1 char
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
@@ -168,6 +170,8 @@ public final class DivInputTemplate: TemplateValue {
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectAllOnFocus: try dictionary.getOptionalExpressionField("select_all_on_focus"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+        textAlignmentHorizontal: try dictionary.getOptionalExpressionField("text_alignment_horizontal"),
+        textAlignmentVertical: try dictionary.getOptionalExpressionField("text_alignment_vertical"),
         textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
         textVariable: try dictionary.getOptionalField("text_variable"),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
@@ -219,6 +223,8 @@ public final class DivInputTemplate: TemplateValue {
     rowSpan: Field<Expression<Int>>? = nil,
     selectAllOnFocus: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
+    textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
+    textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     textColor: Field<Expression<Color>>? = nil,
     textVariable: Field<String>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
@@ -264,6 +270,8 @@ public final class DivInputTemplate: TemplateValue {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus
     self.selectedActions = selectedActions
+    self.textAlignmentHorizontal = textAlignmentHorizontal
+    self.textAlignmentVertical = textAlignmentVertical
     self.textColor = textColor
     self.textVariable = textVariable
     self.tooltips = tooltips
@@ -310,6 +318,8 @@ public final class DivInputTemplate: TemplateValue {
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectAllOnFocusValue = parent?.selectAllOnFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.selectAllOnFocusValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
+    let textAlignmentHorizontalValue = parent?.textAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentHorizontalValidator) ?? .noValue
+    let textAlignmentVerticalValue = parent?.textAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentVerticalValidator) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
     let textVariableValue = parent?.textVariable?.resolveValue(context: context, validator: ResolvedValue.textVariableValidator) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
@@ -354,6 +364,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_variable", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -407,6 +419,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
+      textAlignmentHorizontal: textAlignmentHorizontalValue.value,
+      textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textVariable: textVariableNonNil,
       tooltips: tooltipsValue.value,
@@ -458,6 +472,8 @@ public final class DivInputTemplate: TemplateValue {
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectAllOnFocusValue: DeserializationResult<Expression<Bool>> = parent?.selectAllOnFocus?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var textAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.textAlignmentHorizontal?.value() ?? .noValue
+    var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
     var textVariableValue: DeserializationResult<String> = parent?.textVariable?.value(validatedBy: ResolvedValue.textVariableValidator) ?? .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
@@ -533,6 +549,10 @@ public final class DivInputTemplate: TemplateValue {
         selectAllOnFocusValue = deserialize(__dictValue, validator: ResolvedValue.selectAllOnFocusValidator).merged(with: selectAllOnFocusValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+      case "text_alignment_horizontal":
+        textAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator).merged(with: textAlignmentHorizontalValue)
+      case "text_alignment_vertical":
+        textAlignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.textAlignmentVerticalValidator).merged(with: textAlignmentVerticalValue)
       case "text_color":
         textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
       case "text_variable":
@@ -619,6 +639,10 @@ public final class DivInputTemplate: TemplateValue {
         selectAllOnFocusValue = selectAllOnFocusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.selectAllOnFocusValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
+      case parent?.textAlignmentHorizontal?.link:
+        textAlignmentHorizontalValue = textAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator))
+      case parent?.textAlignmentVertical?.link:
+        textAlignmentVerticalValue = textAlignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textAlignmentVerticalValidator))
       case parent?.textColor?.link:
         textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
       case parent?.textVariable?.link:
@@ -702,6 +726,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_variable", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -755,6 +781,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
+      textAlignmentHorizontal: textAlignmentHorizontalValue.value,
+      textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textVariable: textVariableNonNil,
       tooltips: tooltipsValue.value,
@@ -811,6 +839,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectAllOnFocus: selectAllOnFocus ?? mergedParent.selectAllOnFocus,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
+      textAlignmentHorizontal: textAlignmentHorizontal ?? mergedParent.textAlignmentHorizontal,
+      textAlignmentVertical: textAlignmentVertical ?? mergedParent.textAlignmentVertical,
       textColor: textColor ?? mergedParent.textColor,
       textVariable: textVariable ?? mergedParent.textVariable,
       tooltips: tooltips ?? mergedParent.tooltips,
@@ -862,6 +892,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: merged.rowSpan,
       selectAllOnFocus: merged.selectAllOnFocus,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
+      textAlignmentHorizontal: merged.textAlignmentHorizontal,
+      textAlignmentVertical: merged.textAlignmentVertical,
       textColor: merged.textColor,
       textVariable: merged.textVariable,
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),

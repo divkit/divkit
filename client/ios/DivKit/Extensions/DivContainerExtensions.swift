@@ -392,6 +392,83 @@ extension DivAlignmentVertical {
   }
 }
 
+extension DivContentAlignmentHorizontal {
+  var alignment: Alignment {
+    switch self {
+    case .left:
+      return .leading
+    case .center:
+      return .center
+    case .right:
+      return .trailing
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  }
+
+  var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .left:
+      return .leading
+    case .center:
+      return .center
+    case .right:
+      return .trailing
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  }
+}
+
+extension DivContentAlignmentVertical {
+  var alignment: Alignment {
+    switch self {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .baseline:
+      DivKitLogger.warning("Baseline alignment not supported.")
+      return .leading
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  }
+
+  var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .baseline:
+      return .baseline
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  }
+}
+
 extension DivContainer.LayoutMode {
   fileprivate var system: ContainerBlock.LayoutMode {
     switch self {

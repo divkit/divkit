@@ -94,6 +94,12 @@ extension Alignment {
       return .center
     case .trailing:
       return .trailing
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
     }
   }
 }

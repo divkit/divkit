@@ -258,6 +258,10 @@ extension Alignment {
       return floor((minimum + maximum - dimension) / 2)
     case .trailing:
       return maximum - dimension
+    // TODO: @bugperson should be implemented here DIVKIT-2378
+    default:
+      assertionFailure("Others alignments not supported yet")
+      return minimum
     }
   }
 }

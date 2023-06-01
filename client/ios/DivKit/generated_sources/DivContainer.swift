@@ -76,8 +76,8 @@ public final class DivContainer: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
-  public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
+  public let contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal> // default value: left
+  public let contentAlignmentVertical: Expression<DivContentAlignmentVertical> // default value: top
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
@@ -121,12 +121,12 @@ public final class DivContainer: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivContentAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivContentAlignmentHorizontal.init(rawValue:)) ?? DivContentAlignmentHorizontal.left
   }
 
-  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.top
+  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivContentAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivContentAlignmentVertical.init(rawValue:)) ?? DivContentAlignmentVertical.top
   }
 
   public func resolveLayoutMode(_ resolver: ExpressionResolver) -> LayoutMode {
@@ -178,10 +178,10 @@ public final class DivContainer: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let contentAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
+  static let contentAlignmentHorizontalValidator: AnyValueValidator<DivContentAlignmentHorizontal> =
     makeNoOpValueValidator()
 
-  static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
+  static let contentAlignmentVerticalValidator: AnyValueValidator<DivContentAlignmentVertical> =
     makeNoOpValueValidator()
 
   static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
@@ -274,8 +274,8 @@ public final class DivContainer: DivBase {
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
-    contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>?,
-    contentAlignmentVertical: Expression<DivAlignmentVertical>?,
+    contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal>?,
+    contentAlignmentVertical: Expression<DivContentAlignmentVertical>?,
     disappearActions: [DivDisappearAction]?,
     doubletapActions: [DivAction]?,
     extensions: [DivExtension]?,

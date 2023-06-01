@@ -60,6 +60,8 @@ public final class DivInput: DivBase {
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
+  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
+  public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: bottom
   public let textColor: Expression<Color> // default value: #FF000000
   public let textVariable: String // at least 1 char
   public let tooltips: [DivTooltip]? // at least 1 elements
@@ -140,6 +142,14 @@ public final class DivInput: DivBase {
 
   public func resolveSelectAllOnFocus(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumericValue(expression: selectAllOnFocus) ?? false
+  }
+
+  public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+  }
+
+  public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: textAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.bottom
   }
 
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
@@ -237,6 +247,12 @@ public final class DivInput: DivBase {
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
+  static let textAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
+    makeNoOpValueValidator()
+
+  static let textAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
+    makeNoOpValueValidator()
+
   static let textColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
@@ -307,6 +323,8 @@ public final class DivInput: DivBase {
     rowSpan: Expression<Int>? = nil,
     selectAllOnFocus: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
+    textAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
+    textAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     textColor: Expression<Color>? = nil,
     textVariable: String,
     tooltips: [DivTooltip]? = nil,
@@ -351,6 +369,8 @@ public final class DivInput: DivBase {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
+    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
+    self.textAlignmentVertical = textAlignmentVertical ?? .value(.bottom)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable
     self.tooltips = tooltips
@@ -441,34 +461,36 @@ extension DivInput: Equatable {
       return false
     }
     guard
-      lhs.textColor == rhs.textColor,
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
+      lhs.textColor == rhs.textColor
+    else {
+      return false
+    }
+    guard
       lhs.textVariable == rhs.textVariable,
-      lhs.tooltips == rhs.tooltips
+      lhs.tooltips == rhs.tooltips,
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
-      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionIn == rhs.transitionIn,
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
-      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators
+      lhs.validators == rhs.validators,
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
-      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
-    else {
-      return false
-    }
-    guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -512,6 +534,8 @@ extension DivInput: Serializable {
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["select_all_on_focus"] = selectAllOnFocus.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
+    result["text_alignment_horizontal"] = textAlignmentHorizontal.toValidSerializationValue()
+    result["text_alignment_vertical"] = textAlignmentVertical.toValidSerializationValue()
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_variable"] = textVariable
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
