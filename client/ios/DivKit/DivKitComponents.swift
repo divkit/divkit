@@ -23,6 +23,7 @@ public final class DivKitComponents {
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
   public let playerFactory: PlayerFactory?
+  public let safeAreaManager: DivSafeAreaManager
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let disposePool = AutodisposePool()
@@ -49,6 +50,7 @@ public final class DivKitComponents {
     self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
+    self.safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
     self.playerFactory = playerFactory ?? defaultPlayerFactory
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)

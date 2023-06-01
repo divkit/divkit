@@ -83,7 +83,7 @@ final class SimpleDivUIView: UIView {
     block.size(forResizableBlockSize: bounds.size)
   }
 
-  private func update() {
+  func update() {
     if let divData = divData {
       do {
         block = try divData.makeBlock(
