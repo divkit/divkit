@@ -48,7 +48,7 @@ private func isStringValid(
   minLength: Int = 0,
   regex: String? = nil
 ) -> Bool {
-  guard str.count >= minLength else {
+  if str.index(str.startIndex, offsetBy: minLength, limitedBy: str.endIndex) == nil {
     return false
   }
 
