@@ -3,6 +3,7 @@ package com.yandex.div.storage
 import android.content.Context
 import android.database.Cursor
 import android.database.SQLException
+import android.database.sqlite.SQLiteDatabaseLockedException
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.core.database.getBlobOrNull
@@ -117,24 +118,29 @@ internal class DivStorageImpl(
             ids.isEmpty() -> null
             else -> "$COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
         }
-        val cardsReadState = readStateFor {
-            query(TABLE_CARDS, null, selection, null, null, null, null, null)
-        }
-        cardsReadState.use {
-            val cursor = it.cursor
 
-            if (cursor.count == 0 || !cursor.moveToFirst()) {
-                return LoadDataResult(emptyList(), exceptions)
+        try {
+            val cardsReadState = readStateFor {
+                query(TABLE_CARDS, null, selection, null, null, null, null, null)
             }
-
-            do {
-                val rawData = cursor.getRestoredRawData(exceptions)
-
-                if (rawData != null) {
-                    cards.add(rawData)
-                    usedGroups.add(rawData.groupId)
+            cardsReadState.use {
+                val cursor = it.cursor
+                if (cursor.count == 0 || !cursor.moveToFirst()) {
+                    return LoadDataResult(emptyList(), exceptions)
                 }
-            } while (cursor.moveToNext())
+
+                do {
+                    val rawData = cursor.getRestoredRawData(exceptions)
+                    if (rawData != null) {
+                        cards.add(rawData)
+                        usedGroups.add(rawData.groupId)
+                    }
+                } while (cursor.moveToNext())
+            }
+        } catch (e: SQLiteDatabaseLockedException) {
+            exceptions.add(e.toStorageException("Exception on load data from storage"))
+        } catch (e: IllegalStateException) {
+            exceptions.add(e.toStorageException("Exception on load data from storage"))
         }
 
         return LoadDataResult(cards, exceptions)
@@ -157,6 +163,7 @@ internal class DivStorageImpl(
 
     @WorkerThread
     override fun readTemplates(templateHashes: Set<String>): LoadDataResult<RawTemplateData> {
+        val actionDesc = "Read templates with hashes: $templateHashes"
         val exceptions = mutableListOf<StorageException>()
         var templates = emptyList<RawTemplateData>()
 
@@ -169,7 +176,10 @@ internal class DivStorageImpl(
                 it.cursor.getTemplates()
             }
         } catch (e: SQLException) {
-            val actionDesc = "Read templates with hashes: $templateHashes"
+            exceptions.add(e.toStorageException(actionDesc))
+        } catch (e: SQLiteDatabaseLockedException) {
+            exceptions.add(e.toStorageException(actionDesc))
+        } catch (e: IllegalStateException) {
             exceptions.add(e.toStorageException(actionDesc))
         }
 
@@ -219,18 +229,21 @@ internal class DivStorageImpl(
     override fun readTemplateReferences(): LoadDataResult<DivStorage.TemplateReference> {
         val actionDesc = "Template references"
 
-        try {
+        return try {
             val readState = readStateFor {
                 query(TABLE_TEMPLATE_REFERENCES, null, null, null, null, null, null, null)
             }
             val results = readState.use {
                 it.cursor.getTemplateReferences()
             }
-            return LoadDataResult(results)
+            LoadDataResult(results)
         } catch (e: SQLException) {
-            return LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
+            LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
+        } catch (e: SQLiteDatabaseLockedException) {
+            LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
+        } catch (e: IllegalStateException) {
+            LoadDataResult(emptyList(), listOf(e.toStorageException(actionDesc)))
         }
-
     }
 
     private fun Cursor.getRestoredRawData(

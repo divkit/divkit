@@ -25,8 +25,8 @@ internal class StorageStatementExecutor(
             vararg statements: StorageStatement
     ): ExecutionResult {
         assertOnWorkerThread()
-        val db = dbProvider()
-        val compiler = ClosableSqlCompiler(db)
+        var db: DatabaseOpenHelper.Database? = null
+        var compiler: ClosableSqlCompiler? = null
         var statementNumber = 1
         var lastStatement: StorageStatement? = null
         val exceptions = mutableListOf<DivStorageErrorException>()
@@ -45,7 +45,7 @@ internal class StorageStatementExecutor(
             }
         }
 
-        fun executeCatchingSqlException(statement: StorageStatement) {
+        fun executeCatchingSqlException(compiler: ClosableSqlCompiler, statement: StorageStatement) {
             try {
                 statement.execute(compiler)
             } catch (e: SQLException) {
@@ -56,10 +56,12 @@ internal class StorageStatementExecutor(
         }
 
         try {
+            db = dbProvider()
+            compiler = ClosableSqlCompiler(db)
             db.beginTransaction()
             statements.forEach { statement ->
                 lastStatement = statement
-                executeCatchingSqlException(statement)
+                executeCatchingSqlException(compiler, statement)
                 statementNumber++
             }
             db.setTransactionSuccessful()
@@ -71,9 +73,9 @@ internal class StorageStatementExecutor(
         } catch (e: IllegalStateException) {
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } finally {
-            db.endTransactionSilently()
-            compiler.close()
-            db.closeSilently()
+            db?.endTransactionSilently()
+            compiler?.close()
+            db?.closeSilently()
         }
         return ExecutionResult(exceptions)
     }
