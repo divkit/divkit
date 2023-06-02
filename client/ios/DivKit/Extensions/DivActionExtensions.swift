@@ -58,6 +58,12 @@ extension ActionsHolder {
   }
 }
 
+extension Array where Element == DivAction {
+  func makeActions(context: DivBlockModelingActionContext) -> [UserInterfaceAction] {
+    compactMap { $0.makeUiAction(context: context) }
+  }
+}
+
 extension LongTapActionsHolder {
   func makeLongTapActions(context: DivBlockModelingActionContext)
     -> NonEmptyArray<UserInterfaceAction>? {

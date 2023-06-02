@@ -60,8 +60,14 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
         case .end:
           self.observer?.elementStateChanged(self.state, forPath: self.model.path)
           self.model.endActions.perform(sendingFrom: self)
-        default:
-          break
+        case .buffering:
+          self.model.bufferingActions.perform(sendingFrom: self)
+        case .pause:
+          self.model.pauseActions.perform(sendingFrom: self)
+        case .fatal:
+          self.model.fatalActions.perform(sendingFrom: self)
+        case .play:
+          self.model.resumeActions.perform(sendingFrom: self)
         }
       }
     }
