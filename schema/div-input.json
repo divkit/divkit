@@ -60,13 +60,13 @@
           "$ref": "div-alignment-horizontal.json",
           "default_value": "left",
           "$description": "translations.json#/div_text_text_alignment_horizontal",
-          "platforms": []
+          "platforms": ["android"]
         },
         "text_alignment_vertical": {
           "$ref": "div-alignment-vertical.json",
-          "default_value": "bottom",
+          "default_value": "center",
           "$description": "translations.json#/div_text_text_alignment_vertical",
-          "platforms": []
+          "platforms": ["android"]
         },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",

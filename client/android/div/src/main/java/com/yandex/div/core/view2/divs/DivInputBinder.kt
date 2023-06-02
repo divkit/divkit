@@ -17,7 +17,10 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivCurrencyInputMask
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
@@ -61,6 +64,7 @@ internal class DivInputBinder @Inject constructor(
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
             observeTextColor(div, expressionResolver)
+            observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
             observeLineHeight(div, expressionResolver)
             observeMaxVisibleLines(div, expressionResolver)
 
@@ -72,6 +76,33 @@ internal class DivInputBinder @Inject constructor(
             observeSelectAllOnFocus(div, expressionResolver)
 
             observeText(div, expressionResolver, divView)
+        }
+    }
+
+    private fun DivInputView.observeTextAlignment(
+        horizontalAlignment: Expression<DivAlignmentHorizontal>,
+        verticalAlignment: Expression<DivAlignmentVertical>,
+        resolver: ExpressionResolver
+    ) {
+        applyTextAlignment(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
+
+        val callback = { _: Any ->
+            applyTextAlignment(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
+        }
+        addSubscription(horizontalAlignment.observe(resolver, callback))
+        addSubscription(verticalAlignment.observe(resolver, callback))
+    }
+
+    private fun DivInputView.applyTextAlignment(
+        horizontalAlignment: DivAlignmentHorizontal,
+        verticalAlignment: DivAlignmentVertical
+    ) {
+        gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
+        textAlignment = when (horizontalAlignment) {
+            DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_VIEW_START
+            DivAlignmentHorizontal.CENTER -> TextView.TEXT_ALIGNMENT_CENTER
+            DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
+            else -> TextView.TEXT_ALIGNMENT_VIEW_START
         }
     }
 
