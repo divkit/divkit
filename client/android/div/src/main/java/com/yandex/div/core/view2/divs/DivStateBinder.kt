@@ -172,7 +172,7 @@ internal class DivStateBinder @Inject constructor(
             if (patchView != null && patchDiv != null) {
                 layout.releaseAndRemoveChildren(divView)
                 layout.addView(patchView)
-                if (patchDiv.value().hasVisibilityActions) {
+                if (patchDiv.value().hasSightActions) {
                     divView.bindViewToDiv(patchView, patchDiv)
                 }
                 viewBinder.get().bind(patchView, patchDiv, divView, currentPath)

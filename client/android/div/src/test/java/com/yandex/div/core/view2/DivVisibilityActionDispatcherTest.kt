@@ -6,6 +6,7 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.view2.divs.DivActionBeaconSender
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,10 +29,12 @@ class DivVisibilityActionDispatcherTest {
 
     private val contextActionHandler = mock<DivActionHandler> {
         on { handleAction(any<DivVisibilityAction>(), any<Div2View>()) } doReturn true
+        on { handleAction(any<DivSightAction>(), any<Div2View>()) } doReturn true
     }
 
     private val viewActionHandler = mock<DivActionHandler> {
         on { handleAction(any<DivVisibilityAction>(), any<Div2View>()) } doReturn true
+        on { handleAction(any<DivSightAction>(), any<Div2View>()) } doReturn true
     }
 
     private val divView = mock<Div2View> {
@@ -53,7 +56,7 @@ class DivVisibilityActionDispatcherTest {
 
         dispatcher.dispatchAction(divView, mock(), action)
 
-        verify(contextActionHandler).handleAction(eq(action), eq(divView))
+        verify(contextActionHandler).handleAction(eq(action as DivSightAction), eq(divView))
     }
 
     @Test
@@ -64,7 +67,7 @@ class DivVisibilityActionDispatcherTest {
             dispatcher.dispatchAction(divView, mock(), action)
         }
 
-        verify(contextActionHandler, times(2)).handleAction(eq(action), eq(divView))
+        verify(contextActionHandler, times(2)).handleAction(eq(action as DivSightAction), eq(divView))
     }
 
     @Test
@@ -77,7 +80,7 @@ class DivVisibilityActionDispatcherTest {
         dispatcher.reset()
         dispatcher.dispatchAction(divView, mock(), action)
 
-        verify(contextActionHandler, times(3)).handleAction(eq(action), eq(divView))
+        verify(contextActionHandler, times(3)).handleAction(eq(action) as DivSightAction, eq(divView))
     }
 
     @Test
@@ -88,7 +91,7 @@ class DivVisibilityActionDispatcherTest {
             dispatcher.dispatchAction(divView, mock(), action)
         }
 
-        verify(contextActionHandler, times(10)).handleAction(eq(action), eq(divView))
+        verify(contextActionHandler, times(10)).handleAction(eq(action as DivSightAction), eq(divView))
     }
 
     @Test
@@ -105,11 +108,11 @@ class DivVisibilityActionDispatcherTest {
     fun `action dispatched to context handler when view handler passes it`() {
         val action = DivVisibilityAction(logId = "action")
         whenever(divView.actionHandler) doReturn viewActionHandler
-        whenever(viewActionHandler.handleAction(eq(action), eq(divView))) doReturn false
+        whenever(viewActionHandler.handleAction(eq(action as DivSightAction), eq(divView))) doReturn false
 
         dispatcher.dispatchAction(divView, mock(), action)
 
-        verify(contextActionHandler).handleAction(eq(action), eq(divView))
+        verify(contextActionHandler).handleAction(eq(action as DivSightAction), eq(divView))
     }
 
     @Test
@@ -133,7 +136,7 @@ class DivVisibilityActionDispatcherTest {
     @Test
     fun `action dispatched to logger when handler passes it`() {
         val action = DivVisibilityAction(logId = "action")
-        whenever(contextActionHandler.handleAction(eq(action), eq(divView))) doReturn false
+        whenever(contextActionHandler.handleAction(eq(action) as DivSightAction, eq(divView))) doReturn false
 
         dispatcher.dispatchAction(divView, mock(), action)
 
@@ -143,7 +146,7 @@ class DivVisibilityActionDispatcherTest {
     @Test
     fun `action dispatched to beacon sender when handler passes it`() {
         val action = DivVisibilityAction(logId = "action")
-        whenever(contextActionHandler.handleAction(eq(action), eq(divView))) doReturn false
+        whenever(contextActionHandler.handleAction(eq(action as DivSightAction), eq(divView))) doReturn false
 
         dispatcher.dispatchAction(divView, mock(), action)
 
@@ -152,7 +155,7 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `dispatch actions runs as a bulk`() {
-        val actionArray = arrayOf(DivVisibilityAction(logId = "action"), DivVisibilityAction(logId = "action2"))
+        val actionArray: Array<DivSightAction> = arrayOf(DivVisibilityAction(logId = "action"), DivVisibilityAction(logId = "action2"))
         dispatcher.dispatchActions(divView, mock(), actionArray)
         verify(divView, times(1)).bulkActions(any())
     }

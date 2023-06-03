@@ -1,14 +1,12 @@
 {
+  "$description": "translations.json#/div_disappear_action",
   "allOf": [
     {
-      "$ref": "div-action-base.json"
+      "$ref": "div-sight-action.json"
     },
     {
-      "type": "object",
-      "$description": "translations.json#/div_disappear_action",
       "properties": {
         "visibility_percentage": {
-          "type": "integer",
           "constraint": "number >= 0 && number < 100",
           "default_value": "0",
           "$description": "translations.json#/div_disappear_action_visibility_percentage"
@@ -17,16 +15,8 @@
           "$ref": "common.json#/non_negative_integer",
           "default_value": "800",
           "$description": "translations.json#/div_disappear_action_disappear_duration"
-        },
-        "log_limit": {
-          "$ref": "common.json#/non_negative_integer",
-          "default_value": "1",
-          "$description": "translations.json#/div_log_limit"
         }
-      },
-      "required": [
-        "log_id"
-      ]
+      }
     }
   ]
 }

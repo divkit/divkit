@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2
 
-import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivSightAction
 
 internal class CompositeLogId(
     private val scopeLogId: String,
@@ -33,6 +33,6 @@ internal class CompositeLogId(
     override fun toString() = compositeLogId
 }
 
-internal fun compositeLogIdOf(scope: Div2View, action: DivVisibilityAction): CompositeLogId {
+internal fun compositeLogIdOf(scope: Div2View, action: DivSightAction): CompositeLogId {
     return CompositeLogId(scopeLogId = scope.logId, actionLogId = action.logId, dataTag = scope.dataTag.id)
 }

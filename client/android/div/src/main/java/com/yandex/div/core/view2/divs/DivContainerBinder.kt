@@ -35,8 +35,6 @@ import com.yandex.div2.DivContainer
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivWrapContentSize
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -98,7 +96,7 @@ internal class DivContainerBinder @Inject constructor(
             oldDiv = null
         }
         for (i in div.items.indices) {
-            if (div.items[i].value().hasVisibilityActions) {
+            if (div.items[i].value().hasSightActions) {
                 divView.bindViewToDiv(view.getChildAt(i), div.items[i])
             }
         }
@@ -130,7 +128,7 @@ internal class DivContainerBinder @Inject constructor(
                         val patchView = patchViewsToAdd[patchIndex]
                         view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
                         observeChildViewAlignment(div, patchDivValue, patchView, resolver, expressionSubscriber)
-                        if (patchDivValue.hasVisibilityActions) {
+                        if (patchDivValue.hasSightActions) {
                             divView.bindViewToDiv(patchView, patchDivs[patchIndex])
                         }
                     }

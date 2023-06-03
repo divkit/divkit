@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.view2.Div2View;
 import com.yandex.div2.DivAction;
+import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivGallery;
 import com.yandex.div2.DivPager;
 import com.yandex.div2.DivVisibilityAction;
@@ -119,17 +120,31 @@ public interface Div2Logger {
     }
 
     /**
-     * Is called when element is shown.
+     * Called when the element is shown.
      */
     default void logViewShown(Div2View divView, View view, DivVisibilityAction visibilityAction) {
         // do nothing
     }
 
     /**
-     * Is called when element is shown.
+     * Called when the element disappears.
+     */
+    default void logViewDisappeared(Div2View divView, View view, DivDisappearAction disappearAction) {
+        // do nothing
+    }
+
+    /**
+     * Called when the element is shown.
      */
     default void logViewShown(Div2View divView, View view, DivVisibilityAction visibilityAction, String actionUid) {
         logViewShown(divView, view, visibilityAction);
+    }
+
+    /**
+     * Called when the element disappears.
+     */
+    default void logViewDisappeared(Div2View divView, View view, DivDisappearAction disappearAction, String actionUid) {
+        logViewDisappeared(divView, view, disappearAction);
     }
 
     /**

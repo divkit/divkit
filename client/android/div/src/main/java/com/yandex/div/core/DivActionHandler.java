@@ -14,6 +14,8 @@ import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div2.DivAction;
 import com.yandex.div2.DivVisibilityAction;
+import com.yandex.div2.DivDisappearAction;
+import com.yandex.div2.DivSightAction;
 import org.json.JSONObject;
 
 /**
@@ -96,7 +98,33 @@ public class DivActionHandler {
      */
     @CallSuper
     public boolean handleAction(@NonNull DivVisibilityAction action, @NonNull DivViewFacade view) {
-        Uri url = action.url != null ? action.url.evaluate(view.getExpressionResolver()) : null;
+        return handleAction((DivSightAction) action, view);
+    }
+
+    /**
+     * Handles the given div disappear action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div disappear action to handle
+     * @param view calling DivView
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleAction(@NonNull DivDisappearAction action, @NonNull DivViewFacade view) {
+        return handleAction((DivSightAction) action, view);
+    }
+
+    /**
+     * Handles the given div sight action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div sight action to handle
+     * @param view calling DivView
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleAction(@NonNull DivSightAction action, @NonNull DivViewFacade view) {
+        Uri url = action.getUrl() != null ? action.getUrl().evaluate(view.getExpressionResolver()) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view);
         }
@@ -114,6 +142,34 @@ public class DivActionHandler {
      */
     @CallSuper
     public boolean handleAction(@NonNull DivVisibilityAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
+        return handleAction(action, view);
+    }
+
+    /**
+     * Handles the given div disappear action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div disappear action to handle
+     * @param view calling DivView
+     * @param actionUid action UUID string
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleAction(@NonNull DivDisappearAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
+        return handleAction(action, view);
+    }
+
+    /**
+     * Handles the given div sight action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div disappear action to handle
+     * @param view calling DivView
+     * @param actionUid action UUID string
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleAction(@NonNull DivSightAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
         return handleAction(action, view);
     }
 

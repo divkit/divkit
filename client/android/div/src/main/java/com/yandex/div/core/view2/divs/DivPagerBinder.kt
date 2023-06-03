@@ -357,7 +357,7 @@ internal class DivPagerBinder @Inject constructor(
                 )
             }
             val selectedPage = divPager.items[position]
-            if (selectedPage.value().hasVisibilityActions) {
+            if (selectedPage.value().hasSightActions) {
                 divView.bindViewToDiv(recyclerView, selectedPage)
             }
             prevPosition = position
@@ -394,8 +394,8 @@ internal class DivPagerBinder @Inject constructor(
                     return
                 }
                 val childDiv = divPager.items[childPosition]
-                val visibilityActionTracker = divView.div2Component.visibilityActionTracker
-                visibilityActionTracker.trackVisibilityActionsOf(divView, child, childDiv)
+
+                divView.div2Component.visibilityActionTracker.trackVisibilityActionsOf(divView, child, childDiv)
             }
         }
     }

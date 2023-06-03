@@ -55,6 +55,7 @@ import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivDimension
+import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
@@ -73,6 +74,7 @@ import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
+import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
@@ -575,11 +577,17 @@ internal inline fun <T> List<Any?>.applyIfNotEquals(second: List<T>, applyRef: (
     }
 }
 
-internal val DivBase.hasVisibilityActions: Boolean
-    get() = visibilityAction != null || !visibilityActions.isNullOrEmpty()
+internal val DivBase.hasSightActions: Boolean
+    get() = visibilityAction != null || !visibilityActions.isNullOrEmpty() || !disappearActions.isNullOrEmpty()
 
 internal val DivBase.allVisibilityActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
+
+internal val DivBase.allDisappearActions: List<DivDisappearAction>
+    get() = disappearActions.orEmpty()
+
+internal val DivBase.allSightActions: List<DivSightAction>
+    get() = this.allDisappearActions + this.allVisibilityActions
 
 internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
     applyWidth(div, resolver)
@@ -601,10 +609,10 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
 internal fun ViewGroup.trackVisibilityActions(newDivs: List<Div>, oldDivs: List<Div>?, divView: Div2View) {
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
     if (!oldDivs.isNullOrEmpty()) {
-        val newLogIds = newDivs.flatMap {it.value().allVisibilityActions }.mapTo(HashSet()) { it.logId }
+        val newLogIds = newDivs.flatMap {it.value().allSightActions }.mapTo(HashSet()) { it.logId }
 
         for (oldDiv in oldDivs) {
-            val actionsToRemove = oldDiv.value().allVisibilityActions.filter { it.logId !in newLogIds }
+            val actionsToRemove = oldDiv.value().allSightActions.filter { it.logId !in newLogIds }
             visibilityActionTracker.trackVisibilityActionsOf(divView, null, oldDiv, actionsToRemove)
         }
     }

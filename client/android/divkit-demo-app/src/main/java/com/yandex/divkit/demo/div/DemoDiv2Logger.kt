@@ -5,6 +5,7 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibilityAction
@@ -108,6 +109,13 @@ class DemoDiv2Logger(
         }
         if (captureVisibilityActions) {
             capturedVisibilityActions += action
+        }
+    }
+
+    override fun logViewDisappeared(divView: Div2View, view: View, action: DivDisappearAction) {
+        val expressionResolver = divView.expressionResolver
+        log(TAG) {
+            "logViewDisappeared(cardId = ${divView.logId}, id = ${action.logId}, url = ${action.url?.evaluate(expressionResolver)}), referer = ${action.referer?.evaluate(expressionResolver)})"
         }
     }
 

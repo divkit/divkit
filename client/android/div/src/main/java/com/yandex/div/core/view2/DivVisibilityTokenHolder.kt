@@ -3,20 +3,21 @@ package com.yandex.div.core.view2
 import android.os.Handler
 import androidx.annotation.AnyThread
 import com.yandex.div.internal.util.SynchronizedList
-import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivSightAction
 
 /**
- * Utility wrapper for MutableList<MutableMap<CompositeLogId, DivVisibilityAction>>.
- * @property tokens is list of MutableMap<CompositeLogId, DivVisibilityAction>, which entries is used as token
- * for [Handler.postDelayed], so amount of entries can be changed without cancelling whole message.
+ * Utility wrapper for MutableList<MutableMap<CompositeLogId, DivSightAction>>.
+ * @property tokens is list of MutableMap<CompositeLogId, DivSightAction>,
+ * which entries is used as token for [Handler.postDelayed], so amount of entries can be changed
+ * without cancelling whole message.
  */
 @AnyThread
 internal class DivVisibilityTokenHolder {
 
-    private val tokens = SynchronizedList<MutableMap<CompositeLogId, DivVisibilityAction>>()
+    private val tokens: SynchronizedList<MutableMap<CompositeLogId, DivSightAction>> = SynchronizedList()
 
     fun remove(logId: CompositeLogId,
-               emptyTokenCallback: (Map<CompositeLogId, DivVisibilityAction>) -> Unit) {
+               emptyTokenCallback: (Map<CompositeLogId, DivSightAction>) -> Unit) {
         val log = tokens.find {
             return@find it.remove(logId) != null
         } ?: return
@@ -26,10 +27,10 @@ internal class DivVisibilityTokenHolder {
         }
     }
 
-    fun add(logIds: MutableMap<CompositeLogId, DivVisibilityAction>) = tokens.add(logIds)
+    fun add(logIds: MutableMap<CompositeLogId, DivSightAction>) = tokens.add(logIds)
 
     fun getLogId(logId: CompositeLogId): CompositeLogId? {
-        val log = tokens.find { logIds: MutableMap<CompositeLogId, DivVisibilityAction> ->
+        val log = tokens.find { logIds: MutableMap<CompositeLogId, DivSightAction> ->
             logIds.containsKey(logId)
         }
         return log?.keys?.toTypedArray()?.find { it == logId }
