@@ -56,7 +56,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     let gaps: [CGFloat]
     let layoutDirection: ContainerBlock.LayoutDirection
     let layoutMode: ContainerBlock.LayoutMode
-    let axialAlignment: Alignment
+    let axialAlignment: ContainerBlock.AxialAlignment
     let crossAlignment: ContainerBlock.CrossAlignment
     let contentAnimation: BlockAnimation?
     let anchorPoint: AnchorPoint

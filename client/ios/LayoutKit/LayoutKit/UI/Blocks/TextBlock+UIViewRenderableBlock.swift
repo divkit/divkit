@@ -458,10 +458,6 @@ extension Alignment {
     case .leading: return .top
     case .center: return .center
     case .trailing: return .bottom
-    // TODO: @bugperson should be implemented here DIVKIT-2378
-    default:
-      assertionFailure("Others alignments not supported yet")
-      return .top
     }
   }
 }

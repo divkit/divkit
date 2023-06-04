@@ -13,9 +13,6 @@ public enum Alignment {
   case center
   /// Child items are laid out at the right/bottom of the container
   case trailing
-  case spaceBetween
-  case spaceAround
-  case spaceEvenly
 }
 
 extension Alignment {
@@ -30,10 +27,6 @@ extension Alignment {
       return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
     case .trailing:
       return availableSpace - contentSize
-    // TODO: @bugperson should be implemented here DIVKIT-2378
-    default:
-      assertionFailure("Others alignments not supported yet")
-      return 0
     }
   }
 }
@@ -47,12 +40,6 @@ extension Alignment: CustomDebugStringConvertible {
       return "Center"
     case .trailing:
       return "Trailing"
-    case .spaceBetween:
-      return "space-between"
-    case .spaceAround:
-      return "space-around"
-    case .spaceEvenly:
-      return "space-evenly"
     }
   }
 }

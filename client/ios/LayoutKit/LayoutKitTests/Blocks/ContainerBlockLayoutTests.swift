@@ -12,7 +12,7 @@ extension ContainerBlockLayout {
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode = .noWrap,
     crossAlignment: ContainerBlock.CrossAlignment = .leading,
-    axialAlignment: Alignment = .leading,
+    axialAlignment: ContainerBlock.AxialAlignment = .leading,
     size: CGSize
   ) {
     self.init(

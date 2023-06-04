@@ -33,7 +33,7 @@ struct ContainerBlockLayout {
   let gaps: [CGFloat]
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
-  let axialAlignment: Alignment
+  let axialAlignment: ContainerBlock.AxialAlignment
   let crossAlignment: ContainerBlock.CrossAlignment
   let size: CGSize
 
@@ -44,7 +44,7 @@ struct ContainerBlockLayout {
     gaps: [CGFloat],
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode,
-    axialAlignment: Alignment,
+    axialAlignment: ContainerBlock.AxialAlignment,
     crossAlignment: ContainerBlock.CrossAlignment,
     size: CGSize
   ) {

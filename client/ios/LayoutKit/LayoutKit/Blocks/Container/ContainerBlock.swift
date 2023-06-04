@@ -46,6 +46,12 @@ public final class ContainerBlock: BlockWithLayout {
     case center
     case trailing
     case baseline
+  }
+
+  public enum AxialAlignment {
+    case leading
+    case center
+    case trailing
     case spaceBetween
     case spaceAround
     case spaceEvenly
@@ -86,7 +92,7 @@ public final class ContainerBlock: BlockWithLayout {
   public let layoutMode: LayoutMode
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
-  public let axialAlignment: Alignment
+  public let axialAlignment: AxialAlignment
   public let crossAlignment: CrossAlignment
   public let gaps: [CGFloat]
   public let children: [Child]
@@ -105,7 +111,7 @@ public final class ContainerBlock: BlockWithLayout {
     layoutMode: LayoutMode = .noWrap,
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
-    axialAlignment: Alignment = .leading,
+    axialAlignment: AxialAlignment = .leading,
     crossAlignment: CrossAlignment = .leading,
     gaps: [CGFloat]? = nil,
     children: [Child],
@@ -554,9 +560,23 @@ extension ContainerBlock.CrossAlignment {
       return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
     case .trailing:
       return availableSpace - contentSize
-    // TODO: @bugperson should be implemented here DIVKIT-2378
-    default:
-      assertionFailure("Others alignments not supported yet")
+    }
+  }
+}
+
+extension ContainerBlock.AxialAlignment {
+  public func offset(
+    forAvailableSpace availableSpace: CGFloat,
+    contentSize: CGFloat = 0
+  ) -> CGFloat {
+    switch self {
+    case .leading:
+      return 0
+    case .center:
+      return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
+    case .trailing:
+      return availableSpace - contentSize
+    case .spaceEvenly, .spaceBetween, .spaceAround:
       return 0
     }
   }
