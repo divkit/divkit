@@ -1,3 +1,10 @@
+## 25.3.0 (June 5, 2023)
+
+Added:
+* New content alignments in the `container`: `space-between`, `space-around`, `space-evenly`
+* `font_family` property is now supported in the different components. Keep in mind, for this property to work, you need to provide a `typefaceProvider`
+* `margins` for a `container` separators are now supported
+
 ## 25.2.0 (May 29, 2023)
 
 Additions:

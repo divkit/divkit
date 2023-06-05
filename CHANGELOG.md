@@ -1,3 +1,38 @@
+## 25.3.0
+
+# JSON Schema:
+
+Additions:
+* Added `text_alignment_` properties for `div-input`
+
+# Android Client:
+
+Additions:
+* Added `DivCustomContainerViewAdapter` with `DivStatePath` propagation to implementations
+
+Fixes:
+* Fixed `DivSelect` line height
+* Fixed permanent destroying video manager on view detach
+* Fixed big corner radius drawing
+
+# iOS Client:
+
+Additions:
+* Added `disappear_actions`
+* Added `fixed_length` mask for `DivInput`
+* Added `margins` for separators in `DivContainer`
+
+# Web Client:
+
+Added:
+* New content alignments in the `container`: `space-between`, `space-around`, `space-evenly`
+* `font_family` property is now supported in the different components. Keep in mind, for this property to work, you need to provide a `typefaceProvider`
+* `margins` for a `container` separators are now supported
+
+# Kotlin JSON Builder:
+
+* Supported properties from scheme up to 25.2.0
+
 ## 25.2.0
 
 # JSON Schema:
