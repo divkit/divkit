@@ -1,5 +1,5 @@
+import BaseTinyPublic
 import Foundation
-import UIKit
 
 public final class DivSafeAreaManager {
   private let storage: DivVariablesStorage
@@ -8,12 +8,12 @@ public final class DivSafeAreaManager {
     self.storage = storage
   }
 
-  public func setEdgeInsets(_ insets: UIEdgeInsets) {
+  public func setEdgeInsets(_ insets: EdgeInsets) {
     let variables = makeVariables(insets)
     storage.append(variables: variables, triggerUpdate: true)
   }
 
-  private func makeVariables(_ insets: UIEdgeInsets) -> DivVariables {
+  private func makeVariables(_ insets: EdgeInsets) -> DivVariables {
     [
       "safe_area_top": .number(insets.top),
       "safe_area_bottom": .number(insets.bottom),
