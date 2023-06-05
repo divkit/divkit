@@ -2,6 +2,7 @@ package divkit.dsl
 
 import com.fasterxml.jackson.databind.json.JsonMapper
 import divkit.dsl.core.bind
+import divkit.dsl.core.expression
 import divkit.dsl.core.reference
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
@@ -10,29 +11,90 @@ import org.skyscreamer.jsonassert.JSONCompareMode
 class DivanTest {
 
     @Test
-    fun buildCardWithTemplate() {
+    fun `simple card`() {
+        val card = divan {
+            data(
+                logId = "test",
+                states = singleRoot(
+                    div = text(
+                        text = "Hello!"
+                    )
+                )
+            )
+        }
+
+        val expectedJson = """
+            {
+              "templates": {},
+              "card": {
+                "log_id": "test",
+                "states": [
+                  {
+                    "state_id": 0,
+                    "div": {
+                      "type": "text",
+                      "text": "Hello!"
+                    }
+                  }
+                ]
+              }
+            }
+        """.trimIndent()
+
+        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+    }
+
+    @Test
+    fun `card with expression`() {
+        val card = divan {
+            data(
+                logId = "test",
+                states = singleRoot(
+                    div = text().evaluate(
+                        text = expression("@{hello_text}")
+                    )
+                )
+            )
+        }
+
+        val expectedJson = """
+            {
+              "templates": {},
+              "card": {
+                "log_id": "test",
+                "states": [
+                  {
+                    "state_id": 0,
+                    "div": {
+                      "type": "text",
+                      "text": "@{hello_text}"
+                    }
+                  }
+                ]
+              }
+            }
+        """.trimIndent()
+
+        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+    }
+
+    @Test
+    fun `card with template`() {
         val titleRef = reference<String>("title")
 
         val titleTemplate = template("title_text") {
             text(
-                width = fixedSize(
-                    value = 120,
-                    unit = dp
-                )
+                width = fixedSize(120, unit = dp)
             ) + textRefs(text = titleRef)
         }
 
-        val divan = divan {
+        val card = divan {
             data(
                 logId = "layout",
                 states = singleRoot(
                     div = container(
-                        width = fixedSize(
-                            value = 320
-                        ),
-                        height = fixedSize(
-                            value = 320
-                        ),
+                        width = fixedSize(320),
+                        height = fixedSize(320),
                         orientation = vertical,
                         items = listOf(
                             render(
@@ -58,8 +120,12 @@ class DivanTest {
             )
         }
 
-        val expected = readResource("/json/card_with_templates.json")
-        val actual = JsonMapper.builder().build().writeValueAsString(divan)
-        assertEquals(expected, actual, JSONCompareMode.STRICT)
+        assertEquals(
+            readResource("/json/card_with_templates.json"),
+            card.toJson(),
+            JSONCompareMode.STRICT
+        )
     }
 }
+
+private fun Divan.toJson() = JsonMapper.builder().build().writeValueAsString(this)
