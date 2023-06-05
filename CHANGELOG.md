@@ -8,6 +8,7 @@ Additions:
 # Android Client:
 
 Additions:
+* Added `disappear_actions`
 * Added `DivCustomContainerViewAdapter` with `DivStatePath` propagation to implementations
 
 Fixes:
