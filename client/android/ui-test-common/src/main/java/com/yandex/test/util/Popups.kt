@@ -12,6 +12,12 @@ fun assertNoPopupsAreDisplayed() {
                       activeRoots.none { RootMatchers.isPlatformPopup().matches(it) })
 }
 
+fun assertPopupDisplayed() {
+    Assert.assertNotNull("Exactly one popup view must exist",
+        activeRoots.singleOrNull { RootMatchers.isPlatformPopup().matches(it) }
+    )
+}
+
 internal val activeRoots: List<Root>
     get() = performOnMain {
         Reflection.staticField("BASE")

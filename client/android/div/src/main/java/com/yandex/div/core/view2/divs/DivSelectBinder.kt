@@ -87,7 +87,7 @@ internal class DivSelectBinder @Inject constructor(
     private fun DivSelectView.observeVariable(div: DivSelect, divView: Div2View, errorCollector: ErrorCollector) {
         val resolver = divView.expressionResolver
 
-        variableBinder.bindVariable(
+        val subscription = variableBinder.bindVariable(
             divView,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
@@ -116,6 +116,8 @@ internal class DivSelectBinder @Inject constructor(
                     this@observeVariable.valueUpdater = valueUpdater
                 }
             })
+
+        addSubscription(subscription)
     }
 
     private fun DivSelectView.observeFontSize(div: DivSelect, resolver: ExpressionResolver) {

@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.variables
 
 import androidx.annotation.MainThread
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider
 import com.yandex.div.core.view2.Div2View
@@ -10,6 +11,7 @@ import com.yandex.div.data.Variable
 import javax.inject.Inject
 
 @DivScope
+@Mockable
 internal class TwoWayStringVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
     expressionsRuntimeProvider: ExpressionsRuntimeProvider
@@ -21,6 +23,7 @@ internal class TwoWayStringVariableBinder @Inject constructor(
 }
 
 @DivScope
+@Mockable
 internal class TwoWayIntegerVariableBinder @Inject constructor(
     errorCollectors: ErrorCollectors,
     expressionsRuntimeProvider: ExpressionsRuntimeProvider
@@ -31,11 +34,13 @@ internal class TwoWayIntegerVariableBinder @Inject constructor(
     override fun Long.toStringValue() = toString()
 }
 
+@Mockable
 internal abstract class TwoWayVariableBinder<T>(
     private val errorCollectors: ErrorCollectors,
     private val expressionsRuntimeProvider: ExpressionsRuntimeProvider
 ) {
 
+    @Mockable
     interface Callbacks<T> {
         @MainThread
         fun onVariableChanged(value: T?)
