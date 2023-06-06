@@ -125,7 +125,9 @@
         "validators": {
           "type": "array",
           "$description": "translations.json#/div_input_validators",
-          "platforms": [],
+          "platforms": [
+            "android"
+          ],
           "items": {
             "$ref": "div-input-validator.json"
           }

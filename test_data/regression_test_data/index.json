@@ -1757,6 +1757,26 @@
       "file": "phone_input_mask.json"
     },
     {
+      "title": "Regex input validator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "regex_input_validator.json"
+    },
+    {
+      "title": "Expression input validator",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "expression_input_validator.json"
+    },
+    {
       "title": "Currency input mask",
       "platforms": [
         "android",

@@ -6,16 +6,22 @@ import android.text.method.DigitsKeyListener
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.view.doOnLayout
+import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
 import com.yandex.div.core.util.mask.FixedLengthInputMask
 import com.yandex.div.core.util.toIntSafely
+import com.yandex.div.core.util.validator.ExpressionValidator
+import com.yandex.div.core.util.validator.RegexValidator
+import com.yandex.div.core.util.validator.ValidatorItemData
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -24,6 +30,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivCurrencyInputMask
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivInputValidator
 import com.yandex.div2.DivSizeUnit
 import java.util.Locale
 import java.util.regex.PatternSyntaxException
@@ -237,7 +244,7 @@ internal class DivInputBinder @Inject constructor(
         resolver: ExpressionResolver,
         divView: Div2View
     ) {
-        removeBoundVariableChangeAction()
+        removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
 
@@ -280,7 +287,7 @@ internal class DivInputBinder @Inject constructor(
             }
 
             override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                setBoundVariableChangeAction { editable ->
+                addAfterTextChangeAction { editable ->
                     val fieldValue = editable?.toString() ?: ""
 
                     inputMask?.apply {
@@ -302,6 +309,148 @@ internal class DivInputBinder @Inject constructor(
         }
 
         addSubscription(variableBinder.bindVariable(divView, primaryVariable, callbacks))
+
+        observeValidators(div, resolver, divView)
+    }
+
+    private fun DivInputView.observeValidators(
+        div: DivInput,
+        resolver: ExpressionResolver,
+        divView: Div2View
+    ) {
+        val validators: MutableList<ValidatorItemData> = mutableListOf()
+
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+
+        val revalidateExpressionValidator = { index: Int  ->
+            validators[index].validate(text.toString(), this, divView)
+        }
+
+        doAfterTextChanged { editable ->
+            if (editable != null) {
+                validators.forEach { it.validate(text.toString(), this, divView) }
+            }
+        }
+
+        val callback = { _: Any ->
+            validators.clear()
+
+            val divValidators = div.validators
+
+            if (divValidators != null) {
+                divValidators.forEach { divInputValidator ->
+                    val validatorItemData = divInputValidator
+                        .toValidatorDataItem(resolver, errorCollector)
+
+                    if (validatorItemData != null) {
+                        validators += validatorItemData
+                    }
+                }
+
+                validators.forEach { it.validate(text.toString(), this, divView) }
+            }
+        }
+
+        div.validators?.forEachIndexed { index, divInputValidator ->
+            return@forEachIndexed when (divInputValidator) {
+                is DivInputValidator.Regex -> {
+                    addSubscription(divInputValidator.value.pattern.observe(resolver, callback))
+                    addSubscription(divInputValidator.value.labelId.observe(resolver, callback))
+                    addSubscription(divInputValidator.value.allowEmpty.observe(resolver, callback))
+                }
+                is DivInputValidator.Expression -> {
+                    addSubscription(divInputValidator.value.condition.observe(resolver) {
+                        revalidateExpressionValidator(index)
+                    })
+                    addSubscription(divInputValidator.value.labelId.observe(resolver, callback))
+                    addSubscription(divInputValidator.value.allowEmpty.observe(resolver, callback))
+                }
+            }
+        }
+
+        callback(Unit)
+    }
+
+    private fun DivInputValidator.toValidatorDataItem(
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ): ValidatorItemData? {
+        return when (this) {
+            is DivInputValidator.Regex -> {
+                val regexValidator = value
+
+                try {
+                    val regex = Regex(regexValidator.pattern.evaluate(resolver))
+
+                    ValidatorItemData(
+                        validator = RegexValidator(
+                            regex,
+                            regexValidator.allowEmpty.evaluate(resolver)
+                        ),
+                        variableName = regexValidator.variable,
+                        labelId = regexValidator.labelId.evaluate(resolver)
+                    )
+                } catch (exception: PatternSyntaxException) {
+                    errorCollector.logError(
+                        IllegalArgumentException("Invalid regex pattern '${exception.pattern}'", exception)
+                    )
+
+                    return null
+                }
+            }
+            is DivInputValidator.Expression -> {
+                val expressionValidator = value
+
+                ValidatorItemData(
+                    validator = ExpressionValidator(
+                        expressionValidator.allowEmpty.evaluate(resolver)
+                    ) {
+                        expressionValidator.condition.evaluate(resolver)
+                    },
+                    variableName = expressionValidator.variable,
+                    labelId = expressionValidator.labelId.evaluate(resolver)
+                )
+            }
+        }
+    }
+
+    private fun ValidatorItemData.validate(
+        newValue: String,
+        view: DivInputView,
+        divView: Div2View
+    ) {
+        val isValid = validator.validate(newValue)
+
+        divView.setVariable(variableName, isValid.toString())
+
+        attachAccessibility(divView, view, isValid)
+    }
+
+    private fun ValidatorItemData.attachAccessibility(
+        divView: Div2View,
+        view: DivInputView,
+        isValid: Boolean
+    ) {
+        val exception = IllegalArgumentException("Can't find label with id '$labelId'")
+
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        val viewIdProvider = divView.viewComponent.viewIdProvider
+
+        view.doOnLayout {
+            val labelId = viewIdProvider.getViewId(labelId)
+
+            if (labelId != View.NO_ID) {
+                val label = view.rootView.findViewById<View>(labelId)
+
+                if (label != null) {
+                    label.labelFor = if (isValid) View.NO_ID else view.id
+                } else {
+                    errorCollector.logError(exception)
+                }
+            } else {
+                errorCollector.logError(exception)
+            }
+        }
     }
 
     private fun DivInputView.observeMask(
