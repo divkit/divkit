@@ -15,7 +15,7 @@ struct SettingsView: View {
   var body: some View {
     ViewWithHeader(
       "Settings",
-      background: ThemeColor.settings,
+      background: ThemeColor.settingsLight,
       presentationMode: presentationMode
     ) {
       VStack(alignment: .leading, spacing: 20) {

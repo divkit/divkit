@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MainView: View {
+  @Environment(\.colorScheme) var colorScheme
+
   var body: some View {
     NavigationView {
       VStack(spacing: 10) {
@@ -25,7 +27,11 @@ struct MainView: View {
             }
           }
         }
-        NavigationButton("settings", color: ThemeColor.settings) {
+        NavigationButton(
+          "settings",
+          color: colorScheme.settingsColor,
+          labelColor: colorScheme.settingsLabelColor
+        ) {
           SettingsView()
         }
         .frame(height: 80)
@@ -48,17 +54,20 @@ private struct NavigationButton<Destination>: View where Destination: View {
 
   private let title: String
   private let color: Color
+  private let labelColor: Color
   private let shape: Shape
   private let destination: () -> Destination
 
   init(
     _ title: String,
     color: Color,
+    labelColor: Color = .white,
     shape: Shape = .rounded,
     destination: @escaping () -> Destination
   ) {
     self.title = title
     self.color = color
+    self.labelColor = labelColor
     self.shape = shape
     self.destination = destination
   }
@@ -78,8 +87,17 @@ private struct NavigationButton<Destination>: View where Destination: View {
   private var label: some View {
     Text(title)
       .font(ThemeFont.button)
-      .foregroundColor(.white)
+      .foregroundColor(labelColor)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(color)
+  }
+}
+
+private extension ColorScheme {
+  var settingsColor: Color {
+    self == .dark ? ThemeColor.settingsDark : ThemeColor.settingsLight
+  }
+  var settingsLabelColor: Color {
+    self == .dark ? .black : .white
   }
 }
