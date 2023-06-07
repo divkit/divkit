@@ -1,0 +1,109 @@
+{
+  "templates": {
+    "video_gallery": {
+      "type": "gallery",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 320
+      },
+      "item_spacing": 0,
+      "restrict_parent_scroll": 1
+    },
+    "video_card": {
+      "type": "video",
+      "height": {
+        "type": "fixed",
+        "value": 320,
+        "unit": "sp"
+      },
+      "video_sources": [
+        {
+          "type": "video_source",
+          "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+          "mime_type": "video/mp4"
+        }
+      ],
+      "repeatable": true,
+      "autostart": false,
+      "muted": true,
+      "disappear_actions": [
+        {
+          "log_id": "play_pause_action",
+          "log_limit": 0,
+          "visibility_percentage": 50,
+          "disappear_duration": 0,
+          "$url": "disappear_action_url"
+        }
+      ],
+      "visibility_actions": [
+        {
+          "log_id": "play_pause_action",
+          "log_limit": 0,
+          "visibility_percentage": 50,
+          "visibility_duration": 0,
+          "$url": "visibility_action_url"
+        }
+      ],
+      "background": [
+        {
+          "type": "solid",
+          "color": "#000000"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "variables": [
+      {
+        "name": "video_time_1",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_2",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_time_3",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "video_gallery",
+          "items": [
+            {
+              "type": "video_card",
+              "id": "bears_video_1",
+              "elapsed_time_variable": "video_time_1",
+              "disappear_action_url": "div-action://video?id=bears_video_1&action=pause",
+              "visibility_action_url": "div-action://video?id=bears_video_1&action=start"
+            },
+            {
+              "type": "video_card",
+              "id": "bears_video_2",
+              "elapsed_time_variable": "video_time_2",
+              "disappear_action_url": "div-action://video?id=bears_video_2&action=pause",
+              "visibility_action_url": "div-action://video?id=bears_video_2&action=start"
+            },
+            {
+              "type": "video_card",
+              "id": "bears_video_3",
+              "elapsed_time_variable": "video_time_3",
+              "disappear_action_url": "div-action://video?id=bears_video_3&action=pause",
+              "visibility_action_url": "div-action://video?id=bears_video_3&action=start"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
