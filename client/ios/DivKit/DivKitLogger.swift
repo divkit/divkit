@@ -30,6 +30,7 @@ public enum DivKitLogger {
     Thread.assertIsMain()
     externalLogger = logger
   }
+
   public static func setLogger(_ logger: @escaping (String) -> Void) {
     setLogger({ logger($1) })
   }
