@@ -37,6 +37,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         ensureVariablesSynced(result.variableController, data, errorCollector)
+        result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
     }
 
@@ -104,7 +105,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         )
 
         val triggersController = TriggersController(
-            data.variableTriggers,
             variableController,
             expressionResolver,
             divActionHandler,
