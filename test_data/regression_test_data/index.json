@@ -868,7 +868,7 @@
       "file": "gallery/gallery_swipe.json"
     },
     {
-      "title": "disappear actions in gallery",
+      "title": "Disappear actions in gallery",
       "platforms": [
         "ios",
         "web"
@@ -882,7 +882,8 @@
       ],
       "expected_results": [
         "Gallery data was opened",
-        "items disappear logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+        "The text changes along with the item that disappeared",
+        "Items disappearing logged, for example 'logViewShown(cardId = ..., id = item/01)'"
       ],
       "file": "gallery/gallery_swipe_disappear_action.json"
     },
@@ -1795,16 +1796,18 @@
       "file": "video/video_with_controls.json"
     },
     {
-      "title": "disappear action with video",
+      "title": "Disappearing actions with DivVideo",
       "platforms": [
         "ios",
         "web"
       ],
       "tags": [
         "DivVideo",
-        "Disappear action"
+        "Disappear action",
+        "Visibility_actions",
+        "DivGallery"
       ],
-      "file": "video/video_with_controls_in_gallery.json"
+      "file": "video/video_in_gallery.json"
     },
     {
       "title": "Video stream",

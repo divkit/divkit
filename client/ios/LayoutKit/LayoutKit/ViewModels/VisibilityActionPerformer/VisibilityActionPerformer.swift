@@ -46,7 +46,9 @@ final class VisibilityActionPerformer {
       guard visibleAreaPercentageAfter <= targetPercentage,
             visibleAreaPercentageBefore > visibleAreaPercentageAfter
       else {
-        invalidateTimer()
+        if visibleAreaPercentageAfter > targetPercentage {
+          invalidateTimer()
+        }
         return
       }
     }
