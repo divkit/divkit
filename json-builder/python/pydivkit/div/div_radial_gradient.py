@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_radial_gradient_center, div_radial_gradient_radius
 
@@ -16,11 +16,12 @@ class DivRadialGradient(BaseDiv):
 
     def __init__(
         self, *,
-        colors: typing.List[str],
         type: str = "radial_gradient",
         center_x: typing.Optional[div_radial_gradient_center.DivRadialGradientCenter] = None,
         center_y: typing.Optional[div_radial_gradient_center.DivRadialGradientCenter] = None,
+        colors: typing.Optional[typing.Sequence[typing.Union[Expr, str]]] = None,
         radius: typing.Optional[div_radial_gradient_radius.DivRadialGradientRadius] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -28,6 +29,7 @@ class DivRadialGradient(BaseDiv):
             center_y=center_y,
             colors=colors,
             radius=radius,
+            **kwargs,
         )
 
     type: str = Field(default="radial_gradient")
@@ -40,14 +42,14 @@ class DivRadialGradient(BaseDiv):
     center_y: typing.Optional[div_radial_gradient_center.DivRadialGradientCenter] = Field(
         description=(
             "Shift of the central point of the gradient relative to the "
-            "upper edge along the Yaxis."
+            "top edge along the Yaxis."
         ),
     )
-    colors: typing.List[str] = Field(
+    colors: typing.Sequence[typing.Union[Expr, str]] = Field(
         min_items=2, 
         description=(
-            "Colors. Gradient points will be located at an equal "
-            "distance from each other."
+            "Colors. Gradient points are located at an equal distance "
+            "from each other."
         ),
     )
     radius: typing.Optional[div_radial_gradient_radius.DivRadialGradientRadius] = Field(

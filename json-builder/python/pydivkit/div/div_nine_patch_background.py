@@ -6,38 +6,39 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_absolute_edge_insets
 
 
-# Image in nine patch format.
-# https://developer.android.com/studio/write/draw9patch.
+# Image in 9-patch format (https://developer.android.com/studio/write/draw9patch).
 class DivNinePatchBackground(BaseDiv):
 
     def __init__(
         self, *,
-        image_url: str,
-        insets: div_absolute_edge_insets.DivAbsoluteEdgeInsets,
         type: str = "nine_patch_image",
+        image_url: typing.Optional[typing.Union[Expr, str]] = None,
+        insets: typing.Optional[div_absolute_edge_insets.DivAbsoluteEdgeInsets] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             image_url=image_url,
             insets=insets,
+            **kwargs,
         )
 
     type: str = Field(default="nine_patch_image")
-    image_url: str = Field(
+    image_url: typing.Union[Expr, str] = Field(
         format="uri", 
         description="Image URL.",
     )
     insets: div_absolute_edge_insets.DivAbsoluteEdgeInsets = Field(
         description=(
-            "Margins that break images into parts, according to the "
-            "rule, are similar "
-            "toborder-image-slice.(https://developer.mozilla.org/en-US/d"
-            "ocs/Web/CSS/border-image-slice)"
+            "Margins that break the image into parts using the same "
+            "rules as the CSS`border-image-slice` "
+            "property(https://developer.mozilla.org/en-US/docs/Web/CSS/b"
+            "order-image-slice)."
         ),
     )
 

@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_size_unit
 
@@ -16,23 +16,25 @@ class DivStroke(BaseDiv):
 
     def __init__(
         self, *,
-        color: str,
-        unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
-        width: typing.Optional[int] = None,
+        color: typing.Optional[typing.Union[Expr, str]] = None,
+        unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        width: typing.Optional[typing.Union[Expr, int]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             color=color,
             unit=unit,
             width=width,
+            **kwargs,
         )
 
-    color: str = Field(
+    color: typing.Union[Expr, str] = Field(
         format="color", 
         description="Stroke color.",
     )
-    unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
     )
-    width: typing.Optional[int] = Field(
+    width: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Stroke width.",
     )
 

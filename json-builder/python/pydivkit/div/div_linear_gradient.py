@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
 # Linear gradient.
@@ -14,25 +14,27 @@ class DivLinearGradient(BaseDiv):
 
     def __init__(
         self, *,
-        colors: typing.List[str],
         type: str = "gradient",
-        angle: typing.Optional[int] = None,
+        angle: typing.Optional[typing.Union[Expr, int]] = None,
+        colors: typing.Optional[typing.Sequence[typing.Union[Expr, str]]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             angle=angle,
             colors=colors,
+            **kwargs,
         )
 
     type: str = Field(default="gradient")
-    angle: typing.Optional[int] = Field(
+    angle: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Angle of gradient direction.",
     )
-    colors: typing.List[str] = Field(
+    colors: typing.Sequence[typing.Union[Expr, str]] = Field(
         min_items=2, 
         description=(
-            "Colors. Gradient points will be located at an equal "
-            "distance from each other."
+            "Colors. Gradient points are located at an equal distance "
+            "from each other."
         ),
     )
 

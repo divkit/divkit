@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
 # Variable — URL as a string.
@@ -14,22 +14,24 @@ class UrlVariable(BaseDiv):
 
     def __init__(
         self, *,
-        name: str,
-        value: str,
         type: str = "url",
+        name: typing.Optional[typing.Union[Expr, str]] = None,
+        value: typing.Optional[typing.Union[Expr, str]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             name=name,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="url")
-    name: str = Field(
+    name: typing.Union[Expr, str] = Field(
         min_length=1, 
         description="Variable name.",
     )
-    value: str = Field(
+    value: typing.Union[Expr, str] = Field(
         format="uri", 
         description="Value.",
     )

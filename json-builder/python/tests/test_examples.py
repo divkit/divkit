@@ -185,7 +185,7 @@ def test_gallery():
                                 'type': template_name,
                                 'icon_url': f'{base_url}/food.png',
                                 'text': 'Food'
-                             }, {
+                            }, {
                                 'type': template_name,
                                 'icon_url': f'{base_url}/alcohol.png',
                                 'text': 'Alcohol'

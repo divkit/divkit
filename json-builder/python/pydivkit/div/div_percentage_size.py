@@ -6,24 +6,26 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
-# Percentage value of the element size.
+# Element size (%).
 class DivPercentageSize(BaseDiv):
 
     def __init__(
         self, *,
-        value: float,
         type: str = "percentage",
+        value: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="percentage")
-    value: float = Field(
+    value: typing.Union[Expr, float] = Field(
         description="Element size value.",
     )
 

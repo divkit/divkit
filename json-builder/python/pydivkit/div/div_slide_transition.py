@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_animation_interpolator, div_dimension
 
@@ -18,10 +18,11 @@ class DivSlideTransition(BaseDiv):
         self, *,
         type: str = "slide",
         distance: typing.Optional[div_dimension.DivDimension] = None,
-        duration: typing.Optional[int] = None,
-        edge: typing.Optional[DivSlideTransitionEdge] = None,
-        interpolator: typing.Optional[div_animation_interpolator.DivAnimationInterpolator] = None,
-        start_delay: typing.Optional[int] = None,
+        duration: typing.Optional[typing.Union[Expr, int]] = None,
+        edge: typing.Optional[typing.Union[Expr, DivSlideTransitionEdge]] = None,
+        interpolator: typing.Optional[typing.Union[Expr, div_animation_interpolator.DivAnimationInterpolator]] = None,
+        start_delay: typing.Optional[typing.Union[Expr, int]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -30,6 +31,7 @@ class DivSlideTransition(BaseDiv):
             edge=edge,
             interpolator=interpolator,
             start_delay=start_delay,
+            **kwargs,
         )
 
     type: str = Field(default="slide")
@@ -41,20 +43,20 @@ class DivSlideTransition(BaseDiv):
             "parent element is used."
         ),
     )
-    duration: typing.Optional[int] = Field(
+    duration: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Animation duration in milliseconds.",
     )
-    edge: typing.Optional[DivSlideTransitionEdge] = Field(
+    edge: typing.Optional[typing.Union[Expr, DivSlideTransitionEdge]] = Field(
         description=(
             "Edge of a parent element for one of the action types:where "
             "the element will movefrom when appearing;where the element "
             "will move to when disappearing."
         ),
     )
-    interpolator: typing.Optional[div_animation_interpolator.DivAnimationInterpolator] = Field(
+    interpolator: typing.Optional[typing.Union[Expr, div_animation_interpolator.DivAnimationInterpolator]] = Field(
         description="Transition speed nature.",
     )
-    start_delay: typing.Optional[int] = Field(
+    start_delay: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Delay in milliseconds before animation starts.",
     )
 

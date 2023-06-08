@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div
 
@@ -16,19 +16,21 @@ class DivPatch(BaseDiv):
 
     def __init__(
         self, *,
-        changes: typing.List[DivPatchChange],
-        mode: typing.Optional[DivPatchMode] = None,
+        changes: typing.Optional[typing.Sequence[DivPatchChange]] = None,
+        mode: typing.Optional[typing.Union[Expr, DivPatchMode]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             changes=changes,
             mode=mode,
+            **kwargs,
         )
 
-    changes: typing.List[DivPatchChange] = Field(
+    changes: typing.Sequence[DivPatchChange] = Field(
         min_items=1, 
         description="Element changes.",
     )
-    mode: typing.Optional[DivPatchMode] = Field(
+    mode: typing.Optional[typing.Union[Expr, DivPatchMode]] = Field(
         description=(
             "Procedure for applying changes:`transactional` — if an "
             "error occurs duringapplication of at least one element, the "
@@ -47,18 +49,20 @@ class DivPatchChange(BaseDiv):
 
     def __init__(
         self, *,
-        id: str,
-        items: typing.Optional[typing.List[div.Div]] = None,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
+        items: typing.Optional[typing.Sequence[div.Div]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             id=id,
             items=items,
+            **kwargs,
         )
 
-    id: str = Field(
+    id: typing.Union[Expr, str] = Field(
         description="ID of an element to be replaced or removed.",
     )
-    items: typing.Optional[typing.List[div.Div]] = Field(
+    items: typing.Optional[typing.Sequence[div.Div]] = Field(
         min_items=1, 
         description=(
             "Elements to be inserted. If the parameter isn\'t specified, "

@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_pivot
 
@@ -18,24 +18,26 @@ class DivTransform(BaseDiv):
         self, *,
         pivot_x: typing.Optional[div_pivot.DivPivot] = None,
         pivot_y: typing.Optional[div_pivot.DivPivot] = None,
-        rotation: typing.Optional[float] = None,
+        rotation: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             pivot_x=pivot_x,
             pivot_y=pivot_y,
             rotation=rotation,
+            **kwargs,
         )
 
     pivot_x: typing.Optional[div_pivot.DivPivot] = Field(
-        description="The X coordinate of the rotation axis.",
+        description="X coordinate of the rotation axis.",
     )
     pivot_y: typing.Optional[div_pivot.DivPivot] = Field(
-        description="The Y coordinate of the rotation axis.",
+        description="Y coordinate of the rotation axis.",
     )
-    rotation: typing.Optional[float] = Field(
+    rotation: typing.Optional[typing.Union[Expr, float]] = Field(
         description=(
-            "The number of degrees by which the element must be rotated. "
-            "A positive valuedescribes a clockwise rotation."
+            "Degrees of the element rotation. Positive values used for "
+            "clockwise rotation."
         ),
     )
 

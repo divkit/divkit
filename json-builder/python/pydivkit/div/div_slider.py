@@ -6,14 +6,14 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div_accessibility, div_action, div_alignment_horizontal,
     div_alignment_vertical, div_appearance_transition, div_background,
-    div_border, div_change_transition, div_drawable, div_edge_insets,
-    div_extension, div_focus, div_font_weight, div_point, div_size,
-    div_size_unit, div_tooltip, div_transform, div_transition_trigger,
+    div_border, div_change_transition, div_disappear_action, div_drawable,
+    div_edge_insets, div_extension, div_focus, div_font_weight, div_point,
+    div_size, div_size_unit, div_tooltip, div_transform, div_transition_trigger,
     div_visibility, div_visibility_action,
 )
 
@@ -23,45 +23,47 @@ class DivSlider(BaseDiv):
 
     def __init__(
         self, *,
-        thumb_style: div_drawable.DivDrawable,
-        track_active_style: div_drawable.DivDrawable,
-        track_inactive_style: div_drawable.DivDrawable,
         type: str = "slider",
         accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
-        alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = None,
-        alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = None,
-        alpha: typing.Optional[float] = None,
-        background: typing.Optional[typing.List[div_background.DivBackground]] = None,
+        alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = None,
+        alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = None,
+        alpha: typing.Optional[typing.Union[Expr, float]] = None,
+        background: typing.Optional[typing.Sequence[div_background.DivBackground]] = None,
         border: typing.Optional[div_border.DivBorder] = None,
-        column_span: typing.Optional[int] = None,
-        extensions: typing.Optional[typing.List[div_extension.DivExtension]] = None,
+        column_span: typing.Optional[typing.Union[Expr, int]] = None,
+        disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = None,
+        extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = None,
         focus: typing.Optional[div_focus.DivFocus] = None,
         height: typing.Optional[div_size.DivSize] = None,
-        id: typing.Optional[str] = None,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
         margins: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        max_value: typing.Optional[int] = None,
-        min_value: typing.Optional[int] = None,
+        max_value: typing.Optional[typing.Union[Expr, int]] = None,
+        min_value: typing.Optional[typing.Union[Expr, int]] = None,
         paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        row_span: typing.Optional[int] = None,
+        row_span: typing.Optional[typing.Union[Expr, int]] = None,
         secondary_value_accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
-        selected_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
+        selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
         thumb_secondary_style: typing.Optional[div_drawable.DivDrawable] = None,
         thumb_secondary_text_style: typing.Optional[DivSliderTextStyle] = None,
-        thumb_secondary_value_variable: typing.Optional[str] = None,
+        thumb_secondary_value_variable: typing.Optional[typing.Union[Expr, str]] = None,
+        thumb_style: typing.Optional[div_drawable.DivDrawable] = None,
         thumb_text_style: typing.Optional[DivSliderTextStyle] = None,
-        thumb_value_variable: typing.Optional[str] = None,
+        thumb_value_variable: typing.Optional[typing.Union[Expr, str]] = None,
         tick_mark_active_style: typing.Optional[div_drawable.DivDrawable] = None,
         tick_mark_inactive_style: typing.Optional[div_drawable.DivDrawable] = None,
-        tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = None,
+        tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = None,
+        track_active_style: typing.Optional[div_drawable.DivDrawable] = None,
+        track_inactive_style: typing.Optional[div_drawable.DivDrawable] = None,
         transform: typing.Optional[div_transform.DivTransform] = None,
         transition_change: typing.Optional[div_change_transition.DivChangeTransition] = None,
         transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
         transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
-        transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = None,
-        visibility: typing.Optional[div_visibility.DivVisibility] = None,
+        transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = None,
+        visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = None,
         visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = None,
-        visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = None,
+        visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = None,
         width: typing.Optional[div_size.DivSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -72,6 +74,7 @@ class DivSlider(BaseDiv):
             background=background,
             border=border,
             column_span=column_span,
+            disappear_actions=disappear_actions,
             extensions=extensions,
             focus=focus,
             height=height,
@@ -103,43 +106,48 @@ class DivSlider(BaseDiv):
             visibility_action=visibility_action,
             visibility_actions=visibility_actions,
             width=width,
+            **kwargs,
         )
 
     type: str = Field(default="slider")
     accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
-        description="Accessibility for disabled people.",
+        description="Accessibility settings.",
     )
-    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+    alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = Field(
         description=(
             "Horizontal alignment of an element inside the parent "
             "element."
         ),
     )
-    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+    alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = Field(
         description=(
             "Vertical alignment of an element inside the parent element."
         ),
     )
-    alpha: typing.Optional[float] = Field(
+    alpha: typing.Optional[typing.Union[Expr, float]] = Field(
         description=(
             "Sets transparency of the entire element: `0` — completely "
             "transparent, `1` —opaque."
         ),
     )
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+    background: typing.Optional[typing.Sequence[div_background.DivBackground]] = Field(
         min_items=1, 
         description="Element background. It can contain multiple layers.",
     )
     border: typing.Optional[div_border.DivBorder] = Field(
         description="Element stroke.",
     )
-    column_span: typing.Optional[int] = Field(
+    column_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a column of the [grid](div-grid.md) "
             "element."
         ),
     )
-    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(
+    disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = Field(
+        min_items=1, 
+        description="Actions when an element disappears from the screen.",
+    )
+    extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = Field(
         min_items=1, 
         description=(
             "Extensions for additional processing of an element. The "
@@ -159,7 +167,7 @@ class DivSlider(BaseDiv):
             "card](../../layout.dita)."
         ),
     )
-    id: typing.Optional[str] = Field(
+    id: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description=(
             "Element ID. It must be unique within the root element. It "
@@ -169,25 +177,25 @@ class DivSlider(BaseDiv):
     margins: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="External margins from the element stroke.",
     )
-    max_value: typing.Optional[int] = Field(
+    max_value: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Maximum value. It must be greater than the minimum value.",
     )
-    min_value: typing.Optional[int] = Field(
+    min_value: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Minimum value.",
     )
     paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Internal margins from the element stroke.",
     )
-    row_span: typing.Optional[int] = Field(
+    row_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a string of the [grid](div-grid.md) "
             "element."
         ),
     )
     secondary_value_accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
-        description="Accessibility for the secondary thumb.",
+        description="Accessibility settings for the second pointer.",
     )
-    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description=(
             "List of [actions](div-action.md) to be executed when "
@@ -200,11 +208,11 @@ class DivSlider(BaseDiv):
     thumb_secondary_text_style: typing.Optional[DivSliderTextStyle] = Field(
         description="Text style in the second pointer.",
     )
-    thumb_secondary_value_variable: typing.Optional[str] = Field(
+    thumb_secondary_value_variable: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description=(
-            "Name of the variable to store the current value of the "
-            "secondary thumb."
+            "Name of the variable to store the second pointer\'s current "
+            "value."
         ),
     )
     thumb_style: div_drawable.DivDrawable = Field(
@@ -213,9 +221,11 @@ class DivSlider(BaseDiv):
     thumb_text_style: typing.Optional[DivSliderTextStyle] = Field(
         description="Text style in the first pointer.",
     )
-    thumb_value_variable: typing.Optional[str] = Field(
+    thumb_value_variable: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
-        description="Name of the variable to store the current thumb value.",
+        description=(
+            "Name of the variable to store the pointer\'s current value."
+        ),
     )
     tick_mark_active_style: typing.Optional[div_drawable.DivDrawable] = Field(
         description="Style of active serifs.",
@@ -223,7 +233,7 @@ class DivSlider(BaseDiv):
     tick_mark_inactive_style: typing.Optional[div_drawable.DivDrawable] = Field(
         description="Style of inactive serifs.",
     )
-    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(
+    tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = Field(
         min_items=1, 
         description=(
             "Tooltips linked to an element. A tooltip can be shown "
@@ -239,9 +249,8 @@ class DivSlider(BaseDiv):
     )
     transform: typing.Optional[div_transform.DivTransform] = Field(
         description=(
-            "Transformation of the element. Applies the passed transform "
-            "to the element. Thecontent that does not fit into the "
-            "original view will be cut off."
+            "Applies the passed transformation to the element. Content "
+            "that doesn\'t fit intothe original view area is cut off."
         ),
     )
     transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(
@@ -265,14 +274,14 @@ class DivSlider(BaseDiv):
             "disappears in the newlayout."
         ),
     )
-    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(
+    transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = Field(
         min_items=1, 
         description=(
             "Animation starting triggers. Default value: `[state_change, "
             "visibility_change]`."
         ),
     )
-    visibility: typing.Optional[div_visibility.DivVisibility] = Field(
+    visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = Field(
         description="Element visibility.",
     )
     visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(
@@ -281,7 +290,7 @@ class DivSlider(BaseDiv):
             "`visibility_actions`parameter is set."
         ),
     )
-    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(
+    visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = Field(
         min_items=1, 
         description="Actions when an element appears on the screen.",
     )
@@ -294,11 +303,12 @@ class DivSliderTextStyle(BaseDiv):
 
     def __init__(
         self, *,
-        font_size: int,
-        font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
-        font_weight: typing.Optional[div_font_weight.DivFontWeight] = None,
+        font_size: typing.Optional[typing.Union[Expr, int]] = None,
+        font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = None,
         offset: typing.Optional[div_point.DivPoint] = None,
-        text_color: typing.Optional[str] = None,
+        text_color: typing.Optional[typing.Union[Expr, str]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             font_size=font_size,
@@ -306,20 +316,21 @@ class DivSliderTextStyle(BaseDiv):
             font_weight=font_weight,
             offset=offset,
             text_color=text_color,
+            **kwargs,
         )
 
-    font_size: int = Field(
+    font_size: typing.Union[Expr, int] = Field(
         description="Font size.",
     )
-    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
     )
-    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+    font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = Field(
         description="Style.",
     )
     offset: typing.Optional[div_point.DivPoint] = Field(
         description="Shift relative to the center.",
     )
-    text_color: typing.Optional[str] = Field(
+    text_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Text color.",
     )

@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_action
 
@@ -16,27 +16,29 @@ class DivTrigger(BaseDiv):
 
     def __init__(
         self, *,
-        actions: typing.List[div_action.DivAction],
-        condition: bool,
-        mode: typing.Optional[DivTriggerMode] = None,
+        actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        condition: typing.Optional[typing.Union[Expr, bool]] = None,
+        mode: typing.Optional[typing.Union[Expr, DivTriggerMode]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             actions=actions,
             condition=condition,
             mode=mode,
+            **kwargs,
         )
 
-    actions: typing.List[div_action.DivAction] = Field(
+    actions: typing.Sequence[div_action.DivAction] = Field(
         min_items=1, 
         description="Action when a trigger is activated.",
     )
-    condition: bool = Field(
+    condition: typing.Union[Expr, bool] = Field(
         description=(
             "Condition for activating a trigger. For example, `liked && "
             "subscribed`."
         ),
     )
-    mode: typing.Optional[DivTriggerMode] = Field(
+    mode: typing.Optional[typing.Union[Expr, DivTriggerMode]] = Field(
         description=(
             "Trigger activation mode:`on_condition` — a trigger is "
             "activated when thecondition changes from `false` to "

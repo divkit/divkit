@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_size_unit
 
@@ -16,17 +16,19 @@ class DivDimension(BaseDiv):
 
     def __init__(
         self, *,
-        value: float,
-        unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
+        unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        value: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             unit=unit,
             value=value,
+            **kwargs,
         )
 
-    unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
     )
-    value: float = Field(
+    value: typing.Union[Expr, float] = Field(
         description="Value.",
     )
 

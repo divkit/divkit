@@ -23,7 +23,9 @@ class _Field:
 
     def apply_constraints(self, constraints: Mapping[str, Any]) -> None:
         for c_key, c_value in constraints.items():
-            if self.constraints.get(c_key) and self.constraints[c_key] != c_value:
+            if self.constraints.get(c_key) and self.constraints[
+                c_key
+            ] != c_value:
                 raise ValueError(
                     f"Incompatible constraints: {c_key} = "
                     f"{self.constraints[c_key]} and {c_key} = {c_value}",
@@ -82,3 +84,19 @@ def Ref(field: Any) -> Any:
         )
     field.is_ref = True
     return _Field(ref_to=field)
+
+
+class Expr:
+    __slots__ = ("v",)
+    v: str
+
+    def __init__(self, v: str):
+        if not v.startswith("@{") or not v.endswith("}"):
+            raise ValueError(f"failed to initiate Expr with {v}")
+        self.v = v
+
+    def __repr__(self) -> str:
+        return f"Expr({self.v})"
+
+    def __str__(self) -> str:
+        return self.v

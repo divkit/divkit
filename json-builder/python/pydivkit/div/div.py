@@ -7,12 +7,12 @@ import enum
 import typing
 from typing import Union
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div_container, div_custom, div_gallery, div_gif_image, div_grid, div_image,
-    div_indicator, div_input, div_pager, div_separator, div_slider, div_state,
-    div_tabs, div_text,
+    div_indicator, div_input, div_pager, div_select, div_separator, div_slider,
+    div_state, div_tabs, div_text, div_video,
 )
 
 
@@ -31,4 +31,6 @@ Div = Union[
     div_indicator.DivIndicator,
     div_slider.DivSlider,
     div_input.DivInput,
+    div_select.DivSelect,
+    div_video.DivVideo,
 ]

@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_point
 
@@ -16,25 +16,27 @@ class DivShadow(BaseDiv):
 
     def __init__(
         self, *,
-        offset: div_point.DivPoint,
-        alpha: typing.Optional[float] = None,
-        blur: typing.Optional[int] = None,
-        color: typing.Optional[str] = None,
+        alpha: typing.Optional[typing.Union[Expr, float]] = None,
+        blur: typing.Optional[typing.Union[Expr, int]] = None,
+        color: typing.Optional[typing.Union[Expr, str]] = None,
+        offset: typing.Optional[div_point.DivPoint] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             alpha=alpha,
             blur=blur,
             color=color,
             offset=offset,
+            **kwargs,
         )
 
-    alpha: typing.Optional[float] = Field(
+    alpha: typing.Optional[typing.Union[Expr, float]] = Field(
         description="Shadow transparency.",
     )
-    blur: typing.Optional[int] = Field(
+    blur: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Blur intensity.",
     )
-    color: typing.Optional[str] = Field(
+    color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Shadow color.",
     )

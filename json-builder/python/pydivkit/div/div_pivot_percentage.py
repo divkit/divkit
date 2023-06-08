@@ -6,26 +6,28 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
-# Location of the coordinate of the axis of rotation as a percentage relative to
-# the element.
+# Location of the coordinate of the rotation axis as a percentage relative to the
+# element size.
 class DivPivotPercentage(BaseDiv):
 
     def __init__(
         self, *,
-        value: float,
         type: str = "pivot-percentage",
+        value: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="pivot-percentage")
-    value: float = Field(
-        description="Location of the element.",
+    value: typing.Union[Expr, float] = Field(
+        description="Coordinate value as a percentage.",
     )
 
 

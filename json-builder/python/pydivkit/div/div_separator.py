@@ -6,14 +6,15 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div_accessibility, div_action, div_alignment_horizontal,
     div_alignment_vertical, div_animation, div_appearance_transition,
-    div_background, div_border, div_change_transition, div_edge_insets,
-    div_extension, div_focus, div_size, div_tooltip, div_transform,
-    div_transition_trigger, div_visibility, div_visibility_action,
+    div_background, div_border, div_change_transition, div_disappear_action,
+    div_edge_insets, div_extension, div_focus, div_size, div_tooltip,
+    div_transform, div_transition_trigger, div_visibility,
+    div_visibility_action,
 )
 
 
@@ -26,34 +27,36 @@ class DivSeparator(BaseDiv):
         accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
         action: typing.Optional[div_action.DivAction] = None,
         action_animation: typing.Optional[div_animation.DivAnimation] = None,
-        actions: typing.Optional[typing.List[div_action.DivAction]] = None,
-        alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = None,
-        alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = None,
-        alpha: typing.Optional[float] = None,
-        background: typing.Optional[typing.List[div_background.DivBackground]] = None,
+        actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = None,
+        alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = None,
+        alpha: typing.Optional[typing.Union[Expr, float]] = None,
+        background: typing.Optional[typing.Sequence[div_background.DivBackground]] = None,
         border: typing.Optional[div_border.DivBorder] = None,
-        column_span: typing.Optional[int] = None,
+        column_span: typing.Optional[typing.Union[Expr, int]] = None,
         delimiter_style: typing.Optional[DivSeparatorDelimiterStyle] = None,
-        doubletap_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
-        extensions: typing.Optional[typing.List[div_extension.DivExtension]] = None,
+        disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = None,
+        doubletap_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = None,
         focus: typing.Optional[div_focus.DivFocus] = None,
         height: typing.Optional[div_size.DivSize] = None,
-        id: typing.Optional[str] = None,
-        longtap_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
+        longtap_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
         margins: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
         paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        row_span: typing.Optional[int] = None,
-        selected_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
-        tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = None,
+        row_span: typing.Optional[typing.Union[Expr, int]] = None,
+        selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = None,
         transform: typing.Optional[div_transform.DivTransform] = None,
         transition_change: typing.Optional[div_change_transition.DivChangeTransition] = None,
         transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
         transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
-        transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = None,
-        visibility: typing.Optional[div_visibility.DivVisibility] = None,
+        transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = None,
+        visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = None,
         visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = None,
-        visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = None,
+        visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = None,
         width: typing.Optional[div_size.DivSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -68,6 +71,7 @@ class DivSeparator(BaseDiv):
             border=border,
             column_span=column_span,
             delimiter_style=delimiter_style,
+            disappear_actions=disappear_actions,
             doubletap_actions=doubletap_actions,
             extensions=extensions,
             focus=focus,
@@ -88,11 +92,12 @@ class DivSeparator(BaseDiv):
             visibility_action=visibility_action,
             visibility_actions=visibility_actions,
             width=width,
+            **kwargs,
         )
 
     type: str = Field(default="separator")
     accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
-        description="Accessibility for disabled people.",
+        description="Accessibility settings.",
     )
     action: typing.Optional[div_action.DivAction] = Field(
         description=(
@@ -102,39 +107,39 @@ class DivSeparator(BaseDiv):
     )
     action_animation: typing.Optional[div_animation.DivAnimation] = Field(
         description=(
-            "Action animation. Web supports `fade`, `scale` and `set` "
-            "only."
+            "Click animation. The web only supports the following "
+            "values: `fade`, `scale`,`native`, `no_animation` and `set`."
         ),
     )
-    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description="Multiple actions when clicking on an element.",
     )
-    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+    alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = Field(
         description=(
             "Horizontal alignment of an element inside the parent "
             "element."
         ),
     )
-    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+    alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = Field(
         description=(
             "Vertical alignment of an element inside the parent element."
         ),
     )
-    alpha: typing.Optional[float] = Field(
+    alpha: typing.Optional[typing.Union[Expr, float]] = Field(
         description=(
             "Sets transparency of the entire element: `0` — completely "
             "transparent, `1` —opaque."
         ),
     )
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+    background: typing.Optional[typing.Sequence[div_background.DivBackground]] = Field(
         min_items=1, 
         description="Element background. It can contain multiple layers.",
     )
     border: typing.Optional[div_border.DivBorder] = Field(
         description="Element stroke.",
     )
-    column_span: typing.Optional[int] = Field(
+    column_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a column of the [grid](div-grid.md) "
             "element."
@@ -143,11 +148,15 @@ class DivSeparator(BaseDiv):
     delimiter_style: typing.Optional[DivSeparatorDelimiterStyle] = Field(
         description="Separator display settings.",
     )
-    doubletap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = Field(
+        min_items=1, 
+        description="Actions when an element disappears from the screen.",
+    )
+    doubletap_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description="Action when double-clicking on an element.",
     )
-    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(
+    extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = Field(
         min_items=1, 
         description=(
             "Extensions for additional processing of an element. The "
@@ -167,18 +176,18 @@ class DivSeparator(BaseDiv):
             "card](../../layout.dita)."
         ),
     )
-    id: typing.Optional[str] = Field(
+    id: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description=(
             "Element ID. It must be unique within the root element. It "
             "is used as`accessibilityIdentifier` on iOS."
         ),
     )
-    longtap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    longtap_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description=(
-            "Action when long-clicking on an element. Doesn\'t work on "
-            "the devices w/o touchgestures."
+            "Action when long-clicking an element. Doesn\'t work on "
+            "devices that don\'t supporttouch gestures."
         ),
     )
     margins: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
@@ -187,20 +196,20 @@ class DivSeparator(BaseDiv):
     paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Internal margins from the element stroke.",
     )
-    row_span: typing.Optional[int] = Field(
+    row_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a string of the [grid](div-grid.md) "
             "element."
         ),
     )
-    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description=(
             "List of [actions](div-action.md) to be executed when "
             "selecting an element in[pager](div-pager.md)."
         ),
     )
-    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(
+    tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = Field(
         min_items=1, 
         description=(
             "Tooltips linked to an element. A tooltip can be shown "
@@ -210,9 +219,8 @@ class DivSeparator(BaseDiv):
     )
     transform: typing.Optional[div_transform.DivTransform] = Field(
         description=(
-            "Transformation of the element. Applies the passed transform "
-            "to the element. Thecontent that does not fit into the "
-            "original view will be cut off."
+            "Applies the passed transformation to the element. Content "
+            "that doesn\'t fit intothe original view area is cut off."
         ),
     )
     transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(
@@ -236,14 +244,14 @@ class DivSeparator(BaseDiv):
             "disappears in the newlayout."
         ),
     )
-    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(
+    transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = Field(
         min_items=1, 
         description=(
             "Animation starting triggers. Default value: `[state_change, "
             "visibility_change]`."
         ),
     )
-    visibility: typing.Optional[div_visibility.DivVisibility] = Field(
+    visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = Field(
         description="Element visibility.",
     )
     visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(
@@ -252,7 +260,7 @@ class DivSeparator(BaseDiv):
             "`visibility_actions`parameter is set."
         ),
     )
-    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(
+    visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = Field(
         min_items=1, 
         description="Actions when an element appears on the screen.",
     )
@@ -266,15 +274,17 @@ class DivSeparatorDelimiterStyle(BaseDiv):
 
     def __init__(
         self, *,
-        color: typing.Optional[str] = None,
-        orientation: typing.Optional[DelimiterStyleOrientation] = None,
+        color: typing.Optional[typing.Union[Expr, str]] = None,
+        orientation: typing.Optional[typing.Union[Expr, DelimiterStyleOrientation]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             color=color,
             orientation=orientation,
+            **kwargs,
         )
 
-    color: typing.Optional[str] = Field(
+    color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description=(
             "Separator color. To prevent the separator from being "
@@ -282,7 +292,7 @@ class DivSeparatorDelimiterStyle(BaseDiv):
             "example, `#00FFFFFF`."
         ),
     )
-    orientation: typing.Optional[DelimiterStyleOrientation] = Field(
+    orientation: typing.Optional[typing.Union[Expr, DelimiterStyleOrientation]] = Field(
         description=(
             "Separator orientation:`vertical` — vertical;`horizontal` — "
             "horizontal.<"

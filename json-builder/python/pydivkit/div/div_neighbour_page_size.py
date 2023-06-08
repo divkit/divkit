@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_fixed_size
 
@@ -16,12 +16,14 @@ class DivNeighbourPageSize(BaseDiv):
 
     def __init__(
         self, *,
-        neighbour_page_width: div_fixed_size.DivFixedSize,
         type: str = "fixed",
+        neighbour_page_width: typing.Optional[div_fixed_size.DivFixedSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             neighbour_page_width=neighbour_page_width,
+            **kwargs,
         )
 
     type: str = Field(default="fixed")

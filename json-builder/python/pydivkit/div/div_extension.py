@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
 # Extension that affects an element.
@@ -14,15 +14,17 @@ class DivExtension(BaseDiv):
 
     def __init__(
         self, *,
-        id: str,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
         params: typing.Optional[typing.Dict[str, typing.Any]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             id=id,
             params=params,
+            **kwargs,
         )
 
-    id: str = Field(
+    id: typing.Union[Expr, str] = Field(
         min_length=1, 
         description="Extension ID.",
     )

@@ -6,23 +6,25 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
-# Size with a fixed aspect ratio. It counts height from width and ignores other
-# specified height values.
+# Fixed aspect ratio. The element's height is calculated based on the width,
+# ignoring the `height` value.
 class DivAspect(BaseDiv):
 
     def __init__(
         self, *,
-        ratio: float,
+        ratio: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             ratio=ratio,
+            **kwargs,
         )
 
-    ratio: float = Field(
-        description="`ratio = width / height`.",
+    ratio: typing.Union[Expr, float] = Field(
+        description="`height = width / ratio`.",
     )
 
 

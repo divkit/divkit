@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_animation_interpolator, div_count
 
@@ -16,14 +16,15 @@ class DivAnimation(BaseDiv):
 
     def __init__(
         self, *,
-        name: DivAnimationName,
-        duration: typing.Optional[int] = None,
-        end_value: typing.Optional[float] = None,
-        interpolator: typing.Optional[div_animation_interpolator.DivAnimationInterpolator] = None,
-        items: typing.Optional[typing.List[DivAnimation]] = None,
+        duration: typing.Optional[typing.Union[Expr, int]] = None,
+        end_value: typing.Optional[typing.Union[Expr, float]] = None,
+        interpolator: typing.Optional[typing.Union[Expr, div_animation_interpolator.DivAnimationInterpolator]] = None,
+        items: typing.Optional[typing.Sequence[DivAnimation]] = None,
+        name: typing.Optional[typing.Union[Expr, DivAnimationName]] = None,
         repeat: typing.Optional[div_count.DivCount] = None,
-        start_delay: typing.Optional[int] = None,
-        start_value: typing.Optional[float] = None,
+        start_delay: typing.Optional[typing.Union[Expr, int]] = None,
+        start_value: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             duration=duration,
@@ -34,15 +35,16 @@ class DivAnimation(BaseDiv):
             repeat=repeat,
             start_delay=start_delay,
             start_value=start_value,
+            **kwargs,
         )
 
-    duration: typing.Optional[int] = Field(
+    duration: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Animation duration in milliseconds.",
     )
-    end_value: typing.Optional[float] = Field(
+    end_value: typing.Optional[typing.Union[Expr, float]] = Field(
         description="Final value of an animation.",
     )
-    interpolator: typing.Optional[div_animation_interpolator.DivAnimationInterpolator] = Field(
+    interpolator: typing.Optional[typing.Union[Expr, div_animation_interpolator.DivAnimationInterpolator]] = Field(
         description=(
             "Animation speed nature. When the value is set to `spring` — "
             "animation of dampingfluctuations cut to 0.7 with the "
@@ -53,20 +55,20 @@ class DivAnimation(BaseDiv):
             "0.58, 1);`ease_in_out` — cubic-bezier(0.42, 0,0.58, 1)."
         ),
     )
-    items: typing.Optional[typing.List[DivAnimation]] = Field(
+    items: typing.Optional[typing.Sequence[DivAnimation]] = Field(
         min_items=1, 
         description="Animation elements.",
     )
-    name: DivAnimationName = Field(
+    name: typing.Union[Expr, DivAnimationName] = Field(
         description="Animation type.",
     )
     repeat: typing.Optional[div_count.DivCount] = Field(
         description="Number of animation repetitions.",
     )
-    start_delay: typing.Optional[int] = Field(
+    start_delay: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Delay in milliseconds before animation starts.",
     )
-    start_value: typing.Optional[float] = Field(
+    start_value: typing.Optional[typing.Union[Expr, float]] = Field(
         description="Starting value of an animation.",
     )
 

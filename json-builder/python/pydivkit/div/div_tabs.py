@@ -6,14 +6,14 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div, div_accessibility, div_action, div_alignment_horizontal,
     div_alignment_vertical, div_appearance_transition, div_background,
-    div_border, div_change_transition, div_corners_radius, div_edge_insets,
-    div_extension, div_focus, div_font_family, div_font_weight, div_size,
-    div_size_unit, div_tooltip, div_transform, div_transition_trigger,
+    div_border, div_change_transition, div_corners_radius, div_disappear_action,
+    div_edge_insets, div_extension, div_focus, div_font_family, div_font_weight,
+    div_size, div_size_unit, div_tooltip, div_transform, div_transition_trigger,
     div_visibility, div_visibility_action,
 )
 
@@ -24,42 +24,44 @@ class DivTabs(BaseDiv):
 
     def __init__(
         self, *,
-        items: typing.List[DivTabsItem],
         type: str = "tabs",
         accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
-        alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = None,
-        alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = None,
-        alpha: typing.Optional[float] = None,
-        background: typing.Optional[typing.List[div_background.DivBackground]] = None,
+        alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = None,
+        alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = None,
+        alpha: typing.Optional[typing.Union[Expr, float]] = None,
+        background: typing.Optional[typing.Sequence[div_background.DivBackground]] = None,
         border: typing.Optional[div_border.DivBorder] = None,
-        column_span: typing.Optional[int] = None,
-        dynamic_height: typing.Optional[bool] = None,
-        extensions: typing.Optional[typing.List[div_extension.DivExtension]] = None,
+        column_span: typing.Optional[typing.Union[Expr, int]] = None,
+        disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = None,
+        dynamic_height: typing.Optional[typing.Union[Expr, bool]] = None,
+        extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = None,
         focus: typing.Optional[div_focus.DivFocus] = None,
-        has_separator: typing.Optional[bool] = None,
+        has_separator: typing.Optional[typing.Union[Expr, bool]] = None,
         height: typing.Optional[div_size.DivSize] = None,
-        id: typing.Optional[str] = None,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
+        items: typing.Optional[typing.Sequence[DivTabsItem]] = None,
         margins: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
         paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        restrict_parent_scroll: typing.Optional[bool] = None,
-        row_span: typing.Optional[int] = None,
-        selected_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
-        selected_tab: typing.Optional[int] = None,
-        separator_color: typing.Optional[str] = None,
+        restrict_parent_scroll: typing.Optional[typing.Union[Expr, bool]] = None,
+        row_span: typing.Optional[typing.Union[Expr, int]] = None,
+        selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        selected_tab: typing.Optional[typing.Union[Expr, int]] = None,
+        separator_color: typing.Optional[typing.Union[Expr, str]] = None,
         separator_paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        switch_tabs_by_content_swipe_enabled: typing.Optional[bool] = None,
+        switch_tabs_by_content_swipe_enabled: typing.Optional[typing.Union[Expr, bool]] = None,
         tab_title_style: typing.Optional[DivTabsTabTitleStyle] = None,
         title_paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = None,
+        tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = None,
         transform: typing.Optional[div_transform.DivTransform] = None,
         transition_change: typing.Optional[div_change_transition.DivChangeTransition] = None,
         transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
         transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
-        transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = None,
-        visibility: typing.Optional[div_visibility.DivVisibility] = None,
+        transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = None,
+        visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = None,
         visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = None,
-        visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = None,
+        visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = None,
         width: typing.Optional[div_size.DivSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -70,6 +72,7 @@ class DivTabs(BaseDiv):
             background=background,
             border=border,
             column_span=column_span,
+            disappear_actions=disappear_actions,
             dynamic_height=dynamic_height,
             extensions=extensions,
             focus=focus,
@@ -98,49 +101,54 @@ class DivTabs(BaseDiv):
             visibility_action=visibility_action,
             visibility_actions=visibility_actions,
             width=width,
+            **kwargs,
         )
 
     type: str = Field(default="tabs")
     accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
-        description="Accessibility for disabled people.",
+        description="Accessibility settings.",
     )
-    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+    alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = Field(
         description=(
             "Horizontal alignment of an element inside the parent "
             "element."
         ),
     )
-    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+    alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = Field(
         description=(
             "Vertical alignment of an element inside the parent element."
         ),
     )
-    alpha: typing.Optional[float] = Field(
+    alpha: typing.Optional[typing.Union[Expr, float]] = Field(
         description=(
             "Sets transparency of the entire element: `0` — completely "
             "transparent, `1` —opaque."
         ),
     )
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+    background: typing.Optional[typing.Sequence[div_background.DivBackground]] = Field(
         min_items=1, 
         description="Element background. It can contain multiple layers.",
     )
     border: typing.Optional[div_border.DivBorder] = Field(
         description="Element stroke.",
     )
-    column_span: typing.Optional[int] = Field(
+    column_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a column of the [grid](div-grid.md) "
             "element."
         ),
     )
-    dynamic_height: typing.Optional[bool] = Field(
+    disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = Field(
+        min_items=1, 
+        description="Actions when an element disappears from the screen.",
+    )
+    dynamic_height: typing.Optional[typing.Union[Expr, bool]] = Field(
         description=(
             "Updating height when changing the active element. In the "
             "browser, the value isalways `true`."
         ),
     )
-    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(
+    extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = Field(
         min_items=1, 
         description=(
             "Extensions for additional processing of an element. The "
@@ -151,7 +159,7 @@ class DivTabs(BaseDiv):
     focus: typing.Optional[div_focus.DivFocus] = Field(
         description="Parameters when focusing on an element or losing focus.",
     )
-    has_separator: typing.Optional[bool] = Field(
+    has_separator: typing.Optional[typing.Union[Expr, bool]] = Field(
         description="A separating line between tabs and contents.",
     )
     height: typing.Optional[div_size.DivSize] = Field(
@@ -163,14 +171,14 @@ class DivTabs(BaseDiv):
             "card](../../layout.dita)."
         ),
     )
-    id: typing.Optional[str] = Field(
+    id: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description=(
             "Element ID. It must be unique within the root element. It "
             "is used as`accessibilityIdentifier` on iOS."
         ),
     )
-    items: typing.List[DivTabsItem] = Field(
+    items: typing.Sequence[DivTabsItem] = Field(
         min_items=1, 
         description=(
             "Tabs. Transition between tabs can be "
@@ -195,29 +203,29 @@ class DivTabs(BaseDiv):
     paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Internal margins from the element stroke.",
     )
-    restrict_parent_scroll: typing.Optional[bool] = Field(
+    restrict_parent_scroll: typing.Optional[typing.Union[Expr, bool]] = Field(
         description=(
             "If the parameter is enabled, tabs won\'t transmit the "
             "scroll gesture to the parentelement."
         ),
     )
-    row_span: typing.Optional[int] = Field(
+    row_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a string of the [grid](div-grid.md) "
             "element."
         ),
     )
-    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description=(
             "List of [actions](div-action.md) to be executed when "
             "selecting an element in[pager](div-pager.md)."
         ),
     )
-    selected_tab: typing.Optional[int] = Field(
+    selected_tab: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Ordinal number of the tab that will be opened by default.",
     )
-    separator_color: typing.Optional[str] = Field(
+    separator_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Separator color.",
     )
@@ -227,7 +235,7 @@ class DivTabs(BaseDiv):
             "`has_separator = false`."
         ),
     )
-    switch_tabs_by_content_swipe_enabled: typing.Optional[bool] = Field(
+    switch_tabs_by_content_swipe_enabled: typing.Optional[typing.Union[Expr, bool]] = Field(
         description="Switching tabs by scrolling through the contents.",
     )
     tab_title_style: typing.Optional[DivTabsTabTitleStyle] = Field(
@@ -236,7 +244,7 @@ class DivTabs(BaseDiv):
     title_paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Indents in the tab name.",
     )
-    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(
+    tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = Field(
         min_items=1, 
         description=(
             "Tooltips linked to an element. A tooltip can be shown "
@@ -246,9 +254,8 @@ class DivTabs(BaseDiv):
     )
     transform: typing.Optional[div_transform.DivTransform] = Field(
         description=(
-            "Transformation of the element. Applies the passed transform "
-            "to the element. Thecontent that does not fit into the "
-            "original view will be cut off."
+            "Applies the passed transformation to the element. Content "
+            "that doesn\'t fit intothe original view area is cut off."
         ),
     )
     transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(
@@ -272,14 +279,14 @@ class DivTabs(BaseDiv):
             "disappears in the newlayout."
         ),
     )
-    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(
+    transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = Field(
         min_items=1, 
         description=(
             "Animation starting triggers. Default value: `[state_change, "
             "visibility_change]`."
         ),
     )
-    visibility: typing.Optional[div_visibility.DivVisibility] = Field(
+    visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = Field(
         description="Element visibility.",
     )
     visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(
@@ -288,7 +295,7 @@ class DivTabs(BaseDiv):
             "`visibility_actions`parameter is set."
         ),
     )
-    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(
+    visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = Field(
         min_items=1, 
         description="Actions when an element appears on the screen.",
     )
@@ -302,20 +309,22 @@ class DivTabsItem(BaseDiv):
 
     def __init__(
         self, *,
-        div: div.Div,
-        title: str,
+        div: typing.Optional[div.Div] = None,
+        title: typing.Optional[typing.Union[Expr, str]] = None,
         title_click_action: typing.Optional[div_action.DivAction] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             div=div,
             title=title,
             title_click_action=title_click_action,
+            **kwargs,
         )
 
     div: div.Div = Field(
         description="Tab contents.",
     )
-    title: str = Field(
+    title: typing.Union[Expr, str] = Field(
         min_length=1, 
         description="Tab title.",
     )
@@ -332,24 +341,25 @@ class DivTabsTabTitleStyle(BaseDiv):
 
     def __init__(
         self, *,
-        active_background_color: typing.Optional[str] = None,
-        active_font_weight: typing.Optional[div_font_weight.DivFontWeight] = None,
-        active_text_color: typing.Optional[str] = None,
-        animation_duration: typing.Optional[int] = None,
-        animation_type: typing.Optional[TabTitleStyleAnimationType] = None,
-        corner_radius: typing.Optional[int] = None,
+        active_background_color: typing.Optional[typing.Union[Expr, str]] = None,
+        active_font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = None,
+        active_text_color: typing.Optional[typing.Union[Expr, str]] = None,
+        animation_duration: typing.Optional[typing.Union[Expr, int]] = None,
+        animation_type: typing.Optional[typing.Union[Expr, TabTitleStyleAnimationType]] = None,
+        corner_radius: typing.Optional[typing.Union[Expr, int]] = None,
         corners_radius: typing.Optional[div_corners_radius.DivCornersRadius] = None,
-        font_family: typing.Optional[div_font_family.DivFontFamily] = None,
-        font_size: typing.Optional[int] = None,
-        font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
-        font_weight: typing.Optional[div_font_weight.DivFontWeight] = None,
-        inactive_background_color: typing.Optional[str] = None,
-        inactive_font_weight: typing.Optional[div_font_weight.DivFontWeight] = None,
-        inactive_text_color: typing.Optional[str] = None,
-        item_spacing: typing.Optional[int] = None,
-        letter_spacing: typing.Optional[float] = None,
-        line_height: typing.Optional[int] = None,
+        font_family: typing.Optional[typing.Union[Expr, div_font_family.DivFontFamily]] = None,
+        font_size: typing.Optional[typing.Union[Expr, int]] = None,
+        font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = None,
+        inactive_background_color: typing.Optional[typing.Union[Expr, str]] = None,
+        inactive_font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = None,
+        inactive_text_color: typing.Optional[typing.Union[Expr, str]] = None,
+        item_spacing: typing.Optional[typing.Union[Expr, int]] = None,
+        letter_spacing: typing.Optional[typing.Union[Expr, float]] = None,
+        line_height: typing.Optional[typing.Union[Expr, int]] = None,
         paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             active_background_color=active_background_color,
@@ -370,26 +380,27 @@ class DivTabsTabTitleStyle(BaseDiv):
             letter_spacing=letter_spacing,
             line_height=line_height,
             paddings=paddings,
+            **kwargs,
         )
 
-    active_background_color: typing.Optional[str] = Field(
+    active_background_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Background color of the active tab title.",
     )
-    active_font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+    active_font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = Field(
         description="Active tab title style.",
     )
-    active_text_color: typing.Optional[str] = Field(
+    active_text_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Color of the active tab title text.",
     )
-    animation_duration: typing.Optional[int] = Field(
+    animation_duration: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Duration of active title change animation.",
     )
-    animation_type: typing.Optional[TabTitleStyleAnimationType] = Field(
+    animation_type: typing.Optional[typing.Union[Expr, TabTitleStyleAnimationType]] = Field(
         description="Active title change animation.",
     )
-    corner_radius: typing.Optional[int] = Field(
+    corner_radius: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Title corner rounding radius. If the parameter isn\'t "
             "specified, the rounding ismaximum (half of the smallest "
@@ -402,46 +413,43 @@ class DivTabsTabTitleStyle(BaseDiv):
             "are replaced by`corner_radius`."
         ),
     )
-    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(
+    font_family: typing.Optional[typing.Union[Expr, div_font_family.DivFontFamily]] = Field(
         description=(
             "Font family:`text` — a standard text font;`display` — a "
             "family of fonts with alarge font size."
         ),
     )
-    font_size: typing.Optional[int] = Field(
+    font_size: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Title font size.",
     )
-    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
         description="Units of title font size measurement.",
     )
-    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+    font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = Field(
         description=(
             "Style. Use `active_font_weight` and `inactive_font_weight` "
             "instead. @deprecated"
         ),
     )
-    inactive_background_color: typing.Optional[str] = Field(
+    inactive_background_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Background color of the inactive tab title.",
     )
-    inactive_font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+    inactive_font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = Field(
         description="Inactive tab title style.",
     )
-    inactive_text_color: typing.Optional[str] = Field(
+    inactive_text_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Color of the inactive tab title text.",
     )
-    item_spacing: typing.Optional[int] = Field(
+    item_spacing: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Spacing between neighbouring tab titles.",
     )
-    letter_spacing: typing.Optional[float] = Field(
+    letter_spacing: typing.Optional[typing.Union[Expr, float]] = Field(
         description="Spacing between title characters.",
     )
-    line_height: typing.Optional[int] = Field(
-        description=(
-            "Line spacing of the text range. The count is taken from the "
-            "font baseline."
-        ),
+    line_height: typing.Optional[typing.Union[Expr, int]] = Field(
+        description="Line spacing of the text.",
     )
     paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Indents around the tab title.",

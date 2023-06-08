@@ -6,22 +6,24 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_percentage_size
 
 
-# Percentage value of the page width.
+# Page width (%).
 class DivPageSize(BaseDiv):
 
     def __init__(
         self, *,
-        page_width: div_percentage_size.DivPercentageSize,
         type: str = "percentage",
+        page_width: typing.Optional[div_percentage_size.DivPercentageSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             page_width=page_width,
+            **kwargs,
         )
 
     type: str = Field(default="percentage")

@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_size_unit
 
@@ -16,11 +16,12 @@ class DivEdgeInsets(BaseDiv):
 
     def __init__(
         self, *,
-        bottom: typing.Optional[int] = None,
-        left: typing.Optional[int] = None,
-        right: typing.Optional[int] = None,
-        top: typing.Optional[int] = None,
-        unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
+        bottom: typing.Optional[typing.Union[Expr, int]] = None,
+        left: typing.Optional[typing.Union[Expr, int]] = None,
+        right: typing.Optional[typing.Union[Expr, int]] = None,
+        top: typing.Optional[typing.Union[Expr, int]] = None,
+        unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             bottom=bottom,
@@ -28,21 +29,22 @@ class DivEdgeInsets(BaseDiv):
             right=right,
             top=top,
             unit=unit,
+            **kwargs,
         )
 
-    bottom: typing.Optional[int] = Field(
+    bottom: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Bottom margin.",
     )
-    left: typing.Optional[int] = Field(
+    left: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Left margin.",
     )
-    right: typing.Optional[int] = Field(
+    right: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Right margin.",
     )
-    top: typing.Optional[int] = Field(
+    top: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Top margin.",
     )
-    unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
     )
 
 

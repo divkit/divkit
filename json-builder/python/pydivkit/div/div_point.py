@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_dimension
 
@@ -16,12 +16,14 @@ class DivPoint(BaseDiv):
 
     def __init__(
         self, *,
-        x: div_dimension.DivDimension,
-        y: div_dimension.DivDimension,
+        x: typing.Optional[div_dimension.DivDimension] = None,
+        y: typing.Optional[div_dimension.DivDimension] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             x=x,
             y=y,
+            **kwargs,
         )
 
     x: div_dimension.DivDimension = Field(

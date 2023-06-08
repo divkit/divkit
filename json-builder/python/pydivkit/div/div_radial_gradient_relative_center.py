@@ -6,28 +6,27 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
-# Relative central point of the gradient.
+# Location of the central point of the gradient relative to the element borders.
 class DivRadialGradientRelativeCenter(BaseDiv):
 
     def __init__(
         self, *,
-        value: float,
         type: str = "relative",
+        value: typing.Optional[typing.Union[Expr, float]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="relative")
-    value: float = Field(
-        description=(
-            "Shift value of the central relative point of the gradient "
-            "in the range `0..1`."
-        ),
+    value: typing.Union[Expr, float] = Field(
+        description="Coordinate value in the range \"0...1\".",
     )
 
 

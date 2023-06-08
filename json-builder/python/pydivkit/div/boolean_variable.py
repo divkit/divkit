@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
 # A Boolean variable in binary format.
@@ -14,22 +14,24 @@ class BooleanVariable(BaseDiv):
 
     def __init__(
         self, *,
-        name: str,
-        value: bool,
         type: str = "boolean",
+        name: typing.Optional[typing.Union[Expr, str]] = None,
+        value: typing.Optional[typing.Union[Expr, bool]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             name=name,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="boolean")
-    name: str = Field(
+    name: typing.Union[Expr, str] = Field(
         min_length=1, 
         description="Variable name.",
     )
-    value: bool = Field(
+    value: typing.Union[Expr, bool] = Field(
         description="Value.",
     )
 

@@ -6,15 +6,15 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div_accessibility, div_action, div_alignment_horizontal,
     div_alignment_vertical, div_appearance_transition, div_background,
-    div_border, div_change_transition, div_edge_insets, div_extension,
-    div_focus, div_font_family, div_font_weight, div_size, div_size_unit,
-    div_tooltip, div_transform, div_transition_trigger, div_visibility,
-    div_visibility_action,
+    div_border, div_change_transition, div_disappear_action, div_edge_insets,
+    div_extension, div_focus, div_font_family, div_font_weight, div_input_mask,
+    div_input_validator, div_size, div_size_unit, div_tooltip, div_transform,
+    div_transition_trigger, div_visibility, div_visibility_action,
 )
 
 
@@ -23,47 +23,51 @@ class DivInput(BaseDiv):
 
     def __init__(
         self, *,
-        text_variable: str,
         type: str = "input",
         accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
-        alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = None,
-        alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = None,
-        alpha: typing.Optional[float] = None,
-        background: typing.Optional[typing.List[div_background.DivBackground]] = None,
+        alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = None,
+        alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = None,
+        alpha: typing.Optional[typing.Union[Expr, float]] = None,
+        background: typing.Optional[typing.Sequence[div_background.DivBackground]] = None,
         border: typing.Optional[div_border.DivBorder] = None,
-        column_span: typing.Optional[int] = None,
-        extensions: typing.Optional[typing.List[div_extension.DivExtension]] = None,
+        column_span: typing.Optional[typing.Union[Expr, int]] = None,
+        disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = None,
+        extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = None,
         focus: typing.Optional[div_focus.DivFocus] = None,
-        font_family: typing.Optional[div_font_family.DivFontFamily] = None,
-        font_size: typing.Optional[int] = None,
-        font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
-        font_weight: typing.Optional[div_font_weight.DivFontWeight] = None,
+        font_family: typing.Optional[typing.Union[Expr, div_font_family.DivFontFamily]] = None,
+        font_size: typing.Optional[typing.Union[Expr, int]] = None,
+        font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = None,
         height: typing.Optional[div_size.DivSize] = None,
-        highlight_color: typing.Optional[str] = None,
-        hint_color: typing.Optional[str] = None,
-        hint_text: typing.Optional[str] = None,
-        id: typing.Optional[str] = None,
-        keyboard_type: typing.Optional[DivInputKeyboardType] = None,
-        letter_spacing: typing.Optional[float] = None,
-        line_height: typing.Optional[int] = None,
+        highlight_color: typing.Optional[typing.Union[Expr, str]] = None,
+        hint_color: typing.Optional[typing.Union[Expr, str]] = None,
+        hint_text: typing.Optional[typing.Union[Expr, str]] = None,
+        id: typing.Optional[typing.Union[Expr, str]] = None,
+        keyboard_type: typing.Optional[typing.Union[Expr, DivInputKeyboardType]] = None,
+        letter_spacing: typing.Optional[typing.Union[Expr, float]] = None,
+        line_height: typing.Optional[typing.Union[Expr, int]] = None,
         margins: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        max_visible_lines: typing.Optional[int] = None,
+        mask: typing.Optional[div_input_mask.DivInputMask] = None,
+        max_visible_lines: typing.Optional[typing.Union[Expr, int]] = None,
         native_interface: typing.Optional[DivInputNativeInterface] = None,
         paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = None,
-        row_span: typing.Optional[int] = None,
-        select_all_on_focus: typing.Optional[bool] = None,
-        selected_actions: typing.Optional[typing.List[div_action.DivAction]] = None,
-        text_color: typing.Optional[str] = None,
-        tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = None,
+        row_span: typing.Optional[typing.Union[Expr, int]] = None,
+        select_all_on_focus: typing.Optional[typing.Union[Expr, bool]] = None,
+        selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        text_color: typing.Optional[typing.Union[Expr, str]] = None,
+        text_variable: typing.Optional[typing.Union[Expr, str]] = None,
+        tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = None,
         transform: typing.Optional[div_transform.DivTransform] = None,
         transition_change: typing.Optional[div_change_transition.DivChangeTransition] = None,
         transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
         transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = None,
-        transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = None,
-        visibility: typing.Optional[div_visibility.DivVisibility] = None,
+        transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = None,
+        validators: typing.Optional[typing.Sequence[div_input_validator.DivInputValidator]] = None,
+        visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = None,
         visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = None,
-        visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = None,
+        visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = None,
         width: typing.Optional[div_size.DivSize] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
@@ -74,6 +78,7 @@ class DivInput(BaseDiv):
             background=background,
             border=border,
             column_span=column_span,
+            disappear_actions=disappear_actions,
             extensions=extensions,
             focus=focus,
             font_family=font_family,
@@ -89,6 +94,7 @@ class DivInput(BaseDiv):
             letter_spacing=letter_spacing,
             line_height=line_height,
             margins=margins,
+            mask=mask,
             max_visible_lines=max_visible_lines,
             native_interface=native_interface,
             paddings=paddings,
@@ -103,47 +109,53 @@ class DivInput(BaseDiv):
             transition_in=transition_in,
             transition_out=transition_out,
             transition_triggers=transition_triggers,
+            validators=validators,
             visibility=visibility,
             visibility_action=visibility_action,
             visibility_actions=visibility_actions,
             width=width,
+            **kwargs,
         )
 
     type: str = Field(default="input")
     accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
-        description="Accessibility for disabled people.",
+        description="Accessibility settings.",
     )
-    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+    alignment_horizontal: typing.Optional[typing.Union[Expr, div_alignment_horizontal.DivAlignmentHorizontal]] = Field(
         description=(
             "Horizontal alignment of an element inside the parent "
             "element."
         ),
     )
-    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+    alignment_vertical: typing.Optional[typing.Union[Expr, div_alignment_vertical.DivAlignmentVertical]] = Field(
         description=(
             "Vertical alignment of an element inside the parent element."
         ),
     )
-    alpha: typing.Optional[float] = Field(
+    alpha: typing.Optional[typing.Union[Expr, float]] = Field(
         description=(
             "Sets transparency of the entire element: `0` — completely "
             "transparent, `1` —opaque."
         ),
     )
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+    background: typing.Optional[typing.Sequence[div_background.DivBackground]] = Field(
         min_items=1, 
         description="Element background. It can contain multiple layers.",
     )
     border: typing.Optional[div_border.DivBorder] = Field(
         description="Element stroke.",
     )
-    column_span: typing.Optional[int] = Field(
+    column_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a column of the [grid](div-grid.md) "
             "element."
         ),
     )
-    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(
+    disappear_actions: typing.Optional[typing.Sequence[div_disappear_action.DivDisappearAction]] = Field(
+        min_items=1, 
+        description="Actions when an element disappears from the screen.",
+    )
+    extensions: typing.Optional[typing.Sequence[div_extension.DivExtension]] = Field(
         min_items=1, 
         description=(
             "Extensions for additional processing of an element. The "
@@ -154,16 +166,16 @@ class DivInput(BaseDiv):
     focus: typing.Optional[div_focus.DivFocus] = Field(
         description="Parameters when focusing on an element or losing focus.",
     )
-    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(
+    font_family: typing.Optional[typing.Union[Expr, div_font_family.DivFontFamily]] = Field(
         description=(
             "Font family:`text` — a standard text font;`display` — a "
             "family of fonts with alarge font size."
         ),
     )
-    font_size: typing.Optional[int] = Field(
+    font_size: typing.Optional[typing.Union[Expr, int]] = Field(
         description="Font size.",
     )
-    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    font_size_unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
         description=(
             "Unit of measurement:`px` — a physical pixel.`dp` — a "
             "logical pixel that doesn\'tdepend on screen density.`sp` — "
@@ -171,7 +183,7 @@ class DivInput(BaseDiv):
             "Specify height in `sp`. Only available on Android."
         ),
     )
-    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+    font_weight: typing.Optional[typing.Union[Expr, div_font_weight.DivFontWeight]] = Field(
         description="Style.",
     )
     height: typing.Optional[div_size.DivSize] = Field(
@@ -183,48 +195,49 @@ class DivInput(BaseDiv):
             "card](../../layout.dita)."
         ),
     )
-    highlight_color: typing.Optional[str] = Field(
+    highlight_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description=(
             "Text highlight color. If the value isn\'t set, the color "
             "set in the client will beused instead."
         ),
     )
-    hint_color: typing.Optional[str] = Field(
+    hint_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Text color.",
     )
-    hint_text: typing.Optional[str] = Field(
+    hint_text: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description="Tooltip text.",
     )
-    id: typing.Optional[str] = Field(
+    id: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1, 
         description=(
             "Element ID. It must be unique within the root element. It "
             "is used as`accessibilityIdentifier` on iOS."
         ),
     )
-    keyboard_type: typing.Optional[DivInputKeyboardType] = Field(
+    keyboard_type: typing.Optional[typing.Union[Expr, DivInputKeyboardType]] = Field(
         description="Keyboard type.",
     )
-    letter_spacing: typing.Optional[float] = Field(
+    letter_spacing: typing.Optional[typing.Union[Expr, float]] = Field(
         description="Spacing between characters.",
     )
-    line_height: typing.Optional[int] = Field(
+    line_height: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
-            "Line spacing of the text range. The count is taken from the "
-            "font baseline.Measured in units specified in "
+            "Line spacing of the text. Units specified in "
             "`font_size_unit`."
         ),
     )
     margins: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="External margins from the element stroke.",
     )
-    max_visible_lines: typing.Optional[int] = Field(
+    mask: typing.Optional[div_input_mask.DivInputMask] = Field(
+        description="Mask for entering text based on the specified template.",
+    )
+    max_visible_lines: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
-            "Maximum number of lines that will be visible in the input "
-            "view."
+            "Maximum number of lines to be displayed in the input field."
         ),
     )
     native_interface: typing.Optional[DivInputNativeInterface] = Field(
@@ -233,31 +246,31 @@ class DivInput(BaseDiv):
     paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
         description="Internal margins from the element stroke.",
     )
-    row_span: typing.Optional[int] = Field(
+    row_span: typing.Optional[typing.Union[Expr, int]] = Field(
         description=(
             "Merges cells in a string of the [grid](div-grid.md) "
             "element."
         ),
     )
-    select_all_on_focus: typing.Optional[bool] = Field(
+    select_all_on_focus: typing.Optional[typing.Union[Expr, bool]] = Field(
         description="Highlighting input text when focused.",
     )
-    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    selected_actions: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description=(
             "List of [actions](div-action.md) to be executed when "
             "selecting an element in[pager](div-pager.md)."
         ),
     )
-    text_color: typing.Optional[str] = Field(
+    text_color: typing.Optional[typing.Union[Expr, str]] = Field(
         format="color", 
         description="Text color.",
     )
-    text_variable: str = Field(
+    text_variable: typing.Union[Expr, str] = Field(
         min_length=1, 
         description="Name of text storage variable.",
     )
-    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(
+    tooltips: typing.Optional[typing.Sequence[div_tooltip.DivTooltip]] = Field(
         min_items=1, 
         description=(
             "Tooltips linked to an element. A tooltip can be shown "
@@ -267,9 +280,8 @@ class DivInput(BaseDiv):
     )
     transform: typing.Optional[div_transform.DivTransform] = Field(
         description=(
-            "Transformation of the element. Applies the passed transform "
-            "to the element. Thecontent that does not fit into the "
-            "original view will be cut off."
+            "Applies the passed transformation to the element. Content "
+            "that doesn\'t fit intothe original view area is cut off."
         ),
     )
     transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(
@@ -293,14 +305,18 @@ class DivInput(BaseDiv):
             "disappears in the newlayout."
         ),
     )
-    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(
+    transition_triggers: typing.Optional[typing.Sequence[typing.Union[Expr, div_transition_trigger.DivTransitionTrigger]]] = Field(
         min_items=1, 
         description=(
             "Animation starting triggers. Default value: `[state_change, "
             "visibility_change]`."
         ),
     )
-    visibility: typing.Optional[div_visibility.DivVisibility] = Field(
+    validators: typing.Optional[typing.Sequence[div_input_validator.DivInputValidator]] = Field(
+        min_items=1, 
+        description="Validators for text value.",
+    )
+    visibility: typing.Optional[typing.Union[Expr, div_visibility.DivVisibility]] = Field(
         description="Element visibility.",
     )
     visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(
@@ -309,7 +325,7 @@ class DivInput(BaseDiv):
             "`visibility_actions`parameter is set."
         ),
     )
-    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(
+    visibility_actions: typing.Optional[typing.Sequence[div_visibility_action.DivVisibilityAction]] = Field(
         min_items=1, 
         description="Actions when an element appears on the screen.",
     )
@@ -332,13 +348,15 @@ class DivInputNativeInterface(BaseDiv):
 
     def __init__(
         self, *,
-        color: str,
+        color: typing.Optional[typing.Union[Expr, str]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             color=color,
+            **kwargs,
         )
 
-    color: str = Field(
+    color: typing.Union[Expr, str] = Field(
         format="color", 
         description="Text input line color.",
     )

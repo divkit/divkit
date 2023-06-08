@@ -7,7 +7,7 @@ import enum
 import typing
 from typing import Union
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     boolean_variable, color_variable, integer_variable, number_variable,

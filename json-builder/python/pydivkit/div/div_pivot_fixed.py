@@ -6,36 +6,38 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_size_unit
 
 
-# Value of the offset of the coordinates of the axis of rotation.
+# Fixed coordinates of the rotation axis.
 class DivPivotFixed(BaseDiv):
 
     def __init__(
         self, *,
         type: str = "pivot-fixed",
-        unit: typing.Optional[div_size_unit.DivSizeUnit] = None,
-        value: typing.Optional[int] = None,
+        unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = None,
+        value: typing.Optional[typing.Union[Expr, int]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             unit=unit,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="pivot-fixed")
-    unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    unit: typing.Optional[typing.Union[Expr, div_size_unit.DivSizeUnit]] = Field(
         description=(
-            "Unit of size measurement. To learn more about units of size "
-            "measurement, see[Layout inside the "
+            "Measurement unit. To learn more about units of size "
+            "measurement, see [Layoutinside the "
             "card](../../layout.dita)."
         ),
     )
-    value: typing.Optional[int] = Field(
-        description="Offset.",
+    value: typing.Optional[typing.Union[Expr, int]] = Field(
+        description="Coordinate value.",
     )
 
 

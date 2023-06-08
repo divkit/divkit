@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_action, div_background, div_border
 
@@ -16,11 +16,12 @@ class DivFocus(BaseDiv):
 
     def __init__(
         self, *,
-        background: typing.Optional[typing.List[div_background.DivBackground]] = None,
+        background: typing.Optional[typing.Sequence[div_background.DivBackground]] = None,
         border: typing.Optional[div_border.DivBorder] = None,
         next_focus_ids: typing.Optional[DivFocusNextFocusIds] = None,
-        on_blur: typing.Optional[typing.List[div_action.DivAction]] = None,
-        on_focus: typing.Optional[typing.List[div_action.DivAction]] = None,
+        on_blur: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        on_focus: typing.Optional[typing.Sequence[div_action.DivAction]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             background=background,
@@ -28,9 +29,10 @@ class DivFocus(BaseDiv):
             next_focus_ids=next_focus_ids,
             on_blur=on_blur,
             on_focus=on_focus,
+            **kwargs,
         )
 
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+    background: typing.Optional[typing.Sequence[div_background.DivBackground]] = Field(
         min_items=1, 
         description=(
             "Background of an element when it is in focus. It can "
@@ -38,16 +40,16 @@ class DivFocus(BaseDiv):
         ),
     )
     border: typing.Optional[div_border.DivBorder] = Field(
-        description="Border of an element when it is in focus",
+        description="Border of an element when it\'s in focus.",
     )
     next_focus_ids: typing.Optional[DivFocusNextFocusIds] = Field(
         description="IDs of elements that will be next to get focus.",
     )
-    on_blur: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    on_blur: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description="Actions when an element loses focus.",
     )
-    on_focus: typing.Optional[typing.List[div_action.DivAction]] = Field(
+    on_focus: typing.Optional[typing.Sequence[div_action.DivAction]] = Field(
         min_items=1, 
         description="Actions when an element gets focus.",
     )
@@ -58,11 +60,12 @@ class DivFocusNextFocusIds(BaseDiv):
 
     def __init__(
         self, *,
-        down: typing.Optional[str] = None,
-        forward: typing.Optional[str] = None,
-        left: typing.Optional[str] = None,
-        right: typing.Optional[str] = None,
-        up: typing.Optional[str] = None,
+        down: typing.Optional[typing.Union[Expr, str]] = None,
+        forward: typing.Optional[typing.Union[Expr, str]] = None,
+        left: typing.Optional[typing.Union[Expr, str]] = None,
+        right: typing.Optional[typing.Union[Expr, str]] = None,
+        up: typing.Optional[typing.Union[Expr, str]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             down=down,
@@ -70,21 +73,22 @@ class DivFocusNextFocusIds(BaseDiv):
             left=left,
             right=right,
             up=up,
+            **kwargs,
         )
 
-    down: typing.Optional[str] = Field(
+    down: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1,
     )
-    forward: typing.Optional[str] = Field(
+    forward: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1,
     )
-    left: typing.Optional[str] = Field(
+    left: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1,
     )
-    right: typing.Optional[str] = Field(
+    right: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1,
     )
-    up: typing.Optional[str] = Field(
+    up: typing.Optional[typing.Union[Expr, str]] = Field(
         min_length=1,
     )
 

@@ -7,7 +7,7 @@ import enum
 import typing
 from typing import Union
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import (
     div_radial_gradient_fixed_center, div_radial_gradient_relative_center,

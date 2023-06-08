@@ -7,7 +7,7 @@ import enum
 import typing
 from typing import Union
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_neighbour_page_size, div_page_size
 

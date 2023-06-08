@@ -6,7 +6,7 @@ from __future__ import annotations
 import enum
 import typing
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 
 # Relative radius of the gradient transition.
@@ -14,17 +14,19 @@ class DivRadialGradientRelativeRadius(BaseDiv):
 
     def __init__(
         self, *,
-        value: DivRadialGradientRelativeRadiusValue,
         type: str = "relative",
+        value: typing.Optional[typing.Union[Expr, DivRadialGradientRelativeRadiusValue]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             value=value,
+            **kwargs,
         )
 
     type: str = Field(default="relative")
-    value: DivRadialGradientRelativeRadiusValue = Field(
-        description="Type of relative radius of the gradient transition.",
+    value: typing.Union[Expr, DivRadialGradientRelativeRadiusValue] = Field(
+        description="Type of the relative radius of the gradient transition.",
     )
 
 

@@ -10,11 +10,11 @@ from functools import reduce
 from types import MappingProxyType
 from typing import (
     Any, Dict, FrozenSet, List, Mapping, Optional, Sequence, Set, Type, Union,
-    get_args, get_origin, get_type_hints,
+    get_args, get_origin, get_type_hints, Iterator, Tuple,
 )
 
 from .compat import classproperty
-from .fields import _Field
+from .fields import Expr, _Field
 from .types.union import inject_types
 
 
@@ -54,16 +54,20 @@ def _cast_value_type(value: Any, type_: Any) -> Any:  # noqa
         return value
 
     origin_type = get_origin(type_)
-    if origin_type is list:
-        if not isinstance(value, list):
+
+    if isinstance(origin_type, type) and isinstance(origin_type, (str, bytes)):
+        return type_(value)
+
+    if isinstance(origin_type, type) and issubclass(origin_type, Sequence):
+        if not isinstance(value, Sequence):
             raise ValueError(
                 f"Value {value} has wrong type. Expected type is {type_}.",
             )
         element_type, *_ = get_args(type_)
         return [_cast_value_type(v, element_type) for v in value]
 
-    if origin_type is dict:
-        if not isinstance(value, dict):
+    if isinstance(origin_type, type) and issubclass(origin_type, Mapping):
+        if not isinstance(value, Mapping):
             raise ValueError(
                 f"Value {value} has wrong type. Expected type is {type_}.",
             )
@@ -88,7 +92,9 @@ def _cast_value_type(value: Any, type_: Any) -> Any:  # noqa
                 raise ValueError(
                     f"Union {type_} does not contain type {type_value}.",
                 )
-            raise ValueError(f"Value {value} does not have field {TYPE_FIELD}.")
+            raise ValueError(
+                f"Value {value} does not have field {TYPE_FIELD}.",
+            )
         for u_type in get_args(type_):
             try:
                 return _cast_value_type(value, u_type)
@@ -123,11 +129,17 @@ def _cast_value_type(value: Any, type_: Any) -> Any:  # noqa
 
 
 def dump(obj: Any) -> Any:
-    if isinstance(obj, list):
+    if isinstance(obj, (str, bytes)):
+        return obj
+    if isinstance(obj, Sequence):
         return [dump(obj_item) for obj_item in obj]
-    elif isinstance(obj, BaseEntity):
+    if isinstance(obj, Mapping):
+        return {k: v for k, v in obj.items()}
+    if isinstance(obj, Expr):
+        return str(obj)
+    if isinstance(obj, BaseEntity):
         return obj.dict()
-    elif isinstance(obj, enum.Enum):
+    if isinstance(obj, enum.Enum):
         return obj.value
     return obj
 
@@ -173,6 +185,8 @@ BUILTIN_TYPES_TO_SCHEMA: Mapping[type, Mapping[str, Any]] = MappingProxyType(
             },
         ),
         str: MappingProxyType({"type": "string"}),
+        bytes: MappingProxyType({"type": "string"}),
+        Expr: MappingProxyType({"type": "string", "pattern": "^@{.*}$"}),
     },
 )
 
@@ -244,14 +258,14 @@ def _field_to_schema(
     schema: Optional[SchemaType] = None
     if field and field.name == TYPE_FIELD and field.default:
         schema = _type_field_to_schema(field)
-    elif origin is list:
+    elif type_ in BUILTIN_TYPES_TO_SCHEMA:
+        schema = {**BUILTIN_TYPES_TO_SCHEMA[type_]}
+    elif isinstance(origin, type) and issubclass(origin, Sequence):
         schema = _list_to_schema(type_, definitions, exclude)
-    elif origin is dict:
+    elif isinstance(origin, type) and issubclass(origin, Mapping):
         schema = _dict_to_schema()
     elif origin is Union:
         schema = _union_to_schema(field, type_, exclude, definitions)
-    elif type_ in BUILTIN_TYPES_TO_SCHEMA:
-        schema = {**BUILTIN_TYPES_TO_SCHEMA[type_]}
     elif issubclass(type_, BaseEntity):
         schema = type_.schema_as_ref(definitions, exclude)
     elif issubclass(type_, enum.Enum):
@@ -509,7 +523,9 @@ class BaseEntity:
             field_value = getattr(self, field_name, field.default)
             if field_value is not None:
                 if isinstance(field_value, _Field) and field_value.ref_to:
-                    result[f"${field.field_name}"] = field_value.ref_to.field_name
+                    result[
+                        f"${field.field_name}"
+                    ] = field_value.ref_to.field_name
                 else:
                     result[field.field_name] = dump(field_value)
         return result
@@ -681,6 +697,44 @@ class BaseDiv(BaseEntity):
                 ref_types[ref_uid] = field_type
         return MappingProxyType(ref_types)
 
+    @staticmethod
+    def _make_union(type: Type[Any]) -> Set[Type[Any]]:
+        if get_origin(type) is Union:
+            return set(get_args(type))
+        return {type}
+
+    @classmethod
+    def _validate_subclass(
+        cls,
+        ref_type: Type[Any],
+        expected_field_type: Type[Any],
+    ) -> bool:
+        def _check_origins() -> Iterator[Tuple[Tuple[Any, ...], Tuple[Any, ...]]]:
+            for ref in cls._make_union(ref_type):
+                for expect in cls._make_union(expected_field_type):
+                    if get_origin(expect) == get_origin(ref):
+                        yield get_args(ref), get_args(expect)
+            return None
+
+        for origins in _check_origins():
+            if origins is None:
+                return False
+
+            expect, ref = origins
+
+            if get_args(expect) == get_args(ref):
+                return True
+
+            if not any(
+                issubclass(exp, get_args(ref))
+                for exp in get_args(expect)
+                if get_origin(exp) is not Union
+            ):
+                continue
+
+            return True
+        return False
+
     @classmethod
     def _validate_ref_types(cls) -> None:
         ref_types = cls._merge_ref_types(
@@ -693,6 +747,9 @@ class BaseDiv(BaseEntity):
             if (
                 ref_type != expected_field_type
                 and ref_type != Optional[expected_field_type]
+                and ref_type != Union[expected_field_type, Expr]
+                and ref_type != Union[expected_field_type, Expr, None]
+                and not cls._validate_subclass(ref_type, expected_field_type)
             ):
                 raise TypeError(
                     f"Type of attribute '{field_name}' does "

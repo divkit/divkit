@@ -7,7 +7,7 @@ import enum
 import typing
 from typing import Union
 
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Expr, Field
 
 from . import div_pivot_fixed, div_pivot_percentage
 
