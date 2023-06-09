@@ -1,7 +1,7 @@
 ext.versions = [
         coroutines                      : '1.6.0',
         dagger                          : '2.38',
-        exoPlayer                       : '2.14.2',
+        exoPlayer                       : '2.18.4',
         festAndroid                     : '1.0.8',
         festReflect                     : '1.4.1',
         googleAutoService               : '1.0',

@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SeekParameters
 import com.google.android.exoplayer2.SimpleExoPlayer
@@ -60,7 +60,7 @@ class ExoDivPlayer(
             }
         }
 
-        override fun onPlayerError(error: ExoPlaybackException) {
+        override fun onPlayerError(error: PlaybackException) {
             observers.forEach {
                 it.onFatal()
             }
