@@ -1,3 +1,8 @@
+## 25.4.0 (June 12, 2023)
+
+Added:
+* Supported `dict` variable type
+
 ## 25.3.0 (June 5, 2023)
 
 Added:

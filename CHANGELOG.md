@@ -1,3 +1,22 @@
+## 25.4.0
+
+# Android Client:
+
+* Added regex validator for `div-input`
+* Added support of disappear actions
+* Added support of text alignment to `div-input`
+* `DivStorage` forwards IllegalStateExceptions to `LoadDataResult` now
+
+# iOS Client:
+
+* Supported resume, pause, fatal actions in `DivVideo`
+* Supported disappearing actions
+
+# Web Client:
+
+Added:
+* Supported `dict` variable type
+
 ## 25.3.0
 
 # JSON Schema:
