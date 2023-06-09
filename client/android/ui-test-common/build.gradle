@@ -7,7 +7,9 @@ dependencies {
     api "androidx.test:core:$versions.androidx.test"
     api "androidx.test:runner:$versions.androidx.test"
     api "androidx.test:rules:$versions.androidx.test"
-    api "androidx.test.espresso:espresso-contrib:$versions.androidx.espresso"
+    api ("androidx.test.espresso:espresso-contrib:$versions.androidx.espresso") {
+        exclude group: 'org.checkerframework', module: 'checker-qual'
+    }
     api "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
     api "androidx.test.espresso:espresso-intents:$versions.androidx.espresso"
 

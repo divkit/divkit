@@ -11,7 +11,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.DISCONTINUITY_REASON_AUTO_TRANSITION
 import com.google.android.exoplayer2.Player.STATE_ENDED
@@ -110,7 +110,7 @@ internal class VideoView(
             viewModel?.onVideoStartedShowing()
         }
 
-        override fun onPlayerError(error: ExoPlaybackException) {
+        override fun onPlayerError(error: PlaybackException) {
             assertBoundToViewModel()
             viewModel?.onPlaybackError(error)
         }
