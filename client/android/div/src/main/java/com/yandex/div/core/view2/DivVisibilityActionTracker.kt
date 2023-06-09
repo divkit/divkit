@@ -43,6 +43,19 @@ internal class DivVisibilityActionTracker @Inject constructor(
     }
 
     @AnyThread
+    fun updateVisibleViews(viewList: List<View>) {
+        val visibleIterator = visibleActions.iterator()
+        while(visibleIterator.hasNext()) {
+            if (visibleIterator.next().key !in viewList) visibleIterator.remove()
+        }
+
+        if (!hasPostedUpdateVisibilityTask) {
+            hasPostedUpdateVisibilityTask = true
+            handler.post(updateVisibilityTask)
+        }
+    }
+
+    @AnyThread
     fun trackVisibilityActionsOf(
         scope: Div2View,
         view: View?,

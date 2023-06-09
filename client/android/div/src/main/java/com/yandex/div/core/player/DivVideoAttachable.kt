@@ -6,4 +6,6 @@ interface DivVideoAttachable {
     fun detach() = Unit
 
     fun getAttachedPlayer(): DivPlayer? = null
+
+    fun setVisibleOnScreen(visible: Boolean) = Unit
 }

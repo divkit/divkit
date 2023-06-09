@@ -286,10 +286,12 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         private fun trackVisibleViews() {
+            val visibilityActionTracker = divView.div2Component.visibilityActionTracker
+            visibilityActionTracker.updateVisibleViews(recycler.children.toList())
+
             recycler.children.forEach { child ->
                 val position = recycler.getChildAdapterPosition(child)
                 val div = (recycler.adapter as GalleryAdapter).items[position]
-                val visibilityActionTracker = divView.div2Component.visibilityActionTracker
                 visibilityActionTracker.trackVisibilityActionsOf(divView, child, div)
             }
         }
