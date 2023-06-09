@@ -7,6 +7,7 @@ import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
+import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
@@ -18,7 +19,8 @@ import javax.inject.Inject
 internal class DivVideoBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
-    private val divActionHandler: DivActionHandler
+    private val divActionHandler: DivActionHandler,
+    private val videoViewMapper: DivVideoViewMapper
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
         val oldDiv = view.div
@@ -47,6 +49,7 @@ internal class DivVideoBinder @Inject constructor(
 
         playerView.attach(player)
 
+        videoViewMapper.addView(view, div)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         val playerListener = object : DivPlayer.Observer {
