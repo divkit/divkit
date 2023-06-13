@@ -508,16 +508,16 @@
     "ru": "Значение."
   },
   "div_disappear_action": {
-    "en": "Actions performed when an element becomes invisible.",
-    "ru": "Действия, которые выполняются, когда элемент становится невидимым."
+    "en": "Actions performed when an element is no longer visible.",
+    "ru": "Действия, которые выполняются, когда элемент пропадает из зоны видимости."
   },
   "div_disappear_action_disappear_duration": {
-    "en": "Time in milliseconds during which an element must be invisible to trigger `disappear-action`.",
-    "ru": "Время в миллисекундах, в течение которого элемент должен быть не виден, чтобы сработал `disappear-action`."
+    "en": "Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.",
+    "ru": "Время в миллисекундах, в течение которого элемент должен находиться вне зоны видимости, чтобы сработало действие `disappear-action`."
   },
   "div_disappear_action_visibility_percentage": {
     "en": "Percentage of the visible part of an element that triggers `disappear-action`.",
-    "ru": "Процент видимой части элемента, при котором срабатывает `disappear-action`."
+    "ru": "Размер видимой части элемента в процентах, при котором срабатывает действие `disappear-action`."
   },
   "div_download_callbacks": {
     "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
@@ -1012,23 +1012,23 @@
     "ru": "Название переменной для хранения текста."
   },
   "div_input_validators": {
-    "en": "Validators for text value.",
+    "en": "Validator that checks that the field value meets the specified conditions.",
     "ru": "Валидатор, который проверяет значение поля на соответствие заданным условиям."
   },
   "div_input_validators_allow_empty": {
-    "en": "Whether an empty value is correct. By default, false.",
+    "en": "Determines whether the empty field value is valid.",
     "ru": "Определяет, является ли пустое значение поля корректным."
   },
   "div_input_validators_expression": {
-    "en": "Expression validator.",
-    "ru": "Валидатор на основе выражений."
+    "en": "[Calculated expression](../../expressions.dita) validator.",
+    "ru": "Валидатор на основе [вычисляемых выражений](../../expressions.dita)."
   },
   "div_input_validators_expression_condition": {
-    "en": "Expression condition for evaluating.",
-    "ru": "Условие валидности значения."
+    "en": "[Calculated expression](../../expressions.dita) used as a value validity condition.",
+    "ru": "[Вычисляемое выражение](../../expressions.dita), которое используется как условие валидности значения."
   },
   "div_input_validators_label_id": {
-    "en": "ID of the text div containing the error message, which will also be used for accessibility.",
+    "en": "ID of the text element containing the error message. The message will also be used for providing access.",
     "ru": "ID текстового элемента, содержащего сообщение об ошибке. Сообщение также будет использовано для обеспечения доступности."
   },
   "div_input_validators_regex": {
@@ -1036,12 +1036,12 @@
     "ru": "Валидатор на основе регулярных выражений."
   },
   "div_input_validators_regex_pattern": {
-    "en": "Regex pattern for matching.",
+    "en": "A regular expression (pattern) that the field value must match.",
     "ru": "Регулярное выражение (паттерн), которому должно соответствовать значение поля."
   },
   "div_input_validators_variable": {
-    "en": "Name of validation storage variable.",
-    "ru": "Переменная для хранения корректности значения поля."
+    "en": "The name of the variable that stores the calculation results.",
+    "ru": "Имя переменной, в которой хранится результат вычисления выражения."
   },
   "div_keyboard_input": {
     "en": "Enter data manually using a keyboard.",
@@ -1053,7 +1053,7 @@
   },
   "div_log_limit": {
     "en": "Limit on the number of loggings. If `0`, the limit is removed.",
-    "ru": "Ограничение на количество логирований. При `0` ограничение снимается."
+    "ru": "Ограничение на количество логирований. При значении `0` ограничение снимается."
   },
   "div_match_parent_size": {
     "en": "Element size adjusts to a parent element.",
@@ -1957,7 +1957,7 @@
   },
   "div_variable_dict": {
     "en": "Variable — any json object.",
-    "ru": "Переменная — произвольный json объект."
+    "ru": "Произвольный объект в формате JSON."
   },
   "div_variable_integer": {
     "en": "An integer variable.",
@@ -2004,7 +2004,7 @@
     "ru": "Действия, которые выполняются после окончания видео."
   },
   "div_video_fatal_actions": {
-    "en": "Actions that are performed when it is impossible to continue playback due to an error in the player.",
+    "en": "Actions performed when playback can't be continued due to a player error.",
     "ru": "Действия, которые выполняются, когда невозможно продолжить воспроизведение из-за ошибки плеера."
   },
   "div_video_muted": {
@@ -2012,7 +2012,7 @@
     "ru": "Опция отключает звук при воспроизведении видео."
   },
   "div_video_pause_actions": {
-    "en": "Actions that are performed when a playback is paused.",
+    "en": "Actions performed when playback is paused.",
     "ru": "Действия, которые выполняются при приостановке воспроизведения."
   },
   "div_video_player_settings_payload": {
@@ -2032,32 +2032,32 @@
     "ru": "Действия, которые выполняются при возобновлении воспроизведения видео."
   },
   "div_video_source": {
-    "en": "Description of a single media file. Contains a link to the source, mime type, bitrate, resolution.",
-    "ru": "Описание одного медиа файла. Содержит ссылку на источник, mime тип, битрейт, разрешение."
+    "en": "Description of one media file. Contains a link to the source, MIME type, bitrate, and resolution.",
+    "ru": "Описание одного медиафайла. Содержит ссылку на источник, MIME-тип, битрейт, разрешение."
   },
   "div_video_source_bitrate": {
-    "en": "Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.",
-    "ru": "Свойство медиафайла, которое определяет скорость передачи данных в потоке видео. Битрейт измеряется в килобитах в секунду (kbps) и указывает, сколько данных передается за единицу времени."
+    "en": "Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).",
+    "ru": "Битрейт медиафайла — скорость передачи данных в потоке видео в килобитах в секунду (kbps)."
   },
   "div_video_source_mime_type": {
-    "en": "The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.",
-    "ru": "Свойство определяет MIME-тип (Multipurpose Internet Mail Extensions) для медиа файла. MIME-тип - это строка, которая указывает на тип содержимого файла и используется для определения типа файла и его правильной обработки."
+    "en": "MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.",
+    "ru": "MIME-тип (Multipurpose Internet Mail Extensions) медиафайла — строка, которая указывает на тип содержимого файла и используется для его правильной обработки."
   },
   "div_video_source_resolution": {
-    "en": "Media file Resolution.",
-    "ru": "Разрешение медиа файла."
+    "en": "Media file resolution.",
+    "ru": "Разрешение медиафайла."
   },
   "div_video_source_resolution_height": {
-    "en": "Contains information about the resolution height of the Media file.",
-    "ru": "Содержит информацию о высоте разрешения медиа файла."
+    "en": "Media file frame height.",
+    "ru": "Высота кадра медиафайла."
   },
   "div_video_source_resolution_width": {
-    "en": "Contains information about the resolution width of the video file.",
-    "ru": "Содержит информацию о ширине разрешения медиа файла."
+    "en": "Media file frame width.",
+    "ru": "Ширина кадра медиафайла."
   },
   "div_video_source_url": {
-    "en": "The property contains a link to a media file available for playback or download.",
-    "ru": "Свойство содержит ссылку на медиа файл, доступного для воспроизведения или загрузки."
+    "en": "Link to the media file available for playback or download.",
+    "ru": "Ссылка на медиафайл, доступный для воспроизведения или загрузки."
   },
   "div_video_stream": {
     "en": "Video data stream for playback.",
