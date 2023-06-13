@@ -1,11 +1,7 @@
 package com.yandex.div.core.view2.divs.widgets
 
-import android.app.Activity
-import android.app.Application
-import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Bundle
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.yandex.div.R
@@ -49,40 +45,6 @@ internal class DivVideoView @JvmOverloads constructor(
 
     private var isDrawing = false
 
-    private val activityCallback = object : ActivityLifecycleCallbacks {
-        override fun onActivityStarted(activity: Activity) {
-            if (getPlayerView()?.getAttachedPlayer() == null) {
-                lastPlayer?.let {
-                    getPlayerView()?.attach(it)
-                }
-            }
-            lastPlayer = null
-        }
-
-        override fun onActivityStopped(activity: Activity) {
-            getPlayerView()?.let {
-                lastPlayer = it.getAttachedPlayer()
-                it.detach()
-            }
-        }
-
-        override fun onActivityPreDestroyed(activity: Activity) {
-            release()
-            (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(this)
-            super.onActivityPreDestroyed(activity)
-        }
-
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
-        override fun onActivityResumed(activity: Activity) = Unit
-        override fun onActivityPaused(activity: Activity) = Unit
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
-        override fun onActivityDestroyed(activity: Activity) = Unit
-    }
-
-    init {
-        (context.applicationContext as Application).registerActivityLifecycleCallbacks(activityCallback)
-    }
-
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
         borderDrawer = updateBorderDrawer(border, resolver)
     }
@@ -114,6 +76,24 @@ internal class DivVideoView @JvmOverloads constructor(
         }
         lastPlayer = null
         borderDrawer?.release()
+    }
+
+    override fun onAttachedToWindow() {
+        if (getPlayerView()?.getAttachedPlayer() == null) {
+            lastPlayer?.let {
+                getPlayerView()?.attach(it)
+            }
+        }
+        lastPlayer = null
+        super.onAttachedToWindow()
+    }
+
+    override fun onDetachedFromWindow() {
+        getPlayerView()?.let {
+            lastPlayer = it.getAttachedPlayer()
+            it.detach()
+        }
+        super.onDetachedFromWindow()
     }
 
     fun getPlayerView(): DivPlayerView? {
