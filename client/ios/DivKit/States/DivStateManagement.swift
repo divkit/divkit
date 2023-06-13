@@ -1,5 +1,6 @@
 import BasePublic
 import CommonCorePublic
+import Foundation
 
 public protocol DivStateManagement: DivStateUpdater {
   func getStateManagerForCard(cardId: DivCardID) -> DivStateManager
@@ -22,7 +23,9 @@ public class DefaultDivStateManagement: DivStateManagement {
   private var stateManagersForCards: [DivCardID: DivStateManager] = [:]
 
   public init(
-    timestampProvider: Variable<Milliseconds> = Variable { Date().timeIntervalSince1970.milliseconds }
+    timestampProvider: Variable<Milliseconds> = Variable {
+      Date().timeIntervalSince1970.milliseconds
+    }
   ) {
     self.timestampProvider = timestampProvider
 
@@ -80,13 +83,13 @@ public class DefaultDivStateManagement: DivStateManagement {
     let currentTimestamp = timestampProvider.value
     let items = persistentStorage.value.items
     let newItems = items.compactMapValues { states in
-      let newStates = states.filter { (_, state) in
+      let newStates = states.filter { _, state in
         currentTimestamp - state.timestamp < storagePeriod
       }
       return (newStates.count > 0) ? newStates : nil
     }
 
-    if (newItems != items) {
+    if newItems != items {
       persistentStorage.value = StoredStates(items: newItems)
     }
   }
@@ -96,7 +99,7 @@ struct StoredStates: Equatable, Codable {
   var items: [DivCardID: [DivStatePath: StoredState]]
 
   func getStates(cardId: DivCardID) -> [DivStatePath: StoredState] {
-    return items[cardId] ?? [:]
+    items[cardId] ?? [:]
   }
 }
 
