@@ -1,3 +1,9 @@
+## 25.4.1
+
+# Android Client:
+
+* Fixed video player engine disconnecting from view when any activity stopped
+
 ## 25.4.0
 
 # Android Client:
