@@ -1,5 +1,13 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.util.Base64
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
@@ -45,7 +53,20 @@ internal class DivVideoBinder @Inject constructor(
         )
 
         val playerView = divView.div2Component.divVideoFactory.makePlayerView(view.context)
+        val preview = div.createPreview(resolver)
+        val previewImageView: ImageView = ImageView(view.context).apply {
+            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            if (preview != null) {
+                visibility = View.VISIBLE
+                setImageBitmap(preview)
+            } else {
+                visibility = View.INVISIBLE
+            }
+            setBackgroundColor(Color.TRANSPARENT)
+        }
         view.addView(playerView)
+        view.addView(previewImageView)
 
         playerView.attach(player)
 
@@ -69,6 +90,10 @@ internal class DivVideoBinder @Inject constructor(
                 div.endActions?.forEach { divAction ->
                     divView.let { divActionHandler.handleAction(divAction, it) }
                 }
+            }
+
+            override fun onReady() {
+                previewImageView.visibility = View.INVISIBLE
             }
         }
         player.addObserver(playerListener)
@@ -119,4 +144,10 @@ fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
             bitrate = it.bitrate?.evaluate(resolver)
         )
     }
+}
+
+fun DivVideo.createPreview(resolver: ExpressionResolver): Bitmap? {
+    val base64String = preview?.evaluate(resolver) ?: return null
+    val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }

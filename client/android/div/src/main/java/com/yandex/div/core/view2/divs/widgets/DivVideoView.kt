@@ -97,8 +97,8 @@ internal class DivVideoView @JvmOverloads constructor(
     }
 
     fun getPlayerView(): DivPlayerView? {
-        if (this.childCount > 1) {
-            KAssert.fail { "More than one player view inside DivVideo" }
+        if (this.childCount > 2) {
+            KAssert.fail { "Too many children in DivVideo" }
         }
         this.getChildAt(0)?.let {
             if (it !is DivPlayerView) {

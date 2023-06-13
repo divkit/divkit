@@ -48,13 +48,13 @@ class ExoDivPlayer(
         }
 
         override fun onPlaybackStateChanged(state: Int) {
-            if (state != Player.STATE_BUFFERING && state != Player.STATE_ENDED) return
             if (state == Player.STATE_ENDED) needToRenderFrameExplicitly = true
 
             observers.forEach {
                 when (state) {
                     Player.STATE_BUFFERING -> it.onBuffering()
                     Player.STATE_ENDED -> it.onEnd()
+                    Player.STATE_READY -> it.onReady()
                     else -> Unit
                 }
             }

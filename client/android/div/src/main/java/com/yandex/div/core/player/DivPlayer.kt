@@ -11,6 +11,11 @@ interface DivPlayer {
         fun onPlay() = Unit
 
         /**
+         * Called when player video is ready to show.
+         */
+        fun onReady() = Unit
+
+        /**
          * Called when playback has been paused by an action.
          */
         fun onPause() = Unit
