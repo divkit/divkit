@@ -14,6 +14,7 @@ import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
@@ -84,6 +85,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             is DivGifImage -> bindType(view, DivAccessibility.Type.IMAGE)
             is DivText -> bindType(view, DivAccessibility.Type.TEXT)
             is DivTabs -> bindType(view, DivAccessibility.Type.TAB_BAR)
+            is DivSelect -> bindType(view, DivAccessibility.Type.SELECT)
             else -> bindType(view, DivAccessibility.Type.NONE)
         }
     }
@@ -127,7 +129,8 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Type.EDIT_TEXT -> "android.widget.EditText"
             DivAccessibility.Type.HEADER -> "android.widget.TextView"
             DivAccessibility.Type.TAB_BAR -> "android.widget.TabWidget"
-            else -> ""
+            DivAccessibility.Type.LIST -> ""
+            DivAccessibility.Type.SELECT -> "android.widget.Spinner"
         }
 
         if (DivAccessibility.Type.HEADER == type) {

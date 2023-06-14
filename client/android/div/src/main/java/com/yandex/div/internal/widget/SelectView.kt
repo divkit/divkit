@@ -8,6 +8,9 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
+import android.widget.AbsListView.CHOICE_MODE_SINGLE
 import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.ListPopupWindow
@@ -33,6 +36,7 @@ internal open class SelectView constructor(context: Context) : SuperLineHeightTe
         anchorView = this@SelectView
 
         setOnItemClickListener { _, _, position, _ ->
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED)
             onItemSelectedListener?.invoke(position)
             dismiss()
         }
@@ -70,6 +74,16 @@ internal open class SelectView constructor(context: Context) : SuperLineHeightTe
         }
     }
 
+    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(info)
+
+        info.setCanOpenPopup(true)
+
+        // When hint is shown, it's treated as text
+        // We need to ignore hint here so it won't be announced twice
+        info.text = text
+    }
+
     @Mockable
     private class PopupWindow @JvmOverloads constructor(
         private val context: Context,
@@ -86,6 +100,8 @@ internal open class SelectView constructor(context: Context) : SuperLineHeightTe
             // Call show() twice on listView creation to force recalculation
             if (listView == null) {
                 super.show()
+                // Make items reported as selectable for accessibility
+                listView?.choiceMode = CHOICE_MODE_SINGLE
             }
 
             super.show()
