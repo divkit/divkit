@@ -72,6 +72,7 @@ public final class RetryingURLRequestPerformer: URLRequestPerforming {
         Thread.assertIsMain()
         switch result {
         case .success:
+          task.onSuccess()
           completion(result)
         case let .failure(error):
           let policy = task.handleError(error)

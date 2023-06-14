@@ -20,6 +20,7 @@ public final class RetryingNetworkTask: NetworkTask, NetworkErrorHandlingStrateg
 
   private let retryStrategy: NetworkErrorHandlingStrategy
   private let retryAction: (RetryingNetworkTask) -> Void
+  private var retainSelf: RetryingNetworkTask?
 
   public init(
     request: URLRequest,
@@ -33,6 +34,7 @@ public final class RetryingNetworkTask: NetworkTask, NetworkErrorHandlingStrateg
     self.retryStrategy = retryStrategy
     self.retryAction = retryAction
     retryStrategy.delegate = self
+    retainSelf = self
   }
 
   public func resume() {
@@ -42,13 +44,17 @@ public final class RetryingNetworkTask: NetworkTask, NetworkErrorHandlingStrateg
   public func cancel() {
     currentTask.cancel()
     retryStrategy.delegate = nil
+    retainSelf = nil
+  }
+
+  func onSuccess() {
+    cancel()
   }
 
   func handleError(_ error: NSError) -> NetworkErrorHandlingPolicy {
     let policy = retryStrategy.policy(for: error, from: request.url!)
     if policy != .waitForRetry {
-      currentTask.cancel()
-      retryStrategy.delegate = nil
+      cancel()
     }
     return policy
   }
