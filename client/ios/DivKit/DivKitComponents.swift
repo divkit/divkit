@@ -38,6 +38,7 @@ public final class DivKitComponents {
     requestPerformer: URLRequestPerforming? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
+    trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: UpdateCardAction?,
     playerFactory: PlayerFactory? = nil,
     urlOpener: @escaping UrlOpener,
@@ -79,6 +80,7 @@ public final class DivKitComponents {
         requestPerformer: requestPerformer
       ),
       trackVisibility: trackVisibility,
+      trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) }
     )
 

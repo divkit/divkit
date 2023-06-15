@@ -10,17 +10,20 @@ public final class DivActionHandler {
   private let divActionURLHandler: DivActionURLHandler
   private let logger: DivActionLogger
   private let trackVisibility: TrackVisibility
+  private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
 
   public init(
     divActionURLHandler: DivActionURLHandler,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
+    trackDisappear: @escaping TrackVisibility = { _, _ in },
     variablesStorage: DivVariablesStorage
   ) {
     self.divActionURLHandler = divActionURLHandler
     self.logger = logger
     self.trackVisibility = trackVisibility
+    self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
   }
 
@@ -33,6 +36,7 @@ public final class DivActionHandler {
     showTooltip: @escaping DivActionURLHandler.ShowTooltipAction,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
+    trackDisappear _: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in }
   ) {
     self.init(
@@ -115,8 +119,10 @@ public final class DivActionHandler {
       logger.log(url: logUrl, referer: referer, payload: action.payload)
     }
 
-    if source == .visibility || source == .disappear {
+    if source == .visibility {
       trackVisibility(action.logId, cardId)
+    } else if source == .disappear {
+      trackDisappear(action.logId, cardId)
     }
   }
 
