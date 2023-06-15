@@ -293,6 +293,45 @@ final class GalleryViewLayoutTests: XCTestCase {
     }
     XCTAssertEqual(totalSpace, 0, accuracy: accuracy)
   }
+
+  func test_Horizontal_ResizableHeightContent() {
+    let layout = GalleryViewLayout(
+      model: GalleryViewModel(
+        blocks: [
+          TextBlock(
+            widthTrait: .intrinsic,
+            heightTrait: .resizable,
+            text: NSAttributedString(string: "Item 1")
+          )
+        ],
+        metrics: GalleryViewMetrics(gaps: [10, 10]),
+        path: UIElementPath("model"),
+        direction: .horizontal
+      ),
+      boundsSize: CGSize(width: 100, height: 200)
+    )
+
+    XCTAssertEqual(layout.blockFrames[0].height, 200)
+  }
+
+  func test_Vertical_ResizbaleWidthContent() {
+    let layout = GalleryViewLayout(
+      model: GalleryViewModel(
+        blocks: [
+          TextBlock(
+            widthTrait: .resizable,
+            text: NSAttributedString(string: "Item 1")
+          )
+        ],
+        metrics: GalleryViewMetrics(gaps: [10, 10]),
+        path: UIElementPath("model"),
+        direction: .vertical
+      ),
+      boundsSize: CGSize(width: 100, height: 200)
+    )
+
+    XCTAssertEqual(layout.blockFrames[0].width, 100)
+  }
 }
 
 private enum Blocks {
