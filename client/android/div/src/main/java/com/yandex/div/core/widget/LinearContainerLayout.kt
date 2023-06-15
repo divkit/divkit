@@ -559,14 +559,16 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (isAtMost(widthMeasureSpec) && totalWeight > 0) {
             totalLength = max(MeasureSpec.getSize(widthMeasureSpec), totalLength)
         }
+        val resizedTotalLength = max(suggestedMinimumWidth, totalLength)
 
-        val widthSizeAndState = resolveSizeAndState(totalLength, widthMeasureSpec, childMeasuredState)
+        val widthSizeAndState = resolveSizeAndState(resizedTotalLength, widthMeasureSpec, childMeasuredState)
+        val widthSize = widthSizeAndState and MEASURED_SIZE_MASK
         if (!exactWidth && aspectRatio != DEFAULT_ASPECT_RATIO) {
-            heightSize = ((widthSizeAndState and MEASURED_SIZE_MASK) / aspectRatio).roundToInt()
+            heightSize = (widthSize / aspectRatio).roundToInt()
             heightSpec = makeExactSpec(heightSize)
         }
 
-        remeasureChildrenHorizontalIfNeeded(widthMeasureSpec, heightSpec, initialMaxHeight)
+        remeasureChildrenHorizontalIfNeeded(widthMeasureSpec, widthSize, heightSpec, initialMaxHeight)
 
         if (!exactHeight && aspectRatio == DEFAULT_ASPECT_RATIO) {
             setParentCrossSizeIfNeeded(heightSpec)
@@ -636,10 +638,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun remeasureChildrenHorizontalIfNeeded(
         widthMeasureSpec: Int,
+        resizedTotalLength: Int,
         heightMeasureSpec: Int,
         initialMaxHeight: Int
     ) {
-        val delta = MeasureSpec.getSize(widthMeasureSpec) - totalLength
+        val delta = resizedTotalLength - totalLength
         if (constrainedChildren.any { it.maxWidth != Int.MAX_VALUE }
             || needRemeasureChildren(delta, widthMeasureSpec)) {
             totalLength = 0
