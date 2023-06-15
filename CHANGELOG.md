@@ -1,3 +1,15 @@
+## 25.5.0
+
+# Android Client:
+
+* ExoPlayer version updated to `2.18.4`
+* Supported preview image in DivVideo
+* Fixed trigger rebind for DivData with the same DivDataTag
+
+# iOS Client:
+
+* Fixed disappear actions timer invalidation
+
 ## 25.4.1
 
 # Android Client:
