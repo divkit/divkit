@@ -1956,7 +1956,7 @@
     "ru": "Переменная — цвет в формате HEX, представленный в виде строки."
   },
   "div_variable_dict": {
-    "en": "Variable — any json object.",
+    "en": "An arbitrary object in JSON format.",
     "ru": "Произвольный объект в формате JSON."
   },
   "div_variable_integer": {
