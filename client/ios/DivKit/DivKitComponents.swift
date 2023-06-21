@@ -17,13 +17,15 @@ public final class DivKitComponents {
   public let fontSpecifiers: FontSpecifiers
   public let imageHolderFactory: ImageHolderFactory
   public let patchProvider: DivPatchProvider
+  public let playerFactory: PlayerFactory?
+  public let safeAreaManager: DivSafeAreaManager
+  public let showToolip: DivActionURLHandler.ShowTooltipAction
   public let stateManagement: DivStateManagement
   public let triggersStorage: DivTriggersStorage
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
-  public let playerFactory: PlayerFactory?
-  public let safeAreaManager: DivSafeAreaManager
+
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let disposePool = AutodisposePool()
@@ -36,6 +38,7 @@ public final class DivKitComponents {
     imageHolderFactory: ImageHolderFactory? = nil,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
+    showTooltip: @escaping DivActionURLHandler.ShowTooltipAction = { _ in },
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
@@ -48,11 +51,13 @@ public final class DivKitComponents {
     self.extensionHandlers = extensionHandlers
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers
+    self.playerFactory = playerFactory ?? defaultPlayerFactory
+    self.showToolip = showTooltip
     self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
-    self.safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
-    self.playerFactory = playerFactory ?? defaultPlayerFactory
+
+    safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
@@ -75,7 +80,7 @@ public final class DivKitComponents {
       patchProvider: self.patchProvider,
       variablesStorage: variablesStorage,
       updateCard: updateCard,
-      showTooltip: { _ in },
+      showTooltip: showTooltip,
       logger: DefaultDivActionLogger(
         requestPerformer: requestPerformer
       ),
