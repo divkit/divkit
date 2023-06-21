@@ -29,7 +29,8 @@ from .entities import (
     Url,
     Color,
     String,
-    Dictionary, BoolInt
+    Dictionary, BoolInt,
+    _build_documentation_generator_properties
 )
 from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
 
@@ -43,21 +44,25 @@ def __resolve_string_field(name: str,
                            config: Config.GenerationConfig,
                            location: ElementLocation,
                            dictionary: Dict[str, any]) -> Tuple[PropertyType, List[Declarable]]:
-    force_instance_field: bool = dictionary.get('force_instance_field', False)
     enum_cases: List[str] = dictionary.get('enum')
-    if not force_instance_field and enum_cases is not None:
+    if enum_cases is not None:
         if not is_list_of_type(enum_cases, str):
             raise TypeError
-        force_enum_field: bool = dictionary.get('force_instance_field', False)
-        if len(enum_cases) > 1 or force_enum_field:
+        if len(enum_cases) > 1:
             fixed_name = fixing_reserved_typename(name, config.lang)
+            documentation_properties = _build_documentation_generator_properties(dictionary=dictionary,
+                                                                                 location=location,
+                                                                                 mode=mode)
+            include_in_documentation_toc = False
+            if documentation_properties is not None:
+                include_in_documentation_toc = documentation_properties.include_in_toc
+
             enumeration = StringEnumeration(name=fixed_name,
                                             original_name=name,
                                             cases=enum_cases,
                                             description=dictionary.get('description', ''),
                                             description_object=dictionary.get('description_translations', {}),
-                                            include_documentation_toc=dictionary.get('include_in_documentation_toc',
-                                                                                     False))
+                                            include_in_documentation_toc=include_in_documentation_toc)
             return Object(name=name, object=None, format=ObjectFormat.DEFAULT), [enumeration]
         else:
             if len(enum_cases) < 1:
@@ -186,11 +191,17 @@ def type_property_build(dictionary: Dict[str, any],
     any_of_entities: List[Dict[str, any]] = dictionary.get('anyOf')
     if is_list_of_type(any_of_entities, Dict) and all(is_dict_with_keys_of_type(d, str) for d in any_of_entities):
         name = fixing_reserved_typename(name, config.lang)
+        documentation_properties = _build_documentation_generator_properties(dictionary=dictionary,
+                                                                             location=location,
+                                                                             mode=mode)
+        include_in_documentation_toc = False
+        if documentation_properties is not None:
+            include_in_documentation_toc = documentation_properties.include_in_toc
         entity_enum: List[Declarable] = _entity_enumeration_build(
             entities=any_of_entities,
             name=name,
             original_name=outer_name,
-            include_in_documentation_toc=dictionary.get('include_in_documentation_toc', False),
+            include_in_documentation_toc=include_in_documentation_toc,
             root_entity=dictionary.get('root_entity', False),
             generate_case_for_templates=generate_cases_for_templates(config.lang, dictionary),
             location=location + 'anyOf',

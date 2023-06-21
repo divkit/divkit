@@ -1,7 +1,11 @@
 {
   "protocol_name": "div-sight-action",
   "type": "object",
-  "include_in_documentation_toc": false,
+  "codegen": {
+    "documentation": {
+      "include_in_toc": false
+    }
+  },
   "allOf": [
     {
       "$ref": "div-action-base.json"

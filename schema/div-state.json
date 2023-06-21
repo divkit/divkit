@@ -1,12 +1,20 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_state",
-  "generate_swift_optional_arguments": false,
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
   "definitions": {
     "div_state": {
       "type": "object",
-      "generate_swift_optional_arguments": false,
       "alias_divan": "item",
+      "codegen": {
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
       "properties": {
         "state_id": {
           "type": "string",

@@ -20,7 +20,8 @@ from ...schema.modeling.entities import (
     ObjectFormat,
     StaticString,
     String,
-    Url
+    Url,
+    DocumentationGeneratorProperties,
 )
 from ...schema.modeling.text import Text
 
@@ -66,6 +67,11 @@ class DocumentationDeclarable(Declarable):
     @property
     @abstractmethod
     def include_in_menu_file(self) -> bool:
+        pass
+
+    @property
+    @abstractmethod
+    def include_in_documentation_toc(self) -> bool:
         pass
 
 
@@ -125,10 +131,6 @@ class DocumentationEntity(Entity, DocumentationDeclarable):
             prop.update_base()
 
     @property
-    def display_name(self) -> str:
-        return self._display_name
-
-    @property
     def is_deprecated(self) -> bool:
         return self._is_deprecated
 
@@ -136,9 +138,15 @@ class DocumentationEntity(Entity, DocumentationDeclarable):
     def properties_doc(self) -> List[DocumentationProperty]:
         return cast(List[DocumentationProperty], self.properties)
 
+    @property
+    def include_in_documentation_toc(self) -> bool:
+        if not isinstance(self.generator_properties, DocumentationGeneratorProperties):
+            return False
+        return cast(DocumentationGeneratorProperties, self.generator_properties).include_in_toc
+
     def json_description(self, obj_stack: List[Declarable], prefix: str = '', suffix: str = '') -> Text:
         if self in obj_stack:
-            return Text(prefix + self.display_name + suffix)
+            return Text(prefix + self.original_name + suffix)
 
         result = Text(prefix + '{')
         last_index = len(self.properties_doc) - 1

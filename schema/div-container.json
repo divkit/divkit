@@ -1,7 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_container",
-  "generate_swift_optional_arguments": false,
   "codegen": {
     "divan": {
       "forced_properties_order": [
@@ -27,6 +26,9 @@
           }
         }
       }
+    },
+    "swift": {
+      "generate_optional_arguments": false
     }
   },
   "definitions": {

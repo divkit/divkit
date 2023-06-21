@@ -1,7 +1,6 @@
 {
   "$description": "translations.json#/div_data",
   "typescript_templatable": false,
-  "generate_swift_optional_arguments": false,
   "root_entity": true,
   "codegen": {
     "divan": {
@@ -11,13 +10,15 @@
         "log_id",
         "states"
       ]
+    },
+    "swift": {
+      "generate_optional_arguments": false
     }
   },
   "definitions": {
     "div_state": {
       "type": "object",
       "typescript_templatable": false,
-      "generate_swift_optional_arguments": false,
       "codegen": {
         "divan": {
           "alias_factory": "root",
@@ -26,6 +27,9 @@
             "state_id",
             "div"
           ]
+        },
+        "swift": {
+          "generate_optional_arguments": false
         }
       },
       "properties": {

@@ -1,11 +1,19 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_tabs",
-  "generate_swift_optional_arguments": false,
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
   "definitions": {
     "item": {
       "type": "object",
-      "generate_swift_optional_arguments": false,
+      "codegen": {
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
       "properties": {
         "title": {
           "$ref": "common.json#/non_empty_string",

@@ -20,7 +20,8 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
-    ObjectFormat
+    ObjectFormat,
+    SwiftGeneratorProperties,
 )
 from ...config import GenerationMode
 from ... import utils
@@ -95,6 +96,12 @@ class SwiftEntity(Entity):
         return self.has_static_type
 
     @property
+    def swift_super_protocol(self) -> Optional[str]:
+        if not isinstance(self.generator_properties, SwiftGeneratorProperties):
+            return None
+        return cast(SwiftGeneratorProperties, self.generator_properties).super_protocol
+
+    @property
     def properties_swift(self) -> List[SwiftProperty]:
         self.update_bases()
         if self.generation_mode.is_template and self.has_parent_property:
@@ -147,7 +154,11 @@ class SwiftEntity(Entity):
             if not self.generation_mode.is_template:
                 if prop.parsed_value_is_optional:
                     nullability = '' if prop.should_be_optional else '?'
-                    optionality = ' = nil' if self._generate_swift_optional_args else ''
+                    generate_optional_args = True
+                    if isinstance(self.generator_properties, SwiftGeneratorProperties):
+                        properties = cast(SwiftGeneratorProperties, self.generator_properties)
+                        generate_optional_args = properties.generate_optional_args
+                    optionality = ' = nil' if generate_optional_args else ''
                 else:
                     nullability = ''
                     optionality = ''

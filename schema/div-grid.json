@@ -1,7 +1,11 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_grid",
-  "generate_swift_optional_arguments": false,
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
   "allOf": [
     {
       "$ref": "div-base.json"
