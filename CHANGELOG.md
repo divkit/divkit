@@ -1,3 +1,16 @@
+## 25.6.0
+
+# JSON Schema:
+* Fixed accessibility for `DivSelect`
+
+# Android Client:
+* Fixed `min_width` for horizontal container
+* Fixed accessibility for `DivSelect`
+
+# iOS Client:
+* Fixed borders with rounded corners.
+* Fixed `DivGallery` with `match_parent` items layout.
+
 ## 25.5.0
 
 # Android Client:
