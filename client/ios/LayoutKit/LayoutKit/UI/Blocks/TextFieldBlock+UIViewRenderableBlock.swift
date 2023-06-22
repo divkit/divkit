@@ -129,9 +129,9 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
       textField.isUserInteractionEnabled = true
       let setFirstResponder = { [weak self] in
         if isFirstResponder {
-          self?.textField.becomeFirstResponder()
+          _ = self?.textField.becomeFirstResponder()
         } else {
-          self?.textField.resignFirstResponder()
+          _ = self?.textField.resignFirstResponder()
         }
       }
       guard textField.window != nil else { 
