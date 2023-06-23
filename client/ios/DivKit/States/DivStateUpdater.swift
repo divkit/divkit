@@ -1,4 +1,4 @@
-import Foundation
+import BasePublic
 
 public protocol DivStateUpdater: AnyObject {
   func set(
