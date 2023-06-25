@@ -56,7 +56,7 @@ private let dictWithoutRequiredField: [String: Any] = [
         "type": "separator",
       ],
       "state_id": 0,
-    ],
+    ] as [String: Any],
   ],
 ]
 
@@ -66,10 +66,10 @@ private let dictWithInvalidField: [String: Any] = [
     [
       "div": [
         "type": "container",
-        "items": [],
-      ],
+        "items": [] as [Any],
+      ] as [String: Any],
       "state_id": 0,
-    ],
+    ] as [String: Any],
     [
       "div": [
         "type": "separator",
@@ -87,7 +87,7 @@ private let dictWithMissingType: [String: Any] = [
         "type": "unknown_type",
       ],
       "state_id": 0,
-    ],
+    ] as [String: Any],
   ],
 ]
 
@@ -99,7 +99,7 @@ private let dictWithTypeMismatch: [String: Any] = [
         "type": "separator",
       ],
       "state_id": 0,
-    ],
+    ] as [String: Any],
   ],
 ]
 
@@ -112,14 +112,14 @@ private let invalidFieldErrors: [DeserializationError] = [
     field: statesKey,
     error: .composite(
       error: .invalidValue(
-        result: [],
+        result: [] as [Any],
         from: [
           "state_id": 0,
           "div": [
             "type": "container",
-            "items": [],
-          ],
-        ]),
+            "items": [] as [Any],
+          ] as [String: Any],
+        ] as [String: Any]),
       causes: NonEmptyArray(
         .nestedObjectError(
           field: "0",
@@ -130,14 +130,14 @@ private let invalidFieldErrors: [DeserializationError] = [
                 result: nil,
                 from: [
                   "type": "container",
-                  "items": [],
-                ]),
+                  "items": [] as [Any],
+                ] as [String: Any]),
               causes: NonEmptyArray(
                 .nestedObjectError(
                   field: itemsKey,
                   error: .invalidValue(
-                    result: [],
-                    value: []
+                    result: [] as [Any],
+                    value: [] as [Any]
                   )
                 )
               )
@@ -164,13 +164,13 @@ private let missingTypeErrors: [DeserializationError] = [
     field: statesKey,
     error: .composite(
       error: .invalidValue(
-        result: [],
+        result: [] as [Any],
         from: [
           "state_id": 0,
           "div": [
             "type": "unknown_type",
           ],
-        ]
+        ] as [String : Any]
       ),
       causes: NonEmptyArray(
         .nestedObjectError(
