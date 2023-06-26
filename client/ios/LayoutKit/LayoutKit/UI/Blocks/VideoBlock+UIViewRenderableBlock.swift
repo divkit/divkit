@@ -116,6 +116,10 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     super.layoutSubviews()
     videoView?.frame = bounds
   }
+
+  deinit {
+    player?.pause()
+  }
 }
 
 extension VideoBlockViewModel {
