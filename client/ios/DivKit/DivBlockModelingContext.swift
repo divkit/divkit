@@ -22,7 +22,15 @@ public struct DivBlockModelingContext {
   public let flagsInfo: DivFlagsInfo
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
-  public let expressionResolver: ExpressionResolver
+  private let variables: DivVariables
+  public var expressionResolver: ExpressionResolver {
+    ExpressionResolver(
+      variables: variables,
+      errorTracker: { [weak errorsStorage] error in
+        errorsStorage?.add(DivBlockModelingRuntimeError(error, path: parentPath))
+      }
+    )
+  }
   public let debugParams: DebugParams
   public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
@@ -73,16 +81,7 @@ public struct DivBlockModelingContext {
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage
 
-    if debugParams.isDebugInfoEnabled {
-      self.expressionResolver = ExpressionResolver(
-        variables: variables,
-        errorTracker: { [weak errorsStorage] error in
-          errorsStorage?.add(error)
-        }
-      )
-    } else {
-      self.expressionResolver = ExpressionResolver(variables: variables)
-    }
+    self.variables = variables
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {
