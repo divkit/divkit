@@ -145,8 +145,9 @@ internal class DivStateLayout @JvmOverloads constructor(
             return true
         }
 
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
             val view = this.view ?: return false
+            if (e1 == null) return false
             val scrollDirection = sign(distanceX).toInt()
             if (view.translationX == 0f &&
                 abs(distanceX) > 2 * abs(distanceY) &&

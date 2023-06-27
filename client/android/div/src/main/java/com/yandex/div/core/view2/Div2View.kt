@@ -382,7 +382,7 @@ class Div2View private constructor(
         histogramReporter.onMeasureFinished()
     }
 
-    override fun draw(canvas: Canvas?) {
+    override fun draw(canvas: Canvas) {
         drawWasSkipped = false
         histogramReporter.onDrawStarted()
         super.draw(canvas)
