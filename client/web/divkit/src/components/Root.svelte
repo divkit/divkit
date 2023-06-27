@@ -117,7 +117,7 @@
             return;
         }
 
-        return variables;
+        return localVariables;
     }
 
     const builtinSet = new Set(builtinProtocols);
