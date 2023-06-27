@@ -286,8 +286,12 @@
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
 
+        // 0.01 forces Chromium to use scroll-snap (exact correct scroll position will not trigger it)
+        // Chromium will save scroll-snapped value and will not save exact one
+        // Saved scroll position is used on resnapping (e.g. content change)
+
         scroller.scroll({
-            [scrollDirection]: Math.max(0, galleryElements[index][elementOffset] - itemSpacing / 2),
+            [scrollDirection]: Math.max(0, galleryElements[index][elementOffset] + .01 - itemSpacing / 2),
             behavior
         });
     }
