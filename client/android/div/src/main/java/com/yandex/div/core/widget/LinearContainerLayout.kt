@@ -78,6 +78,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var dividerWidth = 0
     private var dividerHeight = 0
 
+    private var dividerMarginTop = 0
+    private var dividerMarginBottom = 0
+    private var dividerMarginLeft = 0
+    private var dividerMarginRight = 0
+
     var dividerDrawable: Drawable? = null
         set(value) {
             if (field == value) return
@@ -88,6 +93,15 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             requestLayout()
         }
 
+    fun setDividerMargins(left: Int, right: Int, top: Int, bottom: Int) {
+        dividerMarginLeft = left
+        dividerMarginRight = right
+        dividerMarginTop = top
+        dividerMarginBottom = bottom
+
+        requestLayout()
+    }
+
     @ShowSeparatorsMode
     var showDividers: Int = 0
         set(value) {
@@ -95,8 +109,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             field = value
             requestLayout()
         }
-
-    var dividerPadding = 0
 
     private val constrainedChildren = mutableListOf<View>()
     private val skippedMatchParentChildren = mutableSetOf<View>()
@@ -126,14 +138,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private fun drawDividersVertical(canvas: Canvas) {
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
-                val top = child.top - child.lp.topMargin - dividerHeight
+                val top = child.top - child.lp.topMargin - dividerHeight - dividerMarginBottom
                 drawHorizontalDivider(canvas, top)
             }
         }
         if (hasDividerBeforeChildAt(childCount)) {
             val bottom = getChildAt(childCount - 1)?.let {
-                it.bottom + it.lp.bottomMargin
-            } ?: (height - paddingBottom - dividerHeight)
+                it.bottom + it.lp.bottomMargin + dividerMarginTop
+            } ?: (height - paddingBottom - dividerHeight - dividerMarginBottom)
             drawHorizontalDivider(canvas, bottom)
         }
     }
@@ -143,9 +155,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
                 val position = if (isLayoutRtl) {
-                    child.right + child.lp.rightMargin
+                    child.right + child.lp.rightMargin + dividerMarginLeft
                 } else {
-                    child.left - child.lp.leftMargin - dividerWidth
+                    child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight
                 }
                 drawVerticalDivider(canvas, position)
             }
@@ -154,29 +166,31 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (hasDividerBeforeChildAt(childCount)) {
             val child = getChildAt(childCount - 1)
             val position = when {
-                child == null && isLayoutRtl -> paddingLeft
-                child == null -> width - paddingRight - dividerWidth
-                isLayoutRtl -> child.left - child.lp.leftMargin - dividerWidth
-                else -> child.right + child.lp.rightMargin
+                child == null && isLayoutRtl -> paddingLeft + dividerMarginLeft
+                child == null -> width - paddingRight - dividerWidth - dividerMarginRight
+                isLayoutRtl -> child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight
+                else -> child.right + child.lp.rightMargin + dividerMarginLeft
             }
             drawVerticalDivider(canvas, position)
         }
     }
 
-    private fun drawHorizontalDivider(canvas: Canvas, top: Int) = drawDivider(
-        canvas,
-        paddingLeft + dividerPadding,
-        top,
-        width - paddingRight - dividerPadding,
-        top + dividerHeight
-    )
+    private fun drawHorizontalDivider(canvas: Canvas, top: Int) {
+        drawDivider(
+            canvas,
+            paddingLeft + dividerMarginLeft,
+            top,
+            width - paddingRight - dividerMarginRight,
+            top + dividerHeight
+        )
+    }
 
     private fun drawVerticalDivider(canvas: Canvas, left: Int) = drawDivider(
         canvas,
         left,
-        paddingTop + dividerPadding,
+        paddingTop + dividerMarginTop,
         left + dividerWidth,
-        height - paddingBottom - dividerPadding
+        height - paddingBottom - dividerMarginBottom
     )
 
     private fun drawDivider(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) =
@@ -258,7 +272,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
-                totalLength += dividerHeight
+                totalLength += dividerHeightWithMargins
             }
             totalWeight += child.lp.fixedVerticalWeight
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
@@ -270,7 +284,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         forEachSignificant { considerMatchParentChildMarginsInHeight(it, heightSpec) }
 
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
-            totalLength += dividerHeight
+            totalLength += dividerHeightWithMargins
         }
         totalLength += paddingTop + paddingBottom
 
@@ -299,6 +313,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             resolveSizeAndState(heightSize, heightSpec, childMeasuredState shl MEASURED_HEIGHT_STATE_SHIFT)
         )
     }
+
+    private val dividerHeightWithMargins get() = dividerHeight + dividerMarginTop + dividerMarginBottom
 
     // At this point we should measure only those children which affect container's final dimensions
     private fun measureChildWithSignificantSizeVertical(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -544,7 +560,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
-                totalLength += dividerWidth
+                totalLength += dividerWidthWithMargins
             }
             totalWeight += child.lp.fixedHorizontalWeight
             measureChildWithSignificantSizeHorizontal(child, widthMeasureSpec, heightSpec)
@@ -553,7 +569,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         forEachSignificant { considerMatchParentChildMarginsInWidth(it, widthMeasureSpec) }
 
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
-            totalLength += dividerWidth
+            totalLength += dividerWidthWithMargins
         }
         totalLength += paddingLeft + paddingRight
         if (isAtMost(widthMeasureSpec) && totalWeight > 0) {
@@ -590,6 +606,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             resolveSizeAndState(heightSize, heightSpec, childMeasuredState shl MEASURED_HEIGHT_STATE_SHIFT)
         )
     }
+
+    private val dividerWidthWithMargins get() = dividerWidth + dividerMarginRight + dividerMarginLeft
 
     // At this point we should measure only those children which affect container's final dimensions
     private fun measureChildWithSignificantSizeHorizontal(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -826,7 +844,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 else -> paddingLeft + lp.leftMargin
             }
             if (hasDividerBeforeChildAt(i)) {
-                childTop += dividerHeight
+                childTop += dividerHeightWithMargins
             }
             childTop += lp.topMargin
             setChildFrame(child, childLeft, childTop, childWidth, childHeight)
@@ -901,7 +919,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 else -> childTop = paddingTop
             }
             if (hasDividerBeforeChildAt(childIndex)) {
-                childLeft += dividerWidth
+                childLeft += dividerWidthWithMargins
             }
             childLeft += lp.leftMargin
             setChildFrame(child, childLeft, childTop, childWidth, childHeight)

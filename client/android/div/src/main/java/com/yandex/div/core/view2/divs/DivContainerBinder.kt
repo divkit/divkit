@@ -32,6 +32,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivWrapContentSize
@@ -241,6 +242,18 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         observeSeparatorShowMode(separator, resolver) { showDividers = it }
         observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
+        observeSeparatorMargins(separator.margins, resolver) {
+            if (separator.margins == null) return@observeSeparatorMargins
+            val metrics = resources.displayMetrics
+            val sizeUnit = separator.margins.unit.evaluate(resolver)
+
+            setDividerMargins(
+                left = separator.margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit),
+                right = separator.margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit),
+                top = separator.margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit),
+                bottom = separator.margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            )
+        }
     }
 
     private fun DivWrapLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
@@ -293,6 +306,21 @@ internal class DivContainerBinder @Inject constructor(
         applyDrawable: (Drawable?) -> Unit
     ) = observeDrawable(resolver, separator.style) {
         applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
+    }
+
+    private fun DivLinearLayout.observeSeparatorMargins(
+        margins: DivEdgeInsets?,
+        resolver: ExpressionResolver,
+        applyMargins: (Any?) -> Unit
+    ) {
+        if (margins == null) return
+        applyMargins.invoke(null)
+
+        addSubscription(margins.unit.observe(resolver, applyMargins))
+        addSubscription(margins.left.observe(resolver, applyMargins))
+        addSubscription(margins.top.observe(resolver, applyMargins))
+        addSubscription(margins.right.observe(resolver, applyMargins))
+        addSubscription(margins.bottom.observe(resolver, applyMargins))
     }
 
     private fun observeChildViewAlignment(
