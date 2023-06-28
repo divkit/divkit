@@ -300,6 +300,8 @@ extension Collection where Element == DivVariable {
         let name = DivVariableName(rawValue: urlVariable.name)
         if variables.keys.contains(name) { return }
         variables[name] = .url(urlVariable.value)
+      case .dictVariable:
+        DivKitLogger.warning("Unsupported variable type: dict")
       }
     }
     return variables

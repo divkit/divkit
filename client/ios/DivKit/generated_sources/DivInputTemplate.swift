@@ -118,7 +118,7 @@ public final class DivInputTemplate: TemplateValue {
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
-  public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: bottom
+  public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textVariable: Field<String>? // at least 1 char
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements

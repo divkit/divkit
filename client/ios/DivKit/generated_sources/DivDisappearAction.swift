@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivDisappearAction {
+public final class DivDisappearAction: DivSightAction {
   public let disappearDuration: Expression<Int> // constraint: number >= 0; default value: 800
   public let downloadCallbacks: DivDownloadCallbacks?
   public let logId: String // at least 1 char

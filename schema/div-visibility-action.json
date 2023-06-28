@@ -7,6 +7,7 @@
     {
       "properties": {
         "visibility_percentage": {
+          "type": "integer",
           "constraint": "number > 0 && number <= 100",
           "default_value": "50",
           "$description": "translations.json#/div_visibility_action_visibility_percentage"

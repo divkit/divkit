@@ -61,7 +61,7 @@ public final class DivInput: DivBase {
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
-  public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: bottom
+  public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
   public let textColor: Expression<Color> // default value: #FF000000
   public let textVariable: String // at least 1 char
   public let tooltips: [DivTooltip]? // at least 1 elements
@@ -149,7 +149,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(expression: textAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.bottom
+    resolver.resolveStringBasedValue(expression: textAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
   }
 
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
@@ -370,7 +370,7 @@ public final class DivInput: DivBase {
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
     self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
-    self.textAlignmentVertical = textAlignmentVertical ?? .value(.bottom)
+    self.textAlignmentVertical = textAlignmentVertical ?? .value(.center)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable
     self.tooltips = tooltips

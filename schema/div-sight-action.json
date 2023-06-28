@@ -12,9 +12,6 @@
     },
     {
       "properties": {
-        "visibility_percentage": {
-          "type": "integer"
-        },
         "log_limit": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "1",

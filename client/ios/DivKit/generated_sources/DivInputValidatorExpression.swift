@@ -7,7 +7,7 @@ import Serialization
 public final class DivInputValidatorExpression {
   public static let type: String = "expression"
   public let allowEmpty: Expression<Bool> // default value: false
-  public let condition: Expression<String> // at least 1 char
+  public let condition: Expression<Bool>
   public let labelId: Expression<String> // at least 1 char
   public let variable: String // at least 1 char
 
@@ -15,8 +15,8 @@ public final class DivInputValidatorExpression {
     resolver.resolveNumericValue(expression: allowEmpty) ?? false
   }
 
-  public func resolveCondition(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: condition, initializer: { $0 })
+  public func resolveCondition(_ resolver: ExpressionResolver) -> Bool? {
+    resolver.resolveNumericValue(expression: condition)
   }
 
   public func resolveLabelId(_ resolver: ExpressionResolver) -> String? {
@@ -26,9 +26,6 @@ public final class DivInputValidatorExpression {
   static let allowEmptyValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
-  static let conditionValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   static let labelIdValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
@@ -37,7 +34,7 @@ public final class DivInputValidatorExpression {
 
   init(
     allowEmpty: Expression<Bool>? = nil,
-    condition: Expression<String>,
+    condition: Expression<Bool>,
     labelId: Expression<String>,
     variable: String
   ) {
