@@ -26,16 +26,7 @@ public struct ImageHolderFactory {
   ) {
     _make = { url, placeholder in
       guard let url = url else {
-        switch placeholder {
-        case let .image(image)?:
-          return image
-        case let .color(color)?:
-          return ColorHolder(color: color)
-        case let .view(view)?:
-          return ViewImageHolder(view: view)
-        case .none:
-          return NilImageHolder()
-        }
+        return placeholder?.toImageHolder() ?? NilImageHolder()
       }
       if let localImage = localImageProvider?.localImage(for: url) {
         return localImage

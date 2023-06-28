@@ -84,8 +84,8 @@ extension ImagePlaceholder {
     switch self {
     case let .image(image):
       return image.size
-    case .color, .view:
-      assertionFailure("cannot get size of color or view")
+    case .color, .view, .imageData:
+      assertionFailure("cannot get size of color, view or imageData")
       return .zero
     @unknown default:
       assertionFailure("cannot get size of unknown image placeholder")
