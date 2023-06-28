@@ -291,3 +291,5 @@ module.exports = [{
         }
     }
 }];
+
+module.exports.configCommon = configCommon;
