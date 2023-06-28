@@ -52,6 +52,7 @@ internal class DivStateBinder @Inject constructor(
     private val divStateCache: DivStateCache,
     private val temporaryStateCache: TemporaryDivStateCache,
     private val divActionBinder: DivActionBinder,
+    private val divActionBeaconSender: DivActionBeaconSender,
     private val divPatchManager: DivPatchManager,
     private val divPatchCache: DivPatchCache,
     private val div2Logger: Div2Logger,
@@ -186,6 +187,7 @@ internal class DivStateBinder @Inject constructor(
                     actions.forEach {
                         divActionBinder.handleAction(divView, it)
                         div2Logger.logSwipedAway(divView, layout, it)
+                        divActionBeaconSender.sendSwipeOutActionBeacon(it, resolver)
                     }
                 }
             }

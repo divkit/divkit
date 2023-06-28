@@ -45,6 +45,18 @@ internal class DivActionBeaconSender @Inject constructor(
         }
     }
 
+    fun sendSwipeOutActionBeacon(action: DivAction, resolver: ExpressionResolver) {
+        val url = action.logUrl?.evaluate(resolver)
+        if (url != null) {
+            val sendBeaconManager = sendBeaconManagerLazy.get()
+            if (sendBeaconManager == null) {
+                KAssert.fail { "SendBeaconManager was not configured" }
+                return
+            }
+            sendBeaconManager.addUrl(url, action.toHttpHeaders(resolver), action.payload)
+        }
+    }
+
     private fun DivAction.toHttpHeaders(resolver: ExpressionResolver): Map<String, String> {
         val headers = mutableMapOf<String, String>()
         referer?.let { referer ->

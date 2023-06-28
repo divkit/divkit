@@ -40,6 +40,7 @@ class DivStateBinderTest: DivBinderTest() {
     private val errorCollectors = mock<ErrorCollectors>()
     private val divPatchManager = mock<DivPatchManager>()
     private val divPatchCache = mock<DivPatchCache>()
+    private val divActionBeaconSender = mock<DivActionBeaconSender>()
 
     private val div = UnitTestData(STATE_DIR, "state_list.json").div
     private val divState = div.value() as DivState
@@ -54,6 +55,7 @@ class DivStateBinderTest: DivBinderTest() {
         divStateCache = stateCache,
         temporaryStateCache = temporaryStateCache,
         divActionBinder = divActionBinder,
+        divActionBeaconSender = divActionBeaconSender,
         divPatchManager = divPatchManager,
         divPatchCache = divPatchCache,
         div2Logger = div2Logger,

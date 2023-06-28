@@ -41,6 +41,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     private val errorCollectors = mock<ErrorCollectors>()
     private val divPatchManager = mock<DivPatchManager>()
     private val divPatchCache = mock<DivPatchCache>()
+    private val divActionBeaconSender = mock<DivActionBeaconSender>()
 
     private val stateLayout = (viewCreator.create(divOne.div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
         layoutParams = defaultLayoutParams()
@@ -53,6 +54,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         divStateCache = stateCache,
         temporaryStateCache = temporaryStateCache,
         divActionBinder = actionBinder,
+        divActionBeaconSender = divActionBeaconSender,
         divPatchManager = divPatchManager,
         divPatchCache = divPatchCache,
         div2Logger = div2Logger,
