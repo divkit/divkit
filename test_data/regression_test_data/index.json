@@ -1819,6 +1819,19 @@
         "DivVideo"
       ],
       "file": "video/video_stream.json"
+    },
+    {
+      "title": "Variables in default state id",
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Check default state"
+      ],
+      "expected_results": [
+        "OK - content in text"
+      ],
+      "file": "state/default_state_id.json"
     }
   ]
 }

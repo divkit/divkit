@@ -29,19 +29,18 @@ extension DivState: DivBlockModeling {
     let divStatePath = context.parentDivStatePath + id
     let stateManager = context.stateManager
     let stateManagerItem = stateManager.get(stateBlockPath: divStatePath)
-
-    let selectedState = stateInterceptor?.getAppropriateState(divState: self, context: context)
+    
+    let expressionResolver = context.expressionResolver
+    let activeState = stateInterceptor?.getAppropriateState(divState: self, context: context)
       ?? states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
-    let defaultState = states.first { $0.stateId == defaultStateId?.rawValue }
+      ?? states.first { $0.stateId == resolveDefaultStateId(expressionResolver) }
       ?? states[0]
-    let activeState = selectedState ?? defaultState
     let activeStateID = DivStateID(rawValue: activeState.stateId)
     let activeStatePath = divStatePath + activeStateID
 
     var previousBlock: Block?
     var animationIn: [TransitioningAnimation]?
     var animationOut: [TransitioningAnimation]?
-    let expressionResolver = context.expressionResolver
     let activeStateId = activeState.stateId
     if let stateManagerItem = stateManagerItem,
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
