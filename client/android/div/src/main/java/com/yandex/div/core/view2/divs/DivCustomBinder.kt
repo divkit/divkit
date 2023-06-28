@@ -129,4 +129,10 @@ internal class DivCustomBinder @Inject constructor(
         val prevDiv: DivCustom = this?.getTag(R.id.div_custom_tag) as? DivCustom ?: return false
         return prevDiv.customType == div.customType
     }
+
+    fun setDataWithoutBinding(view: View, div: DivCustom) {
+        val container = view as? ViewGroup ?: return
+        val customView = if (container.isNotEmpty()) container[0] else return
+        customView.setTag(R.id.div_custom_tag, div)
+    }
 }

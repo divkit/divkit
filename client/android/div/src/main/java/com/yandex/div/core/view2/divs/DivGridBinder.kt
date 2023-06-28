@@ -143,4 +143,14 @@ internal class DivGridBinder @Inject constructor(
             requestLayout()
         }
     }
+
+    fun setDataWithoutBinding(view: DivGridLayout, div: DivGrid) {
+        view.div = div
+        for (gridIndex in div.items.indices) {
+            divBinder.get().setDataWithoutBinding(
+                view.getChildAt(gridIndex),
+                div.items[gridIndex]
+            )
+        }
+    }
 }

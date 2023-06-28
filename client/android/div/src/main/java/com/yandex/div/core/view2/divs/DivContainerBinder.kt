@@ -409,4 +409,18 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector.logWarning(Throwable(
             INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId, size)))
     }
+
+    fun setDataWithoutBinding(view: ViewGroup, div: DivContainer) {
+        when (view) {
+            is DivWrapLayout -> view.div = div
+            is DivLinearLayout -> view.div = div
+            is DivFrameLayout -> view.div = div
+        }
+        for (containerIndex in div.items.indices) {
+            divBinder.get().setDataWithoutBinding(
+                view.getChildAt(containerIndex),
+                div.items[containerIndex]
+            )
+        }
+    }
 }

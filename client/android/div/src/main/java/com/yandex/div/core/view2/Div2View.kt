@@ -66,7 +66,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.util.WeakHashMap
-import kotlin.collections.ArrayDeque
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -297,6 +296,8 @@ class Div2View private constructor(
             bindOnAttachRunnable?.cancel()
             rebind(oldData, false)
             divData = newDivData
+            val state = newDivData.stateToBind
+            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
@@ -835,7 +836,7 @@ class Div2View private constructor(
             }
             histogramReporter?.onRebindingStarted()
             viewComponent.errorCollectors.getOrCreate(dataTag, divData).cleanRuntimeWarningsAndErrors()
-            val state = newData.states.firstOrNull { it.stateId == stateId } ?: newData.states[0]
+            val state = newData.stateToBind
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
             }
@@ -852,6 +853,8 @@ class Div2View private constructor(
             KAssert.fail(error)
         }
     }
+
+    private val DivData.stateToBind get() = states.firstOrNull { it.stateId == stateId } ?: states[0]
 
     var visualErrorsEnabled: Boolean
         set(value) {
