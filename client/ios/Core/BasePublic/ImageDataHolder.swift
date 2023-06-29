@@ -1,6 +1,6 @@
 import Foundation
 
-class ImageDataHolder: ImageHolder {
+final class ImageDataHolder: ImageHolder {
   private let imageData: ImageData
   public let image: Image?
   public var placeholder: ImagePlaceholder? { .imageData(imageData) }
