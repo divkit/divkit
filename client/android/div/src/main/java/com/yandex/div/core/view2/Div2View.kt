@@ -46,6 +46,7 @@ import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -403,6 +404,7 @@ class Div2View private constructor(
         super.onDetachedFromWindow()
         tryLogVisibility()
         divTimerEventDispatcher?.onDetach(this)
+        releaseChildren(this)
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -826,7 +828,13 @@ class Div2View private constructor(
         return divVideoActionHandler.handleAction(this, divId, command)
     }
 
-    internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
+    internal fun unbindViewFromDiv(view: View): Div? {
+        val removedDiv = viewToDivBindings.remove(view)
+        if (viewToDivBindings.isEmpty()) {
+            releaseViewVisitor.visit(view)
+        }
+        return removedDiv
+    }
 
     private fun rebind(newData: DivData, isAutoanimations: Boolean) {
         try {

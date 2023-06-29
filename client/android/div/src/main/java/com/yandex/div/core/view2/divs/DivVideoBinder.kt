@@ -31,17 +31,7 @@ internal class DivVideoBinder @Inject constructor(
     private val videoViewMapper: DivVideoViewMapper
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
-        val oldDiv = view.div
-        if (div == oldDiv) return
-
         val resolver = divView.expressionResolver
-        view.closeAllSubscription()
-
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
-
-        view.removeAllViews()
-
         val player = divView.div2Component.divVideoFactory.makePlayer(
             div.createSource(resolver),
             DivPlayerPlaybackConfig(
@@ -51,6 +41,20 @@ internal class DivVideoBinder @Inject constructor(
                 payload = div.playerSettingsPayload
             )
         )
+
+        val oldDiv = view.div
+        if (div == oldDiv) {
+            // Should recreate player when rebinding view because player engine was released
+            view.getPlayerView()?.attach(player)
+            return
+        }
+
+        view.closeAllSubscription()
+
+        view.div = div
+        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
+
+        view.removeAllViews()
 
         val playerView = divView.div2Component.divVideoFactory.makePlayerView(view.context)
         val preview = div.createPreview(resolver)
