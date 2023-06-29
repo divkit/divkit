@@ -103,7 +103,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .divDataChangeListener(transitionScheduler)
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
 
         divContext = divContext(baseContext = this, configuration = divConfiguration)

@@ -38,8 +38,7 @@
           "$description": "translations.json#/div_font_size_unit"
         },
         "font_family": {
-          "$ref": "div-font-family.json",
-          "default_value": "text",
+          "$ref": "common.json#/non_empty_string",
           "$description": "translations.json#/div_font_family"
         },
         "font_weight": {

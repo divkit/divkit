@@ -56,7 +56,7 @@ fun divConfiguration(
         .tooltipRestrictor { _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
-        .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(activity))
+        .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))
         .viewPoolReporter(object : ViewPoolProfiler.Reporter {
             override fun reportEvent(message: String, result: Map<String, Any>) {
                 reporter.reportEvent(message, result)

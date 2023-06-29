@@ -108,8 +108,7 @@
               "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight"
             },
             "font_family": {
-              "$ref": "div-font-family.json",
-              "default_value": "text",
+              "$ref": "common.json#/non_empty_string",
               "$description": "translations.json#/div_font_family"
             },
             "active_text_color": {

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
-import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
@@ -19,9 +18,10 @@ import com.yandex.div.core.player.DivPlayerFactory;
 import dagger.Module;
 import dagger.Provides;
 
-import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
@@ -64,7 +64,7 @@ public class DivConfiguration {
     @NonNull
     private final DivTypefaceProvider mTypefaceProvider;
     @NonNull
-    private final DivTypefaceProvider mDisplayTypefaceProvider;
+    private final Map<String, DivTypefaceProvider> mTypefaceProviders;
     @NonNull
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
 
@@ -102,7 +102,7 @@ public class DivConfiguration {
             @NonNull List<DivExtensionHandler> extensionHandlers,
             @NonNull DivDownloader divDownloader,
             @NonNull DivTypefaceProvider typefaceProvider,
-            @NonNull DivTypefaceProvider displayTypefaceProvider,
+            @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
             @NonNull ViewPoolProfiler.Reporter reporter,
             @Nullable GlobalVariableController globalVariableController,
             boolean tapBeaconsEnabled,
@@ -134,7 +134,7 @@ public class DivConfiguration {
         mExtensionHandlers = extensionHandlers;
         mDivDownloader = divDownloader;
         mTypefaceProvider = typefaceProvider;
-        mDisplayTypefaceProvider = displayTypefaceProvider;
+        mTypefaceProviders = typefaceProviders;
         mViewPoolReporter = reporter;
         mTapBeaconsEnabled = tapBeaconsEnabled;
         mVisibilityBeaconsEnabled = visibilityBeaconsEnabled;
@@ -305,10 +305,9 @@ public class DivConfiguration {
     }
 
     @Provides
-    @Named(Names.TYPEFACE_DISPLAY)
     @NonNull
-    public DivTypefaceProvider getDisplayTypefaceProvider() {
-        return mDisplayTypefaceProvider;
+    public Map<String, ? extends DivTypefaceProvider> getAdditionalTypefaceProviders() {
+        return mTypefaceProviders;
     }
 
     @Provides
@@ -374,6 +373,8 @@ public class DivConfiguration {
         private DivDownloader mDivDownloader;
         @Nullable
         private DivTypefaceProvider mTypefaceProvider;
+        @Nullable
+        private Map<String, DivTypefaceProvider> mAdditionalTypefaceProviders;
         @Nullable
         private DivTypefaceProvider mDisplayTypefaceProvider;
         @Nullable
@@ -529,14 +530,16 @@ public class DivConfiguration {
         }
 
         @NonNull
-        public Builder typefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
-            mTypefaceProvider = typefaceProvider;
+        public Builder additionalTypefaceProviders(
+            @NonNull Map<String, DivTypefaceProvider> typefaceProviders
+        ) {
+            mAdditionalTypefaceProviders = typefaceProviders;
             return this;
         }
 
         @NonNull
-        public Builder displayTypefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
-            mDisplayTypefaceProvider = typefaceProvider;
+        public Builder typefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
+            mTypefaceProvider = typefaceProvider;
             return this;
         }
 
@@ -634,7 +637,7 @@ public class DivConfiguration {
                     mExtensionHandlers,
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,
                     nonNullTypefaceProvider,
-                    mDisplayTypefaceProvider == null ? nonNullTypefaceProvider : mDisplayTypefaceProvider,
+                    mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
                     mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
                     mTapBeaconsEnabled,

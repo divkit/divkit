@@ -98,7 +98,7 @@ open class DivActivity : AppCompatActivity() {
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
             .extension(DivShimmerExtensionHandler())
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
         return DivViewAdapter(divContext(baseContext = this, configuration = configuration))
     }

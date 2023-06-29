@@ -98,7 +98,7 @@ class Div2Activity : AppCompatActivity() {
             .divDataChangeListener(transitionScheduler)
             .actionHandler(Div2ActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
         val context = divContext(baseContext = this, configuration = divConfiguration)
 

@@ -153,12 +153,17 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeTypeface(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { _: Any -> typeface = typefaceResolver.getTypeface(
-            div.fontFamily.evaluate(resolver),
-            div.fontWeight.evaluate(resolver)
-        ) }
-        addSubscription(div.fontFamily.observeAndGet(resolver, callback))
+        applyTypeface(div, resolver)
+        val callback = { _: Any ->  applyTypeface(div, resolver) }
+        div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
+    }
+
+    private fun DivInputView.applyTypeface(div: DivInput, resolver: ExpressionResolver) {
+        typeface = typefaceResolver.getTypeface(
+            div.fontFamily?.evaluate(resolver),
+            div.fontWeight.evaluate(resolver)
+        )
     }
 
     private fun DivInputView.observeTextColor(div: DivInput, resolver: ExpressionResolver) {
