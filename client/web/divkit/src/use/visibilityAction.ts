@@ -2,6 +2,18 @@ import type { DisappearAction, VisibilityAction } from '../types/visibilityActio
 import { RootCtxValue } from '../context/root';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 
+function checkPercentage(isVisibility: boolean, val: number | undefined, defaultVal: number): number {
+    if (typeof val === 'number') {
+        if (
+            isVisibility && val > 0 && val <= 100 ||
+            !isVisibility && val >= 0 && val < 100
+        ) {
+            return val;
+        }
+    }
+    return defaultVal;
+}
+
 export function visibilityAction(node: HTMLElement, {
     visibilityActions,
     disappearActions,
@@ -48,26 +60,49 @@ export function visibilityAction(node: HTMLElement, {
         });
     }
 
-    const calcedList = visibilityStatus.map(it => rootCtx.getJsonWithVars({
-        visibility_percentage: it.action.visibility_percentage,
-        visibility_duration: it.type === 'visibility' ?
-            (it.action as VisibilityAction).visibility_duration :
-            (it.action as DisappearAction).disappear_duration,
-        log_limit: it.action.log_limit
-    }));
+    const calcedList: {
+        visibility_percentage: number;
+        visibility_duration: number | undefined;
+        log_limit: number | undefined;
+    }[] = visibilityStatus.map(it => {
+        const isVisibility = it.type === 'visibility';
+        const calced = rootCtx.getJsonWithVars({
+            visibility_percentage: it.action.visibility_percentage,
+            visibility_duration: isVisibility ?
+                (it.action as VisibilityAction).visibility_duration :
+                (it.action as DisappearAction).disappear_duration,
+            log_limit: it.action.log_limit
+        });
 
-    const thresholds = [...new Set([...visibilityStatus.map((_it, index) =>
-        (calcedList[index].visibility_percentage || 50) / 100
-    )])];
+        return {
+            ...calced,
+            visibility_percentage: checkPercentage(
+                isVisibility,
+                calced.visibility_percentage,
+                isVisibility ? 50 : 0
+            )
+        };
+    });
+
+    const thresholds = [...new Set(calcedList.map(it =>
+        it.visibility_percentage / 100
+    ))];
 
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             visibilityStatus.forEach(status => {
-                const nowVisible = entry.intersectionRatio >= (status.action.visibility_percentage || 50) / 100;
-                const shouldProc = status.type === 'visibility' ?
+                const calcedParams = calcedList[status.index];
+                const isVisibility = status.type === 'visibility';
+                let nowVisible;
+                if (calcedParams.visibility_percentage === 0) {
+                    nowVisible = entry.intersectionRatio >= 1e-12;
+                } else {
+                    nowVisible = entry.intersectionRatio >= (calcedParams.visibility_percentage / 100);
+                }
+                const shouldProc = isVisibility ?
                     !status.visible && nowVisible :
                     status.visible && !nowVisible;
-                const shouldClear = status.type === 'visibility' ?
+                const shouldClear = isVisibility ?
                     !nowVisible :
                     nowVisible;
 
@@ -76,7 +111,6 @@ export function visibilityAction(node: HTMLElement, {
                         status.timer = setTimeout(() => {
                             ++status.count;
 
-                            const calcedParams = calcedList[status.index];
                             const limit = calcedParams.log_limit === 0 ? Infinity : (calcedParams.log_limit || 1);
                             if (++status.count >= limit) {
                                 status.finished = true;
@@ -95,7 +129,7 @@ export function visibilityAction(node: HTMLElement, {
                                 }
                             }
 
-                            rootCtx.logStat(status.type === 'visibility' ? 'visible' : 'disappear', calcedAction);
+                            rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
                         }, calcedList[status.index].visibility_duration || 800);
                     }
                 } else if (shouldClear) {
