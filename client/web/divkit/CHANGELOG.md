@@ -1,3 +1,8 @@
+## 25.7.0 (July 03, 2023)
+
+Fixes:
+* Fixed update of the`gallery` with the `scroll_mode` = `paging` and `default_item` in rare cases
+
 ## 25.4.0 (June 12, 2023)
 
 Added:
