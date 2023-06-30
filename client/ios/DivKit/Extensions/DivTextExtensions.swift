@@ -21,46 +21,48 @@ extension DivText: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let font = context.fontSpecifiers.font(
-      family: resolveFontFamily(context.expressionResolver).fontFamily,
-      weight: resolveFontWeight(context.expressionResolver).fontWeight,
-      size: resolveFontSizeUnit(context.expressionResolver)
-        .makeScaledValue(resolveFontSize(context.expressionResolver))
+    let expressionResolver = context.expressionResolver
+    
+    let font = context.fontProvider.font(
+      family: resolveFontFamily(expressionResolver) ?? "",
+      weight: resolveFontWeight(expressionResolver),
+      size: resolveFontSizeUnit(expressionResolver)
+        .makeScaledValue(resolveFontSize(expressionResolver))
     )
     var typo = Typo(font: font).allowHeightOverrun
 
-    let alignment = resolveTextAlignmentHorizontal(context.expressionResolver).system
+    let alignment = resolveTextAlignmentHorizontal(expressionResolver).system
     if alignment != .left {
       typo = typo.with(alignment: alignment)
     }
 
-    let kern = CGFloat(resolveLetterSpacing(context.expressionResolver))
+    let kern = CGFloat(resolveLetterSpacing(expressionResolver))
     if !kern.isApproximatelyEqualTo(0) {
       typo = typo.kerned(kern)
     }
 
-    let resolvedColor: Color = resolveTextColor(context.expressionResolver)
+    let resolvedColor: Color = resolveTextColor(expressionResolver)
 
     if resolvedColor != .black {
       typo = typo.with(color: resolvedColor)
     }
 
-    if let lineHeight = resolveLineHeight(context.expressionResolver) {
+    if let lineHeight = resolveLineHeight(expressionResolver) {
       typo = typo.with(height: CGFloat(lineHeight))
     }
 
-    switch resolveStrike(context.expressionResolver) {
+    switch resolveStrike(expressionResolver) {
     case .none: break
     case .single: typo = typo.struckThrough(.single)
     }
 
-    switch resolveUnderline(context.expressionResolver) {
+    switch resolveUnderline(expressionResolver) {
     case .none: break
     case .single: typo = typo.underlined(.single)
     }
 
     let attributedString = makeAttributedString(
-      text: resolveText(context.expressionResolver) ?? ("" as CFString),
+      text: resolveText(expressionResolver) ?? ("" as CFString),
       typo: typo,
       ranges: ranges,
       actions: nil,
@@ -75,7 +77,7 @@ extension DivText: DivBlockModeling {
 
     let truncationToken = ellipsis.map {
       makeAttributedString(
-        text: ($0.resolveText(context.expressionResolver) ?? "") as CFString,
+        text: ($0.resolveText(expressionResolver) ?? "") as CFString,
         typo: typo,
         ranges: $0.ranges,
         actions: $0.makeActions(context: context.actionContext),
@@ -92,15 +94,15 @@ extension DivText: DivBlockModeling {
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),
       text: attributedString,
-      textGradient: makeGradient(context.expressionResolver),
+      textGradient: makeGradient(expressionResolver),
       verticalAlignment:
-      resolveTextAlignmentVertical(context.expressionResolver).alignment,
-      maxIntrinsicNumberOfLines: resolveMaxLines(context.expressionResolver) ?? .max,
-      minNumberOfHiddenLines: resolveMinHiddenLines(context.expressionResolver) ?? 0,
+      resolveTextAlignmentVertical(expressionResolver).alignment,
+      maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
+      minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
       images: images,
       truncationToken: truncationToken,
       truncationImages: truncationImages,
-      canSelect: resolveSelectable(context.expressionResolver)
+      canSelect: resolveSelectable(expressionResolver)
     )
   }
 
@@ -147,39 +149,41 @@ extension DivText: DivBlockModeling {
     to string: CFMutableAttributedString,
     context: DivBlockModelingContext
   ) {
-    let start = range.resolveStart(context.expressionResolver) ?? 0
-    let end = range.resolveEnd(context.expressionResolver) ?? 0
+    let expressionResolver = context.expressionResolver
+
+    let start = range.resolveStart(expressionResolver) ?? 0
+    let end = range.resolveEnd(expressionResolver) ?? 0
     guard end > start && start < CFAttributedStringGetLength(string) else {
       return
     }
 
     let fontTypo: Typo?
     if range.fontSize != nil || range.fontWeight != nil {
-      let font = context.fontSpecifiers.font(
-        family: range.resolveFontFamily(context.expressionResolver)?.fontFamily
-          ?? resolveFontFamily(context.expressionResolver).fontFamily,
+      let font = context.fontProvider.font(
+        family: range.resolveFontFamily(expressionResolver)
+          ?? resolveFontFamily(expressionResolver) ?? "",
         weight: (
-          range.resolveFontWeight(context.expressionResolver)
-            ?? resolveFontWeight(context.expressionResolver)
-        ).fontWeight,
+          range.resolveFontWeight(expressionResolver)
+            ?? resolveFontWeight(expressionResolver)
+        ),
         size: CGFloat(
-          range.resolveFontSize(context.expressionResolver)
-            ?? resolveFontSize(context.expressionResolver)
+          range.resolveFontSize(expressionResolver)
+            ?? resolveFontSize(expressionResolver)
         )
       )
       fontTypo = Typo(font: font)
     } else {
       fontTypo = nil
     }
-    let colorTypo = range.resolveTextColor(context.expressionResolver)
+    let colorTypo = range.resolveTextColor(expressionResolver)
       .map { Typo(color: $0) }
-    let heightTypo = range.resolveLineHeight(context.expressionResolver)
+    let heightTypo = range.resolveLineHeight(expressionResolver)
       .map { Typo(height: CGFloat($0)) }
-    let spacingTypo = range.resolveLetterSpacing(context.expressionResolver)
+    let spacingTypo = range.resolveLetterSpacing(expressionResolver)
       .map { Typo(kern: CGFloat($0)) }
-    let strikethroughTypo = range.resolveStrike(context.expressionResolver)
+    let strikethroughTypo = range.resolveStrike(expressionResolver)
       .map { Typo(strikethrough: $0.underlineStyle) }
-    let underlineTypo = range.resolveUnderline(context.expressionResolver)
+    let underlineTypo = range.resolveUnderline(expressionResolver)
       .map { Typo(underline: $0.underlineStyle) }
     let typos = [fontTypo, colorTypo, heightTypo, spacingTypo, strikethroughTypo, underlineTypo]
       .compactMap { $0 }
@@ -193,10 +197,10 @@ extension DivText: DivBlockModeling {
     typos.forEach { $0.apply(to: string, at: cfRange) }
     string.apply(actions, at: cfRange)
 
-    range.makeBackground(range: cfRange, resolver: context.expressionResolver)?
+    range.makeBackground(range: cfRange, resolver: expressionResolver)?
       .apply(to: string, at: cfRange)
 
-    range.makeBorder(range: cfRange, resolver: context.expressionResolver)?
+    range.makeBorder(range: cfRange, resolver: expressionResolver)?
       .apply(to: string, at: cfRange)
   }
 

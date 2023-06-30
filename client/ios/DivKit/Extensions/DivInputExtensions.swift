@@ -19,39 +19,27 @@ extension DivInput: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let font = context.fontSpecifiers.font(
-      family: resolveFontFamily(context.expressionResolver).fontFamily,
-      weight: resolveFontWeight(context.expressionResolver).fontWeight,
-      size: resolveFontSizeUnit(context.expressionResolver)
-        .makeScaledValue(resolveFontSize(context.expressionResolver))
+    let expressionResolver = context.expressionResolver
+    
+    let font = context.fontProvider.font(
+      family: resolveFontFamily(expressionResolver) ?? "",
+      weight: resolveFontWeight(expressionResolver),
+      size: resolveFontSizeUnit(expressionResolver)
+        .makeScaledValue(resolveFontSize(expressionResolver))
     )
     var typo = Typo(font: font).allowHeightOverrun
 
-    let kern = CGFloat(resolveLetterSpacing(context.expressionResolver))
+    let kern = CGFloat(resolveLetterSpacing(expressionResolver))
     if !kern.isApproximatelyEqualTo(0) {
       typo = typo.kerned(kern)
     }
 
-    if let lineHeight = resolveLineHeight(context.expressionResolver) {
+    if let lineHeight = resolveLineHeight(expressionResolver) {
       typo = typo.with(height: CGFloat(lineHeight))
     }
 
-    let resolvedHintColor: Color = resolveHintColor(context.expressionResolver)
-    let hintTypo = typo.with(color: resolvedHintColor)
-    let hintValue = resolveHintText(context.expressionResolver) ?? ""
-
-    let resolvedColor: Color = resolveTextColor(context.expressionResolver)
-    let textTypo = typo.with(color: resolvedColor)
-
-    let textValue = Binding<String>(context: context, name: textVariable)
-
-    let highlightColor = resolveHighlightColor(context.expressionResolver)
-
-    let keyboardType = resolveKeyboardType(context.expressionResolver)
-
-    let maxVisibleLines = resolveMaxVisibleLines(context.expressionResolver)
-
-    let selectAllOnFocus = resolveSelectAllOnFocus(context.expressionResolver)
+    let hintValue = resolveHintText(expressionResolver) ?? ""
+    let keyboardType = resolveKeyboardType(expressionResolver)
 
     let onFocusActions = (focus?.onFocus ?? []).map {
       $0.uiAction(context: context.actionContext)
@@ -60,22 +48,19 @@ extension DivInput: DivBlockModeling {
       $0.uiAction(context: context.actionContext)
     }
 
-    let maskValidator = mask?.makeMaskValidator(context.expressionResolver)
-    let rawTextValue: Binding<String>? = mask?.makeRawVariable(context)
-
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),
-      hint: hintValue.with(typo: hintTypo),
-      textValue: textValue,
-      rawTextValue: rawTextValue,
-      textTypo: textTypo,
+      hint: hintValue.with(typo: typo.with(color: resolveHintColor(expressionResolver))),
+      textValue: Binding<String>(context: context, name: textVariable),
+      rawTextValue: mask?.makeRawVariable(context),
+      textTypo: typo.with(color: resolveTextColor(expressionResolver)),
       multiLineMode: keyboardType == .multiLineText,
       inputType: keyboardType.system,
-      highlightColor: highlightColor,
-      maxVisibleLines: maxVisibleLines,
-      selectAllOnFocus: selectAllOnFocus,
-      maskValidator: maskValidator,
+      highlightColor: resolveHighlightColor(expressionResolver),
+      maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
+      selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
+      maskValidator: mask?.makeMaskValidator(expressionResolver),
       path: context.parentPath,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,

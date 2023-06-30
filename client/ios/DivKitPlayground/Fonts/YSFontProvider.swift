@@ -1,25 +1,24 @@
-import CoreGraphics
 import UIKit
 
-import BaseUIPublic
+import DivKit
 
-final class YSFontProvider: FontSpecifying {
+final class YSFontProvider: DivFontProvider {
   static let mediumFontName = "YSText-Medium"
   static let regularFontName = "YSText-Regular"
 
-  func font(weight: FontWeight, size: CGFloat) -> UIFont {
+  func font(family _: String, weight: DivFontWeight, size: CGFloat) -> UIFont {
     UIFont(name: weight.fontName, size: size)!
   }
 }
 
-extension FontWeight {
+extension DivFontWeight {
   fileprivate var fontName: String {
     switch self {
     case .light:
       return "YSText-Light"
     case .regular:
       return YSFontProvider.regularFontName
-    case .medium, .semibold:
+    case .medium:
       return YSFontProvider.mediumFontName
     case .bold:
       return "YSText-Bold"

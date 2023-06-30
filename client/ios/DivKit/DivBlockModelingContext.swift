@@ -18,7 +18,7 @@ public struct DivBlockModelingContext {
   public let imageHolderFactory: ImageHolderFactory
   public let highPriorityImageHolderFactory: ImageHolderFactory?
   public let divCustomBlockFactory: DivCustomBlockFactory
-  public let fontSpecifiers: FontSpecifiers
+  public let fontProvider: DivFontProvider
   public let flagsInfo: DivFlagsInfo
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
@@ -51,7 +51,7 @@ public struct DivBlockModelingContext {
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
-    fontSpecifiers: FontSpecifiers = BaseUIPublic.fontSpecifiers,
+    fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
@@ -74,7 +74,7 @@ public struct DivBlockModelingContext {
     self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
-    self.fontSpecifiers = fontSpecifiers
+    self.fontProvider = fontProvider ?? DefaultFontProvider()
     self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.childrenA11yDescription = childrenA11yDescription

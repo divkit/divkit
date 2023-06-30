@@ -146,14 +146,15 @@ extension DivSlider.TextStyle {
     context: DivBlockModelingContext,
     value: Int
   ) -> Block {
+    let expressionResolver = context.expressionResolver
+
     let typo = Typo(
-      size: FontSize(
-        rawValue: resolveFontSize(context.expressionResolver)
-          .flatMap(CGFloat.init) ?? 16
-      ),
-      weight: resolveFontWeight(context.expressionResolver).fontWeight
+      font: context.fontProvider.font(
+        weight: resolveFontWeight(expressionResolver),
+        size: resolveFontSize(expressionResolver).map(CGFloat.init) ?? 16
+      )
     )
-    .with(color: resolveTextColor(context.expressionResolver))
+    .with(color: resolveTextColor(expressionResolver))
     .with(alignment: .center)
 
     return TextBlock(

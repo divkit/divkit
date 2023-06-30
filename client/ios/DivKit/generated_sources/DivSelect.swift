@@ -40,7 +40,7 @@ public final class DivSelect: DivBase {
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
-  public let fontFamily: Expression<DivFontFamily> // default value: text
+  public let fontFamily: Expression<String>? // at least 1 char
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -84,8 +84,8 @@ public final class DivSelect: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+  public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -158,8 +158,8 @@ public final class DivSelect: DivBase {
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
-  static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-    makeNoOpValueValidator()
+  static let fontFamilyValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -247,7 +247,7 @@ public final class DivSelect: DivBase {
     disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
-    fontFamily: Expression<DivFontFamily>? = nil,
+    fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -285,7 +285,7 @@ public final class DivSelect: DivBase {
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
-    self.fontFamily = fontFamily ?? .value(.text)
+    self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -426,7 +426,7 @@ extension DivSelect: Serializable {
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()

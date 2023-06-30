@@ -1,10 +1,19 @@
 import CoreGraphics
-import Foundation
+import XCTest
 
+import BaseUIPublic
 import LayoutKit
 
-enum LayoutKitSnapshotTest {
-  static func perform(
+class LayoutKitSnapshotTest: XCTestCase {
+  override func setUp() {
+    let fontProvider = YSFontProvider()
+    fontSpecifiers = FontSpecifiers(
+      text: fontProvider,
+      display: fontProvider
+    )
+  }
+
+  func perform(
     on renderable: UIViewRenderable,
     size: CGSize,
     name: String = #function,

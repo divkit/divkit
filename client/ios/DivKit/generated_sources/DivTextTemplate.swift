@@ -311,7 +311,7 @@ public final class DivTextTemplate: TemplateValue {
     public let background: Field<DivTextRangeBackgroundTemplate>?
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
-    public let fontFamily: Field<Expression<DivFontFamily>>?
+    public let fontFamily: Field<Expression<String>>? // at least 1 char
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>?
@@ -352,7 +352,7 @@ public final class DivTextTemplate: TemplateValue {
       background: Field<DivTextRangeBackgroundTemplate>? = nil,
       border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
-      fontFamily: Field<Expression<DivFontFamily>>? = nil,
+      fontFamily: Field<Expression<String>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -454,7 +454,7 @@ public final class DivTextTemplate: TemplateValue {
       var backgroundValue: DeserializationResult<DivTextRangeBackground> = .noValue
       var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
-      var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+      var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -630,7 +630,7 @@ public final class DivTextTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let focusedTextColor: Field<Expression<Color>>?
-  public let fontFamily: Field<Expression<DivFontFamily>>? // default value: text
+  public let fontFamily: Field<Expression<String>>? // at least 1 char
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -750,7 +750,7 @@ public final class DivTextTemplate: TemplateValue {
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     focusedTextColor: Field<Expression<Color>>? = nil,
-    fontFamily: Field<Expression<DivFontFamily>>? = nil,
+    fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -1034,7 +1034,7 @@ public final class DivTextTemplate: TemplateValue {
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var focusedTextColorValue: DeserializationResult<Expression<Color>> = parent?.focusedTextColor?.value() ?? .noValue
-    var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+    var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue

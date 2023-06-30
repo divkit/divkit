@@ -57,7 +57,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
-      flagsInfo: DivFlagsInfo(),
+      fontProvider: YSFontProvider(),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
       updateCardAction: nil,
       urlOpener: { _ in }

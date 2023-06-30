@@ -14,7 +14,7 @@ public final class DivKitComponents {
   public let divCustomBlockFactory: DivCustomBlockFactory
   public var extensionHandlers: [DivExtensionHandler]
   public let flagsInfo: DivFlagsInfo
-  public let fontSpecifiers: FontSpecifiers
+  public let fontProvider: DivFontProvider
   public let imageHolderFactory: ImageHolderFactory
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
@@ -34,7 +34,7 @@ public final class DivKitComponents {
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     extensionHandlers: [DivExtensionHandler] = [],
     flagsInfo: DivFlagsInfo = .default,
-    fontSpecifiers: FontSpecifiers = BaseUIPublic.fontSpecifiers,
+    fontProvider: DivFontProvider? = nil,
     imageHolderFactory: ImageHolderFactory? = nil,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
@@ -50,7 +50,7 @@ public final class DivKitComponents {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.extensionHandlers = extensionHandlers
     self.flagsInfo = flagsInfo
-    self.fontSpecifiers = fontSpecifiers
+    self.fontProvider = fontProvider ?? DefaultFontProvider()
     self.playerFactory = playerFactory ?? defaultPlayerFactory
     self.showToolip = showTooltip
     self.stateManagement = stateManagement
@@ -180,7 +180,7 @@ public final class DivKitComponents {
       imageHolderFactory: imageHolderFactory
         .withInMemoryCache(cachedImageHolders: cachedImageHolders),
       divCustomBlockFactory: divCustomBlockFactory,
-      fontSpecifiers: fontSpecifiers,
+      fontProvider: fontProvider,
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
       variables: variablesStorage.makeVariables(for: cardId),

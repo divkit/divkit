@@ -39,7 +39,7 @@ extension DivTabs: DivBlockModeling {
     let listModel = TabListViewModel(
       tabTitles: tabs.map { $0.title },
       titleStyle: tabTitleStyle.makeTitleStyle(
-        fontSpecifiers: context.fontSpecifiers,
+        fontProvider: context.fontProvider,
         expressionResolver: context.expressionResolver
       ),
       listPaddings: titlePaddings.makeEdgeInsets(with: context.expressionResolver)
@@ -104,12 +104,12 @@ typealias Tab = (title: UILink, page: TabPageViewModel)
 
 extension DivTabs.TabTitleStyle {
   private func makeTypo(
-    fontSpecifiers: FontSpecifiers,
-    fontWeight: FontWeight,
-    with expressionResolver: ExpressionResolver
+    fontProvider: DivFontProvider,
+    fontWeight: DivFontWeight,
+    expressionResolver: ExpressionResolver
   ) -> Typo {
-    let font = fontSpecifiers.font(
-      family: resolveFontFamily(expressionResolver).fontFamily,
+    let font = fontProvider.font(
+      family: resolveFontFamily(expressionResolver) ?? "",
       weight: fontWeight,
       size: resolveFontSizeUnit(expressionResolver)
         .makeScaledValue(resolveFontSize(expressionResolver))
@@ -121,20 +121,20 @@ extension DivTabs.TabTitleStyle {
   }
 
   fileprivate func makeTitleStyle(
-    fontSpecifiers: FontSpecifiers,
+    fontProvider: DivFontProvider,
     expressionResolver: ExpressionResolver
   ) -> LayoutKit.TabTitleStyle {
-    let defaultTypo = resolveFontWeight(expressionResolver).fontWeight
+    let defaultFontWeight = resolveFontWeight(expressionResolver)
     return LayoutKit.TabTitleStyle(
       typo: makeTypo(
-        fontSpecifiers: fontSpecifiers,
-        fontWeight: resolveActiveFontWeight(expressionResolver)?.fontWeight ?? defaultTypo,
-        with: expressionResolver
+        fontProvider: fontProvider,
+        fontWeight: resolveActiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        expressionResolver: expressionResolver
       ),
       inactiveTypo: makeTypo(
-        fontSpecifiers: fontSpecifiers,
-        fontWeight: resolveInactiveFontWeight(expressionResolver)?.fontWeight ?? defaultTypo,
-        with: expressionResolver
+        fontProvider: fontProvider,
+        fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        expressionResolver: expressionResolver
       ),
       paddings: paddings.makeEdgeInsets(with: expressionResolver),
       cornerRadius: makeCornerRadii(with: expressionResolver),

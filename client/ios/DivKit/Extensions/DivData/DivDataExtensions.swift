@@ -36,11 +36,7 @@ extension DivData: DivBlockModeling {
       .addingStateBlock(
         ids: stateManager.getVisibleIds(statePath: statePath)
       )
-      .addingDebugInfo(
-        debugParams: divContext.debugParams,
-        errors: divContext.errorsStorage.errors,
-        parentPath: divContext.parentPath
-      )
+      .addingDebugInfo(context: divContext)
   }
 
   private func getCurrentState(

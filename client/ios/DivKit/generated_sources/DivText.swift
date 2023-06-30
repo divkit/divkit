@@ -101,7 +101,7 @@ public final class DivText: DivBase {
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
-    public let fontFamily: Expression<DivFontFamily>?
+    public let fontFamily: Expression<String>? // at least 1 char
     public let fontSize: Expression<Int>? // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight>?
@@ -117,8 +117,8 @@ public final class DivText: DivBase {
       resolver.resolveNumericValue(expression: end)
     }
 
-    public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily? {
-      resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:))
+    public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
@@ -173,8 +173,8 @@ public final class DivText: DivBase {
     static let endValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 > 0 })
 
-    static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-      makeNoOpValueValidator()
+    static let fontFamilyValidator: AnyValueValidator<String> =
+      makeStringValidator(minLength: 1)
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -208,7 +208,7 @@ public final class DivText: DivBase {
       background: DivTextRangeBackground? = nil,
       border: DivTextRangeBorder? = nil,
       end: Expression<Int>,
-      fontFamily: Expression<DivFontFamily>? = nil,
+      fontFamily: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
@@ -256,7 +256,7 @@ public final class DivText: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
-  public let fontFamily: Expression<DivFontFamily> // default value: text
+  public let fontFamily: Expression<String>? // at least 1 char
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -316,8 +316,8 @@ public final class DivText: DivBase {
     resolver.resolveStringBasedValue(expression: focusedTextColor, initializer: Color.color(withHexString:))
   }
 
-  public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+  public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -435,8 +435,8 @@ public final class DivText: DivBase {
   static let focusedTextColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
-  static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-    makeNoOpValueValidator()
+  static let fontFamilyValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -555,7 +555,7 @@ public final class DivText: DivBase {
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     focusedTextColor: Expression<Color>? = nil,
-    fontFamily: Expression<DivFontFamily>? = nil,
+    fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -608,7 +608,7 @@ public final class DivText: DivBase {
     self.extensions = extensions
     self.focus = focus
     self.focusedTextColor = focusedTextColor
-    self.fontFamily = fontFamily ?? .value(.text)
+    self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -799,7 +799,7 @@ extension DivText: Serializable {
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["focused_text_color"] = focusedTextColor?.toValidSerializationValue()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()

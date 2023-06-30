@@ -109,7 +109,7 @@ public final class DivSelectTemplate: TemplateValue {
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
-  public let fontFamily: Field<Expression<DivFontFamily>>? // default value: text
+  public let fontFamily: Field<Expression<String>>? // at least 1 char
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -199,7 +199,7 @@ public final class DivSelectTemplate: TemplateValue {
     disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
-    fontFamily: Field<Expression<DivFontFamily>>? = nil,
+    fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -412,7 +412,7 @@ public final class DivSelectTemplate: TemplateValue {
     var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
-    var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+    var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue

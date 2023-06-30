@@ -1,10 +1,9 @@
 import CoreGraphics
-import XCTest
 
 import CommonCorePublic
 import LayoutKit
 
-final class TooltipFactorySnapshotTests: XCTestCase {
+final class TooltipFactorySnapshotTests: LayoutKitSnapshotTest {
   func test_Orientations() {
     BlockTooltip.Position.allCases.forEach {
       perform(text: "Тултип", position: $0, width: nil)
@@ -30,7 +29,7 @@ final class TooltipFactorySnapshotTests: XCTestCase {
       position: position,
       width: width
     )
-    LayoutKitSnapshotTest.perform(
+    perform(
       on: block,
       size: block.intrinsicSize,
       name: "\(name)_\(position)",

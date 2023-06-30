@@ -1,7 +1,7 @@
-import BaseUIPublic
+import BasePublic
 
 extension DivFontWeight {
-  var fontWeight: FontWeight {
+  var fontWeight: Font.Weight {
     switch self {
     case .light:
       return .light
@@ -11,17 +11,6 @@ extension DivFontWeight {
       return .medium
     case .bold:
       return .bold
-    }
-  }
-}
-
-extension DivFontFamily {
-  var fontFamily: FontFamily {
-    switch self {
-    case .display:
-      return .YSDisplay
-    case .text:
-      return .YSText
     }
   }
 }

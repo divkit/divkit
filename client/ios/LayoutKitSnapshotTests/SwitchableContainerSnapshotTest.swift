@@ -1,10 +1,8 @@
-import XCTest
-
 import BaseUIPublic
 import CommonCorePublic
 import LayoutKit
 
-final class SwitchableContainerSnapshotTest: XCTestCase {
+final class SwitchableContainerSnapshotTest: LayoutKitSnapshotTest {
   func test_LeftSideSelected() {
     performTest(selection: .left, mode: mode)
   }
@@ -106,7 +104,7 @@ final class SwitchableContainerSnapshotTest: XCTestCase {
       path: UIElementPath("R")
     )
 
-    LayoutKitSnapshotTest.perform(on: block, size: blockViewSize, name: name, mode: mode)
+    perform(on: block, size: blockViewSize, name: name, mode: mode)
   }
 }
 

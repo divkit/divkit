@@ -1,7 +1,6 @@
 import SwiftUI
 import UIKit
 
-import BaseUIPublic
 import CommonCorePublic
 import DivKit
 import LayoutKit
@@ -139,6 +138,6 @@ private let noDataBlock = EmptyBlock.zeroSized
 private func makeErrorBlock(_ text: String) -> Block {
   TextBlock(
     widthTrait: .resizable,
-    text: text.with(typo: Typo(size: 18, weight: .regular))
+    text: text.withTypo(size: 18)
   ).addingEdgeGaps(20)
 }

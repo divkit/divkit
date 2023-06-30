@@ -46,7 +46,7 @@ public final class DivTabs: DivBase {
     public let animationType: Expression<AnimationType> // default value: slide
     public let cornerRadius: Expression<Int>? // constraint: number >= 0
     public let cornersRadius: DivCornersRadius?
-    public let fontFamily: Expression<DivFontFamily> // default value: text
+    public let fontFamily: Expression<String>? // at least 1 char
     public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -82,8 +82,8 @@ public final class DivTabs: DivBase {
       resolver.resolveNumericValue(expression: cornerRadius)
     }
 
-    public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-      resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+    public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -143,8 +143,8 @@ public final class DivTabs: DivBase {
     static let cornersRadiusValidator: AnyValueValidator<DivCornersRadius> =
       makeNoOpValueValidator()
 
-    static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-      makeNoOpValueValidator()
+    static let fontFamilyValidator: AnyValueValidator<String> =
+      makeStringValidator(minLength: 1)
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -181,7 +181,7 @@ public final class DivTabs: DivBase {
       animationType: Expression<AnimationType>? = nil,
       cornerRadius: Expression<Int>? = nil,
       cornersRadius: DivCornersRadius? = nil,
-      fontFamily: Expression<DivFontFamily>? = nil,
+      fontFamily: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
@@ -200,7 +200,7 @@ public final class DivTabs: DivBase {
       self.animationType = animationType ?? .value(.slide)
       self.cornerRadius = cornerRadius
       self.cornersRadius = cornersRadius
-      self.fontFamily = fontFamily ?? .value(.text)
+      self.fontFamily = fontFamily
       self.fontSize = fontSize ?? .value(12)
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight ?? .value(.regular)
@@ -706,7 +706,7 @@ extension DivTabs.TabTitleStyle: Serializable {
     result["animation_type"] = animationType.toValidSerializationValue()
     result["corner_radius"] = cornerRadius?.toValidSerializationValue()
     result["corners_radius"] = cornersRadius?.toDictionary()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()

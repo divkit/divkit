@@ -7,6 +7,8 @@ import LayoutKit
 import NetworkingPublic
 
 enum AppComponents {
+  static let fontProvider = YSFontProvider()
+
   static func makeDivKitComponents(
     updateCardAction: DivKitComponents.UpdateCardAction? = nil,
     urlOpener: @escaping UrlOpener = { _ in }
@@ -29,6 +31,7 @@ enum AppComponents {
         ShimmerImagePreviewExtension(),
       ],
       flagsInfo: DivFlagsInfo(),
+      fontProvider: fontProvider,
       patchProvider: DemoPatchProvider(),
       trackVisibility: { logId, cardId in
         print(

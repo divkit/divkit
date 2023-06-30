@@ -1,6 +1,5 @@
 import UIKit
 
-import BaseUIPublic
 import CommonCorePublic
 import DivKit
 import DivKitExtensions
@@ -182,7 +181,7 @@ private let noDataBlock = EmptyBlock.zeroSized
 private func makeErrorBlock(_ text: String) -> Block {
   TextBlock(
     widthTrait: .resizable,
-    text: text.with(typo: Typo(size: 18, weight: .regular))
+    text: text.withTypo(size: 18)
   ).addingEdgeGaps(20)
 }
 
@@ -194,13 +193,13 @@ private func makeErrorsBlock(_ errors: [String]) -> Block {
   let separator = SeparatorBlock(color: .gray, direction: .horizontal)
   let errorsHeader = TextBlock(
     widthTrait: .resizable,
-    text: "Errors: \(errors.count)".with(typo: Typo(size: 18, weight: .bold))
+    text: "Errors: \(errors.count)".withTypo(size: 18, weight: .bold)
   ).addingEdgeGaps(10)
 
   let errorBlocks = errors.map {
     TextBlock(
       widthTrait: .resizable,
-      text: $0.with(typo: Typo(size: 14, weight: .regular))
+      text: $0.withTypo(size: 14, weight: .regular)
     ).addingEdgeGaps(10)
   }
   return try! ContainerBlock(
@@ -233,7 +232,7 @@ extension Block {
 
     let textBlock = TextBlock(
       widthTrait: .resizable,
-      text: text.with(typo: Typo(size: 18, weight: .regular))
+      text: text.withTypo(size: 18)
     ).addingEdgeGaps(20)
 
     let block = try? ContainerBlock(

@@ -1,11 +1,10 @@
 import CoreGraphics
-import XCTest
 
 import BaseUIPublic
 import CommonCorePublic
 import LayoutKit
 
-final class AnchorBlockTests: XCTestCase {
+final class AnchorBlockTests: LayoutKitSnapshotTest {
   func test_OnlyCenter_Fits() {
     perform(.crossResizables(center: 100))
   }
@@ -114,7 +113,7 @@ final class AnchorBlockTests: XCTestCase {
         ).addingDecorations(border: .init(color: .blue))
       ).addingDecorations(border: .init(color: .red))
 
-      LayoutKitSnapshotTest.perform(
+      perform(
         on: makeCenterOverlay(content: anchor, color: .red)
           .addingDecorations(border: .init(color: .gray)),
         size: size,

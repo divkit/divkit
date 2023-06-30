@@ -139,7 +139,7 @@ public final class DivTabsTemplate: TemplateValue {
     public let animationType: Field<Expression<AnimationType>>? // default value: slide
     public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
     public let cornersRadius: Field<DivCornersRadiusTemplate>?
-    public let fontFamily: Field<Expression<DivFontFamily>>? // default value: text
+    public let fontFamily: Field<Expression<String>>? // at least 1 char
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -182,7 +182,7 @@ public final class DivTabsTemplate: TemplateValue {
       animationType: Field<Expression<AnimationType>>? = nil,
       cornerRadius: Field<Expression<Int>>? = nil,
       cornersRadius: Field<DivCornersRadiusTemplate>? = nil,
-      fontFamily: Field<Expression<DivFontFamily>>? = nil,
+      fontFamily: Field<Expression<String>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -287,7 +287,7 @@ public final class DivTabsTemplate: TemplateValue {
       var animationTypeValue: DeserializationResult<Expression<DivTabs.TabTitleStyle.AnimationType>> = parent?.animationType?.value() ?? .noValue
       var cornerRadiusValue: DeserializationResult<Expression<Int>> = parent?.cornerRadius?.value() ?? .noValue
       var cornersRadiusValue: DeserializationResult<DivCornersRadius> = .noValue
-      var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+      var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
