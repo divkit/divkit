@@ -242,17 +242,8 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         observeSeparatorShowMode(separator, resolver) { showDividers = it }
         observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
-        observeSeparatorMargins(separator.margins, resolver) {
-            if (separator.margins == null) return@observeSeparatorMargins
-            val metrics = resources.displayMetrics
-            val sizeUnit = separator.margins.unit.evaluate(resolver)
-
-            setDividerMargins(
-                left = separator.margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit),
-                right = separator.margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit),
-                top = separator.margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit),
-                bottom = separator.margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
-            )
+        observeSeparatorMargins(this, separator.margins, resolver) {
+            left, top, right, bottom -> setDividerMargins(left, top, right, bottom)
         }
     }
 
@@ -266,10 +257,16 @@ internal class DivContainerBinder @Inject constructor(
         div.separator?.let { separator ->
             observeSeparatorShowMode(separator, resolver) { showSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { separatorDrawable = it }
+            observeSeparatorMargins(this, separator.margins, resolver)  {
+                left, top, right, bottom -> setSeparatorMargins(left, top, right, bottom)
+            }
         }
         div.lineSeparator?.let { separator ->
             observeSeparatorShowMode(separator, resolver) { showLineSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { lineSeparatorDrawable = it }
+            observeSeparatorMargins(this, separator.margins, resolver) {
+                left, top, right, bottom -> setLineSeparatorMargins(left, top, right, bottom)
+            }
         }
 
         this.div = div
@@ -308,19 +305,30 @@ internal class DivContainerBinder @Inject constructor(
         applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
     }
 
-    private fun DivLinearLayout.observeSeparatorMargins(
-        margins: DivEdgeInsets?,
+    private fun ExpressionSubscriber.observeSeparatorMargins(
+        view: View,
+        margins: DivEdgeInsets,
         resolver: ExpressionResolver,
-        applyMargins: (Any?) -> Unit
+        applyMargins: (left: Int, top: Int, right: Int, bottom: Int) -> Unit
     ) {
-        if (margins == null) return
-        applyMargins.invoke(null)
+        val metrics = view.resources.displayMetrics
+        val callback = { _: Any? ->
+            val sizeUnit = margins.unit.evaluate(resolver)
 
-        addSubscription(margins.unit.observe(resolver, applyMargins))
-        addSubscription(margins.left.observe(resolver, applyMargins))
-        addSubscription(margins.top.observe(resolver, applyMargins))
-        addSubscription(margins.right.observe(resolver, applyMargins))
-        addSubscription(margins.bottom.observe(resolver, applyMargins))
+            val left = margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            val right = margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            val top = margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            val bottom = margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
+
+            applyMargins(left, top, right, bottom)
+        }
+
+        callback(null)
+        addSubscription(margins.unit.observe(resolver, callback))
+        addSubscription(margins.left.observe(resolver, callback))
+        addSubscription(margins.top.observe(resolver, callback))
+        addSubscription(margins.right.observe(resolver, callback))
+        addSubscription(margins.bottom.observe(resolver, callback))
     }
 
     private fun observeChildViewAlignment(

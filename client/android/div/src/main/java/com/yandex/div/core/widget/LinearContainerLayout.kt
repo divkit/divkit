@@ -93,7 +93,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             requestLayout()
         }
 
-    fun setDividerMargins(left: Int, right: Int, top: Int, bottom: Int) {
+    fun setDividerMargins(left: Int, top: Int, right: Int, bottom: Int) {
         dividerMarginLeft = left
         dividerMarginRight = right
         dividerMarginTop = top

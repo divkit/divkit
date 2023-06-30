@@ -28,13 +28,9 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
                 when (field) {
                     WrapDirection.ROW -> {
                         isRowDirection = true
-                        separatorLength = separatorDrawable?.intrinsicWidth ?: 0
-                        lineSeparatorLength = lineSeparatorDrawable?.intrinsicHeight ?: 0
                     }
                     WrapDirection.COLUMN -> {
                         isRowDirection = false
-                        separatorLength = separatorDrawable?.intrinsicHeight ?: 0
-                        lineSeparatorLength = lineSeparatorDrawable?.intrinsicWidth ?: 0
                     }
                     else -> throw IllegalStateException(
                         "Invalid value for the wrap direction is set: $wrapDirection")
@@ -84,9 +80,6 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
         set(value) {
             if (field != value) {
                 field = value
-                separatorLength = value?.run {
-                    if (isRowDirection) intrinsicWidth else intrinsicHeight
-                } ?: 0
                 requestLayout()
             }
         }
@@ -95,12 +88,27 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
         set(value) {
             if (field != value) {
                 field = value
-                lineSeparatorLength = value?.run {
-                    if (isRowDirection) intrinsicHeight else intrinsicWidth
-                } ?: 0
                 requestLayout()
             }
         }
+
+    fun setSeparatorMargins(left: Int, top: Int, right: Int, bottom: Int) {
+        separatorMarginLeft = left
+        separatorMarginRight = right
+        separatorMarginTop = top
+        separatorMarginBottom = bottom
+
+        requestLayout()
+    }
+
+    fun setLineSeparatorMargins(left: Int, top: Int, right: Int, bottom: Int) {
+        lineSeparatorMarginLeft = left
+        lineSeparatorMarginRight = right
+        lineSeparatorMarginTop = top
+        lineSeparatorMarginBottom = bottom
+
+        requestLayout()
+    }
 
     private var isRowDirection = true
 
@@ -108,10 +116,37 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
 
     private var childState = 0
 
+    private val separatorLength
+        get() =
+            if (isRowDirection) {
+                (separatorDrawable?.intrinsicWidth ?: 0) + separatorMarginLeft + separatorMarginRight
+            } else {
+                (separatorDrawable?.intrinsicHeight ?: 0) + separatorMarginTop + separatorMarginBottom
+            }
     @Px
-    private var separatorLength = 0
+    private var separatorMarginTop = 0
     @Px
-    private var lineSeparatorLength = 0
+    private var separatorMarginBottom = 0
+    @Px
+    private var separatorMarginLeft = 0
+    @Px
+    private var separatorMarginRight = 0
+
+    private val lineSeparatorLength
+        get() =
+            if (isRowDirection) {
+                (lineSeparatorDrawable?.intrinsicHeight ?: 0) + lineSeparatorMarginTop + lineSeparatorMarginBottom
+            } else {
+                (lineSeparatorDrawable?.intrinsicWidth ?: 0) + lineSeparatorMarginLeft + lineSeparatorMarginRight
+            }
+    @Px
+    private var lineSeparatorMarginTop = 0
+    @Px
+    private var lineSeparatorMarginBottom = 0
+    @Px
+    private var lineSeparatorMarginLeft = 0
+    @Px
+    private var lineSeparatorMarginRight = 0
 
     private var tempSumCrossSize = 0
 
@@ -535,7 +570,7 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
     private fun drawSeparatorsHorizontal(canvas: Canvas) {
         var lineTop: Int
         var lineBottom = 0
-        val drawLineSeparator = { top: Int -> drawSeparator(lineSeparatorDrawable, canvas,
+        val drawLineSeparator = { top: Int -> drawLineSeparator(canvas,
             paddingLeft, top - lineSeparatorLength, width - paddingRight, top) }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
             lineTop = firstVisibleLine?.let { it.bottom - it.crossSize } ?: 0
@@ -569,17 +604,17 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
                 childRight = child.right + lp.rightMargin
                 if (needStartSeparator) {
                     if (showSeparatorAtStart(showSeparators)) {
-                        drawSeparator(separatorDrawable, canvas,
+                        drawSeparator(canvas,
                             childLeft - separatorLength, lineTop, childLeft, lineBottom)
                     }
                     needStartSeparator = false
                 } else if (showSeparatorBetween(showSeparators)) {
-                    drawSeparator(separatorDrawable, canvas,
+                    drawSeparator(canvas,
                         childLeft - separatorLength, lineTop, childLeft, lineBottom)
                 }
             }
             if (childRight > 0 && showSeparatorAtEnd(showSeparators)) {
-                drawSeparator(separatorDrawable, canvas,
+                drawSeparator(canvas,
                     childRight, lineTop, childRight + separatorLength, lineBottom)
             }
         }
@@ -591,8 +626,9 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
     private fun drawSeparatorsVertical(canvas: Canvas) {
         var lineLeft: Int
         var lineRight = 0
-        val drawLineSeparator = { left: Int -> drawSeparator(lineSeparatorDrawable, canvas,
-            left - lineSeparatorLength, paddingTop, left, height - paddingBottom) }
+        val drawLineSeparator = { left: Int -> drawLineSeparator(canvas, left - lineSeparatorLength,
+                paddingTop, left, height - paddingBottom)
+        }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
             lineLeft = firstVisibleLine?.let { it.right - it.crossSize } ?: 0
             drawLineSeparator(lineLeft)
@@ -625,23 +661,39 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
                 childBottom = child.bottom + lp.bottomMargin
                 if (needStartSeparator) {
                     if (showSeparatorAtStart(showSeparators)) {
-                        drawSeparator(separatorDrawable, canvas,
+                        drawSeparator(canvas,
                             lineLeft, childTop - separatorLength, lineRight, childTop)
                     }
                     needStartSeparator = false
                 } else if (showSeparatorBetween(showSeparators)) {
-                    drawSeparator(separatorDrawable, canvas,
+                    drawSeparator(canvas,
                         lineLeft, childTop - separatorLength, lineRight, childTop)
                 }
             }
             if (childBottom > 0 && showSeparatorAtEnd(showSeparators)) {
-                drawSeparator(separatorDrawable, canvas,
+                drawSeparator(canvas,
                     lineLeft, childBottom, lineRight, childBottom + separatorLength)
             }
         }
         if (lineRight > 0 && showSeparatorAtEnd(showLineSeparators)) {
             drawLineSeparator(lineRight + lineSeparatorLength)
         }
+    }
+
+    private fun drawSeparator(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
+        drawSeparator(separatorDrawable, canvas,
+            left + separatorMarginLeft,
+            top - separatorMarginTop,
+            right - separatorMarginRight,
+            bottom + separatorMarginBottom)
+    }
+
+    private fun drawLineSeparator(canvas: Canvas, left: Int, top: Int, right: Int, bottom: Int) {
+        drawSeparator(lineSeparatorDrawable, canvas,
+            left + lineSeparatorMarginLeft,
+            top - lineSeparatorMarginTop,
+            right - lineSeparatorMarginRight,
+            bottom + lineSeparatorMarginBottom)
     }
 
     private fun drawSeparator(

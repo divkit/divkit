@@ -56,10 +56,7 @@
         },
         "margins": {
           "$ref": "div-edge-insets.json",
-          "$description": "translations.json#/div_base_margins",
-          "platforms": [
-            "web"
-          ]
+          "$description": "translations.json#/div_base_margins"
         }
       },
       "required": [
