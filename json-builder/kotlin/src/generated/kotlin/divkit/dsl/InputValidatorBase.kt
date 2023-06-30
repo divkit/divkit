@@ -38,16 +38,16 @@ class InputValidatorBase internal constructor(
 
     class Properties internal constructor(
         /**
-         * Whether an empty value is correct. By default, false.
+         * Determines whether the empty field value is valid.
          * Default value: `false`.
          */
         val allowEmpty: Property<Boolean>?,
         /**
-         * ID of the text div containing the error message, which will also be used for accessibility.
+         * ID of the text element containing the error message. The message will also be used for providing access.
          */
         val labelId: Property<String>?,
         /**
-         * Name of validation storage variable.
+         * The name of the variable that stores the calculation results.
          */
         val variable: Property<String>?,
     ) {
@@ -63,9 +63,9 @@ class InputValidatorBase internal constructor(
 }
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorBase(
@@ -82,9 +82,9 @@ fun DivScope.inputValidatorBase(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorBaseProps(
@@ -99,9 +99,9 @@ fun DivScope.inputValidatorBaseProps(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun TemplateScope.inputValidatorBaseRefs(
@@ -116,9 +116,9 @@ fun TemplateScope.inputValidatorBaseRefs(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorBase.override(
@@ -135,9 +135,9 @@ fun InputValidatorBase.override(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorBase.defer(
@@ -154,8 +154,8 @@ fun InputValidatorBase.defer(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
  */
 @Generated
 fun InputValidatorBase.evaluate(

@@ -93,7 +93,7 @@ class Accessibility internal constructor(
     /**
      * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
      * 
-     * Possible values: [none, button, image, text, edit_text, header, tab_bar, list].
+     * Possible values: [none, button, image, text, edit_text, header, tab_bar, list, select].
      */
     @Generated
     sealed interface Type

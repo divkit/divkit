@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Variable — any json object.
+ * An arbitrary object in JSON format.
  * 
  * Can be created using the method [dictVariable].
  * 

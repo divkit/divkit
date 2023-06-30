@@ -40,7 +40,6 @@ def _build_generator_properties(
     generator_properties_location = location + "codegen"
     if generator_properties is None:
         return None
-
     if not isinstance(generator_properties, Dict):
         raise GenericError(
             location=generator_properties_location,
@@ -48,13 +47,7 @@ def _build_generator_properties(
         )
 
     lang: GeneratedLanguage = config.lang
-    specific_properties: Dict[str, Any] = generator_properties.get(lang.value, None)
-    if specific_properties is None:
-        return GeneralGeneratorProperties(
-            general_properties=generator_properties,
-            lang=lang,
-            mode=mode
-        )
+    specific_properties: Dict[str, Any] = generator_properties.get(lang.value, {})
     if not isinstance(specific_properties, Dict):
         raise GenericError(
             location=generator_properties_location + lang.value,
@@ -70,6 +63,7 @@ def _build_generator_properties(
             specific_properties=specific_properties,
             properties_list=properties_list,
         )
+
     generator_properties_classes = {
         GeneratedLanguage.SWIFT: SwiftGeneratorProperties,
         GeneratedLanguage.TYPE_SCRIPT: TypeScriptGeneratorProperties,
@@ -78,8 +72,11 @@ def _build_generator_properties(
     }
     specific_properties_class = generator_properties_classes.get(lang, None)
     if specific_properties_class is None:
-        raise NotImplementedError
-
+        return GeneralGeneratorProperties(
+            general_properties=generator_properties,
+            lang=lang,
+            mode=mode
+        )
     return specific_properties_class(
         general_properties=generator_properties,
         lang=lang,

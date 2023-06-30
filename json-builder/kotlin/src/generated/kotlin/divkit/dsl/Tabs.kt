@@ -396,9 +396,8 @@ class Tabs internal constructor(
             val cornersRadius: Property<CornersRadius>?,
             /**
              * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
-             * Default value: `text`.
              */
-            val fontFamily: Property<FontFamily>?,
+            val fontFamily: Property<String>?,
             /**
              * Title font size.
              * Default value: `12`.
@@ -1597,7 +1596,7 @@ fun DivScope.tabsTabTitleStyle(
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
     cornerRadius: Int? = null,
     cornersRadius: CornersRadius? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1661,7 +1660,7 @@ fun DivScope.tabsTabTitleStyleProps(
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
     cornerRadius: Int? = null,
     cornersRadius: CornersRadius? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1723,7 +1722,7 @@ fun TemplateScope.tabsTabTitleStyleRefs(
     animationType: ReferenceProperty<Tabs.TabTitleStyle.AnimationType>? = null,
     cornerRadius: ReferenceProperty<Int>? = null,
     cornersRadius: ReferenceProperty<CornersRadius>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1785,7 +1784,7 @@ fun Tabs.TabTitleStyle.override(
     animationType: Tabs.TabTitleStyle.AnimationType? = null,
     cornerRadius: Int? = null,
     cornersRadius: CornersRadius? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1849,7 +1848,7 @@ fun Tabs.TabTitleStyle.defer(
     animationType: ReferenceProperty<Tabs.TabTitleStyle.AnimationType>? = null,
     cornerRadius: ReferenceProperty<Int>? = null,
     cornersRadius: ReferenceProperty<CornersRadius>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1910,7 +1909,7 @@ fun Tabs.TabTitleStyle.evaluate(
     animationDuration: ExpressionProperty<Int>? = null,
     animationType: ExpressionProperty<Tabs.TabTitleStyle.AnimationType>? = null,
     cornerRadius: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,

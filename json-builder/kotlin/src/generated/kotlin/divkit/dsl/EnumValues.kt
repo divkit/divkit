@@ -54,8 +54,7 @@ object ImageEnumValue : EnumValue("image"),
 
 @Generated
 object TextEnumValue : EnumValue("text"),
-    Accessibility.Type,
-    FontFamily
+    Accessibility.Type
 
 @Generated
 object EditTextEnumValue : EnumValue("edit_text"),
@@ -71,6 +70,10 @@ object TabBarEnumValue : EnumValue("tab_bar"),
 
 @Generated
 object ListEnumValue : EnumValue("list"),
+    Accessibility.Type
+
+@Generated
+object SelectEnumValue : EnumValue("select"),
     Accessibility.Type
 
 @Generated
@@ -236,10 +239,6 @@ object SpaceAroundEnumValue : EnumValue("space-around"),
 object SpaceEvenlyEnumValue : EnumValue("space-evenly"),
     ContentAlignmentHorizontal,
     ContentAlignmentVertical
-
-@Generated
-object DisplayEnumValue : EnumValue("display"),
-    FontFamily
 
 @Generated
 object LightEnumValue : EnumValue("light"),
@@ -466,6 +465,10 @@ val DivScope.list: ListEnumValue
     get() = ListEnumValue
 
 @Generated
+val DivScope.select: SelectEnumValue
+    get() = SelectEnumValue
+
+@Generated
 val DivScope.self: SelfEnumValue
     get() = SelfEnumValue
 
@@ -600,10 +603,6 @@ val DivScope.space_around: SpaceAroundEnumValue
 @Generated
 val DivScope.space_evenly: SpaceEvenlyEnumValue
     get() = SpaceEvenlyEnumValue
-
-@Generated
-val DivScope.display: DisplayEnumValue
-    get() = DisplayEnumValue
 
 @Generated
 val DivScope.light: LightEnumValue

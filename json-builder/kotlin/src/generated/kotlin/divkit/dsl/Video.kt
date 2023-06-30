@@ -133,7 +133,7 @@ class Video internal constructor(
          */
         val extensions: Property<List<Extension>>?,
         /**
-         * Actions that are performed when it is impossible to continue playback due to an error in the player.
+         * Actions performed when playback can't be continued due to a player error.
          */
         val fatalActions: Property<List<Action>>?,
         /**
@@ -163,7 +163,7 @@ class Video internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Actions that are performed when a playback is paused.
+         * Actions performed when playback is paused.
          */
         val pauseActions: Property<List<Action>>?,
         /**
@@ -295,14 +295,14 @@ class Video internal constructor(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -418,14 +418,14 @@ fun DivScope.video(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -539,14 +539,14 @@ fun DivScope.videoProps(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -660,14 +660,14 @@ fun TemplateScope.videoRefs(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -783,14 +783,14 @@ fun Video.override(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -974,14 +974,14 @@ fun Video.evaluate(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
@@ -1098,14 +1098,14 @@ fun Component<Video>.override(
  * @param elapsedTimeVariable Time interval from the video beginning to the current position in milliseconds.
  * @param endActions Actions performed after the video ends.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param fatalActions Actions that are performed when it is impossible to continue playback due to an error in the player.
+ * @param fatalActions Actions performed when playback can't be continued due to a player error.
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param margins External margins from the element stroke.
  * @param muted This option mutes video.
  * @param paddings Internal margins from the element stroke.
- * @param pauseActions Actions that are performed when a playback is paused.
+ * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.

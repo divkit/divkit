@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Actions performed when an element becomes invisible.
+ * Actions performed when an element is no longer visible.
  * 
  * Can be created using the method [disappearAction].
  * 
@@ -47,7 +47,7 @@ class DisappearAction internal constructor(
 
     class Properties internal constructor(
         /**
-         * Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+         * Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
          * Default value: `800`.
          */
         val disappearDuration: Property<Int>?,
@@ -99,7 +99,7 @@ class DisappearAction internal constructor(
 }
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
@@ -133,7 +133,7 @@ fun DivScope.disappearAction(
 )
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
@@ -165,7 +165,7 @@ fun DivScope.disappearActionProps(
 )
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
@@ -197,7 +197,7 @@ fun TemplateScope.disappearActionRefs(
 )
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
@@ -231,7 +231,7 @@ fun DisappearAction.override(
 )
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
@@ -265,7 +265,7 @@ fun DisappearAction.defer(
 )
 
 /**
- * @param disappearDuration Time in milliseconds during which an element must be invisible to trigger `disappear-action`.
+ * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).

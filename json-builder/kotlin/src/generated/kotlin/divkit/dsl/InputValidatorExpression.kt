@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Expression validator.
+ * [Calculated expression](../../expressions.dita) validator.
  * 
  * Can be created using the method [inputValidatorExpression].
  * 
@@ -45,20 +45,20 @@ class InputValidatorExpression internal constructor(
 
     class Properties internal constructor(
         /**
-         * Whether an empty value is correct. By default, false.
+         * Determines whether the empty field value is valid.
          * Default value: `false`.
          */
         val allowEmpty: Property<Boolean>?,
         /**
-         * Expression condition for evaluating.
+         * [Calculated expression](../../expressions.dita) used as a value validity condition.
          */
-        val condition: Property<String>?,
+        val condition: Property<Boolean>?,
         /**
-         * ID of the text div containing the error message, which will also be used for accessibility.
+         * ID of the text element containing the error message. The message will also be used for providing access.
          */
         val labelId: Property<String>?,
         /**
-         * Name of validation storage variable.
+         * The name of the variable that stores the calculation results.
          */
         val variable: Property<String>?,
     ) {
@@ -75,16 +75,16 @@ class InputValidatorExpression internal constructor(
 }
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorExpression(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: Boolean? = null,
-    condition: String? = null,
+    condition: Boolean? = null,
     labelId: String? = null,
     variable: String? = null,
 ): InputValidatorExpression = InputValidatorExpression(
@@ -97,16 +97,16 @@ fun DivScope.inputValidatorExpression(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorExpressionProps(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: Boolean? = null,
-    condition: String? = null,
+    condition: Boolean? = null,
     labelId: String? = null,
     variable: String? = null,
 ) = InputValidatorExpression.Properties(
@@ -117,16 +117,16 @@ fun DivScope.inputValidatorExpressionProps(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun TemplateScope.inputValidatorExpressionRefs(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: ReferenceProperty<Boolean>? = null,
-    condition: ReferenceProperty<String>? = null,
+    condition: ReferenceProperty<Boolean>? = null,
     labelId: ReferenceProperty<String>? = null,
     variable: ReferenceProperty<String>? = null,
 ) = InputValidatorExpression.Properties(
@@ -137,16 +137,16 @@ fun TemplateScope.inputValidatorExpressionRefs(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorExpression.override(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: Boolean? = null,
-    condition: String? = null,
+    condition: Boolean? = null,
     labelId: String? = null,
     variable: String? = null,
 ): InputValidatorExpression = InputValidatorExpression(
@@ -159,16 +159,16 @@ fun InputValidatorExpression.override(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorExpression.defer(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: ReferenceProperty<Boolean>? = null,
-    condition: ReferenceProperty<String>? = null,
+    condition: ReferenceProperty<Boolean>? = null,
     labelId: ReferenceProperty<String>? = null,
     variable: ReferenceProperty<String>? = null,
 ): InputValidatorExpression = InputValidatorExpression(
@@ -181,15 +181,15 @@ fun InputValidatorExpression.defer(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param condition Expression condition for evaluating.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param condition [Calculated expression](../../expressions.dita) used as a value validity condition.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
  */
 @Generated
 fun InputValidatorExpression.evaluate(
     `use named arguments`: Guard = Guard.instance,
     allowEmpty: ExpressionProperty<Boolean>? = null,
-    condition: ExpressionProperty<String>? = null,
+    condition: ExpressionProperty<Boolean>? = null,
     labelId: ExpressionProperty<String>? = null,
 ): InputValidatorExpression = InputValidatorExpression(
     InputValidatorExpression.Properties(

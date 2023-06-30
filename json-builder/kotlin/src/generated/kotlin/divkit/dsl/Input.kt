@@ -66,6 +66,8 @@ class Input internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectAllOnFocus = additive.selectAllOnFocus ?: properties.selectAllOnFocus,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
+            textAlignmentHorizontal = additive.textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+            textAlignmentVertical = additive.textAlignmentVertical ?: properties.textAlignmentVertical,
             textColor = additive.textColor ?: properties.textColor,
             textVariable = additive.textVariable ?: properties.textVariable,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -126,9 +128,8 @@ class Input internal constructor(
         val focus: Property<Focus>?,
         /**
          * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
-         * Default value: `text`.
          */
-        val fontFamily: Property<FontFamily>?,
+        val fontFamily: Property<String>?,
         /**
          * Font size.
          * Default value: `12`.
@@ -214,6 +215,16 @@ class Input internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
+         * Horizontal text alignment.
+         * Default value: `left`.
+         */
+        val textAlignmentHorizontal: Property<AlignmentHorizontal>?,
+        /**
+         * Vertical text alignment.
+         * Default value: `center`.
+         */
+        val textAlignmentVertical: Property<AlignmentVertical>?,
+        /**
          * Text color.
          * Default value: `#FF000000`.
          */
@@ -247,7 +258,7 @@ class Input internal constructor(
          */
         val transitionTriggers: Property<List<TransitionTrigger>>?,
         /**
-         * Validators for text value.
+         * Validator that checks that the field value meets the specified conditions.
          */
         val validators: Property<List<InputValidator>>?,
         /**
@@ -302,6 +313,8 @@ class Input internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("select_all_on_focus", selectAllOnFocus)
             result.tryPutProperty("selected_actions", selectedActions)
+            result.tryPutProperty("text_alignment_horizontal", textAlignmentHorizontal)
+            result.tryPutProperty("text_alignment_vertical", textAlignmentVertical)
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_variable", textVariable)
             result.tryPutProperty("tooltips", tooltips)
@@ -396,6 +409,8 @@ class Input internal constructor(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -404,7 +419,7 @@ class Input internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -423,7 +438,7 @@ fun DivScope.input(
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -443,6 +458,8 @@ fun DivScope.input(
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -488,6 +505,8 @@ fun DivScope.input(
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+        textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
@@ -535,6 +554,8 @@ fun DivScope.input(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -543,7 +564,7 @@ fun DivScope.input(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -562,7 +583,7 @@ fun DivScope.inputProps(
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -582,6 +603,8 @@ fun DivScope.inputProps(
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -626,6 +649,8 @@ fun DivScope.inputProps(
     rowSpan = valueOrNull(rowSpan),
     selectAllOnFocus = valueOrNull(selectAllOnFocus),
     selectedActions = valueOrNull(selectedActions),
+    textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+    textAlignmentVertical = valueOrNull(textAlignmentVertical),
     textColor = valueOrNull(textColor),
     textVariable = valueOrNull(textVariable),
     tooltips = valueOrNull(tooltips),
@@ -672,6 +697,8 @@ fun DivScope.inputProps(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -680,7 +707,7 @@ fun DivScope.inputProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -699,7 +726,7 @@ fun TemplateScope.inputRefs(
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -719,6 +746,8 @@ fun TemplateScope.inputRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -763,6 +792,8 @@ fun TemplateScope.inputRefs(
     rowSpan = rowSpan,
     selectAllOnFocus = selectAllOnFocus,
     selectedActions = selectedActions,
+    textAlignmentHorizontal = textAlignmentHorizontal,
+    textAlignmentVertical = textAlignmentVertical,
     textColor = textColor,
     textVariable = textVariable,
     tooltips = tooltips,
@@ -809,6 +840,8 @@ fun TemplateScope.inputRefs(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -817,7 +850,7 @@ fun TemplateScope.inputRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -836,7 +869,7 @@ fun Input.override(
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -856,6 +889,8 @@ fun Input.override(
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -901,6 +936,8 @@ fun Input.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectAllOnFocus = valueOrNull(selectAllOnFocus) ?: properties.selectAllOnFocus,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal) ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = valueOrNull(textAlignmentVertical) ?: properties.textAlignmentVertical,
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textVariable = valueOrNull(textVariable) ?: properties.textVariable,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -948,6 +985,8 @@ fun Input.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -956,7 +995,7 @@ fun Input.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -975,7 +1014,7 @@ fun Input.defer(
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -995,6 +1034,8 @@ fun Input.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1040,6 +1081,8 @@ fun Input.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = selectedActions ?: properties.selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = textVariable ?: properties.textVariable,
         tooltips = tooltips ?: properties.tooltips,
@@ -1074,6 +1117,8 @@ fun Input.defer(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param visibility Element visibility.
  */
@@ -1084,7 +1129,7 @@ fun Input.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1097,6 +1142,8 @@ fun Input.evaluate(
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Input = Input(
@@ -1131,6 +1178,8 @@ fun Input.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = properties.selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = properties.textVariable,
         tooltips = properties.tooltips,
@@ -1178,6 +1227,8 @@ fun Input.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1186,7 +1237,7 @@ fun Input.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1205,7 +1256,7 @@ fun Component<Input>.override(
     disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1225,6 +1276,8 @@ fun Component<Input>.override(
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -1271,6 +1324,8 @@ fun Component<Input>.override(
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+        textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
@@ -1318,6 +1373,8 @@ fun Component<Input>.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1326,7 +1383,7 @@ fun Component<Input>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param validators Validators for text value.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1345,7 +1402,7 @@ fun Component<Input>.defer(
     disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1365,6 +1422,8 @@ fun Component<Input>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1411,6 +1470,8 @@ fun Component<Input>.defer(
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = textVariable,
         tooltips = tooltips,
@@ -1445,6 +1506,8 @@ fun Component<Input>.defer(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param visibility Element visibility.
  */
@@ -1455,7 +1518,7 @@ fun Component<Input>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1468,6 +1531,8 @@ fun Component<Input>.evaluate(
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Input> = Component(
@@ -1503,6 +1568,8 @@ fun Component<Input>.evaluate(
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = null,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = null,
         tooltips = null,

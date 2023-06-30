@@ -45,20 +45,20 @@ class InputValidatorRegex internal constructor(
 
     class Properties internal constructor(
         /**
-         * Whether an empty value is correct. By default, false.
+         * Determines whether the empty field value is valid.
          * Default value: `false`.
          */
         val allowEmpty: Property<Boolean>?,
         /**
-         * ID of the text div containing the error message, which will also be used for accessibility.
+         * ID of the text element containing the error message. The message will also be used for providing access.
          */
         val labelId: Property<String>?,
         /**
-         * Regex pattern for matching.
+         * A regular expression (pattern) that the field value must match.
          */
         val pattern: Property<String>?,
         /**
-         * Name of validation storage variable.
+         * The name of the variable that stores the calculation results.
          */
         val variable: Property<String>?,
     ) {
@@ -75,10 +75,10 @@ class InputValidatorRegex internal constructor(
 }
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorRegex(
@@ -97,10 +97,10 @@ fun DivScope.inputValidatorRegex(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun DivScope.inputValidatorRegexProps(
@@ -117,10 +117,10 @@ fun DivScope.inputValidatorRegexProps(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun TemplateScope.inputValidatorRegexRefs(
@@ -137,10 +137,10 @@ fun TemplateScope.inputValidatorRegexRefs(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorRegex.override(
@@ -159,10 +159,10 @@ fun InputValidatorRegex.override(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
- * @param variable Name of validation storage variable.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
+ * @param variable The name of the variable that stores the calculation results.
  */
 @Generated
 fun InputValidatorRegex.defer(
@@ -181,9 +181,9 @@ fun InputValidatorRegex.defer(
 )
 
 /**
- * @param allowEmpty Whether an empty value is correct. By default, false.
- * @param labelId ID of the text div containing the error message, which will also be used for accessibility.
- * @param pattern Regex pattern for matching.
+ * @param allowEmpty Determines whether the empty field value is valid.
+ * @param labelId ID of the text element containing the error message. The message will also be used for providing access.
+ * @param pattern A regular expression (pattern) that the field value must match.
  */
 @Generated
 fun InputValidatorRegex.evaluate(

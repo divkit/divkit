@@ -169,9 +169,8 @@ class Text internal constructor(
         val focusedTextColor: Property<Color>?,
         /**
          * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
-         * Default value: `text`.
          */
-        val fontFamily: Property<FontFamily>?,
+        val fontFamily: Property<String>?,
         /**
          * Font size.
          * Default value: `12`.
@@ -571,7 +570,7 @@ class Text internal constructor(
             /**
              * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
              */
-            val fontFamily: Property<FontFamily>?,
+            val fontFamily: Property<String>?,
             /**
              * Font size.
              */
@@ -714,7 +713,7 @@ fun DivScope.text(
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -882,7 +881,7 @@ fun DivScope.textProps(
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1048,7 +1047,7 @@ fun TemplateScope.textRefs(
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1214,7 +1213,7 @@ fun Text.override(
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1382,7 +1381,7 @@ fun Text.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1510,7 +1509,7 @@ fun Text.evaluate(
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1660,7 +1659,7 @@ fun Component<Text>.override(
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1829,7 +1828,7 @@ fun Component<Text>.defer(
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1958,7 +1957,7 @@ fun Component<Text>.evaluate(
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -2355,7 +2354,7 @@ fun DivScope.textRange(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2410,7 +2409,7 @@ fun DivScope.textRangeProps(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2463,7 +2462,7 @@ fun TemplateScope.textRangeRefs(
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2516,7 +2515,7 @@ fun Text.Range.override(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2571,7 +2570,7 @@ fun Text.Range.defer(
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2620,7 +2619,7 @@ fun Text.Range.defer(
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     end: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,

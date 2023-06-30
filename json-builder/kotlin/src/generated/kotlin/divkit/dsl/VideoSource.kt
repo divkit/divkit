@@ -43,19 +43,19 @@ class VideoSource internal constructor(
 
     class Properties internal constructor(
         /**
-         * Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
+         * Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
          */
         val bitrate: Property<Int>?,
         /**
-         * The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
+         * MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
          */
         val mimeType: Property<String>?,
         /**
-         * Media file Resolution.
+         * Media file resolution.
          */
         val resolution: Property<Resolution>?,
         /**
-         * The property contains a link to a media file available for playback or download.
+         * Link to the media file available for playback or download.
          */
         val url: Property<Url>?,
     ) {
@@ -71,7 +71,7 @@ class VideoSource internal constructor(
     }
 
     /**
-     * Media file Resolution.
+     * Media file resolution.
      * 
      * Can be created using the method [videoSourceResolution].
      * 
@@ -96,11 +96,11 @@ class VideoSource internal constructor(
 
         class Properties internal constructor(
             /**
-             * Contains information about the resolution height of the Media file.
+             * Media file frame height.
              */
             val height: Property<Int>?,
             /**
-             * Contains information about the resolution width of the video file.
+             * Media file frame width.
              */
             val width: Property<Int>?,
         ) {
@@ -117,10 +117,10 @@ class VideoSource internal constructor(
 }
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param resolution Media file Resolution.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun DivScope.videoSource(
@@ -139,10 +139,10 @@ fun DivScope.videoSource(
 )
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param resolution Media file Resolution.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun DivScope.videoSourceProps(
@@ -159,10 +159,10 @@ fun DivScope.videoSourceProps(
 )
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param resolution Media file Resolution.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun TemplateScope.videoSourceRefs(
@@ -179,10 +179,10 @@ fun TemplateScope.videoSourceRefs(
 )
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param resolution Media file Resolution.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun VideoSource.override(
@@ -201,10 +201,10 @@ fun VideoSource.override(
 )
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param resolution Media file Resolution.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param resolution Media file resolution.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun VideoSource.defer(
@@ -223,9 +223,9 @@ fun VideoSource.defer(
 )
 
 /**
- * @param bitrate Properties of the media file that determines the data transfer rate in the video stream. Bitrate is measured in kilobits per second (kbps) and indicates how much data is transmitted per unit of time.
- * @param mimeType The property defines the MIME type (Multipurpose Internet Mail Extensions) for the media file. A MIME type is a string that indicates the type of file content and is used to determine the type of file and its correct processing.
- * @param url The property contains a link to a media file available for playback or download.
+ * @param bitrate Media file bitrate: Data transfer rate in a video stream, measured in kilobits per second (kbps).
+ * @param mimeType MIME type (Multipurpose Internet Mail Extensions): A string that defines the file type and helps process it correctly.
+ * @param url Link to the media file available for playback or download.
  */
 @Generated
 fun VideoSource.evaluate(
@@ -246,8 +246,8 @@ fun VideoSource.evaluate(
 fun VideoSource.asList() = listOf(this)
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun DivScope.videoSourceResolution(
@@ -262,8 +262,8 @@ fun DivScope.videoSourceResolution(
 )
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun DivScope.videoSourceResolutionProps(
@@ -276,8 +276,8 @@ fun DivScope.videoSourceResolutionProps(
 )
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun TemplateScope.videoSourceResolutionRefs(
@@ -290,8 +290,8 @@ fun TemplateScope.videoSourceResolutionRefs(
 )
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun VideoSource.Resolution.override(
@@ -306,8 +306,8 @@ fun VideoSource.Resolution.override(
 )
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun VideoSource.Resolution.defer(
@@ -322,8 +322,8 @@ fun VideoSource.Resolution.defer(
 )
 
 /**
- * @param height Contains information about the resolution height of the Media file.
- * @param width Contains information about the resolution width of the video file.
+ * @param height Media file frame height.
+ * @param width Media file frame width.
  */
 @Generated
 fun VideoSource.Resolution.evaluate(

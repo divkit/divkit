@@ -28,7 +28,7 @@ import kotlin.collections.Map
 class FixedSize internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : RadialGradientRadius, Size {
+) : Size, RadialGradientRadius {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "fixed")
