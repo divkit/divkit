@@ -31,7 +31,7 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
 
     let imageHolder = imageHolderFactory.make(
       resolveImageUrl(expressionResolver),
-      resolvePlaceholder(expressionResolver)
+      resolvePlaceholder(expressionResolver, highPriority: highPriority)
     )
     return ImageBlock(
       imageHolder: imageHolder,

@@ -12,15 +12,18 @@ public final class RemoteImageHolder: ImageHolder {
   public let url: URL
   public private(set) weak var image: Image?
   private let resourceRequester: AsyncImageRequester
+  private let imageProcessingQueue: OperationQueueType
 
   private init(
     url: URL,
     placeholder: ImagePlaceholder? = nil,
-    resourceRequester: @escaping AsyncImageRequester
+    resourceRequester: @escaping AsyncImageRequester,
+    imageProcessingQueue: OperationQueueType
   ) {
     self.url = url
     self.placeholder = placeholder
     self.resourceRequester = resourceRequester
+    self.imageProcessingQueue = imageProcessingQueue
   }
 
   public convenience init(
@@ -71,7 +74,8 @@ public final class RemoteImageHolder: ImageHolder {
     self.init(
       url: url,
       placeholder: placeholder,
-      resourceRequester: resourceRequester.requestResource
+      resourceRequester: resourceRequester.requestResource,
+      imageProcessingQueue: imageProcessingQueue
     )
     weakSelf = self
   }
@@ -94,8 +98,15 @@ public final class RemoteImageHolder: ImageHolder {
       return nil
     }
 
-    if case let .some(.image(placeholder)) = placeholder {
-      completion((placeholder, .cache))
+    switch placeholder {
+    case let .image(image)?:
+      completion((image, .cache))
+    case let .imageData(imageData)?:
+      imageData.makeImage(queue: imageProcessingQueue) { image in
+        completion((image, .cache))
+      }
+    case .view, .color, .none:
+      break
     }
 
     return resourceRequester(completion)
@@ -121,3 +132,4 @@ extension RemoteImageHolder {
     (self.placeholder === placeholder && url == remoteImageURL) ? self : nil
   }
 }
+

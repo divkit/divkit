@@ -315,18 +315,7 @@ extension DivData {
 extension ImageHolderFactory {
   static let placeholderOnly = ImageHolderFactory(
     make: { _, placeholder in
-      switch placeholder {
-      case let .image(image)?:
-        return image
-      case let .color(color)?:
-        return ColorHolder(color: color)
-      case let .view(view)?:
-        return ViewImageHolder(view: view)
-      case .none:
-        return NilImageHolder()
-      @unknown default:
-        return NilImageHolder()
-      }
+      placeholder?.toImageHolder() ?? NilImageHolder()
     }
   )
 }

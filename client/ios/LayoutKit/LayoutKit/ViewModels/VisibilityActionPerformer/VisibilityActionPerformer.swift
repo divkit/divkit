@@ -38,13 +38,17 @@ final class VisibilityActionPerformer {
   ) {
     switch type {
     case .appear:
-      guard visibleAreaPercentageAfter >= targetPercentage else {
-        invalidateTimer()
+      guard visibleAreaPercentageAfter >= targetPercentage,
+            visibleAreaPercentageBefore < targetPercentage
+      else {
+        if visibleAreaPercentageAfter < targetPercentage {
+          invalidateTimer()
+        }
         return
       }
     case .disappear:
       guard visibleAreaPercentageAfter <= targetPercentage,
-            visibleAreaPercentageBefore > visibleAreaPercentageAfter
+            visibleAreaPercentageBefore > targetPercentage
       else {
         if visibleAreaPercentageAfter > targetPercentage {
           invalidateTimer()

@@ -46,6 +46,7 @@ import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -66,7 +67,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.util.WeakHashMap
-import kotlin.collections.ArrayDeque
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -297,6 +297,8 @@ class Div2View private constructor(
             bindOnAttachRunnable?.cancel()
             rebind(oldData, false)
             divData = newDivData
+            val state = newDivData.stateToBind
+            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
@@ -402,6 +404,7 @@ class Div2View private constructor(
         super.onDetachedFromWindow()
         tryLogVisibility()
         divTimerEventDispatcher?.onDetach(this)
+        releaseChildren(this)
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -825,7 +828,13 @@ class Div2View private constructor(
         return divVideoActionHandler.handleAction(this, divId, command)
     }
 
-    internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
+    internal fun unbindViewFromDiv(view: View): Div? {
+        val removedDiv = viewToDivBindings.remove(view)
+        if (viewToDivBindings.isEmpty()) {
+            releaseViewVisitor.visit(view)
+        }
+        return removedDiv
+    }
 
     private fun rebind(newData: DivData, isAutoanimations: Boolean) {
         try {
@@ -835,7 +844,7 @@ class Div2View private constructor(
             }
             histogramReporter?.onRebindingStarted()
             viewComponent.errorCollectors.getOrCreate(dataTag, divData).cleanRuntimeWarningsAndErrors()
-            val state = newData.states.firstOrNull { it.stateId == stateId } ?: newData.states[0]
+            val state = newData.stateToBind
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
             }
@@ -852,6 +861,8 @@ class Div2View private constructor(
             KAssert.fail(error)
         }
     }
+
+    private val DivData.stateToBind get() = states.firstOrNull { it.stateId == stateId } ?: states[0]
 
     var visualErrorsEnabled: Boolean
         set(value) {

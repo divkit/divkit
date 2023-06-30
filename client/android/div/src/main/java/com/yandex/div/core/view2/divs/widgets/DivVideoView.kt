@@ -7,7 +7,6 @@ import android.widget.FrameLayout
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
-import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
@@ -41,7 +40,6 @@ internal class DivVideoView @JvmOverloads constructor(
         }
 
     override val subscriptions = mutableListOf<Disposable>()
-    private var lastPlayer: DivPlayer? = null
 
     private var isDrawing = false
 
@@ -74,26 +72,7 @@ internal class DivVideoView @JvmOverloads constructor(
             it.getAttachedPlayer()?.release()
             it.detach()
         }
-        lastPlayer = null
         borderDrawer?.release()
-    }
-
-    override fun onAttachedToWindow() {
-        if (getPlayerView()?.getAttachedPlayer() == null) {
-            lastPlayer?.let {
-                getPlayerView()?.attach(it)
-            }
-        }
-        lastPlayer = null
-        super.onAttachedToWindow()
-    }
-
-    override fun onDetachedFromWindow() {
-        getPlayerView()?.let {
-            lastPlayer = it.getAttachedPlayer()
-            it.detach()
-        }
-        super.onDetachedFromWindow()
     }
 
     fun getPlayerView(): DivPlayerView? {

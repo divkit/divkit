@@ -1,3 +1,16 @@
+## 25.7.0
+
+# Android Client:
+* `compileSdkVersion` updated to 34
+* Supported margins for linear container separators.
+
+# iOS Client:
+* Added Xcode 14.3 & Xcode 15 support.
+* Fixed player pausing in VideoBlock.
+
+# Web Client:
+* Fixed update of the`gallery` with the `scroll_mode` = `paging` and `default_item` in rare cases
+
 ## 25.6.0
 
 # JSON Schema:
