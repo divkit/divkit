@@ -214,6 +214,9 @@
     },
     {
       "title": "Pager scroll",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager",
         "scroll"
