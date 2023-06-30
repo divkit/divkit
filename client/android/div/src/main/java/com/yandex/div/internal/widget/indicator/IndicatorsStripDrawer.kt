@@ -9,98 +9,52 @@ internal class IndicatorsStripDrawer(
     private val singleIndicatorDrawer: SingleIndicatorDrawer,
     private val animator: IndicatorAnimator,
 ) {
+    private val ribbon = IndicatorsRibbon()
+
     private var itemsCount: Int = 0
     private var maxVisibleCount: Int = 0
 
     private var baseYOffset: Float = styleParams.inactiveShape.itemSize.width
-    private var baseXOffset: Float = styleParams.inactiveShape.itemSize.width / 2
     private var spaceBetweenCenters: Float = 0f
     private var itemWidthMultiplier: Float = 1f
 
     private var viewportWidth: Int = 0
     private var viewportHeight: Int = 0
     private var selectedItemPosition: Int = 0
-    private var selectedItemOffset: Float = 0f
-    private var firstVisibleItemOffset: Float = 0f
-    private var startIndex: Int = 0
-    private var endIndex: Int = maxVisibleCount - 1
+    private var selectedItemFraction: Float = 0f
 
-    fun onPageScrolled(position: Int, positionOffset: Float) {
+    fun onPageScrolled(position: Int, positionFraction: Float) {
         selectedItemPosition = position
-        selectedItemOffset = positionOffset
-        animator.onPageScrolled(position, positionOffset)
-        adjustVisibleItems(position, positionOffset)
+        selectedItemFraction = positionFraction
+        animator.onPageScrolled(position, positionFraction)
+        adjustVisibleItems(position, positionFraction)
     }
 
     fun onPageSelected(position: Int) {
         selectedItemPosition = position
-        selectedItemOffset = 0f
+        selectedItemFraction = 0f
         animator.onPageSelected(position)
         adjustVisibleItems(position, 0f)
     }
 
     fun onDraw(canvas: Canvas) {
-        for (index in startIndex..endIndex) {
-            val xOffset = getItemOffsetAt(index) - firstVisibleItemOffset
-
-            if (xOffset !in 0f..viewportWidth.toFloat()) continue
-            var itemSize = getItemSizeAt(index)
-            if (itemsCount > maxVisibleCount) {
-                val scaleDistance = spaceBetweenCenters * 1.3f
-                val smallScaleDistance = styleParams.inactiveShape.itemSize.width / 2
-                val currentScaleDistance = if (index == 0 || index == itemsCount - 1) {
-                    smallScaleDistance
-                } else {
-                    scaleDistance
-                }
-                val viewportSize = viewportWidth
-                if (xOffset < currentScaleDistance) { // left border
-                    val calculatedSize = itemSize.width * xOffset / currentScaleDistance
-                    if (calculatedSize <= styleParams.minimumShape.itemSize.width) {
-                        itemSize = styleParams.minimumShape.itemSize
-                    } else if (calculatedSize < itemSize.width) {
-                        when (itemSize) {
-                            is IndicatorParams.ItemSize.RoundedRect -> {
-                                itemSize.itemWidth = calculatedSize
-                                itemSize.itemHeight = itemSize.itemHeight * xOffset / currentScaleDistance
-                            }
-                            is IndicatorParams.ItemSize.Circle -> {
-                                itemSize.radius = calculatedSize
-                            }
-                        }
-                    }
-                } else if (xOffset > viewportSize - currentScaleDistance) { // right border
-                    val calculatedSize = itemSize.width * (-xOffset + viewportSize) / currentScaleDistance
-                    if (calculatedSize <= styleParams.minimumShape.itemSize.width) {
-                        itemSize = styleParams.minimumShape.itemSize
-                    } else if (calculatedSize < itemSize.width) {
-                        when (itemSize) {
-                            is IndicatorParams.ItemSize.RoundedRect -> {
-                                itemSize.itemWidth = calculatedSize
-                                itemSize.itemHeight = itemSize.itemHeight * (-xOffset + viewportSize) / currentScaleDistance
-                            }
-                            is IndicatorParams.ItemSize.Circle -> {
-                                itemSize.radius = calculatedSize
-                            }
-                        }
-                    }
-                }
-            }
-
+        ribbon.visibleItems.forEach { indicator ->
             singleIndicatorDrawer.draw(
-                canvas,
-                xOffset,
-                baseYOffset,
-                itemSize,
-                animator.getColorAt(index),
-                animator.getBorderWidthAt(index),
-                animator.getBorderColorAt(index)
+                    canvas,
+                    indicator.centerOffset,
+                    baseYOffset,
+                    indicator.itemSize,
+                    animator.getColorAt(indicator.position),
+                    animator.getBorderWidthAt(indicator.position),
+                    animator.getBorderColorAt(indicator.position)
             )
         }
-        val xOffset = getItemOffsetAt(selectedItemPosition) - firstVisibleItemOffset
-        val rect = animator.getSelectedItemRect(xOffset, baseYOffset)
-        if (rect != null) {
-            singleIndicatorDrawer.drawSelected(canvas, rect)
+
+        ribbon.visibleItems.find { it.active }?.let { indicator ->
+            val rect = animator.getSelectedItemRect(indicator.centerOffset, baseYOffset, viewportWidth.toFloat())
+            if (rect != null) {
+                singleIndicatorDrawer.drawSelected(canvas, rect)
+            }
         }
     }
 
@@ -109,7 +63,6 @@ internal class IndicatorsStripDrawer(
         animator.setItemsCount(count)
 
         calculateMaximumVisibleItems()
-        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1)) / 2f
         baseYOffset = viewportHeight / 2f
     }
 
@@ -121,42 +74,21 @@ internal class IndicatorsStripDrawer(
         calculateMaximumVisibleItems()
         adjustItemsPlacement()
 
-        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1)) / 2f
         baseYOffset = viewportHeight / 2f
-        adjustVisibleItems(selectedItemPosition, selectedItemOffset)
+        adjustVisibleItems(selectedItemPosition, selectedItemFraction)
     }
 
     fun getMaxVisibleItems() = maxVisibleCount
 
     private fun calculateMaximumVisibleItems() {
         maxVisibleCount = when (val itemPlacement = styleParams.itemsPlacement) {
-            is IndicatorParams.ItemPlacement.Default -> (((viewportWidth - styleParams.activeShape.itemSize.width) /
-                    itemPlacement.spaceBetweenCenters).toInt())
+            is IndicatorParams.ItemPlacement.Default -> ((viewportWidth / itemPlacement.spaceBetweenCenters).toInt())
             is IndicatorParams.ItemPlacement.Stretch -> itemPlacement.maxVisibleItems
         }.coerceAtMost(itemsCount)
     }
 
     private fun adjustVisibleItems(position: Int, positionOffset: Float) {
-        if (itemsCount <= maxVisibleCount) {
-            firstVisibleItemOffset = 0f
-        } else {
-            val minPage = maxVisibleCount / 2
-            val maxPage = itemsCount - maxVisibleCount / 2 - maxVisibleCount % 2
-            val centerOffset = if (maxVisibleCount % 2 == 0) spaceBetweenCenters / 2 else 0f
-
-            firstVisibleItemOffset = if (itemsCount > maxVisibleCount) {
-                when {
-                    position < minPage -> getItemOffsetAt(minPage) - viewportWidth / 2 - centerOffset
-                    position >= maxPage -> getItemOffsetAt(maxPage) - viewportWidth / 2 - centerOffset
-                    else -> getItemOffsetAt(position) + spaceBetweenCenters * positionOffset - viewportWidth / 2 - centerOffset
-                }
-            } else {
-                0f
-            }
-        }
-
-        startIndex = (((firstVisibleItemOffset - baseXOffset) / spaceBetweenCenters).toInt()).coerceAtLeast(0)
-        endIndex = ((startIndex + viewportWidth / spaceBetweenCenters + 1).toInt()).coerceAtMost(itemsCount - 1)
+        ribbon.relayout(position, positionOffset)
     }
 
     private fun adjustItemsPlacement() {
@@ -174,8 +106,6 @@ internal class IndicatorsStripDrawer(
         animator.updateSpaceBetweenCenters(spaceBetweenCenters)
     }
 
-    private fun getItemOffsetAt(position: Int) = baseXOffset + spaceBetweenCenters * position
-
     private fun getItemSizeAt(position: Int): IndicatorParams.ItemSize {
         var itemSize = animator.getItemSizeAt(position)
 
@@ -185,5 +115,205 @@ internal class IndicatorsStripDrawer(
         }
 
         return itemSize
+    }
+
+    private data class Indicator(
+        val position: Int,
+        val active: Boolean,
+        val centerOffset: Float,
+        val itemSize: IndicatorParams.ItemSize,
+        val scaleFactor: Float = 1f,
+    ) {
+        val left: Float get() = centerOffset - itemSize.width / 2f
+        val right: Float get() = centerOffset + itemSize.width / 2f
+    }
+
+    /**
+     * Used to prepare layout of currently visible indicators.
+     */
+    private inner class IndicatorsRibbon {
+        /**
+         * List of all items with absolute offsets. Intermediate data
+         * from which [visibleItems] are built.
+         */
+        private val allItems = mutableListOf<Indicator>()
+
+        /**
+         * List of visible items with offsets that could be used in real viewport.
+         */
+        val visibleItems = mutableListOf<Indicator>()
+
+        fun relayout(activePosition: Int, positionFraction: Float) {
+            allItems.clear()
+            visibleItems.clear()
+            if (itemsCount <= 0) {
+                return
+            }
+
+            (0 until itemsCount).forEach { position ->
+                val size = getItemSizeAt(position)
+                val centerOffset = when (position) {
+                    0 -> size.width / 2f
+                    else -> allItems.last().centerOffset + spaceBetweenCenters
+                }
+
+                allItems.add(Indicator(
+                        position = position,
+                        active = position == activePosition,
+                        centerOffset = centerOffset,
+                        itemSize = size,
+                ))
+
+            }
+            visibleItems.addAll(relayoutVisibleItems(activePosition, positionFraction))
+        }
+
+        private fun relayoutVisibleItems(activePosition: Int,
+                                         positionFraction: Float): List<Indicator> {
+            val shiftToCurrentViewport = calcOffsetShiftFor(activePosition, positionFraction)
+            val viewportItems = allItems.map {
+                it.copy(centerOffset = it.centerOffset + shiftToCurrentViewport)
+            }.toMutableList()
+
+            if (viewportItems.size <= maxVisibleCount) {
+                return viewportItems
+            }
+
+            val viewPort = 0f..viewportWidth.toFloat()
+
+            // Remove alignment to center when first or last item fits to viewport.
+            when {
+                viewPort.contains(viewportItems.first().left) -> {
+                    val offsetToSide = -viewportItems.first().left
+                    replaceAll(viewportItems) { it.copy(centerOffset = it.centerOffset + offsetToSide) }
+                }
+                viewPort.contains(viewportItems.last().right) -> {
+                    val offsetToSide = viewportWidth - viewportItems.last().right
+                    replaceAll(viewportItems) { it.copy(centerOffset = it.centerOffset + offsetToSide) }
+                }
+            }
+
+            // Remove items outside viewport
+            viewportItems.removeAll {
+                !viewPort.contains(it.centerOffset) && !viewPort.contains(it.centerOffset)
+            }
+
+            downscaleAndDisperse(viewportItems)
+            return viewportItems
+        }
+
+        /**
+         * @return offset for each item so active one would be arranged at viewport's center or near.
+         */
+        private fun calcOffsetShiftFor(activePosition: Int,
+                                       positionFraction: Float): Float {
+            if (allItems.size <= maxVisibleCount) {
+                // Simply places center of ribbon into viewport center.
+                return (viewportWidth / 2f) - (allItems.last().right / 2)
+            }
+
+            val activeItemOffset = allItems[activePosition].centerOffset
+            val viewportCenter = viewportWidth / 2f
+            var offset = viewportCenter - activeItemOffset - (spaceBetweenCenters * positionFraction)
+
+            val centerIsBetweenItems = maxVisibleCount % 2 == 0
+            if (centerIsBetweenItems) {
+                offset += spaceBetweenCenters / 2
+            }
+            return offset
+        }
+
+        private fun downscaleAndDisperse(viewportItems: MutableList<Indicator>) {
+            // Downscale items on sides when there are more items behind them.
+            replaceAll(viewportItems) {
+                val scaleFactor = calcScaleFraction(it.centerOffset)
+                if (it.position == 0 || it.position == itemsCount - 1 || it.active) {
+                    it.copy(scaleFactor = scaleFactor)
+                } else {
+                    scaleItem(it, scaleFactor)
+                }
+            }
+
+            // Increase distance to downscaled items so viewport
+            // won't show multiple downscaled bullets.
+            val firstNonScaledIndex = viewportItems
+                    .indexOfFirst { it.scaleFactor == 1f }
+                    .takeIf { it >= 0 } ?: return
+            val lastNonScaledIndex = viewportItems
+                    .indexOfLast { it.scaleFactor == 1f }
+                    .takeIf { it >= 0 } ?: return
+            val leftDownscaledItemIndex = firstNonScaledIndex - 1
+            val rightDownscaledItemIndex = lastNonScaledIndex + 1
+
+            viewportItems.forEachIndexed { i, item ->
+                if (i < leftDownscaledItemIndex) {
+                    val scaleFactor = viewportItems.getOrNull(leftDownscaledItemIndex)?.scaleFactor
+                            ?: return@forEachIndexed
+                    val shiftFactor = 1f - scaleFactor
+                    val shift = spaceBetweenCenters * shiftFactor
+                    viewportItems[i] = item.copy(centerOffset = item.centerOffset - shift)
+                }
+                if (i > rightDownscaledItemIndex) {
+                    val scaleFactor = viewportItems.getOrNull(rightDownscaledItemIndex)?.scaleFactor
+                            ?: return@forEachIndexed
+                    val shiftFactor = 1f - scaleFactor
+                    val shift = spaceBetweenCenters * shiftFactor
+                    viewportItems[i] = item.copy(centerOffset = item.centerOffset + shift)
+                }
+            }
+        }
+
+        private fun calcScaleFraction(absOffset: Float): Float {
+            val minScaleOffset = 0f
+            val maxScaleOffset = minScaleOffset + spaceBetweenCenters
+            val itemOffset = if (absOffset <= maxScaleOffset) {
+                absOffset
+            } else {
+                // Mirror offset from right corner to left.
+                (viewportWidth - absOffset).coerceAtMost(maxScaleOffset)
+            }
+
+            if (itemOffset > maxScaleOffset) {
+                return 1f
+            }
+            val fraction = itemOffset / (maxScaleOffset - minScaleOffset)
+            return fraction.coerceIn(0f, 1f)
+        }
+
+        private fun scaleItem(item: Indicator, scaleFraction: Float): Indicator {
+            val itemSize = item.itemSize
+            val calculatedSize = itemSize.width * scaleFraction
+
+            if (calculatedSize <= styleParams.minimumShape.itemSize.width) {
+                return item.copy(
+                    itemSize = styleParams.minimumShape.itemSize,
+                    scaleFactor = scaleFraction)
+            }
+
+            if (calculatedSize < itemSize.width) {
+                return when (itemSize) {
+                    is IndicatorParams.ItemSize.RoundedRect -> {
+                        item.copy(itemSize = itemSize.copy(
+                            itemWidth = calculatedSize,
+                            itemHeight = itemSize.itemHeight * (calculatedSize / itemSize.itemWidth),
+                        ), scaleFactor = scaleFraction,)
+                    }
+                    is IndicatorParams.ItemSize.Circle -> {
+                        item.copy(
+                            itemSize = itemSize.copy(radius = (itemSize.width * scaleFraction) / 2f),
+                            scaleFactor = scaleFraction,
+                        )
+                    }
+                }
+            }
+
+            return item
+        }
+
+        private inline fun <T: Any> replaceAll(list: MutableList<T>, operator: (T) -> T) {
+            list.forEachIndexed { i, element ->
+                list[i] = operator(element)
+            }
+        }
     }
 }

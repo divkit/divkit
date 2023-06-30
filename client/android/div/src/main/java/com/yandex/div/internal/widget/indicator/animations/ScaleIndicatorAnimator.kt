@@ -39,29 +39,42 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
         itemsCount = count
     }
 
-    override fun getSelectedItemRect(xOffset: Float, yOffset: Float): RectF? = null
+    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float): RectF? = null
 
     override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize {
         return when (val activeShape = styleParams.activeShape) {
             is IndicatorParams.Shape.Circle -> {
                 val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.Circle
                 IndicatorParams.ItemSize.Circle(
-                    inactiveShape.itemSize.radius + (activeShape.itemSize.radius
-                            - inactiveShape.itemSize.radius) * getScaleAt(position)
+                        interpolate(
+                                src = inactiveShape.itemSize.radius,
+                                dst = activeShape.itemSize.radius,
+                                fraction = getScaleAt(position),
+                        )
                 )
             }
             is IndicatorParams.Shape.RoundedRect -> {
                 val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.RoundedRect
                 IndicatorParams.ItemSize.RoundedRect(
-                    inactiveShape.itemSize.itemWidth + (activeShape.itemSize.itemWidth
-                            - inactiveShape.itemSize.itemWidth) * getScaleAt(position),
-                    inactiveShape.itemSize.itemHeight + (activeShape.itemSize.itemHeight
-                            - inactiveShape.itemSize.itemHeight) * getScaleAt(position),
-                    inactiveShape.itemSize.cornerRadius + (activeShape.itemSize.cornerRadius
-                            - inactiveShape.itemSize.cornerRadius) * getScaleAt(position)
+                        itemWidth = interpolate(
+                                src = inactiveShape.itemSize.itemWidth + inactiveShape.strokeWidth,
+                                dst = activeShape.itemSize.itemWidth + activeShape.strokeWidth,
+                                fraction = getScaleAt(position)),
+                        itemHeight = interpolate(
+                                src = inactiveShape.itemSize.itemHeight + inactiveShape.strokeWidth,
+                                dst = activeShape.itemSize.itemHeight + activeShape.strokeWidth,
+                                fraction = getScaleAt(position)),
+                        cornerRadius = interpolate(
+                                src = inactiveShape.itemSize.cornerRadius,
+                                dst = activeShape.itemSize.cornerRadius,
+                                fraction = getScaleAt(position)),
                 )
             }
         }
+    }
+
+    private fun interpolate(src: Float, dst: Float, fraction: Float): Float {
+        return src + (dst - src) * fraction
     }
 
     override fun getBorderColorAt(position: Int): Int {
