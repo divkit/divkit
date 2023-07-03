@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
 
     import css from './Video.module.css';
 
@@ -67,7 +67,7 @@
         }
     });
 
-    if (json.id && !hasError) {
+    if (json.id && !hasError && !layoutParams?.fakeElement) {
         rootCtx.registerInstance<VideoElements>(json.id, {
             pause() {
                 videoElem?.pause();
@@ -119,6 +119,12 @@
         const actions = rootCtx.getJsonWithVars(json.fatal_actions);
         rootCtx.execAnyActions(actions);
     }
+
+    onDestroy(() => {
+        if (json.id && !hasError && !layoutParams?.fakeElement) {
+            rootCtx.unregisterInstance(json.id);
+        }
+    });
 </script>
 
 {#if !hasError}
@@ -147,7 +153,7 @@
             on:error={onError}
         >
             {#each sources as source}
-                <source src={source.src} type={source.type}>
+                <source src={source.src} type={source.type} on:error={onError}>
             {/each}
         </video>
     </Outer>
