@@ -401,7 +401,7 @@
     $: {
         backgroundStyle = {};
         hasSeparateBg = false;
-        if ($jsonBackground) {
+        if (Array.isArray($jsonBackground)) {
             hasSeparateBg =
                 $jsonBackground.some(it => it.type === 'image' || it.type === 'nine_patch_image') ||
                 Boolean(backgroundRadius);
