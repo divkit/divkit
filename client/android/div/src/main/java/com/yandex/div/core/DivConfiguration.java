@@ -11,7 +11,9 @@ import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.state.DivStateChangeListener;
+import com.yandex.div.internal.viewpool.FixedPreCreationProfile;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
 import com.yandex.div.core.player.DivPlayerFactory;
@@ -66,6 +68,8 @@ public class DivConfiguration {
     @NonNull
     private final Map<String, DivTypefaceProvider> mTypefaceProviders;
     @NonNull
+    private final ViewPreCreationProfile mViewPreCreationProfile;
+    @NonNull
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
 
     @NonNull
@@ -103,6 +107,7 @@ public class DivConfiguration {
             @NonNull DivDownloader divDownloader,
             @NonNull DivTypefaceProvider typefaceProvider,
             @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
+            @NonNull ViewPreCreationProfile viewPreCreationProfile,
             @NonNull ViewPoolProfiler.Reporter reporter,
             @Nullable GlobalVariableController globalVariableController,
             boolean tapBeaconsEnabled,
@@ -144,6 +149,7 @@ public class DivConfiguration {
         mSupportHyphenation = supportHyphenation;
         mAccessibilityEnabled = accessibilityEnabled;
         mViewPoolEnabled = viewPoolEnabled;
+        mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
@@ -312,6 +318,12 @@ public class DivConfiguration {
 
     @Provides
     @NonNull
+    public ViewPreCreationProfile getViewPreCreationProfile() {
+        return mViewPreCreationProfile;
+    }
+
+    @Provides
+    @NonNull
     public ViewPoolProfiler.Reporter getViewPoolReporter() {
         return mViewPoolReporter;
     }
@@ -376,7 +388,7 @@ public class DivConfiguration {
         @Nullable
         private Map<String, DivTypefaceProvider> mAdditionalTypefaceProviders;
         @Nullable
-        private DivTypefaceProvider mDisplayTypefaceProvider;
+        private ViewPreCreationProfile mViewPreCreationProfile;
         @Nullable
         private ViewPoolProfiler.Reporter mViewPoolReporter;
         @Nullable
@@ -544,6 +556,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder viewPreCreationProfile(@NonNull ViewPreCreationProfile viewPreCreationProfile) {
+            mViewPreCreationProfile = viewPreCreationProfile;
+            return this;
+        }
+
+        @NonNull
         public Builder viewPoolReporter(@NonNull ViewPoolProfiler.Reporter viewPoolReporter) {
             mViewPoolReporter = viewPoolReporter;
             return this;
@@ -638,6 +656,7 @@ public class DivConfiguration {
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,
                     nonNullTypefaceProvider,
                     mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,
+                    mViewPreCreationProfile == null ? new FixedPreCreationProfile() : mViewPreCreationProfile,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
                     mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
                     mTapBeaconsEnabled,

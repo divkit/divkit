@@ -25,7 +25,9 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.internal.viewpool.FixedPreCreationProfile
 import com.yandex.div.internal.viewpool.ViewPool
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -36,29 +38,36 @@ import javax.inject.Named
 @DivScope
 @Mockable
 internal class DivViewCreator @Inject constructor(
-        @Named(Names.THEMED_CONTEXT) private val context: Context,
-        private val viewPool: ViewPool,
-        private val validator: DivValidator,
+    @Named(Names.THEMED_CONTEXT) private val context: Context,
+    private val viewPool: ViewPool,
+    private val validator: DivValidator,
+    viewPreCreationProfile: ViewPreCreationProfile
 ) : DivVisitor<View>() {
 
     init {
-        viewPool.register(TAG_TEXT, { DivLineHeightTextView(context) }, 20)
-        viewPool.register(TAG_IMAGE, { DivImageView(context) }, 20)
-        viewPool.register(TAG_GIF_IMAGE, { DivGifImageView(context) }, 3)
-        viewPool.register(TAG_OVERLAP_CONTAINER, { DivFrameLayout(context) }, 8)
-        viewPool.register(TAG_LINEAR_CONTAINER, { DivLinearLayout(context) }, 12)
-        viewPool.register(TAG_WRAP_CONTAINER, { DivWrapLayout(context) }, 4)
-        viewPool.register(TAG_GRID, { DivGridLayout(context) }, 4)
-        viewPool.register(TAG_GALLERY, { DivRecyclerView(context) }, 6)
-        viewPool.register(TAG_PAGER, { DivPagerView(context) }, 2)
-        viewPool.register(TAG_TABS, { TabsLayout(context) }, 2)
-        viewPool.register(TAG_STATE, { DivStateLayout(context) }, 4)
-        viewPool.register(TAG_CUSTOM, { DivFrameLayout(context) }, 2)
-        viewPool.register(TAG_INDICATOR, { DivPagerIndicatorView(context) }, 2)
-        viewPool.register(TAG_SLIDER, { DivSliderView(context) }, 2)
-        viewPool.register(TAG_INPUT, { DivInputView(context) }, 2)
-        viewPool.register(TAG_SELECT, { DivSelectView(context) }, 2)
-        viewPool.register(TAG_VIDEO, { DivVideoView(context) }, 2)
+        with (viewPreCreationProfile) {
+            when (this) {
+                is FixedPreCreationProfile -> viewPool.run {
+                    register(TAG_TEXT, { DivLineHeightTextView(context) }, textCapacity)
+                    register(TAG_IMAGE, { DivImageView(context) }, imageCapacity)
+                    register(TAG_GIF_IMAGE, { DivGifImageView(context) }, gifImageCapacity)
+                    register(TAG_OVERLAP_CONTAINER, { DivFrameLayout(context) }, overlapContainerCapacity)
+                    register(TAG_LINEAR_CONTAINER, { DivLinearLayout(context) }, linearContainerCapacity)
+                    register(TAG_WRAP_CONTAINER, { DivWrapLayout(context) }, wrapContainerCapacity)
+                    register(TAG_GRID, { DivGridLayout(context) }, gridCapacity)
+                    register(TAG_GALLERY, { DivRecyclerView(context) }, galleryCapacity)
+                    register(TAG_PAGER, { DivPagerView(context) }, pagerCapacity)
+                    register(TAG_TABS, { TabsLayout(context) }, tabCapacity)
+                    register(TAG_STATE, { DivStateLayout(context) }, stateCapacity)
+                    register(TAG_CUSTOM, { DivFrameLayout(context) }, customCapacity)
+                    register(TAG_INDICATOR, { DivPagerIndicatorView(context) }, indicatorCapacity)
+                    register(TAG_SLIDER, { DivSliderView(context) }, sliderCapacity)
+                    register(TAG_INPUT, { DivInputView(context) }, inputCapacity)
+                    register(TAG_SELECT, { DivSelectView(context) }, selectCapacity)
+                    register(TAG_VIDEO, { DivVideoView(context) }, videoCapacity)
+                }
+            }
+        }
     }
 
     fun create(div: Div, resolver: ExpressionResolver): View {
