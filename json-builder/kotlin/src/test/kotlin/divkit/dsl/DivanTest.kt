@@ -15,10 +15,8 @@ class DivanTest {
         val card = divan {
             data(
                 logId = "test",
-                states = singleRoot(
-                    div = text(
-                        text = "Hello!"
-                    )
+                div = text(
+                    text = "Hello!"
                 )
             )
         }
@@ -49,10 +47,8 @@ class DivanTest {
         val card = divan {
             data(
                 logId = "test",
-                states = singleRoot(
-                    div = text().evaluate(
-                        text = expression("@{hello_text}")
-                    )
+                div = text().evaluate(
+                    text = expression("@{hello_text}")
                 )
             )
         }
@@ -83,11 +79,9 @@ class DivanTest {
         val card = divan {
             data(
                 logId = "test",
-                states = singleRoot(
-                    div = text(
-                        text = "Hello!",
-                        autoEllipsize = true
-                    )
+                div = text(
+                    text = "Hello!",
+                    autoEllipsize = true
                 )
             )
         }
@@ -127,27 +121,25 @@ class DivanTest {
         val card = divan {
             data(
                 logId = "layout",
-                states = singleRoot(
-                    div = container(
-                        width = fixedSize(320),
-                        height = fixedSize(320),
-                        orientation = vertical,
-                        items = listOf(
-                            render(
-                                titleTemplate,
-                                titleRef bind "Good news, everyone!"
-                            ) + textProps(
-                                width = matchParentSize()
-                            ),
-                            text(
-                                width = wrapContentSize(),
-                                height = wrapContentSize(),
-                                text = "Hello, Everyone!",
-                                actions = listOf(
-                                    action(
-                                        logId = "tap_action",
-                                        url = url("https://yandex.ru")
-                                    )
+                div = container(
+                    width = fixedSize(320),
+                    height = fixedSize(320),
+                    orientation = vertical,
+                    items = listOf(
+                        render(
+                            titleTemplate,
+                            titleRef bind "Good news, everyone!"
+                        ) + textProps(
+                            width = matchParentSize()
+                        ),
+                        text(
+                            width = wrapContentSize(),
+                            height = wrapContentSize(),
+                            text = "Hello, Everyone!",
+                            actions = listOf(
+                                action(
+                                    logId = "tap_action",
+                                    url = url("https://yandex.ru")
                                 )
                             )
                         )
