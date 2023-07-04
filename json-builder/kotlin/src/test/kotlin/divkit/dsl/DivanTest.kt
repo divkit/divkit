@@ -79,6 +79,42 @@ class DivanTest {
     }
 
     @Test
+    fun `card with boolean property`() {
+        val card = divan {
+            data(
+                logId = "test",
+                states = singleRoot(
+                    div = text(
+                        text = "Hello!",
+                        autoEllipsize = true
+                    )
+                )
+            )
+        }
+
+        val expectedJson = """
+            {
+              "templates": {},
+              "card": {
+                "log_id": "test",
+                "states": [
+                  {
+                    "state_id": 0,
+                    "div": {
+                      "type": "text",
+                      "text": "Hello!",
+                      "auto_ellipsize": 1
+                    }
+                  }
+                ]
+              }
+            }
+        """.trimIndent()
+
+        assertEquals(expectedJson, card.toJson(), JSONCompareMode.STRICT)
+    }
+
+    @Test
     fun `card with template`() {
         val titleRef = reference<String>("title")
 
