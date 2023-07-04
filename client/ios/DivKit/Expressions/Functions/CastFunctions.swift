@@ -7,6 +7,8 @@ enum CastFunctions: String, CaseIterable {
   case toString
   case toNumber
   case toInteger
+  case toColor
+  case toUrl
 
   var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     [.function(rawValue, arity: function.arity): function.symbolEvaluator]
@@ -58,6 +60,10 @@ enum CastFunctions: String, CaseIterable {
           AnyCalcExpression.Error.toInteger($0.first)
         }
       )
+    case .toColor:
+      return FunctionUnary(impl: _stringToColor)
+    case .toUrl:
+      return FunctionUnary(impl: _stringToUrl)
     }
   }
 }
@@ -136,6 +142,20 @@ private func _doubleToInteger(value: Double) throws -> Int {
   return number
 }
 
+private func _stringToColor(value: String) throws -> Color {
+  guard let color = Color.color(withHexString: value) else {
+    throw AnyCalcExpression.Error.toColor(value)
+  }
+  return color
+}
+
+private func _stringToUrl(value: String) throws -> URL {
+  guard let url = URL(string: value) else {
+    throw AnyCalcExpression.Error.toUrl(value)
+  }
+  return url
+}
+
 extension Bool {
   fileprivate func toInteger() -> Int {
     switch self {
@@ -203,6 +223,18 @@ extension AnyCalcExpression.Error {
   fileprivate static func toInteger(_ value: Any?) -> AnyCalcExpression.Error {
     .message(
       "Failed to evaluate [toInteger(\(value ?? ""))]. Unable to convert value to Integer."
+    )
+  }
+
+  fileprivate static func toColor(_ value: String) -> AnyCalcExpression.Error {
+    .message(
+      "Failed to evaluate [toColor('\(value)')]. Unable to convert value to Color, expected format #AARRGGBB."
+    )
+  }
+
+  fileprivate static func toUrl(_ value: String) -> AnyCalcExpression.Error {
+    .message(
+      "Failed to evaluate [toUrl('\(value)')]. Unable to convert value to URL."
     )
   }
 

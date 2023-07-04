@@ -37,7 +37,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -57,7 +58,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -79,7 +81,33 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'prop2', 'prop3') => 'val'",
+      "expression": "@{getDictString(dict, 'prop', 'prop2', 'prop3')}",
+      "expected": {
+        "type": "string",
+        "value": "val"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": {
+                "prop3": "val"
+              }
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
       ]
     },
     {
@@ -101,7 +129,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -121,7 +150,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -143,7 +173,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -163,7 +194,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -183,7 +215,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -203,7 +236,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -223,7 +257,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -243,7 +278,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -263,7 +299,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -283,7 +320,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -303,7 +341,29 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, 'prop') => error (2)",
+      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictNumber(<dict>, 'prop')]. Incorrect value type: expected \"number\", got \"string\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
       ]
     },
     {
@@ -323,7 +383,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -343,7 +404,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -363,7 +425,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -383,7 +446,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -398,12 +462,13 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 9223372036854775808
+            "prop": 9223372036854775808000000000000000000000
           }
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -423,7 +488,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -443,7 +509,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -463,7 +530,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -483,7 +551,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -503,7 +572,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -523,7 +593,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -543,7 +614,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -563,7 +635,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -583,7 +656,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -603,7 +677,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -625,7 +700,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -645,7 +721,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -667,7 +744,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -687,7 +765,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -707,7 +786,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -727,7 +807,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -747,7 +828,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -767,7 +849,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -787,7 +870,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -807,7 +891,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -827,7 +912,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -847,7 +933,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -867,7 +954,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -882,12 +970,13 @@
           "type": "dict",
           "name": "dict",
           "value": {
-            "prop": 9223372036854775808
+            "prop": 922337203685477580800
           }
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -907,7 +996,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -927,7 +1017,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -947,7 +1038,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -967,7 +1059,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -987,7 +1080,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1007,7 +1101,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1027,7 +1122,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1047,7 +1143,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1067,7 +1164,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1087,7 +1185,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1107,7 +1206,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -1127,7 +1227,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]

@@ -202,7 +202,10 @@
     },
     {
       "$ref": "#/definitions/dict_variable",
-      "platforms": []
+      "platforms": [
+        "web",
+        "ios"
+      ]
     }
   ]
 }

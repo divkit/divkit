@@ -61,6 +61,18 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_Functions_To_Color() throws {
+    let testCases = try makeTestCases(for: "functions_to_color")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
+  func test_Functions_To_Url() throws {
+    let testCases = try makeTestCases(for: "functions_to_url")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   func test_Functions_Datetime() throws {
     let testCases = try makeTestCases(for: "functions_datetime")
     let type: ExpressionType<String> = .singleItem
@@ -69,6 +81,12 @@ final class ExpressionResolvingTests: XCTestCase {
 
   func test_Functions_String() throws {
     let testCases = try makeTestCases(for: "functions_string")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
+  func test_Functions_Dict() throws {
+    let testCases = try makeTestCases(for: "functions_dict")
     let type: ExpressionType<String> = .stringBased(initializer: { $0 })
     perform(on: testCases, type: type)
   }
@@ -514,6 +532,9 @@ extension DivVariable: Decodable {
     case UrlVariable.type:
       let value = try container.decode(String.self, forKey: .value)
       self = .urlVariable(UrlVariable(name: name, value: URL(string: value)!))
+    case DictVariable.type:
+      let dict = try container.decode(Dict.self, forKey: .value)
+      self = .dictVariable(DictVariable(name: name, value: dict.value))
     default:
       throw DecodingError.valueNotFound(
         String.self,
@@ -527,5 +548,81 @@ extension DivVariable: Decodable {
 
   private enum CodingKeys: String, CodingKey {
     case type, name, value
+  }
+}
+
+fileprivate struct JSONCodingKeys: CodingKey {
+  var stringValue: String
+
+  init(stringValue: String) {
+    self.stringValue = stringValue
+  }
+
+  var intValue: Int?
+
+  init?(intValue: Int) {
+    self.init(stringValue: "\(intValue)")
+    self.intValue = intValue
+  }
+}
+
+fileprivate struct Dict: Decodable {
+  var value: [String: Any] = [:]
+
+  public init(from decoder: Decoder) throws {
+    if let container = try? decoder.container(keyedBy: JSONCodingKeys.self) {
+      self.value = decode(fromObject: container)
+    }
+  }
+
+  func decode(fromObject container: KeyedDecodingContainer<JSONCodingKeys>) -> [String: Any] {
+    var result: [String: Any] = [:]
+
+    for key in container.allKeys {
+      if let val = try? container.decode(Int.self, forKey: key) {
+        result[key.stringValue] = val
+      } else if let val = try? container.decode(Double.self, forKey: key) {
+        result[key.stringValue] = val
+      } else if let val = try? container.decode(String.self, forKey: key) {
+        result[key.stringValue] = val
+      } else if let val = try? container.decode(Bool.self, forKey: key) {
+        result[key.stringValue] = val
+      } else if let nestedContainer = try? container.nestedContainer(
+        keyedBy: JSONCodingKeys.self,
+        forKey: key
+      ) {
+        result[key.stringValue] = decode(fromObject: nestedContainer)
+      } else if var nestedArray = try? container.nestedUnkeyedContainer(forKey: key) {
+        result[key.stringValue] = decode(fromArray: &nestedArray)
+      } else if (try? container.decodeNil(forKey: key)) == true {
+        result.updateValue(Any?(nil) as Any, forKey: key.stringValue)
+      }
+    }
+
+    return result
+  }
+
+  func decode(fromArray container: inout UnkeyedDecodingContainer) -> [Any] {
+    var result: [Any] = []
+
+    while !container.isAtEnd {
+      if let value = try? container.decode(String.self) {
+        result.append(value)
+      } else if let value = try? container.decode(Int.self) {
+        result.append(value)
+      } else if let value = try? container.decode(Double.self) {
+        result.append(value)
+      } else if let value = try? container.decode(Bool.self) {
+        result.append(value)
+      } else if let nestedContainer = try? container.nestedContainer(keyedBy: JSONCodingKeys.self) {
+        result.append(decode(fromObject: nestedContainer))
+      } else if var nestedArray = try? container.nestedUnkeyedContainer() {
+        result.append(decode(fromArray: &nestedArray))
+      } else if (try? container.decodeNil()) == true {
+        result.append(Any?(nil) as Any)
+      }
+    }
+
+    return result
   }
 }

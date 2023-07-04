@@ -215,7 +215,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -230,7 +231,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -416,7 +418,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -436,7 +439,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -456,7 +460,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -476,7 +481,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -496,7 +502,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -516,7 +523,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -540,7 +548,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -564,7 +573,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -588,7 +598,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -612,7 +623,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -636,7 +648,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -660,7 +673,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -684,7 +698,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -708,7 +723,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]
