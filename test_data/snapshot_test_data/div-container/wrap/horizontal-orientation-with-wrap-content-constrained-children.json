@@ -88,7 +88,7 @@
                 "type": "wrap_content",
                 "constrained": true
               },
-              "text": "constrained height, should not be shown"
+              "text": "constrained height"
             }
           ]
         }

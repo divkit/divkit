@@ -41,7 +41,8 @@
         "div": {
           "type": "container",
           "width": {
-            "type": "wrap_content"
+            "type": "fixed",
+            "value": 320
           },
           "height": {
             "type": "fixed",
@@ -95,7 +96,7 @@
                 "type": "wrap_content",
                 "constrained": true
               },
-              "text": "constrained width, should not be shown"
+              "text": "constrained width"
             }
           ]
         }

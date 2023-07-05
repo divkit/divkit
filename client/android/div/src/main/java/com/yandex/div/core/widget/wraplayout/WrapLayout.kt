@@ -12,7 +12,6 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.dimensionAffecting
-import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
@@ -331,8 +330,7 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
         layoutParams?.width.isIncorrectForCrossAxis
     }
 
-    private val Int?.isIncorrectForCrossAxis get() =
-        this == MATCH_PARENT || this == DivLayoutParams.WRAP_CONTENT_CONSTRAINED
+    private val Int?.isIncorrectForCrossAxis get() = this == MATCH_PARENT
 
     private fun addLineIfNeeded(childIndex: Int, line: WrapLine) {
         val isLastItem = childIndex == childCount - 1 && line.itemCountNotGone != 0

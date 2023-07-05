@@ -35,16 +35,13 @@ import com.yandex.div2.DivContainer
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivWrapContentSize
 import javax.inject.Inject
 import javax.inject.Provider
 
 private const val INCORRECT_CHILD_SIZE =
     "Incorrect child size. Container with wrap_content size contains child with match_parent size."
 private const val INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
-    "Container with wrap layout mode contains child%s with %s size along the cross axis."
-private const val MATCH_PARENT_MESSAGE = "match parent"
-private const val WRAP_CONTENT_CONSTRAINED_MESSAGE = "wrap content with constrained=true"
+    "Container with wrap layout mode contains child%s with match_parent size along the cross axis."
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
@@ -374,22 +371,14 @@ internal class DivContainerBinder @Inject constructor(
         resolver: ExpressionResolver,
         errorCollector: ErrorCollector
     ) = if (isHorizontal(resolver)) {
-        childDiv.height.checkForCrossAxis(childDiv, resolver, errorCollector)
+        childDiv.height.checkForCrossAxis(childDiv, errorCollector)
     } else {
-        childDiv.width.checkForCrossAxis(childDiv, resolver, errorCollector)
+        childDiv.width.checkForCrossAxis(childDiv, errorCollector)
     }
 
-    private fun DivSize.checkForCrossAxis(
-        childDiv: DivBase,
-        resolver: ExpressionResolver,
-        errorCollector: ErrorCollector
-    ) {
-        when (val size = value()) {
-            is DivMatchParentSize ->
-                addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id, MATCH_PARENT_MESSAGE)
-            is DivWrapContentSize -> if (size.constrained?.evaluate(resolver) == true) {
-                addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id, WRAP_CONTENT_CONSTRAINED_MESSAGE)
-            }
+    private fun DivSize.checkForCrossAxis(childDiv: DivBase, errorCollector: ErrorCollector) {
+        if (value() is DivMatchParentSize) {
+            addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id)
         }
     }
 
@@ -408,14 +397,10 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE))
     }
 
-    private fun addIncorrectSizeALongCrossAxisWarning(
-        errorCollector: ErrorCollector,
-        childId: String?,
-        size: String
-    ) {
+    private fun addIncorrectSizeALongCrossAxisWarning(errorCollector: ErrorCollector, childId: String?) {
         val withId = childId?.let { " with id='$it'" } ?: ""
         errorCollector.logWarning(Throwable(
-            INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId, size)))
+            INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
     }
 
     fun setDataWithoutBinding(view: ViewGroup, div: DivContainer) {
