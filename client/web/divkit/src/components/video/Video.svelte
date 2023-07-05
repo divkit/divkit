@@ -54,7 +54,7 @@
     let poster: string | undefined = undefined;
     $: poster = typeof $jsonPreview === 'string' ? prepareBase64($jsonPreview) : poster;
 
-    const elapsedVariableName = rootCtx.getJsonWithVars(json.elapsed_time_variable);
+    const elapsedVariableName = json.elapsed_time_variable;
     let elapsedVariable = elapsedVariableName && rootCtx.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
 
     elapsedVariable.subscribe(val => {

@@ -29,7 +29,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    const variable = rootCtx.getJsonWithVars(json.value_variable);
+    const variable = json.value_variable;
 
     let hasError = false;
     if (!variable) {

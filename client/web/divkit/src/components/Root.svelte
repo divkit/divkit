@@ -205,7 +205,7 @@
     function getJsonWithVars<T>(jsonProp: T): MaybeMissing<T> {
         const prepared = prepareVars(jsonProp, logError);
 
-        if (!prepared.vars.length) {
+        if (!prepared.hasExpression) {
             return jsonProp;
         }
 
