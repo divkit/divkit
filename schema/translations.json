@@ -539,6 +539,10 @@
     "en": "Bottom margin.",
     "ru": "Нижний отступ."
   },
+  "div_edge_insets_end": {
+    "en": "End margin. Depends on the interface direction. Has a higher priority than left/right.",
+    "ru": "Отступ от конца. Зависит от направления интерфейса. Имеет больший приоритет, чем left/right."
+  },
   "div_edge_insets_left": {
     "en": "Left margin.",
     "ru": "Левый отступ."
@@ -547,18 +551,14 @@
     "en": "Right margin.",
     "ru": "Правый отступ."
   },
-  "div_edge_insets_top": {
-    "en": "Top margin.",
-    "ru": "Верхний отступ."
-  },
   "div_edge_insets_start": {
     "en": "Start margin. Depends on the interface direction. Has a higher priority than left/right.",
     "ru": "Отступ от начала. Зависит от направления интерфейса. Имеет больший приоритет, чем left/right."
   },
-  "div_edge_insets_end": {
-    "en": "End margin. Depends on the interface direction. Has a higher priority than left/right.",
-    "ru": "Отступ от конца. Зависит от направления интерфейса. Имеет больший приоритет, чем left/right."
-  },  
+  "div_edge_insets_top": {
+    "en": "Top margin.",
+    "ru": "Верхний отступ."
+  },
   "div_extension": {
     "en": "Extension that affects an element.",
     "ru": "Расширение, которое влияет на элемент."
