@@ -61,7 +61,7 @@ describe('DivCard tests', (): void => {
                             font_weight: 'medium',
                         },
                         items: reference('tab_items_link'),
-                        dynamic_height: 1,
+                        dynamic_height: true,
                     }),
                     template('footer'),
                 ],

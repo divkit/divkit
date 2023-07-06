@@ -9,7 +9,7 @@ type Exactly<TBase, TExt extends TBase> = {
     [K in keyof TExt]: K extends keyof TBase ? TExt[K] : never;
 };
 
-export type IntBoolean = 1 | 0;
+export type IntBoolean = 1 | 0 | true | false;
 
 /**
  * DFS for a js object with callback on each leaf
