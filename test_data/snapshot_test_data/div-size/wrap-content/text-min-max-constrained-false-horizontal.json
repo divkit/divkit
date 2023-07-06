@@ -40,7 +40,8 @@
               "type": "wrapped_text",
               "text": "height min_size = 100",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "height": {
                 "type": "wrap_content",
@@ -60,6 +61,7 @@
               },
               "width": {
                 "type": "wrap_content",
+                "constrained": false,
                 "max_size": {
                   "value": 60
                 }

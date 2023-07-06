@@ -68,10 +68,12 @@
                     {
                       "type": "item",
                       "width": {
-                        "type": "wrap_content"
+                        "type": "wrap_content",
+                        "constrained": false
                       },
                       "height": {
-                        "type": "wrap_content"
+                        "type": "wrap_content",
+                        "constrained": false
                       },
                       "text": "not constrained"
                     },
@@ -99,10 +101,12 @@
                     {
                       "type": "item",
                       "width": {
-                        "type": "wrap_content"
+                        "type": "wrap_content",
+                        "constrained": false
                       },
                       "height": {
-                        "type": "wrap_content"
+                        "type": "wrap_content",
+                        "constrained": false
                       },
                       "text": "not constrained element"
                     },
@@ -155,7 +159,8 @@
                         "constrained": true
                       },
                       "height": {
-                        "type": "wrap_content"
+                        "type": "wrap_content",
+                        "constrained": false
                       },
                       "text": "constrained width, not constrained height"
                     }

@@ -67,7 +67,8 @@
             {
               "type": "item",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "text": "not constrained element with very very very very very long text"
             },
