@@ -11,6 +11,10 @@
       "width": {
         "type": "wrap_content"
       },
+      "height": {
+        "type": "wrap_content",
+        "constrained": false
+      },
       "border": {
         "stroke": {
           "color": "#FF0000"
@@ -56,6 +60,7 @@
               },
               "height": {
                 "type": "wrap_content",
+                "constrained": false,
                 "min_size": {
                   "value": 50
                 }
@@ -81,6 +86,7 @@
               "text": "height wrap_content min_size = 100",
               "height": {
                 "type": "wrap_content",
+                "constrained": false,
                 "min_size": {
                   "value": 100
                 }

@@ -37,7 +37,8 @@
             "type": "wrap_content"
           },
           "height": {
-            "type": "wrap_content"
+            "type": "wrap_content",
+            "constrained": false
           },
           "border": {
             "stroke": {

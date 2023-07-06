@@ -12,7 +12,8 @@
                 "type": "wrap_content"
             },
             "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
             },
             "paddings": {
                 "left": 5,
@@ -33,7 +34,8 @@
                 "type": "wrap_content"
             },
             "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
             },
             "alignment_vertical": "baseline",
             "paddings": {
@@ -136,7 +138,8 @@
                                     },
                                     "orientation": "horizontal",
                                     "width": {
-                                        "type": "wrap_content"
+                                        "type": "wrap_content",
+                                        "constrained": false
                                     },
                                     "height": {
                                         "type": "wrap_content"

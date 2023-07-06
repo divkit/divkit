@@ -6,7 +6,7 @@
     "web"
   ],
   "templates": {
-    "text_white_bg_50x50": {
+    "text_white_bg_50x30": {
       "type": "text",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
@@ -22,14 +22,14 @@
       },
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 30
       }
     },
     "testcase_name": {
       "type": "text",
       "paddings": {
-        "top": 10,
-        "bottom": 10
+        "top": 8,
+        "bottom": 8
       },
       "font_size": 16,
       "background": [
@@ -52,10 +52,10 @@
     "overlap_orientation_default_alignment_testcase": {
       "type": "overlap_container_black",
       "width": { "type": "fixed", "value": 70 },
-      "height": { "type": "fixed", "value": 70 },
+      "height": { "type": "fixed", "value": 40 },
       "items": [
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x30",
           "text": "default"
         }
       ]
@@ -75,10 +75,6 @@
             "type": "wrap_content"
           },
           "items": [
-            {
-              "type": "testcase_name",
-              "text": "Container-defined alignment for single item\n"
-            },
             {
               "type": "testcase_name",
               "text": "left-top:"

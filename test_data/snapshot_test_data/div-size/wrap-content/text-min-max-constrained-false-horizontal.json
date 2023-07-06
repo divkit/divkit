@@ -45,6 +45,7 @@
               },
               "height": {
                 "type": "wrap_content",
+                "constrained": false,
                 "min_size": {
                   "value": 100
                 }
@@ -55,6 +56,7 @@
               "text": "height max_size = 60, width max_size = 60",
               "height": {
                 "type": "wrap_content",
+                "constrained": false,
                 "max_size": {
                   "value": 60
                 }
@@ -71,7 +73,8 @@
               "type": "wrapped_text",
               "text": "wrap_content",
               "height": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               }
             },
             {

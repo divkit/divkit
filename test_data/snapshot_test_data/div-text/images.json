@@ -65,7 +65,7 @@
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 24
+                    "value": 18
                   }
                 },
                 {
@@ -77,7 +77,7 @@
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 24
+                    "value": 18
                   }
                 },
                 {
@@ -127,7 +127,7 @@
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 24
+                    "value": 18
                   }
                 }
               ]
@@ -152,7 +152,7 @@
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 24
+                    "value": 18
                   }
                 }
               ]
@@ -269,7 +269,7 @@
     },
     "multiline_text_image_testcase_large_line_height": {
       "type": "multiline_text_image_testcase",
-      "line_height": 40
+      "line_height": 30
     },
     "red_separator": {
       "type": "separator",
@@ -281,7 +281,7 @@
       ],
       "height": {
         "type": "fixed",
-        "value": 3
+        "value": 1
       }
     },
     "multiline_text_image_testcase": {
@@ -301,7 +301,7 @@
           },
           "height": {
             "type": "fixed",
-            "value": 24
+            "value": 18
           }
         }
       ]
@@ -322,7 +322,7 @@
           },
           "height": {
             "type": "fixed",
-            "value": 24
+            "value": 18
           }
         }
       ]
