@@ -253,6 +253,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
+    setNeedsLayout()
   }
 
   private func updateHintVisibility() {
