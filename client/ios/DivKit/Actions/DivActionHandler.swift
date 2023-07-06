@@ -36,7 +36,7 @@ public final class DivActionHandler {
     showTooltip: @escaping DivActionURLHandler.ShowTooltipAction,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
-    trackDisappear _: @escaping TrackVisibility = { _, _ in },
+    trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in }
   ) {
     self.init(
@@ -51,6 +51,7 @@ public final class DivActionHandler {
       ),
       logger: logger,
       trackVisibility: trackVisibility,
+      trackDisappear: trackDisappear,
       variablesStorage: variablesStorage
     )
   }
