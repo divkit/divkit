@@ -1,3 +1,15 @@
+## 26.0.0 (July 10, 2023)
+
+Additions:
+* Allowed expressions in the `visibility_percentage`
+
+Fixes:
+* Fixed `fatal_actions` in the `video` component logic
+* Fixed `video` unmount logic
+* Incorrect non-array `background`s will not throw error
+* Fixed default `visibility_percentage` value in the `disappear_action`
+* Fixed `disappear_action` with the percentage equal to `0`
+
 ## 25.7.0 (July 03, 2023)
 
 Fixes:

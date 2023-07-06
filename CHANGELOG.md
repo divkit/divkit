@@ -1,3 +1,35 @@
+## 26.0
+
+# JSON Schema:
+* Added `start` and `end` properties to edge insets.
+* Supported user-defined font families.
+
+# Android Client:
+* Added profile to configure number of precreated views.
+* Supported margins for wrap container separators.
+* Supported user-defined font families.
+* Supported beacons in swipe_out_actions
+* Fixed indicators alignment when they cannot fit to container
+* Fixed `release` method not called on destroy
+* Fixed sequential patch applyment
+
+# iOS Client:
+* Supported user-defined font families.
+* Added async image previews loading.
+* Fixed expressions support in `DivState.default_state_id`.
+* Fixed recurring visibility actions.
+
+# Web Client:
+* Fixed `fatal_actions` in the `video` component logic
+* Fixed `video` unmount logic
+* Incorrect non-array `background`s will not throw error
+* Fixed default `visibility_percentage` value in the `disappear_action`
+* Fixed `disappear_action` with the percentage equal to `0`
+* Allowed expressions in the `visibility_percentage`
+
+# Kotlin JSON Builder:
+* Added extension div data creation.
+
 ## 25.7.0
 
 # Android Client:
