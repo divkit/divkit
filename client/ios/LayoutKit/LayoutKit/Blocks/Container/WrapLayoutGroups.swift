@@ -42,8 +42,7 @@ struct WrapLayoutGroups {
   private mutating func makeGroups() {
     addStartLineSeparator()
     children.forEach { child in
-      guard !child.isResizable(for: layoutDirection.opposite) && !child
-        .isConstrained(for: layoutDirection.opposite) else { return }
+      guard !child.isResizable(for: layoutDirection.opposite) else { return }
       if child.isResizable(for: layoutDirection) {
         startNewLine()
         var childSize = child.content.size(forResizableBlockSize: size)
