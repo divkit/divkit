@@ -348,6 +348,25 @@
         "web",
         "ios"
       ]
+    },
+    {
+      "name": "testRegex(str: string, regex: string) boolean",
+      "function_name": "testRegex",
+      "doc": "Checks whether the string matches the regular expression.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "A string to test."
+        },
+        {
+          "type": "string",
+          "doc": "Regex string."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

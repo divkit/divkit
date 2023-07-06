@@ -156,6 +156,20 @@ function padEnd(
     };
 }
 
+function testRegex(_ctx: EvalContext, str: StringValue, regex: StringValue): EvalValue {
+    let re: RegExp;
+    try {
+        re = new RegExp(regex.value);
+    } catch (err) {
+        throw new Error('Invalid regular expression.');
+    }
+
+    return {
+        type: BOOLEAN,
+        value: re.test(str.value) ? 1 : 0
+    };
+}
+
 export function registerStrings(): void {
     registerFunc('len', [STRING], len);
     registerFunc('contains', [STRING, STRING], contains);
@@ -172,4 +186,5 @@ export function registerStrings(): void {
     registerFunc('padStart', [INTEGER, INTEGER, STRING], padStart);
     registerFunc('padEnd', [STRING, INTEGER, STRING], padEnd);
     registerFunc('padEnd', [INTEGER, INTEGER, STRING], padEnd);
+    registerFunc('testRegex', [STRING, STRING], testRegex);
 }

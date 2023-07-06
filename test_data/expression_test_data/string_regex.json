@@ -1,0 +1,227 @@
+{
+    "cases": [
+        {
+            "name": "testRegex('a', 'a') => true",
+            "expression": "@{testRegex('a', 'a')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('b', 'a') => false",
+            "expression": "@{testRegex('b', 'a')}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('abc', 'b') => true",
+            "description": "testRegex does not require that the whole string should match regex, only a part of it can match",
+            "expression": "@{testRegex('abc', 'b')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', 'A') => false",
+            "description": "testRegex honors case",
+            "expression": "@{testRegex('a', 'A')}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', '[a-z]') => true",
+            "expression": "@{testRegex('a', '[a-z]')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('\\', '\\\\') => true",
+            "description": "Triple escape. Json, DivKit, and RegExp",
+            "expression": "@{testRegex('\\\\', '\\\\\\\\')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('abc', '(b)') => true",
+            "expression": "@{testRegex('abc', '(b)')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('5', '\\d') => true",
+            "expression": "@{testRegex('5', '\\\\d')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('ab', 'ac?b') => true",
+            "expression": "@{testRegex('ab', 'ac?b')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('ab', '^ab$') => true",
+            "expression": "@{testRegex('ab', '^ab$')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('abc', '^ab$') => false",
+            "expression": "@{testRegex('abc', '^ab$')}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', 'a{1,3}') => true",
+            "expression": "@{testRegex('a', 'a{1,3}')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', 'a{2,3}') => false",
+            "expression": "@{testRegex('a', 'a{2,3}')}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', '(?:a)') => true",
+            "expression": "@{testRegex('a', '(?:a)')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('[]', '\\[]') => true",
+            "expression": "@{testRegex('[]', '\\\\[]')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('-', '[-]') => true",
+            "expression": "@{testRegex('-', '[-]')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a-b', '^[-ab]+$') => true",
+            "expression": "@{testRegex('a-b', '^[-ab]+$')}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('[', '[') => error",
+            "expression": "@{testRegex('[', '[')}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [testRegex('[', '[')]. Invalid regular expression."
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('(', '(') => error",
+            "expression": "@{testRegex('(', '(')}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [testRegex('(', '(')]. Invalid regular expression."
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "testRegex('a', '\\') => error",
+            "expression": "@{testRegex('a', '\\\\')}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [testRegex('a', '\\\\')]. Invalid regular expression."
+            },
+            "platforms": [
+                "web"
+            ]
+        }
+    ]
+}

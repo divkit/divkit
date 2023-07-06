@@ -66,7 +66,7 @@ export function valToPreview(val: EvalValue): string {
     if (val.type === 'string') {
         res = "'" +
             res
-                .replace(/\\/g, '\\\'')
+                .replace(/\\/g, '\\\\')
                 .replace(/'/g, '\\\'') +
             "'";
     }
