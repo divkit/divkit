@@ -30,7 +30,7 @@ except ModuleNotFoundError:
 def assert_as_json_test(file_expected: str, content_actual: Dict) -> None:
     with open(file_expected, 'r') as expected:
         content_expected = json.loads(expected.read())
-        diff = DeepDiff(content_expected, content_actual, ignore_order=True)
+        diff = DeepDiff(content_expected, content_actual, ignore_order=False)
         assert len(diff) == 0
 
 

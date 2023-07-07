@@ -188,6 +188,10 @@ def type_property_build(dictionary: Dict[str, any],
                         mode: GenerationMode,
                         config: Config.GenerationConfig) -> Tuple[PropertyType, List[Declarable]]:
     name: str = alias(config.lang, dictionary) or outer_name
+
+    if is_boolean_int_property(dictionary):
+        return BoolInt(), []
+
     any_of_entities: List[Dict[str, any]] = dictionary.get('anyOf')
     if is_list_of_type(any_of_entities, Dict) and all(is_dict_with_keys_of_type(d, str) for d in any_of_entities):
         name = fixing_reserved_typename(name, config.lang)
@@ -213,8 +217,6 @@ def type_property_build(dictionary: Dict[str, any],
     number_constraints: Optional[str] = dictionary.get('constraint')
 
     if type_value == 'integer':
-        if dictionary.get('format') == 'boolean':
-            return BoolInt(), []
         return Int(constraint=number_constraints, long_type=dictionary.get('long_type', False)), []
     elif type_value == 'number':
         return Double(constraint=number_constraints), []
@@ -287,3 +289,14 @@ def property_build(properties: Dict[str, Dict[str, any]],
         inner_types_list.extend(inner_types)
 
     return sorted(properties_list, key=lambda p: isinstance(p.property_type, StaticString)), inner_types_list
+
+
+def is_boolean_int_property(dictionary: Dict[str, any]) -> bool:
+    one_of_entities: List[Dict[str, any]] = dictionary.get('oneOf')
+    if one_of_entities is None:
+        return False
+    if len(one_of_entities) != 2:
+        return False
+    type1: str = one_of_entities[0].get('type')
+    type2: str = one_of_entities[1].get('type')
+    return (type1 == 'boolean' and type2 == 'integer') or (type1 == 'integer' and type2 == 'boolean')
