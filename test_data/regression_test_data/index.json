@@ -233,6 +233,9 @@
     },
     {
       "title": "Pager item actions",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager"
       ],

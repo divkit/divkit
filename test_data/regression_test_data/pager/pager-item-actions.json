@@ -167,6 +167,7 @@
             {
               "items": [
                 {
+                  "id": "scroll_click_1",
                   "actions": [
                     {
                       "log_id": "prev",
@@ -178,6 +179,7 @@
                   "type": "button"
                 },
                 {
+                  "id": "scroll_click_2",
                   "actions": [
                     {
                       "log_id": "prev",
@@ -189,6 +191,7 @@
                   "type": "button"
                 },
                 {
+                  "id": "scroll_click_3",
                   "actions": [
                     {
                       "log_id": "next",
@@ -200,6 +203,7 @@
                   "type": "button"
                 },
                 {
+                  "id": "scroll_click_4",
                   "actions": [
                     {
                       "log_id": "next",
