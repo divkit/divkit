@@ -237,6 +237,8 @@ internal interface DivGalleryItemHelper {
                 DivAlignmentHorizontal.LEFT -> DivGallery.CrossContentAlignment.START
                 DivAlignmentHorizontal.CENTER -> DivGallery.CrossContentAlignment.CENTER
                 DivAlignmentHorizontal.RIGHT -> DivGallery.CrossContentAlignment.END
+                DivAlignmentHorizontal.START -> DivGallery.CrossContentAlignment.START
+                DivAlignmentHorizontal.END -> DivGallery.CrossContentAlignment.END
             }
         }
 

@@ -4,6 +4,8 @@
     "left",
     "center",
     "right",
+    "start",
+    "end",
     "space-between",
     "space-around",
     "space-evenly"
