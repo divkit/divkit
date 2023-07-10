@@ -5,10 +5,13 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivCustom
 import com.yandex.div2.DivData
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivState
+import com.yandex.div2.DivTabs
 import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
@@ -72,6 +75,32 @@ internal class DivVideoActionHandler @Inject constructor(
                 div.items.forEach { item ->
                     findDivVideoWithId(item.value(), id)?.let {
                         return it
+                    }
+                }
+                return null
+            }
+            is DivTabs -> {
+                div.items.forEach { item ->
+                    findDivVideoWithId(item.div.value(), id)?.let {
+                        return it
+                    }
+                }
+                return null
+            }
+            is DivCustom -> {
+                div.items?.forEach { item ->
+                    findDivVideoWithId(item.value(), id)?.let {
+                        return it
+                    }
+                }
+                return null
+            }
+            is DivState -> {
+                div.states.forEach { state ->
+                    state.div?.value()?.let {  div ->
+                        findDivVideoWithId(div, id)?.let {
+                            return it
+                        }
                     }
                 }
                 return null

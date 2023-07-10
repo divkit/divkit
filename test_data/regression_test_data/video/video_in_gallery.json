@@ -31,7 +31,7 @@
       "muted": true,
       "disappear_actions": [
         {
-          "log_id": "play_pause_action",
+          "$log_id": "disappear_log_id",
           "log_limit": 0,
           "visibility_percentage": 50,
           "disappear_duration": 0,
@@ -40,7 +40,7 @@
       ],
       "visibility_actions": [
         {
-          "log_id": "play_pause_action",
+          "$log_id": "visibility_log_id",
           "log_limit": 0,
           "visibility_percentage": 50,
           "visibility_duration": 0,
@@ -85,21 +85,27 @@
               "id": "bears_video_1",
               "elapsed_time_variable": "video_time_1",
               "disappear_action_url": "div-action://video?id=bears_video_1&action=pause",
-              "visibility_action_url": "div-action://video?id=bears_video_1&action=start"
+              "visibility_action_url": "div-action://video?id=bears_video_1&action=start",
+              "disappear_log_id": "disappeared_video_1",
+              "visibility_log_id": "visible_video_1"
             },
             {
               "type": "video_card",
               "id": "bears_video_2",
               "elapsed_time_variable": "video_time_2",
               "disappear_action_url": "div-action://video?id=bears_video_2&action=pause",
-              "visibility_action_url": "div-action://video?id=bears_video_2&action=start"
+              "visibility_action_url": "div-action://video?id=bears_video_2&action=start",
+              "disappear_log_id": "disappeared_video_2",
+              "visibility_log_id": "visible_video_2"
             },
             {
               "type": "video_card",
               "id": "bears_video_3",
               "elapsed_time_variable": "video_time_3",
               "disappear_action_url": "div-action://video?id=bears_video_3&action=pause",
-              "visibility_action_url": "div-action://video?id=bears_video_3&action=start"
+              "visibility_action_url": "div-action://video?id=bears_video_3&action=start",
+              "disappear_log_id": "disappeared_video_2",
+              "visibility_log_id": "visible_video_2"
             }
           ]
         }

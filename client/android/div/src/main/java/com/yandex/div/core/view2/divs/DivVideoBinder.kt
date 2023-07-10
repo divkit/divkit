@@ -80,19 +80,31 @@ internal class DivVideoBinder @Inject constructor(
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
                 div.resumeActions?.forEach { divAction ->
-                    divView.let { divActionHandler.handleAction(divAction, it) }
+                    divActionHandler.handleAction(divAction, divView)
+                }
+            }
+
+            override fun onPause() {
+                div.pauseActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
                 }
             }
 
             override fun onBuffering() {
                 div.bufferingActions?.forEach { divAction ->
-                    divView.let { divActionHandler.handleAction(divAction, it) }
+                    divActionHandler.handleAction(divAction, divView)
                 }
             }
 
             override fun onEnd() {
                 div.endActions?.forEach { divAction ->
-                    divView.let { divActionHandler.handleAction(divAction, it) }
+                    divActionHandler.handleAction(divAction, divView)
+                }
+            }
+
+            override fun onFatal() {
+                div.fatalActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
                 }
             }
 

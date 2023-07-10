@@ -1803,10 +1803,6 @@
     },
     {
       "title": "Disappearing actions with DivVideo",
-      "platforms": [
-        "ios",
-        "web"
-      ],
       "tags": [
         "DivVideo",
         "Disappear action",
@@ -1825,6 +1821,31 @@
         "DivVideo"
       ],
       "file": "video/video_stream.json"
+    },
+    {
+      "title": "Video fullscreen",
+      "tags": [
+        "DivVideo",
+        "Disappear action",
+        "Visibility_actions",
+        "DivGallery"
+      ],
+      "file": "video/fullscreen_video_in_recycler.json"
+    },
+    {
+      "title": "Video in pager",
+      "tags": [
+        "DivVideo",
+        "DivPager"
+      ],
+      "file": "video/video_in_pager.json"
+    },
+    {
+      "title": "Video callbacks",
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_callbacks.json"
     },
     {
       "title": "Variables in default state id",
