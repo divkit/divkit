@@ -126,7 +126,7 @@ extension VideoBlockViewModel {
   fileprivate static let zero: Self = VideoBlockViewModel(
     videoData: VideoData(videos: []),
     playbackConfig: .default,
-    path: .init("")
+    path: .init("video")
   )
 }
 
