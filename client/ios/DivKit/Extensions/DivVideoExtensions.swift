@@ -60,7 +60,6 @@ extension DivVideo: DivBlockModeling {
     let videoPath = context.parentPath + (id ?? DivVideo.type)
     let videoContext = modified(context) {
       $0.parentPath = videoPath
-      $0.galleryResizableInsets = nil
     }
 
     let state: VideoBlockViewState = videoContext.blockStateStorage

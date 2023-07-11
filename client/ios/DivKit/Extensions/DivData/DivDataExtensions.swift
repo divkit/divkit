@@ -18,9 +18,6 @@ extension DivData: DivBlockModeling {
       $0.cardLogId = $0.cardLogId ?? logId
       $0.parentPath = $0.parentPath + stateId
       $0.parentDivStatePath = statePath
-      if case .divGallery = div {} else {
-        $0.galleryResizableInsets = nil
-      }
     }
 
     stateManager.updateBlockIdsWithStateChangeTransition(

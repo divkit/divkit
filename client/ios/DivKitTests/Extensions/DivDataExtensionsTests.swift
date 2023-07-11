@@ -60,21 +60,6 @@ final class DivDataExtensionsTests: XCTestCase {
     let expectedPath = UIElementPath.root + "0" + DivGallery.type
     XCTAssertEqual(galleryBlock?.model.path, expectedPath)
   }
-
-  func test_WhenTopLevelDivIsNotGallery_DiscardsResizableInsetsParams() throws {
-    let context = DivBlockModelingContext(
-      galleryResizableInsets: InsetMode.Resizable(minValue: 16, maxViewportSize: 240)
-    )
-    let block = try dataWithGalleryInContainer
-      .makeBlock(context: context)
-      .withoutStateBlock() as? DecoratingBlock
-    let containerBlock = block?.child as? ContainerBlock
-    let galleryContainerBlock = containerBlock?.children.first?.content as? DecoratingBlock
-    let innerGalleryBlock = galleryContainerBlock?.child as? GalleryBlock
-    let expectedInsets = SideInsets.zero
-    XCTAssertEqual(containerBlock?.gaps, expectedInsets.asArray())
-    XCTAssertEqual(innerGalleryBlock?.model.metrics.axialInsetMode, .fixed(values: expectedInsets))
-  }
 }
 
 private let data = makeDivData(
@@ -108,15 +93,6 @@ private let gallery = makeDivGallery(
 private let dataWithGallery = makeDivData(
   logId: DivKitTests.cardLogId,
   states: [.init(div: .divGallery(gallery), stateId: 0)]
-)
-
-private let container = makeDivContainer(
-  items: [.divGallery(gallery)]
-)
-
-private let dataWithGalleryInContainer = makeDivData(
-  logId: DivKitTests.cardLogId,
-  states: [.init(div: .divContainer(container), stateId: 0)]
 )
 
 extension Block {

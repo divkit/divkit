@@ -48,15 +48,13 @@ extension DivBlockModelingContext {
   static let `default` = DivBlockModelingContext()
 
   init(
-    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    galleryResizableInsets: InsetMode.Resizable? = nil
+    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage()
   ) {
     self.init(
       cardId: DivKitTests.cardId,
       cardLogId: DivKitTests.cardLogId,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
-      galleryResizableInsets: galleryResizableInsets,
       imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() })
     )
   }

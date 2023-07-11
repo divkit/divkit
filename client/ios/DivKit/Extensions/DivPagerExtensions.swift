@@ -22,7 +22,6 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     let expressionResolver = context.expressionResolver
     let itemContext = modified(context) {
       $0.parentPath = pagerPath
-      $0.galleryResizableInsets = nil
     }
     let pagerModelPath = id.map {
       PagerPath(
@@ -36,7 +35,6 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
       crossSpacing: 0,
       defaultAlignment: .center,
-      resizableInsets: context.galleryResizableInsets,
       scrollMode: .autoPaging
     )
     let width = context.override(width: width)

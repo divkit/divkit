@@ -22,7 +22,6 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     let expressionResolver = context.expressionResolver
     let galleryContext = modified(context) {
       $0.parentPath = galleryPath
-      $0.galleryResizableInsets = nil
     }
     let defaultAlignment = resolveCrossContentAlignment(expressionResolver)
       .blockAlignment
@@ -33,7 +32,6 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       spacing: CGFloat(itemSpacing),
       crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
       defaultAlignment: defaultAlignment,
-      resizableInsets: context.galleryResizableInsets,
       scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
       columnCount: resolveColumnCount(expressionResolver)
     )

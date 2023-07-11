@@ -14,7 +14,6 @@ public struct DivBlockModelingContext {
   public var stateManager: DivStateManager
   public let blockStateStorage: DivBlockStateStorage
   public let visibilityCounter: DivVisibilityCounting
-  public var galleryResizableInsets: InsetMode.Resizable?
   public let imageHolderFactory: ImageHolderFactory
   public let highPriorityImageHolderFactory: ImageHolderFactory?
   public let divCustomBlockFactory: DivCustomBlockFactory
@@ -47,7 +46,6 @@ public struct DivBlockModelingContext {
     stateManager: DivStateManager,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting = DivVisibilityCounter(),
-    galleryResizableInsets: InsetMode.Resizable? = nil,
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -69,7 +67,6 @@ public struct DivBlockModelingContext {
     self.stateManager = stateManager
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter
-    self.galleryResizableInsets = galleryResizableInsets
     self.imageHolderFactory = imageHolderFactory
     self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory
