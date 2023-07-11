@@ -13,6 +13,7 @@ import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -953,9 +954,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (isVertical) DivLayoutParams(MATCH_PARENT, WRAP_CONTENT) else DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 
     private val isVertical get() = orientation == VERTICAL
-
-    private fun isLayoutRtl() =
-        ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
 
     private val DivLayoutParams.fixedHorizontalWeight get() = getFixedWeight(horizontalWeight, width)
 

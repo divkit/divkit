@@ -1,6 +1,7 @@
 package com.yandex.div.core.util
 
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.core.view.doOnNextLayout
 
 // https://issuetracker.google.com/issues/189446951#comment8
@@ -9,6 +10,9 @@ val View.isActuallyLaidOut: Boolean
 
 internal val View.isHierarchyLaidOut: Boolean
     get() = farthestLayoutCaller() == null
+
+internal fun View.isLayoutRtl() =
+    ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
 
 inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     if (isActuallyLaidOut && !isLayoutRequested) {
