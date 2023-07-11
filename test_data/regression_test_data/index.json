@@ -250,6 +250,9 @@
     },
     {
       "title": "Pager default item states",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager"
       ],
