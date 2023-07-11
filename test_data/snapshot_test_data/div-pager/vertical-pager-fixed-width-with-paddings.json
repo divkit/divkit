@@ -1,6 +1,7 @@
 {
   "description": "Vertical pager with paddings and items which are wider than pager",
   "platforms": [
+    "android",
     "ios"
   ],
   "templates": {

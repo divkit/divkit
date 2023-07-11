@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
@@ -30,8 +29,10 @@ import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
-import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.core.widget.makeUnspecifiedSpec
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.PageItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -39,6 +40,7 @@ import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.math.sign
 
 @DivScope
 internal class DivPagerBinder @Inject constructor(
@@ -70,7 +72,7 @@ internal class DivPagerBinder @Inject constructor(
         if (div == oldDiv) {
             val adapter = view.viewPager.adapter as PagerAdapter
             if (!adapter.applyPatch(divPatchCache)) {
-                adapter.notifyItemRangeChanged(0, adapter.itemCount);
+                adapter.notifyItemRangeChanged(0, adapter.itemCount)
             }
             return
         }
@@ -97,8 +99,7 @@ internal class DivPagerBinder @Inject constructor(
                 }
             },
             viewCreator = viewCreator,
-            path = path,
-            visitor = divView.releaseViewVisitor
+            path = path
         )
 
         val reusableObserver = { _: Any ->
@@ -130,6 +131,7 @@ internal class DivPagerBinder @Inject constructor(
             } else {
                 ViewPager2.ORIENTATION_VERTICAL
             }
+            (view.viewPager.adapter as PagerAdapter).orientation = view.orientation
 
             updatePageTransformer(view, div, resolver, pageTranslations)
             applyDecorations(view, div, resolver)
@@ -177,7 +179,6 @@ internal class DivPagerBinder @Inject constructor(
     ) {
         val metrics = view.resources.displayMetrics
         val orientation = div.orientation.evaluate(resolver)
-        val pageWidthPercent = div.evaluatePageWidthPercent(resolver)
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
         val startPadding = if (orientation == DivPager.Orientation.HORIZONTAL) {
             div.paddings.left.evaluate(resolver).dpToPxF(metrics)
@@ -194,45 +195,14 @@ internal class DivPagerBinder @Inject constructor(
             val viewPager = page.parent.parent as ViewPager2
             val recyclerView = viewPager.getChildAt(0) as RecyclerView
 
-            val isTwoPage = recyclerView.adapter?.itemCount == 2
-            val pagePosition = recyclerView.layoutManager?.getPosition(page)
-            val isFirst = pagePosition == 0
-            val isSecond = pagePosition == 1
-            val isPreLast = pagePosition == recyclerView.adapter!!.itemCount - 2
-            val isLast = pagePosition == recyclerView.adapter!!.itemCount - 1
-            var neighbourItemWidth = div.evaluateNeighbourItemWidth(view, resolver)
+            val pagePosition = recyclerView.layoutManager?.getPosition(page) ?: return@setPageTransformer
+            val widthOfThisItemAsNeighbour = div.evaluateNeighbourItemWidth(view, resolver,
+                pagePosition - sign(position).toInt(), startPadding, endPadding)
+            val neighbourItemWidth = div.evaluateNeighbourItemWidth(view, resolver,
+                pagePosition, startPadding, endPadding)
 
-            if (pageWidthPercent != null) {
-                val parentSize = if (orientation == DivPager.Orientation.HORIZONTAL) {
-                    view.viewPager.width
-                } else {
-                    view.viewPager.height
-                }
-                neighbourItemWidth =
-                    (parentSize * (1 - pageWidthPercent / 100f) - itemSpacing * 2) / 2
-            }
-
-
-            val additionalOffset = if (isTwoPage) {
-                0f
-            } else if (isFirst && position < 0f && position >= -1f) {
-                neighbourItemWidth + itemSpacing - startPadding
-            } else if (isFirst && position < -1f) {
-                (neighbourItemWidth + itemSpacing - startPadding) / -position
-            } else if (isSecond && position > 0f) {
-                neighbourItemWidth + itemSpacing - startPadding
-            } else if (isPreLast && position < 0f) {
-                neighbourItemWidth + itemSpacing - endPadding
-            } else if (isLast && position > 1f) {
-                (neighbourItemWidth + itemSpacing - endPadding) / position
-            } else if (isLast && position > 0f && position <= 1f) {
-                neighbourItemWidth + itemSpacing - endPadding
-            } else {
-                0f
-            }
-
-            val offset = -position * (neighbourItemWidth * 2 + itemSpacing + additionalOffset)
-            pagePosition?.let { pageTranslations.put(it, offset) }
+            val offset = -position * (widthOfThisItemAsNeighbour + neighbourItemWidth + itemSpacing)
+            pageTranslations.put(pagePosition, offset)
             if (orientation == DivPager.Orientation.HORIZONTAL) {
                 page.translationX = offset
             } else {
@@ -247,32 +217,28 @@ internal class DivPagerBinder @Inject constructor(
         resolver: ExpressionResolver,
     ) {
         val metrics = view.resources.displayMetrics
-        val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
-        val neighbourItemWidth = div.evaluateNeighbourItemWidth(view, resolver)
+        val isHorizontal = div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL
         view.viewPager.setItemDecoration(
             PageItemDecoration(
+                layoutMode = div.layoutMode,
+                metrics = metrics,
+                resolver = resolver,
                 paddingLeft = div.paddings.left.evaluate(resolver).dpToPxF(metrics),
                 paddingRight = div.paddings.right.evaluate(resolver).dpToPxF(metrics),
                 paddingTop = div.paddings.top.evaluate(resolver).dpToPxF(metrics),
                 paddingBottom = div.paddings.bottom.evaluate(resolver).dpToPxF(metrics),
-                itemSpacing = itemSpacing,
-                neighbourItemWidth = neighbourItemWidth,
-                orientation = if (div.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL) {
-                    RecyclerView.HORIZONTAL
-                } else {
-                    RecyclerView.VERTICAL
-                }
+                parentSize = if (isHorizontal) view.viewPager.width else view.viewPager.height,
+                itemSpacing = div.itemSpacing.toPxF(metrics, resolver),
+                orientation = if (isHorizontal) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
             )
         )
 
-        val pageWidthPercent = div.evaluatePageWidthPercent(resolver)
-
-        if (neighbourItemWidth != 0f ||
-            pageWidthPercent != null && pageWidthPercent < 100
-        ) {
-            if (view.viewPager.offscreenPageLimit != 1) {
-                view.viewPager.offscreenPageLimit = 1
-            }
+        val neighbourItemIsShown = when (val mode = div.layoutMode) {
+            is DivPagerLayoutMode.PageSize -> mode.value.pageWidth.value.evaluate(resolver) < 100
+            is DivPagerLayoutMode.NeighbourPageSize -> mode.value.neighbourPageWidth.value.evaluate(resolver) > 0
+        }
+        if (neighbourItemIsShown && view.viewPager.offscreenPageLimit != 1) {
+            view.viewPager.offscreenPageLimit = 1
         }
     }
 
@@ -303,41 +269,51 @@ internal class DivPagerBinder @Inject constructor(
         }
     }
 
-
-    private fun DivPager.evaluatePageWidthPercent(resolver: ExpressionResolver): Int? {
-        return (layoutMode as? DivPagerLayoutMode.PageSize)
-            ?.value?.pageWidth?.value?.evaluate(resolver)?.toInt()
-    }
-
-    private fun DivPager.evaluateNeighbourItemWidth(view: DivPagerView,
-                                                    resolver: ExpressionResolver): Float {
+    private fun DivPager.evaluateNeighbourItemWidth(
+        view: DivPagerView,
+        resolver: ExpressionResolver,
+        position: Int,
+        paddingStart: Float,
+        paddingEnd: Float
+    ): Float {
         val metrics = view.resources.displayMetrics
+        val mode = layoutMode
+        val itemSpacing = itemSpacing.toPxF(metrics, resolver)
+        val lastPosition = (view.viewPager[0] as RecyclerView).adapter!!.itemCount - 1
+        if (mode is DivPagerLayoutMode.NeighbourPageSize) {
+            val fixedWidth = mode.value.neighbourPageWidth.toPxF(metrics, resolver)
+            val offsetsWidth = 2 * fixedWidth + itemSpacing
+            return when (position) {
+                0 -> offsetsWidth - paddingStart
+                lastPosition -> offsetsWidth - paddingEnd
+                else -> fixedWidth
+            }.coerceAtLeast(0f)
+        }
 
-        return when (val mode = this.layoutMode) {
-            is DivPagerLayoutMode.PageSize -> {
-                val parentSize = if (this.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL) {
-                    view.viewPager.width
-                } else {
-                    view.viewPager.height
-                }
-                val pageWidthPercent = mode.value.pageWidth.value.evaluate(resolver).toInt()
-                val itemSpacing = itemSpacing.toPxF(metrics, resolver)
-                (parentSize * (1 - pageWidthPercent / 100f) - itemSpacing * 2) / 2
-            }
-            is DivPagerLayoutMode.NeighbourPageSize -> {
-                mode.value.neighbourPageWidth.toPxF(metrics, resolver)
-            }
-        }}
+        val parentSize = if (this.orientation.evaluate(resolver) == DivPager.Orientation.HORIZONTAL) {
+            view.viewPager.width
+        } else {
+            view.viewPager.height
+        }
+        val pageWidthPercent = (mode as DivPagerLayoutMode.PageSize).value.pageWidth.value.evaluate(resolver).toInt()
+        val neighbourItemsPart = 1 - pageWidthPercent / 100f
+        val getSideNeighbourPageSize = { padding: Float -> (parentSize - padding) * neighbourItemsPart - itemSpacing }
+        return when (position) {
+            0 -> getSideNeighbourPageSize(paddingStart)
+            lastPosition -> getSideNeighbourPageSize(paddingEnd)
+            else -> parentSize * neighbourItemsPart / 2
+        }
+    }
 
     class PageChangeCallback(
         private val divPager: DivPager,
         private val divView: Div2View,
         private val recyclerView: RecyclerView
     ) : ViewPager2.OnPageChangeCallback() {
-        var prevPosition = RecyclerView.NO_POSITION
+        private var prevPosition = RecyclerView.NO_POSITION
 
-        val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
-        var totalDelta = 0
+        private val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
+        private var totalDelta = 0
 
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -406,18 +382,19 @@ internal class DivPagerBinder @Inject constructor(
         private val divBinder: DivBinder,
         private val translationBinder: (holder: PagerViewHolder, position: Int) -> Unit,
         private val viewCreator: DivViewCreator,
-        private val path: DivStatePath,
-        private val visitor: ReleaseViewVisitor
+        private val path: DivStatePath
     ) : DivPatchableAdapter<PagerViewHolder>(divs, div2View) {
 
         override val subscriptions = mutableListOf<Disposable>()
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
-            val view = PageLayout(div2View.context)
-            view.layoutParams =
-                FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        var orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
-            return PagerViewHolder(view, divBinder, viewCreator, visitor)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
+            val view = PageLayout(div2View.context) { orientation }
+            view.layoutParams =
+                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+
+            return PagerViewHolder(view, divBinder, viewCreator)
         }
 
         override fun getItemCount() = items.size
@@ -430,23 +407,37 @@ internal class DivPagerBinder @Inject constructor(
 
     }
 
-    private class PageLayout(context: Context) : FrameLayout(context) {
+    private class PageLayout(
+        context: Context,
+        private val orientationProvider: () -> Int
+    ) : FrameContainerLayout(context) {
+
         override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-            //when the page height is equal to MATCH_PARENT, the page must be the size of a pager minus padding,
-            //otherwise the page height should be enough for its own content regardless of the current pager height
-            if (childCount != 0 && getChildAt(0).layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-            } else {
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            // When the page cross size is equal to MATCH_PARENT or WRAP_CONTENT_CONSTRAINED,
+            // the page must be the size of a pager minus padding,
+            // otherwise the page size should be enough for its own content regardless of the current pager height
+            if (childCount == 0) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            val lp = getChildAt(0).layoutParams
+            val isHorizontal = orientationProvider() == ViewPager2.ORIENTATION_HORIZONTAL
+            val widthSpec = getSpec(lp.width, widthMeasureSpec, isHorizontal)
+            val heightSpec = getSpec(lp.height, heightMeasureSpec, !isHorizontal)
+            super.onMeasure(widthSpec, heightSpec)
+        }
+
+        private fun getSpec(size: Int, parentSpec: Int, alongScrollAxis: Boolean) = if (alongScrollAxis) {
+            parentSpec
+        } else {
+            when (size) {
+                LayoutParams.MATCH_PARENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> parentSpec
+                else -> makeUnspecifiedSpec()
             }
         }
     }
 
     private class PagerViewHolder(
-        val frameLayout: FrameLayout,
+        val frameLayout: PageLayout,
         private val divBinder: DivBinder,
-        private val viewCreator: DivViewCreator,
-        private val visitor: ReleaseViewVisitor
+        private val viewCreator: DivViewCreator
     ) : RecyclerView.ViewHolder(frameLayout) {
 
         private var oldDiv: Div? = null

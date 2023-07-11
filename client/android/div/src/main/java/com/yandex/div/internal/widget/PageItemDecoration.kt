@@ -1,18 +1,25 @@
 package com.yandex.div.internal.widget
 
 import android.graphics.Rect
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.annotation.Px
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.internal.KAssert
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivPagerLayoutMode
 import kotlin.math.roundToInt
 
 internal class PageItemDecoration @JvmOverloads constructor(
+    layoutMode: DivPagerLayoutMode,
+    private val metrics: DisplayMetrics,
+    private val resolver: ExpressionResolver,
     @Px private val paddingLeft: Float = 0f,
     @Px private val paddingRight: Float = 0f,
     @Px private val paddingTop: Float = 0f,
     @Px private val paddingBottom: Float = 0f,
-    @Px private var neighbourItemWidth: Float = 0f,
+    @Px private val parentSize: Int,
     @Px private val itemSpacing: Float = 0f,
     private val orientation: Int = RecyclerView.HORIZONTAL
 ) : RecyclerView.ItemDecoration() {
@@ -22,21 +29,12 @@ internal class PageItemDecoration @JvmOverloads constructor(
     private val paddingTopInt = paddingTop.roundToInt()
     private val paddingBottomInt = paddingBottom.roundToInt()
 
-    private val middlePadding = (neighbourItemWidth + itemSpacing).roundToInt()
-    private val paddingEndForFirstItem = when (orientation) {
-        RecyclerView.HORIZONTAL -> ((neighbourItemWidth + itemSpacing) * 2 - paddingLeft).roundToInt()
-        RecyclerView.VERTICAL -> ((neighbourItemWidth + itemSpacing) * 2 - paddingBottom).roundToInt()
-        else -> 0
-    }
-    private val paddingStartForLastItem = when (orientation) {
-        RecyclerView.HORIZONTAL -> ((neighbourItemWidth + itemSpacing) * 2 - paddingRight).roundToInt()
-        RecyclerView.VERTICAL -> ((neighbourItemWidth + itemSpacing) * 2 - paddingTop).roundToInt()
-        else -> 0
-    }
+    private val middlePadding = (layoutMode.middleNeighbourWidth + itemSpacing).roundToInt()
+    private val paddingEndForFirstItem = layoutMode.getPaddingForSideItem(paddingLeft, paddingTop)
+    private val paddingStartForLastItem = layoutMode.getPaddingForSideItem(paddingRight, paddingBottom)
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
 
-        val isTwoPage = parent.adapter?.itemCount == 2
         val isFirst = parent.layoutManager?.getPosition(view) == 0
         val isLast = parent.layoutManager?.getPosition(view) == parent.adapter!!.itemCount - 1
 
@@ -44,13 +42,13 @@ internal class PageItemDecoration @JvmOverloads constructor(
             RecyclerView.HORIZONTAL -> outRect.set(
                 when {
                     isFirst -> paddingLeftInt
-                    isLast && !isTwoPage -> paddingStartForLastItem
+                    isLast -> paddingStartForLastItem
                     else -> middlePadding
                 },
                 paddingTopInt,
                 when {
+                    isFirst -> paddingEndForFirstItem
                     isLast -> paddingRightInt
-                    isFirst && !isTwoPage -> paddingEndForFirstItem
                     else -> middlePadding
                 },
                 paddingBottomInt
@@ -59,17 +57,46 @@ internal class PageItemDecoration @JvmOverloads constructor(
                 paddingLeftInt,
                 when {
                     isFirst -> paddingTopInt
-                    isLast && !isTwoPage -> paddingStartForLastItem
+                    isLast -> paddingStartForLastItem
                     else -> middlePadding
                 },
                 paddingRightInt,
                 when {
+                    isFirst -> paddingEndForFirstItem
                     isLast -> paddingBottomInt
-                    isFirst && !isTwoPage -> paddingEndForFirstItem
                     else -> middlePadding
                 }
             )
             else -> KAssert.fail { "Unsupported orientation: $orientation" }
         }
     }
+
+    private val DivPagerLayoutMode.middleNeighbourWidth get() = when (this) {
+        is DivPagerLayoutMode.NeighbourPageSize -> fixedWidth
+        is DivPagerLayoutMode.PageSize -> parentSize * (1 - percentageWidth / 100f) / 2
+    }
+
+    private fun DivPagerLayoutMode.getPaddingForSideItem(horizontalPadding: Float, verticalPadding: Float) =
+        if (orientation == RecyclerView.HORIZONTAL) {
+            when (this) {
+                is DivPagerLayoutMode.NeighbourPageSize -> getPaddingForSideItem(horizontalPadding)
+                is DivPagerLayoutMode.PageSize -> getPaddingForSideItem(horizontalPadding)
+            }
+        } else {
+            when (this) {
+                is DivPagerLayoutMode.NeighbourPageSize -> getPaddingForSideItem(verticalPadding)
+                is DivPagerLayoutMode.PageSize -> getPaddingForSideItem(verticalPadding)
+            }
+        }
+
+    private fun DivPagerLayoutMode.NeighbourPageSize.getPaddingForSideItem(padding: Float) =
+        (2 * (fixedWidth + itemSpacing) - padding).roundToInt().coerceAtLeast(0)
+
+    private fun DivPagerLayoutMode.PageSize.getPaddingForSideItem(padding: Float) =
+        ((parentSize - padding) * (1 - percentageWidth / 100f)).roundToInt()
+
+    private val DivPagerLayoutMode.NeighbourPageSize.fixedWidth get() =
+        value.neighbourPageWidth.toPxF(metrics, resolver)
+
+    private val DivPagerLayoutMode.PageSize.percentageWidth get() = value.pageWidth.value.evaluate(resolver).toInt()
 }

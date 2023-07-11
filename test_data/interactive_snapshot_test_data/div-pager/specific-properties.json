@@ -11,7 +11,7 @@
         "type": "pager",
         "width": {
           "type": "fixed",
-          "value": 360
+          "value": 320
         },
         "height": {
           "type": "fixed",
@@ -69,7 +69,7 @@
         {
           "name": "page_width",
           "type": "number",
-          "value": 20
+          "value": 80
         },
         {
           "name": "item_spacing",
@@ -144,7 +144,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=page_width&value=10",
+          "url": "div-action://set_variable?name=page_width&value=60",
           "log_id": "page_width"
         }
       ]
@@ -164,7 +164,7 @@
           "log_id": "restore: item_spacing"
         },
         {
-          "url": "div-action://set_variable?name=page_width&value=20",
+          "url": "div-action://set_variable?name=page_width&value=80",
           "log_id": "restore: page_width"
         },
         {
