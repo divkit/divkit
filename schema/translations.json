@@ -628,8 +628,8 @@
     "ru": "Действия, когда элемент получает фокус."
   },
   "div_font_family": {
-    "en": "Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>",
-    "ru": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
+    "en": "Font family",
+    "ru": "Шрифт"
   },
   "div_font_size": {
     "en": "Font size.",
