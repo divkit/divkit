@@ -60,6 +60,14 @@ private final class SubviewStorage: RenderingDelegate {
     wrappedRenderingDelegate?.mapView(view, to: id)
   }
 
+  func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
+    wrappedRenderingDelegate?.tooltipAnchorViewAdded(anchorView: anchorView)
+  }
+
+  func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView) {
+    wrappedRenderingDelegate?.tooltipAnchorViewRemoved(anchorView: anchorView)
+  }
+
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
     views.first { $0.id == id }?.view
   }

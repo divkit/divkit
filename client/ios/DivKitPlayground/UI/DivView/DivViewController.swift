@@ -103,15 +103,19 @@ open class DivViewController: UIViewController {
 
   private func updateBlockView(block: Block) {
     let elementStateObserver = self
+    let renderingDelegate = divKitComponents.tooltipManager
     if let blockView = blockView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(
         blockView,
         observer: elementStateObserver,
         overscrollDelegate: nil,
-        renderingDelegate: nil
+        renderingDelegate: renderingDelegate
       )
     } else {
-      blockView = block.makeBlockView(observer: elementStateObserver)
+      blockView = block.makeBlockView(
+        observer: elementStateObserver,
+        renderingDelegate: renderingDelegate
+      )
       cardView.blockView = blockView
     }
 

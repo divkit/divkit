@@ -20,8 +20,9 @@ public final class DivKitComponents {
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let safeAreaManager: DivSafeAreaManager
-  public let showToolip: DivActionURLHandler.ShowTooltipAction
   public let stateManagement: DivStateManagement
+  public let showToolip: DivActionURLHandler.ShowTooltipAction?
+  public let tooltipManager: TooltipManager
   public let triggersStorage: DivTriggersStorage
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
@@ -40,8 +41,9 @@ public final class DivKitComponents {
     layoutDirection: LayoutDirection = .system,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
-    showTooltip: @escaping DivActionURLHandler.ShowTooltipAction = { _ in },
+    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
+    tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: UpdateCardAction?,
@@ -76,6 +78,18 @@ public final class DivKitComponents {
     let updateCard: DivActionURLHandler.UpdateCardAction = updateAggregator.aggregate(_:)
 
     weak var weakTimerStorage: DivTimerStorage?
+    weak var weakActionHandler: DivActionHandler?
+
+    self.tooltipManager = tooltipManager ?? DefaultTooltipManager(
+      shownDivTooltips: .init(),
+      handleAction: {
+        switch $0.payload {
+        case let .divAction(params: params):
+          weakActionHandler?.handle(params: params, urlOpener: urlOpener)
+        default: break
+        }
+      }
+    )
 
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
@@ -84,6 +98,7 @@ public final class DivKitComponents {
       variablesStorage: variablesStorage,
       updateCard: updateCard,
       showTooltip: showTooltip,
+      tooltipActionPerformer: self.tooltipManager,
       logger: DefaultDivActionLogger(
         requestPerformer: requestPerformer
       ),
@@ -104,7 +119,10 @@ public final class DivKitComponents {
       urlOpener: urlOpener,
       updateCard: updateCard
     )
+
+    weakActionHandler = actionHandler
     weakTimerStorage = timerStorage
+
     variablesStorage.changeEvents.addObserver { change in
       switch change.kind {
       case .global:

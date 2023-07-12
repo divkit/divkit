@@ -124,6 +124,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   private var model: Model!
   private weak var observer: ElementStateObserver?
+  private weak var renderingDelegate: RenderingDelegate?
   private(set) var childView: BlockView?
 
   private var contextMenuDelegate: NSObjectProtocol?
@@ -289,9 +290,16 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       return
     }
 
+    if self.model?.tooltips.isEmpty ?? true, !model.tooltips.isEmpty {
+      renderingDelegate?.tooltipAnchorViewAdded(anchorView: self)
+    } else if self.model?.tooltips.isEmpty == false, model.tooltips.isEmpty {
+      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
+    }
+
     let shouldUpdateChildView = model.child !== self.model?.child || self.observer !== observer
     self.model = model
     self.observer = observer
+    self.renderingDelegate = renderingDelegate
 
     blurView = model.blurEffect.map { UIVisualEffectView(effect: UIBlurEffect(style: $0.cast())) }
 
@@ -414,6 +422,12 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       duration: tooltipModel.duration
     )
   }
+
+  deinit {
+    if model?.tooltips.isEmpty == false {
+      renderingDelegate?.tooltipAnchorViewRemoved(anchorView: self)
+    }
+  }
 }
 
 extension DecoratingView {
@@ -438,6 +452,10 @@ extension DecoratingView {
       }
     }
   }
+}
+
+extension DecoratingView: TooltipAnchorView {
+  var tooltips: [BlockTooltip] { model.tooltips }
 }
 
 extension DecoratingView.HighlightState {

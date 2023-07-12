@@ -31,7 +31,8 @@ public final class DivActionURLHandler {
   private let patchProvider: DivPatchProvider
   private let variableUpdater: DivVariableUpdater
   private let updateCard: UpdateCardAction
-  private let showTooltip: ShowTooltipAction
+  private let showTooltip: ShowTooltipAction?
+  private let tooltipActionPerformer: TooltipActionPerformer?
   private let performTimerAction: PerformTimerAction
 
   public init(
@@ -40,7 +41,8 @@ public final class DivActionURLHandler {
     patchProvider: DivPatchProvider,
     variableUpdater: DivVariableUpdater,
     updateCard: @escaping UpdateCardAction,
-    showTooltip: @escaping ShowTooltipAction,
+    showTooltip: ShowTooltipAction?,
+    tooltipActionPerformer: TooltipActionPerformer?,
     performTimerAction: @escaping PerformTimerAction = { _, _, _ in }
   ) {
     self.stateUpdater = stateUpdater
@@ -49,6 +51,7 @@ public final class DivActionURLHandler {
     self.variableUpdater = variableUpdater
     self.updateCard = updateCard
     self.showTooltip = showTooltip
+    self.tooltipActionPerformer = tooltipActionPerformer
     self.performTimerAction = performTimerAction
   }
 
@@ -67,9 +70,17 @@ public final class DivActionURLHandler {
 
     switch intent {
     case let .showTooltip(id, multiple):
-      showTooltip(TooltipInfo(id: id, showsOnStart: false, multiple: multiple))
-    case .hideTooltip:
-      return false
+      let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
+      guard showTooltip == nil else {
+        showTooltip?(tooltipInfo)
+        break
+      }
+      tooltipActionPerformer?.showTooltip(info: tooltipInfo)
+    case let .hideTooltip(id):
+      guard showTooltip == nil else {
+        break
+      }
+      tooltipActionPerformer?.hideTooltip(id: id)
     case let .download(patchUrl):
       patchProvider.getPatch(
         url: patchUrl,

@@ -33,7 +33,8 @@ public final class DivActionHandler {
     patchProvider: DivPatchProvider,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    showTooltip: @escaping DivActionURLHandler.ShowTooltipAction,
+    showTooltip: DivActionURLHandler.ShowTooltipAction?,
+    tooltipActionPerformer: TooltipActionPerformer? = nil,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
@@ -47,6 +48,7 @@ public final class DivActionHandler {
         variableUpdater: variablesStorage,
         updateCard: updateCard,
         showTooltip: showTooltip,
+        tooltipActionPerformer: tooltipActionPerformer,
         performTimerAction: performTimerAction
       ),
       logger: logger,
