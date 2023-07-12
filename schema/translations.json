@@ -541,7 +541,7 @@
   },
   "div_edge_insets_end": {
     "en": "End margin. Depends on the interface direction. Has a higher priority than left/right.",
-    "ru": "Отступ от конца. Зависит от направления интерфейса. Имеет больший приоритет, чем left/right."
+    "ru": "Отступ от конца элемента. Положение отступа зависит от направления интерфейса. Имеет больший приоритет, чем левый или правый отступ."
   },
   "div_edge_insets_left": {
     "en": "Left margin.",
@@ -553,7 +553,7 @@
   },
   "div_edge_insets_start": {
     "en": "Start margin. Depends on the interface direction. Has a higher priority than left/right.",
-    "ru": "Отступ от начала. Зависит от направления интерфейса. Имеет больший приоритет, чем left/right."
+    "ru": "Отступ от начала элемента. Положение отступа зависит от направления интерфейса. Имеет больший приоритет, чем левый или правый отступ."
   },
   "div_edge_insets_top": {
     "en": "Top margin.",
@@ -628,8 +628,8 @@
     "ru": "Действия, когда элемент получает фокус."
   },
   "div_font_family": {
-    "en": "Font family",
-    "ru": "Шрифт"
+    "en": "Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>",
+    "ru": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
   },
   "div_font_size": {
     "en": "Font size.",
