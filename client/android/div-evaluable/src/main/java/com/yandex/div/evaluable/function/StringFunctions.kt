@@ -8,6 +8,8 @@ import com.yandex.div.evaluable.REASON_OUT_OF_BOUNDS
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import java.net.URLDecoder
 import java.net.URLEncoder
+import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 
 internal object StringLength : Function() {
 
@@ -330,6 +332,30 @@ internal object PadEndInteger : Function() {
         val leftForRequired = length - string.length
 
         return string + buildRepeatableString(leftForRequired.toInt(), padStr)
+    }
+}
+
+internal object TestRegex : Function() {
+
+    override val name = "testRegex"
+
+    override val declaredArgs = listOf(
+            FunctionArgument(type = EvaluableType.STRING), // string
+            FunctionArgument(type = EvaluableType.STRING)  // regex
+    )
+    override val resultType = EvaluableType.BOOLEAN
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val string = args[0] as String
+        val regex = args[1] as String
+
+        try {
+            val pattern = Pattern.compile(regex)
+            return pattern.matcher(string).find()
+        } catch (e: PatternSyntaxException) {
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Invalid regular expression.")
+        }
     }
 }
 

@@ -115,6 +115,7 @@ class BuiltinFunctionProvider(variableProvider: VariableProvider) : FunctionProv
         registry.register(StringLastIndex)
         registry.register(StringEncodeUri)
         registry.register(StringDecodeUri)
+        registry.register(TestRegex)
         registry.register(ToLowerCase)
         registry.register(ToUpperCase)
         registry.register(Trim)

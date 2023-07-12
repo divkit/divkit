@@ -365,6 +365,7 @@
       ],
       "result_type": "boolean",
       "platforms": [
+        "android",
         "web"
       ]
     }

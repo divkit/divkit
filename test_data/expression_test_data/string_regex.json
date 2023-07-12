@@ -8,6 +8,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -19,6 +20,7 @@
                 "value": false
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -31,6 +33,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -43,6 +46,7 @@
                 "value": false
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -54,6 +58,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -66,6 +71,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -77,6 +83,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -88,6 +95,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -99,6 +107,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -110,6 +119,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -121,6 +131,7 @@
                 "value": false
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -132,6 +143,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -143,6 +155,7 @@
                 "value": false
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -154,6 +167,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -165,6 +179,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -176,6 +191,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -187,6 +203,7 @@
                 "value": true
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -198,6 +215,7 @@
                 "value": "Failed to evaluate [testRegex('[', '[')]. Invalid regular expression."
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
@@ -209,6 +227,7 @@
                 "value": "Failed to evaluate [testRegex('(', '(')]. Invalid regular expression."
             },
             "platforms": [
+                "android",
                 "web"
             ]
         },
