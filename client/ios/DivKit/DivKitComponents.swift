@@ -16,6 +16,7 @@ public final class DivKitComponents {
   public let flagsInfo: DivFlagsInfo
   public let fontProvider: DivFontProvider
   public let imageHolderFactory: ImageHolderFactory
+  public let layoutDirection: LayoutDirection
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let safeAreaManager: DivSafeAreaManager
@@ -36,6 +37,7 @@ public final class DivKitComponents {
     flagsInfo: DivFlagsInfo = .default,
     fontProvider: DivFontProvider? = nil,
     imageHolderFactory: ImageHolderFactory? = nil,
+    layoutDirection: LayoutDirection = .system,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     showTooltip: @escaping DivActionURLHandler.ShowTooltipAction = { _ in },
@@ -56,6 +58,7 @@ public final class DivKitComponents {
     self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
+    self.layoutDirection = layoutDirection
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
@@ -186,7 +189,8 @@ public final class DivKitComponents {
       variables: variablesStorage.makeVariables(for: cardId),
       playerFactory: playerFactory,
       debugParams: debugParams,
-      parentScrollView: parentScrollView
+      parentScrollView: parentScrollView,
+      layoutDirection: layoutDirection
     )
   }
 

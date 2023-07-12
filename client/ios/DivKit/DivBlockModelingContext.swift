@@ -22,6 +22,7 @@ public struct DivBlockModelingContext {
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
   private let variables: DivVariables
+  public let layoutDirection: LayoutDirection
   public var expressionResolver: ExpressionResolver {
     ExpressionResolver(
       variables: variables,
@@ -58,7 +59,8 @@ public struct DivBlockModelingContext {
     debugParams: DebugParams = DebugParams(),
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
-    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: [])
+    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
+    layoutDirection: LayoutDirection = .system
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -77,6 +79,7 @@ public struct DivBlockModelingContext {
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage
+    self.layoutDirection = layoutDirection
 
     self.variables = variables
 

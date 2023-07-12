@@ -34,10 +34,10 @@ extension DivBase {
 
     let internalInsets = options.contains(.noPaddings)
       ? .zero
-      : paddings.makeEdgeInsets(with: expressionResolver)
+    : paddings.makeEdgeInsets(context: context)
     block = block.addingEdgeInsets(internalInsets)
 
-    let externalInsets = margins.makeEdgeInsets(with: expressionResolver)
+    let externalInsets = margins.makeEdgeInsets(context: context)
     if visibility == .invisible {
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
@@ -287,14 +287,14 @@ extension DivBase {
   func makeContentWidthTrait(with context: DivBlockModelingContext) -> LayoutTrait {
     let overridenWidth = context.override(width: width)
     return overridenWidth.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).horizontalInsets
+      consideringInsets: paddings.makeEdgeInsets(context: context).horizontalInsets
     )
   }
 
   func makeContentHeightTrait(with context: DivBlockModelingContext) -> LayoutTrait {
     let overridenHeight = context.override(height: height)
     return overridenHeight.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).verticalInsets
+      consideringInsets: paddings.makeEdgeInsets(context: context).verticalInsets
     )
   }
 }

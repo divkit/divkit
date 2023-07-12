@@ -40,9 +40,10 @@ extension DivTabs: DivBlockModeling {
       tabTitles: tabs.map { $0.title },
       titleStyle: tabTitleStyle.makeTitleStyle(
         fontProvider: context.fontProvider,
-        expressionResolver: context.expressionResolver
+        expressionResolver: context.expressionResolver,
+        context: context
       ),
-      listPaddings: titlePaddings.makeEdgeInsets(with: context.expressionResolver)
+      listPaddings: titlePaddings.makeEdgeInsets(context: context)
     )
 
     let contentsModel = try TabContentsViewModel(
@@ -58,7 +59,7 @@ extension DivTabs: DivBlockModeling {
       model: try TabViewModel(
         listModel: listModel,
         contentsModel: contentsModel,
-        separatorStyle: makeSeparatorStyle(with: context.expressionResolver)
+        separatorStyle: makeSeparatorStyle(with: context.expressionResolver, context: context)
       ),
       state: makeState(context: tabsContext, tabs: tabs),
       widthTrait: makeContentWidthTrait(with: context),
@@ -67,11 +68,12 @@ extension DivTabs: DivBlockModeling {
   }
 
   private func makeSeparatorStyle(
-    with expressionResolver: ExpressionResolver
+    with expressionResolver: ExpressionResolver,
+    context: DivBlockModelingContext
   ) -> TabSeparatorStyle? {
     resolveHasSeparator(expressionResolver) ? TabSeparatorStyle(
       color: resolveSeparatorColor(expressionResolver),
-      insets: separatorPaddings.makeEdgeInsets(with: expressionResolver)
+      insets: separatorPaddings.makeEdgeInsets(context: context)
     ) : nil
   }
 
@@ -122,7 +124,8 @@ extension DivTabs.TabTitleStyle {
 
   fileprivate func makeTitleStyle(
     fontProvider: DivFontProvider,
-    expressionResolver: ExpressionResolver
+    expressionResolver: ExpressionResolver,
+    context: DivBlockModelingContext
   ) -> LayoutKit.TabTitleStyle {
     let defaultFontWeight = resolveFontWeight(expressionResolver)
     return LayoutKit.TabTitleStyle(
@@ -136,7 +139,7 @@ extension DivTabs.TabTitleStyle {
         fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
         expressionResolver: expressionResolver
       ),
-      paddings: paddings.makeEdgeInsets(with: expressionResolver),
+      paddings: paddings.makeEdgeInsets(context: context),
       cornerRadius: makeCornerRadii(with: expressionResolver),
       baseTextColor: resolveInactiveTextColor(expressionResolver),
       activeTextColor: resolveActiveTextColor(expressionResolver),

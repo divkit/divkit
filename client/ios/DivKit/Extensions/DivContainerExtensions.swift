@@ -279,7 +279,7 @@ extension DivContainer: DivBlockModeling {
     }
     let separatorBlock = try separator.style.makeBlock(
       context: context, corners: .all
-    ).addingEdgeInsets(separator.margins.makeEdgeInsets(with: context.expressionResolver))
+    ).addingEdgeInsets(separator.margins.makeEdgeInsets(context: context))
 
     let style = ContainerBlock.Child(
       content: separatorBlock,
@@ -302,7 +302,7 @@ extension DivContainer: DivBlockModeling {
     }
     let lineSeparatorBlock = try lineSeparator.style.makeBlock(
       context: context, corners: .all
-    ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(with: context.expressionResolver))
+    ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(context: context))
 
     let style = ContainerBlock.Child(
       content: lineSeparatorBlock,
