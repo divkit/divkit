@@ -143,7 +143,7 @@ internal fun DivSize?.toLayoutParamsSize(
         is DivSize.WrapContent -> when {
             value.constrained?.evaluate(resolver) != true -> ViewGroup.LayoutParams.WRAP_CONTENT
             lp is DivLayoutParams -> DivLayoutParams.WRAP_CONTENT_CONSTRAINED
-            else -> ViewGroup.LayoutParams.MATCH_PARENT
+            else -> ViewGroup.LayoutParams.WRAP_CONTENT
         }
     }
 }
