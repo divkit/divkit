@@ -187,7 +187,7 @@
             newChildLayoutParams.overlapParent = true;
         }
         if (orientation !== 'horizontal') {
-            newChildLayoutParams.parentHAlign = HALIGN_MAP[contentHAlign];
+            newChildLayoutParams.parentHAlign = wrap ? 'start' : HALIGN_MAP[contentHAlign];
             if (
                 !aspect && (
                     !$jsonHeight ||
@@ -199,7 +199,7 @@
             }
         }
         if (orientation !== 'vertical') {
-            newChildLayoutParams.parentVAlign = VALIGN_MAP[contentVAlign];
+            newChildLayoutParams.parentVAlign = wrap ? 'start' : VALIGN_MAP[contentVAlign];
             if (
                 $jsonWidth?.type === 'wrap_content' ||
                 $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
