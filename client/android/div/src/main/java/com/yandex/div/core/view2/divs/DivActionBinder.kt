@@ -11,7 +11,6 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
-import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
 import com.yandex.div.core.experiments.Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED
 import com.yandex.div.core.view2.Div2View
@@ -39,7 +38,6 @@ internal class DivActionBinder @Inject constructor(
     private val divActionBeaconSender: DivActionBeaconSender,
     @ExperimentFlag(LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED) private val longtapActionsPassToChild: Boolean,
     @ExperimentFlag(IGNORE_ACTION_MENU_ITEMS_ENABLED) private val shouldIgnoreActionMenuItems: Boolean,
-    @ExperimentFlag(ACCESSIBILITY_ENABLED) private val accessibilityEnabled: Boolean
 ) {
     private val passToParentLongClickListener: (View) -> Boolean = { view ->
         var isLongClickHandled = false
@@ -76,10 +74,8 @@ internal class DivActionBinder @Inject constructor(
             divGestureListener
         )
 
-        if (accessibilityEnabled &&
-            DivAccessibility.Mode.MERGE == divView.getPropagatedAccessibilityMode(target) &&
-            divView.isDescendantAccessibilityMode(target)
-        ) {
+        if (DivAccessibility.Mode.MERGE == divView.getPropagatedAccessibilityMode(target) &&
+            divView.isDescendantAccessibilityMode(target)) {
             target.isClickable = clickableState
             target.isLongClickable = longClickableState
         }

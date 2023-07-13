@@ -47,7 +47,6 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
                 .divDataChangeListener(transitionScheduler)
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
                 .actionHandler(UIDiv2ActionHandler(uriHandler, context))
-                .enableAccessibility(true)
                 .build()
         val divContext = divContext(baseContext = activity, configuration = divConfiguration)
         divStateStorage.preloadState("div2")

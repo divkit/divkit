@@ -19,9 +19,6 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     VISUAL_ERRORS_ENABLED(
         "visual_errors"
     ),
-    ACCESSIBILITY_ENABLED(
-        "accessibility_enabled"
-    ),
     VIEW_POOL_ENABLED(
         "view_pool_enabled",
         defaultValue = true
