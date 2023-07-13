@@ -1,3 +1,11 @@
+## 26.1.0 (July 17, 2023)
+Additions:
+* Implemented `testRegex` function
+
+Fixes and changes:
+* `content_alignment_` properties along cross-axis in `container` with the `wrap` mode will now align rows / columns of items, instead of children components (to better match Android / iOS behavior)
+* Fixed expression processing without variables (constant expressions)
+
 ## 26.0.0 (July 10, 2023)
 
 Additions:

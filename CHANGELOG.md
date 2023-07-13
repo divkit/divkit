@@ -1,3 +1,26 @@
+## 26.1
+
+# JSON Schema:
+* Added `start` and `end` to horizontal alignment.
+
+# Android Client:
+* Added `testRegex` function.
+* Supported `constrained` property in `wrap_content` size for pagers.
+* Ignore constrained along wrap-container's cross axis.
+* Fixed gallery `item_space` in RTL layout direction. 
+
+# iOS Client:
+* Ignore constrained along wrap-container's cross axis.
+* Supported `start` and `end` parameters in margins, padding.
+
+# Web Client:
+* Implemented `testRegex` function
+* `content_alignment_` properties along cross-axis in `container` with the `wrap` mode will now align rows / columns of items, instead of children components (to better match Android / iOS behavior).
+* Fixed expression processing without variables (constant expressions).
+
+# TypeScript JSON Builder:
+* `boolean_int` properties will now accept `true` and `false` values in addition to `1` / `0`. These boolean values will be automatically converted to `1` / `0`, but only if the `divCard` function is used. Beware of old clients with the old DivKit SDK, they may not accept boolean `true` / `false` values.
+
 ## 26.0
 
 # JSON Schema:
