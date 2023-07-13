@@ -30,6 +30,8 @@ public final class DivKitComponents {
 
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
+  private let updateCard: DivActionURLHandler.UpdateCardAction
+  private let variableTracker = DivVariableTracker()
   private let disposePool = AutodisposePool()
 
   public init(
@@ -64,6 +66,9 @@ public final class DivKitComponents {
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
+    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in })
+    updateCard = updateAggregator.aggregate(_:)
+
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
     self.imageHolderFactory = imageHolderFactory
@@ -71,11 +76,6 @@ public final class DivKitComponents {
 
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
-
-    let updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in
-    })
-    self.updateAggregator = updateAggregator
-    let updateCard: DivActionURLHandler.UpdateCardAction = updateAggregator.aggregate(_:)
 
     weak var weakTimerStorage: DivTimerStorage?
     weak var weakActionHandler: DivActionHandler?
@@ -123,13 +123,8 @@ public final class DivKitComponents {
     weakActionHandler = actionHandler
     weakTimerStorage = timerStorage
 
-    variablesStorage.changeEvents.addObserver { change in
-      switch change.kind {
-      case .global:
-        updateCard(.variable(.all))
-      case let .local(cardId, _):
-        updateCard(.variable(.specific([cardId])))
-      }
+    variablesStorage.changeEvents.addObserver { [weak self] event in
+      self?.onVariablesChanged(event: event)
     }.dispose(in: disposePool)
   }
 
@@ -193,7 +188,8 @@ public final class DivKitComponents {
     debugParams: DebugParams = DebugParams(),
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
-    DivBlockModelingContext(
+    variableTracker.onModelingStarted(cardId: cardId)
+    return DivBlockModelingContext(
       cardId: cardId,
       stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       blockStateStorage: blockStateStorage,
@@ -208,7 +204,8 @@ public final class DivKitComponents {
       playerFactory: playerFactory,
       debugParams: debugParams,
       parentScrollView: parentScrollView,
-      layoutDirection: layoutDirection
+      layoutDirection: layoutDirection,
+      variableTracker: variableTracker
     )
   }
 
@@ -234,6 +231,18 @@ public final class DivKitComponents {
 
   public func setTimers(divData: DivData, cardId: DivCardID) {
     timerStorage.set(cardId: cardId, timers: divData.timers ?? [])
+  }
+
+  private func onVariablesChanged(event: DivVariablesStorage.ChangeEvent) {
+    switch event.kind {
+    case let .global(variables):
+      let cardIds = variableTracker.getAffectedCards(variables: variables)
+      if (!cardIds.isEmpty) {
+        updateCard(.variable(.specific(cardIds)))
+      }
+    case let .local(cardId, _):
+      updateCard(.variable(.specific([cardId])))
+    }
   }
 }
 

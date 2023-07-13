@@ -401,7 +401,6 @@ extension ExpressionTestCase {
   ) -> T? {
     let expression: Expression<T>? = try? ExpressionLink<T>(
       rawValue: expression,
-      validator: nil,
       errorTracker: errorTracker
     ).map { .link($0) } ?? .value(expression as! T)
     let resolver = ExpressionResolver(variables: variables, errorTracker: errorTracker)
@@ -417,10 +416,8 @@ extension ExpressionTestCase {
   }
 
   private func testResolveSingleItem<T: Equatable>(expectedValue: T) {
-    let expression: Expression<T>? = try? ExpressionLink<T>(
-      rawValue: expression,
-      validator: nil
-    ).map { .link($0) }
+    let expression: Expression<T>? = try? ExpressionLink<T>(rawValue: expression)
+      .map { .link($0) }
     let resolver = ExpressionResolver(variables: variables)
     let result = resolver.resolveNumericValue(expression: expression)
     XCTAssertEqual(result, expectedValue, "test: \(name)")
@@ -430,10 +427,8 @@ extension ExpressionTestCase {
     expectedValue: T,
     initializer: (String) -> T?
   ) {
-    let expression: Expression<T>? = try? ExpressionLink<T>(
-      rawValue: expression,
-      validator: nil
-    ).map { .link($0) } ?? .value(expression as! T)
+    let expression: Expression<T>? = try? ExpressionLink<T>(rawValue: expression)
+      .map { .link($0) } ?? .value(expression as! T)
     let resolver = ExpressionResolver(variables: variables)
     let result = resolver.resolveStringBasedValue(
       expression: expression,

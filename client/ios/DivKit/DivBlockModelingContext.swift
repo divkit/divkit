@@ -23,21 +23,27 @@ public struct DivBlockModelingContext {
   public let stateInterceptors: [String: DivStateInterceptor]
   private let variables: DivVariables
   public let layoutDirection: LayoutDirection
-  public var expressionResolver: ExpressionResolver {
-    ExpressionResolver(
-      variables: variables,
-      errorTracker: { [weak errorsStorage] error in
-        errorsStorage?.add(DivBlockModelingRuntimeError(error, path: parentPath))
-      }
-    )
-  }
   public let debugParams: DebugParams
   public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
+  private let variableTracker: DivVariableTracker?
+
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
+
+  public var expressionResolver: ExpressionResolver {
+    ExpressionResolver(
+      variables: variables,
+      errorTracker: { [weak errorsStorage] error in
+        errorsStorage?.add(DivBlockModelingRuntimeError(error, path: parentPath))
+      },
+      variableTracker: { [weak variableTracker] variables in
+        variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
+      }
+    )
+  }
 
   public init(
     cardId: DivCardID,
@@ -60,7 +66,8 @@ public struct DivBlockModelingContext {
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
-    layoutDirection: LayoutDirection = .system
+    layoutDirection: LayoutDirection = .system,
+    variableTracker: DivVariableTracker? = nil
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -74,14 +81,14 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
+    self.variables = variables
     self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage
     self.layoutDirection = layoutDirection
-
-    self.variables = variables
+    self.variableTracker = variableTracker
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {

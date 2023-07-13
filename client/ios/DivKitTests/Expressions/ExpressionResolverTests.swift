@@ -5,14 +5,19 @@ import XCTest
 import CommonCorePublic
 
 final class ExpressionResolverTests: XCTestCase {
-  private let expressionResolver = ExpressionResolver(
+  private lazy var expressionResolver = ExpressionResolver(
     variables: [
       "string_var": .string("string value"),
       "color_var": .color(Color.color(withHexString: "#AABBCC")!),
       "enum_var": .string("first"),
       "url_var": .url(URL(string: "https://some.url")!),
-    ]
+    ],
+    variableTracker: { [unowned self] in
+      self.usedVariables = self.usedVariables.union($0)
+    }
   )
+
+  private var usedVariables: Set<DivVariableName> = []
 
   func test_ResolveString_Constant() {
     XCTAssertEqual(
@@ -81,6 +86,24 @@ final class ExpressionResolverTests: XCTestCase {
       expressionResolver.resolveUrl(expression: "@{url_var}"),
       URL(string: "https://some.url")!
     )
+  }
+
+  func test_TracksVariable_InSimpleExpression() {
+    let _ = expressionResolver.resolveString(expression: "@{string_var}")
+
+    XCTAssertEqual(usedVariables, ["string_var"])
+  }
+
+  func test_TracksVariable_InNestedExpression() {
+    let _ = expressionResolver.resolveString(expression: "@{'@{string_var}'}")
+
+    XCTAssertEqual(usedVariables, ["string_var"])
+  }
+
+  func test_TracksVariable_InGetValueFunction() {
+    let _ = expressionResolver.resolveString(expression: "@{getStringValue('string_var', 'default')}")
+
+    XCTAssertTrue(usedVariables.contains("string_var"))
   }
 }
 

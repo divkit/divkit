@@ -15,24 +15,10 @@ public struct ExpressionLink<T> {
   let validator: ExpressionValueValidator<T>?
   let errorTracker: ExpressionErrorTracker?
 
-  init?(
-    expression: String,
-    validator: ExpressionValueValidator<T>?,
-    errorTracker: ExpressionErrorTracker? = nil,
-    resolveNested: Bool = true
-  ) throws {
-    try self.init(
-      rawValue: "@{\(expression)}",
-      validator: validator,
-      errorTracker: errorTracker,
-      resolveNested: resolveNested
-    )
-  }
-
   @usableFromInline
   init?(
     rawValue: String,
-    validator: ExpressionValueValidator<T>?,
+    validator: ExpressionValueValidator<T>? = nil,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
   ) throws {
@@ -63,10 +49,10 @@ public struct ExpressionLink<T> {
           let value = String(currentValue[start...end])
           if resolveNested, let link = try ExpressionLink<String>(
             rawValue: value,
-            validator: nil,
             errorTracker: errorTracker
           ) {
             items.append(.nestedCalcExpression(link))
+            variablesNames.append(contentsOf: link.variablesNames)
           } else {
             let parsedCalcExpression = CalcExpression.parse(value)
             items.append(.calcExpression(parsedCalcExpression))

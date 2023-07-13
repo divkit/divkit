@@ -7,19 +7,24 @@ public typealias ExpressionValueValidator<T> = (T) -> Bool
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
+  public typealias VariableTracker = (Set<DivVariableName>) -> Void
+
   @usableFromInline
   let variables: DivVariables
   private let errorTracker: ExpressionErrorTracker
+  let variableTracker: VariableTracker
 
   public init(
     variables: DivVariables,
-    errorTracker: ExpressionErrorTracker? = nil
+    errorTracker: ExpressionErrorTracker? = nil,
+    variableTracker: @escaping VariableTracker = { _ in }
   ) {
     self.variables = variables
     self.errorTracker = {
       DivKitLogger.error($0.description)
       errorTracker?($0)
     }
+    self.variableTracker = variableTracker
   }
 
   public func resolveString(expression: String) -> String {
@@ -60,6 +65,7 @@ public final class ExpressionResolver {
     case let .value(val):
       return resolveEscaping(val)
     case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateStringBasedValue(
         link: link,
         initializer: initializer
@@ -69,7 +75,29 @@ public final class ExpressionResolver {
     }
   }
 
-  func resolveEscaping<T>(_ value: T?) -> T? {
+  func resolveNumericValue<T>(
+    expression: Expression<T>?
+  ) -> T? {
+    switch expression {
+    case let .value(val):
+      return val
+    case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
+      return evaluateSingleItem(link: link)
+    case .none:
+      return nil
+    }
+  }
+
+  @inlinable
+  func getVariableValue<T>(_ name: String) -> T? {
+    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
+      return nil
+    }
+    return value
+  }
+
+  private func resolveEscaping<T>(_ value: T?) -> T? {
     guard var value = value as? String, value.contains("\\") else {
       return value
     }
@@ -101,24 +129,7 @@ public final class ExpressionResolver {
     return value as? T
   }
 
-  @inlinable
-  func resolveNumericValue<T>(
-    expression: Expression<T>?
-  ) -> T? {
-    switch expression {
-    case let .value(val):
-      return val
-    case let .link(link):
-      return evaluateSingleItem(
-        link: link
-      )
-    case .none:
-      return nil
-    }
-  }
-
-  @usableFromInline
-  func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
+  private func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
     guard link.items.count == 1,
           case let .calcExpression(parsedExpression) = link.items.first
     else {
@@ -148,8 +159,7 @@ public final class ExpressionResolver {
     }
   }
 
-  @usableFromInline
-  func evaluateStringBasedValue<T>(
+  private func evaluateStringBasedValue<T>(
     link: ExpressionLink<T>,
     initializer: (String) -> T?
   ) -> T? {
@@ -186,8 +196,7 @@ public final class ExpressionResolver {
           initializer: { $0 }
         ) {
           let link = try? ExpressionLink<String>(
-            expression: expression,
-            validator: nil,
+            rawValue: "@{\(expression)}",
             errorTracker: link.errorTracker,
             resolveNested: false
           )
@@ -211,14 +220,6 @@ public final class ExpressionResolver {
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
   }
 
-  @inlinable
-  func getVariableValue<T>(_ name: String) -> T? {
-    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
-      return nil
-    }
-    return value
-  }
-
   private func validatedValue<T>(
     value: T?,
     validator: ExpressionValueValidator<T>?,
@@ -239,7 +240,7 @@ public final class ExpressionResolver {
     expression: String,
     initializer: (String) -> T?
   ) -> T? {
-    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression, validator: nil) else {
+    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression) else {
       return nil
     }
     return resolveStringBasedValue(

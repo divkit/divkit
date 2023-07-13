@@ -16,39 +16,157 @@ final class DivTriggerTests: XCTestCase {
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
     actionHandler: actionHandler,
-    urlOpener: { [unowned self] in
-      self.openedUrls.append($0)
+    urlOpener: { [unowned self] _ in
+      self.triggersCount += 1
     }
   )
 
-  private var openedUrls: [URL] = []
+  private var triggersCount = 0
 
-  func test_WhenVariableDeclared_PerformsActions() {
-    for mode in DivTrigger.Mode.allCases {
-      let trigger = DivTrigger(
-        actions: [DivAction(logId: "1", url: .value(actionURL))],
-        condition: .link(try! ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
-        mode: .value(mode)
-      )
-      triggerStorage.set(cardId: "id", triggers: [trigger])
-      variablesStorage.set(variables: ["sample_variable": .bool(true)], triggerUpdate: true)
-    }
+  func test_set_DoesNoTrigger_WhenConditionHasNoVariables() throws {
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: .value(true),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
 
-    XCTAssertEqual(openedUrls, [actionURL, actionURL])
+    XCTAssertEqual(triggersCount, 0)
   }
 
-  func test_WhenTriggersSetAfterVariableDeclaration_PerformsActions() {
-    for mode in DivTrigger.Mode.allCases {
-      let trigger = DivTrigger(
-        actions: [DivAction(logId: "1", url: .value(actionURL))],
-        condition: .link(try! ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
-        mode: .value(mode)
-      )
-      variablesStorage.set(variables: ["sample_variable": .bool(true)], triggerUpdate: true)
-      triggerStorage.set(cardId: "id", triggers: [trigger])
-    }
+  func test_set_DoesNotTrigger_WhenConditionIsFalse() {
+    setVariable("should_trigger", false)
 
-    XCTAssertEqual(openedUrls, [actionURL, actionURL])
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_set_Triggers_WhenConditionIsTrue_OnConditionMode() {
+    setVariable("should_trigger", true)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_set_Triggers_WhenConditionIsTrue_OnVariableMode() {
+    setVariable("should_trigger", true)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onVariable)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_Triggers_WhenVariableIsSet() {
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("should_trigger", true)
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_Triggers_WhenVariableIsChanged() {
+    setVariable("should_trigger", false)
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("should_trigger", true)
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_TriggersMultipleTimes_WhenConditionsIsChangedMultipleTimes() {
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{should_trigger}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("should_trigger", true)
+    setVariable("should_trigger", false)
+    setVariable("should_trigger", true)
+
+    XCTAssertEqual(triggersCount, 2)
+  }
+
+  func test_TriggersOnce_WhenVariableIsChangedMultipleTimes_OnConditionMode() {
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{var != 'Hello'}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("var", "H")
+    setVariable("var", "He")
+    setVariable("var", "Hel")
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  func test_TriggersMultipleTimes_WhenVariableIsChangedMultipleTimes_OnVariableMode() {
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{var != 'Hello'}"),
+      mode: .value(.onVariable)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("var", "H")
+    setVariable("var", "He")
+    setVariable("var", "Hel")
+
+    XCTAssertEqual(triggersCount, 3)
+  }
+
+  func test_Triggers_WhenVariableInNestedExpressionIsChanged() throws {
+    try XCTSkipIf(true, "Test is broken. Numeric/Bool properties does not support nested expressions.")
+
+    let trigger = DivTrigger(
+      actions: [action],
+      condition: expression("@{'@{var}' == 'OK'}"),
+      mode: .value(.onCondition)
+    )
+    triggerStorage.set(cardId: "id", triggers: [trigger])
+
+    setVariable("var", "OK")
+
+    XCTAssertEqual(triggersCount, 1)
+  }
+
+  private func setVariable(_ name: DivVariableName, _ value: Bool) {
+    variablesStorage.set(variables: [name: .bool(value)], triggerUpdate: true)
+  }
+
+  private func setVariable(_ name: DivVariableName, _ value: String) {
+    variablesStorage.set(variables: [name: .string(value)], triggerUpdate: true)
   }
 }
 
@@ -69,4 +187,8 @@ private class FakeDivPatchDownloader: DivPatchProvider {
   func cancelRequests() {}
 }
 
-private let actionURL = URL(string: "action://host")!
+private let action = DivAction(logId: "1", url: .value(URL(string: "action://host")!))
+
+private func expression(_ expression: String) -> Expression<Bool> {
+  .link(try! ExpressionLink(rawValue: expression)!)
+}

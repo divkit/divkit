@@ -70,6 +70,7 @@ enum ValueFunctions: String, CaseIterable {
 extension ExpressionResolver {
   fileprivate func getValueFunction<T>() -> GetOrDefault<T> {
     { name, fallbackValue in
+      self.variableTracker([DivVariableName(rawValue: name)])
       guard let value = self.getValue(name) else {
         return fallbackValue
       }
@@ -81,11 +82,11 @@ extension ExpressionResolver {
     }
   }
 
-  fileprivate func getValueFunctionWithTransform<
-    T,
-    U
-  >(transform: @escaping (U) throws -> T) -> GetOrDefaultWithTransform<U, T> {
+  fileprivate func getValueFunctionWithTransform<T, U>(
+    transform: @escaping (U) throws -> T
+  ) -> GetOrDefaultWithTransform<U, T> {
     { name, fallbackValue in
+      self.variableTracker([DivVariableName(rawValue: name)])
       guard let value = self.getValue(name) else {
         return try transform(fallbackValue)
       }

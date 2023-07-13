@@ -142,8 +142,8 @@ extension DivTrigger {
 extension Expression {
   fileprivate var variablesNames: Set<DivVariableName> {
     switch self {
-    case let .link(resolver):
-      return Set(resolver.variablesNames.map(DivVariableName.init(rawValue:)))
+    case let .link(link):
+      return Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
     case .value:
       return []
     }
