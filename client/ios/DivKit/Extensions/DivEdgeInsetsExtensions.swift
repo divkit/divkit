@@ -18,7 +18,7 @@ extension DivEdgeInsets {
     let end = resolveEnd(context.expressionResolver).flatMap(unit.makeScaledValue)
 
     if start != nil || end != nil {
-      switch (context.layoutDirection.uiLayoutDirection) {
+      switch context.layoutDirection {
       case .rightToLeft:
         right = start ?? 0
         left = end ?? 0

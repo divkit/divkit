@@ -31,6 +31,7 @@ struct ContainerBlockLayout {
   public private(set) var blockFrames: [CGRect] = []
   public private(set) var ascent: CGFloat?
   let gaps: [CGFloat]
+  let blockLayoutDirection: UserInterfaceLayoutDirection
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
   let axialAlignment: ContainerBlock.AxialAlignment
@@ -43,6 +44,7 @@ struct ContainerBlockLayout {
     separator: ContainerBlock.Separator? = nil,
     lineSeparator: ContainerBlock.Separator? = nil,
     gaps: [CGFloat],
+    blockLayoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode,
     axialAlignment: ContainerBlock.AxialAlignment,
@@ -51,6 +53,7 @@ struct ContainerBlockLayout {
     needCompressConstrainedBlocks: Bool = true
   ) {
     precondition(gaps.count == children.count + 1)
+    self.blockLayoutDirection = blockLayoutDirection
     self.gaps = gaps
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
@@ -87,12 +90,17 @@ struct ContainerBlockLayout {
   private func calculateNoWrapLayoutFrames(
     children: [ContainerBlock.Child]
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
+    var children = children
     var frames = [CGRect]()
     var containerAscent: CGFloat?
     let gapsSize = gaps.reduce(0, +)
     var shift = CGPoint(x: 0, y: 0)
     switch layoutDirection {
     case .horizontal:
+      if blockLayoutDirection == .rightToLeft {
+        children.reverse()
+      }
+
       let horizontallyResizableBlocks = children.map { $0.content }
         .filter { $0.isHorizontallyResizable }
       let widthOfHorizontallyNonResizableBlocks =

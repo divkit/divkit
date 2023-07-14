@@ -22,7 +22,7 @@ public struct DivBlockModelingContext {
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
   private let variables: DivVariables
-  public let layoutDirection: LayoutDirection
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let debugParams: DebugParams
   public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
@@ -66,7 +66,7 @@ public struct DivBlockModelingContext {
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
-    layoutDirection: LayoutDirection = .system,
+    layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
     variableTracker: DivVariableTracker? = nil
   ) {
     self.cardId = cardId

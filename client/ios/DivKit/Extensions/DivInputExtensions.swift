@@ -72,11 +72,11 @@ extension DivInput: DivBlockModeling {
 extension DivAlignmentHorizontal {
   fileprivate var system: TextAlignment {
     switch self {
-    case .left:
+    case .left, .start:
       return .left
     case .center:
       return .center
-    case .right:
+    case .right, .end:
       return .right
     }
   }

@@ -34,7 +34,7 @@ extension DivBase {
 
     let internalInsets = options.contains(.noPaddings)
       ? .zero
-    : paddings.makeEdgeInsets(context: context)
+      : paddings.makeEdgeInsets(context: context)
     block = block.addingEdgeInsets(internalInsets)
 
     let externalInsets = margins.makeEdgeInsets(context: context)

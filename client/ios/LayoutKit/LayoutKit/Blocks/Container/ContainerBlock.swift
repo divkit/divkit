@@ -88,6 +88,7 @@ public final class ContainerBlock: BlockWithLayout {
     var nonResizableSize: (width: CGFloat, height: CGFloat?)?
   }
 
+  public let blockLayoutDirection: UserInterfaceLayoutDirection
   public let layoutDirection: LayoutDirection
   public let layoutMode: LayoutMode
   public let widthTrait: LayoutTrait
@@ -107,6 +108,7 @@ public final class ContainerBlock: BlockWithLayout {
   private var cached = CachedSizes()
 
   public init(
+    blockLayoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     layoutDirection: LayoutDirection,
     layoutMode: LayoutMode = .noWrap,
     widthTrait: LayoutTrait = .resizable,
@@ -132,6 +134,7 @@ public final class ContainerBlock: BlockWithLayout {
       throw Error.childAndGapCountMismatch
     }
 
+    self.blockLayoutDirection = blockLayoutDirection
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
     self.widthTrait = widthTrait
@@ -168,6 +171,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -295,6 +299,7 @@ public final class ContainerBlock: BlockWithLayout {
         separator: separator,
         lineSeparator: lineSeparator,
         gaps: gaps,
+        blockLayoutDirection: blockLayoutDirection,
         layoutDirection: layoutDirection,
         layoutMode: layoutMode,
         axialAlignment: axialAlignment,
@@ -380,6 +385,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -433,6 +439,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,

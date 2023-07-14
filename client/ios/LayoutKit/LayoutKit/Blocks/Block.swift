@@ -42,9 +42,13 @@ public protocol Block: AnyObject,
   var minHeight: CGFloat { get }
 
   func equals(_ other: Block) -> Bool
+
+  var blockLayoutDirection: UserInterfaceLayoutDirection { get }
 }
 
 extension Block {
+  public var blockLayoutDirection: UserInterfaceLayoutDirection { .leftToRight }
+
   public var calculateWidthFirst: Bool { true }
 
   public func widthOfHorizontallyNonResizableBlock(forHeight _: CGFloat) -> CGFloat {

@@ -16,7 +16,7 @@ public final class DivKitComponents {
   public let flagsInfo: DivFlagsInfo
   public let fontProvider: DivFontProvider
   public let imageHolderFactory: ImageHolderFactory
-  public let layoutDirection: LayoutDirection
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
   public let safeAreaManager: DivSafeAreaManager
@@ -40,7 +40,7 @@ public final class DivKitComponents {
     flagsInfo: DivFlagsInfo = .default,
     fontProvider: DivFontProvider? = nil,
     imageHolderFactory: ImageHolderFactory? = nil,
-    layoutDirection: LayoutDirection = .system,
+    layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,

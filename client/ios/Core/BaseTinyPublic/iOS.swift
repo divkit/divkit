@@ -10,6 +10,14 @@ public typealias SystemShadow = NSShadow
 
 public typealias EdgeInsets = UIEdgeInsets
 
+public typealias UserInterfaceLayoutDirection = UIUserInterfaceLayoutDirection
+
+extension UIUserInterfaceLayoutDirection {
+  public static var system: UIUserInterfaceLayoutDirection {
+    return UIApplication.shared.userInterfaceLayoutDirection
+  }
+}
+
 extension NSShadow {
   public var cgColor: CGColor? { (shadowColor as? UIColor)?.cgColor }
 }
