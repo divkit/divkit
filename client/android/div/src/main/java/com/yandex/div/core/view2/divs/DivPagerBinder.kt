@@ -181,12 +181,20 @@ internal class DivPagerBinder @Inject constructor(
         val orientation = div.orientation.evaluate(resolver)
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
         val startPadding = if (orientation == DivPager.Orientation.HORIZONTAL) {
-            div.paddings.left.evaluate(resolver).dpToPxF(metrics)
+            if (div.paddings.start != null) {
+                div.paddings.start?.evaluate(resolver).dpToPxF(metrics)
+            } else {
+                div.paddings.left.evaluate(resolver).dpToPxF(metrics)
+            }
         } else {
             div.paddings.top.evaluate(resolver).dpToPxF(metrics)
         }
         val endPadding = if (orientation == DivPager.Orientation.HORIZONTAL) {
-            div.paddings.right.evaluate(resolver).dpToPxF(metrics)
+            if (div.paddings.end != null) {
+                div.paddings.end?.evaluate(resolver).dpToPxF(metrics)
+            } else {
+                div.paddings.right.evaluate(resolver).dpToPxF(metrics)
+            }
         } else {
             div.paddings.bottom.evaluate(resolver).dpToPxF(metrics)
         }

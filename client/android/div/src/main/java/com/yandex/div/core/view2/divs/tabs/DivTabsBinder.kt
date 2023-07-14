@@ -402,16 +402,34 @@ internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: Expres
     val paddings = style.paddings
     val metrics = resources.displayMetrics
     val applyTabPaddings = { _: Any? ->
-        setTabPadding(
-            paddings.left.evaluate(resolver).dpToPx(metrics), paddings.top.evaluate(resolver).dpToPx(metrics),
-            paddings.right.evaluate(resolver).dpToPx(metrics), paddings.bottom.evaluate(resolver).dpToPx(metrics)
-        )
+        if (paddings.start != null || paddings.end != null) {
+            setTabPadding(
+                    paddings.start?.evaluate(resolver).dpToPx(metrics),
+                    paddings.top.evaluate(resolver).dpToPx(metrics),
+                    paddings.end?.evaluate(resolver).dpToPx(metrics),
+                    paddings.bottom.evaluate(resolver).dpToPx(metrics)
+            )
+        } else {
+            setTabPadding(
+                    paddings.left.evaluate(resolver).dpToPx(metrics),
+                    paddings.top.evaluate(resolver).dpToPx(metrics),
+                    paddings.right.evaluate(resolver).dpToPx(metrics),
+                    paddings.bottom.evaluate(resolver).dpToPx(metrics)
+            )
+        }
     }
 
-    subscriber.addSubscription(paddings.left.observe(resolver, applyTabPaddings))
-    subscriber.addSubscription(paddings.right.observe(resolver, applyTabPaddings))
     subscriber.addSubscription(paddings.top.observe(resolver, applyTabPaddings))
     subscriber.addSubscription(paddings.bottom.observe(resolver, applyTabPaddings))
+    if (paddings.start != null || paddings.end != null) {
+       subscriber.addSubscription(paddings.start?.observe(resolver, applyTabPaddings)
+                ?: Disposable.NULL)
+        subscriber.addSubscription(paddings.end?.observe(resolver, applyTabPaddings)
+                ?: Disposable.NULL)
+    } else {
+        subscriber.addSubscription(paddings.left.observe(resolver, applyTabPaddings))
+        subscriber.addSubscription(paddings.right.observe(resolver, applyTabPaddings))
+    }
     applyTabPaddings(null)
 
     fun Expression<DivFontWeight>.addToSubscriber(callback: (DivFontWeight) -> Unit) {

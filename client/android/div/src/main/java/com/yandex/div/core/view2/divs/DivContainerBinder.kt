@@ -1,10 +1,12 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -311,9 +313,21 @@ internal class DivContainerBinder @Inject constructor(
         val metrics = view.resources.displayMetrics
         val callback = { _: Any? ->
             val sizeUnit = margins.unit.evaluate(resolver)
-
-            val left = margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit)
-            val right = margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            var left = 0
+            var right = 0
+            if (margins.start != null || margins.end != null) {
+                val layoutDirection = view.resources.configuration.layoutDirection
+                if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                    left = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                    right = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                } else {
+                    left = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                    right = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                }
+            } else {
+                left = margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                right = margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            }
             val top = margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit)
             val bottom = margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
 
@@ -322,10 +336,15 @@ internal class DivContainerBinder @Inject constructor(
 
         callback(null)
         addSubscription(margins.unit.observe(resolver, callback))
-        addSubscription(margins.left.observe(resolver, callback))
         addSubscription(margins.top.observe(resolver, callback))
-        addSubscription(margins.right.observe(resolver, callback))
         addSubscription(margins.bottom.observe(resolver, callback))
+        if (margins.start != null || margins.end != null) {
+            addSubscription(margins.start?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(margins.end?.observe(resolver, callback) ?: Disposable.NULL)
+        } else {
+            addSubscription(margins.left.observe(resolver, callback))
+            addSubscription(margins.right.observe(resolver, callback))
+        }
     }
 
     private fun observeChildViewAlignment(

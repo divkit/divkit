@@ -86,20 +86,43 @@ internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionReso
     val metrics = resources.displayMetrics
     when(insets?.unit?.evaluate(resolver)) {
         DivSizeUnit.DP -> {
-            setPadding(
-                insets.left.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
-                insets.right.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics))
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
+                        insets.end?.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics)
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
+                        insets.right.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics))
+            }
         }
         DivSizeUnit.SP -> {
-            setPadding(
-                insets.left.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
-                insets.right.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics))
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
+                        insets.end?.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics)
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
+                        insets.right.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics))
+            }
         }
         DivSizeUnit.PX -> {
-            setPadding(
-                    insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
-                    insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
-            )
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver)?.toIntSafely() ?: 0,
+                        insets.top.evaluate(resolver).toIntSafely(),
+                        insets.end?.evaluate(resolver)?.toIntSafely() ?: 0,
+                        insets.bottom.evaluate(resolver).toIntSafely()
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
+                        insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
+                )
+            }
         }
     }
 }
@@ -112,6 +135,8 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
     var topMargin = 0
     var rightMargin = 0
     var bottomMargin = 0
+    var startMargin : Int? = null
+    var endMargin : Int? = null
 
     if (insets != null) {
         val unit = insets.unit.evaluate(resolver)
@@ -119,14 +144,26 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
         topMargin = insets.top.evaluate(resolver).unitToPx(metrics, unit)
         rightMargin = insets.right.evaluate(resolver).unitToPx(metrics, unit)
         bottomMargin = insets.bottom.evaluate(resolver).unitToPx(metrics, unit)
+        insets.start?.let {
+            startMargin = it.evaluate(resolver).unitToPx(metrics, unit)
+        }
+        insets.end?.let {
+            endMargin = it.evaluate(resolver).unitToPx(metrics, unit)
+        }
     }
 
     if (lp.leftMargin != leftMargin || lp.topMargin != topMargin
-        || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin) {
+        || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin
+        || startMargin != null || endMargin != null) {
         lp.leftMargin = leftMargin
         lp.topMargin = topMargin
-        lp.rightMargin = rightMargin
-        lp.bottomMargin = bottomMargin
+        if (startMargin != null || endMargin != null) {
+            lp.marginStart = startMargin ?: 0
+            lp.marginEnd = endMargin ?: 0
+        } else {
+            lp.rightMargin = rightMargin
+            lp.bottomMargin = bottomMargin
+        }
         requestLayout()
     }
 }

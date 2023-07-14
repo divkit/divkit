@@ -37,7 +37,9 @@
             "top": 40,
             "bottom": 10,
             "left": 20,
-            "right": 20
+            "right": 20,
+            "start": 20,
+            "end": 20
           },
           "items": [
             {
@@ -126,6 +128,7 @@
                       ],
                       "margins": {
                         "left": 8,
+                        "start": 8,
                         "bottom": 10
                       }
                     },
@@ -152,7 +155,8 @@
                         }
                       ],
                       "margins": {
-                        "left": 8
+                        "left": 8,
+                        "start": 8
                       },
                       "height": {
                         "type": "wrap_content"
