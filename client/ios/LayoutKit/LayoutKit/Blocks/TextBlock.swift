@@ -124,7 +124,7 @@ public final class TextBlock: BlockWithTraits {
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       if let cached = cachedIntrinsicHeight,
          cached.width.isApproximatelyEqualTo(width) {
         return cached.height
@@ -137,7 +137,7 @@ public final class TextBlock: BlockWithTraits {
           minNumberOfHiddenLines: minNumberOfHiddenLines
         )
       )
-      let result = constrained ? height : clamp(height, min: minSize, max: maxSize)
+      let result = clamp(height, min: minSize, max: maxSize)
       cachedIntrinsicHeight = (width: width, height: result)
       return result
     case let .fixed(value):

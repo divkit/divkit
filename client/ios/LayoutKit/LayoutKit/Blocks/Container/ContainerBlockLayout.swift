@@ -36,6 +36,7 @@ struct ContainerBlockLayout {
   let axialAlignment: ContainerBlock.AxialAlignment
   let crossAlignment: ContainerBlock.CrossAlignment
   let size: CGSize
+  let needCompressConstrainedBlocks: Bool
 
   public init(
     children: [ContainerBlock.Child],
@@ -46,7 +47,8 @@ struct ContainerBlockLayout {
     layoutMode: ContainerBlock.LayoutMode,
     axialAlignment: ContainerBlock.AxialAlignment,
     crossAlignment: ContainerBlock.CrossAlignment,
-    size: CGSize
+    size: CGSize,
+    needCompressConstrainedBlocks: Bool = true
   ) {
     precondition(gaps.count == children.count + 1)
     self.gaps = gaps
@@ -55,6 +57,7 @@ struct ContainerBlockLayout {
     self.axialAlignment = axialAlignment
     self.crossAlignment = crossAlignment
     self.size = size
+    self.needCompressConstrainedBlocks = needCompressConstrainedBlocks
     (self.childrenWithSeparators, self.blockFrames, self.ascent) = calculateBlockFrames(
       children: children,
       separator: separator,
@@ -127,7 +130,7 @@ struct ContainerBlockLayout {
           widthOfHorizontallyResizableBlock: widthIfResizable,
           heightOfVerticallyResizableBlock: size.height,
           constrainedWidth: widthIfConstrained,
-          constrainedHeight: size.height
+          constrainedHeight: needCompressConstrainedBlocks ? size.height : .infinity
         )
         containerAscent = getMaxAscent(
           current: containerAscent, child: child, childSize: blockSize
@@ -140,55 +143,66 @@ struct ContainerBlockLayout {
       frames.addBaselineOffset(children: children, ascent: containerAscent)
       shift.x = axialAlignment.offset(forAvailableSpace: size.width, contentSize: x)
     case .vertical:
-      let verticallyResizableBlocks = children.map { $0.content }
-        .filter { $0.isVerticallyResizable }
-      let heightOfVerticallyNonResizableBlocks =
-        heightsOfVerticallyNonResizableBlocksIn(children.map { $0.content }, forWidth: size.width)
-          .reduce(0, +)
-      let heightAvailableForResizableBlocks = (
-        size.height - heightOfVerticallyNonResizableBlocks - gapsSize
-      )
-      let resizableBlockWeights = verticallyResizableBlocks
+      let blocks = children.map { $0.content }
+
+      let blockSizes = blocks.map {
+        (
+          $0,
+          $0
+            .sizeFor(
+              widthOfHorizontallyResizableBlock: size.width,
+              heightOfVerticallyResizableBlock: size.height,
+              constrainedWidth: size.width,
+              constrainedHeight: .infinity
+            ).height
+        )
+      }
+
+      let heightOfVerticallyNonResizableBlocks = blockSizes.filter { !$0.0.isVerticallyResizable }
+        .map(\.1).reduce(0, +)
+
+      let heightAvailableForResizableBlocks = size
+        .height - heightOfVerticallyNonResizableBlocks - gapsSize
+
+      let verticallyResizableBlocks = blocks.filter { $0.isVerticallyResizable }
+      let verticallyResizableBlocksWeight = verticallyResizableBlocks
         .map { $0.weightOfVerticallyResizableBlock.rawValue }
-      let heightAvailablePerWeightUnit = max(0, heightAvailableForResizableBlocks) /
-        resizableBlockWeights.reduce(0, +)
-      var y = gaps[0]
+        .reduce(0, +)
       var blockMeasure = ResizableBlockMeasure(
         resizableBlockCount: verticallyResizableBlocks.count,
-        lengthAvailablePerWeightUnit: heightAvailablePerWeightUnit,
+        lengthAvailablePerWeightUnit: max(0, heightAvailableForResizableBlocks) /
+          verticallyResizableBlocksWeight,
         lengthAvailableForResizableBlocks: heightAvailableForResizableBlocks
       )
 
-      let verticallyConstrainedBlocks = children.map { $0.content }
-        .filter { $0.isVerticallyConstrained }
       var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
-        blockSizes: verticallyConstrainedBlocks
-          .map {
-            .init(
-              size: $0.heightOfVerticallyNonResizableBlock(forWidth: size.width),
-              minSize: $0.minHeight
-            )
-          },
+        blockSizes: blockSizes.filter { $0.0.isVerticallyConstrained }.map {
+          ConstrainedBlockSize(size: $0.1, minSize: $0.0.minHeight)
+        },
         lengthToDecrease: heightAvailableForResizableBlocks < 0 ?
-          -heightAvailableForResizableBlocks :
-          0
+          -heightAvailableForResizableBlocks : 0
       )
 
+      var y = gaps[0]
       zip(children, gaps.dropFirst()).forEach { child, gapAfterBlock in
         let block = child.content
-        var width = block.isHorizontallyResizable
-          ? size.width
-          : block.widthOfHorizontallyNonResizableBlock
-        width = block.isHorizontallyConstrained ? min(width, size.width) : width
+        let width: CGFloat
+        if block.isHorizontallyResizable {
+          width = size.width
+        } else {
+          let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
+          width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
+        }
+        let height: CGFloat
+        if block.isVerticallyResizable {
+          height = blockMeasure.measureNext(block.verticalMeasure)
+        } else if block.isVerticallyConstrained {
+          height = constrainedBlockSizesIterator.next() ?? 0
+        } else {
+          height = block.heightOfVerticallyNonResizableBlock(forWidth: width)
+        }
         let alignmentSpace = size.width - width
         let x = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
-        let heightIfResizable = blockMeasure.measureNext(block.verticalMeasure)
-        var height = block.isVerticallyResizable
-          ? heightIfResizable
-          : block.heightOfVerticallyNonResizableBlock(forWidth: width)
-        if block.isVerticallyConstrained {
-          height = constrainedBlockSizesIterator.next() ?? 0
-        }
         frames.append(CGRect(x: x, y: y, width: width, height: height))
         y += height + gapAfterBlock
       }

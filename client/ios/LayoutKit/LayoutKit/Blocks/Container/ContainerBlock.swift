@@ -299,7 +299,8 @@ public final class ContainerBlock: BlockWithLayout {
         layoutMode: layoutMode,
         axialAlignment: axialAlignment,
         crossAlignment: crossAlignment,
-        size: CGSize(width: width, height: .zero)
+        size: CGSize(width: width, height: .zero),
+        needCompressConstrainedBlocks: false
       )
       result = layout.blockFrames.map { $0.maxY }.max() ?? 0
     case .vertical:
