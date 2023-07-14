@@ -862,9 +862,9 @@
       "file": "action_animation/button_press_action_animations.json"
     },
     {
-      "title": "Visibility_actions in gallery",
+      "title": "Visibility actions in gallery",
       "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Scroll the gallery",
@@ -897,9 +897,9 @@
       "file": "gallery/gallery_swipe_disappear_action.json"
     },
     {
-      "title": "Visibility_actions in pager",
+      "title": "Visibility actions in pager",
       "tags": [
-        "Visibility_actions",
+        "visibility_actions",
         "DivPager"
       ],
       "steps": [
@@ -910,28 +910,12 @@
         "Pager data was opened",
         "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
       ],
-      "file": "action_visibility/pager.json"
-    },
-    {
-      "title": "Visibility_actions on change page in pager",
-      "tags": [
-        "Visibility_actions",
-        "DivPager"
-      ],
-      "steps": [
-        "Swipe cards",
-        "Check logs"
-      ],
-      "expected_results": [
-        "Pager data is logged",
-        "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
-      ],
-      "file": "action_visibility/swipe_div_pager.json"
+      "file": "visibility_actions/pager.json"
     },
     {
       "title": "Visibility actions performed and logged in pager",
       "tags": [
-        "Visibility_actions",
+        "visibility_actions",
         "DivPager"
       ],
       "steps": [
@@ -942,26 +926,12 @@
         "Logged evens logViewShown(cardId = ..., id = content_item_show0) logViewShown(cardId = ..., id = container)",
         "Cards description was changed"
       ],
-      "file": "action_visibility/swipe_div_pager.json"
-    },
-    {
-      "title": "Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility",
-      "tags": [
-        "Visibility_actions",
-        "DivPager"
-      ],
-      "steps": [
-        "Check logs"
-      ],
-      "expected_results": [
-        "First element logged, example logViewShown(cardId = ..., id = content_item_show:0) logViewShown(cardId = ..., id = goose_shown)"
-      ],
-      "file": "action_visibility/pager.json"
+      "file": "visibility_actions/swipe_div_pager.json"
     },
     {
       "title": "Send select Pager using Div2View.tryLogVisibility",
       "tags": [
-        "Visibility_actions",
+        "visibility_actions",
         "DivPager"
       ],
       "platforms": [
@@ -977,27 +947,12 @@
         "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
         "Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
       ],
-      "file": "action_visibility/pager_selected_actions.json"
+      "file": "visibility_actions/pager_selected_actions.json"
     },
     {
-      "title": "Grouped bulkActions logged in 'dispatchActions:'",
+      "title": "Visibility actions for default_item",
       "tags": [
-        "Visibility_actions"
-      ],
-      "steps": [
-        "Swipe to change tab",
-        "Check logs"
-      ],
-      "expected_results": [
-        "Tabs changes on swipe",
-        "Logged item's visibility, exaple logViewShown(cardId = ..., id = content_item_show) logViewShown(cardId = ..., id = container)"
-      ],
-      "file": "action_visibility/swipe_div_pager.json"
-    },
-    {
-      "title": "Visibility_actions for default_item",
-      "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Check logs"
@@ -1006,12 +961,12 @@
         "Card is opened",
         "Card visibility logged, example logViewShown(cardId = ..., id = comments_counter_show:4)"
       ],
-      "file": "action_visibility/default_item.json"
+      "file": "visibility_actions/default_item.json"
     },
     {
       "title": "Nested visibility actions",
       "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Click EXPAND",
@@ -1021,7 +976,36 @@
         "Elements are expanded",
         "Visibility actions logged, example logViewShown(cardId = ..., id = separator) logViewShown(cardId = ..., id = text) logViewShown(cardId = ..., id = text2) logViewShown(cardId = ..., id = comment_state) logViewShown(cardId = ..., id = comment_01) logViewShown(cardId = ..., id = comment_02) logViewShown(cardId = ..., id = comment_03) logViewShown(cardId = ..., id = comment_04)"
       ],
-      "file": "action_visibility/article.json"
+      "file": "visibility_actions/article.json"
+    },
+    {
+      "title": "Visibility action in visible block",
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/visibility_aciton.json"
+    },
+    {
+      "title": "Visibility actions in DivState",
+      "tags": [
+        "DivState",
+        "visibility_actions"
+      ],
+      "steps": [
+        "Press 'State 2' button",
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "State changes",
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/states.json"
     },
     {
       "title": "Variables in gallery",
@@ -1138,7 +1122,7 @@
         "On click on test button text field set correct visibility.",
         "Showing text field is logged."
       ],
-      "file": "action_visibility/set_visibility.json"
+      "file": "set_visibility.json"
     },
     {
       "title": "Showing animation on image loaded",

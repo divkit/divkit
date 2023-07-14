@@ -59,7 +59,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerVisibilityActionsLog() {
         pager {
-            testAsset = "regression_test_data/action_visibility/pager.json"
+            testAsset = "regression_test_data/visibility_actions/pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -71,7 +71,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerSwipeVisibilityActionsLog() {
         pager {
-            testAsset = "regression_test_data/action_visibility/swipe_div_pager.json"
+            testAsset = "regression_test_data/visibility_actions/swipe_div_pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -85,7 +85,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerSwipeVisibilityActions() {
         pager {
-            testAsset = "regression_test_data/action_visibility/swipe_div_pager.json"
+            testAsset = "regression_test_data/visibility_actions/swipe_div_pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -98,7 +98,7 @@ class VisibilityActionsTest {
     @Test
     fun firstPagePagerVisibilityActions() {
         pager {
-            testAsset = "regression_test_data/action_visibility/pager.json"
+            testAsset = "regression_test_data/visibility_actions/pager.json"
             activityRule.buildContainer()
         }
 
@@ -113,7 +113,7 @@ class VisibilityActionsTest {
     @Test
     fun defaultItemPagerVisibilityActions() {
         pager {
-            testAsset = "regression_test_data/action_visibility/default_item.json"
+            testAsset = "regression_test_data/visibility_actions/default_item.json"
             activityRule.buildContainer()
         }
         visibilityActions {

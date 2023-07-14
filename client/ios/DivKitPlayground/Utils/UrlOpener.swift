@@ -11,7 +11,7 @@ final class DemoUrlOpener {
     guard url.scheme == divDemoActionScheme && url.host == setDataHost,
           let path = url.queryParamValue(forName: pathParam),
           let regressionFileUrl = RegressionFile.makeUrl(path) else {
-      DemoAppLogger.error("Unhandled URL: \(url)")
+      AppLogger.error("Unhandled URL: \(url)")
       return
     }
     loadJsonUrl(regressionFileUrl)

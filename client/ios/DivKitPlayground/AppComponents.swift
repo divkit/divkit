@@ -34,12 +34,10 @@ enum AppComponents {
       fontProvider: fontProvider,
       patchProvider: DemoPatchProvider(),
       trackVisibility: { logId, cardId in
-        print(
-          """
-          logId = \(logId)
-          cardId = \(cardId.debugDescription)
-          """
-        )
+        AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")
+      },
+      trackDisappear: { logId, cardId in
+        AppLogger.info("Disappear: cardId = \(cardId), logId = \(logId)")
       },
       updateCardAction: updateCardAction,
       playerFactory: DefaultPlayerFactory(),

@@ -87,9 +87,13 @@ open class DivViewController: UIViewController {
 
     let blockSize = blockProvider.block.size(forResizableBlockSize: view.bounds.size)
     cardView.frame = CGRect(origin: .zero, size: blockSize)
-    blockView.frame = cardView.bounds
     scrollView.contentSize = blockSize
 
+    blockView.frame = cardView.bounds
+    blockView.layoutIfNeeded()
+  }
+
+  public override func viewDidLayoutSubviews() {
     onVisibleBoundsChanged(to: scrollView.bounds)
   }
 

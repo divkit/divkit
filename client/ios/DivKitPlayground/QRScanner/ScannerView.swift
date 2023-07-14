@@ -11,7 +11,7 @@ struct ScannerView: UIViewControllerRepresentable {
   func makeUIViewController(context _: Context) -> UIViewController {
     let controller = ScannerViewController(
       logError: { message in
-        DemoAppLogger.error(message)
+        AppLogger.error(message)
       }
     )
     controller.result.currentAndNewValues

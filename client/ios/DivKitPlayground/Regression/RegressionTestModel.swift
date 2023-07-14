@@ -22,7 +22,7 @@ struct RegressionTestsModel: Decodable {
       do {
         value = try T(from: decoder)
       } catch {
-        DemoAppLogger.error(error.localizedDescription)
+        AppLogger.error(error.localizedDescription)
         value = nil
       }
     }

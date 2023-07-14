@@ -4,7 +4,7 @@ describe('regression', () => {
             await this.browser.execute(() => {
                 window.divkitLogs = [];
             });
-            await this.browser.yaOpenRegressionJson('action_visibility/swipe_div_pager');
+            await this.browser.yaOpenRegressionJson('visibility_actions/swipe_div_pager');
         });
 
         hermione.only.in('chromeMobile', 'pointerType="touch" is not supported on firefox');

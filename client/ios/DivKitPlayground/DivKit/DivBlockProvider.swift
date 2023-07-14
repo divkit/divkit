@@ -104,7 +104,7 @@ final class DivBlockProvider {
       + context.errorsStorage.errors.map { UIStatePayload.Error($0 as CustomStringConvertible) }
       + errors
       block = makeErrorsBlock(errors.map { $0.description })
-      DemoAppLogger.error("Failed to build block: \(error)")
+      AppLogger.error("Failed to build block: \(error)")
     }
   }
 
@@ -115,7 +115,7 @@ final class DivBlockProvider {
       errors = [UIStatePayload.Error(error as CustomStringConvertible)] + errors
       block = makeErrorsBlock(errors.map { $0.description })
 
-      DemoAppLogger.error("Failed to update block: \(error)")
+      AppLogger.error("Failed to update block: \(error)")
     }
   }
 
@@ -148,7 +148,7 @@ final class DivBlockProvider {
       errors = [UIStatePayload.Error(error as CustomStringConvertible)]
       block = makeErrorsBlock(errors.map { "\($0.description)" })
 
-      DemoAppLogger.error("Failed to parse DivData: \(error)")
+      AppLogger.error("Failed to parse DivData: \(error)")
       return
     }
 

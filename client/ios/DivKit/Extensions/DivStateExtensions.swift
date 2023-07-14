@@ -99,6 +99,7 @@ extension DivState: DivBlockModeling {
         ),
       ]
     ).addingStateBlock(
+      stateId: activeStateId,
       ids: stateManager.getVisibleIds(statePath: activeStatePath)
     )
   }

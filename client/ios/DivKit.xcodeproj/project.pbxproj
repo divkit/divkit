@@ -47,7 +47,7 @@
 		8C1A375028B4189E00A047C8 /* MetadataCaptureSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374D28B4189E00A047C8 /* MetadataCaptureSession.swift */; };
 		8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374E28B4189E00A047C8 /* ScannerViewController.swift */; };
 		8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374F28B4189E00A047C8 /* ScannerView.swift */; };
-		8C1A376928B41BA100A047C8 /* DemoAppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* DemoAppLogger.swift */; };
+		8C1A376928B41BA100A047C8 /* AppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* AppLogger.swift */; };
 		8C1A376D28B4DC2400A047C8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376C28B4DC2400A047C8 /* SettingsView.swift */; };
 		8C1A377928B4E3E700A047C8 /* WebPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377128B4E3E700A047C8 /* WebPreviewView.swift */; };
 		8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377228B4E3E700A047C8 /* WebPreviewViewController.swift */; };
@@ -284,7 +284,7 @@
 		8C1A374D28B4189E00A047C8 /* MetadataCaptureSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataCaptureSession.swift; sourceTree = "<group>"; };
 		8C1A374E28B4189E00A047C8 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		8C1A374F28B4189E00A047C8 /* ScannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
-		8C1A376828B41BA000A047C8 /* DemoAppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAppLogger.swift; sourceTree = "<group>"; };
+		8C1A376828B41BA000A047C8 /* AppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogger.swift; sourceTree = "<group>"; };
 		8C1A376C28B4DC2400A047C8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8C1A377128B4E3E700A047C8 /* WebPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPreviewView.swift; sourceTree = "<group>"; };
 		8C1A377228B4E3E700A047C8 /* WebPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPreviewViewController.swift; sourceTree = "<group>"; };
@@ -799,15 +799,15 @@
 			isa = PBXGroup;
 			children = (
 				8C7B18832864CA380036EF4C /* Alert.swift */,
-				8C1A376828B41BA000A047C8 /* DemoAppLogger.swift */,
+				8C1A376828B41BA000A047C8 /* AppLogger.swift */,
 				8C1A374828B4187B00A047C8 /* DeviceInfo.swift */,
 				89D02B1928C8EBC40041EC18 /* Palette.swift */,
 				E9E484C029AF434D00C803A8 /* RegressionFile.swift */,
+				8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */,
 				8C2BFA5728C10F5B00A16E9B /* TestData.swift */,
 				893D19632902AD8F005540DF /* TimeMeasure.swift */,
 				8C7B18842864CA380036EF4C /* UrlOpener.swift */,
 				8CF1296228B0021F00351F65 /* UserPreferences.swift */,
-				8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1437,7 +1437,7 @@
 				8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */,
 				8CF1296528B0036F00351F65 /* Themes.swift in Sources */,
 				896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */,
-				8C1A376928B41BA100A047C8 /* DemoAppLogger.swift in Sources */,
+				8C1A376928B41BA100A047C8 /* AppLogger.swift in Sources */,
 				8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */,
 				8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */,
 				8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */,

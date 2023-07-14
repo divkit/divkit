@@ -40,7 +40,7 @@ final class WebPreviewSocket: NSObject {
   func connect(httpUrl: URL) {
     guard let source = URLComponents(url: httpUrl, resolvingAgainstBaseURL: false),
           let uuid = source.queryItems?.first(where: { $0.name == "uuid" })?.value else {
-      DemoAppLogger.error("Invalid web preview URL: \(httpUrl.absoluteString)")
+      AppLogger.error("Invalid web preview URL: \(httpUrl.absoluteString)")
       return
     }
 
@@ -62,7 +62,7 @@ final class WebPreviewSocket: NSObject {
     task.resume()
     task.send(ListenPayload(uuid: uuid)) { [weak self] in
       if let error = $0 {
-        DemoAppLogger.error("Failed to connect to server: \(error)")
+        AppLogger.error("Failed to connect to server: \(error)")
         self?.disconnect(.failed)
         return
       }
@@ -74,7 +74,7 @@ final class WebPreviewSocket: NSObject {
 
   func send(state: UIStatePayload) {
     task?.send(state) {
-      $0.map { DemoAppLogger.error("Failed to send UI state with \($0)") }
+      $0.map { AppLogger.error("Failed to send UI state with \($0)") }
     }
   }
 
@@ -98,7 +98,7 @@ final class WebPreviewSocket: NSObject {
           return try JSONPayload(dictionary: dictionary).message.json
         }
       case let .failure(error):
-        DemoAppLogger.error("Failed to receive message with \(error)")
+        AppLogger.error("Failed to receive message with \(error)")
       }
       self?.listen()
     }

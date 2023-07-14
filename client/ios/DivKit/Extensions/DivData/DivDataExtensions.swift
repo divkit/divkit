@@ -31,6 +31,7 @@ extension DivData: DivBlockModeling {
     )
     return block
       .addingStateBlock(
+        stateId: stateId,
         ids: stateManager.getVisibleIds(statePath: statePath)
       )
       .addingDebugInfo(context: divContext)
