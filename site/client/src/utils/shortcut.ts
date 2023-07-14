@@ -10,6 +10,7 @@ const MODIFIERS = {
 
 const KEYS = {
     BACKSPACE: 8,
+    ALT: 18,
     DELETE: 46,
     LEFT: 37,
     UP: 38,
