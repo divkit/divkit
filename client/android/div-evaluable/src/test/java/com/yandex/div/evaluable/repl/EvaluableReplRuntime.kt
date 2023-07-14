@@ -106,6 +106,7 @@ internal object EvaluableReplRuntime {
                 EvaluableType.STRING -> value
                 EvaluableType.COLOR -> value
                 EvaluableType.DATETIME -> DateTime.parseAsUTC(value)
+                EvaluableType.DICT -> value
             }
             name to convertedValue
         } catch (t: Throwable) {

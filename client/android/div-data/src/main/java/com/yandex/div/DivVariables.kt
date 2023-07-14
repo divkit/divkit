@@ -7,11 +7,13 @@ import android.net.Uri
 import androidx.annotation.ColorInt
 import com.yandex.div2.BoolVariable
 import com.yandex.div2.ColorVariable
+import com.yandex.div2.DictVariable
 import com.yandex.div2.DivVariable
 import com.yandex.div2.IntegerVariable
 import com.yandex.div2.NumberVariable
 import com.yandex.div2.StrVariable
 import com.yandex.div2.UrlVariable
+import org.json.JSONObject
 
 fun integerVariable(name: String, value: Long): DivVariable.Integer {
     return DivVariable.Integer(IntegerVariable(name, value))
@@ -35,4 +37,8 @@ fun colorVariable(name: String, @ColorInt value: Int): DivVariable.Color {
 
 fun urlVariable(name: String, value: Uri): DivVariable.Url {
     return DivVariable.Url(UrlVariable(name, value))
+}
+
+internal fun dictVariable(name: String, value: JSONObject): DivVariable.Dict {
+    return DivVariable.Dict(DictVariable(name, value))
 }
