@@ -366,6 +366,7 @@
       "result_type": "boolean",
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }

@@ -9,7 +9,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"               
             ]
         },
         {
@@ -21,7 +22,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -34,7 +36,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -47,7 +50,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -59,7 +63,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -72,7 +77,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -84,7 +90,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -96,7 +103,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -108,7 +116,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -120,7 +129,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -132,7 +142,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -144,7 +155,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -156,7 +168,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -168,7 +181,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -180,7 +194,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -192,7 +207,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -204,7 +220,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -216,7 +233,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -228,7 +246,8 @@
             },
             "platforms": [
                 "android",
-                "web"
+                "ios",
+                "web"      
             ]
         },
         {
@@ -239,7 +258,8 @@
                 "value": "Failed to evaluate [testRegex('a', '\\\\')]. Invalid regular expression."
             },
             "platforms": [
-                "web"
+                "web",
+                "ios"
             ]
         }
     ]

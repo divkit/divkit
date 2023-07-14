@@ -295,6 +295,12 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_string_regex() throws {
+    let testCases = try makeTestCases(for: "string_regex")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   private func perform<T: Equatable>(on testCases: TestCases, type: ExpressionType<T>) {
     testCases.cases.filter { $0.platforms.contains(.ios) }.forEach {
       testCase = $0

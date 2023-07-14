@@ -229,7 +229,7 @@ final class CalcExpression: CustomStringConvertible {
     func makeOutputMessage(for expression: String) -> String {
       switch self {
       case let .shortMessage(message):
-        return "Failed to evaluate [\(expression)]. \(message)"
+        return "Failed to evaluate [\(expression.escaped)]. \(message)"
       default:
         return self.description
       }
@@ -1434,5 +1434,11 @@ extension UnicodeScalarView {
     case nil:
       throw CalcExpression.Error.emptyExpression
     }
+  }
+}
+
+extension String {
+  fileprivate var escaped: String {
+    replacingOccurrences(of: "\\", with: "\\\\")
   }
 }
