@@ -863,6 +863,9 @@
     },
     {
       "title": "Visibility actions in gallery",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions"
       ],

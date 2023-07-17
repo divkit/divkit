@@ -1,5 +1,5 @@
 describe('regression', () => {
-    describe('Visibility_actions in pager', () => {
+    describe('Visibility actions in pager', () => {
         beforeEach(async function() {
             await this.browser.execute(() => {
                 window.divkitLogs = [];
