@@ -35,9 +35,12 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     fatalError()
   }
 
-  public override func touchesBegan(_ touches: Set<UITouch>, with _: UIEvent?) {
-    if touches.first?.view?.isDescendant(of: tooltipView) == false {
-      close()
+  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    if let touch = touches.first {
+      let point = touch.location(in: self)
+      if !tooltipView.point(inside: tooltipView.convert(point, from: self), with: event) {
+        close()
+      }
     }
   }
 

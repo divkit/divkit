@@ -1852,6 +1852,25 @@
         "OK - content in text"
       ],
       "file": "state/default_state_id.json"
+    },
+    {
+      "title": "Tooltips",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Tooltips",
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips.json"
     }
   ]
 }
