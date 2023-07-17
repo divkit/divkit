@@ -30,6 +30,10 @@
     import { BaseInputMask } from '../../utils/mask/baseInputMask';
     import { updateCurrencyMask } from '../../utils/updateCurrencyMask';
     import { CurrencyInputMask } from '../../utils/mask/currencyInputMask';
+    import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
+    import { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;
@@ -37,10 +41,8 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
-    let input: HTMLInputElement | HTMLTextAreaElement;
-    let holder: HTMLElement;
+    let input: HTMLInputElement | HTMLSpanElement;
     let isPressed = false;
-    let verticalOverflow = false;
     let inputMask: BaseInputMask | null = null;
 
     const variable = json.text_variable;
@@ -55,6 +57,7 @@
     let valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
     let rawValueVariable = rawVariable && rootCtx.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
     let value = '';
+    let contentEditableValue = '';
 
     const jsonMask = rootCtx.getDerivedFromVars(json.mask);
     function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {
@@ -71,7 +74,7 @@
     $: updateMaskData($jsonMask);
 
     $: if (!inputMask && value !== $valueVariable) {
-        value = $valueVariable;
+        value = contentEditableValue = $valueVariable;
     }
 
     $: if (inputMask && inputMask.rawValue !== $rawValueVariable) {
@@ -137,6 +140,18 @@
         highlightColor = correctColor($jsonHighlightColor, 1, highlightColor);
     }
 
+    const jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
+    let alignmentHorizontal: AlignmentHorizontal = 'left';
+    $: {
+        alignmentHorizontal = correctAlignmentHorizontal($jsonAlignmentHorizontal, alignmentHorizontal);
+    }
+
+    const jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
+    let alignmentVertical: AlignmentVertical = 'center';
+    $: {
+        alignmentVertical = correctAlignmentVertical($jsonAlignmentVertical, alignmentVertical);
+    }
+
     const jsonKeyboardType = rootCtx.getDerivedFromVars(json.keyboard_type);
     const KEYBOARD_MAP: Record<KeyboardType, string> = {
         email: 'email',
@@ -169,6 +184,7 @@
     let maxHeight = '';
     let selfPadding: EdgeInsets | null = null;
     let padding = '';
+    let verticalPadding = '';
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
             maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) * (fontSize / 10) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
@@ -179,6 +195,10 @@
             right: (Number(selfPadding.right) || 0) / fontSize * 10,
             bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10,
             left: (Number(selfPadding.left) || 0) / fontSize * 10
+        }) : '';
+        verticalPadding = selfPadding ? edgeInsertsToCss({
+            top: (Number(selfPadding.top) || 0) / fontSize * 10,
+            bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10
         }) : '';
     }
 
@@ -196,15 +216,16 @@
 
     $: mods = {
         'highlight-color': Boolean(highlightColor),
-        'vertical-overflow': verticalOverflow,
-        multiline: isMultiline
+        multiline: isMultiline,
+        'alignment-horizontal': alignmentHorizontal,
+        'alignment-vertical': alignmentVertical
     };
     $: stl = {
         '--divkit-input-hint-color': hintColor,
         '--divkit-input-highlight-color': highlightColor,
+        '--divkit-input-line-height': lineHeight,
         'font-weight': fontWeight,
         'font-family': fontFamily,
-        'line-height': lineHeight,
         'letter-spacing': letterSpacing,
         color: textColor,
         'max-height': maxHeight
@@ -213,19 +234,37 @@
         'font-size': pxToEm(fontSize),
         padding
     };
+    $: verticalPaddingStl = {
+        'font-size': pxToEm(fontSize),
+        padding: verticalPadding
+    };
 
-    function onInput(event: Event) {
-        const val = (event.target as HTMLInputElement).value || '';
+    function onInput(event: Event): void {
+        let val = (isMultiline ?
+            (event.target as HTMLDivElement).innerText :
+            (event.target as HTMLInputElement).value
+        ) || '';
+
+        if (val === '\n') {
+            val = '';
+        }
 
         if (value !== val) {
-            value = val;
+            value = contentEditableValue = val;
             valueVariable.setValue(val);
             if (inputMask) {
                 runValueMask();
             }
         }
+    }
 
-        checkVerticalOverflow();
+    function onPaste(event: ClipboardEvent): void {
+        event.preventDefault();
+        if (event.clipboardData) {
+            let text = event.clipboardData.getData('text/plain');
+            text = text.trim();
+            document.execCommand('inserttext', false, text);
+        }
     }
 
     // Handle text selection
@@ -239,15 +278,33 @@
 
     function onClick() {
         if (!isPressed) {
-            input.select();
+            if (input instanceof HTMLInputElement) {
+                input.select();
+            } else {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNode(input);
+                if (selection) {
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
         }
     }
 
-    function checkVerticalOverflow(): void {
-        if (holder) {
-            verticalOverflow = holder.scrollHeight > holder.offsetHeight;
+    function getSelectionEnd(): number | undefined {
+        if (input instanceof HTMLInputElement) {
+            return input.selectionEnd === null ? undefined : input.selectionEnd;
+        }
+
+        return calcSelectionOffset(input);
+    }
+
+    function setCursorPosition(cursorPosition: number): void {
+        if (input instanceof HTMLInputElement) {
+            input.selectionStart = input.selectionEnd = cursorPosition;
         } else {
-            verticalOverflow = false;
+            setSelectionOffset(input, cursorPosition);
         }
     }
 
@@ -256,16 +313,16 @@
             return;
         }
 
-        inputMask.applyChangeFrom(value, input.selectionEnd !== null ? input.selectionEnd : undefined);
+        inputMask.applyChangeFrom(value, getSelectionEnd());
 
         rawValueVariable.set(inputMask.rawValue);
-        $valueVariable = value = inputMask.value;
+        $valueVariable = value = contentEditableValue = inputMask.value;
         const cursorPosition = inputMask.cursorPosition;
 
         await tick();
 
         if (document.activeElement === input) {
-            input.selectionStart = input.selectionEnd = cursorPosition;
+            setCursorPosition(cursorPosition);
         }
     }
 
@@ -277,23 +334,21 @@
         inputMask.overrideRawValue($rawValueVariable);
 
         rawValueVariable.set(inputMask.rawValue);
-        $valueVariable = value = inputMask.value;
+        $valueVariable = value = contentEditableValue = inputMask.value;
         const cursorPosition = inputMask.cursorPosition;
 
         await tick();
 
         if (document.activeElement === input) {
-            input.selectionStart = input.selectionEnd = cursorPosition;
+            setCursorPosition(cursorPosition);
         }
     }
 
     onMount(() => {
-        checkVerticalOverflow();
-
         if (input && inputMask) {
             if ($rawValueVariable) {
                 inputMask.overrideRawValue($rawValueVariable);
-                $valueVariable = value = inputMask.value;
+                $valueVariable = value = contentEditableValue = inputMask.value;
             }
         }
     });
@@ -311,42 +366,56 @@
         {templateContext}
         {layoutParams}
     >
-        <span class={css.input__wrapper} style={makeStyle(paddingStl)}>
-            <span class={css.input__holder} aria-hidden="true" bind:this={holder}>
-                <!--appends zero-space at end-->
-                {value}{#if value.endsWith('\n') || !value}​{/if}
-            </span>
-            {#if isMultiline}
-                <textarea
+        {#if isMultiline}
+            <span class={css['input__scroll-wrapper']}>
+                {#if !contentEditableValue && placeholder}
+                    <div
+                        class={css.input__placeholder}
+                        aria-hidden="true"
+                        style={makeStyle(paddingStl)}
+                    >
+                        {placeholder}
+                    </div>
+                {/if}
+
+                <!-- zero-width space, so other baseline-elements could be aligned without value -->
+                <span
+                    aria-hidden="true"
+                    style={makeStyle(verticalPaddingStl)}
+                >​</span>
+
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <span
                     bind:this={input}
-                    class={css.input__input}
-                    autocomplete="off"
+                    class="{css.input__input} {css.input__input_multiline}"
                     autocapitalize="off"
+                    contenteditable="true"
                     aria-label={description}
-                    style={makeStyle({ padding })}
-                    {placeholder}
-                    {value}
+                    style={makeStyle(paddingStl)}
+                    bind:innerText={contentEditableValue}
                     on:input={onInput}
-                    on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                    on:click={$jsonSelectAll ? onClick : undefined}
-                ></textarea>
-            {:else}
-                <input
-                    bind:this={input}
-                    type={inputType}
-                    inputmode={inputMode}
-                    class={css.input__input}
-                    autocomplete="off"
-                    autocapitalize="off"
-                    aria-label={description}
-                    style={makeStyle({ padding })}
-                    {placeholder}
-                    {value}
-                    on:input={onInput}
+                    on:paste={onPaste}
                     on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                     on:click={$jsonSelectAll ? onClick : undefined}
                 >
-            {/if}
-        </span>
+                </span>
+            </span>
+        {:else}
+            <input
+                bind:this={input}
+                type={inputType}
+                inputmode={inputMode}
+                class="{css.input__input} {css.input__input_singleline}"
+                autocomplete="off"
+                autocapitalize="off"
+                aria-label={description}
+                style={makeStyle(paddingStl)}
+                {placeholder}
+                {value}
+                on:input={onInput}
+                on:mousedown={$jsonSelectAll ? onMousedown : undefined}
+                on:click={$jsonSelectAll ? onClick : undefined}
+            >
+        {/if}
     </Outer>
 {/if}

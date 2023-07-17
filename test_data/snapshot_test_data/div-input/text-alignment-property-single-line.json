@@ -33,7 +33,8 @@
             "hint_text": "Hint",
             "hint_color": "#888888",
             "highlight_color": "#e0bae3",
-            "line_height": 22
+            "line_height": 22,
+            "keyboard_type": "single_line_text"
         }
     },
     "card": {

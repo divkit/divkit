@@ -1,41 +1,23 @@
 .input {
+    position: relative;
     display: flex;
     min-width: 0;
     min-height: 0;
     letter-spacing: 0;
+    line-height: var(--divkit-input-line-height);
 }
 
-.input__wrapper {
-    position: relative;
-    box-sizing: border-box;
-    display: block;
-    flex: 1 1 auto;
-    max-width: 100%;
-    min-width: 0;
-    max-height: 100%;
-    border-radius: inherit;
+.input_alignment-horizontal_center {
+    text-align: center;
 }
 
-.input__holder {
-    display: block;
-    max-height: 100%;
-    visibility: hidden;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.input_multiline .input__holder {
-    white-space: pre-wrap;
-    overflow-y: auto;
+.input_alignment-horizontal_right {
+    text-align: right;
 }
 
 .input__input {
-    position: absolute;
-    top: 0;
-    left: 0;
     box-sizing: border-box;
-    width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
     margin: 0;
     padding: 0;
     font: inherit;
@@ -50,8 +32,6 @@
     border-radius: inherit;
     /*outline: none;*/
     white-space: pre-wrap;
-    resize: none;
-    overflow: hidden;
 }
 
 .input__input::-webkit-inner-spin-button,
@@ -63,10 +43,96 @@
     color: var(--divkit-input-hint-color, rgba(0, 0, 0, .45));
 }
 
+.input__placeholder {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--divkit-input-hint-color, rgba(0, 0, 0, .45));
+    pointer-events: none;
+}
+
+.input_alignment-horizontal_center .input__placeholder {
+    justify-content: center;
+}
+
+.input_alignment-horizontal_right .input__placeholder {
+    justify-content: flex-end;
+}
+
+.input_alignment-vertical_top .input__placeholder {
+    align-items: flex-start;
+}
+
+.input_alignment-vertical_bottom .input__placeholder {
+    align-items: flex-end;
+}
+
+.input_alignment-vertical_baseline .input__placeholder {
+    align-items: baseline;
+}
+
 .input_highlight-color .input__input::selection {
     background: var(--divkit-input-highlight-color);
 }
 
-.input_vertical-overflow textarea.input__input {
-    overflow-y: scroll;
+.input_alignment-horizontal_center .input__input_singleline {
+    text-align: center;
+}
+
+.input_alignment-horizontal_right .input__input_singleline {
+    text-align: right;
+}
+
+.input_alignment-vertical_top .input__input_singleline {
+    align-self: flex-start;
+    height: calc(1em * var(--divkit-input-line-height));
+}
+
+.input_alignment-vertical_bottom .input__input_singleline {
+    align-self: flex-end;
+    height: calc(1em * var(--divkit-input-line-height));
+}
+
+.input_alignment-vertical_baseline .input__input_singleline {
+    height: calc(1em * var(--divkit-input-line-height));
+}
+
+.input__scroll-wrapper {
+    overflow: auto;
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.input__input_multiline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    height: max-content;
+}
+
+.input_alignment-vertical_top .input__input_multiline {
+    justify-content: flex-start;
+}
+
+.input_alignment-vertical_bottom .input__input_multiline {
+    justify-content: flex-end;
+}
+
+.input_alignment-vertical_baseline .input__input_multiline {
+    justify-content: flex-start;
+}
+
+.input_alignment-horizontal_center .input__input_multiline {
+    align-items: center;
+}
+
+.input_alignment-horizontal_right .input__input_multiline {
+    align-items: flex-end;
 }
