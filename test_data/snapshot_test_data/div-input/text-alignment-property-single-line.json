@@ -1,5 +1,5 @@
 {
-    "description": "Test text_alignment property in multi line Input",
+    "description": "Test text_alignment property in single line Input",
     "platforms": [
         "android",
         "web"
