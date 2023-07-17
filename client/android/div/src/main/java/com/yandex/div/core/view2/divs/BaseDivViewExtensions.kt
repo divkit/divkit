@@ -377,7 +377,9 @@ internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivA
         DivAlignmentHorizontal.LEFT -> Gravity.LEFT
         DivAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
         DivAlignmentHorizontal.RIGHT -> Gravity.RIGHT
-        else -> Gravity.LEFT
+        DivAlignmentHorizontal.START -> Gravity.START
+        DivAlignmentHorizontal.END -> Gravity.END
+        else -> Gravity.START
     }
 
     val verticalGravity = when (vertical) {
@@ -395,7 +397,9 @@ internal fun evaluateGravity(horizontal: DivContentAlignmentHorizontal?, vertica
         DivContentAlignmentHorizontal.LEFT -> Gravity.LEFT
         DivContentAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
         DivContentAlignmentHorizontal.RIGHT -> Gravity.RIGHT
-        else -> Gravity.LEFT // TODO(grechka62): support additional variants
+        DivContentAlignmentHorizontal.START -> Gravity.START
+        DivContentAlignmentHorizontal.END -> Gravity.END
+        else -> Gravity.START // TODO(grechka62): support additional variants
     }
 
     val verticalGravity = when (vertical) {
