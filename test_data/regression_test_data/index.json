@@ -898,6 +898,9 @@
     },
     {
       "title": "Visibility actions in pager",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions",
         "DivPager"

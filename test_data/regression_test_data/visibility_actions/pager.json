@@ -94,6 +94,7 @@
                                 {
                                   "type": "text_block",
                                   "header": "Item 0",
+                                  "id": "block_1",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:0",
@@ -104,6 +105,7 @@
                                 },
                                 {
                                   "type": "image_block",
+                                  "id": "block_2",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:1",

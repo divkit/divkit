@@ -1,9 +1,6 @@
 describe('regression', () => {
     describe('Paged scroll', () => {
         beforeEach(async function() {
-            await this.browser.execute(() => {
-                window.divkitLogs = [];
-            });
             await this.browser.yaOpenRegressionJson('pager/pager');
         });
 
@@ -27,8 +24,6 @@ describe('regression', () => {
             });
             await this.browser.assertView('scroll_righting', '#root');
 
-            const logs = await this.browser.execute(() => window.divkitLogs);
-            logs.length.should.equal(3);
         });
     });
 });
