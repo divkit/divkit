@@ -1,4 +1,4 @@
-## 26.1
+## 26.1.0
 
 # JSON Schema:
 * Added `start` and `end` to horizontal alignment.
@@ -21,7 +21,7 @@
 # TypeScript JSON Builder:
 * `boolean_int` properties will now accept `true` and `false` values in addition to `1` / `0`. These boolean values will be automatically converted to `1` / `0`, but only if the `divCard` function is used. Beware of old clients with the old DivKit SDK, they may not accept boolean `true` / `false` values.
 
-## 26.0
+## 26.0.0
 
 # JSON Schema:
 * Added `start` and `end` properties to edge insets.
