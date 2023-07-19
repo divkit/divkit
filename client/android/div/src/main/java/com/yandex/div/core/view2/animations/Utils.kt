@@ -43,7 +43,19 @@ internal fun Transition.getViewForAnimate(
     values: TransitionValues,
     positionKey: String
 ): View {
-    return if (view.isActuallyLaidOut) {
+    val startViewIsOverlayView = values.view == view
+    /*
+     * If start animation view is equals to overlay animation view, that means that
+     * `androidx.transition.Visibility#onDisappear` expect to see real view as an overlay (cause
+     * start view has no parents).
+     *
+     * If we get the copy and set it as `save_overlay_view` tag to get copy on next animation applying,
+     * the tag will be anyway replaced by `androidx.transition.Visibility#onDisappear` with start view
+     * so when applying second animation, we get our start view from `save_overlay_view` tag,
+     * and so we will apply the first animation to the copied view and all future to the real view.
+     */
+
+    return if (!startViewIsOverlayView && view.isActuallyLaidOut) {
         createOrGetVisualCopy(view, sceneRoot, this, values.values[positionKey] as IntArray)
     } else {
         view
