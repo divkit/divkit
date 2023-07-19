@@ -15,7 +15,7 @@ public protocol DivViewMetaProviding: AnyObject {
   func subview(with id: BlockViewID) -> BlockView?
 }
 
-public protocol TooltipAnchorView: UIView {
+public protocol TooltipAnchorView: ViewType {
   var tooltips: [BlockTooltip] { get }
 }
 #else
