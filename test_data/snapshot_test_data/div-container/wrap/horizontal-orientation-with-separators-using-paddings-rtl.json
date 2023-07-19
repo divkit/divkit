@@ -1,10 +1,11 @@
 {
-  "description": "Horizontal wrap container with separators.",
+  "description": "Horizontal wrap container with separators in right-to-left layout direction.",
   "platforms": [
-    "ios",
-    "web",
     "android"
   ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
   "templates": {
     "item_text": {
       "type": "text",
@@ -25,7 +26,7 @@
           "color": "#B2B2B2"
         }
       },
-      "font_size": 12,
+      "font_size": 10,
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center"
     }
@@ -54,7 +55,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Horizontal wrap container with separators:",
+              "text": "Horizontal wrap container with separators (RTL):",
               "paddings": {
                 "left": 10,
                 "top": 10,
@@ -137,14 +138,14 @@
               "items": [
                 {
                   "type": "item_text",
-                  "text": "match_parent",
+                  "text": "Item 0\nmatch_parent",
                   "width": {
                     "type": "match_parent"
                   }
                 },
                 {
                   "type": "item_text",
-                  "text": "50",
+                  "text": "Item 1\n50",
                   "width": {
                     "type": "fixed",
                     "value": 50
@@ -152,7 +153,7 @@
                 },
                 {
                   "type": "item_text",
-                  "text": "50",
+                  "text": "Item 2\n50",
                   "width": {
                     "type": "fixed",
                     "value": 50
@@ -160,7 +161,7 @@
                 },
                 {
                   "type": "item_text",
-                  "text": "50",
+                  "text": "Item 3\n50",
                   "width": {
                     "type": "fixed",
                     "value": 50
@@ -168,7 +169,7 @@
                 },
                 {
                   "type": "item_text",
-                  "text": "100",
+                  "text": "Item 4\n100",
                   "width": {
                     "type": "fixed",
                     "value": 100
@@ -176,34 +177,10 @@
                 },
                 {
                   "type": "item_text",
-                  "text": "50",
+                  "text": "Item 5\n50",
                   "width": {
                     "type": "fixed",
                     "value": 50
-                  }
-                },
-                {
-                  "type": "item_text",
-                  "text": "50",
-                  "width": {
-                    "type": "fixed",
-                    "value": 50
-                  }
-                },
-                {
-                  "type": "item_text",
-                  "text": "50",
-                  "width": {
-                    "type": "fixed",
-                    "value": 50
-                  }
-                },
-                {
-                  "type": "item_text",
-                  "text": "150",
-                  "width": {
-                    "type": "fixed",
-                    "value": 150
                   }
                 }
               ]

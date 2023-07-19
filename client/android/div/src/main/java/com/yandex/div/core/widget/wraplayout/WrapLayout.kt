@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.ShowSeparatorsMode
@@ -459,7 +460,12 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
             }
 
             var needSeparator = false
-            for (j in 0 until line.itemCount) {
+            val itemIndexes = if (isLayoutRtl()) {
+                (line.itemCount - 1 downTo 0)
+            } else {
+                (0 until line.itemCount)
+            }
+            for (j in itemIndexes) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
                 if (child == null || child.isHidden) {
@@ -500,7 +506,13 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
 
         var childTop: Int
         var needLineSeparator = false
-        lines.forEach { line ->
+        val linesOrder = if (isLayoutRtl()) {
+            (lines.size - 1 downTo 0)
+        } else {
+            (0 until lines.size)
+        }
+        linesOrder.forEach {
+            val line = lines[it]
             childTop = startSeparatorLength + when (val gravityVertical = gravity.toVerticalGravity()) {
                 Gravity.TOP -> paddingTop
                 Gravity.BOTTOM -> height - line.mainSize + paddingBottom
