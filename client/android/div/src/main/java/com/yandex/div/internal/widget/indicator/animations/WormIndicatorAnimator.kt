@@ -42,12 +42,17 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
         itemsCount = count
     }
 
-    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float): RectF {
+    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float, isLayoutRtl: Boolean): RectF {
         val itemWidth = if (itemWidthOverride == 0f) styleParams.activeShape.itemSize.width else itemWidthOverride
         itemRect.top = yOffset - styleParams.activeShape.itemSize.height / 2f
-        itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f
+        if (isLayoutRtl) {
+            itemRect.right = xOffset - (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) + itemWidth / 2f
+            itemRect.left = xOffset - (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) - itemWidth / 2f
+        } else {
+            itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f
+            itemRect.left = xOffset + (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) - itemWidth / 2f
+        }
         itemRect.bottom = yOffset + styleParams.activeShape.itemSize.height / 2f
-        itemRect.left = xOffset + (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) - itemWidth / 2f
         if (itemRect.left < 0) {
             itemRect.offset(-itemRect.left, 0f)
         }

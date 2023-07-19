@@ -1,13 +1,16 @@
 package com.yandex.div.internal.widget.indicator
 
 import android.graphics.Canvas
+import android.view.View
 import com.yandex.div.internal.widget.indicator.animations.IndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.SingleIndicatorDrawer
+import com.yandex.div.core.util.isLayoutRtl
 
 internal class IndicatorsStripDrawer(
     private val styleParams: IndicatorParams.Style,
     private val singleIndicatorDrawer: SingleIndicatorDrawer,
     private val animator: IndicatorAnimator,
+    private val view: View,
 ) {
     private val ribbon = IndicatorsRibbon()
 
@@ -51,7 +54,8 @@ internal class IndicatorsStripDrawer(
         }
 
         ribbon.visibleItems.find { it.active }?.let { indicator ->
-            val rect = animator.getSelectedItemRect(indicator.centerOffset, baseYOffset, viewportWidth.toFloat())
+            val rect = animator.getSelectedItemRect(indicator.centerOffset, baseYOffset,
+                viewportWidth.toFloat(), view.isLayoutRtl())
             if (rect != null) {
                 singleIndicatorDrawer.drawSelected(canvas, rect)
             }
@@ -150,10 +154,18 @@ internal class IndicatorsStripDrawer(
                 return
             }
 
-            (0 until itemsCount).forEach { position ->
+            val left: Int
+            val indicatorsPosition = if (view.isLayoutRtl()) {
+                left = itemsCount - 1
+                (itemsCount - 1 downTo 0)
+            } else {
+                left =  0
+                (0 until itemsCount)
+            }
+            indicatorsPosition.forEach { position ->
                 val size = getItemSizeAt(position)
                 val centerOffset = when (position) {
-                    0 -> size.width / 2f
+                    left -> size.width / 2f
                     else -> allItems.last().centerOffset + spaceBetweenCenters
                 }
 
@@ -195,7 +207,7 @@ internal class IndicatorsStripDrawer(
 
             // Remove items outside viewport
             viewportItems.removeAll {
-                !viewPort.contains(it.centerOffset) && !viewPort.contains(it.centerOffset)
+                !viewPort.contains(it.centerOffset)
             }
 
             downscaleAndDisperse(viewportItems)
@@ -212,9 +224,16 @@ internal class IndicatorsStripDrawer(
                 return (viewportWidth / 2f) - (allItems.last().right / 2)
             }
 
-            val activeItemOffset = allItems[activePosition].centerOffset
             val viewportCenter = viewportWidth / 2f
-            var offset = viewportCenter - activeItemOffset - (spaceBetweenCenters * positionFraction)
+            val activeItemOffset: Float
+            var offset: Float
+            if (view.isLayoutRtl()) {
+                activeItemOffset = allItems[allItems.size - 1 - activePosition].centerOffset
+                offset = viewportCenter - activeItemOffset + (spaceBetweenCenters * positionFraction)
+            } else {
+                activeItemOffset = allItems[activePosition].centerOffset
+                offset = viewportCenter - activeItemOffset - (spaceBetweenCenters * positionFraction)
+            }
 
             val centerIsBetweenItems = maxVisibleCount % 2 == 0
             if (centerIsBetweenItems) {

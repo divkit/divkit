@@ -6,6 +6,7 @@ import com.yandex.div.internal.widget.indicator.animations.ScaleIndicatorAnimato
 import com.yandex.div.internal.widget.indicator.forms.RoundedRect
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -38,7 +39,7 @@ class IndicatorStripDrawerTest {
             animation = IndicatorParams.Animation.SCALE,
         )
 
-        val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style))
+        val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style), mock())
         indicatorsStripDrawer.setItemsCount(10)
         indicatorsStripDrawer.calculateMaximumVisibleItems(300, 300)
 
@@ -72,7 +73,7 @@ class IndicatorStripDrawerTest {
             animation = IndicatorParams.Animation.SCALE,
         )
 
-        val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style))
+        val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style), mock())
         indicatorsStripDrawer.setItemsCount(10)
         indicatorsStripDrawer.calculateMaximumVisibleItems(100, 100)
 

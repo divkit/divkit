@@ -42,11 +42,16 @@ internal class SliderIndicatorAnimator(private val styleParams: IndicatorParams.
         itemsCount = count
     }
 
-    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float): RectF {
+    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float, isLayoutRtl: Boolean): RectF {
         val itemWidth = if (itemWidthOverride == 0f) styleParams.activeShape.itemSize.width else itemWidthOverride
-        itemRect.left = xOffset + (spaceBetweenCenters * selectedPositionOffset).coerceAtLeast(0f) - itemWidth / 2f
+        if (isLayoutRtl) {
+            itemRect.left = xOffset - (spaceBetweenCenters * selectedPositionOffset).coerceAtMost(spaceBetweenCenters) - itemWidth / 2f
+            itemRect.right = xOffset - (spaceBetweenCenters * selectedPositionOffset).coerceAtLeast(0f) + itemWidth / 2f
+        } else {
+            itemRect.left = xOffset + (spaceBetweenCenters * selectedPositionOffset).coerceAtLeast(0f) - itemWidth / 2f
+            itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f
+        }
         itemRect.top = yOffset - styleParams.activeShape.itemSize.height / 2f
-        itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f
         itemRect.bottom = yOffset + styleParams.activeShape.itemSize.height / 2f
         if (itemRect.left < 0) {
             itemRect.offset(-itemRect.left, 0f)

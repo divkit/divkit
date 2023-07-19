@@ -39,7 +39,7 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
         itemsCount = count
     }
 
-    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float): RectF? = null
+    override fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float, isLayoutRtl: Boolean): RectF? = null
 
     override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize {
         return when (val activeShape = styleParams.activeShape) {

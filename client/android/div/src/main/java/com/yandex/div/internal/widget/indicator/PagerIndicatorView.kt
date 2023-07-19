@@ -44,7 +44,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     fun setStyle(style: IndicatorParams.Style) {
         this.style = style
 
-        stripDrawer = IndicatorsStripDrawer(style, getIndicatorDrawer(style), getIndicatorAnimator(style)).apply {
+        stripDrawer = IndicatorsStripDrawer(style, getIndicatorDrawer(style), getIndicatorAnimator(style), this).apply {
             calculateMaximumVisibleItems(
                 measuredWidth - paddingLeft - paddingRight,
                 measuredHeight - paddingTop - paddingBottom

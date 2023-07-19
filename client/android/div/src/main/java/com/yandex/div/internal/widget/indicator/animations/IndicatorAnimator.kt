@@ -11,7 +11,7 @@ internal interface IndicatorAnimator {
     fun updateSpaceBetweenCenters(spaceBetweenCenters: Float) = Unit
     fun overrideItemWidth(width: Float) = Unit
     fun setItemsCount(count: Int)
-    fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float): RectF?
+    fun getSelectedItemRect(xOffset: Float, yOffset: Float, viewportWidth: Float, isLayoutRtl: Boolean): RectF?
     fun getItemSizeAt(position: Int): IndicatorParams.ItemSize
     fun getBorderColorAt(position: Int): Int
     fun getBorderWidthAt(position: Int): Float
