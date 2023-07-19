@@ -957,6 +957,9 @@
     },
     {
       "title": "Visibility actions for default_item",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions"
       ],
