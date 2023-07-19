@@ -540,7 +540,7 @@
     "ru": "Нижний отступ."
   },
   "div_edge_insets_end": {
-    "en": "End margin. Depends on the interface direction. Has a higher priority than left/right.",
+    "en": "End margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.",
     "ru": "Отступ от конца элемента. Положение отступа зависит от направления интерфейса. Имеет больший приоритет, чем левый или правый отступ."
   },
   "div_edge_insets_left": {
@@ -552,7 +552,7 @@
     "ru": "Правый отступ."
   },
   "div_edge_insets_start": {
-    "en": "Start margin. Depends on the interface direction. Has a higher priority than left/right.",
+    "en": "Start margin. Margin position depends on the interface orientation. Has higher priority than the left and right margins.",
     "ru": "Отступ от начала элемента. Положение отступа зависит от направления интерфейса. Имеет больший приоритет, чем левый или правый отступ."
   },
   "div_edge_insets_top": {
