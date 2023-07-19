@@ -24,7 +24,7 @@ public final class DivKitComponents {
   public let showToolip: DivActionURLHandler.ShowTooltipAction?
   public let tooltipManager: TooltipManager
   public let triggersStorage: DivTriggersStorage
-  public let urlOpener: UrlOpener
+  public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
 
@@ -50,19 +50,21 @@ public final class DivKitComponents {
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: UpdateCardAction?,
     playerFactory: PlayerFactory? = nil,
-    urlOpener: @escaping UrlOpener,
+    urlHandler: DivUrlHandler? = nil,
+    urlOpener: @escaping UrlOpener = { _ in }, // remove in next major release
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.extensionHandlers = extensionHandlers
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
+    self.layoutDirection = layoutDirection
     self.playerFactory = playerFactory ?? defaultPlayerFactory
     self.showToolip = showTooltip
     self.stateManagement = stateManagement
-    self.urlOpener = urlOpener
+    let urlHandler = urlHandler ?? DivUrlOpenerWrapper(urlOpener)
+    self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
-    self.layoutDirection = layoutDirection
 
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
@@ -85,7 +87,7 @@ public final class DivKitComponents {
       handleAction: {
         switch $0.payload {
         case let .divAction(params: params):
-          weakActionHandler?.handle(params: params, urlOpener: urlOpener)
+          weakActionHandler?.handle(params: params, sender: nil)
         default: break
         }
       }
@@ -104,19 +106,18 @@ public final class DivKitComponents {
       ),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
-      performTimerAction: { weakTimerStorage?.perform($0, $1, $2) }
+      performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
+      urlHandler: urlHandler
     )
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
-      actionHandler: actionHandler,
-      urlOpener: urlOpener
+      actionHandler: actionHandler
     )
 
     timerStorage = DivTimerStorage(
       variablesStorage: variablesStorage,
       actionHandler: actionHandler,
-      urlOpener: urlOpener,
       updateCard: updateCard
     )
 
@@ -207,10 +208,6 @@ public final class DivKitComponents {
       layoutDirection: layoutDirection,
       variableTracker: variableTracker
     )
-  }
-
-  public func handleActions(params: UserInterfaceAction.DivActionParams) {
-    actionHandler.handle(params: params, urlOpener: urlOpener)
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {

@@ -1,13 +1,15 @@
 import Foundation
 
-final class DemoUrlOpener {
+import DivKit
+
+final class PlaygroundUrlHandler: DivUrlHandler {
   private let loadJsonUrl: (URL) -> Void
 
   init(loadJsonUrl: @escaping (URL) -> Void) {
     self.loadJsonUrl = loadJsonUrl
   }
 
-  func openUrl(_ url: URL) {
+  func handle(_ url: URL, sender _: AnyObject?) {
     guard url.scheme == divDemoActionScheme && url.host == setDataHost,
           let path = url.queryParamValue(forName: pathParam),
           let regressionFileUrl = RegressionFile.makeUrl(path) else {

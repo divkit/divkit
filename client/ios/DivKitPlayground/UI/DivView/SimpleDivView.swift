@@ -118,15 +118,15 @@ extension SimpleDivUIView: UIActionEventPerforming {
     perform(uiActionEvents: [event], from: sender)
   }
 
-  func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
-    events.map { $0.payload }.forEach { handle($0) }
+  func perform(uiActionEvents events: [UIActionEvent], from sender: AnyObject) {
+    events.map { $0.payload }.forEach { handle($0, sender: sender) }
     update()
   }
 
-  private func handle(_ payload: UserInterfaceAction.Payload) {
+  private func handle(_ payload: UserInterfaceAction.Payload, sender: AnyObject) {
     switch payload {
     case let .divAction(params):
-      divKitComponents.handleActions(params: params)
+      divKitComponents.actionHandler.handle(params: params, sender: sender)
     case .composite, .empty, .json, .menu, .url:
       break
     }

@@ -148,7 +148,6 @@
 		8C7B187F2864CA1F0036EF4C /* DivBlockProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */; };
 		8C7B18812864CA1F0036EF4C /* DemoPatchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */; };
 		8C7B18952864CA380036EF4C /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18832864CA380036EF4C /* Alert.swift */; };
-		8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18842864CA380036EF4C /* UrlOpener.swift */; };
 		8C7B1BF12865C01C0036EF4C /* ExpressionResolvingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */; };
 		8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */; };
 		8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */; };
@@ -199,6 +198,7 @@
 		8C9898402A4C570400FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */; };
 		8C9898422A4C59DF00FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
+		8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */; };
 		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
@@ -388,7 +388,6 @@
 		8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivBlockProvider.swift; sourceTree = "<group>"; };
 		8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoPatchProvider.swift; sourceTree = "<group>"; };
 		8C7B18832864CA380036EF4C /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
-		8C7B18842864CA380036EF4C /* UrlOpener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlOpener.swift; sourceTree = "<group>"; };
 		8C7B1B1A2865BFF10036EF4C /* DivKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionResolvingTests.swift; sourceTree = "<group>"; };
 		8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTabsExtensionsTests.swift; sourceTree = "<group>"; };
@@ -446,6 +445,7 @@
 		8C97EA382A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
 		8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundUrlHandler.swift; sourceTree = "<group>"; };
 		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
@@ -784,13 +784,14 @@
 		8C7B187B2864CA1F0036EF4C /* DivKit */ = {
 			isa = PBXGroup;
 			children = (
-				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
-				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
-				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
-				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
-				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */,
 				8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */,
+				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
+				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
+				8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */,
+				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
+				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
+				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
 			);
 			path = DivKit;
 			sourceTree = "<group>";
@@ -806,7 +807,6 @@
 				8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */,
 				8C2BFA5728C10F5B00A16E9B /* TestData.swift */,
 				893D19632902AD8F005540DF /* TimeMeasure.swift */,
-				8C7B18842864CA380036EF4C /* UrlOpener.swift */,
 				8CF1296228B0021F00351F65 /* UserPreferences.swift */,
 			);
 			path = Utils;
@@ -1431,7 +1431,6 @@
 				8C7B18812864CA1F0036EF4C /* DemoPatchProvider.swift in Sources */,
 				E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */,
 				89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */,
-				8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */,
 				8C7915D028B177CE00A4642A /* ViewWithHeader.swift in Sources */,
 				0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */,
 				8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */,
@@ -1460,6 +1459,7 @@
 				8C1A377B28B4E3E700A047C8 /* Payload.swift in Sources */,
 				8C1A376D28B4DC2400A047C8 /* SettingsView.swift in Sources */,
 				8C1A378028B4E47900A047C8 /* WebPreviewSocket.swift in Sources */,
+				8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */,
 				8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */,
 				8C7B18952864CA380036EF4C /* Alert.swift in Sources */,
 				8C1A378828B5143200A047C8 /* VisibilityTrackingCardView.swift in Sources */,

@@ -1,8 +1,9 @@
+@testable import DivKit
+
 import XCTest
 
 import BaseUIPublic
 import CommonCorePublic
-import DivKit
 import LayoutKit
 import NetworkingPublic
 
@@ -60,7 +61,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       fontProvider: YSFontProvider(),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
       updateCardAction: nil,
-      urlOpener: { _ in }
+      urlHandler: DivUrlHandlerDelegate { _, _ in }
     )
     for (path, state) in blocksState {
       divKitComponents.blockStateStorage.setState(path: path, state: state)
@@ -127,7 +128,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
             divAction,
             cardId: testDivCardId,
             source: .custom,
-            urlOpener: divKitComponents.urlOpener
+            sender: nil
           )
         }
         try checkSnapshots(

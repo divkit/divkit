@@ -6,7 +6,6 @@ import LayoutKit
 final class DivTimerStorage {
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler
-  private let urlOpener: UrlOpener
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let timerScheduler = TimerScheduler()
   private var cardsTimers = [DivCardID: [DivTimer]]()
@@ -15,12 +14,10 @@ final class DivTimerStorage {
   public init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
-    urlOpener: @escaping UrlOpener,
     updateCard: @escaping DivActionURLHandler.UpdateCardAction
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
-    self.urlOpener = urlOpener
     self.updateCard = updateCard
   }
 
@@ -138,7 +135,7 @@ final class DivTimerStorage {
         $0,
         cardId: cardId,
         source: .custom,
-        urlOpener: urlOpener
+        sender: nil
       )
     }
   }

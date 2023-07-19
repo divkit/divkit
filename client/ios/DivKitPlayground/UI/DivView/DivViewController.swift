@@ -143,18 +143,14 @@ extension DivViewController: ElementStateObserver {
 }
 
 extension DivViewController: UIActionEventPerforming {
-  public func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
-    handle(event.payload)
-  }
-
-  private func handle(_ payload: UserInterfaceAction.Payload) {
-    switch payload {
+  public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
+    switch event.payload {
     case .composite, .empty, .json, .url:
       break
     case let .menu(menu):
       showMenu(menu, actionPerformer: self)
     case let .divAction(params):
-      divKitComponents.handleActions(params: params)
+      divKitComponents.actionHandler.handle(params: params, sender: sender)
     }
   }
 }

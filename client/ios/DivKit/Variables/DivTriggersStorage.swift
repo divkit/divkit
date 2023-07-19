@@ -9,19 +9,17 @@ public final class DivTriggersStorage {
   private var cardsTriggers = DivCardsTriggers()
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
-  private let urlOpener: UrlOpener
 
   private let cardsTriggersLock = RWLock()
   private let autodisposePool = AutodisposePool()
 
   public init(
     variablesStorage: DivVariablesStorage,
-    actionHandler: DivActionHandler,
-    urlOpener: @escaping UrlOpener
+    actionHandler: DivActionHandler
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
-    self.urlOpener = urlOpener
+
     variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
       cardIdTriggersPairs.forEach { (cardId, triggers) in
@@ -86,7 +84,7 @@ public final class DivTriggersStorage {
             $0,
             cardId: cardId,
             source: .custom,
-            urlOpener: urlOpener
+            sender: nil
           )
         }
       }

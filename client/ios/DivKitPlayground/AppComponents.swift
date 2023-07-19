@@ -11,7 +11,7 @@ enum AppComponents {
 
   static func makeDivKitComponents(
     updateCardAction: DivKitComponents.UpdateCardAction? = nil,
-    urlOpener: @escaping UrlOpener = { _ in }
+    urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)
@@ -41,7 +41,7 @@ enum AppComponents {
       },
       updateCardAction: updateCardAction,
       playerFactory: DefaultPlayerFactory(),
-      urlOpener: urlOpener,
+      urlHandler: urlHandler,
       variablesStorage: variablesStorage
     )
   }

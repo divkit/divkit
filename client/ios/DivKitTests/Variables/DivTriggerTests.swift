@@ -10,15 +10,15 @@ final class DivTriggerTests: XCTestCase {
     patchProvider: FakeDivPatchDownloader(),
     variablesStorage: variablesStorage,
     updateCard: { _ in },
-    showTooltip: { _ in }
+    showTooltip: { _ in },
+    urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
+      self.triggersCount += 1
+    }
   )
 
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
-    actionHandler: actionHandler,
-    urlOpener: { [unowned self] _ in
-      self.triggersCount += 1
-    }
+    actionHandler: actionHandler
   )
 
   private var triggersCount = 0
