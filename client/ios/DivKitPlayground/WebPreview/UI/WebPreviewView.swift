@@ -40,18 +40,12 @@ private struct WebPreviewModel {
   }
 
   init() {
-    weak var weakBlockProvider: DivBlockProvider?
-    divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { reasons in
-        weakBlockProvider?.update(reasons: reasons.asArray())
-      }
-    )
+    divKitComponents = AppComponents.makeDivKitComponents()
     blockProvider = DivBlockProvider(
       json: socket.response,
       divKitComponents: divKitComponents,
       shouldResetOnDataChange: false
     )
-    weakBlockProvider = blockProvider
     payloadFactory = UIStatePayloadFactory(
       deviceInfo: DeviceInfo(),
       errors: blockProvider.$errors

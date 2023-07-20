@@ -64,6 +64,9 @@ final class DivBlockProvider {
         self?.update(jsonProvider: $0)
       }
       .dispose(in: disposePool)
+
+    divKitComponents.updateCardSignal
+      .addObserver { [weak self] in self?.update(reasons: $0) }.dispose(in: disposePool)
   }
 
   func update(reasons: [DivActionURLHandler.UpdateReason]) {
@@ -97,12 +100,14 @@ final class DivBlockProvider {
           templateParsing: divTemplateParsingTime.time,
           render: divRenderTime.time
         )
-        .addingErrorsInfo(errors.map { $0.description } +
-                          context.errorsStorage.errors.map { UIStatePayload.Error($0).description })
+        .addingErrorsInfo(
+          errors.map { $0.description } +
+            context.errorsStorage.errors.map { UIStatePayload.Error($0).description }
+        )
     } catch {
       errors = [UIStatePayload.Error(error as CustomStringConvertible)]
-      + context.errorsStorage.errors.map { UIStatePayload.Error($0 as CustomStringConvertible) }
-      + errors
+        + context.errorsStorage.errors.map { UIStatePayload.Error($0 as CustomStringConvertible) }
+        + errors
       block = makeErrorsBlock(errors.map { $0.description })
       AppLogger.error("Failed to build block: \(error)")
     }
@@ -140,10 +145,11 @@ final class DivBlockProvider {
       let result = try parseDivDataWithTemplates(json, cardId: cardId)
 
       divData = result.value
-      errors = result.errorsOrWarnings?.map { (error: DeserializationError) -> UIStatePayload.Error in
-        return UIStatePayload.Error(error)
-      }
-      ?? []
+      errors = result.errorsOrWarnings?
+        .map { (error: DeserializationError) -> UIStatePayload.Error in
+          UIStatePayload.Error(error)
+        }
+        ?? []
     } catch {
       errors = [UIStatePayload.Error(error as CustomStringConvertible)]
       block = makeErrorsBlock(errors.map { "\($0.description)" })
@@ -249,7 +255,7 @@ extension Block {
     guard !errorList.isEmpty else {
       return self
     }
-   let errorsBlock = makeErrorsBlock(errorList)
+    let errorsBlock = makeErrorsBlock(errorList)
 
     let block = try? ContainerBlock(
       layoutDirection: .vertical,
@@ -268,8 +274,8 @@ extension TimeMeasure.Time {
 
 extension UIStatePayload.Error {
   var description: String {
-    return "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))" +
-    (additional.isEmpty ? "" : "\nAdditional: \(additional)")
+    "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))" +
+      (additional.isEmpty ? "" : "\nAdditional: \(additional)")
   }
 
   init(_ error: CustomStringConvertible) {
@@ -289,7 +295,7 @@ extension UIStatePayload.Error {
 extension DeserializationError {
   fileprivate var stack: [String] {
     switch self {
-    case .nestedObjectError(let field, let error):
+    case let .nestedObjectError(field, error):
       return [field] + error.stack
     default:
       return []

@@ -10,7 +10,6 @@ enum AppComponents {
   static let fontProvider = YSFontProvider()
 
   static func makeDivKitComponents(
-    updateCardAction: DivKitComponents.UpdateCardAction? = nil,
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
@@ -39,7 +38,6 @@ enum AppComponents {
       trackDisappear: { logId, cardId in
         AppLogger.info("Disappear: cardId = \(cardId), logId = \(logId)")
       },
-      updateCardAction: updateCardAction,
       playerFactory: DefaultPlayerFactory(),
       urlHandler: urlHandler,
       variablesStorage: variablesStorage

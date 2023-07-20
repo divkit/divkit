@@ -15,9 +15,6 @@ final class DivViewProvider {
       }
     )
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { [weak self] reasons in
-        self?.blockProvider.update(reasons: reasons.asArray())
-      },
       urlHandler: urlHandler
     )
 

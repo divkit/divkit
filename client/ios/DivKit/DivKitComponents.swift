@@ -27,12 +27,16 @@ public final class DivKitComponents {
   public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
+  public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
+    updateCardPipe.signal
+  }
 
   private let timerStorage: DivTimerStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let variableTracker = DivVariableTracker()
   private let disposePool = AutodisposePool()
+  private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
 
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -48,7 +52,7 @@ public final class DivKitComponents {
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    updateCardAction: UpdateCardAction?,
+    updateCardAction: UpdateCardAction? = nil, // remove in next major release
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler? = nil,
     urlOpener: @escaping UrlOpener = { _ in }, // remove in next major release
@@ -66,9 +70,15 @@ public final class DivKitComponents {
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
 
+    let updateCardActionSignalPipe = SignalPipe<[DivActionURLHandler.UpdateReason]>()
+    self.updateCardPipe = updateCardActionSignalPipe
+
     safeAreaManager = DivSafeAreaManager(storage: variablesStorage)
 
-    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in })
+    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: {
+      updateCardAction?($0)
+      updateCardActionSignalPipe.send($0.asArray())
+    })
     updateCard = updateAggregator.aggregate(_:)
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
@@ -234,7 +244,7 @@ public final class DivKitComponents {
     switch event.kind {
     case let .global(variables):
       let cardIds = variableTracker.getAffectedCards(variables: variables)
-      if (!cardIds.isEmpty) {
+      if !cardIds.isEmpty {
         updateCard(.variable(.specific(cardIds)))
       }
     case let .local(cardId, _):
