@@ -102,10 +102,11 @@ extension DivContainer: DivBlockModeling {
 
   private func makeOverlapBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let defaultAlignment = BlockAlignment2D(
+    let defaultStateAlignment = BlockAlignment2D(
       horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
+    let defaultAlignment = alignment2D(withDefault: defaultStateAlignment, context: context)
 
     let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
     let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)
@@ -119,7 +120,7 @@ extension DivContainer: DivBlockModeling {
           content: block,
           alignment: div.value.alignment2D(
             withDefault: defaultAlignment,
-            expressionResolver: expressionResolver
+            context: context
           )
         )
       }
@@ -329,7 +330,8 @@ extension DivBase {
     let expressionResolver = context.expressionResolver
     switch direction {
     case .horizontal: return resolveAlignmentVertical(expressionResolver)?.crossAlignment
-    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?.makeCrossAlignment(uiLayoutDirection: context.layoutDirection)
+    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?
+      .makeCrossAlignment(uiLayoutDirection: context.layoutDirection)
     }
   }
 }
@@ -360,7 +362,23 @@ extension DivAlignmentHorizontal {
     }
   }
 
-  func makeCrossAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ContainerBlock.CrossAlignment {
+  func makeCrossAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ContainerBlock
+    .CrossAlignment {
+    switch self {
+    case .left:
+      return .leading
+    case .right:
+      return .trailing
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      return .center
+    case .end:
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+    }
+  }
+
+  func makeContentAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> Alignment {
     switch self {
     case .left:
       return .leading
@@ -486,7 +504,6 @@ private let defaultFallbackSize = DivOverridenSize(
   overriden: .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
 )
 
-
 fileprivate func makeCrossAlignment(
   _ direction: ContainerBlock.LayoutDirection,
   verticalAlignment: DivContentAlignmentVertical,
@@ -571,5 +588,3 @@ fileprivate func makeAxialAlignment(
     }
   }
 }
-
-

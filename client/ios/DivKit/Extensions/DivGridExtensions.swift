@@ -55,7 +55,7 @@ extension DivBase {
         row: height.makeWeight(with: context.expressionResolver)
       ),
       contents: block,
-      alignment: alignment2D(withDefault: .default, expressionResolver: context.expressionResolver)
+      alignment: alignment2D(withDefault: .default, context: context)
     )
   }
 }

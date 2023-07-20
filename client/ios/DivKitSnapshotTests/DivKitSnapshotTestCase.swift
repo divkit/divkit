@@ -41,6 +41,14 @@ open class DivKitSnapshotTestCase: XCTestCase {
     return platforms.contains { $0 as? String == "ios" }
   }
 
+  func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
+    let configuration = try? jsonDict.getField("configuration") as [String: Any]
+    guard configuration?["layout_direction"] as? String == "rtl" else {
+      return .leftToRight
+    }
+    return .rightToLeft
+  }
+
   final func testDivs(
     _ fileName: String,
     testName: String = #function,
@@ -60,6 +68,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
+      layoutDirection: getLayoutDirection(from: jsonDict),
       updateCardAction: nil,
       urlHandler: DivUrlHandlerDelegate { _, _ in }
     )

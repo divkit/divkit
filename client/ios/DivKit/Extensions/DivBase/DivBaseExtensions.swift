@@ -120,12 +120,13 @@ extension DivBase {
 
   func alignment2D(
     withDefault defaultAlignment: BlockAlignment2D,
-    expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveAlignmentHorizontal(expressionResolver)?.alignment
+      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?
+        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
-      vertical: resolveAlignmentVertical(expressionResolver)?.alignment
+      vertical: resolveAlignmentVertical(context.expressionResolver)?.alignment
         ?? defaultAlignment.vertical
     )
   }
@@ -148,7 +149,7 @@ extension DivBase {
       .compactMap { index, action in
         action.makeDisappearAction(context: context, index: index)
       }
-    ?? []
+      ?? []
   }
 
   private func makeAccessibilityElement(

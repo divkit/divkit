@@ -29,7 +29,7 @@ extension DivState: DivBlockModeling {
     let divStatePath = context.parentDivStatePath + id
     let stateManager = context.stateManager
     let stateManagerItem = stateManager.get(stateBlockPath: divStatePath)
-    
+
     let expressionResolver = context.expressionResolver
     let activeState = stateInterceptor?.getAppropriateState(divState: self, context: context)
       ?? states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
@@ -81,7 +81,7 @@ extension DivState: DivBlockModeling {
       vertical: .leading
     )
     let stateAlignment = activeStateDiv?
-      .alignment2D(withDefault: defaultStateAlignment, expressionResolver: expressionResolver) ??
+      .alignment2D(withDefault: defaultStateAlignment, context: context) ??
       defaultStateAlignment
 
     return LayeredBlock(
