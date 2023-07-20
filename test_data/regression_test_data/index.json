@@ -974,6 +974,9 @@
     },
     {
       "title": "Nested visibility actions",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions"
       ],
