@@ -283,7 +283,7 @@
             } else {
                 const selection = window.getSelection();
                 const range = document.createRange();
-                range.selectNode(input);
+                range.selectNodeContents(input);
                 if (selection) {
                     selection.removeAllRanges();
                     selection.addRange(range);
