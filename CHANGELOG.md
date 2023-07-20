@@ -1,3 +1,22 @@
+## 26.2.0
+
+# JSON Schema:
+* Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `div-input`
+
+# Android Client:
+* Added `start` and `end` values to horizontal alignment
+* Added `start` and `end` values to paddings and margins
+* Supported right-to-left layout direction for `wrap` container
+* Supported dictionary functions
+* Fixed `visibility_actions` in DivStates
+
+# iOS Client:
+* Added `testRegex` function.
+* Fixed visibility action for `DivStates`.
+
+# Web Client:
+* Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
+
 ## 26.1.0
 
 # JSON Schema:

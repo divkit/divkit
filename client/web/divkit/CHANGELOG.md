@@ -1,3 +1,7 @@
+## 26.2.0 (July 24, 2023)
+Additions
+* Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
+
 ## 26.1.0 (July 17, 2023)
 Additions:
 * Implemented `testRegex` function
