@@ -552,15 +552,15 @@ fileprivate func makeAxialAlignment(
   case .horizontal:
     switch horizontalAlignment {
     case .left:
-      return uiLayoutDirection == .leftToRight ? .leading : .trailing
-    case .right:
-      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
-    case .start:
       return .leading
+    case .right:
+      return .trailing
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
     case .center:
       return .center
     case .end:
-      return .trailing
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
     case .spaceBetween:
       return .spaceBetween
     case .spaceAround:
