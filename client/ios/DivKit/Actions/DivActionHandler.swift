@@ -39,14 +39,14 @@ public final class DivActionHandler {
     patchProvider: DivPatchProvider,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    showTooltip: DivActionURLHandler.ShowTooltipAction?,
+    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
     urlHandler: DivUrlHandler,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
   ) {
     self.init(
       divActionURLHandler: DivActionURLHandler(

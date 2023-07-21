@@ -3,7 +3,6 @@ import Foundation
 import BasePublic
 import Foundation
 
-
 public final class DivPersistentValuesStorage {
   static let storageFileName = "divkit.values_storage"
   private let timestampProvider: Variable<Milliseconds>
@@ -17,7 +16,7 @@ public final class DivPersistentValuesStorage {
     removeOutdatedStoredValues()
   }
 
-  private let persistentStorage = Property<StoredValues>(
+  private let storage = Property<StoredValues>(
     fileName: storageFileName,
     initialValue: StoredValues(items: [:]),
     onError: { error in
@@ -26,18 +25,18 @@ public final class DivPersistentValuesStorage {
   )
 
   func set(value: DivStoredValue) {
-    var items = persistentStorage.value.items
+    var items = storage.value.items
     items[value.name] = StoredValue(
       timestamp: timestampProvider.value,
       value: value.value,
       type: value.type,
       lifetimeInSec: value.lifetimeInSec
     )
-    persistentStorage.value = StoredValues(items: items)
+    storage.value = StoredValues(items: items)
   }
 
   func get<T>(name: String) -> T? {
-    let items = persistentStorage.value.items
+    let items = storage.value.items
     let currentTimestamp = timestampProvider.value
     guard let storedValue = items[name],
           currentTimestamp - storedValue.timestamp < storedValue.lifetimeInSec * 1000 else {
@@ -58,13 +57,13 @@ public final class DivPersistentValuesStorage {
 
   private func removeOutdatedStoredValues() {
     let currentTimestamp = timestampProvider.value
-    let items = persistentStorage.value.items
+    let items = storage.value.items
     let newItems = items.filter { _, value in
       currentTimestamp - value.timestamp < value.lifetimeInSec * 1000
     }
 
     if newItems.count != items.count {
-      persistentStorage.value = StoredValues(items: newItems)
+      storage.value = StoredValues(items: newItems)
     }
   }
 }

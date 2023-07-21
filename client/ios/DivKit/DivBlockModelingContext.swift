@@ -70,7 +70,7 @@ public struct DivBlockModelingContext {
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
     layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
     variableTracker: DivVariableTracker? = nil,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
