@@ -1,3 +1,5 @@
+import Foundation
+
 import BasePublic
 
 public protocol DivUrlHandler {
