@@ -67,7 +67,7 @@ public final class DivKitComponents {
     self.playerFactory = playerFactory ?? defaultPlayerFactory
     self.showToolip = showTooltip
     self.stateManagement = stateManagement
-    let urlHandler = urlHandler ?? DivUrlOpenerWrapper(urlOpener)
+    let urlHandler = urlHandler ?? DivUrlHandlerDelegate(urlOpener)
     self.urlHandler = urlHandler
     self.variablesStorage = variablesStorage
 
