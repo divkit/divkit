@@ -68,9 +68,10 @@ internal class DivVideoView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
-        getPlayerView()?.let {
-            it.getAttachedPlayer()?.release()
-            it.detach()
+        getPlayerView()?.let { playerView ->
+            val lastPlayer = playerView.getAttachedPlayer()
+            playerView.detach()
+            lastPlayer?.release()
         }
         borderDrawer?.release()
     }

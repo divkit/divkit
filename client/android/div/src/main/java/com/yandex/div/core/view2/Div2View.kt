@@ -11,6 +11,9 @@ import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -91,6 +94,13 @@ class Div2View private constructor(
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
+
+    private val lifecycleObserver = LifecycleEventObserver { _, event ->
+        when(event) {
+            Lifecycle.Event.ON_DESTROY -> releaseAndRemoveChildren(this)
+            else -> Unit
+        }
+    }
 
     private val divBuilder: Div2Builder = context.div2Component.div2Builder
     private val loadReferences = mutableListOf<LoadReference>()
@@ -398,19 +408,43 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
+
+        val lifecycleOwner = ViewTreeLifecycleOwner.get(this)
+        if (lifecycleOwner == null) {
+            KAssert.fail { "Div2View is out of lifecycle after attach" }
+        } else {
+            lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         tryLogVisibility()
         divTimerEventDispatcher?.onDetach(this)
-        releaseChildren(this)
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
         synchronized(monitor) {
             loadReferences.add(loadReference)
         }
+    }
+
+    /** Returns true if div can be replaced with given DivData or false otherwise **/
+    fun prepareForRecycleOrCleanup(newData: DivData, oldData: DivData? = null): Boolean {
+        val canBeReplaced = DivComparator.isDivDataReplaceable(
+            divData ?: oldData,
+            newData,
+            stateId,
+            expressionResolver
+        )
+        if (canBeReplaced) {
+            releaseChildren(this)
+            stopLoadAndSubscriptions()
+        } else {
+            cleanup()
+        }
+
+        return canBeReplaced
     }
 
     override fun cleanup() = synchronized(monitor) {
@@ -424,6 +458,10 @@ class Div2View private constructor(
         divData = null
         dataTag = DivDataTag.INVALID
         cancelImageLoads()
+        stopLoadAndSubscriptions()
+    }
+
+    private fun stopLoadAndSubscriptions() {
         viewToDivBindings.clear()
         propagatedAccessibilityModes.clear()
         cancelTooltips()
@@ -828,13 +866,7 @@ class Div2View private constructor(
         return divVideoActionHandler.handleAction(this, divId, command)
     }
 
-    internal fun unbindViewFromDiv(view: View): Div? {
-        val removedDiv = viewToDivBindings.remove(view)
-        if (viewToDivBindings.isEmpty()) {
-            releaseViewVisitor.visit(view)
-        }
-        return removedDiv
-    }
+    internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)
 
     private fun rebind(newData: DivData, isAutoanimations: Boolean) {
         try {

@@ -62,7 +62,7 @@ internal object DivComparator {
         new: DivBase,
         resolver: ExpressionResolver
     ): Boolean {
-        if (old.id != null && new.id != null && old.id != new.id) {
+        if (old.id != null && new.id != null && old.id != new.id && (old.hasTransitions() || new.hasTransitions())) {
             return false
         }
         if (old is DivCustom && new is DivCustom && old.customType != new.customType) {
@@ -110,5 +110,9 @@ internal object DivComparator {
             is Div.Slider -> emptyList()
             is Div.Video -> emptyList()
         }
+    }
+
+    private fun DivBase.hasTransitions(): Boolean {
+        return transitionIn != null || transitionOut != null || transitionChange != null
     }
 }
