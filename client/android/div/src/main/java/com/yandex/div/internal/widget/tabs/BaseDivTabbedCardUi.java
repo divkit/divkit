@@ -1,7 +1,10 @@
 package com.yandex.div.internal.widget.tabs;
 
+import static com.yandex.div.core.util.ViewsKt.isLayoutRtl;
+
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.LayoutDirection;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.ArrayMap;
+import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -89,6 +93,9 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            if (isLayoutRtl(mPager)) {
+                position = getCount() - position - 1;
+            }
             Log.d(TAG, "instantiateItem pos " + position);
             ViewGroup child;
             Binding binding = mBindingByPosition.get(position);
@@ -116,6 +123,9 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            if (isLayoutRtl(mPager)) {
+                position = getCount() - position - 1;
+            }
             ViewGroup view = (ViewGroup) object;
             mBindings.remove(view).unbind();
             mBindingByPosition.remove(position);
@@ -212,6 +222,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         mAbstractTabBar.setViewPool(viewPool, mTabHeaderTag);
 
         mPager = Views.findViewAndCast(mView, tabbedCardConfig.getCardPagerContainerId());
+        ViewCompat.setLayoutDirection(mPager, mPager.getResources().getConfiguration().getLayoutDirection());
         mPager.setAdapter(null);
         mPager.clearOnPageChangeListeners();
         mPager.addOnPageChangeListener(new PagerChangeListener());

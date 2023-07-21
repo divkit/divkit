@@ -14,7 +14,7 @@ import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost;
 
 import java.util.Set;
 
-public class ScrollableViewPager extends ViewPager implements OnInterceptTouchEventListenerHost {
+public class ScrollableViewPager extends RtlViewPager implements OnInterceptTouchEventListenerHost {
 
     private final NestedHorizontalScrollCompanion mNestedScrollCompanion = new NestedHorizontalScrollCompanion(this);
 
