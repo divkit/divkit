@@ -37,6 +37,7 @@ public final class DivKitComponents {
   private let variableTracker = DivVariableTracker()
   private let disposePool = AutodisposePool()
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
+  private let persistentValuesStorage = DivPersistentValuesStorage()
 
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -117,18 +118,21 @@ public final class DivKitComponents {
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
-      urlHandler: urlHandler
+      urlHandler: urlHandler,
+      persistentValuesStorage: persistentValuesStorage
     )
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
-      actionHandler: actionHandler
+      actionHandler: actionHandler,
+      persistentValuesStorage: persistentValuesStorage
     )
 
     timerStorage = DivTimerStorage(
       variablesStorage: variablesStorage,
       actionHandler: actionHandler,
-      updateCard: updateCard
+      updateCard: updateCard,
+      persistentValuesStorage: persistentValuesStorage
     )
 
     weakActionHandler = actionHandler
@@ -216,7 +220,8 @@ public final class DivKitComponents {
       debugParams: debugParams,
       parentScrollView: parentScrollView,
       layoutDirection: layoutDirection,
-      variableTracker: variableTracker
+      variableTracker: variableTracker,
+      persistentValuesStorage: persistentValuesStorage
     )
   }
 

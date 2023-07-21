@@ -65,6 +65,7 @@ private func makeContext(
     stateManager: DivStateManager(),
     imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
     extensionHandlers: extensionHandlers,
-    stateInterceptors: stateInterceptors
+    stateInterceptors: stateInterceptors,
+    persistentValuesStorage: DivPersistentValuesStorage()
   )
 }

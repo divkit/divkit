@@ -13,6 +13,7 @@ public final class DivActionHandler {
   private let trackVisibility: TrackVisibility
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -20,7 +21,8 @@ public final class DivActionHandler {
     logger: DivActionLogger,
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,
-    variablesStorage: DivVariablesStorage
+    variablesStorage: DivVariablesStorage,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.divActionURLHandler = divActionURLHandler
     self.urlHandler = urlHandler
@@ -28,6 +30,7 @@ public final class DivActionHandler {
     self.trackVisibility = trackVisibility
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public convenience init(
@@ -42,7 +45,8 @@ public final class DivActionHandler {
     trackVisibility: @escaping TrackVisibility = { _, _ in },
     trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
-    urlHandler: DivUrlHandler
+    urlHandler: DivUrlHandler,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.init(
       divActionURLHandler: DivActionURLHandler(
@@ -53,13 +57,15 @@ public final class DivActionHandler {
         updateCard: updateCard,
         showTooltip: showTooltip,
         tooltipActionPerformer: tooltipActionPerformer,
-        performTimerAction: performTimerAction
+        performTimerAction: performTimerAction,
+        persistentValuesStorage: persistentValuesStorage
       ),
       urlHandler: urlHandler,
       logger: logger,
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
-      variablesStorage: variablesStorage
+      variablesStorage: variablesStorage,
+      persistentValuesStorage: persistentValuesStorage
     )
   }
 
@@ -95,7 +101,7 @@ public final class DivActionHandler {
     sender: AnyObject?
   ) {
     let variables = variablesStorage.makeVariables(for: cardId)
-    let expressionResolver = ExpressionResolver(variables: variables)
+    let expressionResolver = ExpressionResolver(variables: variables, persistentValuesStorage: persistentValuesStorage)
     if let url = action.resolveUrl(expressionResolver) {
       let isDivActionURLHandled = divActionURLHandler.handleURL(
         url,

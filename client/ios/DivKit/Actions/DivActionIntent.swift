@@ -14,6 +14,7 @@ enum DivActionIntent {
   case setPreviousItem(id: String, overflow: OverflowMode)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
+  case setStoredValue(storedValue: DivStoredValue)
 
   public static let scheme = "div-action"
 
@@ -73,6 +74,11 @@ enum DivActionIntent {
         return nil
       }
       self = .video(id: id, action: action)
+    case "set_stored_value":
+      guard let storedValue = url.storedValue else {
+        return nil
+      }
+      self = .setStoredValue(storedValue: storedValue)
     default:
       return nil
     }
@@ -164,5 +170,37 @@ extension URL {
       DivKitLogger.failure("Unknown overflow: '\(overflow)'.")
       return .clamp
     }
+  }
+
+  fileprivate var storedValue: DivStoredValue? {
+    guard let name = getParam(forName: "name"),
+          let value = getParam(forName: "value"),
+          let lifetime = getParam(forName: "lifetime").flatMap(Int.init),
+          let typeStr = getParam(forName: "type") else {
+      return nil
+    }
+    guard let type = DivStoredValue.ValueType(rawValue: typeStr) else {
+      DivKitLogger.error("Unsupported stored value type: \(typeStr)")
+      return nil
+    }
+    let storedValue = DivStoredValue(
+      name: name,
+      value: value,
+      type: type,
+      lifetimeInSec: lifetime
+    )
+    guard storedValue.isValueValid else {
+      DivKitLogger.error("Incorrect value: \(value) for type: \(type)")
+      return nil
+    }
+    return storedValue
+  }
+
+  fileprivate func getParam(forName name: String) -> String? {
+    guard let param = queryParamValue(forName: name) else {
+      DivKitLogger.error("The required parameter \(name) is missing")
+      return nil
+    }
+    return param
   }
 }

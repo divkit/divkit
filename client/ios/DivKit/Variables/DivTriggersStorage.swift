@@ -9,16 +9,19 @@ public final class DivTriggersStorage {
   private var cardsTriggers = DivCardsTriggers()
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   private let cardsTriggersLock = RWLock()
   private let autodisposePool = AutodisposePool()
 
   public init(
     variablesStorage: DivVariablesStorage,
-    actionHandler: DivActionHandler
+    actionHandler: DivActionHandler,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
+    self.persistentValuesStorage = persistentValuesStorage
 
     variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
@@ -77,7 +80,8 @@ public final class DivTriggersStorage {
       if trigger.shouldPerformActions(
         for: changesVariablesNames,
         newVariables: newVariables,
-        oldVariables: oldVariables
+        oldVariables: oldVariables,
+        persistentValuesStorage: persistentValuesStorage
       ) {
         trigger.actions.forEach {
           actionHandler?.handle(
@@ -119,9 +123,10 @@ extension DivTrigger {
   func shouldPerformActions(
     for changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
-    oldVariables: DivVariables
+    oldVariables: DivVariables,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) -> Bool {
-    let resolverWithNewVariables = ExpressionResolver(variables: newVariables)
+    let resolverWithNewVariables = ExpressionResolver(variables: newVariables, persistentValuesStorage: persistentValuesStorage)
     guard
       !condition.variablesNames.intersection(changedVariablesNames).isEmpty,
       resolveCondition(resolverWithNewVariables) ?? false
@@ -131,7 +136,7 @@ extension DivTrigger {
     case .onVariable:
       return true
     case .onCondition:
-      let resolverWithOldVariables = ExpressionResolver(variables: oldVariables)
+      let resolverWithOldVariables = ExpressionResolver(variables: oldVariables, persistentValuesStorage: persistentValuesStorage)
       return !(resolveCondition(resolverWithOldVariables) ?? false)
     }
   }

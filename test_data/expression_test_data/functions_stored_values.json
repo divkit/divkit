@@ -1,0 +1,106 @@
+{
+  "cases": [
+    {
+      "name": "getStoredIntegerValue(notStoredIntVar, fallback) => intVal",
+      "expression": "@{getStoredIntegerValue('abc', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 456
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredNumberValue(notStoredNumberVar, fallback) => numberVal",
+      "expression": "@{getStoredNumberValue('abc', 456.0)}",
+      "expected": {
+        "type": "number",
+        "value": 456.0
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredBooleanValue(notStoredBooleanVar, fallback) => booleanVal",
+      "expression": "@{getStoredBooleanValue('abc', true)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredStringValue(notStoredStringVar, fallback) => stringVal",
+      "expression": "@{getStoredStringValue('abc', 'a')}",
+      "expected": {
+        "type": "string",
+        "value": "a"
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(notStoredColorVar, fallbackVar) => colorVal",
+      "expression": "@{getStoredColorValue('abc', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(notStoredColorVar, fallback) => colorVal",
+      "expression": "@{getStoredColorValue('abc', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(notStoredUrlVar, fallbackVar) => urlVal",
+      "expression": "@{getStoredUrlValue('abc', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(notStoredUrlVar, fallback) => urlVal",
+      "expression": "@{getStoredUrlValue('abc', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

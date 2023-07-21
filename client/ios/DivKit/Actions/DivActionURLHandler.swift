@@ -34,6 +34,7 @@ public final class DivActionURLHandler {
   private let showTooltip: ShowTooltipAction?
   private let tooltipActionPerformer: TooltipActionPerformer?
   private let performTimerAction: PerformTimerAction
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   public init(
     stateUpdater: DivStateUpdater,
@@ -43,7 +44,8 @@ public final class DivActionURLHandler {
     updateCard: @escaping UpdateCardAction,
     showTooltip: ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
-    performTimerAction: @escaping PerformTimerAction = { _, _, _ in }
+    performTimerAction: @escaping PerformTimerAction = { _, _, _ in },
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.stateUpdater = stateUpdater
     self.blockStateStorage = blockStateStorage
@@ -53,6 +55,7 @@ public final class DivActionURLHandler {
     self.showTooltip = showTooltip
     self.tooltipActionPerformer = tooltipActionPerformer
     self.performTimerAction = performTimerAction
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func canHandleURL(_ url: URL) -> Bool {
@@ -119,6 +122,8 @@ public final class DivActionURLHandler {
       updateCard(.state(cardId))
     case let .timer(timerId, action):
       performTimerAction(cardId, timerId, action)
+    case let .setStoredValue(storedValue):
+      persistentValuesStorage.set(value: storedValue)
     }
 
     return true

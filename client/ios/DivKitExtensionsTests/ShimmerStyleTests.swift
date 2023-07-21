@@ -5,7 +5,11 @@ import DivKit
 import BasePublic
 
 final class ShimmerStyleTests: XCTestCase {
-  private let expressionResolver = ExpressionResolver(variables: [:], errorTracker: nil)
+  private let expressionResolver = ExpressionResolver(
+    variables: [:],
+    persistentValuesStorage: DivPersistentValuesStorage(),
+    errorTracker: nil
+  )
 
   func test_WhenDecodingEmptyShimmerStyle_DecodesWithDefaultValues() throws {
     XCTAssertEqual(

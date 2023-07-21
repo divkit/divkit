@@ -13,12 +13,14 @@ final class DivTriggerTests: XCTestCase {
     showTooltip: { _ in },
     urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
       self.triggersCount += 1
-    }
+    },
+    persistentValuesStorage: DivPersistentValuesStorage()
   )
 
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
-    actionHandler: actionHandler
+    actionHandler: actionHandler,
+    persistentValuesStorage: DivPersistentValuesStorage()
   )
 
   private var triggersCount = 0

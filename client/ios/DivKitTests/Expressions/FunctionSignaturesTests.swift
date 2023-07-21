@@ -32,7 +32,10 @@ private let functions: [String: Function] = {
   DictFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   IntervalFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   ValueFunctions.allCases.forEach {
-    result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(variables: [:]))
+    result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(
+      variables: [:],
+      persistentValuesStorage: DivPersistentValuesStorage()
+    ))
   }
   return result
 }()

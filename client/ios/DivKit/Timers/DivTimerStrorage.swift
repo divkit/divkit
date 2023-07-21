@@ -10,15 +10,18 @@ final class DivTimerStorage {
   private let timerScheduler = TimerScheduler()
   private var cardsTimers = [DivCardID: [DivTimer]]()
   private var timerControllers = [String: DivTimerController]()
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   public init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
-    updateCard: @escaping DivActionURLHandler.UpdateCardAction
+    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
     self.updateCard = updateCard
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func set(
@@ -125,7 +128,8 @@ final class DivTimerStorage {
       },
       updateCard: { [weak self] in
         self?.updateCard(.timer(cardId))
-      }
+      },
+      persistentValuesStorage: persistentValuesStorage
     )
   }
 

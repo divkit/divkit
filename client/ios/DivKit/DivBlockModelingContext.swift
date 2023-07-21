@@ -29,6 +29,7 @@ public struct DivBlockModelingContext {
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
   private let variableTracker: DivVariableTracker?
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
@@ -36,6 +37,7 @@ public struct DivBlockModelingContext {
   public var expressionResolver: ExpressionResolver {
     ExpressionResolver(
       variables: variables,
+      persistentValuesStorage: persistentValuesStorage,
       errorTracker: { [weak errorsStorage] error in
         errorsStorage?.add(DivBlockModelingRuntimeError(error, path: parentPath))
       },
@@ -67,7 +69,8 @@ public struct DivBlockModelingContext {
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
     layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
-    variableTracker: DivVariableTracker? = nil
+    variableTracker: DivVariableTracker? = nil,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -89,6 +92,7 @@ public struct DivBlockModelingContext {
     self.errorsStorage = errorsStorage
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker
+    self.persistentValuesStorage = persistentValuesStorage
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {

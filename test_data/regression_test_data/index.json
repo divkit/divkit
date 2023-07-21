@@ -1877,6 +1877,23 @@
         "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
       ],
       "file": "tooltips.json"
+    },
+    {
+      "title": "Persistent values storage",
+      "platforms": [
+        "ios"
+      ],
+      "steps": [
+        "Press 'Store value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'Nothing stored'",
+        "In the second open there should be the text 'Stored'",
+        "In the last open there should be again the text 'Nothing stored'"
+      ],
+      "file": "stored_value.json"
     }
   ]
 }

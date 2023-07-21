@@ -12,6 +12,7 @@ final class ExpressionResolverTests: XCTestCase {
       "enum_var": .string("first"),
       "url_var": .url(URL(string: "https://some.url")!),
     ],
+    persistentValuesStorage: DivPersistentValuesStorage(),
     variableTracker: { [unowned self] in
       self.usedVariables = self.usedVariables.union($0)
     }

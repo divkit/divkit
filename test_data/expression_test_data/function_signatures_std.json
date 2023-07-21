@@ -737,6 +737,158 @@
         "web",
         "ios"
       ]
+    },
+    {
+      "name": "getStoredIntegerValue(string, integer) integer",
+      "function_name": "getStoredIntegerValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "integer",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredNumberValue(string, number) number",
+      "function_name": "getStoredNumberValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "number",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredStringValue(string, string) string",
+      "function_name": "getStoredStringValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(string, url) url",
+      "function_name": "getStoredUrlValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "url",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(string, string) url",
+      "function_name": "getStoredUrlValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(string, color) color",
+      "function_name": "getStoredColorValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "color",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(string, string) color",
+      "function_name": "getStoredColorValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredBooleanValue(string, boolean) boolean",
+      "function_name": "getStoredBooleanValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "boolean",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

@@ -1,7 +1,7 @@
 import XCTest
 
+@testable import DivKit
 import CommonCorePublic
-import DivKit
 import LayoutKit
 import NetworkingPublic
 import Serialization
@@ -55,7 +55,8 @@ extension DivBlockModelingContext {
       cardLogId: DivKitTests.cardLogId,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
-      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() })
+      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
+      persistentValuesStorage: DivPersistentValuesStorage()
     )
   }
 }

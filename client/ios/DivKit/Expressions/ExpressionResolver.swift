@@ -13,9 +13,11 @@ public final class ExpressionResolver {
   let variables: DivVariables
   private let errorTracker: ExpressionErrorTracker
   let variableTracker: VariableTracker
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   public init(
     variables: DivVariables,
+    persistentValuesStorage: DivPersistentValuesStorage,
     errorTracker: ExpressionErrorTracker? = nil,
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
@@ -25,6 +27,7 @@ public final class ExpressionResolver {
       errorTracker?($0)
     }
     self.variableTracker = variableTracker
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func resolveString(expression: String) -> String {
@@ -218,6 +221,10 @@ public final class ExpressionResolver {
       return nil
     }
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
+  }
+
+  func getStoredValue<T>(_ name: String) -> T? {
+    persistentValuesStorage.get(name: name)
   }
 
   private func validatedValue<T>(

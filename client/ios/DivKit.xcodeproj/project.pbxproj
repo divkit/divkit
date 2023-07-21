@@ -25,6 +25,7 @@
 		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
 		76FD0506294208890002A1F9 /* RiveDivCustomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0505294208890002A1F9 /* RiveDivCustomData.swift */; };
 		76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0507294208F70002A1F9 /* RiveContainerView.swift */; };
+		891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */; };
 		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
 		896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896381842987C9D50064DDD4 /* RenderingTime.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
@@ -265,6 +266,7 @@
 		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
 		76FD0505294208890002A1F9 /* RiveDivCustomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveDivCustomData.swift; sourceTree = "<group>"; };
 		76FD0507294208F70002A1F9 /* RiveContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveContainerView.swift; sourceTree = "<group>"; };
+		891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivPersistentValuesStorageTests.swift; sourceTree = "<group>"; };
 		893D19632902AD8F005540DF /* TimeMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMeasure.swift; sourceTree = "<group>"; };
 		896381842987C9D50064DDD4 /* RenderingTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingTime.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -837,6 +839,7 @@
 				8C7B1B6C2865C01C0036EF4C /* DivBuilders.swift */,
 				7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */,
 				8C0DC7112865CA1100286F6B /* DivKitTests.swift */,
+				891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */,
 				8C7B1B302865C01C0036EF4C /* DivSerializationTests.swift */,
 				8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */,
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
@@ -1529,6 +1532,7 @@
 				8C23F42629DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
 				8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */,
+				891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */,
 				8C23F43F29DDB3810069F3F7 /* EntityProtocol.swift in Sources */,
 				52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */,
 				8C23F42729DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift in Sources */,

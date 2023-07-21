@@ -12,6 +12,13 @@ enum ValueFunctions: String, CaseIterable {
   case getColorValue
   case getBooleanValue
 
+  case getStoredIntegerValue
+  case getStoredNumberValue
+  case getStoredStringValue
+  case getStoredUrlValue
+  case getStoredColorValue
+  case getStoredBooleanValue
+
   func getDeclaration(resolver: ExpressionResolver)
     -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     [
@@ -63,6 +70,45 @@ enum ValueFunctions: String, CaseIterable {
     case .getBooleanValue:
       let function: GetOrDefault<Bool> = resolver.getValueFunction()
       return FunctionBinary(impl: function)
+    case .getStoredIntegerValue:
+      let function: GetOrDefault<Int> = resolver.getStoredValueFunction()
+      return FunctionBinary(impl: function)
+    case .getStoredNumberValue:
+      let function: GetOrDefault<Double> = resolver.getStoredValueFunction()
+      return FunctionBinary(impl: function)
+    case .getStoredStringValue:
+      let function: GetOrDefault<String> = resolver.getStoredValueFunction()
+      return FunctionBinary(impl: function)
+    case .getStoredUrlValue:
+      let fromUrlFunction: GetOrDefault<URL> = resolver.getStoredValueFunction()
+      let fromStringFunction: GetOrDefaultWithTransform<String, URL> = resolver
+        .getStoredValueFunctionWithTransform {
+          guard let url = URL(string: $0) else {
+            throw AnyCalcExpression.Error.toURL($0)
+          }
+          return url
+        }
+      return OverloadedFunction(functions: [
+        FunctionBinary(impl: fromUrlFunction),
+        FunctionBinary(impl: fromStringFunction),
+      ])
+
+    case .getStoredColorValue:
+      let fromColorFunction: GetOrDefault<Color> = resolver.getStoredValueFunction()
+      let fromStringFunction: GetOrDefaultWithTransform<String, Color> = resolver
+        .getStoredValueFunctionWithTransform {
+          guard let color = Color.color(withHexString: $0) else {
+            throw AnyCalcExpression.Error.toColor($0)
+          }
+          return color
+        }
+      return OverloadedFunction(functions: [
+        FunctionBinary(impl: fromColorFunction),
+        FunctionBinary(impl: fromStringFunction),
+      ])
+    case .getStoredBooleanValue:
+      let function: GetOrDefault<Bool> = resolver.getStoredValueFunction()
+      return FunctionBinary(impl: function)
     }
   }
 }
@@ -95,6 +141,26 @@ extension ExpressionResolver {
         DivKitLogger.warning("The type of the variable \(name) is not \(T.self)")
       }
       return try typpedValue ?? transform(fallbackValue)
+    }
+  }
+
+  fileprivate func getStoredValueFunction<T>() -> GetOrDefault<T> {
+    { name, fallbackValue in
+      guard let value: T = self.getStoredValue(name) else {
+        return fallbackValue
+      }
+      return value
+    }
+  }
+
+  fileprivate func getStoredValueFunctionWithTransform<T,U>(
+    transform: @escaping (U) throws -> T
+  ) -> GetOrDefaultWithTransform<U, T> {
+    { name, fallbackValue in
+      guard let value: T = self.getStoredValue(name) else {
+        return try transform(fallbackValue)
+      }
+      return value
     }
   }
 }
