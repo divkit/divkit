@@ -936,6 +936,9 @@
     },
     {
       "title": "Send select Pager using Div2View.tryLogVisibility",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions",
         "DivPager"
