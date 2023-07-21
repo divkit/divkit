@@ -4,11 +4,12 @@ import { BOOLEAN, INTEGER, STRING } from '../const';
 import { escapeRegExp } from '../../utils/escapeRegExp';
 import { valToString } from '../utils';
 import { wrapError } from '../../utils/wrapError';
+import { toBigInt } from '../bigint';
 
 function len(_ctx: EvalContext, arg: StringValue): EvalValue {
     return {
         type: INTEGER,
-        value: arg.value.length
+        value: toBigInt(arg.value.length)
     };
 }
 
@@ -56,14 +57,14 @@ function replaceAll(_ctx: EvalContext, str: StringValue, what: StringValue, repl
 function index(_ctx: EvalContext, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
-        value: str.value.indexOf(what.value)
+        value: toBigInt(str.value.indexOf(what.value))
     };
 }
 
 function lastIndex(_ctx: EvalContext, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
-        value: str.value.lastIndexOf(what.value)
+        value: toBigInt(str.value.lastIndexOf(what.value))
     };
 }
 
