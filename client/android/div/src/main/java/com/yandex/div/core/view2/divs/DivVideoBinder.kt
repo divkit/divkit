@@ -31,51 +31,47 @@ internal class DivVideoBinder @Inject constructor(
     private val videoViewMapper: DivVideoViewMapper
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
+        val oldDiv = view.div
         val resolver = divView.expressionResolver
-        val player = divView.div2Component.divVideoFactory.makePlayer(
-            div.createSource(resolver),
-            DivPlayerPlaybackConfig(
-                autoplay = div.autostart.evaluate(resolver),
-                isMuted = div.muted.evaluate(resolver),
-                repeatable = div.repeatable.evaluate(resolver),
-                payload = div.playerSettingsPayload
-            )
+
+        val source = div.createSource(resolver)
+        val config = DivPlayerPlaybackConfig(
+            autoplay = div.autostart.evaluate(resolver),
+            isMuted = div.muted.evaluate(resolver),
+            repeatable = div.repeatable.evaluate(resolver),
+            payload = div.playerSettingsPayload
         )
 
-        val oldDiv = view.div
-        if (div == oldDiv) {
-            // Should recreate player when rebinding view because player engine was released
-            view.getPlayerView()?.attach(player)
-            return
+        val player = divView.div2Component.divVideoFactory.makePlayer(source, config)
+
+        val currentPlayerView = view.getPlayerView()
+        var currentPreviewView: ImageView? = null
+
+        for (i in 0 until view.childCount) {
+            val childView = view.getChildAt(i)
+            if (childView is ImageView) {
+                currentPreviewView = childView
+                break
+            }
         }
 
-        view.closeAllSubscription()
+        val playerView = currentPlayerView ?: divView.div2Component.divVideoFactory.makePlayerView(view.context)
 
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
-
-        view.removeAllViews()
-
-        val playerView = divView.div2Component.divVideoFactory.makePlayerView(view.context)
         val preview = div.createPreview(resolver)
-        val previewImageView: ImageView = ImageView(view.context).apply {
+        val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {
             layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             scaleType = ImageView.ScaleType.FIT_CENTER
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        with(previewImageView) {
             if (preview != null) {
                 visibility = View.VISIBLE
                 setImageBitmap(preview)
             } else {
                 visibility = View.INVISIBLE
             }
-            setBackgroundColor(Color.TRANSPARENT)
         }
-        view.addView(playerView)
-        view.addView(previewImageView)
-
-        playerView.attach(player)
-
-        videoViewMapper.addView(view, div)
-        baseBinder.bindView(view, div, oldDiv, divView)
 
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
@@ -117,6 +113,25 @@ internal class DivVideoBinder @Inject constructor(
         view.apply {
             observeElapsedTime(div, divView, player)
         }
+
+        playerView.attach(player)
+
+        if (div == oldDiv) return
+
+        view.closeAllSubscription()
+
+        view.div = div
+        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
+
+        if (currentPreviewView == null && currentPlayerView == null) {
+            view.removeAllViews()
+
+            view.addView(playerView)
+            view.addView(previewImageView)
+        }
+
+        videoViewMapper.addView(view, div)
+        baseBinder.bindView(view, div, oldDiv, divView)
     }
 
     private fun DivVideoView.observeElapsedTime(

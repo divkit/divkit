@@ -4,6 +4,7 @@ import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
@@ -20,10 +21,12 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivComparatorTest {
+    private val transitionMock = mock(DivAppearanceTransition::class.java)
 
     @Test
     fun `divs of the same type are replaceable`() {
@@ -54,9 +57,17 @@ class DivComparatorTest {
     }
 
     @Test
-    fun `divs with different ids are not replaceable`() {
+    fun `divs with different ids are replaceable`() {
         val div1 = divText(id = "01", text = "Text 01")
         val div2 = divText(id = "02", text = "Text 02")
+
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+    }
+
+    @Test
+    fun `divs that has transitions and different ids are not replaceable`() {
+        val div1 = divText(id = "01", text = "Text 01", transitionIn = transitionMock)
+        val div2 = divText(id = "02", text = "Text 02", transitionIn = transitionMock)
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
     }
@@ -102,9 +113,17 @@ class DivComparatorTest {
     }
 
     @Test
-    fun `containers with different child ids are not replaceable`() {
+    fun `containers with different child ids are replaceable`() {
         val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01")))
         val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02")))
+
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+    }
+
+    @Test
+    fun `containers which children has transitions and different ids are not replaceable`() {
+        val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
+        val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
     }
@@ -142,9 +161,17 @@ class DivComparatorTest {
     }
 
     @Test
-    fun `grids with different child ids are not replaceable`() {
+    fun `grids with different child ids are replaceable`() {
         val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01")))
         val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02")))
+
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+    }
+
+    @Test
+    fun `grids which children has transitions and different ids are not replaceable`() {
+        val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
+        val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
     }
@@ -181,58 +208,87 @@ class DivComparatorTest {
         assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
     }
 
-    private fun divText(id: String? = null, text: String): Div {
-        return Div.Text(DivText(id  = id, text = text.asExpression()))
+    private fun divText(
+        id: String? = null,
+        text: String,
+        transitionIn: DivAppearanceTransition? = null
+    ): Div {
+        return Div.Text(DivText(id = id, text = text.asExpression(), transitionIn = transitionIn))
     }
 
-    private fun divImage(id: String? = null, imageUrl: String): Div {
-        return Div.Image(DivImage(id  = id, imageUrl = Uri.parse(imageUrl).asExpression()))
+    private fun divImage(
+        id: String? = null,
+        imageUrl: String,
+        transitionIn: DivAppearanceTransition? = null
+    ): Div {
+        return Div.Image(
+            DivImage(
+                id = id,
+                imageUrl = Uri.parse(imageUrl).asExpression(),
+                transitionIn = transitionIn
+            )
+        )
     }
 
-    private fun divCustom(type: String): Div {
-        return Div.Custom(DivCustom(customType = type))
+    private fun divCustom(type: String, transitionIn: DivAppearanceTransition? = null): Div {
+        return Div.Custom(DivCustom(customType = type, transitionIn = transitionIn))
     }
 
     private fun divContainer(
         orientation: DivContainer.Orientation = DivContainer.Orientation.VERTICAL,
-        items: List<Div>
+        items: List<Div>,
+        transitionIn: DivAppearanceTransition? = null
     ): Div {
         return Div.Container(
             DivContainer(
                 orientation = orientation.asExpression(),
-                items = items
+                items = items,
+                transitionIn = transitionIn
             )
         )
     }
 
-    private fun divGrid(items: List<Div>): Div {
-        return Div.Grid(DivGrid(columnCount = 1L.asExpression(), items = items))
+    private fun divGrid(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {
+        return Div.Grid(
+            DivGrid(
+                columnCount = 1L.asExpression(),
+                items = items,
+                transitionIn = transitionIn
+            )
+        )
     }
 
-    private fun divGallery(items: List<Div>): Div {
-        return Div.Gallery(DivGallery(items = items))
+    private fun divGallery(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {
+        return Div.Gallery(DivGallery(items = items, transitionIn = transitionIn))
     }
 
-    private fun divPager(items: List<Div>): Div {
+    private fun divPager(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {
         return Div.Pager(
             DivPager(
                 layoutMode = DivPagerLayoutMode.PageSize(value = DivPageSize(pageWidth = DivPercentageSize(80.0.asExpression()))),
-                items = items
+                items = items,
+                transitionIn = transitionIn
             )
         )
     }
 
-    private fun divTabs(items: List<Div>): Div {
+    private fun divTabs(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {
         val tabs = items.mapIndexed { index, div ->
             DivTabs.Item(title = "tab $index".asExpression(), div = div)
         }
-        return Div.Tabs(DivTabs(items = tabs))
+        return Div.Tabs(DivTabs(items = tabs, transitionIn = transitionIn))
     }
 
-    private fun divState(items: List<Div>): Div {
+    private fun divState(items: List<Div>, transitionIn: DivAppearanceTransition? = null): Div {
         val states = items.mapIndexed { index, div ->
             DivState.State(stateId = "state_$index", div = div)
         }
-        return Div.State(DivState(divId = "state_container", states = states))
+        return Div.State(
+            DivState(
+                divId = "state_container",
+                states = states,
+                transitionIn = transitionIn
+            )
+        )
     }
 }
