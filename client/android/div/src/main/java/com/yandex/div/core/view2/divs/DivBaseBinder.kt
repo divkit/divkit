@@ -81,6 +81,10 @@ internal class DivBaseBinder @Inject constructor(
                 view.bindFocusActions(divView, resolver, div.focus?.onFocus, div.focus?.onBlur)
             }
 
+        // DivAccessibilityBinder is responsible for focus setup, so changing isFocusable only if binder is disabled
+        if(!divAccessibilityBinder.enabled) {
+            view.applyFocusableState(div)
+        }
         view.observeVisibility(div, resolver, subscriber, divView)
         view.observeTransform(div, resolver, subscriber)
     }
@@ -512,6 +516,10 @@ internal class DivBaseBinder @Inject constructor(
         onBlur: List<DivAction>?
     ) {
         divFocusBinder.bindDivFocusActions(this, divView, resolver, onFocus, onBlur)
+    }
+
+    private fun View.applyFocusableState(div: DivBase) {
+        isFocusable = div.focus != null
     }
 
     private val DivSize.minSize get() = (this as? DivSize.WrapContent)?.value?.minSize

@@ -82,6 +82,7 @@ public class DivConfiguration {
     private final boolean mShouldIgnoreMenuItemsInActions;
     private final boolean mVisualErrors;
     private final boolean mSupportHyphenation;
+    private final boolean mAccessibilityEnabled;
     private boolean mViewPoolEnabled;
     private boolean mViewPoolProfilingEnabled;
     private boolean mResourceCacheEnabled;
@@ -115,6 +116,7 @@ public class DivConfiguration {
             boolean shouldIgnoreMenuItemsInActions,
             boolean visualErrors,
             boolean supportHyphenation,
+            boolean accessibilityEnabled,
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
             boolean resourceCacheEnabled,
@@ -145,6 +147,7 @@ public class DivConfiguration {
         mShouldIgnoreMenuItemsInActions = shouldIgnoreMenuItemsInActions;
         mVisualErrors = visualErrors;
         mSupportHyphenation = supportHyphenation;
+        mAccessibilityEnabled = accessibilityEnabled;
         mViewPoolEnabled = viewPoolEnabled;
         mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
@@ -332,6 +335,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.ACCESSIBILITY_ENABLED)
+    public boolean isAccessibilityEnabled() {
+        return mAccessibilityEnabled;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     public boolean isBindOnAttachEnabled() {
         return mBindOnAttachEnabled;
@@ -391,6 +400,7 @@ public class DivConfiguration {
         private boolean mShouldIgnoreMenuItemsInActions = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED.getDefaultValue();
         private boolean mSupportHyphenation = Experiment.HYPHENATION_SUPPORT_ENABLED.getDefaultValue();
         private boolean mVisualErrors = Experiment.VISUAL_ERRORS_ENABLED.getDefaultValue();
+        private boolean mAcccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
@@ -582,6 +592,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enableAccessibility(boolean enable) {
+            mAcccessibilityEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public Builder enableViewPool(boolean enable) {
             mViewPoolEnabled = enable;
             return this;
@@ -649,6 +665,7 @@ public class DivConfiguration {
                     mShouldIgnoreMenuItemsInActions,
                     mVisualErrors,
                     mSupportHyphenation,
+                    mAcccessibilityEnabled,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mResourceCacheEnabled,
