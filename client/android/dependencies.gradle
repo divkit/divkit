@@ -43,7 +43,7 @@ ext.versions.androidx = [
         espresso                        : '3.4.0',
         lifecycle                       : '2.4.0',
         material                        : '1.2.1',
-        recycler                        : '1.1.0',
+        recycler                        : '1.2.0',
         test                            : '1.4.0',
         uiautomator                     : '2.2.0',
         viewpager2                      : '1.0.0',

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
@@ -46,7 +47,14 @@ class RegressionActivity : AppCompatActivity() {
         binding.regressionToolbar.setNavigationIcon(R.drawable.ic_back)
         binding.toolbarLayout.setCollapsedTitleTextColor(Color.BLACK)
         binding.regressionToolbar.setNavigationOnClickListener { onBackPressed() }
-        binding.scenarioList.addItemDecoration(DividerItemDecoration(this, 0))
+
+        with(binding.scenarioList) {
+            addItemDecoration(DividerItemDecoration(this@RegressionActivity, 0))
+            layoutManager = LinearLayoutManager(this@RegressionActivity)
+            adapter = scenarioListAdapter.also {
+                it.stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        }
 
         setContentView(binding.root)
         setupRecordScreenSwitch()
@@ -63,11 +71,6 @@ class RegressionActivity : AppCompatActivity() {
                 }
             })
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setupScenarioList()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -123,10 +126,5 @@ class RegressionActivity : AppCompatActivity() {
         params.gravity = Gravity.CENTER_HORIZONTAL
         switcher.layoutParams = params
         binding.toolbarLayout.addView(switcher)
-    }
-
-    private fun setupScenarioList() {
-        binding.scenarioList.layoutManager = LinearLayoutManager(this)
-        binding.scenarioList.adapter = scenarioListAdapter
     }
 }
