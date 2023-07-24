@@ -129,22 +129,20 @@
           "type": "container",
           "orientation": "horizontal",
           "paddings": {
-            "top": 22,
-            "bottom": 22,
+            "top": 11,
+            "bottom": 11,
             "left": 20,
             "right": 20
           },
           "margins": {
-            "top": 25,
-            "bottom": 10,
-            "left": 20,
-            "right": 20
+            "top": 2
           },
+          "alignment_horizontal": "center",
           "height": {
             "type": "wrap_content"
           },
           "width": {
-            "type": "match_parent"
+            "type": "wrap_content"
           },
           "background": [
             {
@@ -167,8 +165,11 @@
               "font_weight": "regular",
               "line_height": 24,
               "width": {
-                "type": "match_parent",
+                "type": "wrap_content",
                 "weight": 1
+              },
+              "margins": {
+                "right": 10
               }
             },
             {
