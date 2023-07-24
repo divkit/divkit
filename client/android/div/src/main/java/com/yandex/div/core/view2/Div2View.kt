@@ -97,8 +97,18 @@ class Div2View private constructor(
 
     private val lifecycleObserver = LifecycleEventObserver { _, event ->
         when(event) {
-            Lifecycle.Event.ON_DESTROY -> releaseAndRemoveChildren(this)
+            Lifecycle.Event.ON_DESTROY -> releaseChildren(this)
             else -> Unit
+        }
+    }
+
+    private val connectToLifecycleRunnable = SingleTimeOnAttachCallback(this) {
+        ViewTreeLifecycleOwner.get(this).let {
+            if (it == null) {
+                KAssert.fail { "Div2View is out of lifecycle after attach" }
+            } else {
+                it.lifecycle.addObserver(lifecycleObserver)
+            }
         }
     }
 
@@ -408,13 +418,7 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
-
-        val lifecycleOwner = ViewTreeLifecycleOwner.get(this)
-        if (lifecycleOwner == null) {
-            KAssert.fail { "Div2View is out of lifecycle after attach" }
-        } else {
-            lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
-        }
+        connectToLifecycleRunnable.onAttach()
     }
 
     override fun onDetachedFromWindow() {
