@@ -110,17 +110,19 @@ internal class DivVideoBinder @Inject constructor(
         }
         player.addObserver(playerListener)
 
-        view.apply {
-            observeElapsedTime(div, divView, player)
-        }
-
         playerView.attach(player)
 
-        if (div == oldDiv) return
+        if (div == oldDiv) {
+            view.observeElapsedTime(div, divView, player)
+            return
+        }
 
         view.closeAllSubscription()
 
         view.div = div
+
+        view.observeElapsedTime(div, divView, player)
+
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
