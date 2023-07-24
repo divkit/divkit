@@ -1,9 +1,11 @@
 package com.yandex.divkit.regression
 
 import android.app.Activity
+import android.graphics.Color
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,9 @@ internal class ScenarioListAdapter(
     private val div2ViewCreator: Div2ViewCreator
 ) :
     ListAdapter<Scenario, ScenarioViewHolder>(Callback) {
+    enum class ScenarioViewType {
+        HEADER, LIST
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenarioViewHolder {
         val item = div2ViewCreator.createDiv2View(
@@ -26,8 +31,26 @@ internal class ScenarioListAdapter(
         )
         item.layoutParams = RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
+        when(viewType) {
+            ScenarioViewType.HEADER.ordinal -> {
+                item.setBackgroundColor(Color.TRANSPARENT)
+                item.setBackgroundResource(R.drawable.rounded_top_corners)
+            }
+            ScenarioViewType.LIST.ordinal -> {
+                item.setBackgroundResource(0)
+                item.setBackgroundColor(ContextCompat.getColor(activity, R.color.white))
+            }
+        }
+
         return ScenarioViewHolder(item) { position ->
             ScenarioActivity.launch(parent.context, position)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when(position) {
+            0 -> ScenarioViewType.HEADER.ordinal
+            else -> ScenarioViewType.LIST.ordinal
         }
     }
 

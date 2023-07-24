@@ -3,14 +3,16 @@ package com.yandex.divkit.regression
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
@@ -45,18 +47,6 @@ class RegressionActivity : AppCompatActivity() {
         binding.toolbarLayout.setCollapsedTitleTextColor(Color.BLACK)
         binding.regressionToolbar.setNavigationOnClickListener { onBackPressed() }
         binding.scenarioList.addItemDecoration(DividerItemDecoration(this, 0))
-
-        binding.scenarioList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val scrollY = binding.scrollView.scrollY
-                if (scrollY > 500) {
-                    binding.scenarioList.setBackgroundColor(Color.WHITE)
-                } else {
-                    binding.scenarioList.setBackgroundResource(R.drawable.rounded_top_corners)
-                }
-            }
-        })
 
         setContentView(binding.root)
         setupRecordScreenSwitch()
@@ -114,7 +104,7 @@ class RegressionActivity : AppCompatActivity() {
         val switcher = provideDiv2ViewCreator().createDiv2View(
             this,
             "application/screen_record_switcher.json",
-            binding.container,
+            binding.toolbarLayout,
             ScenarioLogDelegate.Stub,
         )
 
@@ -126,7 +116,13 @@ class RegressionActivity : AppCompatActivity() {
                 url = Expression.constant(Uri.parse(url))
             )
         )
-        binding.container.addView(switcher, 0)
+        val params = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        params.gravity = Gravity.CENTER_HORIZONTAL
+        switcher.layoutParams = params
+        binding.toolbarLayout.addView(switcher)
     }
 
     private fun setupScenarioList() {
