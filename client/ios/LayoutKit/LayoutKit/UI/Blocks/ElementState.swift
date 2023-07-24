@@ -2,15 +2,7 @@ import Foundation
 
 import LayoutKitInterface
 
-public protocol ElementState {
-  static var prefersAnimatedChanges: Bool { get }
-  static var shouldUpdateUi: Bool { get }
-}
-
-extension ElementState {
-  public static var prefersAnimatedChanges: Bool { false }
-  public static var shouldUpdateUi: Bool { true }
-}
+public protocol ElementState {}
 
 public typealias BlocksState = [UIElementPath: ElementState]
 

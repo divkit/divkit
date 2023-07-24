@@ -8,8 +8,6 @@ public final class SwipeContainerBlock: WrapperBlock {
     case right
     case left
 
-    public static let prefersAnimatedChanges = true
-
     public static let `default` = State.normal
   }
 
