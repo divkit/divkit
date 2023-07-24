@@ -1,21 +1,15 @@
 package com.yandex.divkit.regression
 
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.internal.Assert
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivAction
 import com.yandex.divkit.regression.databinding.RegressionActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
 import com.yandex.divkit.regression.di.provideRegressionConfig
@@ -49,7 +43,6 @@ class RegressionActivity : AppCompatActivity() {
         binding.scenarioList.addItemDecoration(DividerItemDecoration(this, 0))
 
         setContentView(binding.root)
-        setupRecordScreenSwitch()
         lifecycleScope.launchWhenCreated {
             regressionViewModel.uiState.collect(object : FlowCollector<RegressionUiState> {
                 override suspend fun emit(uiState: RegressionUiState) {
@@ -98,31 +91,6 @@ class RegressionActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.addSubMenu(Menu.NONE, TAG_FILTER_MENU_ID, Menu.NONE, "Filter by tag")
         return true
-    }
-
-    private fun setupRecordScreenSwitch() {
-        val switcher = provideDiv2ViewCreator().createDiv2View(
-            this,
-            "application/screen_record_switcher.json",
-            binding.toolbarLayout,
-            ScenarioLogDelegate.Stub,
-        )
-
-        val state = if (regressionConfig.isRecordScreenEnabled) "active" else "inactive"
-        val url = "div-action://set_state?state_id=0/switcher/$state"
-        switcher.handleActionWithResult(
-            DivAction(
-                logId = "init record screen switcher",
-                url = Expression.constant(Uri.parse(url))
-            )
-        )
-        val params = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        params.gravity = Gravity.CENTER_HORIZONTAL
-        switcher.layoutParams = params
-        binding.toolbarLayout.addView(switcher)
     }
 
     private fun setupScenarioList() {
