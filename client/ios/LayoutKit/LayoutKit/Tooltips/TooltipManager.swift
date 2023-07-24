@@ -1,15 +1,19 @@
 import BasePublic
 import CommonCorePublic
-import UIKit
 
-public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {
-  func tooltipAnchorViewAdded(anchorView: TooltipAnchorView)
-  func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView)
-}
+#if os(iOS)
+import UIKit
+#endif
 
 public protocol TooltipActionPerformer {
   func showTooltip(info: TooltipInfo)
   func hideTooltip(id: String)
+}
+
+#if os(iOS)
+public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {
+  func tooltipAnchorViewAdded(anchorView: TooltipAnchorView)
+  func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView)
 }
 
 extension TooltipManager {
@@ -23,22 +27,22 @@ public final class DefaultTooltipManager: TooltipManager {
     public let view: VisibleBoundsTrackingView
   }
 
-  public var shownDivTooltips: BasePublic.Property<Set<String>>
+  public var shownTooltips: BasePublic.Property<Set<String>>
 
   private let handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var showingTooltips = [String: TooltipContainerView]()
 
   public init(
-    shownDivTooltips: BasePublic.Property<Set<String>>,
+    shownTooltips: BasePublic.Property<Set<String>>,
     handleAction: @escaping (UIActionEvent) -> Void
   ) {
     self.handleAction = handleAction
-    self.shownDivTooltips = shownDivTooltips
+    self.shownTooltips = shownTooltips
   }
 
   public func showTooltip(info: TooltipInfo) {
-    if !info.multiple, !shownDivTooltips.value.insert(info.id).inserted { return }
+    if !info.multiple, !shownTooltips.value.insert(info.id).inserted { return }
     guard !showingTooltips.keys.contains(info.id),
           let tooltip = existingAnchorViews.compactMap({ $0?.makeTooltip(id: info.id) }).first
     else { return }
@@ -97,3 +101,14 @@ extension TooltipAnchorView {
       }
   }
 }
+#else
+public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {
+}
+
+public final class DefaultTooltipManager: TooltipManager {
+  public init() {}
+
+  public func showTooltip(info _: TooltipInfo) {}
+  public func hideTooltip(id _: String) {}
+}
+#endif

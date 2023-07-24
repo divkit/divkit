@@ -93,8 +93,9 @@ public final class DivKitComponents {
     weak var weakTimerStorage: DivTimerStorage?
     weak var weakActionHandler: DivActionHandler?
 
+    #if os(iOS)
     self.tooltipManager = tooltipManager ?? DefaultTooltipManager(
-      shownDivTooltips: .init(),
+      shownTooltips: .init(),
       handleAction: {
         switch $0.payload {
         case let .divAction(params: params):
@@ -103,6 +104,9 @@ public final class DivKitComponents {
         }
       }
     )
+    #else
+    self.tooltipManager = tooltipManager ?? DefaultTooltipManager()
+    #endif
 
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
