@@ -920,6 +920,9 @@
     },
     {
       "title": "Visibility actions performed and logged in pager",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions",
         "DivPager"
