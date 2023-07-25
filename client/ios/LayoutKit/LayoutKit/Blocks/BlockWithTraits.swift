@@ -33,9 +33,7 @@ extension BlockWithWidthTrait {
 
   public var minWidth: CGFloat {
     switch widthTrait {
-    case let .fixed(size):
-      return size
-    case .weighted:
+    case .fixed, .weighted:
       return 0
     case .intrinsic(constrained: _, minSize: let minSize, maxSize: _):
       return minSize
