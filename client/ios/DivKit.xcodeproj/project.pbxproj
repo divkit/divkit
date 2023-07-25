@@ -56,7 +56,6 @@
 		8C1A377C28B4E3E700A047C8 /* UIStatePayloadFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377528B4E3E700A047C8 /* UIStatePayloadFactory.swift */; };
 		8C1A377D28B4E3E700A047C8 /* JSONPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377628B4E3E700A047C8 /* JSONPayload.swift */; };
 		8C1A378028B4E47900A047C8 /* WebPreviewSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377F28B4E47900A047C8 /* WebPreviewSocket.swift */; };
-		8C1A378828B5143200A047C8 /* VisibilityTrackingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378428B5143200A047C8 /* VisibilityTrackingCardView.swift */; };
 		8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */; };
 		8C1A378A28B5143200A047C8 /* DivViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378628B5143200A047C8 /* DivViewController.swift */; };
 		8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378728B5143200A047C8 /* DivViewProvider.swift */; };
@@ -294,7 +293,6 @@
 		8C1A377528B4E3E700A047C8 /* UIStatePayloadFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStatePayloadFactory.swift; sourceTree = "<group>"; };
 		8C1A377628B4E3E700A047C8 /* JSONPayload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONPayload.swift; sourceTree = "<group>"; };
 		8C1A377F28B4E47900A047C8 /* WebPreviewSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPreviewSocket.swift; sourceTree = "<group>"; };
-		8C1A378428B5143200A047C8 /* VisibilityTrackingCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibilityTrackingCardView.swift; sourceTree = "<group>"; };
 		8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisibilityTrackingScrollView.swift; sourceTree = "<group>"; };
 		8C1A378628B5143200A047C8 /* DivViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewController.swift; sourceTree = "<group>"; };
 		8C1A378728B5143200A047C8 /* DivViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewProvider.swift; sourceTree = "<group>"; };
@@ -612,7 +610,6 @@
 				8C1A378628B5143200A047C8 /* DivViewController.swift */,
 				8C1A378728B5143200A047C8 /* DivViewProvider.swift */,
 				8C1A382F28B61A0300A047C8 /* SimpleDivView.swift */,
-				8C1A378428B5143200A047C8 /* VisibilityTrackingCardView.swift */,
 				8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */,
 			);
 			path = DivView;
@@ -1465,7 +1462,6 @@
 				8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */,
 				8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */,
 				8C7B18952864CA380036EF4C /* Alert.swift in Sources */,
-				8C1A378828B5143200A047C8 /* VisibilityTrackingCardView.swift in Sources */,
 				8C2BFA5428C10EA000A16E9B /* RegressionTestModel.swift in Sources */,
 				8C440A042864C55400EF4175 /* DivKitPlaygroundApp.swift in Sources */,
 				8C1A374928B4187B00A047C8 /* DeviceInfo.swift in Sources */,

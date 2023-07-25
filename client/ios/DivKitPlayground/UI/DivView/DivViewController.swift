@@ -24,18 +24,8 @@ open class DivViewController: UIViewController {
   private let blockProvider: DivBlockProvider
   private let divKitComponents: DivKitComponents
   private let disposePool = AutodisposePool()
-
-  private let cardView = VisibilityTrackingCardView()
   private let scrollView = VisibilityTrackingScrollView()
-
   private var lastBounds = CGRect.zero
-
-  private var blockView: BlockView! {
-    didSet {
-      oldValue?.removeFromSuperview()
-      scrollView.addSubview(blockView)
-    }
-  }
 
   init(
     blockProvider: DivBlockProvider,
@@ -54,7 +44,6 @@ open class DivViewController: UIViewController {
 
   public override func loadView() {
     scrollView.backgroundColor = .white
-    scrollView.cardView = cardView
 
     blockProvider.parentScrollView = scrollView
 
@@ -86,11 +75,9 @@ open class DivViewController: UIViewController {
     super.viewWillLayoutSubviews()
 
     let blockSize = blockProvider.block.size(forResizableBlockSize: view.bounds.size)
-    cardView.frame = CGRect(origin: .zero, size: blockSize)
+    scrollView.cardView?.frame = CGRect(origin: .zero, size: blockSize)
     scrollView.contentSize = blockSize
-
-    blockView.frame = cardView.bounds
-    blockView.layoutIfNeeded()
+    scrollView.cardView?.layoutIfNeeded()
   }
 
   public override func viewDidLayoutSubviews() {
@@ -108,7 +95,7 @@ open class DivViewController: UIViewController {
   private func updateBlockView(block: Block) {
     let elementStateObserver = self
     let renderingDelegate = divKitComponents.tooltipManager
-    if let blockView = blockView, block.canConfigureBlockView(blockView) {
+    if let blockView = scrollView.cardView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(
         blockView,
         observer: elementStateObserver,
@@ -116,11 +103,10 @@ open class DivViewController: UIViewController {
         renderingDelegate: renderingDelegate
       )
     } else {
-      blockView = block.makeBlockView(
+      scrollView.cardView = block.makeBlockView(
         observer: elementStateObserver,
         renderingDelegate: renderingDelegate
       )
-      cardView.blockView = blockView
     }
 
     view.setNeedsLayout()

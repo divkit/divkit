@@ -2,15 +2,18 @@ import UIKit
 
 import BaseUIPublic
 import CommonCorePublic
+import LayoutKit
 
 final class VisibilityTrackingScrollView: UIScrollView, VisibleBoundsTrackingContainer {
+  typealias CardView = VisibleBoundsTrackingView & BlockViewProtocol
+
   private var previousVisibleBounds = CGRect.zero
   private var currentVisibleBounds = CGRect.zero
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     cardView.asArray()
   }
 
-  var cardView: VisibilityTrackingCardView? {
+  var cardView: CardView? {
     didSet {
       oldValue?.removeFromSuperview()
       cardView.map { addSubview($0) }
