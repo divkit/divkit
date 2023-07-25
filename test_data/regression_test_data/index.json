@@ -1011,6 +1011,9 @@
     },
     {
       "title": "Visibility actions in DivState",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivState",
         "visibility_actions"
