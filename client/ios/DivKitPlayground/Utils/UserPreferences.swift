@@ -6,6 +6,7 @@ enum UserPreferences {
   static let lastUrlKey = "lastUrl"
   static let playgroundThemeKey = "playgroundTheme"
   static let showRenderingTimeKey = "showRenderingTime"
+  static let isRTLEnabledKey = "isRTLEnabled"
 
   static let isQrScannerEnabledDefault = {
     #if targetEnvironment(simulator)
@@ -14,6 +15,12 @@ enum UserPreferences {
     true
     #endif
   }()
+
+  static let isRTLEnabledDefault: Bool = UIUserInterfaceLayoutDirection
+    .system == .rightToLeft ? true : false
+  static var isRTLEnabled: Bool {
+    defaults.value(forKey: isRTLEnabledKey) as? Bool ?? isRTLEnabledDefault
+  }
 
   static let showRenderingTimeDefault = false
   static var showRenderingTime: Bool {

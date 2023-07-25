@@ -1,20 +1,23 @@
-import SwiftUI
-
 import DivKit
+import SwiftUI
 
 final class DivViewProvider {
   public let jsonProvider = ObservableJsonProvider()
 
   private var blockProvider: DivBlockProvider!
   private var divKitComponents: DivKitComponents!
+  private var layoutDirection: UIUserInterfaceLayoutDirection
 
-  init() {
+  init(layoutDirection: UIUserInterfaceLayoutDirection = .system) {
+    self.layoutDirection = layoutDirection
+
     let urlHandler = PlaygroundUrlHandler(
       loadJsonUrl: { [weak self] url in
         self?.jsonProvider.load(url: url)
       }
     )
     divKitComponents = AppComponents.makeDivKitComponents(
+      layoutDirection: layoutDirection,
       urlHandler: urlHandler
     )
 

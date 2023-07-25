@@ -10,6 +10,7 @@ enum AppComponents {
   static let fontProvider = YSFontProvider()
 
   static func makeDivKitComponents(
+    layoutDirection: UserInterfaceLayoutDirection = .system,
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
@@ -31,6 +32,7 @@ enum AppComponents {
       ],
       flagsInfo: DivFlagsInfo(),
       fontProvider: fontProvider,
+      layoutDirection: layoutDirection,
       patchProvider: DemoPatchProvider(),
       trackVisibility: { logId, cardId in
         AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")

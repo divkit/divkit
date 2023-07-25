@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MainView: View {
   @Environment(\.colorScheme) var colorScheme
+  @AppStorage(UserPreferences.isRTLEnabledKey)
+  var isRTLEnabled: Bool = UserPreferences.isRTLEnabledDefault
 
   var body: some View {
     NavigationView {
@@ -42,7 +44,7 @@ struct MainView: View {
   }
 
   private func makeDivViewProvider() -> DivViewProvider {
-    DivViewProvider()
+    DivViewProvider(layoutDirection: isRTLEnabled ? .rightToLeft : .leftToRight)
   }
 }
 
@@ -93,11 +95,12 @@ private struct NavigationButton<Destination>: View where Destination: View {
   }
 }
 
-private extension ColorScheme {
-  var settingsColor: Color {
+extension ColorScheme {
+  fileprivate var settingsColor: Color {
     self == .dark ? ThemeColor.settingsDark : ThemeColor.settingsLight
   }
-  var settingsLabelColor: Color {
+
+  fileprivate var settingsLabelColor: Color {
     self == .dark ? .black : .white
   }
 }
