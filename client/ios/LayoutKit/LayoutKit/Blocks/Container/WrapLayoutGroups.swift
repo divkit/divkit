@@ -7,6 +7,7 @@ struct WrapLayoutGroups {
   private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
   private(set) var groups: [[ChildParametes]] = [[]]
 
+  private let blockLayoutDirection: UserInterfaceLayoutDirection
   private let children: [ContainerBlock.Child]
   private let separator: ContainerBlock.Separator?
   private let lineSeparator: ContainerBlock.Separator?
@@ -20,12 +21,14 @@ struct WrapLayoutGroups {
   private var separatorAdded = false
 
   init(
+    blockLayoutDirection: UserInterfaceLayoutDirection,
     children: [ContainerBlock.Child],
     separator: ContainerBlock.Separator?,
     lineSeparator: ContainerBlock.Separator?,
     size: CGSize,
     layoutDirection: ContainerBlock.LayoutDirection
   ) {
+    self.blockLayoutDirection = blockLayoutDirection
     self.children = children
     self.separator = separator
     self.lineSeparator = lineSeparator
@@ -71,10 +74,7 @@ struct WrapLayoutGroups {
         }
         if offset + childSize[keyPath: keyPath] + separatorOffset > size[keyPath: keyPath] {
           startNewLine()
-          addChild(
-            child: child,
-            size: childSize
-          )
+          addChild(child: child, size: childSize)
         } else {
           addChild(child: child, size: childSize)
         }
@@ -82,9 +82,15 @@ struct WrapLayoutGroups {
     }
     if line.count > 0 {
       addEndSeparator()
-      groups.append(line)
+      addLine(line)
       addEndLineSeparator()
     }
+
+    if layoutDirection == .vertical && blockLayoutDirection == .rightToLeft {
+      groups.reverse()
+    }
+
+    childrenWithSeparators = groups.flatMap { $0 }.map { $0.child }
   }
 
   private var separatorOffset: CGFloat {
@@ -110,16 +116,45 @@ struct WrapLayoutGroups {
     } else {
       addStartSeparator()
     }
-    childrenWithSeparators.append(child)
     line.append((child: child, childSize: size, lineOffset: offset))
     offset += size[keyPath: keyPath]
     separatorAdded = false
   }
 
+  private mutating func addLine(_ line: [ChildParametes]) {
+    switch (layoutDirection, blockLayoutDirection) {
+    case (.vertical, _):
+      groups.append(line)
+    case (.horizontal, .leftToRight):
+      groups.append(line)
+    case (.horizontal, .rightToLeft):
+      groups.append(reverseChildren(in: line))
+    @unknown default:
+      assertionFailure(
+        "Unknown blockLayoutDirection (UserInterfaceLayoutDirection) or layoutDirection (ContainerBlock.LayoutDirection)"
+      )
+    }
+  }
+
+  private func reverseChildren(in line: [ChildParametes]) -> [ChildParametes] {
+    var reversedLine = [ChildParametes]()
+    var offset: CGFloat = 0
+    for childParameter in line.reversed() {
+      reversedLine
+        .append((
+          child: childParameter.child,
+          childSize: childParameter.childSize,
+          lineOffset: offset
+        ))
+      offset += childParameter.childSize[keyPath: keyPath]
+    }
+    return reversedLine
+  }
+
   private mutating func startNewLine() {
     if line.count > 0 {
       addEndSeparator()
-      groups.append(line)
+      addLine(line)
       addBetweenLineSeparator()
     }
     line = []
@@ -152,7 +187,6 @@ struct WrapLayoutGroups {
     guard let lineSeparator = lineSeparator else {
       return
     }
-    childrenWithSeparators.append(lineSeparator.style)
     groups.append([(child: lineSeparator.style, childSize: lineSeparatorSize, lineOffset: 0)])
   }
 
@@ -182,7 +216,6 @@ struct WrapLayoutGroups {
       return
     }
     separatorAdded = true
-    childrenWithSeparators.append(separator.style)
     line.append((child: separator.style, childSize: separatorSize, lineOffset: offset))
     offset += separatorSize[keyPath: keyPath]
   }

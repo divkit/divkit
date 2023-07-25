@@ -1,7 +1,8 @@
 {
   "description": "Horizontal wrap container with separators in right-to-left layout direction.",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "configuration": {
     "layout_direction": "rtl"

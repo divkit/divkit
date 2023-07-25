@@ -247,6 +247,7 @@ struct ContainerBlockLayout {
     let transferDirectionKeyPath = layoutDirection.transferDirectionKeyPath
 
     let wrapLayoutGroups = WrapLayoutGroups(
+      blockLayoutDirection: blockLayoutDirection,
       children: children,
       separator: separator,
       lineSeparator: lineSeparator,
