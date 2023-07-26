@@ -56,6 +56,7 @@ import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.Log
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -95,20 +96,11 @@ class Div2View private constructor(
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 
+    private var attachedToLifecycle = false
     private val lifecycleObserver = LifecycleEventObserver { _, event ->
         when(event) {
             Lifecycle.Event.ON_DESTROY -> releaseChildren(this)
             else -> Unit
-        }
-    }
-
-    private val connectToLifecycleRunnable = SingleTimeOnAttachCallback(this) {
-        ViewTreeLifecycleOwner.get(this).let {
-            if (it == null) {
-                KAssert.fail { "Div2View is out of lifecycle after attach" }
-            } else {
-                it.lifecycle.addObserver(lifecycleObserver)
-            }
         }
     }
 
@@ -187,6 +179,19 @@ class Div2View private constructor(
             }
         } else {
             _expressionsRuntime?.onAttachedToWindow(this)
+        }
+    }
+
+    private fun tryAttachToLifecycle() {
+        if (attachedToLifecycle) return
+
+        ViewTreeLifecycleOwner.get(this).let {
+            if (it == null) {
+                Log.w(TAG, NOT_ATTACHED_TO_LIFECYCLE_WARNING)
+            } else {
+                it.lifecycle.addObserver(lifecycleObserver)
+                attachedToLifecycle = true
+            }
         }
     }
 
@@ -418,7 +423,7 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
-        connectToLifecycleRunnable.onAttach()
+        tryAttachToLifecycle()
     }
 
     override fun onDetachedFromWindow() {
@@ -960,5 +965,13 @@ class Div2View private constructor(
             pendingState = null
             pendingPaths.clear()
         }
+    }
+
+    companion object {
+        const val TAG = "Div2View"
+        const val NOT_ATTACHED_TO_LIFECYCLE_WARNING =
+            "Div2View is out of lifecycle after attach. Lifecycle events will not be caught! " +
+                    "If you're using some long-lived resources, like a video player, " +
+                    "call cleanup explicitly when you don't need Div2View anymore"
     }
 }
