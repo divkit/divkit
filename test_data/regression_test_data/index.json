@@ -998,6 +998,9 @@
     },
     {
       "title": "Visibility action in visible block",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "visibility_actions"
       ],
