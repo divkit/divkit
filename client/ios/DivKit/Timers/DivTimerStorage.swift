@@ -93,6 +93,15 @@ final class DivTimerStorage {
     timerControllers.removeAll()
   }
 
+  public func reset(cardId: DivCardID) {
+    timerControllers.forEach { key, timer in
+      if key.starts(with: cardId.rawValue) {
+        timer.cancel()
+      }
+    }
+    timerControllers = timerControllers.filter { !$0.key.starts(with: cardId.rawValue) }
+  }
+
   private func getTimer(cardId: DivCardID, timerId: String) -> DivTimerController? {
     guard let timers = cardsTimers[cardId],
           let divTimer = timers.filter({ $0.id == timerId }).first else {

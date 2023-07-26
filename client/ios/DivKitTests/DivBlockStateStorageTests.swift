@@ -64,6 +64,13 @@ final class DivBlockStateStorageTests: XCTestCase {
     storage.reset()
     XCTAssertNil(storage.getStateUntyped("id", cardId: "card_id"))
   }
+
+  func test_Reset_ResettingByCardId() {
+    storage.setState(id: "id", cardId: "card_id", state: state1)
+    storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state2)
+    storage.reset(cardId: "card_id")
+    XCTAssertNil(storage.getStateUntyped("id", cardId: "card_id"))
+  }
 }
 
 private let state1 = State(name: "State 1")

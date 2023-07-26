@@ -302,6 +302,12 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(storage.getVariableValue(cardId: cardId, name: "unknown_var"))
   }
 
+  func test_reset_resettingVariablesByCardId() {
+    storage.set(cardId: cardId, variables: variables)
+    storage.reset(cardId: cardId)
+    variables.forEach { XCTAssertNil(storage.getVariableValue(cardId: cardId, name: $0.key)) }
+  }
+
   private func makeVariables(cardId: DivCardID = cardId) -> DivVariables {
     storage.makeVariables(for: cardId)
   }

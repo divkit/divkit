@@ -153,6 +153,12 @@ public final class DivVariablesStorage {
     }
   }
 
+  public func reset(cardId: DivCardID) {
+    rwLock.write {
+      storage.local[cardId] = [:]
+    }
+  }
+
   public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
     changeEvents.addObserver(action)
   }

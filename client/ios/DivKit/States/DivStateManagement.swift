@@ -5,6 +5,7 @@ import Foundation
 public protocol DivStateManagement: DivStateUpdater {
   func getStateManagerForCard(cardId: DivCardID) -> DivStateManager
   func reset()
+  func reset(cardId: DivCardID)
 }
 
 public class DefaultDivStateManagement: DivStateManagement {
@@ -77,6 +78,10 @@ public class DefaultDivStateManagement: DivStateManagement {
     stateManagersForCards.values.forEach {
       $0.reset()
     }
+  }
+
+  public func reset(cardId: DivCardID) {
+    stateManagersForCards[cardId]?.reset()
   }
 
   private func removeOutdatedStoredStates() {

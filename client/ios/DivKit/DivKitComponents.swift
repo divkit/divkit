@@ -157,6 +157,14 @@ public final class DivKitComponents {
     timerStorage.reset()
   }
 
+  public func reset(cardId: DivCardID) {
+    blockStateStorage.reset(cardId: cardId)
+    stateManagement.reset(cardId: cardId)
+    variablesStorage.reset(cardId: cardId)
+    visibilityCounter.reset(cardId: cardId)
+    timerStorage.reset(cardId: cardId)
+  }
+
   public func parseDivData(
     _ jsonDict: [String: Any],
     cardId: DivCardID

@@ -1,7 +1,7 @@
 import Foundation
 
-import LayoutKit
 import BaseTinyPublic
+import LayoutKit
 
 public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
@@ -42,6 +42,11 @@ public final class DivBlockStateStorage {
   public func reset() {
     states = [:]
     statesById = [:]
+  }
+
+  public func reset(cardId: DivCardID) {
+    states = states.filter { $0.key.root != cardId.rawValue }
+    statesById = statesById.filter { $0.key.cardId != cardId }
   }
 }
 
