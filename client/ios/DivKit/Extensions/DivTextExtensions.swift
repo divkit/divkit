@@ -22,7 +22,7 @@ extension DivText: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    
+
     let font = context.fontProvider.font(
       family: resolveFontFamily(expressionResolver) ?? "",
       weight: resolveFontWeight(expressionResolver),
@@ -31,7 +31,8 @@ extension DivText: DivBlockModeling {
     )
     var typo = Typo(font: font).allowHeightOverrun
 
-    let alignment = resolveTextAlignmentHorizontal(expressionResolver).system
+    let alignment = resolveTextAlignmentHorizontal(expressionResolver)
+      .makeTextAlignment(uiLayoutDirection: context.layoutDirection)
     if alignment != .left {
       typo = typo.with(alignment: alignment)
     }
@@ -162,10 +163,9 @@ extension DivText: DivBlockModeling {
       let font = context.fontProvider.font(
         family: range.resolveFontFamily(expressionResolver)
           ?? resolveFontFamily(expressionResolver) ?? "",
-        weight: (
-          range.resolveFontWeight(expressionResolver)
-            ?? resolveFontWeight(expressionResolver)
-        ),
+        weight:
+        range.resolveFontWeight(expressionResolver)
+          ?? resolveFontWeight(expressionResolver),
         size: CGFloat(
           range.resolveFontSize(expressionResolver)
             ?? resolveFontSize(expressionResolver)
@@ -254,13 +254,20 @@ extension CFMutableAttributedString {
 }
 
 extension DivAlignmentHorizontal {
-  fileprivate var system: TextAlignment {
+  fileprivate func makeTextAlignment(
+    uiLayoutDirection: UserInterfaceLayoutDirection =
+      .system
+  ) -> TextAlignment {
     switch self {
-    case .left, .start:
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .left : .right
+    case .end:
+      return uiLayoutDirection == .leftToRight ? .right : .left
+    case .left:
       return .left
     case .center:
       return .center
-    case .right, .end:
+    case .right:
       return .right
     }
   }
