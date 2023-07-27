@@ -291,6 +291,8 @@ internal class DivGalleryBinder @Inject constructor(
 
             recycler.children.forEach { child ->
                 val position = recycler.getChildAdapterPosition(child)
+                if (position == RecyclerView.NO_POSITION) return@forEach
+
                 val div = (recycler.adapter as GalleryAdapter).items[position]
                 visibilityActionTracker.trackVisibilityActionsOf(divView, child, div)
             }
