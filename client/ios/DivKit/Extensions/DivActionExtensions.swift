@@ -117,6 +117,7 @@ extension DivAction {
     context: DivBlockModelingActionContext
   ) -> UserInterfaceAction.Payload? {
     guard let menuItems = menuItems else { return nil }
+    let expressionResolver = context.expressionResolver
 
     let items: [Menu.Item] = menuItems.compactMap { item in
       if let actions = item.actions {
@@ -124,14 +125,14 @@ extension DivAction {
         if !uiActions.isEmpty {
           return Menu.Item(
             actions: uiActions,
-            text: item.resolveText(context.expressionResolver) ?? ""
+            text: item.resolveText(expressionResolver) ?? ""
           )
         }
       }
       if let uiAction = item.action?.makeUiAction(context: context) {
         return Menu.Item(
           actions: [uiAction],
-          text: item.resolveText(context.expressionResolver) ?? ""
+          text: item.resolveText(expressionResolver) ?? ""
         )
       }
       return nil

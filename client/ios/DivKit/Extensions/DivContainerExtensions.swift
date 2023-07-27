@@ -21,7 +21,8 @@ extension DivContainer: DivBlockModeling {
     let childContext = modified(context) {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
     }
-    let orientation = resolveOrientation(context.expressionResolver)
+    let expressionResolver = context.expressionResolver
+    let orientation = resolveOrientation(expressionResolver)
     switch orientation {
     case .overlap:
       return try makeOverlapBlock(context: childContext)
@@ -29,7 +30,7 @@ extension DivContainer: DivBlockModeling {
       return try makeContainerBlock(
         context: childContext,
         orientation: orientation,
-        layoutMode: resolveLayoutMode(context.expressionResolver)
+        layoutMode: resolveLayoutMode(expressionResolver)
       )
     }
   }
@@ -290,11 +291,12 @@ extension DivContainer: DivBlockModeling {
       crossAlignment: .center
     )
 
+    let expressionResolver = context.expressionResolver
     return ContainerBlock.Separator(
       style: style,
-      showAtEnd: separator.resolveShowAtEnd(context.expressionResolver),
-      showAtStart: separator.resolveShowAtStart(context.expressionResolver),
-      showBetween: separator.resolveShowBetween(context.expressionResolver)
+      showAtEnd: separator.resolveShowAtEnd(expressionResolver),
+      showAtStart: separator.resolveShowAtStart(expressionResolver),
+      showBetween: separator.resolveShowBetween(expressionResolver)
     )
   }
 
@@ -312,12 +314,13 @@ extension DivContainer: DivBlockModeling {
       content: lineSeparatorBlock,
       crossAlignment: .center
     )
-
+    
+    let expressionResolver = context.expressionResolver
     return ContainerBlock.Separator(
       style: style,
-      showAtEnd: lineSeparator.resolveShowAtEnd(context.expressionResolver),
-      showAtStart: lineSeparator.resolveShowAtStart(context.expressionResolver),
-      showBetween: lineSeparator.resolveShowBetween(context.expressionResolver)
+      showAtEnd: lineSeparator.resolveShowAtEnd(expressionResolver),
+      showAtStart: lineSeparator.resolveShowAtStart(expressionResolver),
+      showBetween: lineSeparator.resolveShowBetween(expressionResolver)
     )
   }
 }
@@ -468,7 +471,8 @@ extension DivContainer.LayoutMode {
 
 extension Div {
   fileprivate func makeA11yDecription(context: DivBlockModelingContext) -> String? {
-    guard value.accessibility.resolveMode(context.expressionResolver) != .exclude
+    let expressionResolver = context.expressionResolver
+    guard value.accessibility.resolveMode(expressionResolver) != .exclude
     else { return nil }
     switch self {
     case .divContainer,
@@ -486,15 +490,15 @@ extension Div {
          .divSlider,
          .divVideo,
          .divState:
-      return value.accessibility.resolveDescription(context.expressionResolver)
+      return value.accessibility.resolveDescription(expressionResolver)
     case let .divText(divText):
       let handlerDescription = context
         .getExtensionHandlers(for: divText)
         .compactMap { $0.accessibilityElement?.strings.label }
         .reduce(nil) { $0?.appending(" " + $1) ?? $1 }
       return handlerDescription ??
-        divText.accessibility.resolveDescription(context.expressionResolver) ??
-        divText.resolveText(context.expressionResolver) as String?
+        divText.accessibility.resolveDescription(expressionResolver) ??
+        divText.resolveText(expressionResolver) as String?
     }
   }
 }

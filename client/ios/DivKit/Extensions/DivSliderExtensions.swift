@@ -18,6 +18,7 @@ extension DivSlider: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+    let expressionResolver = context.expressionResolver
     let secondThumb: SliderModel.ThumbModel?
     if let thumbSecondaryStyle = thumbSecondaryStyle,
        let thumbSecondaryValueVariable = thumbSecondaryValueVariable {
@@ -32,8 +33,8 @@ extension DivSlider: DivBlockModeling {
           ),
           textOffset: thumbSecondaryTextStyle.flatMap {
             CGPoint(
-              x: $0.offset?.x.resolveValue(context.expressionResolver) ?? 0,
-              y: $0.offset?.y.resolveValue(context.expressionResolver) ?? 0
+              x: $0.offset?.x.resolveValue(expressionResolver) ?? 0,
+              y: $0.offset?.y.resolveValue(expressionResolver) ?? 0
             )
           } ?? .zero
         ),
@@ -42,8 +43,8 @@ extension DivSlider: DivBlockModeling {
           width: thumbSecondaryStyle.getWidth(context: context),
           height: thumbSecondaryStyle.getHeight(context: context)
         ),
-        offsetX: thumbSecondaryTextStyle?.offset?.x.resolveValue(context.expressionResolver) ?? 0,
-        offsetY: thumbSecondaryTextStyle?.offset?.y.resolveValue(context.expressionResolver) ?? 0
+        offsetX: thumbSecondaryTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
+        offsetY: thumbSecondaryTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
       )
     } else {
       secondThumb = nil
@@ -64,8 +65,8 @@ extension DivSlider: DivBlockModeling {
           ),
           textOffset: thumbTextStyle.flatMap {
             CGPoint(
-              x: $0.offset?.x.resolveValue(context.expressionResolver) ?? 0,
-              y: $0.offset?.y.resolveValue(context.expressionResolver) ?? 0
+              x: $0.offset?.x.resolveValue(expressionResolver) ?? 0,
+              y: $0.offset?.y.resolveValue(expressionResolver) ?? 0
             )
           } ?? .zero
         ),
@@ -74,8 +75,8 @@ extension DivSlider: DivBlockModeling {
           width: thumbStyle.getWidth(context: context),
           height: thumbStyle.getHeight(context: context)
         ),
-        offsetX: thumbTextStyle?.offset?.x.resolveValue(context.expressionResolver) ?? 0,
-        offsetY: thumbTextStyle?.offset?.y.resolveValue(context.expressionResolver) ?? 0
+        offsetX: thumbTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
+        offsetY: thumbTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
       ),
       secondThumb: secondThumb,
       activeMarkModel: tickMarkActiveStyle.flatMap {
@@ -96,8 +97,8 @@ extension DivSlider: DivBlockModeling {
           )
         )
       },
-      minValue: resolveMinValue(context.expressionResolver),
-      maxValue: resolveMaxValue(context.expressionResolver),
+      minValue: resolveMinValue(expressionResolver),
+      maxValue: resolveMaxValue(expressionResolver),
       activeTrack: (try? self.trackActiveStyle.makeBlock(
         context: context,
         widthTrait: .resizable,
@@ -113,8 +114,8 @@ extension DivSlider: DivBlockModeling {
     let height = context.override(height: height)
     return SliderBlock(
       sliderModel: sliderModel,
-      widthTrait: width.makeLayoutTrait(with: context.expressionResolver),
-      heightTrait: height.makeLayoutTrait(with: context.expressionResolver)
+      widthTrait: width.makeLayoutTrait(with: expressionResolver),
+      heightTrait: height.makeLayoutTrait(with: expressionResolver)
     )
   }
 }

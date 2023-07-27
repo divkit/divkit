@@ -45,14 +45,15 @@ extension DivBase {
     context: DivBlockModelingContext
   ) throws -> GridBlock.Item {
     let block = try makeBlock(context: context)
+    let expressionResolver = context.expressionResolver
     return try .init(
       span: GridBlock.Span(
-        rows: resolveRowSpan(context.expressionResolver) ?? 1,
-        columns: resolveColumnSpan(context.expressionResolver) ?? 1
+        rows: resolveRowSpan(expressionResolver) ?? 1,
+        columns: resolveColumnSpan(expressionResolver) ?? 1
       ),
       weight: .init(
-        column: width.makeWeight(with: context.expressionResolver),
-        row: height.makeWeight(with: context.expressionResolver)
+        column: width.makeWeight(with: expressionResolver),
+        row: height.makeWeight(with: expressionResolver)
       ),
       contents: block,
       alignment: alignment2D(withDefault: .default, context: context)

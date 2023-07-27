@@ -41,8 +41,9 @@ public final class ImageThemeExtensionHandler: DivExtensionHandler {
     divImage: DivImage,
     context: DivBlockModelingContext
   ) -> ImageBlock {
-    let imageURL = divImage.resolveDarkThemeImageURL(context.expressionResolver)
-    let placeholder = divImage.resolveDarkThemePlaceholder(context.expressionResolver)
+    let expressionResolver = context.expressionResolver
+    let imageURL = divImage.resolveDarkThemeImageURL(expressionResolver)
+    let placeholder = divImage.resolveDarkThemePlaceholder(expressionResolver)
     if imageURL == nil, placeholder == nil {
       return initialBlock
     }
