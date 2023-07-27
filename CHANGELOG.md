@@ -1,3 +1,8 @@
+## 26.2.1
+
+# Android Client:
+* Assert on the absence of LifecyclerOwner were replaced by warning.
+
 ## 26.2.0
 
 # JSON Schema:
