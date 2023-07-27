@@ -1,3 +1,21 @@
+## 27.0.0
+
+# Android Client:
+* Added RTL support for container, tabs, slider and indicator
+* Fixed multiple find lifecycleOwner call
+* Fixed multiple out animations ignoring or view doubling
+
+# iOS Client:
+* Added `getStoredValue` functions support.
+* Added RTL layout support in `DivContainer`.
+* Added `updateCardSignal` to `DivKitComponents`.
+* Replaced `UrlOpener` with `DivUrlHandler` protocol. Changed `DivActionHandler` API.
+
+# Web Client:
+Fixes:
+* Fixed an issue with the integer values from the several functions: `getYear`, `getMonth`, `getDay`, `getDayOfWeek`, `getHours`, `getMinutes`, `getSeconds`, `getMillis`, `len`, `index` and `lastIndex`. These integer values previously could produce errors in integer operations
+
+
 ## 26.2.0
 
 # JSON Schema:

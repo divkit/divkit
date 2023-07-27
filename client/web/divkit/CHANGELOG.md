@@ -1,3 +1,7 @@
+## 27.0.0 (July 31, 2023)
+Fixes:
+* Fixed an issue with the integer values from the several functions: `getYear`, `getMonth`, `getDay`, `getDayOfWeek`, `getHours`, `getMinutes`, `getSeconds`, `getMillis`, `len`, `index` and `lastIndex`. These integer values previously could produce errors in integer operations
+
 ## 26.2.0 (July 24, 2023)
 Additions
 * Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
