@@ -10,13 +10,13 @@ import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
+import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.internal.viewpool.FixedPreCreationProfile;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
-import com.yandex.div.core.player.DivPlayerFactory;
 import dagger.Module;
 import dagger.Provides;
 
@@ -332,6 +332,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @kotlin.Deprecated(message = "Accessibility is always enabled")
+    public boolean isAccessibilityEnabled() {
+        return true;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     public boolean isBindOnAttachEnabled() {
         return mBindOnAttachEnabled;
@@ -578,6 +584,12 @@ public class DivConfiguration {
         @NonNull
         public Builder supportHyphenation(boolean supportHyphenation) {
             mSupportHyphenation = supportHyphenation;
+            return this;
+        }
+
+        @NonNull
+        @kotlin.Deprecated(message = "Accessibility is always enabled")
+        public Builder enableAccessibility(boolean enable) {
             return this;
         }
 
