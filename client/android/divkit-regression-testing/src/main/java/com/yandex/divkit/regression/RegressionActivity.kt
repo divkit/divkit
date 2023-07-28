@@ -65,7 +65,9 @@ class RegressionActivity : AppCompatActivity() {
                         RegressionUiState.Loading -> Unit
                         is RegressionUiState.Data -> {
                             tagFilter = uiState.tagFilter
-                            scenarioListAdapter.submitList(uiState.scenarios)
+                            scenarioListAdapter.submitList(uiState.scenarios) {
+                                binding.scenarioList.scrollToPosition(0)
+                            }
                         }
                     }
                 }
