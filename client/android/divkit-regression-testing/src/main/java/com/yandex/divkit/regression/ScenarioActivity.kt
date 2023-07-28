@@ -16,11 +16,7 @@ import com.yandex.divkit.regression.data.Scenario
 import com.yandex.divkit.regression.databinding.ScenarioActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
 import com.yandex.divkit.regression.di.provideScenariosRepository
-import com.yandex.divkit.regression.di.provideScreenRecord
-import com.yandex.divkit.regression.screenrecord.ScreenRecord
 import com.yandex.divkit.regression.utils.shortMessage
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 private const val EXTRA_POSITION = "${BuildConfig.LIBRARY_PACKAGE_NAME}.extra_position"
 
@@ -35,10 +31,6 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
     private val div2ViewCreator by lazy(LazyThreadSafetyMode.NONE) { provideDiv2ViewCreator() }
     private val logging = mutableListOf<String>()
     private val logDelegate = ScenarioLogDelegate { message -> logging += message }
-
-    private val screenRecord by lazy(LazyThreadSafetyMode.NONE) {
-        provideScreenRecord(activityResultRegistry)
-    }
 
     private lateinit var _scenario: Scenario
     override val scenario: Scenario
@@ -58,7 +50,6 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         position = intent.getIntExtra(EXTRA_POSITION, -1)
-        lifecycle.addObserver(screenRecord)
         metadataBottomSheet = MetadataBottomSheet()
         if (position >= 0) {
             lifecycleScope.launchWhenCreated {
@@ -114,25 +105,15 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
 
     private fun launchScenarioAtPosition(position: Int) {
         shortMessage(this, R.string.loading_scenario)
-        screenRecord.onStop(this)
-        lifecycleScope.launch {
-            screenRecord.recordState.collect { state ->
-                when (state) {
-                    ScreenRecord.RecordState.STARTED -> Unit
-                    ScreenRecord.RecordState.STOPPED -> {
-                        startActivity(
-                            launchIntent(this@ScenarioActivity, position),
-                            ActivityOptionsCompat.makeCustomAnimation(
-                                this@ScenarioActivity,
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out
-                            ).toBundle()
-                        )
-                        finish()
-                    }
-                }
-            }
-        }
+        startActivity(
+            launchIntent(this@ScenarioActivity, position),
+            ActivityOptionsCompat.makeCustomAnimation(
+                this@ScenarioActivity,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            ).toBundle()
+        )
+        finish()
     }
 
     private fun bindScenario(scenario: Scenario) {

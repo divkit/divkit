@@ -57,7 +57,7 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                 .divDataChangeListener(transitionScheduler)
                 .divStateCache(divStateStorage.cache)
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
-                .actionHandler(RegressionDivActionHandler(uriHandler, assetReader, activity))
+                .actionHandler(RegressionDivActionHandler(uriHandler, assetReader))
                 .build()
         val divContext = divContext(baseContext = activity, configuration = divConfiguration)
         divStateStorage.preloadState("div2")
