@@ -36,6 +36,8 @@ class GalleryFeedTestActivity : AppCompatActivity() {
             ): RecyclerView.ViewHolder {
                 val divContainer = DivContainer(parent.context).apply {
                     div2View = Div2View(divContext).also { addView(it) }
+                    layoutParams = RecyclerView.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 }
                 return object : RecyclerView.ViewHolder(divContainer) {}
             }
