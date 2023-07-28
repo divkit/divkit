@@ -6,6 +6,12 @@ import LayoutKit
 import NetworkingPublic
 import Serialization
 
+#if os(iOS)
+import UIKit
+#else
+import Appkit
+#endif
+
 public struct DivBlockModelingContext {
   public let cardId: DivCardID
   internal var cardLogId: String?
@@ -68,7 +74,7 @@ public struct DivBlockModelingContext {
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
-    layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     variableTracker: DivVariableTracker? = nil,
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
   ) {

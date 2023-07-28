@@ -6,6 +6,12 @@ import LayoutKit
 import NetworkingPublic
 import Serialization
 
+#if os(iOS)
+import UIKit
+#else
+import Appkit
+#endif
+
 public final class DivKitComponents {
   public typealias UpdateCardAction = (NonEmptyArray<DivActionURLHandler.UpdateReason>) -> Void
 
@@ -45,7 +51,7 @@ public final class DivKitComponents {
     flagsInfo: DivFlagsInfo = .default,
     fontProvider: DivFontProvider? = nil,
     imageHolderFactory: ImageHolderFactory? = nil,
-    layoutDirection: UserInterfaceLayoutDirection = UserInterfaceLayoutDirection.system,
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
