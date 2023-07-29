@@ -11,6 +11,7 @@ enum AppComponents {
 
   static func makeDivKitComponents(
     layoutDirection: UserInterfaceLayoutDirection = .system,
+    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
@@ -19,7 +20,6 @@ enum AppComponents {
       factory: LottieAnimationFactory(),
       requester: requester
     )
-    let variablesStorage = DivVariablesStorage()
     let sizeProviderExtensionHandler = SizeProviderExtensionHandler(
       variablesStorage: variablesStorage
     )
@@ -47,6 +47,8 @@ enum AppComponents {
   }
 
   static var debugParams: DebugParams {
-    DebugParams(isDebugInfoEnabled: true)
+    DebugParams(
+      isDebugInfoEnabled: true
+    )
   }
 }

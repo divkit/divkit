@@ -1,83 +1,117 @@
 import UIKit
 
+import BaseUIPublic
 import CommonCorePublic
 import DivKit
-import DivKitExtensions
 import LayoutKit
 import Serialization
 
-typealias JsonProvider = () throws -> [String: Any]
+final class DivBlockProvider {
+  struct Source {
+    enum Kind {
+      case json([String: Any])
+      case data(Data)
+      case divData(DivData)
+    }
 
-struct ObservableJsonProvider {
-  @ObservableProperty
-  private var provider: JsonProvider = { [:] }
+    let kind: Kind
+    let cardId: DivCardID
+    let parentScrollView: ScrollView?
+    let debugParams: DebugParams
 
-  var signal: Signal<JsonProvider> {
-    $provider.currentAndNewValues
-  }
-
-  func load(url: URL) {
-    provider = {
-      try Data(contentsOf: url).asJsonDictionary()
+    init(
+      kind: Kind,
+      cardId: DivCardID,
+      parentScrollView: ScrollView?,
+      debugParams: DebugParams = DebugParams()
+    ) {
+      self.kind = kind
+      self.cardId = cardId
+      self.parentScrollView = parentScrollView
+      self.debugParams = debugParams
     }
   }
-}
 
-extension Data {
-  func asJsonDictionary() throws -> [String: Any] {
-    try JSONSerialization.jsonObject(with: self, options: []) as! [String: Any]
-  }
-}
-
-final class DivBlockProvider {
   private let divKitComponents: DivKitComponents
-  private let sizeProviderExtensionHandler: SizeProviderExtensionHandler?
   private let disposePool = AutodisposePool()
 
-  private var divData: DivData?
-  public weak var parentScrollView: ScrollView?
-  let divRenderTime = TimeMeasure()
-  let divDataParsingTime = TimeMeasure()
-  let divTemplateParsingTime = TimeMeasure()
+  private var divData: DivData? {
+    didSet {
+      guard oldValue !== divData else { return }
+      update(reasons: [])
+    }
+  }
+
+  private var cardId: DivCardID!
+  private var debugParams: DebugParams = .init()
+  private weak var parentScrollView: ScrollView?
+
+  private let measurements = DebugParams.Measurements(
+    divDataParsingTime: TimeMeasure(),
+    renderTime: TimeMeasure(),
+    templateParsingTime: TimeMeasure()
+  )
 
   @ObservableProperty
   private(set) var block: Block = noDataBlock
-  @Property
-  private(set) var errors: [UIStatePayload.Error] = []
+  private(set) var errors: [DivError] = []
 
   init(
-    json: Signal<JsonProvider>,
-    divKitComponents: DivKitComponents,
-    shouldResetOnDataChange: Bool
+    divKitComponents: DivKitComponents
   ) {
     self.divKitComponents = divKitComponents
-
-    sizeProviderExtensionHandler = divKitComponents.extensionHandlers
-      .compactMap { $0 as? SizeProviderExtensionHandler }
-      .first
-
-    json
-      .addObserver { [weak self] in
-        if shouldResetOnDataChange {
-          self?.divKitComponents.reset()
-        }
-        self?.update(jsonProvider: $0)
-      }
-      .dispose(in: disposePool)
 
     divKitComponents.updateCardSignal
       .addObserver { [weak self] in self?.update(reasons: $0) }.dispose(in: disposePool)
   }
 
-  func update(reasons: [DivActionURLHandler.UpdateReason]) {
+  func setSource(_ source: Source, shouldResetPreviousCardData: Bool) {
+    if shouldResetPreviousCardData {
+      cardId.flatMap(divKitComponents.reset(cardId:))
+    }
+
+    block = noDataBlock
+
+    cardId = source.cardId
+    debugParams = source.debugParams
+    parentScrollView = source.parentScrollView
+    switch source.kind {
+    case let .data(data): update(data: data)
+    case let .divData(divData): self.divData = divData
+    case let .json(json): update(json: json)
+    }
+  }
+
+  private func update(data: Data) {
+    do {
+      let result = try divKitComponents.parseDivDataWithTemplates(data, cardId: cardId)
+      divData = result.value
+      errors.append(result.errorsOrWarnings?.asArray() ?? [])
+    } catch {
+      block = handleError(error: error, message: "Failed to parse DivData")
+    }
+  }
+
+  private func update(json: [String: Any]) {
+    do {
+      let result = try parseDivDataWithTemplates(json, cardId: cardId)
+      divData = result.value
+      errors.append(result.errorsOrWarnings?.asArray() ?? [])
+    } catch {
+      block = handleError(error: error, message: "Failed to parse DivData")
+    }
+  }
+
+  private func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData = divData else {
-      block = makeErrorsBlock(errors.map { $0.description })
+      guard debugParams.isDebugInfoEnabled else { return }
+      block = makeErrorsBlock(errors.map(errorMessage(_:)))
       return
     }
 
-    sizeProviderExtensionHandler?.onCardUpdated(reasons: reasons)
+    guard needUpdateBlock(reasons: reasons) else { return }
 
-    reasons.compactMap(\.patch).forEach {
+    reasons.compactMap { $0.patch(for: self.cardId) }.forEach {
       divData = divData.applyPatch($0)
     }
     self.divData = divData
@@ -85,80 +119,54 @@ final class DivBlockProvider {
     let context = divKitComponents.makeContext(
       cardId: cardId,
       cachedImageHolders: block.getImageHolders(),
-      debugParams: AppComponents.debugParams,
+      debugParams: debugParams,
       parentScrollView: parentScrollView
     )
     do {
-      divRenderTime.start()
-      let newBlock = try divData.makeBlock(
-        context: context
-      )
-      divRenderTime.stop()
-      block = newBlock
-        .addingTime(
-          dataParsing: divDataParsingTime.time,
-          templateParsing: divTemplateParsingTime.time,
-          render: divRenderTime.time
+      block = try measurements.renderTime.updateMeasure {
+        try divData.makeBlock(
+          context: context
         )
-        .addingErrorsInfo(
-          errors.map { $0.description } +
-            context.errorsStorage.errors.map { UIStatePayload.Error($0).description }
-        )
+      }
+      errors.append(context.errorsStorage.errors)
+      debugParams.processMeasurements((cardId: cardId, measurements: measurements))
+      debugParams.processErrors((cardId: cardId, errors: errors))
     } catch {
-      errors = [UIStatePayload.Error(error as CustomStringConvertible)]
-        + context.errorsStorage.errors.map { UIStatePayload.Error($0 as CustomStringConvertible) }
-        + errors
-      block = makeErrorsBlock(errors.map { $0.description })
-      AppLogger.error("Failed to build block: \(error)")
+      block = handleError(error: error, message: "Failed to build block", context: context)
     }
+  }
+
+  private func needUpdateBlock(reasons: [DivActionURLHandler.UpdateReason]) -> Bool {
+    guard !reasons.isEmpty else { return true }
+    for reason in reasons {
+      let cardId: DivCardID
+      switch reason {
+      case let .patch(divCardID, _):
+        cardId = divCardID
+      case let .timer(divCardID):
+        cardId = divCardID
+      case let .state(divCardID):
+        cardId = divCardID
+      case let .variable(affectedCards):
+        if case let .specific(cardIds) = affectedCards,
+           cardIds.contains(self.cardId) || affectedCards == .all {
+          return true
+        }
+        continue
+      }
+      if cardId == self.cardId {
+        return true
+      }
+    }
+    return false
   }
 
   func update(withStates blockStates: BlocksState) {
     do {
       block = try block.updated(withStates: blockStates)
     } catch {
-      errors = [UIStatePayload.Error(error as CustomStringConvertible)] + errors
-      block = makeErrorsBlock(errors.map { $0.description })
-
-      AppLogger.error("Failed to update block: \(error)")
+      block = handleError(error: error, message: "Failed to update block")
     }
-  }
-
-  private func update(jsonProvider: JsonProvider) {
-    divData = nil
-    block = noDataBlock
-    errors = []
-
-    do {
-      let json = try jsonProvider()
-      if json.isEmpty {
-        return
-      }
-
-      let palette = Palette(json: try json.getOptionalField("palette") ?? [:])
-      divKitComponents.variablesStorage
-        .set(
-          variables: palette.makeVariables(theme: UserPreferences.playgroundTheme),
-          triggerUpdate: false
-        )
-
-      let result = try parseDivDataWithTemplates(json, cardId: cardId)
-
-      divData = result.value
-      errors = result.errorsOrWarnings?
-        .map { (error: DeserializationError) -> UIStatePayload.Error in
-          UIStatePayload.Error(error)
-        }
-        ?? []
-    } catch {
-      errors = [UIStatePayload.Error(error as CustomStringConvertible)]
-      block = makeErrorsBlock(errors.map { "\($0.description)" })
-
-      AppLogger.error("Failed to parse DivData: \(error)")
-      return
-    }
-
-    update(reasons: [])
   }
 
   private func parseDivDataWithTemplates(
@@ -166,46 +174,63 @@ final class DivBlockProvider {
     cardId: DivCardID
   ) throws -> DeserializationResult<DivData> {
     let rawDivData = try RawDivData(dictionary: jsonDict)
-    divTemplateParsingTime.start()
-    let templates = DivTemplates(dictionary: rawDivData.templates)
-    divTemplateParsingTime.stop()
-    divDataParsingTime.start()
-    let result = templates.parseValue(type: DivDataTemplate.self, from: rawDivData.card)
-    if let divData = result.value {
-      divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
-      divKitComponents.setTimers(divData: divData, cardId: cardId)
+    let templates = try measurements.templateParsingTime.updateMeasure {
+      DivTemplates(dictionary: rawDivData.templates)
     }
-    divDataParsingTime.stop()
-    return result
+    return try measurements.divDataParsingTime.updateMeasure {
+      let result = templates.parseValue(type: DivDataTemplate.self, from: rawDivData.card)
+      if let divData = result.value {
+        divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
+        divKitComponents.setTimers(divData: divData, cardId: cardId)
+      }
+      return result
+    }
+  }
+
+  private func handleError(
+    error: Error,
+    message: String,
+    context: DivBlockModelingContext? = nil
+  ) -> Block {
+    guard debugParams.isDebugInfoEnabled else { return noDataBlock }
+    errors.append(error as DivError)
+    errors.append(contentsOf: context?.errorsStorage.errors ?? [])
+    DivKitLogger.error("\(message). Error: \(error).")
+    debugParams.processErrors((cardId: cardId, errors: errors))
+    return makeErrorsBlock(errors.map(errorMessage(_:)))
   }
 }
 
-private let cardId: DivCardID = "sample_card"
-
 private let noDataBlock = EmptyBlock.zeroSized
 
-private func makeErrorBlock(_ text: String) -> Block {
-  TextBlock(
-    widthTrait: .resizable,
-    text: text.withTypo(size: 18)
-  ).addingEdgeGaps(20)
+extension DivActionURLHandler.UpdateReason {
+  fileprivate func patch(for divCardId: DivCardID) -> DivPatch? {
+    switch self {
+    case let .patch(cardId, patch):
+      return cardId == divCardId ? patch : nil
+    case .timer, .variable, .state:
+      return nil
+    }
+  }
 }
 
 private func makeErrorsBlock(_ errors: [String]) -> Block {
   guard !errors.isEmpty else {
-    return noDataBlock
+    return EmptyBlock.zeroSized
   }
 
   let separator = SeparatorBlock(color: .gray, direction: .horizontal)
+  let headerTypo = Typo(size: 18, weight: .bold)
   let errorsHeader = TextBlock(
     widthTrait: .resizable,
-    text: "Errors: \(errors.count)".withTypo(size: 18, weight: .bold)
+    text: "Errors: \(errors.count)".with(typo: headerTypo)
   ).addingEdgeGaps(10)
 
+  let errorBlockTypo = Typo(size: 14, weight: .regular)
   let errorBlocks = errors.map {
     TextBlock(
       widthTrait: .resizable,
-      text: $0.withTypo(size: 14, weight: .regular)
+      text: $0.with(typo: errorBlockTypo)
     ).addingEdgeGaps(10)
   }
   return try! ContainerBlock(
@@ -214,14 +239,44 @@ private func makeErrorsBlock(_ errors: [String]) -> Block {
   )
 }
 
+private func errorMessage(_ error: DivError) -> String {
+  let message: String
+  let stack: [String]
+  let additional: [String: String]
+
+  switch error {
+  case let deserializationError as DeserializationError:
+    message = deserializationError.errorMessage
+    stack = deserializationError.stack
+    additional = deserializationError.userInfo
+  default:
+    message = (error as DivError).description
+    stack = []
+    additional = [:]
+  }
+
+  return "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))"
+    + (additional.isEmpty ? "" : "\nAdditional: \(additional)")
+}
+
+extension DeserializationError {
+  fileprivate var stack: [String] {
+    switch self {
+    case let .nestedObjectError(field, error):
+      return [field] + error.stack
+    default:
+      return []
+    }
+  }
+}
+
 extension Block {
-  func addingTime(
+  fileprivate func addingTime(
     dataParsing: TimeMeasure.Time?,
     templateParsing: TimeMeasure.Time?,
     render: TimeMeasure.Time?
   ) -> Block {
-    guard UserPreferences.showRenderingTime,
-          let render = render,
+    guard let render = render,
           let dataParsing = dataParsing,
           let templateParsing = templateParsing else {
       return self
@@ -236,9 +291,10 @@ extension Block {
       - Div.Parsing.Templates.\(templateParsing.description) ms
       """
 
+    let perfTypo = Typo(size: 18, weight: .regular)
     let textBlock = TextBlock(
       widthTrait: .resizable,
-      text: text.withTypo(size: 18)
+      text: text.with(typo: perfTypo)
     ).addingEdgeGaps(20)
 
     let block = try? ContainerBlock(
@@ -247,58 +303,5 @@ extension Block {
     )
 
     return block ?? self
-  }
-}
-
-extension Block {
-  func addingErrorsInfo(_ errorList: [String]) -> Block {
-    guard !errorList.isEmpty else {
-      return self
-    }
-    let errorsBlock = makeErrorsBlock(errorList)
-
-    let block = try? ContainerBlock(
-      layoutDirection: .vertical,
-      children: [self, errorsBlock]
-    )
-
-    return block ?? self
-  }
-}
-
-extension TimeMeasure.Time {
-  fileprivate var description: String {
-    "\(status.rawValue.capitalized): \(value)"
-  }
-}
-
-extension UIStatePayload.Error {
-  var description: String {
-    "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))" +
-      (additional.isEmpty ? "" : "\nAdditional: \(additional)")
-  }
-
-  init(_ error: CustomStringConvertible) {
-    switch error {
-    case let deserializationError as DeserializationError:
-      message = deserializationError.errorMessage
-      stack = deserializationError.stack
-      additional = deserializationError.userInfo
-    default:
-      message = (error as CustomStringConvertible).description
-      stack = []
-      additional = [:]
-    }
-  }
-}
-
-extension DeserializationError {
-  fileprivate var stack: [String] {
-    switch self {
-    case let .nestedObjectError(field, error):
-      return [field] + error.stack
-    default:
-      return []
-    }
   }
 }

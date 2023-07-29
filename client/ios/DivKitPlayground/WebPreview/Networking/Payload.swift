@@ -1,6 +1,7 @@
 import Foundation
 
 import CommonCorePublic
+import Serialization
 
 struct ListenPayload: Encodable {
   struct Message: Encodable {
@@ -82,5 +83,36 @@ struct UIStatePayload: Encodable {
       errors: errors,
       rendering_time: renderingTime
     )
+  }
+}
+
+extension UIStatePayload.Error {
+  var description: String {
+    "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))" +
+      (additional.isEmpty ? "" : "\nAdditional: \(additional)")
+  }
+
+  init(_ error: CustomStringConvertible) {
+    switch error {
+    case let deserializationError as DeserializationError:
+      message = deserializationError.errorMessage
+      stack = deserializationError.stack
+      additional = deserializationError.userInfo
+    default:
+      message = (error as CustomStringConvertible).description
+      stack = []
+      additional = [:]
+    }
+  }
+}
+
+extension DeserializationError {
+  fileprivate var stack: [String] {
+    switch self {
+    case let .nestedObjectError(field, error):
+      return [field] + error.stack
+    default:
+      return []
+    }
   }
 }

@@ -1,6 +1,7 @@
 import Foundation
 
 import CommonCorePublic
+import DivKit
 
 struct ScreenshotInfo {
   let data: Data
@@ -12,15 +13,16 @@ struct ScreenshotInfo {
 final class UIStatePayloadFactory {
   private let deviceInfo: DeviceInfo
   private let clientId = UUID().uuidString
-  @Variable
-  private var errors: [UIStatePayload.Error]
+  private var errors: [UIStatePayload.Error] = []
 
   init(
-    deviceInfo: DeviceInfo,
-    errors: Variable<[UIStatePayload.Error]>
+    deviceInfo: DeviceInfo
   ) {
     self.deviceInfo = deviceInfo
-    _errors = errors
+  }
+
+  func updateErrors(errors: [DivError]) {
+    self.errors = errors.map(UIStatePayload.Error.init)
   }
 
   func makePayload(

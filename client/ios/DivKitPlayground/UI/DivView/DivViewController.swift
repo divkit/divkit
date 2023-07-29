@@ -7,13 +7,14 @@ import DivKitExtensions
 import LayoutKit
 
 struct DivView: UIViewControllerRepresentable {
-  let blockProvider: DivBlockProvider
+  let jsonProvider: Signal<[String: Any]>
   let divKitComponents: DivKitComponents
 
   func makeUIViewController(context _: Context) -> UIViewController {
     DivViewController(
-      blockProvider: blockProvider,
-      divKitComponents: divKitComponents
+      jsonProvider: jsonProvider,
+      divKitComponents: divKitComponents,
+      debugParams: AppComponents.debugParams
     )
   }
 
@@ -28,13 +29,27 @@ open class DivViewController: UIViewController {
   private var lastBounds = CGRect.zero
 
   init(
-    blockProvider: DivBlockProvider,
-    divKitComponents: DivKitComponents
+    jsonProvider: Signal<[String: Any]>,
+    divKitComponents: DivKitComponents,
+    debugParams: DebugParams
   ) {
-    self.blockProvider = blockProvider
+    self.blockProvider = DivBlockProvider(divKitComponents: divKitComponents)
     self.divKitComponents = divKitComponents
 
     super.init(nibName: nil, bundle: nil)
+
+    jsonProvider.addObserver { [weak self] in
+      guard let self else { return }
+      blockProvider.setSource(
+        .init(
+          kind: .json($0),
+          cardId: "DivViewCard",
+          parentScrollView: scrollView,
+          debugParams: debugParams
+        ),
+        shouldResetPreviousCardData: true
+      )
+    }.dispose(in: disposePool)
   }
 
   @available(*, unavailable)
@@ -44,9 +59,6 @@ open class DivViewController: UIViewController {
 
   public override func loadView() {
     scrollView.backgroundColor = .white
-
-    blockProvider.parentScrollView = scrollView
-
     view = scrollView
   }
 

@@ -1,51 +1,37 @@
+import BasePublic
 import DivKit
+import LayoutKit
 import SwiftUI
 
 final class DivViewProvider {
-  public let jsonProvider = ObservableJsonProvider()
-
-  private var blockProvider: DivBlockProvider!
-  private var divKitComponents: DivKitComponents!
-  private var layoutDirection: UIUserInterfaceLayoutDirection
+  public let jsonProvider: PlaygroundJsonProvider
+  private let divKitComponents: DivKitComponents
+  private let layoutDirection: UIUserInterfaceLayoutDirection
 
   init(layoutDirection: UIUserInterfaceLayoutDirection = .system) {
     self.layoutDirection = layoutDirection
-
+    let variablesStorage = DivVariablesStorage()
+    let jsonProvider = PlaygroundJsonProvider(variablesStorage: variablesStorage)
     let urlHandler = PlaygroundUrlHandler(
-      loadJsonUrl: { [weak self] url in
-        self?.jsonProvider.load(url: url)
+      loadJsonUrl: { url in
+        jsonProvider.load(url: url)
       }
     )
     divKitComponents = AppComponents.makeDivKitComponents(
       layoutDirection: layoutDirection,
+      variablesStorage: variablesStorage,
       urlHandler: urlHandler
     )
-
-    blockProvider = DivBlockProvider(
-      json: jsonProvider.signal,
-      divKitComponents: divKitComponents,
-      shouldResetOnDataChange: true
-    )
+    self.jsonProvider = jsonProvider
   }
 
   func makeDivView(_ url: URL) -> some View {
     DivView(
-      blockProvider: blockProvider,
+      jsonProvider: jsonProvider.$json.newValues,
       divKitComponents: divKitComponents
     )
     .onAppear { [weak self] in
       self?.jsonProvider.load(url: url)
-    }
-  }
-}
-
-extension DivActionURLHandler.UpdateReason {
-  var patch: DivPatch? {
-    switch self {
-    case let .patch(_, patch):
-      return patch
-    case .timer, .variable, .state:
-      return nil
     }
   }
 }

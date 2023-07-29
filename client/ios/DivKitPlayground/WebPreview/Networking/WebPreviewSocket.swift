@@ -17,8 +17,8 @@ final class WebPreviewSocket: NSObject {
   private var session: URLSession!
   private var task: URLSessionWebSocketTask?
 
-  private let responsePipe = SignalPipe<JsonProvider>()
-  var response: Signal<JsonProvider> { responsePipe.signal }
+  private let responsePipe = SignalPipe<[String: Any]>()
+  var response: Signal<[String: Any]> { responsePipe.signal }
 
   @ObservableProperty
   private(set) var state: State = .disconnected(.ended)
@@ -93,10 +93,10 @@ final class WebPreviewSocket: NSObject {
     task?.receive { [weak self] in
       switch $0 {
       case let .success(message):
-        self?.responsePipe.send {
-          let dictionary = try message.data.asJsonDictionary()
-          return try JSONPayload(dictionary: dictionary).message.json
-        }
+        self?.responsePipe.send({
+          let dictionary = try! message.data.asJsonDictionary()
+          return try! JSONPayload(dictionary: dictionary).message.json
+        }())
       case let .failure(error):
         AppLogger.error("Failed to receive message with \(error)")
       }
