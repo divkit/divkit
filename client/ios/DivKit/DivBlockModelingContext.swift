@@ -9,7 +9,7 @@ import Serialization
 #if os(iOS)
 import UIKit
 #else
-import Appkit
+import AppKit
 #endif
 
 public struct DivBlockModelingContext {
