@@ -3,8 +3,10 @@ package com.yandex.div.core.view2.divs
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.core.view.forEach
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
+import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
@@ -13,6 +15,8 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.Releasable
+import com.yandex.div.core.view2.ReleaseManager
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.KAssert
@@ -25,6 +29,7 @@ internal class DivCustomBinder @Inject constructor(
     private val divCustomViewAdapter: DivCustomViewAdapter? = null,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter? = null,
     private val extensionController: DivExtensionController,
+    private val releaseManager: ReleaseManager,
 ) : DivViewBinder<DivCustom, View> {
 
     override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
@@ -48,6 +53,20 @@ internal class DivCustomBinder @Inject constructor(
             divCustomViewAdapter.bind(view, customView, div, divView)
         } else {
             oldBind(div, divView, view, customView)
+        }
+
+        view.observeViewTreeReleaseLifecycle(divView.context.lifecycleOwner)
+    }
+
+    private fun View.observeViewTreeReleaseLifecycle(lifecycleOwner: LifecycleOwner?) {
+        if (this is Releasable) {
+            releaseManager.observeViewLifecycle(lifecycleOwner, this)
+        }
+
+        if (this is ViewGroup) {
+            this.forEach {
+                it.observeViewTreeReleaseLifecycle(lifecycleOwner)
+            }
         }
     }
 

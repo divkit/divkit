@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.div
 import android.app.Activity
 import android.net.Uri
 import android.view.ContextThemeWrapper
+import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
@@ -28,6 +29,7 @@ import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import org.json.JSONObject
 
@@ -77,14 +79,15 @@ fun divContext(
         .configBuilder()
         .build()
 
-    return divContext(activity, configuration)
+    return divContext(activity, configuration, activity.lifecycleOwner)
 }
 
 fun divContext(
     baseContext: ContextThemeWrapper,
-    configuration: DivConfiguration
+    configuration: DivConfiguration,
+    lifecycleOwner: LifecycleOwner?
 ): Div2Context {
-    return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo)
+    return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo, lifecycleOwner)
 }
 
 open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {

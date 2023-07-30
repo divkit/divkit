@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.DivBinder;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
+import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import dagger.BindsInstance;
@@ -144,6 +145,9 @@ public interface Div2Component {
 
     @NonNull
     RenderScript getRenderScript();
+
+    @NonNull
+    ReleaseManager getReleaseManager();
 
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)

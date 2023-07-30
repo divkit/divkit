@@ -44,6 +44,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
 import com.yandex.divkit.demo.utils.longToast
 import com.yandex.divkit.regression.MetadataBottomSheet
@@ -106,7 +107,11 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
 
-        divContext = divContext(baseContext = this, configuration = divConfiguration)
+        divContext = divContext(
+            baseContext = this,
+            configuration = divConfiguration,
+            lifecycleOwner = lifecycleOwner
+        )
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 

@@ -8,6 +8,7 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.player.DivPlayerView
+import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.KAssert
@@ -25,7 +26,8 @@ internal class DivVideoView @JvmOverloads constructor(
     DivBorderSupports,
     TransientView,
     DivExtensionView,
-    ExpressionSubscriber {
+    ExpressionSubscriber,
+    Releasable {
     internal var div: DivVideo? = null
 
     private var borderDrawer: DivBorderDrawer? = null

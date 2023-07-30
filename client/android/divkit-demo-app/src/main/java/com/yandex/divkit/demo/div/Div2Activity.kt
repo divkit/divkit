@@ -44,6 +44,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 import java.net.URL
@@ -100,7 +101,11 @@ class Div2Activity : AppCompatActivity() {
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
-        val context = divContext(baseContext = this, configuration = divConfiguration)
+        val context = divContext(
+            baseContext = this,
+            configuration = divConfiguration,
+            lifecycleOwner = lifecycleOwner
+        )
 
         val prevValue = preferences.getString(DIV2_KEY_URL, "")?.takeIf { it.isNotBlank() } ?: ""
         variable = Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, prevValue)

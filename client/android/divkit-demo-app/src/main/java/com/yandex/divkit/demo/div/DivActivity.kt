@@ -28,6 +28,7 @@ import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.SamplesActivityBinding
 import com.yandex.divkit.demo.utils.DivkitDemoPermissionHelper
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 
@@ -100,7 +101,13 @@ open class DivActivity : AppCompatActivity() {
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
-        return DivViewAdapter(divContext(baseContext = this, configuration = configuration))
+        val context = divContext(
+            baseContext = this,
+            configuration = configuration,
+            lifecycleOwner = lifecycleOwner
+        )
+
+        return DivViewAdapter(context)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

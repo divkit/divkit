@@ -11,9 +11,6 @@ import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.ViewTreeLifecycleOwner
 import androidx.transition.Scene
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -56,7 +53,6 @@ import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
-import com.yandex.div.internal.Log
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -81,7 +77,7 @@ import kotlin.collections.set
 @SuppressLint("ViewConstructor")
 @Mockable
 class Div2View private constructor(
-    context: Div2Context,
+    internal val context: Div2Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
@@ -95,14 +91,6 @@ class Div2View private constructor(
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
-
-    private var attachedToLifecycle = false
-    private val lifecycleObserver = LifecycleEventObserver { _, event ->
-        when(event) {
-            Lifecycle.Event.ON_DESTROY -> releaseChildren(this)
-            else -> Unit
-        }
-    }
 
     private val divBuilder: Div2Builder = context.div2Component.div2Builder
     private val loadReferences = mutableListOf<LoadReference>()
@@ -179,19 +167,6 @@ class Div2View private constructor(
             }
         } else {
             _expressionsRuntime?.onAttachedToWindow(this)
-        }
-    }
-
-    private fun tryAttachToLifecycle() {
-        if (attachedToLifecycle) return
-
-        ViewTreeLifecycleOwner.get(this).let {
-            if (it == null) {
-                Log.w(TAG, NOT_ATTACHED_TO_LIFECYCLE_WARNING)
-            } else {
-                it.lifecycle.addObserver(lifecycleObserver)
-                attachedToLifecycle = true
-            }
         }
     }
 
@@ -423,7 +398,6 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
-        tryAttachToLifecycle()
     }
 
     override fun onDetachedFromWindow() {
@@ -965,13 +939,5 @@ class Div2View private constructor(
             pendingState = null
             pendingPaths.clear()
         }
-    }
-
-    companion object {
-        const val TAG = "Div2View"
-        const val NOT_ATTACHED_TO_LIFECYCLE_WARNING =
-            "Div2View is out of lifecycle after attach. Lifecycle events will not be caught! " +
-                    "If you're using some long-lived resources, like a video player, " +
-                    "call cleanup explicitly when you don't need Div2View anymore"
     }
 }

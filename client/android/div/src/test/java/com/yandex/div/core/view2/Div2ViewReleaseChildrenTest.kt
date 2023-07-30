@@ -38,8 +38,16 @@ class Div2ViewReleaseChildrenTest {
         configuration = DivConfiguration.Builder(mock()).build()
     )
     private val viewBinder = mock<DivBinder>()
-    private val divExtensionController = DivExtensionController(emptyList())
-    private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), null, null, divExtensionController))
+    private val divExtensionController = DivExtensionController(emptyList(), mock())
+    private val releaseViewVisitor = spy(
+        ReleaseViewVisitor(
+            mock(),
+            divCustomViewAdapter = null,
+            divCustomContainerViewAdapter = null,
+            divExtensionController,
+            mock()
+        )
+    )
     private val component: TestComponent = TestComponent(
         wrapped = backingContext.div2Component,
         divBinder = viewBinder,

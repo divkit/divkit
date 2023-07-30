@@ -18,6 +18,7 @@ import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.ReleaseManager
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
@@ -28,7 +29,8 @@ internal class DivVideoBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val divActionHandler: DivActionHandler,
-    private val videoViewMapper: DivVideoViewMapper
+    private val videoViewMapper: DivVideoViewMapper,
+    private val releaseManager: ReleaseManager,
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
         val oldDiv = view.div
@@ -134,6 +136,8 @@ internal class DivVideoBinder @Inject constructor(
 
         videoViewMapper.addView(view, div)
         baseBinder.bindView(view, div, oldDiv, divView)
+
+        releaseManager.observeViewLifecycle(divView.context.lifecycleOwner, view)
     }
 
     private fun DivVideoView.observeElapsedTime(

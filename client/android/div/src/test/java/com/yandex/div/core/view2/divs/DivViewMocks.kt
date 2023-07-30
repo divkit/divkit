@@ -1,10 +1,13 @@
 package com.yandex.div.core.view2.divs
 
 import android.content.Context
+import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.state.DivStatePath
@@ -27,6 +30,11 @@ internal fun divView(
     divTag: String = ""
 ): Div2View {
     val context = context()
+    val div2Context = Div2Context(
+        ContextThemeWrapper(context, context.theme),
+        DivConfiguration.Builder(mock()).build(),
+        lifecycleOwner = null
+    )
 
     val actionBinder = mock<DivActionBinder> {
         on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), any()) }.thenCallRealMethod()
@@ -38,7 +46,7 @@ internal fun divView(
     }
 
     return mock {
-        on { this.context } doReturn context
+        on { this.context } doReturn div2Context
         on { this.resources } doReturn context.resources
         on { this.div2Component } doReturn component
         on { this.logId } doReturn logId

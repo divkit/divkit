@@ -20,6 +20,7 @@ import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import java.util.concurrent.Executors
@@ -59,7 +60,11 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
                 .actionHandler(RegressionDivActionHandler(uriHandler, assetReader))
                 .build()
-        val divContext = divContext(baseContext = activity, configuration = divConfiguration)
+        val divContext = divContext(
+            baseContext = activity,
+            configuration = divConfiguration,
+            lifecycleOwner = activity.lifecycleOwner
+        )
         divStateStorage.preloadState("div2")
         return when {
             divJson.has("card") -> {

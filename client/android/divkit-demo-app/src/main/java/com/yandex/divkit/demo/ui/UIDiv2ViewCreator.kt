@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.ui
 import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.state.DivStateDatabase
@@ -48,7 +49,11 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
                 .actionHandler(UIDiv2ActionHandler(uriHandler, context))
                 .build()
-        val divContext = divContext(baseContext = activity, configuration = divConfiguration)
+        val divContext = divContext(
+            baseContext = activity,
+            configuration = divConfiguration,
+            lifecycleOwner = activity as? LifecycleOwner
+        )
         divStateStorage.preloadState("div2")
         val templateJson = divJson.optJSONObject("templates")
         val cardJson = divJson.getJSONObject("card")
