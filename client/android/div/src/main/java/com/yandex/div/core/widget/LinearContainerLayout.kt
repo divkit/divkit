@@ -72,6 +72,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private var totalLength = 0
     private var totalConstrainedLength = 0
+    private var totalMatchParentLength = 0
     private var childMeasuredState = 0
 
     override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
@@ -218,6 +219,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         totalLength = 0
+        maxCrossSize = 0
+        totalConstrainedLength = 0
+        totalMatchParentLength = 0
         totalWeight = 0f
         childMeasuredState = 0
 
@@ -278,11 +282,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalWeight += child.lp.fixedVerticalWeight
             measureChildWithSignificantSizeVertical(child, widthMeasureSpec, heightSpec)
         }
-
-        setParentCrossSizeIfNeeded(widthMeasureSpec)
         considerMatchParentChildrenInMaxWidth(widthMeasureSpec, heightSpec)
         crossMatchParentChildren.forEach { measureMatchParentWidthChild(it, heightSpec) }
-        forEachSignificant { considerMatchParentChildMarginsInHeight(it, heightSpec) }
 
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
             totalLength += dividerHeightWithMargins
@@ -299,10 +300,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             }
             aspectRatio == DEFAULT_ASPECT_RATIO && !isExact(heightSpec) -> {
                 heightSize = max(totalLength, suggestedMinimumHeight)
-                if (isAtMost(heightSpec) && totalWeight > 0) {
-                    heightSize = max(MeasureSpec.getSize(heightSpec), heightSize)
-                }
-                heightSize = resolveSize(heightSize, heightSpec)
                 remeasureChildrenVerticalIfNeeded(widthMeasureSpec, heightSize, heightSpec, initialMaxWidth)
                 heightSize = max(totalLength, suggestedMinimumHeight)
             }
@@ -335,6 +332,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         if (!hasSignificantHeight) {
             skippedMatchParentChildren += child
+            // If match_parent child has margins it will be drawn even when there's no space for this child itself.
+            // So this size should be considered.
+            totalLength = getMaxLength(totalLength, child.lp.verticalMargins)
         }
     }
 
@@ -350,10 +350,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     ) {
         val lp = child.lp
 
-        if (lp.height == WRAP_CONTENT_CONSTRAINED) {
-            measureConstrainedHeightChildFirstTime(child, widthMeasureSpec, heightMeasureSpec, considerHeight)
-        } else {
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+        when (lp.height) {
+            WRAP_CONTENT_CONSTRAINED -> {
+                measureConstrainedHeightChildFirstTime(child, widthMeasureSpec, heightMeasureSpec, considerHeight)
+            }
+            MATCH_PARENT -> {
+                measureMatchParentHeightChildFirstTime(child, widthMeasureSpec, heightMeasureSpec, considerHeight)
+            }
+            else -> measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         }
 
         childMeasuredState = combineMeasuredStates(childMeasuredState, child.measuredState)
@@ -361,7 +365,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             updateMaxCrossSize(widthMeasureSpec, child.measuredWidth + lp.horizontalMargins)
         }
 
-        if (!considerHeight || !hasSignificantHeight(child, heightMeasureSpec)) return
+        if (!considerHeight) return
         totalLength = getMaxLength(totalLength, child.measuredHeight + lp.verticalMargins)
     }
 
@@ -386,15 +390,23 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         constrainedChildren.add(child)
     }
 
-    // When container has children with match_parent size along cross direction without other defined dimensions
-    // such children can be stretched to maximum size that parent provides.
-    private fun setParentCrossSizeIfNeeded(measureSpec: Int) {
-        when {
-            crossMatchParentChildren.isEmpty() -> Unit
-            maxCrossSize > 0 -> Unit
-            !isAtMost(measureSpec) -> Unit
-            else -> maxCrossSize = MeasureSpec.getSize(measureSpec)
+    private fun measureMatchParentHeightChildFirstTime(
+        child: View,
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+        considerHeight: Boolean
+    ) {
+        if (isExact(heightMeasureSpec)) {
+            measureChildWithMargins(child, widthMeasureSpec, 0, makeExactSpec(0), 0)
+            return
         }
+
+        val lp = child.lp
+        lp.height = WRAP_CONTENT
+        measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+        lp.height = MATCH_PARENT
+        if (!considerHeight) return
+        totalMatchParentLength = getMaxLength(totalMatchParentLength, child.measuredHeight)
     }
 
     private fun considerMatchParentChildrenInMaxWidth(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -415,13 +427,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
     }
 
-    // If match_parent child has margins it will be drawn even when there's no space for this child itself.
-    // So this size should be considered.
-    private fun considerMatchParentChildMarginsInHeight(child: View, heightMeasureSpec: Int) {
-        if (hasSignificantHeight(child, heightMeasureSpec)) return
-        totalLength = getMaxLength(totalLength, child.lp.verticalMargins)
-    }
-
     private fun measureMatchParentWidthChild(child: View, heightMeasureSpec: Int) {
         if (!hasSignificantHeight(child, heightMeasureSpec)) return
         measureVerticalFirstTime(child, makeExactSpec(maxCrossSize), heightMeasureSpec,
@@ -438,8 +443,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val delta = heightSize - totalLength
         if (constrainedChildren.any { it.maxHeight != Int.MAX_VALUE } || needRemeasureChildren(delta, heightSpec)) {
             totalLength = 0
-            remeasureConstrainedHeightChildren(widthMeasureSpec, delta)
-            remeasureMatchParentHeightChildren(widthMeasureSpec, initialMaxWidth, delta)
+            remeasureConstrainedHeightChildren(widthMeasureSpec, heightSpec, delta)
+            remeasureMatchParentHeightChildren(widthMeasureSpec, heightSpec, initialMaxWidth, delta)
             totalLength += paddingTop + paddingBottom
         }
     }
@@ -448,15 +453,17 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     // shrink constrained ones if they extend beyond our current bounds.
     // If we skipped measurement on any children, we need to measure them now.
     private fun needRemeasureChildren(delta: Int, spec: Int) = when {
-        isUnspecified(spec) -> false
         skippedMatchParentChildren.isNotEmpty() -> true
+        isUnspecified(spec) -> false
+        delta < 0 -> totalConstrainedLength > 0 || totalWeight > 0
+        !isExact(spec) -> false
         delta > 0 -> totalWeight > 0
-        delta < 0 -> totalConstrainedLength > 0
         else -> false
     }
 
-    private fun remeasureConstrainedHeightChildren(widthMeasureSpec: Int, delta: Int) {
-        if (delta >= 0) {
+    private fun remeasureConstrainedHeightChildren(widthMeasureSpec: Int, heightMeasureSpec: Int, delta: Int) {
+        val freeSpace = getFreeSpace(delta, heightMeasureSpec)
+        if (freeSpace >= 0) {
             constrainedChildren.forEach { child ->
                 if (child.maxHeight == Int.MAX_VALUE) return@forEach
                 remeasureChildVertical(child, widthMeasureSpec, maxCrossSize,
@@ -465,7 +472,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             return
         }
 
-        var spaceToShrink = delta
+        var spaceToShrink = freeSpace
         constrainedChildren.sortByDescending { it.minimumHeight / it.measuredHeight.toFloat() }
         constrainedChildren.forEach { child ->
             val lp = child.lp
@@ -507,8 +514,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             ((MEASURED_STATE_MASK shr MEASURED_HEIGHT_STATE_SHIFT)))
     }
 
-    private fun remeasureMatchParentHeightChildren(widthMeasureSpec: Int, initialMaxWidth: Int, delta: Int) {
-        var freeSpace = delta
+    private fun remeasureMatchParentHeightChildren(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+        initialMaxWidth: Int,
+        delta: Int
+    ) {
+        val freeSpace = getFreeSpace(delta, heightMeasureSpec)
+        var spaceToExpand = freeSpace
         var weightSum = totalWeight
         val oldMaxWidth = maxCrossSize
         maxCrossSize = initialMaxWidth
@@ -516,10 +529,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val lp = child.lp
             when {
                 lp.height != MATCH_PARENT -> Unit
-                delta > 0 -> {
-                    val share = (lp.fixedVerticalWeight * freeSpace / weightSum).toInt()
+                freeSpace > 0 -> {
+                    val share = (lp.fixedVerticalWeight * spaceToExpand / weightSum).toInt()
                     weightSum -= lp.fixedVerticalWeight
-                    freeSpace -= share
+                    spaceToExpand -= share
                     remeasureChildVertical(child, widthMeasureSpec, oldMaxWidth, share)
                 }
                 skippedMatchParentChildren.contains(child) -> {
@@ -532,6 +545,12 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
 
         KAssert.assertEquals(oldMaxWidth, maxCrossSize) { "Width of vertical container changed after remeasuring" }
+    }
+
+    private fun getFreeSpace(delta: Int, spec: Int) = when {
+        delta < 0 && totalMatchParentLength > 0 -> (delta + totalMatchParentLength).coerceAtLeast(0)
+        delta >= 0 && isExact(spec) -> delta + totalMatchParentLength
+        else -> delta
     }
 
     /**
@@ -573,9 +592,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalLength += dividerWidthWithMargins
         }
         totalLength += paddingLeft + paddingRight
-        if (isAtMost(widthMeasureSpec) && totalWeight > 0) {
-            totalLength = max(MeasureSpec.getSize(widthMeasureSpec), totalLength)
-        }
         val resizedTotalLength = max(suggestedMinimumWidth, totalLength)
 
         val widthSizeAndState = resolveSizeAndState(resizedTotalLength, widthMeasureSpec, childMeasuredState)
@@ -588,7 +604,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         remeasureChildrenHorizontalIfNeeded(widthMeasureSpec, widthSize, heightSpec, initialMaxHeight)
 
         if (!exactHeight && aspectRatio == DEFAULT_ASPECT_RATIO) {
-            setParentCrossSizeIfNeeded(heightSpec)
             forEachSignificant { considerMatchParentChildInMaxHeight(it, heightSpec, maxCrossSize == 0) }
             if (maxBaselineAscent != -1) {
                 updateMaxCrossSize(heightSpec, maxBaselineAscent + maxBaselineDescent)
@@ -615,17 +630,19 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (!hasSignificantWidth(child, widthMeasureSpec)) return
         val lp = child.lp
 
-        if (lp.width == WRAP_CONTENT_CONSTRAINED) {
-            measureChildWithConstrainedWidthFirstTime(child, widthMeasureSpec, heightMeasureSpec)
-        } else {
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+        when (lp.width) {
+            WRAP_CONTENT_CONSTRAINED -> {
+                measureConstrainedWidthChildFirstTime(child, widthMeasureSpec, heightMeasureSpec)
+            }
+            MATCH_PARENT -> {
+                measureMatchParentWidthChildFirstTime(child, widthMeasureSpec, heightMeasureSpec)
+            }
+            else -> measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
         }
 
         childMeasuredState = combineMeasuredStates(childMeasuredState, child.measuredState)
         updateMaxCrossSize(heightMeasureSpec, child.measuredHeight + lp.verticalMargins)
         updateBaselineOffset(child)
-
-        if (!hasSignificantWidth(child, widthMeasureSpec)) return
         totalLength = getMaxLength(totalLength, child.measuredWidth + lp.horizontalMargins)
     }
 
@@ -633,9 +650,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         hasSignificantDimension(child.lp.width, widthMeasureSpec)
 
     private fun hasSignificantDimension(dimension: Int, parentMeasureSpec: Int) =
-        dimension != MATCH_PARENT || isUnspecified(parentMeasureSpec)
+        dimension != MATCH_PARENT || !isExact(parentMeasureSpec)
 
-    private fun measureChildWithConstrainedWidthFirstTime(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    private fun measureConstrainedWidthChildFirstTime(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val lp = child.lp
         val oldMaxWidth = lp.maxWidth
         lp.width = WRAP_CONTENT
@@ -648,6 +665,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         constrainedChildren.add(child)
     }
 
+    private fun measureMatchParentWidthChildFirstTime(child: View, widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val lp = child.lp
+        lp.width = WRAP_CONTENT
+        measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+        lp.width = MATCH_PARENT
+        totalMatchParentLength = getMaxLength(totalMatchParentLength, child.measuredWidth + lp.horizontalMargins)
+    }
+
     // If match_parent child has margins it will be drawn even when there's no space for this child itself.
     // So this size should be considered.
     private fun considerMatchParentChildMarginsInWidth(child: View, widthMeasureSpec: Int) {
@@ -657,22 +682,23 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun remeasureChildrenHorizontalIfNeeded(
         widthMeasureSpec: Int,
-        resizedTotalLength: Int,
+        widthSize: Int,
         heightMeasureSpec: Int,
         initialMaxHeight: Int
     ) {
-        val delta = resizedTotalLength - totalLength
+        val delta = widthSize - totalLength
         if (constrainedChildren.any { it.maxWidth != Int.MAX_VALUE }
             || needRemeasureChildren(delta, widthMeasureSpec)) {
             totalLength = 0
-            remeasureConstrainedWidthChildren(heightMeasureSpec, delta)
-            remeasureMatchParentWidthChildren(heightMeasureSpec, initialMaxHeight, delta)
+            remeasureConstrainedWidthChildren(widthMeasureSpec, heightMeasureSpec, delta)
+            remeasureMatchParentWidthChildren(widthMeasureSpec, heightMeasureSpec, initialMaxHeight, delta)
             totalLength += paddingTop + paddingBottom
         }
     }
 
-    private fun remeasureConstrainedWidthChildren(heightMeasureSpec: Int, delta: Int) {
-        if (delta >= 0) {
+    private fun remeasureConstrainedWidthChildren(widthMeasureSpec: Int, heightMeasureSpec: Int, delta: Int) {
+        val freeSpace = getFreeSpace(delta, widthMeasureSpec)
+        if (freeSpace >= 0) {
             constrainedChildren.forEach { child ->
                 if (child.maxWidth == Int.MAX_VALUE) return@forEach
                 remeasureChildHorizontal(child, heightMeasureSpec, min(child.measuredWidth, child.maxWidth))
@@ -680,7 +706,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             return
         }
 
-        var spaceToShrink = delta
+        var spaceToShrink = freeSpace
         constrainedChildren.sortByDescending { it.minimumWidth / it.measuredWidth.toFloat() }
         constrainedChildren.forEach { child ->
             val lp = child.lp
@@ -698,8 +724,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
     }
 
-    private fun remeasureMatchParentWidthChildren(heightMeasureSpec: Int, initialMaxHeight: Int, delta: Int) {
-        var freeSpace = delta
+    private fun remeasureMatchParentWidthChildren(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+        initialMaxHeight: Int,
+        delta: Int
+    ) {
+        val freeSpace = getFreeSpace(delta, widthMeasureSpec)
+        var spaceToExpand = freeSpace
         var weightSum = totalWeight
         maxCrossSize = initialMaxHeight
         maxBaselineAscent = -1
@@ -708,10 +740,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val lp = child.lp
             when {
                 lp.width != MATCH_PARENT -> Unit
-                delta > 0 -> {
-                    val share = (lp.fixedHorizontalWeight * freeSpace / weightSum).toInt()
+                freeSpace > 0 -> {
+                    val share = (lp.fixedHorizontalWeight * spaceToExpand / weightSum).toInt()
                     weightSum -= lp.fixedHorizontalWeight
-                    freeSpace -= share
+                    spaceToExpand -= share
                     remeasureChildHorizontal(child, heightMeasureSpec, share)
                 }
                 else -> remeasureChildHorizontal(child, heightMeasureSpec, 0)

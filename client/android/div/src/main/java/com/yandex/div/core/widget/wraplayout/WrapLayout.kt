@@ -25,15 +25,10 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
         set(value) {
             if (field != value) {
                 field = value
-                when (field) {
-                    WrapDirection.ROW -> {
-                        isRowDirection = true
-                    }
-                    WrapDirection.COLUMN -> {
-                        isRowDirection = false
-                    }
-                    else -> throw IllegalStateException(
-                        "Invalid value for the wrap direction is set: $wrapDirection")
+                isRowDirection = when (field) {
+                    WrapDirection.ROW -> true
+                    WrapDirection.COLUMN -> false
+                    else -> throw IllegalStateException("Invalid value for the wrap direction is set: $wrapDirection")
                 }
                 requestLayout()
             }
@@ -403,7 +398,7 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context), Aspect
         MeasureSpec.UNSPECIFIED -> maxSize
         MeasureSpec.AT_MOST -> when {
             isCrossAxis -> min(size, maxSize)
-            maxSize < size -> size
+            maxSize > size -> size
             visibleLinesCount > 1 -> size
             else -> maxSize
         }

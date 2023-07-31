@@ -68,11 +68,13 @@ internal object DivComparator {
         if (old is DivCustom && new is DivCustom && old.customType != new.customType) {
             return false
         }
-        if (
-            old is DivContainer && new is DivContainer
-            && old.isWrapContainer(resolver) != new.isWrapContainer(resolver)
-        ) {
-            return false
+        if (old is DivContainer && new is DivContainer) {
+            if (old.isOverlap(resolver) != new.isOverlap(resolver)) {
+                return false
+            }
+            if (old.isWrapContainer(resolver) != new.isWrapContainer(resolver)) {
+                return false
+            }
         }
         return true
     }
@@ -115,4 +117,7 @@ internal object DivComparator {
     private fun DivBase.hasTransitions(): Boolean {
         return transitionIn != null || transitionOut != null || transitionChange != null
     }
+
+    private fun DivContainer.isOverlap(resolver: ExpressionResolver) =
+        orientation.evaluate(resolver) == DivContainer.Orientation.OVERLAP
 }
