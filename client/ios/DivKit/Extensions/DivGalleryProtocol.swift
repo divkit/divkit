@@ -52,6 +52,7 @@ extension DivGalleryProtocol {
 
     return GalleryViewModel(
       items: children,
+      layoutDirection: context.layoutDirection,
       metrics: metrics,
       scrollMode: scrollMode,
       path: context.parentPath,

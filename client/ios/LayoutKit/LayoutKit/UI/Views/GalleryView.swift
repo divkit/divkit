@@ -107,6 +107,10 @@ public final class GalleryView: BlockView {
     if oldModel != model {
       let blocks = model.items.map { $0.content }
       dataSource.blocks = blocks
+      if oldModel?.layoutDirection != model.layoutDirection {
+        collectionView.semanticContentAttribute = model
+          .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
+      }
       collectionView.decelerationRate = model.scrollMode.decelerationRate
       collectionView.alwaysBounceVertical = model.alwaysBounceVertical
       collectionView.bounces = model.bounces
