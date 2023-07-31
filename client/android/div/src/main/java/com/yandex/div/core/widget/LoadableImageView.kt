@@ -17,6 +17,7 @@ import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.core.view2.drawable.ScaleDrawable
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.internal.widget.DivLayoutParams
 import java.util.concurrent.Future
 
 open class LoadableImageView(
@@ -154,9 +155,13 @@ open class LoadableImageView(
     }
 
     private fun shouldScaleAccordingToDensity(): Boolean {
-        val wrapsContent = layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT &&
-                layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
+        val wrapsContent = wrapsSize(layoutParams.width) && wrapsSize(layoutParams.height)
         return wrapsContent || imageScale == Scale.NO_SCALE
+    }
+
+    private fun wrapsSize(size: Int) = when (size) {
+        ViewGroup.LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> true
+        else -> false
     }
 
     fun setImageChangeCallback(callback: (() -> Unit)? = null) {
