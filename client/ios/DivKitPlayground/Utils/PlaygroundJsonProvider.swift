@@ -13,7 +13,10 @@ struct PlaygroundJsonProvider {
   }
 
   public func load(url: URL) {
-    let json = try! Data(contentsOf: url).asJsonDictionary()
+    guard let json = try? Data(contentsOf: url).asJsonDictionary() else {
+      self.json = [:]
+      return
+    }
     let palette = Palette(json: try! json.getOptionalField("palette") ?? [:])
     variablesStorage.set(
       variables: palette.makeVariables(theme: UserPreferences.playgroundTheme),

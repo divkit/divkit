@@ -26,9 +26,9 @@ struct SampleView: View {
   let model: SampleModel
 
   var body: some View {
-    SimpleDivView(
+    DivViewSwiftUIAdapter(
       cardId: model.cardId,
-      jsonData: model.jsonData,
+      jsonData: model.jsonData ?? Data(),
       divKitComponents: model.divKitComponents
     )
   }

@@ -26,9 +26,10 @@ final class DivViewProvider {
   }
 
   func makeDivView(_ url: URL) -> some View {
-    DivView(
+    DivViewControllerSwiftUIAdapter(
       jsonProvider: jsonProvider.$json.newValues,
-      divKitComponents: divKitComponents
+      divKitComponents: divKitComponents,
+      debugParams: AppComponents.debugParams
     )
     .onAppear { [weak self] in
       self?.jsonProvider.load(url: url)
