@@ -96,6 +96,7 @@
                 },
                 {
                   "type": "text_block",
+                  "id": "blocks_2",
                   "header": "Item 2",
                   "item_log_id": "item/02",
                   "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_2"

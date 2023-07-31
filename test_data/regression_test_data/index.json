@@ -884,6 +884,9 @@
     },
     {
       "title": "Disappear actions in gallery",
+      "automated": [
+        "web"
+      ],
       "platforms": [
         "ios",
         "web"
