@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
-		431276EC2A72B89C000CC821 /* DivView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431276EB2A72B89C000CC821 /* DivView.swift */; };
 		431276EE2A72B8F2000CC821 /* DivView+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
@@ -17,7 +16,6 @@
 		4356EDC12A6C54E40017205B /* PlaygroundJsonProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4356EDC02A6C54E40017205B /* PlaygroundJsonProvider.swift */; };
 		437B19D429C8A73300A4C467 /* MaskValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */; };
 		4391F7C32A77DB9B006D8818 /* DivViewController+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */; };
-		43A853512A7058ED00D94E69 /* DivBlockProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A853502A7058ED00D94E69 /* DivBlockProvider.swift */; };
 		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */; };
 		52DED04F29F7349000D64519 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 52DED04E29F7349000D64519 /* DivKit */; };
@@ -254,7 +252,6 @@
 
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
-		431276EB2A72B89C000CC821 /* DivView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivView.swift; sourceTree = "<group>"; };
 		431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivView+SwiftUI.swift"; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
@@ -262,7 +259,6 @@
 		4356EDC02A6C54E40017205B /* PlaygroundJsonProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundJsonProvider.swift; sourceTree = "<group>"; };
 		437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskValidatorTests.swift; sourceTree = "<group>"; };
 		4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivViewController+SwiftUI.swift"; sourceTree = "<group>"; };
-		43A853502A7058ED00D94E69 /* DivBlockProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivBlockProvider.swift; sourceTree = "<group>"; };
 		5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunLoopCardUpdateAggregatorTests.swift; sourceTree = "<group>"; };
 		52DED03C29F6E3D500D64519 /* ShimmerStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTests.swift; sourceTree = "<group>"; };
 		52DED04729F7346900D64519 /* DivKitExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -613,7 +609,6 @@
 			children = (
 				8C1A378628B5143200A047C8 /* DivViewController.swift */,
 				4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */,
-				431276EB2A72B89C000CC821 /* DivView.swift */,
 				8C1A378728B5143200A047C8 /* DivViewProvider.swift */,
 				8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */,
 				431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */,
@@ -794,7 +789,6 @@
 				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */,
 				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
-				43A853502A7058ED00D94E69 /* DivBlockProvider.swift */,
 				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
 				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
 			);
@@ -1447,7 +1441,6 @@
 				8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */,
 				431276EE2A72B8F2000CC821 /* DivView+SwiftUI.swift in Sources */,
 				8C1A377D28B4E3E700A047C8 /* JSONPayload.swift in Sources */,
-				431276EC2A72B89C000CC821 /* DivView.swift in Sources */,
 				76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */,
 				8C1A375028B4189E00A047C8 /* MetadataCaptureSession.swift in Sources */,
 				8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */,
@@ -1458,7 +1451,6 @@
 				76FD0506294208890002A1F9 /* RiveDivCustomData.swift in Sources */,
 				767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */,
 				89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */,
-				43A853512A7058ED00D94E69 /* DivBlockProvider.swift in Sources */,
 				8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */,
 				8C4504DC28B3AA30005712FD /* SamplesView.swift in Sources */,
 				8C1A383228B61A2B00A047C8 /* AppComponents.swift in Sources */,

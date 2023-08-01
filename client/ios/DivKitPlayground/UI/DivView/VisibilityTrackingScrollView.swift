@@ -3,6 +3,7 @@ import UIKit
 import BaseUIPublic
 import CommonCorePublic
 import LayoutKit
+import DivKit
 
 final class VisibilityTrackingScrollView: UIScrollView {
   var divView: DivView? {

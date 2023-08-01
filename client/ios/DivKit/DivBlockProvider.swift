@@ -2,13 +2,12 @@ import UIKit
 
 import BaseUIPublic
 import CommonCorePublic
-import DivKit
 import LayoutKit
 import Serialization
 
-final class DivBlockProvider {
-  struct Source {
-    enum Kind {
+public final class DivBlockProvider {
+  public struct Source {
+    public enum Kind {
       case json([String: Any])
       case data(Data)
       case divData(DivData)
@@ -16,19 +15,13 @@ final class DivBlockProvider {
 
     let kind: Kind
     let cardId: DivCardID
-    let parentScrollView: ScrollView?
-    let debugParams: DebugParams
 
-    init(
+    public init(
       kind: Kind,
-      cardId: DivCardID,
-      parentScrollView: ScrollView?,
-      debugParams: DebugParams = DebugParams()
+      cardId: DivCardID
     ) {
       self.kind = kind
       self.cardId = cardId
-      self.parentScrollView = parentScrollView
-      self.debugParams = debugParams
     }
   }
 
@@ -44,7 +37,7 @@ final class DivBlockProvider {
 
   private var cardId: DivCardID!
   private var debugParams: DebugParams = .init()
-  private weak var parentScrollView: ScrollView?
+  private var errors: [DivError] = []
 
   private let measurements = DebugParams.Measurements(
     divDataParsingTime: TimeMeasure(),
@@ -54,18 +47,25 @@ final class DivBlockProvider {
 
   @ObservableProperty
   private(set) var block: Block = noDataBlock
-  private(set) var errors: [DivError] = []
+  weak var parentScrollView: ScrollView? {
+    didSet {
+      guard oldValue !== parentScrollView else { return }
+      update(reasons: [])
+    }
+  }
 
-  init(
-    divKitComponents: DivKitComponents
-  ) {
+  init(divKitComponents: DivKitComponents) {
     self.divKitComponents = divKitComponents
 
     divKitComponents.updateCardSignal
       .addObserver { [weak self] in self?.update(reasons: $0) }.dispose(in: disposePool)
   }
 
-  func setSource(_ source: Source, shouldResetPreviousCardData: Bool) {
+  func setSource(
+    _ source: Source,
+    debugParams: DebugParams,
+    shouldResetPreviousCardData: Bool
+  ) {
     if shouldResetPreviousCardData {
       cardId.flatMap(divKitComponents.reset(cardId:))
     }
@@ -73,8 +73,7 @@ final class DivBlockProvider {
     block = noDataBlock
 
     cardId = source.cardId
-    debugParams = source.debugParams
-    parentScrollView = source.parentScrollView
+    self.debugParams = debugParams
     switch source.kind {
     case let .data(data): update(data: data)
     case let .divData(divData): self.divData = divData

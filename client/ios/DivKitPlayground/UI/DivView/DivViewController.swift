@@ -28,11 +28,12 @@ open class DivViewController: UIViewController {
       divView.setSource(
         DivBlockProvider.Source(
           kind: .json($0),
-          cardId: "DivViewCard",
-          parentScrollView: scrollView,
-          debugParams: debugParams
-        ), shouldResetPreviousCardData: true
+          cardId: "DivViewCard"
+        ),
+        debugParams: debugParams,
+        shouldResetPreviousCardData: true
       )
+      divView.setParentScrollView(scrollView)
     }.dispose(in: disposePool)
   }
 

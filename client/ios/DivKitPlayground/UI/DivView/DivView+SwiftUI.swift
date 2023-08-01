@@ -9,7 +9,7 @@ struct DivViewSwiftUIAdapter: UIViewRepresentable {
   func makeUIView(context _: Context) -> UIView {
     let view = DivView(divKitComponents: divKitComponents)
     view.setSource(
-      .init(kind: .data(jsonData), cardId: cardId, parentScrollView: nil),
+      .init(kind: .data(jsonData), cardId: cardId),
       shouldResetPreviousCardData: true
     )
     return view

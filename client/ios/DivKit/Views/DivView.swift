@@ -2,10 +2,9 @@ import UIKit
 
 import BasePublic
 import CommonCorePublic
-import DivKit
 import LayoutKit
 
-final class DivView: VisibleBoundsTrackingView {
+public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
   private let blockProvider: DivBlockProvider
   private let disposePool = AutodisposePool()
@@ -19,9 +18,7 @@ final class DivView: VisibleBoundsTrackingView {
     }
   }
 
-  public init(
-    divKitComponents: DivKitComponents
-  ) {
+  public init(divKitComponents: DivKitComponents) {
     self.divKitComponents = divKitComponents
     self.blockProvider = DivBlockProvider(divKitComponents: divKitComponents)
 
@@ -34,12 +31,18 @@ final class DivView: VisibleBoundsTrackingView {
 
   public func setSource(
     _ source: DivBlockProvider.Source,
-    shouldResetPreviousCardData: Bool
+    debugParams: DebugParams = DebugParams(),
+    shouldResetPreviousCardData: Bool = false
   ) {
     blockProvider.setSource(
       source,
+      debugParams: debugParams,
       shouldResetPreviousCardData: shouldResetPreviousCardData
     )
+  }
+
+  public func setParentScrollView(_ parentScrollView: ScrollView) {
+    blockProvider.parentScrollView = parentScrollView
   }
 
   @available(*, unavailable)
@@ -62,7 +65,7 @@ final class DivView: VisibleBoundsTrackingView {
     blockProvider.block.size(forResizableBlockSize: availableSize)
   }
 
-  override var intrinsicContentSize: CGSize {
+  public override var intrinsicContentSize: CGSize {
     blockProvider.block.size(forResizableBlockSize: bounds.size)
   }
 
@@ -83,7 +86,7 @@ final class DivView: VisibleBoundsTrackingView {
     setNeedsLayout()
   }
 
-  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+  public func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
     blockView.onVisibleBoundsChanged(from: from, to: to)
   }
 }
@@ -109,7 +112,26 @@ extension DivView: UIActionEventPerforming {
 }
 
 extension UIResponder {
-  public var nearestViewController: UIViewController? {
+  fileprivate var nearestViewController: UIViewController? {
     next as? UIViewController ?? next?.nearestViewController
+  }
+}
+
+extension UIViewController {
+  fileprivate func showMenu(
+    _ menu: Menu,
+    actionPerformer: UIActionEventPerforming
+  ) {
+    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    menu.items.forEach { item in
+      let action = UIAlertAction(title: item.text, style: .default) { _ in
+        let events = item.actions.map {
+          UIActionEvent(uiAction: $0, originalSender: self)
+        }
+        actionPerformer.perform(uiActionEvents: events, from: self)
+      }
+      alert.addAction(action)
+    }
+    present(alert, animated: true)
   }
 }
