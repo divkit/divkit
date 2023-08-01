@@ -14,6 +14,7 @@ extension PageControlBlock {
   ) {
     (view as! PageControlBlockView).model = Model(
       state: state,
+      layoutDirection: layoutDirection,
       configuration: configuration,
       source: weakify(self)
     )
@@ -26,6 +27,7 @@ extension PageControlBlock {
 
 private struct Model: ReferenceEquatable {
   let state: PagerViewState
+  let layoutDirection: UserInterfaceLayoutDirection
   let configuration: PageIndicatorConfiguration
   let source: Variable<AnyObject?>
 }
@@ -73,6 +75,15 @@ private final class PageControlBlockView: BlockView, VisibleBoundsTrackingLeaf {
       }
     } else {
       indicatorView.currentIndexPosition = currentPage
+    }
+
+    switch model.layoutDirection {
+    case .leftToRight:
+      indicatorView.transform = .identity
+    case .rightToLeft:
+      indicatorView.transform = CGAffineTransformMakeScale(-1.0, 1.0)
+    @unknown default:
+      assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
     }
   }
 }
