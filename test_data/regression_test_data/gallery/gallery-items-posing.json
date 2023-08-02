@@ -81,14 +81,17 @@
               "scroll_mode": "paging",
               "items": [
                 {
+                  "id": "block_1",
                   "type": "text_block",
                   "text": "Item 0"
                 },
                 {
+                  "id": "block_2",
                   "type": "text_block",
                   "text": "Item 1"
                 },
                 {
+                  "id": "block_3",
                   "type": "text_block",
                   "text": "Item 2"
                 },

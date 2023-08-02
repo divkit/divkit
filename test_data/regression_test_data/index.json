@@ -1636,6 +1636,9 @@
     },
     {
       "title": "Gallery items posing",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
