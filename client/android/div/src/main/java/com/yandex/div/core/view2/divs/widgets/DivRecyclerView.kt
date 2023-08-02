@@ -39,7 +39,11 @@ internal class DivRecyclerView @JvmOverloads constructor(
     private var pointTouchY = 0
     var scrollInterceptionAngle = NOT_INTERCEPT
         set(value) {
-            field = abs(value) % 90
+            field = if (value == NOT_INTERCEPT) {
+                NOT_INTERCEPT
+            } else {
+                abs(value) % 90
+            }
         }
 
     private var borderDrawer: DivBorderDrawer? = null
@@ -165,6 +169,6 @@ internal class DivRecyclerView @JvmOverloads constructor(
     companion object {
         private const val RIGHT_ANGLE = 90.0
 
-        const val NOT_INTERCEPT = -1f
+        const val NOT_INTERCEPT = 0f
     }
 }
