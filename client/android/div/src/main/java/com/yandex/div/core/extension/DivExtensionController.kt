@@ -50,7 +50,7 @@ internal class DivExtensionController @Inject constructor(
         }
 
         if (view is Releasable) {
-            releaseManager.observeViewLifecycle(divView.context.lifecycleOwner, view)
+            releaseManager.observeViewLifecycle(divView, view)
         }
     }
 

@@ -6,7 +6,6 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.forEach
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
-import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
@@ -55,17 +54,17 @@ internal class DivCustomBinder @Inject constructor(
             oldBind(div, divView, view, customView)
         }
 
-        view.observeViewTreeReleaseLifecycle(divView.context.lifecycleOwner)
+        view.observeViewTreeReleaseLifecycle(divView)
     }
 
-    private fun View.observeViewTreeReleaseLifecycle(lifecycleOwner: LifecycleOwner?) {
+    private fun View.observeViewTreeReleaseLifecycle(divView: Div2View) {
         if (this is Releasable) {
-            releaseManager.observeViewLifecycle(lifecycleOwner, this)
+            releaseManager.observeViewLifecycle(divView, this)
         }
 
         if (this is ViewGroup) {
             this.forEach {
-                it.observeViewTreeReleaseLifecycle(lifecycleOwner)
+                it.observeViewTreeReleaseLifecycle(divView)
             }
         }
     }

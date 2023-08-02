@@ -17,7 +17,6 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.internal.util.tryGetLifecycleOwner
 
 /**
  * Context to be used to create instance of [Div2View]
@@ -40,7 +39,7 @@ import com.yandex.div.internal.util.tryGetLifecycleOwner
 class Div2Context @MainThread private constructor(
     internal val themedBaseContext: ContextThemeWrapper,
     internal val div2Component: Div2Component,
-    internal val lifecycleOwner: LifecycleOwner? = themedBaseContext.tryGetLifecycleOwner()
+    internal val lifecycleOwner: LifecycleOwner? = null
 ) : ContextWrapper(themedBaseContext) {
 
     val globalVariableController: GlobalVariableController
@@ -53,7 +52,7 @@ class Div2Context @MainThread private constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
         @StyleRes themeId: Int = R.style.Div_Theme,
-        lifecycleOwner: LifecycleOwner? = baseContext.tryGetLifecycleOwner()
+        lifecycleOwner: LifecycleOwner? = null
     ) : this(
         baseContext,
         DivKit.getInstance(baseContext).component

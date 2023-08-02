@@ -137,7 +137,7 @@ internal class DivVideoBinder @Inject constructor(
         videoViewMapper.addView(view, div)
         baseBinder.bindView(view, div, oldDiv, divView)
 
-        releaseManager.observeViewLifecycle(divView.context.lifecycleOwner, view)
+        releaseManager.observeViewLifecycle(divView, view)
     }
 
     private fun DivVideoView.observeElapsedTime(

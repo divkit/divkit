@@ -1,8 +1,5 @@
 package com.yandex.div.internal.util
 
-import android.content.Context
-import android.content.ContextWrapper
-import androidx.lifecycle.LifecycleOwner
 import java.lang.ref.WeakReference
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -49,10 +46,4 @@ private class WeakRef<T>(obj: T? = null) : ReadWriteProperty<Any?, T?> {
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T?) {
         weakReference = value?.let { WeakReference(it) }
     }
-}
-
-internal fun Context.tryGetLifecycleOwner(): LifecycleOwner? {
-    if (this is LifecycleOwner) return this
-
-    return (this as? ContextWrapper)?.baseContext?.tryGetLifecycleOwner()
 }

@@ -79,12 +79,12 @@ internal class ReleaseViewVisitor @Inject constructor(
     internal fun release(view: View) {
         if (view is Releasable) {
             view.release()
-            releaseManager.stopObservingView(divView.context, view)
+            releaseManager.stopObservingView(divView, view)
         }
 
         view.releasableList?.forEach { releasable ->
             releasable.release()
-            releaseManager.stopObservingView(divView.context, releasable)
+            releaseManager.stopObservingView(divView, releasable)
         }
     }
 }
