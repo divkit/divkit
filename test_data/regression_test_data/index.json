@@ -1503,6 +1503,9 @@
     },
     {
       "title": "Grid layout",
+      "automated": [
+        "web"
+      ],
       "file": "grid_layout.json"
     },
     {

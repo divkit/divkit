@@ -145,6 +145,7 @@
                     },
                     "alignment_vertical": "bottom",
                     "text": "Test button",
+                    "id": "button",
                     "actions": [
                       {
                         "log_id": "update_row_span_left",
@@ -170,6 +171,7 @@
                     },
                     "alignment_vertical": "bottom",
                     "text": "Test button",
+                    "id": "button_1",
                     "actions": [
                       {
                         "log_id": "update_row_span_left",
