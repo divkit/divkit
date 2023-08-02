@@ -51,6 +51,7 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
+    private val scrollInterceptionAngle: Float,
 ) : DivViewBinder<DivGallery, DivRecyclerView> {
 
     @SuppressLint("ClickableViewAccessibility")
@@ -193,6 +194,7 @@ internal class DivGalleryBinder @Inject constructor(
             DivGridLayoutManager(divView, view, div, orientation)
         }
         view.layoutManager = layoutManager
+        view.scrollInterceptionAngle = scrollInterceptionAngle
         view.clearOnScrollListeners()
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()

@@ -38,7 +38,8 @@ class DivGalleryBinderTest : DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         divBinder = { divBinder },
-        divPatchCache = mock()
+        divPatchCache = mock(),
+        scrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT
     )
 
     private val div = div()

@@ -2,6 +2,7 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.downloader.DivDownloader;
@@ -12,18 +13,20 @@ import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.state.DivStateChangeListener;
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView;
 import com.yandex.div.internal.viewpool.FixedPreCreationProfile;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
-import dagger.Module;
-import dagger.Provides;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import dagger.Module;
+import dagger.Provides;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
@@ -88,6 +91,8 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
 
+    private float mRecyclerScrollInterceptionAngle;
+
     private DivConfiguration(
             @NonNull DivImageLoader imageLoader,
             @NonNull DivActionHandler actionHandler,
@@ -119,7 +124,8 @@ public class DivConfiguration {
             boolean viewPoolProfilingEnabled,
             boolean resourceCacheEnabled,
             boolean multipleStateChangeEnabled,
-            boolean bindOnAttachEnabled
+            boolean bindOnAttachEnabled,
+            float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -152,6 +158,7 @@ public class DivConfiguration {
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mGlobalVariableController = globalVariableController;
+        mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
     }
 
     @Provides
@@ -343,6 +350,11 @@ public class DivConfiguration {
         return mBindOnAttachEnabled;
     }
 
+    @Provides
+    public float getRecyclerScrollInterceptionAngle() {
+        return mRecyclerScrollInterceptionAngle;
+    }
+
     @NonNull
     public GlobalVariableController getGlobalVariableController() {
         return mGlobalVariableController;
@@ -402,6 +414,7 @@ public class DivConfiguration {
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
+        private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -629,6 +642,11 @@ public class DivConfiguration {
             return this;
         }
 
+        public Builder recyclerScrollInterceptionAngle(float angle) {
+            mRecyclerScrollInterceptionAngle = angle;
+            return this;
+        }
+
         @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
@@ -665,7 +683,8 @@ public class DivConfiguration {
                     mViewPoolProfilingEnabled,
                     mResourceCacheEnabled,
                     mMultipleStateChangeEnabled,
-                    mBindOnAttachEnabled);
+                    mBindOnAttachEnabled,
+                    mRecyclerScrollInterceptionAngle);
         }
     }
 }
