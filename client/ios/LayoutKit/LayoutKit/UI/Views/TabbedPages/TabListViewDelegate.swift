@@ -5,6 +5,7 @@ import LayoutKitInterface
 
 final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   private let collectionView: UICollectionView
+  public var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
 
   private var itemSizes: [CGSize] = [] {
     didSet {
@@ -66,7 +67,7 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     let nextItemVisibilityFraction = itemSelection - CGFloat(baseItemIndex)
 
     let contentOffsetX: CGFloat
-    let pillOriginX: CGFloat
+    var pillOriginX: CGFloat
 
     let bouncingLeft = itemSelection <= 0
     let bouncingRight = itemSelection >= CGFloat(tabs.count - 1)
@@ -92,6 +93,11 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
 
       contentOffsetX = offset.interpolated(to: nextOffset, progress: nextItemVisibilityFraction)
       pillOriginX = originX.interpolated(to: nextOriginX, progress: nextItemVisibilityFraction)
+    }
+
+    if layoutDirection == .rightToLeft {
+      let pillSizeWidth = itemSizes.map { $0.width }.interim(at: itemSelection)
+      pillOriginX = size.width - pillSizeWidth - pillOriginX
     }
 
     if let offset = offset {

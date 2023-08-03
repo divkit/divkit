@@ -49,7 +49,8 @@ extension TabContentsViewModel {
       path: path,
       background: background,
       footer: footer,
-      scrollingEnabled: scrollingEnabled
+      scrollingEnabled: scrollingEnabled,
+      layoutDirection: layoutDirection
     )
   }
 }

@@ -4,6 +4,7 @@ import CommonCorePublic
 
 struct TabTitlesViewModel {
   let items: [TabTitleViewModel]
+  let layoutDirection: UserInterfaceLayoutDirection
   let listPaddings: EdgeInsets
   let titlePaddings: EdgeInsets
   let selectedBackgroundColor: Color

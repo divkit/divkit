@@ -11,6 +11,7 @@ public struct TabContentsViewModel: Equatable {
   public let footer: Block?
   public let scrollingEnabled: Bool
   public let contentInsets: EdgeInsets
+  public let layoutDirection: UserInterfaceLayoutDirection
 
   public init(
     pages: [TabPageViewModel],
@@ -19,7 +20,8 @@ public struct TabContentsViewModel: Equatable {
     path: UIElementPath? = nil,
     background: Background? = nil,
     footer: Block? = nil,
-    scrollingEnabled: Bool = true
+    scrollingEnabled: Bool = true,
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   ) throws {
     self.path = path
     self.pages = pages
@@ -28,6 +30,7 @@ public struct TabContentsViewModel: Equatable {
     self.background = background
     self.footer = footer
     self.scrollingEnabled = scrollingEnabled
+    self.layoutDirection = layoutDirection
 
     try checkConstraints()
   }

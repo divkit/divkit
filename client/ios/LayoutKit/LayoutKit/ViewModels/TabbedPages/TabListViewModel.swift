@@ -8,6 +8,7 @@ public final class TabListViewModel: Equatable {
 
   public let tabTitles: [UILink]
   public let titleStyle: TabTitleStyle
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let listPaddings: EdgeInsets
 
   lazy var tabs: [TabTitleViewModel] = tabTitles.map { item in
@@ -27,10 +28,12 @@ public final class TabListViewModel: Equatable {
   public init(
     tabTitles: [UILink],
     titleStyle: TabTitleStyle = TabTitleStyle(),
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     listPaddings: EdgeInsets = defaultListPaddings
   ) {
     self.tabTitles = tabTitles
     self.titleStyle = titleStyle
+    self.layoutDirection = layoutDirection
     self.listPaddings = listPaddings
   }
 

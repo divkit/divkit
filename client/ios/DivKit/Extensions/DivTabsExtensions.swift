@@ -44,6 +44,7 @@ extension DivTabs: DivBlockModeling {
         expressionResolver: expressionResolver,
         context: context
       ),
+      layoutDirection: context.layoutDirection,
       listPaddings: titlePaddings.makeEdgeInsets(context: context)
     )
 
@@ -53,7 +54,8 @@ extension DivTabs: DivBlockModeling {
         ? .bySelectedPage
         : .byHighestPage,
       path: tabsContext.parentPath,
-      scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(expressionResolver)
+      scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(expressionResolver),
+      layoutDirection: context.layoutDirection
     )
 
     return try TabsBlock(
