@@ -42,7 +42,7 @@
     "states": [{
       "state_id": 0,
       "div": {
-        "type": "gallery",
+        "type": "pager",
         "width": {
           "type": "match_parent"
         },
