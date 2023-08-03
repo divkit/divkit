@@ -398,6 +398,7 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
+        divTimerEventDispatcher?.onAttach(this)
     }
 
     override fun onDetachedFromWindow() {
