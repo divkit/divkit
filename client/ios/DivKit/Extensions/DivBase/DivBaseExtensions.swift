@@ -21,6 +21,7 @@ extension DivBase {
 
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       return EmptyBlock.zeroSized
     }
@@ -39,6 +40,7 @@ extension DivBase {
 
     let externalInsets = margins.makeEdgeInsets(context: context)
     if visibility == .invisible {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
         to: block.addingEdgeInsets(externalInsets),
@@ -72,6 +74,16 @@ extension DivBase {
       border: border.makeBlockBorder(with: expressionResolver),
       shadow: border.makeBlockShadow(with: expressionResolver),
       visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
+      lastVisibleBounds: visibilityActions.isEmpty ? nil : Property<CGRect>(
+        getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
+        setter: {
+          context.lastVisibleBoundsCache.updateLastVisibleBounds(
+            for: context.parentPath,
+            bounds: $0
+          )
+        }
+      ),
+      scheduler: context.scheduler,
       tooltips: try makeTooltips(context: context)
     )
     .addingTransform(

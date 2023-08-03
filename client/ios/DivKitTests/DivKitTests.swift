@@ -1,7 +1,7 @@
 import XCTest
 
-@testable import DivKit
 import CommonCorePublic
+@testable import DivKit
 import LayoutKit
 import NetworkingPublic
 import Serialization
@@ -48,7 +48,8 @@ extension DivBlockModelingContext {
   static let `default` = DivBlockModelingContext()
 
   init(
-    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage()
+    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
+    scheduler: Scheduling? = nil
   ) {
     self.init(
       cardId: DivKitTests.cardId,
@@ -56,6 +57,7 @@ extension DivBlockModelingContext {
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
       imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
+      scheduler: scheduler,
       persistentValuesStorage: DivPersistentValuesStorage()
     )
   }

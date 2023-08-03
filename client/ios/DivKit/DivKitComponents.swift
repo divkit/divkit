@@ -33,6 +33,7 @@ public final class DivKitComponents {
   public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
+  public let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
     updateCardPipe.signal
   }
@@ -227,6 +228,7 @@ public final class DivKitComponents {
       stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
+      lastVisibleBoundsCache: lastVisibleBoundsCache,
       imageHolderFactory: imageHolderFactory
         .withInMemoryCache(cachedImageHolders: cachedImageHolders),
       divCustomBlockFactory: divCustomBlockFactory,

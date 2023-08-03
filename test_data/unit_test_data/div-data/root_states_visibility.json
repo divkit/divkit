@@ -1,0 +1,28 @@
+{
+  "log_id": "sample_card",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "text",
+        "text": "state zero",
+        "visibility_action": {
+          "log_id": "zero state visible",
+          "log_limit": 0
+        }
+      }
+    },
+    {
+      "state_id": 1,
+      "div": {
+        "type": "text",
+        "text": "state first",
+        "visibility_action": {
+          "log_id": "first state visible",
+          "log_limit": 0
+        }
+      }
+    }
+  ]
+}
+

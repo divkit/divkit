@@ -22,7 +22,7 @@ final class VisibilityActionPerformer {
     limiter: ActionLimiter,
     action: @escaping Action,
     type: VisibilityActionType,
-    timerScheduler: Scheduling = TimerScheduler()
+    timerScheduler: Scheduling
   ) {
     self.requiredDuration = requiredDuration
     self.targetPercentage = targetVisibilityPercentage

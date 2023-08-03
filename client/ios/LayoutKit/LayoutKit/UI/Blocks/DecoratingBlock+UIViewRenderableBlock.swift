@@ -38,7 +38,9 @@ extension DecoratingBlock {
       blurEffect: blurEffect,
       paddings: paddings,
       source: Variable { [weak self] in self },
+      scheduler: scheduler,
       visibilityActions: visibilityActions,
+      lastVisibleBounds: lastVisibleBounds,
       tooltips: tooltips,
       accessibility: accessibilityElement
     )
@@ -101,7 +103,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let blurEffect: BlurEffect?
     let paddings: EdgeInsets
     let source: Variable<AnyObject?>
+    let scheduler: Scheduling?
     let visibilityActions: [VisibilityAction]
+    let lastVisibleBounds: Property<CGRect>?
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
 
@@ -289,6 +293,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     guard model != self.model || observer !== self.observer else {
       return
     }
+    let oldModel = self.model
 
     if self.model?.tooltips.isEmpty ?? true, !model.tooltips.isEmpty {
       renderingDelegate?.tooltipAnchorViewAdded(anchorView: self)
@@ -320,24 +325,28 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 
-    visibilityActionPerformers = model.visibilityActions.isEmpty
-      ? nil
-      : VisibilityActionPerformers(
-        visibilityCheckParams: model.visibilityActions.map { visibilityAction in
-          VisibilityCheckParam(
-            requiredDuration: visibilityAction.requiredDuration,
-            targetPercentage: visibilityAction.targetPercentage,
-            limiter: visibilityAction.limiter,
-            action: { [unowned self] in
-              UIActionEvent(
-                uiAction: visibilityAction.uiAction,
-                originalSender: self
-              ).sendFrom(self)
-            },
-            type: visibilityAction.actionType
-          )
-        }
-      )
+    if oldModel?.visibilityActions != model.visibilityActions {
+      visibilityActionPerformers = model.visibilityActions.isEmpty
+        ? nil
+        : VisibilityActionPerformers(
+          visibilityCheckParams: model.visibilityActions.map { visibilityAction in
+            VisibilityCheckParam(
+              requiredDuration: visibilityAction.requiredDuration,
+              targetPercentage: visibilityAction.targetPercentage,
+              limiter: visibilityAction.limiter,
+              action: { [unowned self] in
+                UIActionEvent(
+                  uiAction: visibilityAction.uiAction,
+                  originalSender: self
+                ).sendFrom(self)
+              },
+              type: visibilityAction.actionType
+            )
+          },
+          lastVisibleBounds: model.lastVisibleBounds ?? Property(initialValue: .zero),
+          scheduling: model.scheduler ?? TimerScheduler()
+        )
+    }
 
     tapRecognizer.isEnabled = model.shouldHandleTap
     doubleTapRecognizer.isEnabled = model.shouldHandleDoubleTap

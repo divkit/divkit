@@ -60,6 +60,26 @@ final class DivDataExtensionsTests: XCTestCase {
     let expectedPath = UIElementPath.root + "0" + DivGallery.type
     XCTAssertEqual(galleryBlock?.model.path, expectedPath)
   }
+
+  func test_WhenStateChanges_ReportsVisibilityForNewState() throws {
+    let timerScheduler = TestTimerScheduler()
+    let context = DivBlockModelingContext(scheduler: timerScheduler)
+
+    for rootStateId in [nil, "1", "0", "1"] {
+      if let rootStateId {
+        context.stateManager.setStateWithHistory(path: DivData.rootPath, stateID: DivStateID(rawValue: rootStateId))
+      }
+
+      let block = try makeBlock(fromFile: "root_states_visibility", context: context)
+
+      let rect = CGRect(
+        origin: .zero,
+        size: CGSize(width: 100, height: block.intrinsicContentHeight(forWidth: 100))
+      )
+      let view = block.makeBlockView()
+      XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timerScheduler), 1)
+    }
+  }
 }
 
 private let data = makeDivData(
@@ -103,3 +123,15 @@ extension Block {
     return self
   }
 }
+
+private func makeBlock(
+  fromFile filename: String,
+  context: DivBlockModelingContext = .default
+) throws -> Block {
+  try DivDataTemplate.make(
+    fromFile: filename,
+    subdirectory: "div-data",
+    context: context
+  )
+}
+

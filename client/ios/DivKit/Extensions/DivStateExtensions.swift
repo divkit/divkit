@@ -46,6 +46,8 @@ extension DivState: DivBlockModeling {
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {
+      // state changed -> drop visibility cache for all children
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       previousBlock = try previousDiv.value.makeBlock(
         context: context.makeContextForState(
           id: id,
@@ -99,7 +101,6 @@ extension DivState: DivBlockModeling {
         ),
       ]
     ).addingStateBlock(
-      stateId: activeStateId,
       ids: stateManager.getVisibleIds(statePath: activeStatePath)
     )
   }

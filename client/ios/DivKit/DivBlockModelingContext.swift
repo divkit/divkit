@@ -20,6 +20,7 @@ public struct DivBlockModelingContext {
   public var stateManager: DivStateManager
   public let blockStateStorage: DivBlockStateStorage
   public let visibilityCounter: DivVisibilityCounting
+  public let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: ImageHolderFactory
   public let highPriorityImageHolderFactory: ImageHolderFactory?
   public let divCustomBlockFactory: DivCustomBlockFactory
@@ -30,6 +31,7 @@ public struct DivBlockModelingContext {
   private let variables: DivVariables
   public let layoutDirection: UserInterfaceLayoutDirection
   public let debugParams: DebugParams
+  public let scheduler: Scheduling
   public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
@@ -61,6 +63,7 @@ public struct DivBlockModelingContext {
     stateManager: DivStateManager,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting = DivVisibilityCounter(),
+    lastVisibleBoundsCache: DivLastVisibleBoundsCache = DivLastVisibleBoundsCache(),
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -71,6 +74,7 @@ public struct DivBlockModelingContext {
     variables: DivVariables = [:],
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
+    scheduler: Scheduling? = nil,
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
@@ -85,6 +89,7 @@ public struct DivBlockModelingContext {
     self.stateManager = stateManager
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter
+    self.lastVisibleBoundsCache = lastVisibleBoundsCache
     self.imageHolderFactory = imageHolderFactory
     self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory
@@ -93,6 +98,7 @@ public struct DivBlockModelingContext {
     self.variables = variables
     self.playerFactory = playerFactory
     self.debugParams = debugParams
+    self.scheduler = scheduler ?? TimerScheduler()
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage

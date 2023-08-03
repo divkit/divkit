@@ -11,6 +11,10 @@ extension DivData: DivBlockModeling {
       throw DivBlockModelingError("DivData has no states", path: context.parentPath)
     }
 
+    if let previousRootState = getPreviousRootState(stateManager: stateManager) {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath + previousRootState.rawValue)
+    }
+
     let stateId = String(state.stateId)
     let statePath = DivStatePath(rawValue: UIElementPath(stateId))
     let div = state.div
@@ -31,7 +35,6 @@ extension DivData: DivBlockModeling {
     )
     return block
       .addingStateBlock(
-        stateId: stateId,
         ids: stateManager.getVisibleIds(statePath: statePath)
       )
       .addingDebugInfo(context: divContext)
@@ -52,6 +55,22 @@ extension DivData: DivBlockModeling {
 
     context.addError(level: .error, message: "DivData.State not found: \(stateId)")
     return states.first
+  }
+
+  private func getPreviousRootState(stateManager: DivStateManager) -> DivStateID? {
+    guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
+      return nil
+    }
+
+    switch item.previousState {
+    case .empty, .initial:
+      return nil
+    case let .withID(id):
+      if item.currentStateID != id {
+        return id
+      }
+      return nil
+    }
   }
 }
 
