@@ -137,3 +137,8 @@
 .input_alignment-horizontal_right .input__input_multiline {
     align-items: flex-end;
 }
+
+.input__input_has-custom-focus:focus,
+.input__input_has-custom-focus:focus-visible {
+    outline: none;
+}

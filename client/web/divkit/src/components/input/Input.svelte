@@ -356,6 +356,9 @@
 
 {#if !hasError}
     <Outer
+        let:focusHandler
+        let:blurHandler
+        let:hasCustomFocus
         cls={genClassName('input', css, mods)}
         style={stl}
         customDescription={true}
@@ -387,7 +390,7 @@
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <span
                     bind:this={input}
-                    class="{css.input__input} {css.input__input_multiline}"
+                    class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, multiline: true })}
                     autocapitalize="off"
                     contenteditable="true"
                     aria-label={description}
@@ -397,6 +400,8 @@
                     on:paste={onPaste}
                     on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                     on:click={$jsonSelectAll ? onClick : undefined}
+                    on:focus={focusHandler}
+                    on:blur={blurHandler}
                 >
                 </span>
             </span>
@@ -405,7 +410,7 @@
                 bind:this={input}
                 type={inputType}
                 inputmode={inputMode}
-                class="{css.input__input} {css.input__input_singleline}"
+                class={genClassName('input__input', css, { 'has-custom-focus': hasCustomFocus, singleline: true })}
                 autocomplete="off"
                 autocapitalize="off"
                 aria-label={description}
@@ -415,6 +420,8 @@
                 on:input={onInput}
                 on:mousedown={$jsonSelectAll ? onMousedown : undefined}
                 on:click={$jsonSelectAll ? onClick : undefined}
+                on:focus={focusHandler}
+                on:blur={blurHandler}
             >
         {/if}
     </Outer>

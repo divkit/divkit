@@ -14,6 +14,7 @@
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { CornersRadius } from '../../types/border';
     import type { WrapContentSize } from '../../types/sizes';
+    import type { Background } from '../../types/background';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -74,6 +75,7 @@
     let attrs: Record<string, string> | undefined;
     let extensions: DivExtension[] | null = null;
 
+    $: jsonFocus = rootCtx.getDerivedFromVars(json.focus);
     $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
     let borderStyle: Style = {};
     let borderElemStyle: Style = {};
@@ -89,14 +91,15 @@
     };
     let backgroundRadius = '';
     $: {
+        const border = hasCustomFocus && $jsonFocus?.border ? $jsonFocus.border : $jsonBorder;
         let newBorderStyle: Style = {};
         let newBorderElemStyle: Style = {};
         let newHasBorder = false;
         let newBackgroundRadius = '';
 
-        if ($jsonBorder) {
-            if ($jsonBorder.has_shadow) {
-                const shadow = $jsonBorder.shadow;
+        if (border) {
+            if (border.has_shadow) {
+                const shadow = border.shadow;
                 if (shadow) {
                     newBorderStyle['box-shadow'] =
                         pxToEm(shadow.offset?.x?.value || 0) + ' ' +
@@ -107,17 +110,17 @@
                     newBorderStyle['box-shadow'] = '0 1px 2px 0 rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.07)';
                 }
             }
-            if ($jsonBorder.stroke) {
+            if (border.stroke) {
                 newHasBorder = true;
-                strokeWidth = correctNonNegativeNumber($jsonBorder.stroke.width, strokeWidth);
-                strokeColor = correctColor($jsonBorder.stroke.color, 1, strokeColor);
+                strokeWidth = correctNonNegativeNumber(border.stroke.width, strokeWidth);
+                strokeColor = correctColor(border.stroke.color, 1, strokeColor);
                 newBorderElemStyle.border = `${pxToEm(strokeWidth)} solid ${strokeColor}`;
             }
-            if ($jsonBorder.corners_radius) {
-                cornersRadius = correctBorderRadiusObject($jsonBorder.corners_radius, cornersRadius);
+            if (border.corners_radius) {
+                cornersRadius = correctBorderRadiusObject(border.corners_radius, cornersRadius);
                 newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = borderRadius(cornersRadius);
-            } else if ($jsonBorder.corner_radius) {
-                cornerRadius = correctNonNegativeNumber($jsonBorder.corner_radius, cornerRadius);
+            } else if (border.corner_radius) {
+                cornerRadius = correctNonNegativeNumber(border.corner_radius, cornerRadius);
                 cornersRadius = {
                     'top-left': cornerRadius,
                     'top-right': cornerRadius,
@@ -128,7 +131,7 @@
             }
 
             // Clip browser rendering artifacts by border-radius + border-width/2
-            if (newHasBorder && strokeWidth && ($jsonBorder.corners_radius || $jsonBorder.corner_radius)) {
+            if (newHasBorder && strokeWidth && (border.corners_radius || border.corner_radius)) {
                 let radius: CornersRadius = { ...cornersRadius };
 
                 ([
@@ -396,18 +399,20 @@
     }
 
     $: jsonBackground = rootCtx.getDerivedFromVars(json.background);
+    let background: MaybeMissing<Background[]> | undefined;
     let backgroundStyle: Style;
     let hasSeparateBg: boolean;
     $: {
+        background = hasCustomFocus && $jsonFocus?.background ? $jsonFocus.background : $jsonBackground;
         backgroundStyle = {};
         hasSeparateBg = false;
-        if (Array.isArray($jsonBackground)) {
+        if (Array.isArray(background)) {
             hasSeparateBg =
-                $jsonBackground.some(it => it.type === 'image' || it.type === 'nine_patch_image') ||
+                background.some(it => it.type === 'image' || it.type === 'nine_patch_image') ||
                 Boolean(backgroundRadius);
 
             if (!hasSeparateBg) {
-                const res = getBackground($jsonBackground);
+                const res = getBackground(background);
                 backgroundStyle['background-color'] = res.color;
                 backgroundStyle['background-image'] = res.image;
                 backgroundStyle['background-size'] = res.size;
@@ -449,15 +454,21 @@
     let actions: MaybeMissing<Action>[] = [];
     let doubleTapActions: MaybeMissing<Action>[] = [];
     let longTapActions: MaybeMissing<Action>[] = [];
+    let focusActions: MaybeMissing<Action>[] = [];
+    let blurActions: MaybeMissing<Action>[] = [];
     $: {
         let newActions = $jsonActions || $jsonAction && [$jsonAction] || [];
         let newDoubleTapActions = $jsonDoubleTapActions || [];
         let newLongTapActions = $jsonLongTapActions || [];
+        let newFocusActions = $jsonFocus?.on_focus || [];
+        let newBlurActions = $jsonFocus?.on_blur || [];
 
         if (layoutParams.fakeElement) {
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
+            newFocusActions = [];
+            newBlurActions = [];
         } else {
             if (!Array.isArray(newActions)) {
                 newActions = [];
@@ -470,6 +481,14 @@
             if (!Array.isArray(newLongTapActions)) {
                 newLongTapActions = [];
                 rootCtx.logError(wrapError(new Error('LongTapActions should be array')));
+            }
+            if (!Array.isArray(newFocusActions)) {
+                newFocusActions = [];
+                rootCtx.logError(wrapError(new Error('FocusActions should be array')));
+            }
+            if (!Array.isArray(newBlurActions)) {
+                newBlurActions = [];
+                rootCtx.logError(wrapError(new Error('BlurActions should be array')));
             }
         }
 
@@ -484,6 +503,8 @@
         actions = newActions;
         doubleTapActions = newDoubleTapActions;
         longTapActions = newLongTapActions;
+        focusActions = newFocusActions;
+        blurActions = newBlurActions;
     }
 
     $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
@@ -602,7 +623,8 @@
         visibility,
         'has-action-animation': Boolean(actionAnimationTransition),
         'parent-flex': layoutParams.parentContainerOrientation || undefined,
-        'parent-grid': Boolean(layoutParams.gridArea) || undefined
+        'parent-grid': Boolean(layoutParams.gridArea) || undefined,
+        'has-custom-focus': Boolean(hasCustomFocus && json.focus)
     };
 
     $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
@@ -765,6 +787,30 @@
             }
         };
     }
+
+    let hasCustomFocus: boolean;
+    $: isPointerFocus = rootCtx.isPointerFocus;
+
+    function focusHandler() {
+        if (!json.focus) {
+            return;
+        }
+
+        if (!$isPointerFocus) {
+            hasCustomFocus = true;
+        }
+
+        rootCtx.execAnyActions(focusActions);
+    }
+
+    function blurHandler() {
+        if (!json.focus) {
+            return;
+        }
+
+        hasCustomFocus = false;
+        rootCtx.execAnyActions(blurActions);
+    }
 </script>
 
 {#if !hasWidthError && !hasHeightError}
@@ -777,7 +823,9 @@
         {longTapActions}
         {attrs}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
+        on:focus={focusHandler}
+        on:blur={blurHandler}
     >
-        {#if hasSeparateBg}<OuterBackground background={$jsonBackground} radius={backgroundRadius} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+        {#if hasSeparateBg}<OuterBackground background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

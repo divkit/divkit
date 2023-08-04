@@ -193,6 +193,8 @@
         on:touchend={longTapActions?.length ? onTouchEnd : null}
         on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
+        on:focus
+        on:blur
         {...attrs}
     >
         <slot />
@@ -213,6 +215,8 @@
         on:touchend={longTapActions?.length ? onTouchEnd : null}
         on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
+        on:focus
+        on:blur
         {...attrs}
     >
         <slot />

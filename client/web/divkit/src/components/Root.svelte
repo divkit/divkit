@@ -1,7 +1,26 @@
+<script lang="ts" context="module">
+    import { writable } from 'svelte/store';
+
+    let isPointerFocus = writable(true);
+    let rootInstancesCount = 0;
+
+    function onWindowClick() {
+        isPointerFocus.set(true);
+    }
+
+    function onWindowKeyDown() {
+        isPointerFocus.set(false);
+    }
+
+    function onWindowPointerDown() {
+        isPointerFocus.set(true);
+    }
+</script>
+
 <script lang="ts">
     import type { Readable, Writable } from 'svelte/types/runtime/store';
-    import { onDestroy, setContext, tick } from 'svelte';
-    import { derived, writable } from 'svelte/store';
+    import { onDestroy, onMount, setContext, tick } from 'svelte';
+    import { derived } from 'svelte/store';
 
     import css from './Root.module.css';
 
@@ -766,6 +785,7 @@
         getExtensionContext,
         typefaceProvider,
         isDesktop,
+        isPointerFocus,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
     });
@@ -1098,7 +1118,23 @@
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     function emptyTouchstartHandler() {}
 
+    onMount(() => {
+        rootInstancesCount++;
+
+        if (rootInstancesCount === 1) {
+            window.addEventListener('keydown', onWindowKeyDown);
+            window.addEventListener('pointerdown', onWindowPointerDown);
+        }
+    });
+
     onDestroy(() => {
+        rootInstancesCount--;
+
+        if (!rootInstancesCount) {
+            window.removeEventListener('keydown', onWindowKeyDown);
+            window.removeEventListener('pointerdown', onWindowPointerDown);
+        }
+
         if (timersController) {
             timersController.destroy();
         }

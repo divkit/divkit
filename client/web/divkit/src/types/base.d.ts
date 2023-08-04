@@ -6,6 +6,7 @@ import type { EdgeInsets } from './edgeInserts';
 import type { DisappearAction, VisibilityAction } from './visibilityAction';
 import type { Dimension } from './sizes';
 import type { Action } from '../../typings/common';
+import type { Focus } from './focus';
 
 export interface Accessibility {
     description?: string;
@@ -113,6 +114,6 @@ export interface DivBaseData {
     transition_out?: AppearanceTransition;
     transition_triggers?: TransitionTrigger[];
     selected_actions?: Action[];
-    // focus;
+    focus?: Focus;
     transform?: Transform;
 }

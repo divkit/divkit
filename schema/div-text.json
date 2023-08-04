@@ -255,7 +255,8 @@
           "$ref": "common.json#/color",
           "$description": "translations.json#/div_text_focused_text_color",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "text_gradient": {

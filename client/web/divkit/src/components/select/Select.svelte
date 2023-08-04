@@ -164,6 +164,9 @@
 
 {#if !hasError}
     <Outer
+        let:hasCustomFocus
+        let:focusHandler
+        let:blurHandler
         cls={genClassName('select', css, mods)}
         style={stl}
         customDescription={true}
@@ -179,7 +182,14 @@
             {selectText || hint || '​'}
         </span>
 
-        <select class={css.select__select} aria-label={description} bind:value={$valueVariable} style={makeStyle(selectStl)}>
+        <select
+            class={genClassName('select__select', css, { 'has-custom-focus': hasCustomFocus })}
+            aria-label={description}
+            bind:value={$valueVariable}
+            style={makeStyle(selectStl)}
+            on:focus={focusHandler}
+            on:blur={blurHandler}
+        >
             {#each filteredItems as item}
                 <option class={css.select__option} value={item.value}>{item.text || item.value}</option>
             {/each}

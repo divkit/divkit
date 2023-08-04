@@ -147,6 +147,12 @@
         rootTextColor = newRootTextColor;
     }
 
+    let focusTextColor = '';
+    $: jsonFocusTextColor = rootCtx.getDerivedFromVars(json.focused_text_color);
+    $: {
+        focusTextColor = correctColor($jsonFocusTextColor, 1, focusTextColor);
+    }
+
     $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
     $: truncate = $jsonTruncate === 'none' ? 'none' : '';
 
@@ -374,7 +380,8 @@
         'max-height': maxHeight,
         '-webkit-line-clamp': lineClamp,
         color: rootTextColor,
-        'background-image': gradient
+        'background-image': gradient,
+        '--divkit-text-focus-color': focusTextColor
     };
 
     function onImgError(event: Event): void {
