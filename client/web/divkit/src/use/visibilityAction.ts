@@ -1,5 +1,5 @@
-import type { DisappearAction, VisibilityAction } from '../types/visibilityAction';
-import { RootCtxValue } from '../context/root';
+import type { DisappearAction, VisibilityAction } from '../../typings/common';
+import type { RootCtxValue } from '../context/root';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 
 function checkPercentage(isVisibility: boolean, val: number | undefined, defaultVal: number): number {

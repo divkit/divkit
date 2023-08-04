@@ -20,11 +20,7 @@
     },
     "download_callbacks": {
       "$ref": "div-download-callbacks.json",
-      "$description": "translations.json#/div_action_base_download_callbacks",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_action_base_download_callbacks"
     }
   }
 }

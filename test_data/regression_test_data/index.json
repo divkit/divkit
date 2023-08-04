@@ -1918,6 +1918,58 @@
         "In the last open there should be again the text 'Nothing stored'"
       ],
       "file": "stored_value.json"
+    },
+    {
+      "title": "Patch container",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/container.json"
+    },
+    {
+      "title": "Patch gallery",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/gallery.json"
+    },
+    {
+      "title": "Patch grid",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/grid.json"
+    },
+    {
+      "title": "Patch pager",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/pager.json"
     }
   ]
 }

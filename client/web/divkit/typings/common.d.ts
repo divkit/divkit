@@ -93,10 +93,17 @@ export interface DivJson {
     palette?: Palette;
 }
 
+export interface DownloadCallbacks {
+    on_fail_actions?: Action[];
+    on_success_actions?: Action[];
+}
+
 export interface Action {
     log_id: string;
     url?: string;
+    // referer
     payload?: Record<string, unknown>;
+    download_callbacks?: DownloadCallbacks;
     log_url?: string;
     target?: string;
 }
@@ -104,22 +111,22 @@ export interface Action {
 export interface VisibilityAction {
     log_id: string;
     url?: string;
-    referer?: string;
+    // referer?: string;
     payload?: Record<string, string>;
+    download_callbacks?: DownloadCallbacks;
     visibility_percentage?: number;
     visibility_duration?: number;
-    // download_callbacks
     log_limit?: number;
 }
 
 export interface DisappearAction {
     log_id: string;
     url?: string;
-    referer?: string;
+    // referer?: string;
     payload?: Record<string, string>;
+    download_callbacks?: DownloadCallbacks;
     visibility_percentage?: number;
     disappear_duration?: number;
-    // download_callbacks
     log_limit?: number;
 }
 

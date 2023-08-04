@@ -3,9 +3,8 @@ import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
-import type { DisappearAction, VisibilityAction } from './visibilityAction';
 import type { Dimension } from './sizes';
-import type { Action } from '../../typings/common';
+import type { Action, DisappearAction, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 
 export interface Accessibility {

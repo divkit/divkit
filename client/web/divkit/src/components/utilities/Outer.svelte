@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, tick } from 'svelte';
+    import { getContext, onDestroy, tick } from 'svelte';
 
     import css from './Outer.module.css';
 
@@ -54,6 +54,8 @@
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
     export let heightByAspect = false;
+    export let parentOf: DivBaseData[] | undefined = undefined;
+    export let replaceItems: ((items: DivBaseData[]) => void) | undefined = undefined;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
         left: 'start',
@@ -75,7 +77,40 @@
     let attrs: Record<string, string> | undefined;
     let extensions: DivExtension[] | null = null;
 
+    let prevChilds: string[] = [];
+    $: {
+        prevChilds.forEach(id => {
+            rootCtx.unregisterParentOf(id);
+        });
+        prevChilds = [];
+        if (parentOf) {
+            parentOf.forEach(item => {
+                if (item.id) {
+                    prevChilds.push(item.id);
+                    rootCtx.registerParentOf(item.id, {
+                        replaceWith
+                    });
+                }
+            });
+        }
+    }
+
+    function replaceWith(id: string, items?: DivBase[]): void {
+        if (!Array.isArray(parentOf) || !replaceItems) {
+            return;
+        }
+
+        const index = parentOf.findIndex(json => json?.id === id);
+        const newItems = parentOf.slice();
+        newItems.splice(index, 1, ...(items || []));
+
+        parentOf = newItems;
+
+        replaceItems(newItems);
+    }
+
     $: jsonFocus = rootCtx.getDerivedFromVars(json.focus);
+
     $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
     let borderStyle: Style = {};
     let borderElemStyle: Style = {};
@@ -811,6 +846,13 @@
         hasCustomFocus = false;
         rootCtx.execAnyActions(blurActions);
     }
+
+    onDestroy(() => {
+        prevChilds.forEach(id => {
+            rootCtx.unregisterParentOf(id);
+        });
+        prevChilds = [];
+    });
 </script>
 
 {#if !hasWidthError && !hasHeightError}

@@ -62,6 +62,13 @@
         };
     });
 
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
+    }
+
     interface ChildInfo {
         rowSpan: number | undefined;
         columnSpan: number | undefined;
@@ -227,9 +234,13 @@
         {templateContext}
         {style}
         {layoutParams}
+        parentOf={json.items}
+        {replaceItems}
     >
-        {#each resultItems as item}
-            <Unknown layoutParams={item.layoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
-        {/each}
+        {#key resultItems}
+            {#each resultItems as item}
+                <Unknown layoutParams={item.layoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
+            {/each}
+        {/key}
     </Outer>
 {/if}

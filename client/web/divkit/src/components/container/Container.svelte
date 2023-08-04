@@ -69,6 +69,13 @@
         }
     }
 
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
+    }
+
     $: items = (!hasItemsError && jsonItems || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
@@ -245,10 +252,14 @@
         {layoutParams}
         {additionalPaddings}
         heightByAspect={Boolean(aspect)}
+        parentOf={jsonItems}
+        {replaceItems}
     >
-        {#each items as item}
-            <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
-        {/each}
+        {#key jsonItems}
+            {#each items as item}
+                <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
+            {/each}
+        {/key}
 
         {#if separator || lineSeparator}
             <ContainerSeparators

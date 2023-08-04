@@ -258,6 +258,30 @@ function typefaceProvider(fontFamily: string, opts?: {
 }
 ```
 
+#### fetchInit
+
+`/client` and `/client-hydratable`
+
+Function or object, optional.
+
+Used as a second parameter for `fetch` requests in the `div-action://download` actions.
+
+```ts
+function fetchInit(url: string) {
+    return {
+        credentials: 'include'
+    };
+}
+```
+
+Or
+
+```ts
+fetchInit: {
+    credentials: 'include'
+}
+```
+
 #### platform
 
 `desktop` | `touch` | `auto`

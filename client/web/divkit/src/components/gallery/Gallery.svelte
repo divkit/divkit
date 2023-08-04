@@ -59,6 +59,13 @@
         }
     }
 
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
+    }
+
     const isDesktop = rootCtx.isDesktop;
 
     interface Item {
@@ -421,6 +428,8 @@
         {layoutParams}
         customPaddings={true}
         customActions={'gallery'}
+        parentOf={jsonItems}
+        {replaceItems}
     >
         <div
             class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
@@ -433,22 +442,24 @@
                 class={css['gallery__items-grid']}
                 style={makeStyle(gridStyle)}
             >
-                {#each itemsGrid as itemsRow, rowIndex}
-                    <div
-                        class={css.gallery__items}
-                        style={makeStyle(columnStyle)}
-                        bind:this={galleryItemsWrappers[rowIndex]}
-                    >
-                        {#each itemsRow as item}
-                            <Unknown
-                                layoutParams={childLayoutParams}
-                                div={item.json}
-                                templateContext={item.templateContext}
-                                origJson={item.origJson}
-                            />
-                        {/each}
-                    </div>
-                {/each}
+                {#key itemsGrid}
+                    {#each itemsGrid as itemsRow, rowIndex}
+                        <div
+                            class={css.gallery__items}
+                            style={makeStyle(columnStyle)}
+                            bind:this={galleryItemsWrappers[rowIndex]}
+                        >
+                            {#each itemsRow as item}
+                                <Unknown
+                                    layoutParams={childLayoutParams}
+                                    div={item.json}
+                                    templateContext={item.templateContext}
+                                    origJson={item.origJson}
+                                />
+                            {/each}
+                        </div>
+                    {/each}
+                {/key}
             </div>
         </div>
         {#if orientation === 'horizontal'}
