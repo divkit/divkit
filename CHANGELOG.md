@@ -1,3 +1,21 @@
+## 27.1.0
+
+# Android Client:
+* Lottie version updated to 6.1.0
+* Added configuration paramater for scroll interception angle.
+* Added release manager
+* Method DivConfiguration.Builder#enableAccessibility is deprecated now.
+* Fixed layout of children with match_parent size inside container with constrained wrap_content size.
+* Fixed input layout with constrained wrap_content height.
+* Fixed image layout with constrained wrap_content size.
+* Fixed visibility tracking of views that has been removed after patch.
+
+# iOS Client:
+* Added `DivView`.
+* Added RTL support for `DivText`, `DivGallery`, `DivPager` and `DivIndicator`.
+* Fixed state management for `DivGallery`.
+
+
 ## 27.0.0
 
 # Android Client:

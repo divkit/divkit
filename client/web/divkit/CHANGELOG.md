@@ -1,18 +1,24 @@
 ## 27.0.0 (July 31, 2023)
+
 Fixes:
 * Fixed an issue with the integer values from the several functions: `getYear`, `getMonth`, `getDay`, `getDayOfWeek`, `getHours`, `getMinutes`, `getSeconds`, `getMillis`, `len`, `index` and `lastIndex`. These integer values previously could produce errors in integer operations
 
+
 ## 26.2.0 (July 24, 2023)
+
 Additions
 * Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
 
+
 ## 26.1.0 (July 17, 2023)
+
 Additions:
 * Implemented `testRegex` function
 
 Fixes and changes:
 * `content_alignment_` properties along cross-axis in `container` with the `wrap` mode will now align rows / columns of items, instead of children components (to better match Android / iOS behavior)
 * Fixed expression processing without variables (constant expressions)
+
 
 ## 26.0.0 (July 10, 2023)
 
@@ -26,15 +32,18 @@ Fixes:
 * Fixed default `visibility_percentage` value in the `disappear_action`
 * Fixed `disappear_action` with the percentage equal to `0`
 
+
 ## 25.7.0 (July 03, 2023)
 
 Fixes:
 * Fixed update of the`gallery` with the `scroll_mode` = `paging` and `default_item` in rare cases
 
+
 ## 25.4.0 (June 12, 2023)
 
 Added:
 * Supported `dict` variable type
+
 
 ## 25.3.0 (June 5, 2023)
 
@@ -43,15 +52,15 @@ Added:
 * `font_family` property is now supported in the different components. Keep in mind, for this property to work, you need to provide a `typefaceProvider`
 * `margins` for a `container` separators are now supported
 
+
 ## 25.2.0 (May 29, 2023)
 
 Additions:
 * `disappear_actions` is now supported
 * Added a new `video` component
 
-## 25.0.0 (May 11, 2023)
 
-# Web Client:
+## 25.0.0 (May 11, 2023)
 
 Additions:
 * Supported expressions in `tabs` title
@@ -226,6 +235,7 @@ Additions:
 * Supported `no_animation` and `native` values for the `action_anmation`
 * Supported `tint_mode`
 
+
 ## 12.0.0 (October 18, 2022)
 
 Additions:
@@ -234,6 +244,7 @@ Additions:
 
 Changes and fixes:
 * Fixed color values convertion
+
 
 ## 11.0.0 (October 12, 2022)
 
@@ -257,9 +268,9 @@ Changes and fixes:
 * Fixed a case where`transition_in`, `transition_out` and `transition_change` incorrectly discarded the `alpha` component property
 * Component actions will now wait for the result of each of them. This means that you can create an array using 2 actions: one to change the state, and the second to change the created component inside the state
 
+
 ## 9.0.0 (September 27, 2022)
 
-## Web Client:
 Added:
 * `radial_gradient` support
 
