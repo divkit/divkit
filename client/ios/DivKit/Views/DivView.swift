@@ -4,6 +4,16 @@ import BasePublic
 import CommonCorePublic
 import LayoutKit
 
+/// ``DivView`` is a view that allows you to draw the layout for `DivKit`.
+/// She is able to handle actions, switch states correctly, as well as update the layout if
+/// necessary.
+///
+/// ## Example
+/// You can find examples of div cards in the
+/// [samples](https://github.com/divkit/divkit/tree/main/test_data/samples) or
+/// [testing](https://github.com/divkit/divkit/tree/main/test_data/regression_test_data) sections of
+/// the demo app.
+
 public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
   private let blockProvider: DivBlockProvider
@@ -18,6 +28,11 @@ public final class DivView: VisibleBoundsTrackingView {
     }
   }
 
+  /// Initializes a new `DivView` instance.
+  ///
+  /// - Parameters:
+  ///  - divKitComponents: The ``DivKitComponents`` instance used for configuration and handling of
+  /// the DivView.
   public init(divKitComponents: DivKitComponents) {
     self.divKitComponents = divKitComponents
     self.blockProvider = DivBlockProvider(divKitComponents: divKitComponents)
@@ -29,6 +44,13 @@ public final class DivView: VisibleBoundsTrackingView {
     }.dispose(in: disposePool)
   }
 
+  /// Sets the source of the ``DivView`` and updates the layout.
+  /// - Parameters:
+  /// - source: The source of the ``DivView``, specified using `JSON` data, a `Data` object, or
+  /// ``DivData``.
+  /// - debugParams: Optional debug configurations for the ``DivView``.
+  /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
+  /// updating the ``DivView`` with new content.
   public func setSource(
     _ source: DivBlockProvider.Source,
     debugParams: DebugParams = DebugParams(),
@@ -41,6 +63,9 @@ public final class DivView: VisibleBoundsTrackingView {
     )
   }
 
+  /// Sets the parent scroll view for the DivView.
+  /// - Parameter parentScrollView: The parent scroll view to set.
+  /// This is used when you require a sub-scroll in a `DivInput`.
   public func setParentScrollView(_ parentScrollView: ScrollView) {
     blockProvider.parentScrollView = parentScrollView
   }
@@ -61,10 +86,18 @@ public final class DivView: VisibleBoundsTrackingView {
     }
   }
 
+  /// Returns the intrinsic content size of the `DivView` for a given available size.
+  /// - Parameters:
+  /// - availableSize: The available size to calculate the intrinsic content size.
+  ///
+  /// - Returns: The calculated intrinsic content size.
   public func intrinsicContentSize(for availableSize: CGSize) -> CGSize {
     blockProvider.block.size(forResizableBlockSize: availableSize)
   }
 
+  /// Returns the intrinsic content size of the `DivView`.
+  ///
+  /// - Returns: The calculated intrinsic content size.
   public override var intrinsicContentSize: CGSize {
     blockProvider.block.size(forResizableBlockSize: bounds.size)
   }
@@ -86,6 +119,10 @@ public final class DivView: VisibleBoundsTrackingView {
     setNeedsLayout()
   }
 
+  /// Notifies the DivView about changes in its visible bounds.
+  /// - Parameters:
+  ///  - from: The original bounds rectangle.
+  ///  - to: The new bounds rectangle.
   public func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
     blockView.onVisibleBoundsChanged(from: from, to: to)
   }

@@ -46,6 +46,43 @@ public final class DivKitComponents {
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let persistentValuesStorage = DivPersistentValuesStorage()
 
+  /// You can create an instance of `DivKitComponents` with various optional parameters that allow
+  /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.
+  ///
+  /// - Parameters:
+  ///   - divCustomBlockFactory: An optional ``DivCustomBlockFactory`` object that defines a custom
+  /// block factory responsible for creating blocks based on custom data and context.
+  ///   - extensionHandlers: An array of ``DivExtensionHandler`` objects that enable the extension
+  /// of existing blocks. These extensions can involve wrapping blocks in others or adding basic
+  /// properties to enhance their behavior.
+  ///   - flagsInfo: An optional ``DivFlagsInfo`` object that provides information about new
+  /// features added under specific flags.
+  ///   - fontProvider: An optional ``DivFontProvider`` object that allows you to specify a custom
+  /// font provider.
+  ///   - imageHolderFactory: An optional `ImageHolderFactory` object responsible for creating image
+  /// holders within `DivKit`.
+  ///   - layoutDirection: The user interface layout direction to be used within `DivKit`. This
+  /// parameter is set to `.leftToRight` by default.
+  ///   - patchProvider: An optional ``DivPatchProvider`` object responsible for downloading
+  /// patches.
+  ///   - requestPerformer: An optional `URLRequestPerforming` object that performs URL requests for
+  /// data retrieval.
+  ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
+  ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
+  /// states.
+  ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
+  /// display of tooltips.
+  ///   - trackVisibility: A closure that tracks the visibility of elements.
+  ///   - trackDisappear: A closure that tracks the disappearance of elements.
+  ///   - updateCardAction: Deprecated. This parameter is deprecated, use ``updateCardSignal``
+  /// instead.
+  ///   - playerFactory: An optional `PlayerFactory` object responsible for creating custom video
+  /// players.
+  ///   - urlHandler: An optional ``DivUrlHandler`` object that allows you to implement custom
+  /// action handling for specific URLs.
+  ///   - urlOpener: Deprecated. This parameter is deprecated, use ``DivUrlHandler`` instead
+  ///   - variablesStorage: A ``DivVariablesStorage`` object that handles the storage and retrieval
+  /// of variables.
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     extensionHandlers: [DivExtensionHandler] = [],

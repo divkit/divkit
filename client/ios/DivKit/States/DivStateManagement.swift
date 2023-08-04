@@ -2,9 +2,28 @@ import BasePublic
 import CommonCorePublic
 import Foundation
 
+/// The `DivStateManagement` protocol provides essential functionality for managing card states.
+///
+/// Conforming to this protocol allows your class to handle state management for cards. It requires
+/// the implementation of three methods:
+/// - `getStateManagerForCard(cardId:)`: This method should return a ``DivStateManager`` object
+/// associated with the given `cardId`.
+/// - `reset()`: This method resets states for all cards.
+/// - `reset(cardId:)`: This method resets the state for the card identified by the provided
+/// `cardId`.
 public protocol DivStateManagement: DivStateUpdater {
+  /// Retrieves the `DivStateManager` object associated with the given `cardId`.
+  ///
+  /// - Parameter cardId: The identifier of the card.
+  /// - Returns: A `DivStateManager` object for the specified card.
   func getStateManagerForCard(cardId: DivCardID) -> DivStateManager
+
+  /// Resets states for all cards.
   func reset()
+
+  /// Resets the state for the card identified by the provided `cardId`.
+  ///
+  /// - Parameter cardId: The identifier of the card to reset.
   func reset(cardId: DivCardID)
 }
 

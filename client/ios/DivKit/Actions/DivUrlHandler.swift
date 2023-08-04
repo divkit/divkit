@@ -1,6 +1,19 @@
 import Foundation
 
+/// The ``DivUrlHandler`` protocol allows you to implement the processing of custom actions that
+/// `DivKit` cannot handle.
+///
+/// Conforming to this protocol enables your class to define custom behaviors for handling URLs.
+///
+/// The protocol requires the implementation of the `handle(_:sender:)` method, which receives a URL
+/// to be handled and an optional `sender` object.
 public protocol DivUrlHandler {
+  /// Handles the specified URL.
+  ///
+  /// - Parameters:
+  ///   - url: The URL to be processed and handled.
+  ///   - sender: An optional sender object that can provide additional context for the URL handling
+  /// process.
   func handle(_ url: URL, sender: AnyObject?)
 }
 
