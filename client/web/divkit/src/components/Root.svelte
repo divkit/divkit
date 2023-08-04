@@ -4,10 +4,6 @@
     let isPointerFocus = writable(true);
     let rootInstancesCount = 0;
 
-    function onWindowClick() {
-        isPointerFocus.set(true);
-    }
-
     function onWindowKeyDown() {
         isPointerFocus.set(false);
     }
