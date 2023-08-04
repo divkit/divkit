@@ -1,7 +1,8 @@
 {
   "description": "Checking div-indicator displayed correctly in right-to-left-layout",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "configuration": {
     "layout_direction": "rtl"
