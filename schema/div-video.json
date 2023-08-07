@@ -92,6 +92,11 @@
             "android",
             "ios"
           ]
+        },
+        "aspect": {
+          "$ref": "div-aspect.json",
+          "$description": "translations.json#/div_aspect",
+          "platforms": []
         }
       }
     }
