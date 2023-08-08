@@ -80,6 +80,9 @@ public final class DivView: VisibleBoundsTrackingView {
 
     let blockSize = blockProvider.block.size(forResizableBlockSize: bounds.size)
     blockView.frame = CGRect(origin: .zero, size: blockSize)
+    blockView.layoutIfNeeded()
+
+    blockView.onVisibleBoundsChanged(from: .zero, to: blockView.bounds)
 
     if bounds.size != blockSize {
       invalidateIntrinsicContentSize()
