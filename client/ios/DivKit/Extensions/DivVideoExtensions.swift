@@ -28,6 +28,7 @@ extension DivVideo: DivBlockModeling {
     let endActions = endActions?.makeActions(context: actionContext) ?? []
     let fatalActions = fatalActions?.makeActions(context: actionContext) ?? []
     let resolver = context.expressionResolver
+    let aspectRatio = aspect.resolveAspectRatio(resolver)
     let repeatable = resolveRepeatable(resolver)
     let muted = resolveMuted(resolver)
     let autostart = resolveAutostart(resolver)
@@ -66,13 +67,19 @@ extension DivVideo: DivBlockModeling {
     let state: VideoBlockViewState = videoContext.blockStateStorage
       .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
 
-    return VideoBlock(
+    let videoBlock = VideoBlock(
       widthTrait: width.makeLayoutTrait(with: resolver),
-      heightTrait: height.makeLayoutTrait(with: resolver),
+      heightTrait: height.makeHeightLayoutTrait(with: resolver, aspectRatio: aspectRatio),
       model: model,
       state: state,
       playerFactory: playerFactory
     )
+
+    if let aspectRatio = aspectRatio {
+      return AspectBlock(content: videoBlock, aspectRatio: aspectRatio)
+    }
+
+    return videoBlock
   }
 }
 

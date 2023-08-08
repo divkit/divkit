@@ -131,7 +131,7 @@ extension DivContainer: DivBlockModeling {
       throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
     }
 
-    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let layeredBlock = LayeredBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
@@ -231,7 +231,7 @@ extension DivContainer: DivBlockModeling {
     }
 
     let widthTrait = makeContentWidthTrait(with: context)
-    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let containerBlock = try ContainerBlock(
       blockLayoutDirection: context.layoutDirection,
       layoutDirection: layoutDirection,
@@ -256,14 +256,6 @@ extension DivContainer: DivBlockModeling {
     }
 
     return containerBlock
-  }
-
-  private func resolveAspectRatio(_ expressionResolver: ExpressionResolver) -> CGFloat? {
-    if let aspect = aspect, let ratio = aspect.resolveRatio(expressionResolver) {
-      // AspectBlock has inverted ratio
-      return 1 / ratio
-    }
-    return nil
   }
 
   private func makeHeightTrait(
@@ -314,7 +306,7 @@ extension DivContainer: DivBlockModeling {
       content: lineSeparatorBlock,
       crossAlignment: .center
     )
-    
+
     let expressionResolver = context.expressionResolver
     return ContainerBlock.Separator(
       style: style,

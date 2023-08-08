@@ -10,6 +10,7 @@ public final class DivVideo: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let aspect: DivAspect?
   public let autostart: Expression<Bool> // default value: false
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
@@ -45,12 +46,19 @@ public final class DivVideo: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
+    -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(
+      expression: alignmentHorizontal,
+      initializer: DivAlignmentHorizontal.init(rawValue:)
+    )
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveStringBasedValue(
+      expression: alignmentVertical,
+      initializer: DivAlignmentVertical.init(rawValue:)
+    )
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -82,7 +90,10 @@ public final class DivVideo: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(
+      expression: visibility,
+      initializer: DivVisibility.init(rawValue:)
+    ) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -96,6 +107,9 @@ public final class DivVideo: DivBase {
 
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
+
+  static let aspectValidator: AnyValueValidator<DivAspect> =
+    makeNoOpValueValidator()
 
   static let autostartValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
@@ -204,6 +218,7 @@ public final class DivVideo: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
+    aspect: DivAspect? = nil,
     autostart: Expression<Bool>? = nil,
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
@@ -243,6 +258,7 @@ public final class DivVideo: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.aspect = aspect
     self.autostart = autostart ?? .value(false)
     self.background = background
     self.border = border ?? DivBorder()
@@ -293,82 +309,83 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.autostart == rhs.autostart,
-      lhs.background == rhs.background
+      lhs.aspect == rhs.aspect,
+      lhs.autostart == rhs.autostart
     else {
       return false
     }
     guard
+      lhs.background == rhs.background,
       lhs.border == rhs.border,
-      lhs.bufferingActions == rhs.bufferingActions,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.bufferingActions == rhs.bufferingActions
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.elapsedTimeVariable == rhs.elapsedTimeVariable,
-      lhs.endActions == rhs.endActions
+      lhs.elapsedTimeVariable == rhs.elapsedTimeVariable
     else {
       return false
     }
     guard
+      lhs.endActions == rhs.endActions,
       lhs.extensions == rhs.extensions,
-      lhs.fatalActions == rhs.fatalActions,
-      lhs.focus == rhs.focus
+      lhs.fatalActions == rhs.fatalActions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.margins == rhs.margins
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.muted == rhs.muted,
-      lhs.paddings == rhs.paddings,
-      lhs.pauseActions == rhs.pauseActions
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.pauseActions == rhs.pauseActions,
       lhs.preview == rhs.preview,
-      lhs.repeatable == rhs.repeatable,
-      lhs.resumeActions == rhs.resumeActions
+      lhs.repeatable == rhs.repeatable
     else {
       return false
     }
     guard
+      lhs.resumeActions == rhs.resumeActions,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.videoSources == rhs.videoSources
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.videoSources == rhs.videoSources,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -386,6 +403,7 @@ extension DivVideo: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["aspect"] = aspect?.toDictionary()
     result["autostart"] = autostart.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
