@@ -52,21 +52,23 @@ final class MaskValidatorTests: XCTestCase {
 
   func test_addSymbolsAtPosition() {
     let phoneValidator = makeMaskValidator(alwaysVisible: false)
-    var inputData = phoneValidator.formatted(rawText: "9051234567")
+    var inputData = phoneValidator.formatted(rawText: "905123456")
 
     // "+7 (905) 123-45-67"
 
-    XCTAssertEqual(phoneValidator.addSymbols(at: 0, data: inputData, string: "1").0, "1905123456")
     XCTAssertEqual(
-      phoneValidator.addSymbols(at: 0, data: inputData, string: "1234567890").0,
-      "1234567890"
+      phoneValidator.addSymbols(at: 0..<1, data: inputData, string: "1").0,
+      "1905123456"
     )
-    XCTAssertEqual(phoneValidator.addSymbols(at: 5, data: inputData, string: "1").0, "9105123456")
+    XCTAssertEqual(
+      phoneValidator.addSymbols(at: 5..<5, data: inputData, string: "1").0,
+      "9105123456"
+    )
 
     inputData = phoneValidator.formatted(rawText: "905")
     // "+7 (905) "
-    XCTAssertEqual(phoneValidator.addSymbols(at: 7, data: inputData, string: "1").0, "9051")
-    XCTAssertEqual(phoneValidator.addSymbols(at: 9, data: inputData, string: "1").0, "9051")
+    XCTAssertEqual(phoneValidator.addSymbols(at: 7..<7, data: inputData, string: "1").0, "9051")
+    XCTAssertEqual(phoneValidator.addSymbols(at: 8..<9, data: inputData, string: "1").0, "9051")
   }
 }
 

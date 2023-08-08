@@ -73,6 +73,7 @@ public final class MaskValidator: Equatable {
   }
 
   public func removeSymbols(at pos: Int, data: InputData) -> (String, CursorData?) {
+    let pos = min(pos, data.text.count)
     var data = data
     let removeIndex = data.rawData.lastIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: pos),
@@ -89,6 +90,11 @@ public final class MaskValidator: Equatable {
   }
 
   public func removeSymbols(at range: Range<Int>, data: InputData) -> (String, CursorData?) {
+    let range = Range<Int>
+      .init(uncheckedBounds: (
+        min(range.lowerBound, data.text.count),
+        min(range.upperBound, data.text.count)
+      ))
     let index = data.rawData.firstIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
       to: $0.index
@@ -110,31 +116,15 @@ public final class MaskValidator: Equatable {
   }
 
   public func addSymbols(
-    at pos: Int,
-    data: InputData,
-    string: String
-  ) -> (String, CursorData?) {
-    let addIndex = data.rawData.firstIndex { data.text.distance(
-      from: data.text.index(data.text.startIndex, offsetBy: pos),
-      to: $0.index
-    ) > 0 } ?? data.rawData.count
-
-    let prefix = String(data.rawData[0..<addIndex].map(\.char))
-    let suffix = String(data.rawData[addIndex..<data.rawData.count].map(\.char))
-    return (
-      String((prefix + string + suffix).prefix(inputLength)),
-      CursorData(
-        cursorPosition: .init(rawValue: prefix.count + string.count),
-        afterNonDecodingSymbols: true
-      )
-    )
-  }
-
-  public func addSymbols(
     at range: Range<Int>,
     data: InputData,
     string: String
   ) -> (String, CursorData?) {
+    let range = Range<Int>
+      .init(uncheckedBounds: (
+        min(range.lowerBound, data.text.count),
+        min(range.upperBound, data.text.count)
+      ))
     let leftIndex = data.rawData.firstIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
       to: $0.index
@@ -148,7 +138,7 @@ public final class MaskValidator: Equatable {
     let prefix = String(data.rawData[0..<leftIndex].map(\.char))
     let suffix = String(data.rawData[rightIndex..<data.rawData.count].map(\.char))
     return (
-      String((prefix + string + suffix).prefix(inputLength)),
+      String(prefix + string + suffix),
       CursorData(
         cursorPosition: .init(rawValue: prefix.count + string.count),
         afterNonDecodingSymbols: true
@@ -178,7 +168,7 @@ public struct PatternElement {
 public enum CursorPositionTag {}
 public typealias CursorPosition = Tagged<CursorPositionTag, Int>
 
-public struct CursorData {
+public struct CursorData: Equatable {
   let cursorPosition: CursorPosition
   let afterNonDecodingSymbols: Bool
 }

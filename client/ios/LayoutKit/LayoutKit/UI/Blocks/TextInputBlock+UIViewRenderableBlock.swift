@@ -47,7 +47,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
   @Binding private var textValue: String
-  private var rawTextValue: Binding<String>?
+  @Binding private var rawTextValue: String
   private var selectAllOnFocus = false
   private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
@@ -55,6 +55,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var isRightToLeft = false
+  private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
   private let disposePool = AutodisposePool()
@@ -63,6 +64,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   override init(frame: CGRect) {
     self._textValue = .empty
+    self._rawTextValue = .empty
     super.init(frame: frame)
 
     isRightToLeft = UIView
@@ -189,63 +191,21 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     typo: Typo,
     mask: MaskValidator?
   ) {
-    let updateTextData: (String) -> Void = { [weak self] in
-      guard let self else { return }
-      let textTypo = self.isRightToLeft ? typo.with(alignment: .right) : typo
-      let attributedText = $0.with(typo: textTypo)
-      self.multiLineInput.attributedText = attributedText
-      self.singleLineInput.attributedText = attributedText
-      self.multiLineInput.typingAttributes = typo.attributes
-      self.singleLineInput.typingAttributes = typo.attributes
-    }
-
+    self.typo = typo
     if let mask = mask, let rawTextValue = rawTextValue {
       self._textValue = textValue
-      self.rawTextValue = rawTextValue
-      if maskedViewModel == nil {
-        self.maskedViewModel = MaskedInputViewModel(
-          rawText: rawTextValue.wrappedValue,
-          maskValidator: mask,
-          signal: userInputPipe.signal
-        )
-        maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
-          guard let self, let position else { return }
-          self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
-          if let textFieldPosition = self.singleLineInput.position(
-            from: self.singleLineInput.beginningOfDocument,
-            offset: position.rawValue
-          ) {
-            self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
-              from: textFieldPosition,
-              to: textFieldPosition
-            )
-          }
-        }.dispose(in: disposePool)
-        maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
-          guard let self = self else { return }
-          self.rawTextValue?.setValue(input, responder: self)
-        }.dispose(in: disposePool)
-        maskedViewModel?.$text.currentAndNewValues
-          .addObserver { [weak self] input in
-            guard let self = self else { return }
-            updateTextData(input)
-            self._textValue.setValue(input, responder: self)
-          }.dispose(in: disposePool)
-      } else {
-        maskedViewModel?.rawText = rawTextValue.wrappedValue
-        maskedViewModel?.maskValidator = mask
-      }
+      setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
-      self._textValue = textValue
-
-      let text: String
-      if let selectionItems = self.selectionItems {
-        text = selectionItems.first { $0.value == textValue.wrappedValue }?.text ?? ""
-      } else {
-        text = textValue.wrappedValue
+      if textValue != self._textValue {
+        self._textValue = textValue
+        let text: String
+        if let selectionItems = self.selectionItems {
+          text = selectionItems.first { $0.value == textValue.wrappedValue }?.text ?? ""
+        } else {
+          text = textValue.wrappedValue
+        }
+        setTextData(text)
       }
-
-      updateTextData(text)
     }
     updateHintVisibility()
     updateMultiLineOffset()
@@ -263,6 +223,54 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateMultiLineOffset() {
     guard !multiLineInput.isHidden else { return }
     multiLineInput.frame.origin = CGPoint(x: 0, y: multiLineOffsetY)
+  }
+
+  private func setTextData(_ text: String) {
+    guard let typo else { return }
+    let textTypo = self.isRightToLeft ? typo.with(alignment: .right) : typo
+    let attributedText = text.with(typo: textTypo)
+    multiLineInput.attributedText = attributedText
+    singleLineInput.attributedText = attributedText
+    multiLineInput.typingAttributes = typo.attributes
+    singleLineInput.defaultTextAttributes = typo.attributes
+  }
+
+  private func setupMaskedViewModelIfNeeded(mask: MaskValidator, rawTextValue: Binding<String>) {
+    self._rawTextValue = rawTextValue
+    guard self.maskedViewModel == nil else {
+      maskedViewModel?.rawText = rawTextValue.wrappedValue
+      maskedViewModel?.maskValidator = mask
+      return
+    }
+    self.maskedViewModel = MaskedInputViewModel(
+      rawText: $rawTextValue.wrappedValue,
+      maskValidator: mask,
+      signal: userInputPipe.signal
+    )
+    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
+      guard let self, let position else { return }
+      self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
+      if let textFieldPosition = self.singleLineInput.position(
+        from: self.singleLineInput.beginningOfDocument,
+        offset: position.rawValue
+      ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
+        self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
+          from: textFieldPosition,
+          to: textFieldPosition
+        )
+      }
+    }.dispose(in: disposePool)
+    maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
+      guard let self = self else { return }
+      self._rawTextValue.setValue(input, responder: self)
+    }.dispose(in: disposePool)
+
+    maskedViewModel?.$text.currentAndNewValues
+      .addObserver { [weak self] input in
+        guard let self = self else { return }
+        setTextData(input)
+        self._textValue.setValue(input, responder: self)
+      }.dispose(in: disposePool)
   }
 
   override func didMoveToWindow() {

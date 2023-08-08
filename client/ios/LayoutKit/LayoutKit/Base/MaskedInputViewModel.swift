@@ -30,9 +30,9 @@ public class MaskedInputViewModel {
     self._rawCursorPosition = rawCursorData
 
     let resultSignal = Signal.combineLatest(
-      rawText.currentAndNewValues,
-      maskValidator.currentAndNewValues,
-      rawCursorData.currentAndNewValues
+      rawText.currentAndNewValues.skipRepeats(),
+      maskValidator.currentAndNewValues.skipRepeats(),
+      rawCursorData.currentAndNewValues.skipRepeats()
     ).map { binding, maskValidator, cursor in
       let res = maskValidator.formatted(rawText: binding, rawCursorPosition: cursor)
       return (res.text, res.cursorPosition)
@@ -70,8 +70,7 @@ public class MaskedInputViewModel {
           string: string
         )
       }
-      self.rawText = self.maskValidator.formatted(rawText: newString)
-        .rawText
+      self.rawText = self.maskValidator.formatted(rawText: newString).rawText
       self.rawCursorPosition = newCursorPosition
     }.dispose(in: disposePool)
   }
