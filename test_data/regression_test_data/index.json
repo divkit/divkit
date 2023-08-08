@@ -1305,6 +1305,9 @@
     },
     {
       "title": "Nested change bounds transitions",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Click 'PRESS HERE'",
         "Click 'PRESS AGAIN'"
