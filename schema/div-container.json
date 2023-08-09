@@ -86,7 +86,7 @@
         },
         "content_alignment_horizontal": {
           "$ref": "div-content-alignment-horizontal.json",
-          "default_value": "left",
+          "default_value": "start",
           "$description": "translations.json#/div_container_content_alignment_horizontal"
         },
         "orientation": {

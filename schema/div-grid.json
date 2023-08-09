@@ -22,7 +22,7 @@
         },
         "content_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
-          "default_value": "left",
+          "default_value": "start",
           "$description": "translations.json#/div_grid_content_alignment_horizontal"
         },
         "items": {

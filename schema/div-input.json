@@ -57,7 +57,7 @@
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
-          "default_value": "left",
+          "default_value": "start",
           "$description": "translations.json#/div_text_text_alignment_horizontal",
           "platforms": [
             "android",

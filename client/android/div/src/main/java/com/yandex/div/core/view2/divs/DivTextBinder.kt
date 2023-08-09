@@ -160,6 +160,8 @@ internal class DivTextBinder @Inject constructor(
             DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_VIEW_START
             DivAlignmentHorizontal.CENTER -> TextView.TEXT_ALIGNMENT_CENTER
             DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
+            DivAlignmentHorizontal.START -> TextView.TEXT_ALIGNMENT_VIEW_START
+            DivAlignmentHorizontal.END -> TextView.TEXT_ALIGNMENT_VIEW_END
             else -> TextView.TEXT_ALIGNMENT_VIEW_START
         }
     }

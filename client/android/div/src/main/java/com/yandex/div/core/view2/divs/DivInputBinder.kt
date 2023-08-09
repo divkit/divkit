@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.BaseInputMask
@@ -101,14 +102,16 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.applyTextAlignment(
-        horizontalAlignment: DivAlignmentHorizontal,
+        horizontalAlignment: DivAlignmentHorizontal?,
         verticalAlignment: DivAlignmentVertical
     ) {
         gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
         textAlignment = when (horizontalAlignment) {
-            DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_VIEW_START
+            DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_TEXT_START
             DivAlignmentHorizontal.CENTER -> TextView.TEXT_ALIGNMENT_CENTER
-            DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
+            DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_TEXT_END
+            DivAlignmentHorizontal.START -> TextView.TEXT_ALIGNMENT_TEXT_START
+            DivAlignmentHorizontal.END -> TextView.TEXT_ALIGNMENT_TEXT_END
             else -> TextView.TEXT_ALIGNMENT_VIEW_START
         }
     }
