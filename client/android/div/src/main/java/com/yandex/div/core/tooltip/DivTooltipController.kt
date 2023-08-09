@@ -26,6 +26,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.toPx
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -42,7 +43,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
         private val tooltipRestrictor: DivTooltipRestrictor,
         private val divVisibilityActionTracker: DivVisibilityActionTracker,
         private val divPreloader: DivPreloader,
-        private val createPopup: CreatePopupCall,
+        private val errorCollectors: ErrorCollectors,
+        private val createPopup: CreatePopupCall
 ) {
     private val tooltips = mutableMapOf<String, TooltipData>()
     private val mainThreadHandler = Handler(Looper.getMainLooper())
@@ -53,11 +55,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
             tooltipRestrictor: DivTooltipRestrictor,
             divVisibilityActionTracker: DivVisibilityActionTracker,
             divPreloader: DivPreloader,
+            errorCollectors: ErrorCollectors
     ) : this(
         div2Builder,
         tooltipRestrictor,
         divVisibilityActionTracker,
         divPreloader,
+        errorCollectors,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
     fun showTooltip(tooltipId: String, div2View: Div2View) {
@@ -160,16 +164,25 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips[divTooltip.id] = tooltipData
         val ticket = divPreloader.preload(div, div2View.expressionResolver) { hasFailures ->
             if (!hasFailures && !tooltipData.dismissed && anchor.isViewAttachedToWindow()
-                && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip)) {
+                    && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip)) {
                 tooltipView.doOnActualLayout {
+                    val windowFrame = div2View.getWindowFrame()
                     val location = calcPopupLocation(tooltipView, anchor, divTooltip, div2View.expressionResolver)
-                    if (fitsInScreen(div2View, tooltipView, location)) {
-                        popup.update(location.x, location.y, tooltipView.width, tooltipView.height)
-                        startVisibilityTracking(div2View, div, tooltipView)
-                        tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
-                    } else {
-                        hideTooltip(divTooltip.id, div2View)
+                    val finalTooltipWidth = minOf(tooltipView.width, windowFrame.right)
+                    val finalTooltipHeight = minOf(tooltipView.height, windowFrame.bottom)
+
+                    if (finalTooltipWidth < tooltipView.width) {
+                        errorCollectors.getOrCreate(div2View.dataTag, div2View.divData)
+                                .logWarning(Throwable("Tooltip width > screen size, width was changed"))
                     }
+                    if (finalTooltipHeight < tooltipView.height) {
+                        errorCollectors.getOrCreate(div2View.dataTag, div2View.divData)
+                                .logWarning(Throwable("Tooltip height > screen size, height was changed"))
+                    }
+
+                    popup.update(location.x, location.y, finalTooltipWidth, finalTooltipHeight)
+                    startVisibilityTracking(div2View, div, tooltipView)
+                    tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
@@ -270,12 +283,8 @@ internal fun calcPopupLocation(popupView: View, anchor: View, divTooltip: DivToo
     return location
 }
 
-private fun fitsInScreen(div2View: Div2View, tooltipView: View, location: Point): Boolean {
+private fun Div2View.getWindowFrame(): Rect {
     val windowFrame = Rect()
-    div2View.getWindowVisibleDisplayFrame(windowFrame)
-
-    return windowFrame.left <= location.x &&
-            windowFrame.top <= location.y &&
-            windowFrame.right >= location.x + tooltipView.width &&
-            windowFrame.bottom >= location.y + tooltipView.height
+    getWindowVisibleDisplayFrame(windowFrame)
+    return windowFrame
 }
