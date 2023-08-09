@@ -80,6 +80,13 @@
                 "div_action": "div-action://show_tooltip?id=bottom-right",
                 "alignment_vertical": "top",
                 "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "center",
+                "div_action": "div-action://show_tooltip?id=center",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "center"
               }
             ]
           },

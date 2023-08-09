@@ -262,7 +262,7 @@ internal fun calcPopupLocation(popupView: View, anchor: View, divTooltip: DivToo
             -popupView.width
         DivTooltip.Position.TOP_RIGHT, DivTooltip.Position.RIGHT, DivTooltip.Position.BOTTOM_RIGHT ->
             anchor.width
-        DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM ->
+        DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM, DivTooltip.Position.CENTER ->
             anchor.width / 2 - popupView.width / 2
     }
 
@@ -271,7 +271,7 @@ internal fun calcPopupLocation(popupView: View, anchor: View, divTooltip: DivToo
             -popupView.height
         DivTooltip.Position.BOTTOM_LEFT, DivTooltip.Position.BOTTOM, DivTooltip.Position.BOTTOM_RIGHT ->
             anchor.height
-        DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT ->
+        DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT, DivTooltip.Position.CENTER ->
             anchor.height / 2 - popupView.height / 2
     }
 

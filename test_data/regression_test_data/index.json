@@ -1889,6 +1889,7 @@
     {
       "title": "Tooltips",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

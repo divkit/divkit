@@ -155,20 +155,22 @@ private class TranslateAnimation(
         position: DivTooltip.Position
     ) = when (position) {
         DivTooltip.Position.TOP_LEFT, DivTooltip.Position.LEFT, DivTooltip.Position.BOTTOM_LEFT ->
-            1
+            1f
         DivTooltip.Position.TOP_RIGHT, DivTooltip.Position.RIGHT, DivTooltip.Position.BOTTOM_RIGHT ->
-            -1
-        DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM -> 0
+            -1f
+        DivTooltip.Position.CENTER -> 0.5f
+        DivTooltip.Position.TOP, DivTooltip.Position.BOTTOM -> 0f
     }
 
     private fun initialDirectionY(
         position: DivTooltip.Position
     ) = when (position) {
         DivTooltip.Position.TOP_LEFT, DivTooltip.Position.TOP, DivTooltip.Position.TOP_RIGHT ->
-            1
+            1f
         DivTooltip.Position.BOTTOM_LEFT, DivTooltip.Position.BOTTOM, DivTooltip.Position.BOTTOM_RIGHT ->
-            -1
-        DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT -> 0
+            -1f
+        DivTooltip.Position.CENTER -> 0.5f
+        DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT -> 0f
     }
 }
 
