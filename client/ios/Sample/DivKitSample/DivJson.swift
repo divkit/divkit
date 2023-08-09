@@ -2,7 +2,6 @@ import Foundation
 
 import DivKit
 import Serialization
-import TemplatesSupport
 
 public struct DivJson: Deserializable {
   public let templates: [String: Any]

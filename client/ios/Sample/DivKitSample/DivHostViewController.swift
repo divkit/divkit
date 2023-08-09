@@ -10,35 +10,18 @@ final class DivHostViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     components = DivKitComponents(
-      updateCardAction: nil,
-      urlOpener: { UIApplication.shared.open($0) }
+      urlHandler: DivUrlHandlerDelegate { UIApplication.shared.open($0) }
     )
     divHostView = DivHostView(components: components)
 
     if let cards = try? DivJson.loadCards() {
       view.addSubview(divHostView)
-      divHostView.setData(cards)
+      divHostView.items = cards
     }
   }
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     divHostView.frame = view.bounds.inset(by: view.safeAreaInsets)
-  }
-}
-
-extension DivHostViewController: UIActionEventPerforming {
-  func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
-    switch event.payload {
-    case let .divAction(params):
-      components.handleActions(params: params)
-      divHostView.reloadItem(cardId: params.cardId)
-    case .empty,
-         .url,
-         .menu,
-         .json,
-         .composite:
-      break
-    }
   }
 }

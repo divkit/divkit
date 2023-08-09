@@ -1,12 +1,13 @@
 import UIKit
 
-import CommonCore
+import BasePublic
+import CommonCorePublic
 import DivKit
 import LayoutKit
 
 final class DivHostView: UICollectionView {
   private let components: DivKitComponents
-  private var items: [Item] = []
+  var items: [DivData] = []
 
   init(components: DivKitComponents) {
     self.components = components
@@ -25,68 +26,29 @@ final class DivHostView: UICollectionView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setData(_ items: [DivData]) {
-    self.items = items.compactMap { makeItem(data: $0) }
-  }
-
-  func reloadItem(cardId: String) {
-    guard let index = items.firstIndex(where: { $0.data.logId == cardId }) else {
-      return
-    }
-
-    let item = items[index]
-    items[index] = makeItem(
-      data: item.data,
-      cachedImageHolders: item.block.getImageHolders()
-    )
-
-    reloadItems(at: [IndexPath(item: index, section: 0)])
-  }
-
-  private func makeItem(
-    data: DivData,
-    cachedImageHolders: [ImageHolder] = []
-  ) -> Item {
-    let context = components.makeContext(
-      cardId: DivCardID(rawValue: data.logId),
-      cachedImageHolders: cachedImageHolders
-    )
-    return Item(data: data, block: try! data.makeBlock(context: context))
-  }
-
-  private struct Item {
-    let data: DivData
-    let block: Block
-  }
-
   private class Cell: UICollectionViewCell {
     static let reuseIdentifier = "cell"
 
-    struct State {
-      let block: Block
-      let view: BlockView
+    var divView: DivView? {
+      didSet {
+        guard let divView else { return }
+        addSubview(divView)
+      }
     }
 
-    var state: State?
-
-    func setBlock(_ block: Block) {
-      let view = block.reuse(
-        state?.view,
-        observer: nil,
-        overscrollDelegate: nil,
-        renderingDelegate: nil,
-        superview: self
-      )
-      state = State(block: block, view: view)
+    func configureCell(divKitComponents: DivKitComponents, divData: DivData) {
+      if divView == nil {
+        self.divView = DivView(divKitComponents: divKitComponents)
+      }
+      divView?.setSource(.init(kind: .divData(divData), cardId: DivCardID(rawValue: divData.logId)))
     }
 
     override func layoutSubviews() {
       super.layoutSubviews()
-
-      if let state = state {
-        let blockSize = state.block.size(forResizableBlockSize: bounds.size)
-        state.view.frame = CGRect(origin: .zero, size: blockSize)
-      }
+      divView?.frame = CGRect(
+        origin: .zero,
+        size: divView?.intrinsicContentSize(for: bounds.size) ?? .zero
+      )
     }
   }
 }
@@ -107,8 +69,7 @@ extension DivHostView: UICollectionViewDataSource {
       withReuseIdentifier: Cell.reuseIdentifier,
       for: indexPath
     ) as! Cell
-    let block = items[indexPath.row].block
-    cell.setBlock(block)
+    cell.configureCell(divKitComponents: components, divData: items[indexPath.row])
     return cell
   }
 }
@@ -119,8 +80,11 @@ extension DivHostView: UICollectionViewDelegateFlowLayout {
     layout _: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    let block = items[indexPath.row].block
-    let height = block.heightOfVerticallyNonResizableBlock(forWidth: bounds.width)
-    return CGSize(width: bounds.width, height: height)
+    let view = DivView(divKitComponents: components)
+    view.setSource(.init(
+      kind: .divData(items[indexPath.row]),
+      cardId: DivCardID(rawValue: items[indexPath.row].logId)
+    ))
+    return view.intrinsicContentSize(for: bounds.size)
   }
 }
