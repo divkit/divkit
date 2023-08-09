@@ -37,7 +37,7 @@ public final class DivBlockProvider {
 
   private var cardId: DivCardID!
   private var debugParams: DebugParams = .init()
-  private var errors: [DivError] = []
+  private var dataErrors: [DeserializationError] = []
 
   private let measurements = DebugParams.Measurements(
     divDataParsingTime: TimeMeasure(),
@@ -82,20 +82,22 @@ public final class DivBlockProvider {
   }
 
   private func update(data: Data) {
+    dataErrors = []
     do {
       let result = try divKitComponents.parseDivDataWithTemplates(data, cardId: cardId)
+      dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
       divData = result.value
-      errors.append(result.errorsOrWarnings?.asArray() ?? [])
     } catch {
       block = handleError(error: error, message: "Failed to parse DivData")
     }
   }
 
   private func update(json: [String: Any]) {
+    dataErrors = []
     do {
       let result = try parseDivDataWithTemplates(json, cardId: cardId)
+      dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
       divData = result.value
-      errors.append(result.errorsOrWarnings?.asArray() ?? [])
     } catch {
       block = handleError(error: error, message: "Failed to parse DivData")
     }
@@ -104,7 +106,7 @@ public final class DivBlockProvider {
   private func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData = divData else {
       guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(errors.map(errorMessage(_:)))
+      block = makeErrorsBlock(dataErrors.map(errorMessage(_:)))
       return
     }
 
@@ -127,7 +129,7 @@ public final class DivBlockProvider {
           context: context
         )
       }
-      errors.append(context.errorsStorage.errors)
+      let errors: [DivError] = dataErrors + context.errorsStorage.errors
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       debugParams.processErrors((cardId: cardId, errors: errors))
     } catch {
@@ -192,6 +194,8 @@ public final class DivBlockProvider {
     context: DivBlockModelingContext? = nil
   ) -> Block {
     guard debugParams.isDebugInfoEnabled else { return noDataBlock }
+
+    var errors: [DivError] = dataErrors
     errors.append(error as DivError)
     errors.append(contentsOf: context?.errorsStorage.errors ?? [])
     DivKitLogger.error("\(message). Error: \(error).")
