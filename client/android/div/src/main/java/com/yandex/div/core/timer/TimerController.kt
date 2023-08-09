@@ -64,6 +64,7 @@ internal class TimerController(
         div2View = null
 
         ticker.saveState()
+        ticker.detachFromTimer()
 
         savedForBackground = true
     }

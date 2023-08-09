@@ -63,6 +63,10 @@ internal open class Ticker(
         timer = parentTimer
     }
 
+    open fun detachFromTimer() {
+        timer = null
+    }
+
     open fun update(
         duration: Long,
         interval: Long?
