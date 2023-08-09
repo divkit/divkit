@@ -198,8 +198,8 @@ extension Array {
   public func iterativeFlatMap<T>(_ transform: (Element, Index) throws -> T?) rethrows -> [T] {
     var result = [T]()
     result.reserveCapacity(count)
-    for item in self {
-      if let transformedItem = try transform(item, result.count) {
+    for (index, item) in self.enumerated() {
+      if let transformedItem = try transform(item, index) {
         result.append(transformedItem)
       }
     }
