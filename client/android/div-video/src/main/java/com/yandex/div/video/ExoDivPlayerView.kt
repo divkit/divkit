@@ -5,12 +5,12 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.view.SurfaceView
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerView
 
 class ExoDivPlayerView(context: Context) : DivPlayerView(context) {
-    private val playerView = PlayerView(context).apply {
+    private val playerView = StyledPlayerView(context).apply {
         useController = false
         setShutterBackgroundColor(Color.TRANSPARENT)
         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT

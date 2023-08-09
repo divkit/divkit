@@ -11,7 +11,6 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SeekParameters
-import com.google.android.exoplayer2.SimpleExoPlayer
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
@@ -24,7 +23,7 @@ class ExoDivPlayer(
     config: DivPlayerPlaybackConfig
 ) : DivPlayer {
     val player: ExoPlayer by lazy {
-        SimpleExoPlayer.Builder(context).build()
+        ExoPlayer.Builder(context).build()
     }
     private val mediaSourceAbstractFactory by lazy {
         ExoDivMediaSourceAbstractFactory(context)
