@@ -27,7 +27,7 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
       imageHolder: imageHolder,
       widthTrait: makeContentWidthTrait(with: context),
       height: resolveHeight(context),
-      contentMode: resolveContentMode(expressionResolver)
+      contentMode: contentMode(context: context)
     )
   }
 }
