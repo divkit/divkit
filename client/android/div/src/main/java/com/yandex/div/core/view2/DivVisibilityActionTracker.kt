@@ -94,18 +94,21 @@ internal class DivVisibilityActionTracker @Inject constructor(
             result
         }
 
+        var viewAppearedForDisappear = appearedForDisappearActions.containsKey(view)
+
         visibilityActions.groupBy { action: DivSightAction ->
             action.duration.evaluate(scope.expressionResolver)
         }.forEach { entry: Map.Entry<Long, List<DivSightAction>> ->
             val (delayMs, actions) = entry
 
-            if (!appearedForDisappearActions.containsKey(view) &&
+            if (!viewAppearedForDisappear &&
                 actions.any {
                     it is DivDisappearAction &&
                         visibilityPercentage > it.visibilityPercentage.evaluate(scope.expressionResolver)
                 }
             ) {
                 appearedForDisappearActions[view] = div
+                viewAppearedForDisappear = true
             }
 
             val actionsToBeTracked = actions.filterTo(ArrayList(actions.size)) { action ->

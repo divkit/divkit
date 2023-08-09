@@ -85,9 +85,9 @@ internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
     private fun errorsToDetails(errors: List<Throwable>): String {
         val errorsList = errors.take(SHOW_LIMIT).joinToString(separator = "\n") {
             if (it is ParsingException) {
-                " - " + it.reason.toString() + ": " + it.fullStackMessage
+                " - ${it.reason}: ${it.fullStackMessage}"
             } else {
-                " - " + it.fullStackMessage
+                " - ${it.fullStackMessage}"
             }
         }
 
