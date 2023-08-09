@@ -7,13 +7,13 @@ struct DivViewSwiftUIAdapter: UIViewRepresentable {
   let divKitComponents: DivKitComponents
 
   func makeUIView(context _: Context) -> UIView {
-    let view = DivView(divKitComponents: divKitComponents)
-    view.setSource(
-      .init(kind: .data(jsonData), cardId: cardId),
-      shouldResetPreviousCardData: true
-    )
-    return view
+    DivView(divKitComponents: divKitComponents)
   }
 
-  func updateUIView(_: UIView, context _: Context) {}
+  func updateUIView(_ view: UIView, context _: Context) {
+    (view as? DivView)?.setSource(
+      DivBlockProvider.Source(kind: .data(jsonData), cardId: cardId),
+      shouldResetPreviousCardData: true
+    )
+  }
 }
