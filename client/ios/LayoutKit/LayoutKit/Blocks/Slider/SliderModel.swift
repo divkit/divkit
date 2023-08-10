@@ -69,6 +69,7 @@ public struct SliderModel: Equatable {
   public let inactiveMarkModel: MarkModel?
   public let activeTrack: Block
   public let inactiveTrack: Block
+  public let layoutDirection: UserInterfaceLayoutDirection
 
   public var sliderHeight: CGFloat {
     max(
@@ -115,7 +116,8 @@ public struct SliderModel: Equatable {
     minValue: Int,
     maxValue: Int,
     activeTrack: Block,
-    inactiveTrack: Block
+    inactiveTrack: Block,
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   ) {
     self.firstThumb = firstThumb
     self.secondThumb = secondThumb
@@ -125,6 +127,7 @@ public struct SliderModel: Equatable {
     self.inactiveMarkModel = inactiveMarkModel
     self.activeTrack = activeTrack
     self.inactiveTrack = inactiveTrack
+    self.layoutDirection = layoutDirection
   }
 
   static var empty: Self {
@@ -136,7 +139,8 @@ public struct SliderModel: Equatable {
       minValue: 0,
       maxValue: 0,
       activeTrack: EmptyBlock.zeroSized,
-      inactiveTrack: EmptyBlock.zeroSized
+      inactiveTrack: EmptyBlock.zeroSized,
+      layoutDirection: .leftToRight
     )
   }
 

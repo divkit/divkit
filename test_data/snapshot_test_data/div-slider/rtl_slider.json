@@ -1,0 +1,521 @@
+{
+  "description": "Different sliders in right-to-left context. Right value must be always smaller. Minimal values is on the right, max value on the left.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 20
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "first_thumb_value",
+        "type": "integer",
+        "value": 6
+      },
+      {
+        "name": "second_thumb_value",
+        "type": "integer",
+        "value": 3
+      },
+      {
+        "name": "second_thumb_secondary_value",
+        "type": "integer",
+        "value": 8
+      },
+      {
+        "name": "third_thumb_value",
+        "type": "integer",
+        "value": 6
+      },
+      {
+        "name": "fourth_thumb_value",
+        "type": "integer",
+        "value": 6
+      },
+      {
+        "name": "fifth_thumb_value",
+        "type": "integer",
+        "value": 6
+      },
+      {
+        "name": "sixth_thumb_value",
+        "type": "integer",
+        "value": 6
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 20,
+            "bottom": 20
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "RTL Sliders",
+              "text_alignment_horizontal": "center"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "first_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 20
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "second_thumb_value",
+              "thumb_secondary_value_variable": "second_thumb_secondary_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "paddings": {
+                "left": 8,
+                "right": 8
+              },
+              "thumb_secondary_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "paddings": {
+                "left": 12,
+                "right": 12
+              },
+              "margins": {
+                "top": 20
+              },
+              "thumb_value_variable": "third_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "tick_mark_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 5
+                  }
+                }
+              },
+              "tick_mark_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 5
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "paddings": {
+                "left": 10,
+                "right": 10
+              },
+              "margins": {
+                "top": 20
+              },
+              "thumb_value_variable": "fourth_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#3F28C3",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 10
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 2
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 20,
+                "left": 20,
+                "right": 20
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "fifth_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 12
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 12
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 20,
+                "left": 10,
+                "right": 10
+              },
+              "max_value": 10,
+              "min_value": 1,
+              "thumb_value_variable": "sixth_thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "thumb_text_style": {
+                "font_size": 12,
+                "font_weight": "bold",
+                "text_color": "#ffffff"
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

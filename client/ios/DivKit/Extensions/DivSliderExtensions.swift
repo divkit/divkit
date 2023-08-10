@@ -27,7 +27,7 @@ extension DivSlider: DivBlockModeling {
         block: makeThumbBlock(
           thumb: try thumbSecondaryStyle
             .makeBlock(context: context, corners: .all),
-          textBlock: thumbSecondaryTextStyle?.makeThumbTextBlock(
+          textBlock: (thumbSecondaryTextStyle ?? thumbTextStyle)?.makeThumbTextBlock(
             context: context,
             value: secondThumbValue.wrappedValue
           ),
@@ -108,7 +108,8 @@ extension DivSlider: DivBlockModeling {
         context: context,
         widthTrait: .resizable,
         corners: .all
-      )) ?? EmptyBlock.zeroSized
+      )) ?? EmptyBlock.zeroSized,
+      layoutDirection: context.layoutDirection
     )
     let width = context.override(width: width)
     let height = context.override(height: height)
