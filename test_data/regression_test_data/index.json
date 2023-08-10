@@ -1828,6 +1828,13 @@
       "file": "video/video_with_controls.json"
     },
     {
+      "title": "Video volume control",
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_volume_control.json"
+    },
+    {
       "title": "Disappearing actions with DivVideo",
       "tags": [
         "DivVideo",
