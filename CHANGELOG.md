@@ -1,3 +1,25 @@
+## 27.2.0
+
+# JSON Schema:
+* Replaced `left` with `start` alignment by default 
+* Added `center` `DivTooltip` position
+* Added `aspect` to `DivVideo`
+
+# Android Client:
+* Updated video player manager
+* Fixed `DivTooltip` with `match_parent` size
+* Improved binding performance
+
+# iOS Client:
+* Added RTL-layout support for `DivTabs`.
+* Fixed crash in `DivInput` mask validator.
+
+# Web Client:
+Additions:
+* Added `div-patch`, `download` action and `download_callbacks` support
+* Added support for the `focus` parameters (including ``focused_text_color`)
+
+
 ## 27.1.0
 
 # Android Client:

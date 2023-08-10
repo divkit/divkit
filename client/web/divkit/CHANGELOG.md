@@ -1,3 +1,10 @@
+## 27.2.0 (July 14, 2023)
+
+Additions:
+* Added `div-patch`, `download` action and `download_callbacks` support
+* Added support for the `focus` parameters (including ``focused_text_color`)
+
+
 ## 27.0.0 (July 31, 2023)
 
 Fixes:
