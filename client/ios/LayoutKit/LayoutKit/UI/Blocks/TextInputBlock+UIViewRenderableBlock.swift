@@ -15,6 +15,7 @@ extension TextInputBlock {
   ) {
     let inputView = view as! TextInputBlockView
     inputView.setInputType(inputType)
+    inputView.setValidators(validators)
     inputView.setText(
       textValue: textValue,
       rawTextValue: rawTextValue,
@@ -58,6 +59,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private var validators: [TextInputValidator]? = nil
   private let disposePool = AutodisposePool()
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
@@ -209,6 +211,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
     updateHintVisibility()
     updateMultiLineOffset()
+    updateValidation()
+  }
+
+  func setValidators(_ validators: [TextInputValidator]?) {
+    self.validators = validators
   }
 
   func setHint(_ value: NSAttributedString) {
@@ -223,6 +230,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateMultiLineOffset() {
     guard !multiLineInput.isHidden else { return }
     multiLineInput.frame.origin = CGPoint(x: 0, y: multiLineOffsetY)
+  }
+
+  private func updateValidation() {
+    let accessibilityLabel = validators?.compactMap {
+      let isValid = $0.validate(currentText)
+      $0.isValid.setValue(isValid, responder: self)
+      return isValid ? nil : $0.message()
+    }.joined(separator: ". ")
+    singleLineInput.accessibilityLabel = accessibilityLabel
+    multiLineInput.accessibilityLabel = accessibilityLabel
   }
 
   private func setTextData(_ text: String) {

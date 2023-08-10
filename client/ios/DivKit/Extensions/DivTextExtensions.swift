@@ -91,6 +91,14 @@ extension DivText: DivBlockModeling {
       text: truncationToken
     )
 
+    if let id {
+      context.blockStateStorage.setState(
+        id: id,
+        cardId: context.cardId,
+        state: TextBlockViewState(text: attributedString.string)
+      )
+    }
+
     return TextBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),

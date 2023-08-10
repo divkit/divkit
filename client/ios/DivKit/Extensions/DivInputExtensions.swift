@@ -64,8 +64,59 @@ extension DivInput: DivBlockModeling {
       path: context.parentPath,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
-      parentScrollView: context.parentScrollView
+      parentScrollView: context.parentScrollView,
+      validators: makeValidators(context)
     )
+  }
+}
+
+extension DivInput {
+  fileprivate func makeValidators(_ context: DivBlockModelingContext) -> [TextInputValidator]? {
+    let expressionResolver = context.expressionResolver
+    return validators?.compactMap { validator -> TextInputValidator? in
+      switch validator {
+      case let .divInputValidatorRegex(regexValidator):
+        let pattern = regexValidator.resolvePattern(expressionResolver) ?? ""
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+          DivKitLogger.error("Invalid regex pattern '\(pattern)'")
+          return nil
+        }
+        return TextInputValidator(
+          isValid: .init(context: context, name: regexValidator.variable),
+          allowEmpty: regexValidator.resolveAllowEmpty(expressionResolver),
+          validator: { $0.matchesRegex(regex) },
+          message: makeMessage(
+            from: regexValidator.resolveLabelId(expressionResolver),
+            storage: context.blockStateStorage,
+            cardId: context.cardId
+          )
+        )
+      case let .divInputValidatorExpression(expressionValidator):
+        return TextInputValidator(
+          isValid: .init(context: context, name: expressionValidator.variable),
+          allowEmpty: expressionValidator.resolveAllowEmpty(expressionResolver),
+          validator: { _ in expressionValidator.resolveCondition(expressionResolver) ?? true },
+          message: makeMessage(
+            from: expressionValidator.resolveLabelId(expressionResolver),
+            storage: context.blockStateStorage,
+            cardId: context.cardId
+          )
+        )
+      }
+    }
+  }
+
+  private func makeMessage(from labelId: String?, storage: DivBlockStateStorage, cardId: DivCardID) -> () -> String? {
+    {
+      guard let labelId else {
+        return nil
+      }
+      guard let state: TextBlockViewState = storage.getState(labelId, cardId: cardId) else {
+        DivKitLogger.error("Can't find text with id '\(labelId)'")
+        return nil
+      }
+      return state.text
+    }
   }
 }
 

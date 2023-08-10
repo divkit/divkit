@@ -55,6 +55,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
   public weak var parentScrollView: ScrollView?
+  public let validators: [TextInputValidator]?
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -72,7 +73,8 @@ public final class TextInputBlock: BlockWithTraits {
     path: UIElementPath,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
-    parentScrollView: ScrollView? = nil
+    parentScrollView: ScrollView? = nil,
+    validators: [TextInputValidator]? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -90,6 +92,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
     self.parentScrollView = parentScrollView
+    self.validators = validators
   }
 
   public var intrinsicContentWidth: CGFloat {

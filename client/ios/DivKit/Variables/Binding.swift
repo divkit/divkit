@@ -43,3 +43,19 @@ extension Binding where T == String {
     )
   }
 }
+
+extension Binding where T == Bool {
+  init(context: DivBlockModelingContext, name: String) {
+    self.init(
+      name: name,
+      getValue: { context.expressionResolver.getVariableValue($0) ?? false },
+      userInterfaceActionFactory: { name, value in
+        URL(string: "div-action://set_variable?name=\(name)&value=\(value.description)")
+          .flatMap {
+            DivAction(logId: "binding", url: .value($0))
+          }?.uiAction(context: context.actionContext)
+      }
+    )
+  }
+}
+
