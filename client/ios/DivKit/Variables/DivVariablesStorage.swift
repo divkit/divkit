@@ -6,7 +6,7 @@ public enum DivVariableNameTag {}
 public typealias DivVariableName = Tagged<DivVariableNameTag, String>
 
 @frozen
-public enum DivVariableValue: Equatable {
+public enum DivVariableValue: Hashable {
   case string(String)
   case number(Double)
   case integer(Int)
