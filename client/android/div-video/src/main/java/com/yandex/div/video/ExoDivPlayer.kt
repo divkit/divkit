@@ -13,6 +13,8 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SeekParameters
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_FULL
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_MUTED
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.internal.KAssert
@@ -33,6 +35,9 @@ class ExoDivPlayer(
     private val updateTimeHandler = Handler(Looper.getMainLooper())
     private var currentSource: DivVideoSource? = null
     private var needToRenderFrameExplicitly = false
+
+    private var lastUnmutedVolume = VOLUME_FULL
+    private var isMuted = config.isMuted
 
     private var targetResolutionArea = 0
 
@@ -99,6 +104,7 @@ class ExoDivPlayer(
         } else {
             KAssert.fail { "Attempt to create a player with an empty source" }
         }
+        player.volume = if (isMuted) VOLUME_MUTED else VOLUME_FULL
 
         (context.applicationContext as Application).registerActivityLifecycleCallbacks(playerActivityCallback)
     }
@@ -125,7 +131,7 @@ class ExoDivPlayer(
     }
 
     private fun setConfig(config: DivPlayerPlaybackConfig) {
-        if (config.isMuted) player.volume = 0f
+        setMuted(config.isMuted)
         player.repeatMode = if (config.repeatable) {
             Player.REPEAT_MODE_ONE
         } else {
@@ -162,6 +168,13 @@ class ExoDivPlayer(
                 player.prepare()
             }
         }
+    }
+
+    override fun setMuted(muted: Boolean) {
+        if (isMuted == muted) return
+
+        player.volume = if (muted) VOLUME_MUTED else lastUnmutedVolume
+        isMuted = muted
     }
 
     override fun addObserver(observer: DivPlayer.Observer) {

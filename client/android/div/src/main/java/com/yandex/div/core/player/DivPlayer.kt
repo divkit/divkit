@@ -47,6 +47,8 @@ interface DivPlayer {
 
     fun setSource(sourceVariants: List<DivVideoSource>, config: DivPlayerPlaybackConfig) = Unit
 
+    fun setMuted(muted: Boolean) = Unit
+
     fun play() = Unit
 
     fun pause() = Unit
@@ -54,4 +56,9 @@ interface DivPlayer {
     fun seek(toMs: Long) = Unit
 
     fun release() = Unit
+
+    companion object {
+        const val VOLUME_FULL = 1.0f
+        const val VOLUME_MUTED = 0.0f
+    }
 }

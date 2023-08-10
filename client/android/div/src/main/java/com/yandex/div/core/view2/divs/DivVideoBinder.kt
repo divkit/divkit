@@ -116,6 +116,7 @@ internal class DivVideoBinder @Inject constructor(
 
         if (div == oldDiv) {
             view.observeElapsedTime(div, divView, player)
+            view.observeMuted(div, divView, player)
             return
         }
 
@@ -124,6 +125,7 @@ internal class DivVideoBinder @Inject constructor(
         view.div = div
 
         view.observeElapsedTime(div, divView, player)
+        view.observeMuted(div, divView, player)
 
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
@@ -164,6 +166,18 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         addSubscription(variableBinder.bindVariable(divView, elapsedTimeVariable, callbacks))
+    }
+
+    private fun DivVideoView.observeMuted(
+        div: DivVideo,
+        divView: Div2View,
+        player: DivPlayer
+    ) {
+        addSubscription(
+            div.muted.observeAndGet(divView.expressionResolver) {
+                player.setMuted(it)
+            }
+        )
     }
 }
 
