@@ -6,8 +6,10 @@
 * Added `aspect` to `DivVideo`
 
 # Android Client:
-* Updated video player manager
 * Fixed `DivTooltip` with `match_parent` size
+* Fixed crash caused by `DivTimer` actions execution after `DivView` detach
+* Observe `DivVideo` `muted` property 
+* Updated video player manager
 * Improved binding performance
 
 # iOS Client:
