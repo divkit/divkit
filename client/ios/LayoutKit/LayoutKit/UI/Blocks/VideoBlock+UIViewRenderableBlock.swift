@@ -107,6 +107,10 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(data: model.videoData, config: model.playbackConfig)
     }
 
+    if model.playbackConfig.isMuted != oldValue.playbackConfig.isMuted {
+      player?.set(isMuted: model.playbackConfig.isMuted)
+    }
+
     if oldValue.elapsedTime != model.elapsedTime {
       model.elapsedTime.flatMap { player?.seek(to: .init(value: $0.wrappedValue)) }
     }
