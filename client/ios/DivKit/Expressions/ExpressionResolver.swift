@@ -118,9 +118,9 @@ public final class ExpressionResolver {
           index = value.index(index, offsetBy: escaped.count)
         } else {
           if next.isEmpty {
-            errorTracker(ExpressionError.tokenizing(expression: value))
+            errorTracker(ExpressionError("Error tokenizing '\(value)'.", expression: value))
           } else {
-            errorTracker(ExpressionError.escaping)
+            errorTracker(ExpressionError("Incorrect string escape", expression: value))
           }
           return nil
         }
@@ -136,7 +136,7 @@ public final class ExpressionResolver {
     guard link.items.count == 1,
           case let .calcExpression(parsedExpression) = link.items.first
     else {
-      errorTracker(.incorrectSingleItemExpression(expression: link.rawValue, type: T.self))
+      errorTracker(ExpressionError("Incorrect single item expression", expression: link.rawValue))
       return nil
     }
     do {
@@ -149,15 +149,11 @@ public final class ExpressionResolver {
     } catch let error as CalcExpression.Error {
       let expression = parsedExpression.description
       errorTracker(
-        .calculating(
-          expression: link.rawValue,
-          scriptInject: expression,
-          description: error.makeOutputMessage(for: expression)
-        )
+        ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
       )
       return nil
     } catch {
-      errorTracker(.unknown(error: error))
+      errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
       return nil
     }
   }
@@ -180,15 +176,11 @@ public final class ExpressionResolver {
         } catch let error as CalcExpression.Error {
           let expression = parsedExpression.description
           errorTracker(
-            .calculating(
-              expression: link.rawValue,
-              scriptInject: expression,
-              description: error.makeOutputMessage(for: expression)
-            )
+            ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
           )
           return nil
         } catch {
-          errorTracker(.unknown(error: error))
+          errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
           return nil
         }
       case let .string(value):
@@ -213,11 +205,12 @@ public final class ExpressionResolver {
       }
     }
     guard let result = initializer(stringValue) else {
-      errorTracker(.initializingValue(
-        expression: link.rawValue,
-        stringValue: stringValue,
-        type: T.self
-      ))
+      errorTracker(
+        ExpressionError(
+          "Failed to initalize \(T.self) from string value: \(stringValue)",
+          expression: link.rawValue
+        )
+      )
       return nil
     }
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
@@ -236,7 +229,7 @@ public final class ExpressionResolver {
       if validator(value) {
         return value
       } else {
-        errorTracker(.validating(expression: rawValue, value: "\(value)", type: T.self))
+        errorTracker(ExpressionError("Failed to validate value: \(value)", expression: rawValue))
         return nil
       }
     }
@@ -283,3 +276,4 @@ extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     reduce([:], +)
   }
 }
+

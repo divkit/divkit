@@ -24,12 +24,3 @@ public struct DivBlockModelingWarning: CustomStringConvertible {
     DivKitLogger.warning(description)
   }
 }
-
-public struct DivBlockModelingRuntimeError: Error, CustomStringConvertible {
-  public let description: String
-
-  init(_ payload: ExpressionError, path: UIElementPath) {
-    description = "[\(path)]: \(payload.description) "
-    DivKitLogger.warning(description)
-  }
-}

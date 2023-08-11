@@ -391,9 +391,7 @@ extension ExpressionTestCase {
 
   private func testErrorResult<T: Equatable>(type: ExpressionType<T>, expectedMessage: String) {
     var resultMessage = ""
-    _ = resolveValue(type: type, errorTracker: {
-      resultMessage = $0.description
-    })
+    _ = resolveValue(type: type, errorTracker: { resultMessage = $0.message })
     if expectedMessage.isEmpty {
       // Can throw any message
       XCTAssertFalse(resultMessage.isEmpty)

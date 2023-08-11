@@ -23,7 +23,7 @@ public struct ExpressionLink<T> {
     resolveNested: Bool = true
   ) throws {
     guard !rawValue.isEmpty else {
-      errorTracker?(.emptyValue)
+      errorTracker?(ExpressionError("Empty expression", expression: nil))
       return nil
     }
     guard rawValue.contains(expressionPrefix) else { return nil }
@@ -36,8 +36,9 @@ public struct ExpressionLink<T> {
       let currentValue = rawValue[index..<endIndex]
       if rawValue.hasExpression(at: index) {
         guard let (start, end) = currentValue.makeLinkIndices() else {
-          errorTracker?(.tokenizing(expression: rawValue))
-          throw ExpressionError.tokenizing(expression: rawValue)
+          let error = ExpressionError("Error tokenizing '\(rawValue)'.", expression: rawValue)
+          errorTracker?(error)
+          throw error
         }
         if !currentString.isEmpty {
           items.append(.string(currentString))
