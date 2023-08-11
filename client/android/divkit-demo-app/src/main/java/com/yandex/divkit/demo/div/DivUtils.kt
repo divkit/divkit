@@ -45,6 +45,7 @@ fun divConfiguration(
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
+        .enableAccessibility(true)
         .enableLongtapActionsPassingToChild()
         .enableViewPool(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)

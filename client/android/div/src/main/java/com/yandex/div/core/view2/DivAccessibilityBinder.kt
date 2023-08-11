@@ -5,6 +5,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
@@ -23,12 +25,17 @@ import javax.inject.Inject
  */
 @DivScope
 @Mockable
-internal class DivAccessibilityBinder @Inject constructor() {
+internal class DivAccessibilityBinder @Inject constructor(
+    @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean
+) {
     fun bindAccessibilityMode(
         view: View,
         divView: Div2View,
         mode: DivAccessibility.Mode,
     ) {
+        if (!enabled) {
+            return
+        }
         val parentMode = (view.parent as? View)?.let {
             divView.getPropagatedAccessibilityMode(it)
         }
@@ -46,6 +53,9 @@ internal class DivAccessibilityBinder @Inject constructor() {
     }
 
     fun bindType(view: View, type: DivAccessibility.Type) {
+        if (!enabled) {
+            return
+        }
         val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
 
         val accessibilityDelegate =
@@ -61,6 +71,9 @@ internal class DivAccessibilityBinder @Inject constructor() {
     }
 
     fun bindTypeAutomatically(view: View, div: DivBase) {
+        if (!enabled) {
+            return
+        }
         if (div.actsAsButton) {
             bindType(view, DivAccessibility.Type.BUTTON)
             return
