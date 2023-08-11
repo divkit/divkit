@@ -36,7 +36,7 @@ public struct DivBlockModelingContext {
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
-  private let variableTracker: DivVariableTracker?
+  internal let variableTracker: DivVariableTracker?
   private let persistentValuesStorage: DivPersistentValuesStorage
 
   var overridenWidth: DivOverridenSize?
