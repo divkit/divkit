@@ -2,6 +2,7 @@ package com.yandex.div.storage.database
 
 import android.database.Cursor
 import android.database.SQLException
+import android.database.sqlite.SQLiteFullException
 import android.database.sqlite.SQLiteStatement
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -71,6 +72,8 @@ internal class StorageStatementExecutor(
             // but kotlin does not support multi-catch.
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } catch (e: IllegalStateException) {
+            exceptions.add(DivStorageErrorException(executionErrorMessage, e))
+        } catch (e: SQLiteFullException) {
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } finally {
             db?.endTransactionSilently()
