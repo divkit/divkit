@@ -991,6 +991,10 @@
     "en": "Name of the variable to store the unprocessed value.",
     "ru": "Имя переменной для хранения необработанного значения."
   },
+  "div_input_mask_phone": {
+    "en": "Mask for entering a phone with a dynamic definition of the regional format.",
+    "ru": "Маска для ввода телефона c динамическим определением регионального формата."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."
