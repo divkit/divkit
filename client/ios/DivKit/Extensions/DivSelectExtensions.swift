@@ -65,7 +65,8 @@ extension DivSelect: DivBlockModeling {
       path: context.parentPath,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
-      parentScrollView: context.parentScrollView
+      parentScrollView: context.parentScrollView,
+      layoutDirection: context.layoutDirection
     )
   }
 }

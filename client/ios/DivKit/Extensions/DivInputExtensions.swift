@@ -20,7 +20,7 @@ extension DivInput: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    
+
     let font = context.fontProvider.font(
       family: resolveFontFamily(expressionResolver) ?? "",
       weight: resolveFontWeight(expressionResolver),
@@ -65,7 +65,8 @@ extension DivInput: DivBlockModeling {
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView,
-      validators: makeValidators(context)
+      validators: makeValidators(context),
+      layoutDirection: context.layoutDirection
     )
   }
 }
@@ -106,7 +107,11 @@ extension DivInput {
     }
   }
 
-  private func makeMessage(from labelId: String?, storage: DivBlockStateStorage, cardId: DivCardID) -> () -> String? {
+  private func makeMessage(
+    from labelId: String?,
+    storage: DivBlockStateStorage,
+    cardId: DivCardID
+  ) -> () -> String? {
     {
       guard let labelId else {
         return nil

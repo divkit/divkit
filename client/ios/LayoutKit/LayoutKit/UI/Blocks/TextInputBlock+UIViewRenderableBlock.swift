@@ -14,6 +14,7 @@ extension TextInputBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let inputView = view as! TextInputBlockView
+    inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
     inputView.setValidators(validators)
     inputView.setText(
@@ -55,12 +56,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var onBlurActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
-  private var isRightToLeft = false
   private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
-  private var validators: [TextInputValidator]? = nil
+  private var validators: [TextInputValidator]?
   private let disposePool = AutodisposePool()
+  private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -68,9 +69,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self._textValue = .empty
     self._rawTextValue = .empty
     super.init(frame: frame)
-
-    isRightToLeft = UIView
-      .userInterfaceLayoutDirection(for: singleLineInput.semanticContentAttribute) == .rightToLeft
 
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
@@ -134,6 +132,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     return multiLineInput.attributedText.string
   }
 
+  func setLayoutDirection(_ layoutDirection: UserInterfaceLayoutDirection) {
+    if layoutDirection != self.layoutDirection {
+      self.layoutDirection = layoutDirection
+      hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
+    }
+  }
+
   func setInputType(_ type: TextInputBlock.InputType) {
     switch type {
     case let .keyboard(type):
@@ -193,7 +198,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     typo: Typo,
     mask: MaskValidator?
   ) {
-    self.typo = typo
+    self.typo = layoutDirection == .rightToLeft ? typo.with(alignment: .right) : typo
+      .with(alignment: .left)
     if let mask = mask, let rawTextValue = rawTextValue {
       self._textValue = textValue
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
@@ -244,8 +250,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   private func setTextData(_ text: String) {
     guard let typo else { return }
-    let textTypo = self.isRightToLeft ? typo.with(alignment: .right) : typo
-    let attributedText = text.with(typo: textTypo)
+    let attributedText = text.with(typo: typo)
     multiLineInput.attributedText = attributedText
     singleLineInput.attributedText = attributedText
     multiLineInput.typingAttributes = typo.attributes
@@ -505,7 +510,7 @@ extension TextInputBlockView {
   }
 
   private func offsetX(_ view: UIView) -> CGFloat {
-    if isRightToLeft {
+    if layoutDirection == .rightToLeft {
       let emptySpace = bounds.size.width - view.bounds.size.width
       guard emptySpace > 0 else { return 0 }
       return emptySpace - cusorOffset
