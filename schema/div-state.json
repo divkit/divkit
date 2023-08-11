@@ -81,6 +81,11 @@
           "minItems": 1,
           "$description": "translations.json#/div_state_states"
         },
+        "state_id_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_state_state_id_variable",
+          "platforms": []
+        },
         "div_id": {
           "type": "string",
           "supports_expressions": false,

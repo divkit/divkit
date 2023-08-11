@@ -1511,6 +1511,10 @@
     "en": "State ID. It must be unique at one hierarchy level.",
     "ru": "Идентификатор состояния. Должен быть уникальным на одном уровне иерархии."
   },
+  "div_state_state_id_variable": {
+    "en": "Name of the variable where the current state ID value is stored. If the value of a variable changes, then the active state will also be changed. The variable takes precedence over the `default_state_id` field.",
+    "ru": "Название переменной, в которую сохраняется текущее идентификатор активного состояния. Если меняется значение переменной, то и активное состояние будет изменено. Переменная приоритетнее поля `default_state_id`."
+  },
   "div_state_div_state_swipe_out_actions": {
     "en": "Actions when swiping the state horizontally.",
     "ru": "Действия при смахивании состояния по горизонтали."
