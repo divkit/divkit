@@ -96,6 +96,6 @@ extension DivBase {
   fileprivate func makeSelectedActions(
     context: DivBlockModelingContext
   ) -> [UserInterfaceAction] {
-    selectedActions?.map { $0.uiAction(context: context.actionContext) } ?? []
+    selectedActions?.map { $0.uiAction(context: context) } ?? []
   }
 }

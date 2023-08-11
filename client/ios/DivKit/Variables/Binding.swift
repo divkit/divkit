@@ -13,7 +13,6 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
   }
 
   init(context: DivBlockModelingContext, name: String) {
-    let actionContext = context.actionContext
     let expressionResolver = context.expressionResolver
     self.init(
       name: name,
@@ -21,7 +20,7 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
       userInterfaceActionFactory: { name, value in
         URL(string: "div-action://set_variable?name=\(name)&value=\(value.description)").flatMap {
           DivAction(logId: "binding", url: .value($0))
-        }?.uiAction(context: actionContext)
+        }?.uiAction(context: context)
       }
     )
   }
@@ -29,7 +28,6 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
 
 extension Binding where T == String {
   init(context: DivBlockModelingContext, name: String) {
-    let actionContext = context.actionContext
     let expressionResolver = context.expressionResolver
     self.init(
       name: name,
@@ -38,7 +36,7 @@ extension Binding where T == String {
         URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncoded())")
           .flatMap {
             DivAction(logId: "binding", url: .value($0))
-          }?.uiAction(context: actionContext)
+          }?.uiAction(context: context)
       }
     )
   }
@@ -46,14 +44,15 @@ extension Binding where T == String {
 
 extension Binding where T == Bool {
   init(context: DivBlockModelingContext, name: String) {
+    let expressionResolver = context.expressionResolver
     self.init(
       name: name,
-      getValue: { context.expressionResolver.getVariableValue($0) ?? false },
+      getValue: { expressionResolver.getVariableValue($0) ?? false },
       userInterfaceActionFactory: { name, value in
         URL(string: "div-action://set_variable?name=\(name)&value=\(value.description)")
           .flatMap {
             DivAction(logId: "binding", url: .value($0))
-          }?.uiAction(context: context.actionContext)
+          }?.uiAction(context: context)
       }
     )
   }

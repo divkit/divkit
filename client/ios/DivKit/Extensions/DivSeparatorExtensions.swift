@@ -7,10 +7,10 @@ extension DivSeparator: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: makeActions(context: context.actionContext),
+      actions: makeActions(context: context),
       actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context.actionContext),
-      longTapActions: makeLongTapActions(context: context.actionContext)
+      doubleTapActions: makeDoubleTapActions(context: context),
+      longTapActions: makeLongTapActions(context: context)
     )
   }
 

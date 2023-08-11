@@ -201,7 +201,7 @@ extension DivTabs.Item {
     let titleContext = modified(context) {
       $0.parentPath += "title"
     }
-    let action = makeAction(context: context.actionContext)
+    let action = makeAction(context: context)
     return UILink(
       text: resolveTitle(titleContext.expressionResolver) ?? "",
       url: action?.url,

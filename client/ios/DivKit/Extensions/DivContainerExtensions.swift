@@ -10,10 +10,10 @@ extension DivContainer: DivBlockModeling {
       context: modified(context) {
         $0.childrenA11yDescription = makeChildrenA11yDescription(context: $0)
       },
-      actions: makeActions(context: context.actionContext),
+      actions: makeActions(context: context),
       actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context.actionContext),
-      longTapActions: makeLongTapActions(context: context.actionContext)
+      doubleTapActions: makeDoubleTapActions(context: context),
+      longTapActions: makeLongTapActions(context: context)
     )
   }
 

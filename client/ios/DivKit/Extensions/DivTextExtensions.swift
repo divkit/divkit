@@ -9,14 +9,15 @@ import NetworkingPublic
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
+    let expressionResolver = context.expressionResolver
+    return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: makeActions(context: context.actionContext),
-      actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context.actionContext),
-      longTapActions: makeLongTapActions(context: context.actionContext),
-      customA11yElement: makeCustomA11yElement(with: context.expressionResolver)
+      actions: makeActions(context: context),
+      actionAnimation: actionAnimation.makeActionAnimation(with: expressionResolver),
+      doubleTapActions: makeDoubleTapActions(context: context),
+      longTapActions: makeLongTapActions(context: context),
+      customA11yElement: makeCustomA11yElement(with: expressionResolver)
     )
   }
 
@@ -81,7 +82,7 @@ extension DivText: DivBlockModeling {
         text: ($0.resolveText(expressionResolver) ?? "") as CFString,
         typo: typo,
         ranges: $0.ranges,
-        actions: $0.makeActions(context: context.actionContext),
+        actions: $0.makeActions(context: context),
         context: context
       )
     }
@@ -195,7 +196,7 @@ extension DivText: DivBlockModeling {
       .map { Typo(underline: $0.underlineStyle) }
     let typos = [fontTypo, colorTypo, heightTypo, spacingTypo, strikethroughTypo, underlineTypo]
       .compactMap { $0 }
-    let actions = range.makeActions(context: context.actionContext)
+    let actions = range.makeActions(context: context)
     if typos.isEmpty, actions == nil, range.background == nil, range.border == nil {
       return
     }

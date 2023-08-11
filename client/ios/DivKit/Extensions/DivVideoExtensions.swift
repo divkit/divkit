@@ -21,12 +21,11 @@ extension DivVideo: DivBlockModeling {
       return EmptyBlock()
     }
 
-    let actionContext = context.actionContext
-    let resumeActions = resumeActions?.makeActions(context: actionContext) ?? []
-    let pauseActions = pauseActions?.makeActions(context: actionContext) ?? []
-    let bufferingActions = bufferingActions?.makeActions(context: actionContext) ?? []
-    let endActions = endActions?.makeActions(context: actionContext) ?? []
-    let fatalActions = fatalActions?.makeActions(context: actionContext) ?? []
+    let resumeActions = resumeActions?.makeActions(context: context) ?? []
+    let pauseActions = pauseActions?.makeActions(context: context) ?? []
+    let bufferingActions = bufferingActions?.makeActions(context: context) ?? []
+    let endActions = endActions?.makeActions(context: context) ?? []
+    let fatalActions = fatalActions?.makeActions(context: context) ?? []
     let resolver = context.expressionResolver
     let aspectRatio = aspect.resolveAspectRatio(resolver)
     let repeatable = resolveRepeatable(resolver)

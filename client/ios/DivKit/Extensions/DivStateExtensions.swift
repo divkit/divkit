@@ -117,7 +117,7 @@ extension DivState: DivBlockModeling {
       state: .default,
       path: context.parentPath + DivState.type,
       swipeOutActions: swipeOutActions.map {
-        $0.uiAction(context: context.actionContext)
+        $0.uiAction(context: context)
       }
     )
   }

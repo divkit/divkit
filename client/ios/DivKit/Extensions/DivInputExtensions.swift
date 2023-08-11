@@ -42,10 +42,10 @@ extension DivInput: DivBlockModeling {
     let keyboardType = resolveKeyboardType(expressionResolver)
 
     let onFocusActions = (focus?.onFocus ?? []).map {
-      $0.uiAction(context: context.actionContext)
+      $0.uiAction(context: context)
     }
     let onBlurActions = (focus?.onBlur ?? []).map {
-      $0.uiAction(context: context.actionContext)
+      $0.uiAction(context: context)
     }
 
     return TextInputBlock(
