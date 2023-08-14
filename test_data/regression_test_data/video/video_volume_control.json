@@ -31,7 +31,7 @@
       {
         "name": "video_1_muted",
         "type": "boolean",
-        "value": false
+        "value": true
       }
     ],
     "states": [
@@ -47,7 +47,7 @@
               "video_sources": [
                 {
                   "type": "video_source",
-                  "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8",
+                  "url": "https://yastatic.net/s3/home/divkit/beep_test.mp4",
                   "mime_type": "video/mp4"
                 }
               ],
