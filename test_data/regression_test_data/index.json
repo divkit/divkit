@@ -1481,6 +1481,17 @@
       "file": "animations/lottie/lottie_animations.json"
     },
     {
+      "title": "Lottie gallery",
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_gallery.json"
+    },
+    {
       "title": "Lottie cycled animations",
       "platforms": [
         "android"
@@ -1550,7 +1561,17 @@
       "expected_results": [
         "Two-column grid with seven cards playing different rive animations"
       ],
-      "file": "rive_animation.json"
+      "file": "animations/rive/rive_animation.json"
+    },
+    {
+      "title": "Rive gallery",
+      "platforms": [
+        "ios"
+      ],
+      "expected_results": [
+        "Gallery with seven cards playing different rive animations"
+      ],
+      "file": "animations/rive/rive_gallery.json"
     },
     {
       "title": "Rive animation (loop=pingPong)",
@@ -1560,7 +1581,7 @@
       "expected_results": [
         "Infinite animation with changing direction"
       ],
-      "file": "rive_ping_pong_loop.json"
+      "file": "animations/rive/rive_ping_pong_loop.json"
     },
     {
       "title": "Rive animation (loop=oneShot)",
@@ -1574,7 +1595,7 @@
       "expected_results": [
         "Animation plays once then stops"
       ],
-      "file": "rive_one_shot_loop.json"
+      "file": "animations/rive/rive_one_shot_loop.json"
     },
     {
       "title": "Visibility transition trigger",

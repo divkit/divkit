@@ -48,7 +48,12 @@ public final class RiveAnimationBlock: BlockWithTraits {
   }
 
   public func equals(_ other: Block) -> Bool {
-    other is RiveAnimationBlock && self == other
+    guard let other = other as? RiveAnimationBlock else {
+      return false
+    }
+    return self.widthTrait == other.widthTrait &&
+      self.heightTrait == other.heightTrait &&
+      self.animationHolder == other.animationHolder
   }
 
   public func getImageHolders() -> [ImageHolder] { [] }
