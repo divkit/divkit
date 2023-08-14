@@ -17,33 +17,30 @@ import com.yandex.div.data.*
 import org.json.JSONArray
 
 @Mockable
-class EntityWithRequiredProperty(
-    @JvmField final val property: Expression<String>, // at least 1 char
+class EntityWithRawArray(
+    @JvmField final val array: JSONArray,
 ) : JSONSerializable {
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeExpression(key = "property", value = property)
+        json.write(key = "array", value = array)
         json.write(key = "type", value = TYPE)
         return json
     }
 
     companion object {
-        const val TYPE = "entity_with_required_property"
+        const val TYPE = "entity_with_raw_array"
 
         @JvmStatic
         @JvmName("fromJson")
-        operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithRequiredProperty {
+        operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithRawArray {
             val logger = env.logger
-            return EntityWithRequiredProperty(
-                property = JsonParser.readExpression(json, "property", PROPERTY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+            return EntityWithRawArray(
+                array = JsonParser.read(json, "array", logger, env)
             )
         }
 
-        private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-
-        val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRequiredProperty(env, json = it) }
+        val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRawArray(env, json = it) }
     }
 
 }

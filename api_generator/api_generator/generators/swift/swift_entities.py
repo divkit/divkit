@@ -20,6 +20,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawArray,
     ObjectFormat,
     SwiftGeneratorProperties,
 )
@@ -84,6 +85,7 @@ class SwiftEntity(Entity):
         Color.__bases__ = (SwiftPropertyType, PropertyType,)
         String.__bases__ = (SwiftPropertyType, PropertyType,)
         Dictionary.__bases__ = (SwiftPropertyType, PropertyType,)
+        RawArray.__bases__ = (SwiftPropertyType, PropertyType,)
         for prop in self.properties:
             prop.__class__ = SwiftProperty
 
@@ -704,6 +706,8 @@ class SwiftPropertyType(PropertyType):
             return 'Color'
         elif isinstance(self, Dictionary):
             return '[String: Any]'
+        elif isinstance(self, RawArray):
+            return '[Any]'
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')
@@ -826,7 +830,7 @@ class SwiftPropertyType(PropertyType):
 
     @property
     def is_equatable(self) -> bool:
-        if isinstance(self, Dictionary):
+        if isinstance(self, (Dictionary, RawArray)):
             return False
         elif isinstance(self, Array):
             return cast(SwiftPropertyType, self.property_type).is_equatable
@@ -834,7 +838,7 @@ class SwiftPropertyType(PropertyType):
             return True
 
     def serialization_suffix(self, use_expressions: bool) -> str:
-        if isinstance(self, Dictionary):
+        if isinstance(self, (Dictionary, RawArray)):
             return ''
         elif isinstance(self, (String, Int, Double, Bool, BoolInt)):
             return '.toValidSerializationValue()' if use_expressions else ''

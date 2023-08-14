@@ -11,6 +11,7 @@ export './entity_with_optional_complex_property.dart';
 export './entity_with_optional_property.dart';
 export './entity_with_optional_string_enum_property.dart';
 export './entity_with_property_with_default_value.dart';
+export './entity_with_raw_array.dart';
 export './entity_with_required_property.dart';
 export './entity_with_simple_properties.dart';
 export './entity_with_strict_array.dart';

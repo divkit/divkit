@@ -14,6 +14,7 @@ import 'entity_with_optional_complex_property.dart';
 import 'entity_with_optional_property.dart';
 import 'entity_with_optional_string_enum_property.dart';
 import 'entity_with_property_with_default_value.dart';
+import 'entity_with_raw_array.dart';
 import 'entity_with_required_property.dart';
 import 'entity_with_simple_properties.dart';
 import 'entity_with_strict_array.dart';
@@ -71,6 +72,9 @@ class Entity with EquatableMixin {
     if(value is EntityWithPropertyWithDefaultValue) {
       return value;
     }
+    if(value is EntityWithRawArray) {
+      return value;
+    }
     if(value is EntityWithRequiredProperty) {
       return value;
     }
@@ -108,6 +112,7 @@ class Entity with EquatableMixin {
     required Function(EntityWithOptionalProperty) entityWithOptionalProperty,
     required Function(EntityWithOptionalStringEnumProperty) entityWithOptionalStringEnumProperty,
     required Function(EntityWithPropertyWithDefaultValue) entityWithPropertyWithDefaultValue,
+    required Function(EntityWithRawArray) entityWithRawArray,
     required Function(EntityWithRequiredProperty) entityWithRequiredProperty,
     required Function(EntityWithSimpleProperties) entityWithSimpleProperties,
     required Function(EntityWithStrictArray) entityWithStrictArray,
@@ -165,6 +170,10 @@ class Entity with EquatableMixin {
       entityWithPropertyWithDefaultValue(value);
       return;
     }
+    if(value is EntityWithRawArray) {
+      entityWithRawArray(value);
+      return;
+    }
     if(value is EntityWithRequiredProperty) {
       entityWithRequiredProperty(value);
       return;
@@ -209,6 +218,7 @@ class Entity with EquatableMixin {
     Function(EntityWithOptionalProperty)? entityWithOptionalProperty,
     Function(EntityWithOptionalStringEnumProperty)? entityWithOptionalStringEnumProperty,
     Function(EntityWithPropertyWithDefaultValue)? entityWithPropertyWithDefaultValue,
+    Function(EntityWithRawArray)? entityWithRawArray,
     Function(EntityWithRequiredProperty)? entityWithRequiredProperty,
     Function(EntityWithSimpleProperties)? entityWithSimpleProperties,
     Function(EntityWithStrictArray)? entityWithStrictArray,
@@ -265,6 +275,10 @@ class Entity with EquatableMixin {
     }
     if(value is EntityWithPropertyWithDefaultValue && entityWithPropertyWithDefaultValue != null) {
       entityWithPropertyWithDefaultValue(value);
+      return;
+    }
+    if(value is EntityWithRawArray && entityWithRawArray != null) {
+      entityWithRawArray(value);
       return;
     }
     if(value is EntityWithRequiredProperty && entityWithRequiredProperty != null) {
@@ -346,6 +360,10 @@ class Entity with EquatableMixin {
     EntityWithPropertyWithDefaultValue value,
   ) : _value = value;
 
+  const Entity.entityWithRawArray(
+    EntityWithRawArray value,
+  ) : _value = value;
+
   const Entity.entityWithRequiredProperty(
     EntityWithRequiredProperty value,
   ) : _value = value;
@@ -404,6 +422,8 @@ class Entity with EquatableMixin {
         return Entity.entityWithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty.fromJson(json)!);
       case EntityWithPropertyWithDefaultValue.type :
         return Entity.entityWithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue.fromJson(json)!);
+      case EntityWithRawArray.type :
+        return Entity.entityWithRawArray(EntityWithRawArray.fromJson(json)!);
       case EntityWithRequiredProperty.type :
         return Entity.entityWithRequiredProperty(EntityWithRequiredProperty.fromJson(json)!);
       case EntityWithSimpleProperties.type :

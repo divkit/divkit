@@ -29,7 +29,9 @@ from .entities import (
     Url,
     Color,
     String,
-    Dictionary, BoolInt,
+    Dictionary,
+    BoolInt,
+    RawArray,
     _build_documentation_generator_properties
 )
 from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
@@ -229,6 +231,8 @@ def type_property_build(dictionary: Dict[str, any],
                                       location=location,
                                       dictionary=dictionary)
     elif type_value == 'array':
+        if 'items' not in dictionary:
+            return RawArray(), []
         items_types: Dict[str, any] = dictionary.get('items')
         single_name: str = name[:-1] if name.endswith('s') else name
         min_items: int = dictionary.get('minItems', 1)

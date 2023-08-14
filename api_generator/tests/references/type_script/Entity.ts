@@ -17,6 +17,7 @@ import {
     EntityWithOptionalProperty,
     EntityWithOptionalStringEnumProperty,
     EntityWithPropertyWithDefaultValue,
+    EntityWithRawArray,
     EntityWithRequiredProperty,
     EntityWithSimpleProperties,
     EntityWithStrictArray,
@@ -39,6 +40,7 @@ export type Entity =
     | EntityWithOptionalProperty
     | EntityWithOptionalStringEnumProperty
     | EntityWithPropertyWithDefaultValue
+    | EntityWithRawArray
     | EntityWithRequiredProperty
     | EntityWithSimpleProperties
     | EntityWithStrictArray

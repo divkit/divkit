@@ -78,6 +78,9 @@
             "$ref": "entity_with_property_with_default_value.json"
           },
           {
+            "$ref": "entity_with_raw_array.json"
+          },
+          {
             "$ref": "entity_with_required_property.json"
           },
           {
@@ -462,6 +465,26 @@
         },
         "required": [
           "type"
+        ]
+      }
+    },
+    {
+      "entity_with_raw_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_raw_array"
+            ]
+          },
+          "array": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "type",
+          "array"
         ]
       }
     },

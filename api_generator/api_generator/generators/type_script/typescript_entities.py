@@ -16,6 +16,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawArray,
     Declarable
 )
 from ...schema.modeling.text import Text, EMPTY
@@ -67,6 +68,8 @@ def _type_script_type_name(property_type: PropertyType, supports_expressions: bo
         raise TypeError('Is a static type')
     elif isinstance(property_type, Dictionary):
         return '{}'
+    elif isinstance(property_type, RawArray):
+        return 'unknown[]'
     elif isinstance(property_type, Array):
         item_type = property_type.property_type
         array_type_name = _type_script_type_name(item_type, supports_expressions)

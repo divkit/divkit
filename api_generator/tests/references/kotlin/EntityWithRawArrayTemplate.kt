@@ -17,33 +17,39 @@ import com.yandex.div.data.*
 import org.json.JSONArray
 
 @Mockable
-class EntityWithoutPropertiesTemplate : JSONSerializable, JsonTemplate<EntityWithoutProperties> {
+class EntityWithRawArrayTemplate : JSONSerializable, JsonTemplate<EntityWithRawArray> {
+    @JvmField final val array: Field<JSONArray>
 
     constructor (
         env: ParsingEnvironment,
-        parent: EntityWithoutPropertiesTemplate? = null,
+        parent: EntityWithRawArrayTemplate? = null,
         topLevel: Boolean = false,
         json: JSONObject
     ) {
         val logger = env.logger
+        array = JsonTemplateParser.readField(json, "array", topLevel, parent?.array, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithoutProperties {
-        return EntityWithoutProperties()
+    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRawArray {
+        return EntityWithRawArray(
+            array = array.resolve(env = env, key = "array", data = data, reader = ARRAY_READER)
+        )
     }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
+        json.writeField(key = "array", field = array)
         json.write(key = "type", value = TYPE)
         return json
     }
 
     companion object {
-        const val TYPE = "entity_without_properties"
+        const val TYPE = "entity_with_raw_array"
 
+        val ARRAY_READER: Reader<JSONArray> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
-        val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithoutPropertiesTemplate(env, json = it) }
+        val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithRawArrayTemplate(env, json = it) }
     }
 
 }

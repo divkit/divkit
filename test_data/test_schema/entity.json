@@ -37,6 +37,9 @@
       "$ref": "entity_with_property_with_default_value.json"
     },
     {
+      "$ref": "entity_with_raw_array.json"
+    },
+    {
       "$ref": "entity_with_required_property.json"
     },
     {

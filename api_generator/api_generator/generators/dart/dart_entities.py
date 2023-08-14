@@ -20,6 +20,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawArray,
     StringEnumeration,
     EntityEnumeration,
     ObjectFormat,
@@ -45,6 +46,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = DartColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = DartDictionary
+    elif isinstance(property_type, RawArray):
+        property_type.__class__ = DartRawArray
     elif isinstance(property_type, Double):
         property_type.__class__ = DartDouble
     elif isinstance(property_type, Int):
@@ -183,6 +186,8 @@ class DartProperty(Property):
             return f"json['{self.name}']{required_cast}"
         elif isinstance(property_type, Dictionary):
             return f"json{required_cast}"
+        elif isinstance(property_type, RawArray):
+            return f"json{required_cast}"
         elif isinstance(property_type, Url):
             return f"safeParseUri(json['{self.name}']){required_cast}"
         elif property_type.is_class():
@@ -271,6 +276,8 @@ class DartPropertyType(PropertyType):
             return 'String'
         elif isinstance(self, Dictionary):
             return 'Map<String, dynamic>'
+        elif isinstance(self, RawArray):
+            return 'List<dynamic>'
         elif isinstance(self, Url):
             return 'Uri'
         elif isinstance(self, Array):
@@ -398,6 +405,10 @@ class DartColor(DartPropertyType, Color):
 
 
 class DartDictionary(DartPropertyType, Dictionary):
+    pass
+
+
+class DartRawArray(DartPropertyType, RawArray):
     pass
 
 

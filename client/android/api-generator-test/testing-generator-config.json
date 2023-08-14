@@ -1,5 +1,5 @@
 {
   "lang": "kotlin",
-  "header": "// Generated code. Do not modify.\n\npackage com.yandex.testing\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.internal.parser.*\nimport com.yandex.div.internal.template.*\nimport com.yandex.div.internal.util.*\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.*\nimport com.yandex.div.core.annotations.Mockable\nimport java.io.IOException\nimport java.util.BitSet\nimport org.json.JSONObject\n",
+  "header": "// Generated code. Do not modify.\n\npackage com.yandex.testing\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.internal.parser.*\nimport com.yandex.div.internal.template.*\nimport com.yandex.div.internal.util.*\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.*\nimport com.yandex.div.core.annotations.Mockable\nimport java.io.IOException\nimport java.util.BitSet\nimport org.json.JSONObject\nimport org.json.JSONArray\n",
   "generateEquality": true
 }

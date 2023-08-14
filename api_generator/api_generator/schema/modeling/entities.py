@@ -844,6 +844,11 @@ class Dictionary(PropertyType):
 
 
 @dataclass
+class RawArray(PropertyType):
+    pass
+
+
+@dataclass
 class Array(PropertyType):
     property_type: PropertyType
     min_items: int

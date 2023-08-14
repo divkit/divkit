@@ -115,6 +115,12 @@
           },
           {
             "$resolved_refs": [
+              "entity_with_raw_array.json"
+            ],
+            "type": "$defined_entity_with_raw_array"
+          },
+          {
+            "$resolved_refs": [
               "entity_with_required_property.json"
             ],
             "type": "$defined_entity_with_required_property"
@@ -576,6 +582,26 @@
         },
         "required": [
           "type"
+        ]
+      }
+    },
+    {
+      "entity_with_raw_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_raw_array"
+            ]
+          },
+          "array": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "type",
+          "array"
         ]
       }
     },
