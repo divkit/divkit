@@ -14,6 +14,7 @@ public final class ExpressionResolver {
   private let errorTracker: ExpressionErrorTracker
   let variableTracker: VariableTracker
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let lock = AllocatedUnfairLock()
 
   public init(
     variables: DivVariables,
@@ -250,10 +251,10 @@ public final class ExpressionResolver {
   }
 
   private lazy var supportedFunctions: [
-    AnyCalcExpression.Symbol: AnyCalcExpression
-      .SymbolEvaluator
-  ] =
+    AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator
+  ] = lock.withLock {
     _supportedFunctions + ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }.flat()
+  }
 }
 
 private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
