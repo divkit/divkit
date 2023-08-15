@@ -5,6 +5,7 @@ extension XCTestCase {
   func getViewVisibilityCallCount(
     view: BlockView,
     rect: CGRect,
+    visibilityRect: CGRect? = nil,
     timerScheduler: TestTimerScheduler
   ) -> Int {
     let performer = UIActionEventPerformerMock()
@@ -12,7 +13,7 @@ extension XCTestCase {
     performer.addSubview(view)
     view.frame = rect
     view.layoutIfNeeded()
-    view.onVisibleBoundsChanged(from: rect, to: rect)
+    view.onVisibleBoundsChanged(from: rect, to: visibilityRect ?? rect)
     timerScheduler.timers.forEach { guard $0.isValid else { return }; $0.fire() }
 
     return performer.callCount

@@ -6,9 +6,9 @@ import LayoutKit
 extension DivDisappearAction {
   func makeDisappearAction(
     context: DivBlockModelingContext,
-    index: Int
+    logId: String
   ) -> VisibilityAction? {
-    guard let uiAction = uiAction(context: context, index: index) else {
+    guard let uiAction = uiAction(context: context, logId: logId) else {
       return nil
     }
 
@@ -35,7 +35,7 @@ extension DivDisappearAction {
 
   private func uiAction(
     context: DivBlockModelingContext,
-    index: Int
+    logId: String
   ) -> UserInterfaceAction? {
     let payloads = [
       makeDivActionPayload(cardId: context.cardId, source: .disappear),
@@ -46,7 +46,7 @@ extension DivDisappearAction {
     }
     return UserInterfaceAction(
       payloads: payloads,
-      path: context.parentPath + index
+      path: context.parentPath + logId
     )
   }
 }

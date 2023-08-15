@@ -147,9 +147,8 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     (visibilityActions ?? visibilityAction.asArray())
-      .enumerated()
-      .compactMap { index, action in
-        action.makeVisibilityAction(context: context, index: index)
+      .compactMap { action in
+        action.makeVisibilityAction(context: context, logId: action.logId)
       }
   }
 
@@ -157,9 +156,8 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     disappearActions?
-      .enumerated()
-      .compactMap { index, action in
-        action.makeDisappearAction(context: context, index: index)
+      .compactMap { action in
+        action.makeDisappearAction(context: context, logId: action.logId)
       }
       ?? []
   }

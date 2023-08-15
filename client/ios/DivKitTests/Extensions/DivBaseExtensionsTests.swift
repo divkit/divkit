@@ -53,6 +53,19 @@ final class DivBaseExtensionsTests: XCTestCase {
     XCTAssertEqual(oldTimers.allSatisfy { !$0.isValid }, true)
   }
 
+  func test_WhenBlockHasVisibilityAndDisappearAction_DoNotShareVisibilityCounter() throws {
+    let context = DivBlockModelingContext(scheduler: timer)
+
+    let blockVisibleFirst = try makeBlock(fromFile: "div-text-visibility-and-disappear-action", context: context)
+
+    let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
+    let view = blockVisibleFirst.makeBlockView()
+    XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timer), 1)
+
+    let invisibleRect: CGRect = .zero
+    XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, visibilityRect: invisibleRect, timerScheduler: timer), 1)
+  }
+
   private func expectVisibilityActionsToRun(
     forVisibleBlockFile file: String,
     invisibleBlockFile: String
