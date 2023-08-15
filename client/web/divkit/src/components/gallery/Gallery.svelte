@@ -297,10 +297,14 @@
         // Chromium will save scroll-snapped value and will not save exact one
         // Saved scroll position is used on resnapping (e.g. content change)
 
-        scroller.scroll({
-            [scrollDirection]: Math.max(0, galleryElements[index][elementOffset] + .01 - itemSpacing / 2),
-            behavior
-        });
+        const elem = galleryElements[index];
+
+        if (elem) {
+            scroller.scroll({
+                [scrollDirection]: Math.max(0, elem[elementOffset] + .01 - itemSpacing / 2),
+                behavior
+            });
+        }
     }
 
     function checkIsIntersecting(scroller: DOMRect, item: DOMRect): boolean {
