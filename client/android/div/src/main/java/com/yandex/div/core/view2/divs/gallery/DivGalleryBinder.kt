@@ -176,7 +176,8 @@ internal class DivGalleryBinder @Inject constructor(
                 )
         )
 
-        when (div.scrollMode.evaluate(resolver)) {
+        val scrollMode = div.scrollMode.evaluate(resolver)
+        when (scrollMode) {
             DivGallery.ScrollMode.DEFAULT -> {
                 view.pagerSnapStartHelper?.attachToRecyclerView(null)
             }
@@ -202,7 +203,7 @@ internal class DivGalleryBinder @Inject constructor(
             val position = galleryState?.visibleItemIndex
                 ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset
-            view.scrollToPositionInternal(position, offset)
+            view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
             view.addOnScrollListener(UpdateStateScrollListener(id, state, layoutManager))
         }
         view.addOnScrollListener(ScrollListener(divView, view, layoutManager, div))
@@ -215,17 +216,21 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.scrollToPositionInternal(position: Int, offset: Int? = null) {
+    private fun DivRecyclerView.scrollToPositionInternal(
+        position: Int,
+        offset: Int? = null,
+        scrollPosition: ScrollPosition
+    ) {
         val layoutManager = layoutManager as? DivGalleryItemHelper
         when {
             offset == null && position == 0 -> {
                 // Show left or top padding on first position without any snapping
-                layoutManager?.instantScrollToPosition(position)
+                layoutManager?.instantScrollToPosition(position, scrollPosition)
             }
-            offset != null -> layoutManager?.instantScrollToPositionWithOffset(position, offset)
+            offset != null -> layoutManager?.instantScrollToPositionWithOffset(position, offset, scrollPosition)
             else -> {
                 // Call on RecyclerView itself for proper snapping.
-                layoutManager?.instantScrollToPosition(position)
+                layoutManager?.instantScrollToPosition(position, scrollPosition)
             }
         }
     }

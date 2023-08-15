@@ -865,6 +865,7 @@ class Div2View private constructor(
                 bindLayoutParams(state.div.value(), expressionResolver)
             }
             divData = newData
+            div2Component.stateManager.updateState(dataTag, state.stateId, true)
             div2Component.divBinder.bind(rootDivView, state.div, this, DivStatePath.fromState(stateId))
             requestLayout()
             if (isAutoanimations) {

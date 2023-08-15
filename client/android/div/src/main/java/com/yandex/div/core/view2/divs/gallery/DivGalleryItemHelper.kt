@@ -110,11 +110,15 @@ internal interface DivGalleryItemHelper {
     fun firstVisibleItemPosition(): Int
     fun lastVisibleItemPosition(): Int
     fun width(): Int
-    fun instantScrollToPosition(position: Int)
-    fun instantScrollToPositionWithOffset(position: Int, offset: Int)
+    fun instantScrollToPosition(position: Int, scrollPosition: ScrollPosition)
+    fun instantScrollToPositionWithOffset(position: Int, offset: Int, scrollPosition: ScrollPosition)
     fun getLayoutManagerOrientation(): Int
 
-    fun instantScroll(position: Int, offset: Int = 0) {
+    fun instantScroll(
+        position: Int,
+        scrollPosition: ScrollPosition = ScrollPosition.DEFAULT,
+        offset: Int = 0
+    ) {
         view.doOnActualLayout {
             if (position == 0) {
                 view.scrollBy(-offset, -offset)
@@ -140,12 +144,31 @@ internal interface DivGalleryItemHelper {
 
             if (targetView == null) return@doOnActualLayout
 
-            val startGap = orientationHelper.getDecoratedStart(targetView) -
-                    orientationHelper.startAfterPadding -
-                    offset +
-                    targetView.marginStart
+            when (scrollPosition) {
+                ScrollPosition.CENTER -> {
+                    val childCoords = intArrayOf(0, 0)
+                    val parentCoords = intArrayOf(0, 0)
 
-            view.scrollBy(startGap, startGap)
+                    view.getLocationOnScreen(parentCoords)
+                    targetView.getLocationOnScreen(childCoords)
+
+                    val startOffset = childCoords[0] - parentCoords[0]
+                    val topOffset = childCoords[1] - parentCoords[1]
+
+                    val centerX = (targetView.width - view.width) / 2 + startOffset
+                    val centerY = (targetView.height - view.height) / 2 + topOffset
+                    view.scrollBy(centerX, centerY)
+                }
+
+                ScrollPosition.DEFAULT -> {
+                    val startGap = orientationHelper.getDecoratedStart(targetView) -
+                            orientationHelper.startAfterPadding -
+                            offset +
+                            targetView.marginStart
+
+                    view.scrollBy(startGap, startGap)
+                }
+            }
         }
     }
 
