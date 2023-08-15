@@ -85,7 +85,7 @@ internal class DivBaseBinder @Inject constructor(
         if(!divAccessibilityBinder.enabled) {
             view.applyFocusableState(div)
         }
-        view.observeVisibility(div, resolver, subscriber, divView)
+        view.observeVisibility(div, resolver, subscriber, divView, oldDiv)
         view.observeTransform(div, resolver, subscriber)
     }
 
@@ -421,12 +421,15 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         divView: Div2View,
+        oldDiv: DivBase?,
     ) {
+        var isFirstApply = oldDiv == null
         subscriber.addSubscription(div.visibility.observeAndGet(resolver) { visibility ->
             if (visibility != DivVisibility.GONE) {
                 applyTransform(div, resolver)
             }
-            applyVisibility(div, visibility, divView, resolver)
+            applyVisibility(div, visibility, divView, resolver, isFirstApply)
+            isFirstApply = false
         })
     }
 
@@ -434,7 +437,8 @@ internal class DivBaseBinder @Inject constructor(
         div: DivBase,
         divVisibility: DivVisibility,
         divView: Div2View,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        firstApply: Boolean,
     ) {
         val divTransitionHandler = divView.divTransitionHandler
 
@@ -470,7 +474,7 @@ internal class DivBaseBinder @Inject constructor(
                     )
                 }
                 (newVisibility == View.INVISIBLE || newVisibility == View.GONE)
-                    && visibility == View.VISIBLE -> {
+                    && visibility == View.VISIBLE  && !firstApply-> {
                     transitionBuilder.createAndroidTransition(
                         div.transitionOut,
                         Visibility.MODE_OUT,
