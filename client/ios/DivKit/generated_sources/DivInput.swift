@@ -60,7 +60,7 @@ public final class DivInput: DivBase {
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
-  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
+  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
   public let textColor: Expression<Color> // default value: #FF000000
   public let textVariable: String // at least 1 char
@@ -145,7 +145,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.start
   }
 
   public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
@@ -369,7 +369,7 @@ public final class DivInput: DivBase {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
-    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
+    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.start)
     self.textAlignmentVertical = textAlignmentVertical ?? .value(.center)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable

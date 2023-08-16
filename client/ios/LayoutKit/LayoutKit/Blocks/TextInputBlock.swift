@@ -39,6 +39,20 @@ public final class TextInputBlock: BlockWithTraits {
     public static let `default`: Self = .keyboard(.default)
   }
 
+  public enum TextAlignmentHorizontal: Equatable {
+    case left
+    case center
+    case right
+    case start
+    case end
+  }
+
+  public enum TextAlignmentVertical: Equatable {
+    case top
+    case center
+    case bottom
+  }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
@@ -54,6 +68,8 @@ public final class TextInputBlock: BlockWithTraits {
   public let path: UIElementPath
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
+  public let textAlignmentHorizontal: TextAlignmentHorizontal
+  public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
   public let validators: [TextInputValidator]?
   public let layoutDirection: UserInterfaceLayoutDirection
@@ -76,7 +92,9 @@ public final class TextInputBlock: BlockWithTraits {
     onBlurActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil,
     validators: [TextInputValidator]? = nil,
-    layoutDirection: UserInterfaceLayoutDirection
+    layoutDirection: UserInterfaceLayoutDirection,
+    textAlignmentHorizontal: TextAlignmentHorizontal = .start,
+    textAlignmentVertical: TextAlignmentVertical = .center
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -96,6 +114,8 @@ public final class TextInputBlock: BlockWithTraits {
     self.parentScrollView = parentScrollView
     self.validators = validators
     self.layoutDirection = layoutDirection
+    self.textAlignmentHorizontal = textAlignmentHorizontal
+    self.textAlignmentVertical = textAlignmentVertical
   }
 
   public var intrinsicContentWidth: CGFloat {

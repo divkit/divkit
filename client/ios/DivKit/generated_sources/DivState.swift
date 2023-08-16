@@ -58,6 +58,7 @@ public final class DivState: DivBase {
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]? // at least 1 elements
+  public let stateIdVariable: String? // at least 1 char
   public let states: [State] // at least 1 elements
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
@@ -157,6 +158,9 @@ public final class DivState: DivBase {
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
+  static let stateIdVariableValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
+
   static let statesValidator: AnyArrayValueValidator<DivState.State> =
     makeArrayValidator(minItems: 1)
 
@@ -212,6 +216,7 @@ public final class DivState: DivBase {
     paddings: DivEdgeInsets?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
+    stateIdVariable: String?,
     states: [State],
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
@@ -243,6 +248,7 @@ public final class DivState: DivBase {
     self.paddings = paddings ?? DivEdgeInsets()
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
+    self.stateIdVariable = stateIdVariable
     self.states = states
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
@@ -304,29 +310,34 @@ extension DivState: Equatable {
       return false
     }
     guard
+      lhs.stateIdVariable == rhs.stateIdVariable,
       lhs.states == rhs.states,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -358,6 +369,7 @@ extension DivState: Serializable {
     result["paddings"] = paddings.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
+    result["state_id_variable"] = stateIdVariable
     result["states"] = states.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()

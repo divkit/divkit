@@ -18,7 +18,7 @@ public final class DivGridTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnCount: Field<Expression<Int>>? // constraint: number >= 0
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
+  public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements

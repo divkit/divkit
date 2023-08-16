@@ -650,7 +650,7 @@ public final class DivTextTemplate: TemplateValue {
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let strike: Field<Expression<DivLineStyle>>? // default value: none
   public let text: Field<Expression<CFString>>? // at least 1 char
-  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
+  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textGradient: Field<DivTextGradientTemplate>?

@@ -276,7 +276,7 @@ public final class DivText: DivBase {
   public let selectedActions: [DivAction]? // at least 1 elements
   public let strike: Expression<DivLineStyle> // default value: none
   public let text: Expression<CFString> // at least 1 char
-  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
+  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
@@ -365,7 +365,7 @@ public final class DivText: DivBase {
   }
 
   public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.start
   }
 
   public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
@@ -628,7 +628,7 @@ public final class DivText: DivBase {
     self.selectedActions = selectedActions
     self.strike = strike ?? .value(.none)
     self.text = text
-    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
+    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.start)
     self.textAlignmentVertical = textAlignmentVertical ?? .value(.top)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient

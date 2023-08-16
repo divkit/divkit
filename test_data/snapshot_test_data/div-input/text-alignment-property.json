@@ -2,6 +2,7 @@
     "description": "Test text_alignment property in multi line Input",
     "platforms": [
         "android",
+        "ios",
         "web"
     ],
     "templates": {

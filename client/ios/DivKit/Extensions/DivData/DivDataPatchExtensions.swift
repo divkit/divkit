@@ -282,6 +282,7 @@ extension DivState {
       paddings: paddings,
       rowSpan: rowSpan,
       selectedActions: selectedActions,
+      stateIdVariable: stateIdVariable,
       states: patchedStates,
       tooltips: tooltips,
       transform: transform,

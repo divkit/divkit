@@ -168,7 +168,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? // default value: left
+  public let contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? // default value: start
   public let contentAlignmentVertical: Field<Expression<DivContentAlignmentVertical>>? // default value: top
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements

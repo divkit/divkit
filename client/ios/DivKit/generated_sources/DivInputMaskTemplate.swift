@@ -8,12 +8,15 @@ import Serialization
 public enum DivInputMaskTemplate: TemplateValue {
   case divFixedLengthInputMaskTemplate(DivFixedLengthInputMaskTemplate)
   case divCurrencyInputMaskTemplate(DivCurrencyInputMaskTemplate)
+  case divPhoneInputMaskTemplate(DivPhoneInputMaskTemplate)
 
   public var value: Any {
     switch self {
     case let .divFixedLengthInputMaskTemplate(value):
       return value
     case let .divCurrencyInputMaskTemplate(value):
+      return value
+    case let .divPhoneInputMaskTemplate(value):
       return value
     }
   }
@@ -24,6 +27,8 @@ public enum DivInputMaskTemplate: TemplateValue {
       return .divFixedLengthInputMaskTemplate(try value.resolveParent(templates: templates))
     case let .divCurrencyInputMaskTemplate(value):
       return .divCurrencyInputMaskTemplate(try value.resolveParent(templates: templates))
+    case let .divPhoneInputMaskTemplate(value):
+      return .divPhoneInputMaskTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -53,6 +58,14 @@ public enum DivInputMaskTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divPhoneInputMaskTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPhoneInputMask(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPhoneInputMask(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -78,6 +91,14 @@ public enum DivInputMaskTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivPhoneInputMask.type:
+      let result = DivPhoneInputMaskTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divPhoneInputMask(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPhoneInputMask(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
@@ -93,6 +114,8 @@ extension DivInputMaskTemplate {
       self = .divFixedLengthInputMaskTemplate(try DivFixedLengthInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivCurrencyInputMaskTemplate.type:
       self = .divCurrencyInputMaskTemplate(try DivCurrencyInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivPhoneInputMaskTemplate.type:
+      self = .divPhoneInputMaskTemplate(try DivPhoneInputMaskTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-input-mask_template", representation: dictionary)
     }

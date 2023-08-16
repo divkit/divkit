@@ -34,8 +34,12 @@ extension DivInput: DivBlockModeling {
       typo = typo.kerned(kern)
     }
 
-    if let lineHeight = resolveLineHeight(expressionResolver) {
-      typo = typo.with(height: CGFloat(lineHeight))
+    if let lineHeightInt = resolveLineHeight(expressionResolver) {
+      let lineHeight = CGFloat(lineHeightInt)
+      typo = typo.with(height: lineHeight)
+      if lineHeight > font.lineHeight {
+        typo = typo.with(baseline: (lineHeight - font.lineHeight) / 2)
+      }
     }
 
     let hintValue = resolveHintText(expressionResolver) ?? ""
@@ -66,7 +70,9 @@ extension DivInput: DivBlockModeling {
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView,
       validators: makeValidators(context),
-      layoutDirection: context.layoutDirection
+      layoutDirection: context.layoutDirection,
+      textAlignmentHorizontal: resolveTextAlignmentHorizontal(expressionResolver).textAlignment,
+      textAlignmentVertical: resolveTextAlignmentVertical(expressionResolver).textAlignment
     )
   }
 }
@@ -126,14 +132,34 @@ extension DivInput {
 }
 
 extension DivAlignmentHorizontal {
-  fileprivate var system: TextAlignment {
+  fileprivate var textAlignment: TextInputBlock.TextAlignmentHorizontal {
     switch self {
-    case .left, .start:
+    case .left:
       return .left
     case .center:
       return .center
-    case .right, .end:
+    case .right:
       return .right
+    case .start:
+      return .start
+    case .end:
+      return .end
+    }
+  }
+}
+
+extension DivAlignmentVertical {
+  fileprivate var textAlignment: TextInputBlock.TextAlignmentVertical {
+    switch self {
+    case .top:
+      return .top
+    case .center:
+      return .center
+    case .bottom:
+      return .bottom
+    case .baseline:
+      DivKitLogger.warning("Baseline alignment is not supported.")
+      return .center
     }
   }
 }
@@ -167,6 +193,8 @@ extension DivInputMask {
       )
     case .divCurrencyInputMask:
       return nil
+    case .divPhoneInputMask(_):
+      return nil
     }
   }
 
@@ -175,6 +203,8 @@ extension DivInputMask {
     case let .divFixedLengthInputMask(divFixedLengthInputMask):
       return .init(context: context, name: divFixedLengthInputMask.rawTextVariable)
     case .divCurrencyInputMask:
+      return nil
+    case .divPhoneInputMask(_):
       return nil
     }
   }

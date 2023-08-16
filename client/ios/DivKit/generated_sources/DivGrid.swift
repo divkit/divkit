@@ -17,7 +17,7 @@ public final class DivGrid: DivBase {
   public let border: DivBorder
   public let columnCount: Expression<Int> // constraint: number >= 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
+  public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
@@ -63,7 +63,7 @@ public final class DivGrid: DivBase {
   }
 
   public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.start
   }
 
   public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
@@ -231,7 +231,7 @@ public final class DivGrid: DivBase {
     self.border = border ?? DivBorder()
     self.columnCount = columnCount
     self.columnSpan = columnSpan
-    self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.left)
+    self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.start)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.top)
     self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions

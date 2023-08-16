@@ -46,19 +46,12 @@ public final class DivVideo: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -90,10 +83,7 @@ public final class DivVideo: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =

@@ -250,6 +250,7 @@ func makeDivState(
     paddings: nil,
     rowSpan: nil,
     selectedActions: nil,
+    stateIdVariable: nil,
     states: states,
     tooltips: nil,
     transform: nil,
