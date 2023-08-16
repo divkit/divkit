@@ -12,7 +12,11 @@ npm i @divkitframework/divkit --save
 
 [Example usage repos](../divkit-examples)
 
+### Inlude CSS
+
 For all variants of usage, css file `dist/client.css` is required. Include it in any way (import as module, link directly in html, etc).
+
+### Include js
 
 JS code can be bundled with various strategies. Basically you need to answer a few questions
 
