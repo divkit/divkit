@@ -233,7 +233,8 @@
               "margins": {
                 "top": 10,
                 "bottom": 10,
-                "left": 20
+                "left": 20,
+                "start": 20
               },
               "visibility_actions": [
                 {
