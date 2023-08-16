@@ -987,13 +987,13 @@
     "en": "Regular expression for validating character inputs. For example, when a mask is digit-only.",
     "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
   },
-  "div_input_mask_raw_text_variable": {
-    "en": "Name of the variable to store the unprocessed value.",
-    "ru": "Имя переменной для хранения необработанного значения."
-  },
   "div_input_mask_phone": {
     "en": "Mask for entering a phone with a dynamic definition of the regional format.",
     "ru": "Маска для ввода телефона c динамическим определением регионального формата."
+  },
+  "div_input_mask_raw_text_variable": {
+    "en": "Name of the variable to store the unprocessed value.",
+    "ru": "Имя переменной для хранения необработанного значения."
   },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
@@ -1515,10 +1515,6 @@
     "en": "State ID. It must be unique at one hierarchy level.",
     "ru": "Идентификатор состояния. Должен быть уникальным на одном уровне иерархии."
   },
-  "div_state_state_id_variable": {
-    "en": "Name of the variable where the current state ID value is stored. If the value of a variable changes, then the active state will also be changed. The variable takes precedence over the `default_state_id` field.",
-    "ru": "Название переменной, в которую сохраняется текущее идентификатор активного состояния. Если меняется значение переменной, то и активное состояние будет изменено. Переменная приоритетнее поля `default_state_id`."
-  },
   "div_state_div_state_swipe_out_actions": {
     "en": "Actions when swiping the state horizontally.",
     "ru": "Действия при смахивании состояния по горизонтали."
@@ -1526,6 +1522,10 @@
   "div_state_short": {
     "en": "State.",
     "ru": "Состояние."
+  },
+  "div_state_state_id_variable": {
+    "en": "Name of the variable where the current state ID value is stored. If the value of a variable changes, then the active state will also be changed. The variable takes precedence over the `default_state_id` field.",
+    "ru": "Название переменной, в которую сохраняется текущее идентификатор активного состояния. Если меняется значение переменной, то и активное состояние будет изменено. Переменная приоритетнее поля `default_state_id`."
   },
   "div_state_states": {
     "en": "States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.",
