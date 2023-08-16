@@ -11,7 +11,6 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.Releasable
-import com.yandex.div.core.view2.ReleaseManager
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCustom
@@ -24,7 +23,6 @@ internal class ReleaseViewVisitor @Inject constructor(
     private val divCustomViewAdapter: DivCustomViewAdapter?,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter?,
     private val divExtensionController: DivExtensionController,
-    private val releaseManager: ReleaseManager,
 ) : DivViewVisitor() {
 
     override fun visit(view: DivWrapLayout) = releaseInternal(view, view.div)
@@ -79,12 +77,10 @@ internal class ReleaseViewVisitor @Inject constructor(
     internal fun release(view: View) {
         if (view is Releasable) {
             view.release()
-            releaseManager.stopObservingView(divView, view)
         }
 
         view.releasableList?.forEach { releasable ->
             releasable.release()
-            releaseManager.stopObservingView(divView, releasable)
         }
     }
 }

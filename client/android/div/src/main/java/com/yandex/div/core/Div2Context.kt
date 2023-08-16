@@ -37,10 +37,10 @@ import com.yandex.div.core.view2.Div2View
  */
 @Mockable
 class Div2Context @MainThread private constructor(
-    internal val themedBaseContext: ContextThemeWrapper,
+    private val baseContext: ContextThemeWrapper,
     internal val div2Component: Div2Component,
     internal val lifecycleOwner: LifecycleOwner? = null
-) : ContextWrapper(themedBaseContext) {
+) : ContextWrapper(baseContext) {
 
     val globalVariableController: GlobalVariableController
         get() = div2Component.globalVariableController
@@ -126,7 +126,7 @@ class Div2Context @MainThread private constructor(
      * instead of creating a new instance of [Div2Context].
      */
     fun childContext(lifecycleOwner: LifecycleOwner?): Div2Context {
-        return Div2Context(themedBaseContext, div2Component, lifecycleOwner)
+        return Div2Context(baseContext, div2Component, lifecycleOwner)
     }
 
     /**

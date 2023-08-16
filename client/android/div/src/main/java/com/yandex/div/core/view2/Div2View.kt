@@ -210,6 +210,7 @@ class Div2View private constructor(
 
     init {
         timeCreated = DivCreationTracker.currentUptimeMillis
+        div2Component.releaseManager.observeDivLifecycle(this)
     }
 
     @JvmOverloads

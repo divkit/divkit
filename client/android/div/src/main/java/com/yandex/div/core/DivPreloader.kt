@@ -10,7 +10,6 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.DivImagePreloader
-import com.yandex.div.core.view2.ReleaseManager
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -42,7 +41,7 @@ class DivPreloader internal constructor(
         imagePreloader = imagePreloader,
         customViewAdapter = customViewAdapter,
         customContainerViewAdapter = null,
-        extensionController = DivExtensionController(extensionHandlers, ReleaseManager())
+        extensionController = DivExtensionController(extensionHandlers)
     )
 
     fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {

@@ -51,16 +51,11 @@ open class DivBinderTest {
         on { expressionResolver } doReturn expressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
     }
-    private val divExtensionController = DivExtensionController(emptyList(), mock())
+    private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(
-        ReleaseViewVisitor(
-            divView,
-            divCustomViewAdapter =  null,
-            divCustomContainerViewAdapter = null,
-            divExtensionController,
-            mock()
-        )
+        ReleaseViewVisitor(divView, null, null,
+            divExtensionController)
     ).apply {
         whenever(divView.releaseViewVisitor).doReturn(this)
     }

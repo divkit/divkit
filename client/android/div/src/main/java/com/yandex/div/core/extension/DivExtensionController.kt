@@ -4,8 +4,6 @@ import android.view.View
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.Releasable
-import com.yandex.div.core.view2.ReleaseManager
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import javax.inject.Inject
@@ -14,7 +12,6 @@ import javax.inject.Inject
 @Mockable
 internal class DivExtensionController @Inject constructor(
     private val extensionHandlers: List<DivExtensionHandler>,
-    private val releaseManager: ReleaseManager
 ) {
 
     fun preprocessExtensions(div: DivBase, resolver: ExpressionResolver) {
@@ -47,10 +44,6 @@ internal class DivExtensionController @Inject constructor(
             if (handler.matches(div)) {
                 handler.bindView(divView, view, div)
             }
-        }
-
-        if (view is Releasable) {
-            releaseManager.observeViewLifecycle(divView, view)
         }
     }
 

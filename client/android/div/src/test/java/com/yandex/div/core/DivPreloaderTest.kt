@@ -29,7 +29,7 @@ class DivPreloaderTest {
     private val divImagePreloader = mock<DivImagePreloader>()
 
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
-    private val extensionHandlersController = DivExtensionController(extensionHandlers, mock())
+    private val extensionHandlersController = DivExtensionController(extensionHandlers)
 
     private val text = mock<DivText>()
     private val divText = Div.Text(text)
