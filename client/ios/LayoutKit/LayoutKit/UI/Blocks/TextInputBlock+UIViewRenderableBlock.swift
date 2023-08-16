@@ -309,7 +309,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     maskedViewModel?.$text.currentAndNewValues
       .addObserver { [weak self] input in
         guard let self = self else { return }
-        setTextData(input)
+        self.setTextData(input)
         self._textValue.setValue(input, responder: self)
       }.dispose(in: disposePool)
   }

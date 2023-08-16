@@ -20,20 +20,13 @@ open class DivViewController: UIViewController {
     self.divKitComponents = divKitComponents
     self.divView = DivView(divKitComponents: divKitComponents)
     self.debugParams = debugParams
+
     super.init(nibName: nil, bundle: nil)
 
     view.addSubview(divView)
+    
     jsonProvider.addObserver { [weak self] in
-      guard let self else { return }
-      divView.setSource(
-        DivBlockProvider.Source(
-          kind: .json($0),
-          cardId: "DivViewCard"
-        ),
-        debugParams: debugParams,
-        shouldResetPreviousCardData: true
-      )
-      divView.setParentScrollView(scrollView)
+      self?.setData($0)
     }.dispose(in: disposePool)
   }
 
@@ -63,4 +56,16 @@ open class DivViewController: UIViewController {
   }
 
   open func onViewUpdated() {}
+
+  private func setData(_ data: [String: Any]) {
+    divView.setSource(
+      DivBlockProvider.Source(
+        kind: .json(data),
+        cardId: "DivViewCard"
+      ),
+      debugParams: debugParams,
+      shouldResetPreviousCardData: true
+    )
+    divView.setParentScrollView(scrollView)
+  }
 }
