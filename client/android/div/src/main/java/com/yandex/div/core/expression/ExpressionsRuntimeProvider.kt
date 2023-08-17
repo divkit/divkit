@@ -63,6 +63,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                 is DivVariable.Color -> existingVariable is Variable.ColorVariable
                 is DivVariable.Url -> existingVariable is Variable.UrlVariable
                 is DivVariable.Dict -> existingVariable is Variable.DictVariable
+                is DivVariable.Array -> existingVariable is Variable.ArrayVariable
             }.apply { /*exhaustive*/ }
 
             // This usually happens when you're using same DivDataTag for DivData
@@ -134,5 +135,6 @@ private val DivVariable.name: String
             is DivVariable.Color -> this.value.name
             is DivVariable.Url -> this.value.name
             is DivVariable.Dict -> this.value.name
+            is DivVariable.Array -> this.value.name
         }
     }

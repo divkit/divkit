@@ -1975,6 +1975,10 @@
     "en": "An arbitrary object in JSON format.",
     "ru": "Произвольный объект в формате JSON."
   },
+  "div_variable_array": {
+    "en": "An arbitrary array in JSON format.",
+    "ru": "Произвольный массив в формате JSON."
+  },
   "div_variable_integer": {
     "en": "An integer variable.",
     "ru": "Целочисленная переменная."

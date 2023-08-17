@@ -107,6 +107,20 @@ object RightEnumValue : EnumValue("right"),
     Tooltip.Position
 
 @Generated
+object StartEnumValue : EnumValue("start"),
+    AlignmentHorizontal,
+    ContentAlignmentHorizontal,
+    Gallery.CrossContentAlignment,
+    Text.Truncate
+
+@Generated
+object EndEnumValue : EnumValue("end"),
+    AlignmentHorizontal,
+    ContentAlignmentHorizontal,
+    Gallery.CrossContentAlignment,
+    Text.Truncate
+
+@Generated
 object TopEnumValue : EnumValue("top"),
     AlignmentVertical,
     ContentAlignmentVertical,
@@ -255,16 +269,6 @@ object RegularEnumValue : EnumValue("regular"),
 @Generated
 object BoldEnumValue : EnumValue("bold"),
     FontWeight
-
-@Generated
-object StartEnumValue : EnumValue("start"),
-    Gallery.CrossContentAlignment,
-    Text.Truncate
-
-@Generated
-object EndEnumValue : EnumValue("end"),
-    Gallery.CrossContentAlignment,
-    Text.Truncate
 
 @Generated
 object PagingEnumValue : EnumValue("paging"),
@@ -489,6 +493,14 @@ val DivScope.right: RightEnumValue
     get() = RightEnumValue
 
 @Generated
+val DivScope.start: StartEnumValue
+    get() = StartEnumValue
+
+@Generated
+val DivScope.end: EndEnumValue
+    get() = EndEnumValue
+
+@Generated
 val DivScope.top: TopEnumValue
     get() = TopEnumValue
 
@@ -619,14 +631,6 @@ val DivScope.regular: RegularEnumValue
 @Generated
 val DivScope.bold: BoldEnumValue
     get() = BoldEnumValue
-
-@Generated
-val DivScope.start: StartEnumValue
-    get() = StartEnumValue
-
-@Generated
-val DivScope.end: EndEnumValue
-    get() = EndEnumValue
 
 @Generated
 val DivScope.paging: PagingEnumValue

@@ -179,6 +179,30 @@
         "name",
         "value"
       ]
+    },
+    "array_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_array",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        "value": {
+          "type": "array",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
     }
   },
   "anyOf": [
@@ -205,6 +229,12 @@
       "platforms": [
         "web",
         "ios"
+      ]
+    },
+    {
+      "$ref": "#/definitions/array_variable",
+      "platforms": [
+        "android"
       ]
     }
   ]

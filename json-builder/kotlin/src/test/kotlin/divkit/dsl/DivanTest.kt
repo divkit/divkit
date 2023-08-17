@@ -154,6 +154,37 @@ class DivanTest {
             JSONCompareMode.STRICT
         )
     }
+
+    @Test
+    fun `json array variable`() {
+        val card = divan {
+            val array = arrayVariable(
+                name = "array_variable",
+                value = listOf(
+                    "outer_string",
+                    123,
+                    true,
+                    arrayVariable(
+                        value = listOf(
+                            "inner_string",
+                            456,
+                            false
+                        )
+                    )
+                )
+            )
+            data(
+                logId = "test",
+                div = text(),
+                variables = listOf(array)
+            )
+        }
+        assertEquals(
+            readResource("/json/array_variable.json"),
+            card.toJson(),
+            JSONCompareMode.STRICT
+        )
+    }
 }
 
 private fun Divan.toJson() = JsonMapper.builder().build().writeValueAsString(this)

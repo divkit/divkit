@@ -8,6 +8,7 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.parser.toBoolean
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -145,6 +146,25 @@ sealed class Variable {
         }
     }
 
+    class ArrayVariable(
+            override val name: String,
+            val defaultValue: JSONArray
+    ): Variable() {
+        internal var value: JSONArray = defaultValue
+            set(value) {
+                if (field == value) {
+                    return
+                }
+                field = value
+                notifyVariableChanged(this)
+            }
+
+        @MainThread
+        fun set(newValue: JSONArray) {
+            value = newValue
+        }
+    }
+
     fun getValue(): Any {
         return when (this) {
             is StringVariable -> value
@@ -154,6 +174,7 @@ sealed class Variable {
             is ColorVariable -> value
             is UrlVariable -> value
             is DictVariable -> value
+            is ArrayVariable -> value
         }
     }
 
@@ -166,6 +187,7 @@ sealed class Variable {
             is ColorVariable -> defaultValue
             is UrlVariable -> defaultValue
             is DictVariable -> defaultValue
+            is ArrayVariable -> defaultValue
         }
     }
 
@@ -197,6 +219,7 @@ sealed class Variable {
             }
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
+            is ArrayVariable -> value = newValue.parseAsJsonArray()
         }
     }
 
@@ -211,6 +234,7 @@ sealed class Variable {
             this is ColorVariable && from is ColorVariable -> this.value = from.value
             this is UrlVariable && from is UrlVariable -> this.value = from.value
             this is DictVariable && from is DictVariable -> this.value = from.value
+            this is ArrayVariable && from is ArrayVariable -> this.value = from.value
             else -> throw VariableMutationException("Setting value to $this from $from not supported!")
         }
     }
@@ -258,6 +282,14 @@ sealed class Variable {
     private fun String.parseAsJsonObject(): JSONObject {
         return try {
             JSONObject(this)
+        } catch (e: JSONException) {
+            throw VariableMutationException(cause = e)
+        }
+    }
+
+    private fun String.parseAsJsonArray(): JSONArray {
+        return try {
+            JSONArray(this)
         } catch (e: JSONException) {
             throw VariableMutationException(cause = e)
         }
