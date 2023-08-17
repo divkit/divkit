@@ -154,15 +154,16 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
 
     if (lp.leftMargin != leftMargin || lp.topMargin != topMargin
         || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin
-        || startMargin != null || endMargin != null) {
-        lp.leftMargin = leftMargin
+        || (startMargin != null && lp.marginStart != startMargin)
+        || (endMargin != null && lp.marginEnd != endMargin)) {
         lp.topMargin = topMargin
+        lp.bottomMargin = bottomMargin
         if (startMargin != null || endMargin != null) {
             lp.marginStart = startMargin ?: 0
             lp.marginEnd = endMargin ?: 0
         } else {
+            lp.leftMargin = leftMargin
             lp.rightMargin = rightMargin
-            lp.bottomMargin = bottomMargin
         }
         requestLayout()
     }
