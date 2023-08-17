@@ -6,10 +6,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Path
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.animation.PathInterpolator
@@ -83,7 +85,13 @@ class Div2Activity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = getString(R.string.demo)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val transitionScheduler = DivParentTransitionScheduler(binding.container)

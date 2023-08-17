@@ -1,10 +1,12 @@
 package com.yandex.divkit.demo.div
 
 import android.content.Context
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
@@ -76,7 +78,13 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = getString(R.string.demo)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener {
             super.onBackPressed()
         }

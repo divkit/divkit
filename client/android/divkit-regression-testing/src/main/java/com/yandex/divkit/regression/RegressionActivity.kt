@@ -1,9 +1,11 @@
 package com.yandex.divkit.regression
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -36,7 +38,13 @@ class RegressionActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.regressionToolbar)
         binding.toolbarLayout.title = getString(R.string.regression_label)
-        binding.regressionToolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.regressionToolbar.setNavigationIcon(icon)
         binding.toolbarLayout.setCollapsedTitleTextColor(Color.BLACK)
         binding.regressionToolbar.setNavigationOnClickListener { onBackPressed() }
 

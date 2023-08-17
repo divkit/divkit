@@ -2,9 +2,11 @@ package com.yandex.divkit.regression
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -72,8 +74,14 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        menu?.prepareOptionsMenu(PREV_ITEM_ID, R.drawable.previous)
-        menu?.prepareOptionsMenu(NEXT_ITEM_ID, R.drawable.next)
+        val config: Configuration = resources.configuration
+        val (iconPrev, iconNext) = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.next to R.drawable.previous
+        } else {
+            R.drawable.previous to R.drawable.next
+        }
+        menu?.prepareOptionsMenu(PREV_ITEM_ID, iconPrev)
+        menu?.prepareOptionsMenu(NEXT_ITEM_ID, iconNext)
         return true
     }
 
