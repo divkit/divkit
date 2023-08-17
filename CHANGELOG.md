@@ -1,14 +1,37 @@
+## 27.3.0
+
+# JSON Schema:
+* Added phone input mask schema
+* Added `state_id_variable` to `DivState`
+
+# Android Client:
+* Enabled accessibility flag by default
+* Fixed state update on rebind
+* Fixed showing `transition` from `visible` to `invisible`/`gone` on first draw
+* Fixed `SQLiteFullException` in `DivStorage` causing app crash
+
+# iOS Client:
+* Added RTL support for `DivImage`, `DivInput`, `DivSlider`.
+* Fixed `updateCardAction` calls for elements with variables binding.
+* Fixed visibility counters.
+* Fixed Lottie and Rive blocks comparison.
+
+# Web Client:
+Fixes:
+* Fixed an issue with a `gallery` component with the `default_item` outside of the items range
+
+
 ## 27.2.0
 
 # JSON Schema:
-* Replaced `left` with `start` alignment by default 
+* Replaced `left` with `start` alignment by default
 * Added `center` `DivTooltip` position
 * Added `aspect` to `DivVideo`
 
 # Android Client:
 * Fixed `DivTooltip` with `match_parent` size
 * Fixed crash caused by `DivTimer` actions execution after `DivView` detach
-* Observe `DivVideo` `muted` property 
+* Observe `DivVideo` `muted` property
 * Updated video player manager
 * Improved binding performance
 
@@ -85,7 +108,7 @@ Fixes:
 * Added `testRegex` function.
 * Supported `constrained` property in `wrap_content` size for pagers.
 * Ignore constrained along wrap-container's cross axis.
-* Fixed gallery `item_space` in RTL layout direction. 
+* Fixed gallery `item_space` in RTL layout direction.
 
 # iOS Client:
 * Ignore constrained along wrap-container's cross axis.

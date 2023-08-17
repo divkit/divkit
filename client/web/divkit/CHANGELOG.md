@@ -1,4 +1,10 @@
-## 27.2.0 (July 14, 2023)
+## 27.3.0 (August 21, 2023)
+
+Fixes:
+* Fixed an issue with a `gallery` component with the `default_item` outside of the items range
+
+
+## 27.2.0 (August 14, 2023)
 
 Additions:
 * Added `div-patch`, `download` action and `download_callbacks` support
