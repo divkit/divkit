@@ -253,7 +253,8 @@ public final class ExpressionResolver {
   private lazy var supportedFunctions: [
     AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator
   ] = lock.withLock {
-    _supportedFunctions + ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }.flat()
+    ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }
+      .reduce(into: _supportedFunctions) { $0[$1.0] = $1.1 }
   }
 }
 

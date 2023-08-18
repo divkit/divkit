@@ -20,14 +20,14 @@ enum ValueFunctions: String, CaseIterable {
   case getStoredBooleanValue
 
   func getDeclaration(resolver: ExpressionResolver)
-    -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [
+    -> (AnyCalcExpression.Symbol, AnyCalcExpression.SymbolEvaluator) {
+    let function = getFunction(resolver: resolver)
+    return (
       .function(
         rawValue,
-        arity: getFunction(resolver: resolver).arity
-      ): getFunction(resolver: resolver)
-        .symbolEvaluator,
-    ]
+        arity: function.arity
+      ), function.symbolEvaluator
+    )
   }
 
   func getFunction(resolver: ExpressionResolver) -> Function {
