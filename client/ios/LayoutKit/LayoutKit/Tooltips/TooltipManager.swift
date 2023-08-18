@@ -129,7 +129,11 @@ extension TooltipAnchorView {
           id: tooltip.id,
           duration: tooltip.duration,
           view: {
-            let tooltipView = tooltip.block.makeBlockView()
+            var tooltipView: VisibleBoundsTrackingView = tooltip.block.makeBlockView()
+            if let tooltipViewFactory = tooltip.tooltipViewFactory,
+               let view = tooltipViewFactory.value {
+              tooltipView = view
+            }
             let frame = tooltip.calculateFrame(targeting: bounds)
             tooltipView.frame = convert(frame, to: nil)
             return tooltipView

@@ -84,7 +84,7 @@ extension DivBase {
         }
       ),
       scheduler: context.scheduler,
-      tooltips: try makeTooltips(context: context)
+      tooltips: try tooltips.makeTooltips(context: context)
     )
     .addingTransform(
       transform: transform.resolveRotation(expressionResolver)
@@ -176,15 +176,6 @@ extension DivBase {
     }
 
     return nil
-  }
-
-  private func makeTooltips(context: DivBlockModelingContext) throws -> [BlockTooltip] {
-    try tooltips?.iterativeFlatMap { div, index in
-      let tooltipContext = modified(context) {
-        $0.parentPath = $0.parentPath + "tooltip" + index
-      }
-      return try div.makeTooltip(context: tooltipContext)
-    } ?? []
   }
 
   private func applyTransitioningAnimations(
@@ -365,49 +356,6 @@ extension DivBorder {
       topRight: CGFloat(topRight),
       bottomLeft: CGFloat(bottomLeft),
       bottomRight: CGFloat(bottomRight)
-    )
-  }
-}
-
-extension DivTooltip {
-  fileprivate func makeTooltip(context: DivBlockModelingContext) throws
-    -> BlockTooltip? {
-    let expressionResolver = context.expressionResolver
-    guard let position = resolvePosition(expressionResolver)?.cast() else {
-      return nil
-    }
-    let block = try div.value.makeBlock(context: context)
-    return BlockTooltip(
-      id: id,
-      block: block,
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      offset: offset?.cast(with: expressionResolver) ?? .zero,
-      position: position
-    )
-  }
-}
-
-extension DivTooltip.Position {
-  fileprivate func cast() -> BlockTooltip.Position {
-    switch self {
-    case .left: return .left
-    case .topLeft: return .topLeft
-    case .top: return .top
-    case .topRight: return .topRight
-    case .right: return .right
-    case .bottomRight: return .bottomRight
-    case .bottom: return .bottom
-    case .bottomLeft: return .bottomLeft
-    case .center: return .center
-    }
-  }
-}
-
-extension DivPoint {
-  fileprivate func cast(with expressionResolver: ExpressionResolver) -> CGPoint {
-    CGPoint(
-      x: x.resolveUnit(expressionResolver).makeScaledValue(x.resolveValue(expressionResolver) ?? 0),
-      y: y.resolveUnit(expressionResolver).makeScaledValue(y.resolveValue(expressionResolver) ?? 0)
     )
   }
 }

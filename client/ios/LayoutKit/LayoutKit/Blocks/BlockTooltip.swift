@@ -1,6 +1,11 @@
+import CommonCorePublic
 import CoreGraphics
 
-import CommonCorePublic
+#if os(iOS)
+public typealias TooltipViewFactory = Variable<VisibleBoundsTrackingView?>
+#else
+public typealias TooltipViewFactory = Variable<ViewType?>
+#endif
 
 public struct BlockTooltip: Equatable {
   public enum Position: String, CaseIterable {
@@ -20,19 +25,22 @@ public struct BlockTooltip: Equatable {
   public let duration: Duration
   public let offset: CGPoint
   public let position: Position
+  public let tooltipViewFactory: TooltipViewFactory?
 
   public init(
     id: String,
     block: Block,
     duration: Duration,
     offset: CGPoint,
-    position: BlockTooltip.Position
+    position: BlockTooltip.Position,
+    tooltipViewFactory: TooltipViewFactory? = nil
   ) {
     self.id = id
     self.block = block
     self.duration = duration
     self.offset = offset
     self.position = position
+    self.tooltipViewFactory = tooltipViewFactory
   }
 
   public static func ==(lhs: BlockTooltip, rhs: BlockTooltip) -> Bool {

@@ -278,7 +278,8 @@ public final class DivKitComponents {
       parentScrollView: parentScrollView,
       layoutDirection: layoutDirection,
       variableTracker: variableTracker,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      tooltipViewFactory: makeTooltipViewFactory(divKitComponents: self, cardId: cardId)
     )
   }
 

@@ -2,6 +2,7 @@ import CoreGraphics
 
 import BasePublic
 import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 import NetworkingPublic
 import Serialization
@@ -38,6 +39,7 @@ public struct DivBlockModelingContext {
   public let errorsStorage: DivErrorsStorage
   internal let variableTracker: DivVariableTracker?
   private let persistentValuesStorage: DivPersistentValuesStorage
+  public let tooltipViewFactory: DivTooltipViewFactory?
 
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
@@ -80,7 +82,8 @@ public struct DivBlockModelingContext {
     errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     variableTracker: DivVariableTracker? = nil,
-    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    tooltipViewFactory: DivTooltipViewFactory? = nil
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -105,6 +108,7 @@ public struct DivBlockModelingContext {
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker
     self.persistentValuesStorage = persistentValuesStorage
+    self.tooltipViewFactory = tooltipViewFactory
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {
