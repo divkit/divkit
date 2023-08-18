@@ -13,6 +13,7 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
+import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TemporaryDivStateCache
@@ -34,6 +35,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
+import com.yandex.div.internal.Log
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
@@ -57,7 +59,8 @@ internal class DivStateBinder @Inject constructor(
     private val divPatchCache: DivPatchCache,
     private val div2Logger: Div2Logger,
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
-    private val errorCollectors: ErrorCollectors
+    private val errorCollectors: ErrorCollectors,
+    private val variableBinder: TwoWayStringVariableBinder,
 ) {
 
     /**
@@ -88,7 +91,9 @@ internal class DivStateBinder @Inject constructor(
                 .logError(missingValue("id", divStatePath.toString()))
         }
         val path = "$divStatePath/$id"
+        layout.observeStateIdVariable(div, divView, divStatePath)
         val stateId = temporaryStateCache.getState(cardId, path) ?: divStateCache.getState(cardId, path)
+        stateId?.let { layout.valueUpdater?.invoke(it) }
 
         val oldState = div.states.find { it.stateId == layout.stateId }
             ?: div.getDefaultState(resolver)
@@ -198,6 +203,28 @@ internal class DivStateBinder @Inject constructor(
 
         layout.activeStateDiv = newStateDiv
         layout.path = currentPath
+    }
+
+    private fun DivStateLayout.observeStateIdVariable(div: DivState,
+                                       divView: Div2View,
+                                       divStatePath: DivStatePath) {
+        val stateIdVariable = div.stateIdVariable ?: return
+
+        val subscription = variableBinder.bindVariable(
+                divView,
+                stateIdVariable,
+                callbacks = object : TwoWayStringVariableBinder.Callbacks {
+                    override fun onVariableChanged(value: String?) {
+                        if (value == null) return
+                        val newDivStatePath = divStatePath.append(div.divId ?: "", value)
+                        divView.switchToState(newDivStatePath, true)
+                    }
+
+                    override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
+                        this@observeStateIdVariable.valueUpdater = valueUpdater
+                    }
+                })
+        addSubscription(subscription)
     }
 
     private fun untrackRecursively(outgoing: View?, divView: Div2View) {

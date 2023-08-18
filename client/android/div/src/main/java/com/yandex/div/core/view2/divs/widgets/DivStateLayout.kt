@@ -45,7 +45,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     var swipeOutCallback: (() -> Unit)? = null
     internal var divState: DivState? = null
     internal var activeStateDiv: Div? = null
-
+    var valueUpdater: ((String) -> Unit)? = null
     override var isTransient = false
         set(value) = invalidateAfter {
             field = value
