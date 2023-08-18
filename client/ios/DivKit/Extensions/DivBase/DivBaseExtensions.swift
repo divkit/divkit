@@ -398,6 +398,7 @@ extension DivTooltip.Position {
     case .bottomRight: return .bottomRight
     case .bottom: return .bottom
     case .bottomLeft: return .bottomLeft
+    case .center: return .center
     }
   }
 }

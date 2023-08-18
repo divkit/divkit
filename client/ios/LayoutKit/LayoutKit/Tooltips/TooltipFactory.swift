@@ -66,6 +66,11 @@ extension BlockTooltip.Position {
         cornerTailSize,
         drawingHandler: { drawCornerTail(style: .topRight, color: color, context: $0) }
       )
+    case .center:
+      imageHolder = Image.imageOfSize(
+        cornerTailSize,
+        drawingHandler: { _ in }
+      )
     }
     return ImageBlock(imageHolder: imageHolder!)
   }
@@ -129,6 +134,13 @@ extension BlockTooltip.Position {
           child.addingEdgeInsets(EdgeInsets(top: 5, left: 0, bottom: 0, right: 1)),
           makeTail(color: theme.backgroundColor),
         ]
+      )
+    case .center:
+      return try! ContainerBlock(
+        layoutDirection: .vertical,
+        horizontalChildrenAlignment: .center,
+        gaps: [0, -1, 0],
+        children: [makeTail(color: theme.backgroundColor), child]
       )
     }
   }

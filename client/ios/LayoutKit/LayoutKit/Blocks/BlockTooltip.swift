@@ -12,6 +12,7 @@ public struct BlockTooltip: Equatable {
     case bottomRight
     case bottom
     case bottomLeft
+    case center
   }
 
   public let id: String
