@@ -68,8 +68,9 @@ extension Optional where Wrapped == [DivTooltip] {
 public func makeTooltipViewFactory(
   divKitComponents: DivKitComponents,
   cardId: DivCardID
-) -> DivTooltipViewFactory {
-  { (div: Div) in
+) -> DivTooltipViewFactory? {
+  #if os(iOS)
+  return { (div: Div) in
     let view = DivView(divKitComponents: divKitComponents)
     let divData = DivData(
       logId: cardId.rawValue,
@@ -82,4 +83,7 @@ public func makeTooltipViewFactory(
     view.setSource(.init(kind: .divData(divData), cardId: cardId))
     return view
   }
+  #else
+  return nil
+  #endif
 }
