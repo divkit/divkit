@@ -11,7 +11,11 @@
         }
       ],
       "result_type": "boolean",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toBoolean(string) boolean",
@@ -24,7 +28,11 @@
         }
       ],
       "result_type": "boolean",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toInteger(boolean) integer",
@@ -37,7 +45,11 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toInteger(number) integer",
@@ -50,7 +62,11 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toInteger(string) integer",
@@ -63,7 +79,11 @@
         }
       ],
       "result_type": "integer",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toNumber(integer) number",
@@ -76,7 +96,11 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toNumber(string) number",
@@ -89,7 +113,11 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toString(boolean) string",
@@ -102,7 +130,11 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toString(integer) string",
@@ -115,7 +147,11 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toString(number) string",
@@ -128,195 +164,731 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toString(color) string",
       "function_name": "toString",
       "doc": "Converts argument value to string type. Returns string value.",
       "arguments": [
-          {
-              "type": "color",
-              "doc": "Color value to convert."
-          }
+        {
+          "type": "color",
+          "doc": "Color value to convert."
+        }
       ],
       "result_type": "string",
-      "platforms": ["android", "ios", "web"]
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "toString(url) string",
       "function_name": "toString",
       "doc": "Converts argument value to string type. Returns string value.",
       "arguments": [
-          {
-              "type": "url",
-              "doc": "Url value to convert."
-          }
+        {
+          "type": "url",
+          "doc": "Url value to convert."
+        }
       ],
       "result_type": "string",
-      "platforms": ["ios", "web"]
+      "platforms": [
+        "ios",
+        "web"
+      ]
     },
     {
       "name": "toColor(str) color",
       "function_name": "toColor",
       "doc": "Converts argument value to color type. Returns color value.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "String value to convert."
-          }
+        {
+          "type": "string",
+          "doc": "String value to convert."
+        }
       ],
       "result_type": "color",
-      "platforms": ["web"]
+      "platforms": [
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "toUrl(str) url",
       "function_name": "toUrl",
       "doc": "Converts argument value to url type. Returns url value.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "String value to convert."
-          }
+        {
+          "type": "string",
+          "doc": "String value to convert."
+        }
       ],
       "result_type": "url",
-      "platforms": ["web"]
+      "platforms": [
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getIntegerValue(string, integer) integer",
       "function_name": "getIntegerValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "integer",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "integer",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "integer",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getNumberValue(string, number) number",
       "function_name": "getNumberValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "number",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "number",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "number",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getStringValue(string, string) string",
       "function_name": "getStringValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "string",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "string",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getUrlValue(string, url) url",
       "function_name": "getUrlValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "url",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "url",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "url",
-      "platforms": ["web", "ios"]
+      "platforms": [
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getUrlValue(string, string) url",
       "function_name": "getUrlValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "string",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "url",
-      "platforms": ["web", "ios"]
+      "platforms": [
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getColorValue(string, color) color",
       "function_name": "getColorValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "color",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "color",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "color",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getColorValue(string, string) color",
       "function_name": "getColorValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "string",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "color",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
     },
     {
       "name": "getBooleanValue(string, boolean) boolean",
       "function_name": "getBooleanValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
       "arguments": [
-          {
-              "type": "string",
-              "doc": "Variable name."
-          },
-          {
-              "type": "boolean",
-              "doc": "Fallback value."
-          }
+        {
+          "type": "string",
+          "doc": "Variable name."
+        },
+        {
+          "type": "boolean",
+          "doc": "Fallback value."
+        }
       ],
       "result_type": "boolean",
-      "platforms": [ "android", "web", "ios" ]
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictString(dict, vararg string) string",
+      "function_name": "getDictString",
+      "doc": "Returns a string value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, vararg string) number",
+      "function_name": "getDictNumber",
+      "doc": "Returns a number value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, vararg string) integer",
+      "function_name": "getDictInteger",
+      "doc": "Returns an integer value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictBoolean(dict, vararg string) boolean",
+      "function_name": "getDictBoolean",
+      "doc": "Returns a boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictColor(dict, vararg string) color",
+      "function_name": "getDictColor",
+      "doc": "Returns a color property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictUrl(dict, vararg string) url",
+      "function_name": "getDictUrl",
+      "doc": "Returns an url property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptString(string, dict, vararg string) string",
+      "function_name": "getDictOptString",
+      "doc": "Returns an optional string property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a string."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptNumber(number, dict, vararg string) number",
+      "function_name": "getDictOptNumber",
+      "doc": "Returns an optional number property from dictionary.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Fallback value if property does not exist or a property value is not a number."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptInteger(integer, dict, vararg string) integer",
+      "function_name": "getDictOptInteger",
+      "doc": "Returns an optional integer property from dictionary.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean(boolean, dict, vararg string) boolean",
+      "function_name": "getDictOptBoolean",
+      "doc": "Returns an optional boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Fallback value if property does not exist or a property value is not a boolean."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptColor(color, dict, vararg string) color",
+      "function_name": "getDictOptColor",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptColor(string, dict, vararg string) color",
+      "function_name": "getDictOptColor",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptUrl(url, dict, vararg string) url",
+      "function_name": "getDictOptUrl",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptUrl(string, dict, vararg string) url",
+      "function_name": "getDictOptUrl",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredIntegerValue(string, integer) integer",
+      "function_name": "getStoredIntegerValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "integer",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredNumberValue(string, number) number",
+      "function_name": "getStoredNumberValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "number",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredStringValue(string, string) string",
+      "function_name": "getStoredStringValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(string, url) url",
+      "function_name": "getStoredUrlValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "url",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredUrlValue(string, string) url",
+      "function_name": "getStoredUrlValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "url",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(string, color) color",
+      "function_name": "getStoredColorValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "color",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredColorValue(string, string) color",
+      "function_name": "getStoredColorValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "getStoredBooleanValue(string, boolean) boolean",
+      "function_name": "getStoredBooleanValue",
+      "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Stored value name."
+        },
+        {
+          "type": "boolean",
+          "doc": "Fallback value."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

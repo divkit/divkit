@@ -2,6 +2,7 @@ import type { DatetimeValue, EvalContext, EvalValue, IntegerValue } from '../eva
 import { registerFunc } from './funcs';
 import { DATETIME, INTEGER } from '../const';
 import { valToString } from '../utils';
+import { toBigInt } from '../bigint';
 
 function getMaxDate(date: Date): number {
     const copy = new Date(date);
@@ -158,7 +159,7 @@ const getter = (
 
         return {
             type: INTEGER,
-            value
+            value: toBigInt(value)
         };
     };
 };

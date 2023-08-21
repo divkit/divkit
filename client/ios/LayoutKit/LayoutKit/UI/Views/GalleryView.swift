@@ -104,10 +104,13 @@ public final class GalleryView: BlockView {
     setState(state.resetToModelIfInconsistent(model), notifyingObservers: false)
     updateLayoutIfNeeded(to: model)
 
-    let isNewModel = oldModel != model
-    if isNewModel {
+    if oldModel != model {
       let blocks = model.items.map { $0.content }
       dataSource.blocks = blocks
+      if oldModel?.layoutDirection != model.layoutDirection {
+        collectionView.semanticContentAttribute = model
+          .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
+      }
       collectionView.decelerationRate = model.scrollMode.decelerationRate
       collectionView.alwaysBounceVertical = model.alwaysBounceVertical
       collectionView.bounces = model.bounces
@@ -124,7 +127,7 @@ public final class GalleryView: BlockView {
            .pending where frame.size == .zero:
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
-        updateContentOffset(to: self.state.contentPosition, animated: !isNewModel)
+        updateContentOffset(to: self.state.contentPosition, animated: oldModel?.path == model.path)
       }
     }
   }

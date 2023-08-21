@@ -17,6 +17,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
@@ -56,6 +57,7 @@ public final class DivPagerTemplate: TemplateValue {
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         defaultItem: try dictionary.getOptionalExpressionField("default_item"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
@@ -95,6 +97,7 @@ public final class DivPagerTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
@@ -128,6 +131,7 @@ public final class DivPagerTemplate: TemplateValue {
     self.border = border
     self.columnSpan = columnSpan
     self.defaultItem = defaultItem
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height
@@ -162,6 +166,7 @@ public final class DivPagerTemplate: TemplateValue {
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let defaultItemValue = parent?.defaultItem?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultItemValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
@@ -194,6 +199,7 @@ public final class DivPagerTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -239,6 +245,7 @@ public final class DivPagerTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultItem: defaultItemValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -278,6 +285,7 @@ public final class DivPagerTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var defaultItemValue: DeserializationResult<Expression<Int>> = parent?.defaultItem?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
@@ -319,6 +327,8 @@ public final class DivPagerTemplate: TemplateValue {
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "default_item":
         defaultItemValue = deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator).merged(with: defaultItemValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
@@ -381,6 +391,8 @@ public final class DivPagerTemplate: TemplateValue {
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.defaultItem?.link:
         defaultItemValue = defaultItemValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
@@ -434,6 +446,7 @@ public final class DivPagerTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -461,6 +474,7 @@ public final class DivPagerTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -506,6 +520,7 @@ public final class DivPagerTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultItem: defaultItemValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -550,6 +565,7 @@ public final class DivPagerTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       defaultItem: defaultItem ?? mergedParent.defaultItem,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
@@ -589,6 +605,7 @@ public final class DivPagerTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       defaultItem: merged.defaultItem,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),

@@ -133,11 +133,18 @@ internal class DivGridLayoutManager(
 
     override fun getLayoutManagerOrientation(): Int = orientation
 
-    override fun instantScrollToPosition(position: Int) {
-        instantScroll(position)
+    override fun instantScrollToPosition(
+        position: Int,
+        scrollPosition: ScrollPosition
+    ) {
+        instantScroll(position, scrollPosition)
     }
 
-    override fun instantScrollToPositionWithOffset(position: Int, offset: Int) {
-        instantScroll(position, offset)
+    override fun instantScrollToPositionWithOffset(
+        position: Int,
+        offset: Int,
+        scrollPosition: ScrollPosition
+    ) {
+        instantScroll(position, scrollPosition, offset)
     }
 }

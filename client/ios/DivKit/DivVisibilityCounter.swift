@@ -22,4 +22,8 @@ public final class DivVisibilityCounter: DivVisibilityCounting, Resetting {
   public func reset() {
     storage.removeAll()
   }
+
+  public func reset(cardId: DivCardID) {
+    storage = storage.filter { $0.key.root != cardId.rawValue }
+  }
 }

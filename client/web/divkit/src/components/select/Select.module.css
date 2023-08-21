@@ -24,6 +24,11 @@
     font: inherit;
 }
 
+.select__select_has-custom-focused:focus,
+.select__select.has-custom-focused:focus-visible {
+    outline: none;
+}
+
 .select__option {
     font: inherit;
 }

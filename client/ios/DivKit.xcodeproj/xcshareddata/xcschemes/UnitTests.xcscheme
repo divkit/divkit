@@ -56,29 +56,19 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8CF329232875D534003F799A"
-               BuildableName = "LayoutKitTests.xctest"
-               BlueprintName = "LayoutKitTests"
-               ReferencedContainer = "container:DivKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6178F74C28E2095100FE1648"
-               BuildableName = "LayoutKit_iOSTests.xctest"
-               BlueprintName = "LayoutKit_iOSTests"
-               ReferencedContainer = "container:DivKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "52DED04629F7346900D64519"
                BuildableName = "DivKitExtensionsTests.xctest"
                BlueprintName = "DivKitExtensionsTests"
+               ReferencedContainer = "container:DivKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8CF329232875D534003F799A"
+               BuildableName = "LayoutKitTests.xctest"
+               BlueprintName = "LayoutKitTests"
                ReferencedContainer = "container:DivKit.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -25,7 +25,8 @@
         "right",
         "bottom-right",
         "bottom",
-        "bottom-left"
+        "bottom-left",
+        "center"
       ],
       "$description": "translations.json#/div_tooltip_position"
     },

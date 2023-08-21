@@ -29,7 +29,10 @@ from .entities import (
     Url,
     Color,
     String,
-    Dictionary, BoolInt
+    Dictionary,
+    BoolInt,
+    RawArray,
+    _build_documentation_generator_properties
 )
 from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
 
@@ -43,21 +46,25 @@ def __resolve_string_field(name: str,
                            config: Config.GenerationConfig,
                            location: ElementLocation,
                            dictionary: Dict[str, any]) -> Tuple[PropertyType, List[Declarable]]:
-    force_instance_field: bool = dictionary.get('force_instance_field', False)
     enum_cases: List[str] = dictionary.get('enum')
-    if not force_instance_field and enum_cases is not None:
+    if enum_cases is not None:
         if not is_list_of_type(enum_cases, str):
             raise TypeError
-        force_enum_field: bool = dictionary.get('force_instance_field', False)
-        if len(enum_cases) > 1 or force_enum_field:
+        if len(enum_cases) > 1:
             fixed_name = fixing_reserved_typename(name, config.lang)
+            documentation_properties = _build_documentation_generator_properties(dictionary=dictionary,
+                                                                                 location=location,
+                                                                                 mode=mode)
+            include_in_documentation_toc = False
+            if documentation_properties is not None:
+                include_in_documentation_toc = documentation_properties.include_in_toc
+
             enumeration = StringEnumeration(name=fixed_name,
                                             original_name=name,
                                             cases=enum_cases,
                                             description=dictionary.get('description', ''),
                                             description_object=dictionary.get('description_translations', {}),
-                                            include_documentation_toc=dictionary.get('include_in_documentation_toc',
-                                                                                     False))
+                                            include_in_documentation_toc=include_in_documentation_toc)
             return Object(name=name, object=None, format=ObjectFormat.DEFAULT), [enumeration]
         else:
             if len(enum_cases) < 1:
@@ -183,14 +190,24 @@ def type_property_build(dictionary: Dict[str, any],
                         mode: GenerationMode,
                         config: Config.GenerationConfig) -> Tuple[PropertyType, List[Declarable]]:
     name: str = alias(config.lang, dictionary) or outer_name
+
+    if is_boolean_int_property(dictionary):
+        return BoolInt(), []
+
     any_of_entities: List[Dict[str, any]] = dictionary.get('anyOf')
     if is_list_of_type(any_of_entities, Dict) and all(is_dict_with_keys_of_type(d, str) for d in any_of_entities):
         name = fixing_reserved_typename(name, config.lang)
+        documentation_properties = _build_documentation_generator_properties(dictionary=dictionary,
+                                                                             location=location,
+                                                                             mode=mode)
+        include_in_documentation_toc = False
+        if documentation_properties is not None:
+            include_in_documentation_toc = documentation_properties.include_in_toc
         entity_enum: List[Declarable] = _entity_enumeration_build(
             entities=any_of_entities,
             name=name,
             original_name=outer_name,
-            include_in_documentation_toc=dictionary.get('include_in_documentation_toc', False),
+            include_in_documentation_toc=include_in_documentation_toc,
             root_entity=dictionary.get('root_entity', False),
             generate_case_for_templates=generate_cases_for_templates(config.lang, dictionary),
             location=location + 'anyOf',
@@ -202,8 +219,6 @@ def type_property_build(dictionary: Dict[str, any],
     number_constraints: Optional[str] = dictionary.get('constraint')
 
     if type_value == 'integer':
-        if dictionary.get('format') == 'boolean':
-            return BoolInt(), []
         return Int(constraint=number_constraints, long_type=dictionary.get('long_type', False)), []
     elif type_value == 'number':
         return Double(constraint=number_constraints), []
@@ -216,6 +231,8 @@ def type_property_build(dictionary: Dict[str, any],
                                       location=location,
                                       dictionary=dictionary)
     elif type_value == 'array':
+        if 'items' not in dictionary:
+            return RawArray(), []
         items_types: Dict[str, any] = dictionary.get('items')
         single_name: str = name[:-1] if name.endswith('s') else name
         min_items: int = dictionary.get('minItems', 1)
@@ -276,3 +293,14 @@ def property_build(properties: Dict[str, Dict[str, any]],
         inner_types_list.extend(inner_types)
 
     return sorted(properties_list, key=lambda p: isinstance(p.property_type, StaticString)), inner_types_list
+
+
+def is_boolean_int_property(dictionary: Dict[str, any]) -> bool:
+    one_of_entities: List[Dict[str, any]] = dictionary.get('oneOf')
+    if one_of_entities is None:
+        return False
+    if len(one_of_entities) != 2:
+        return False
+    type1: str = one_of_entities[0].get('type')
+    type2: str = one_of_entities[1].get('type')
+    return (type1 == 'boolean' and type2 == 'integer') or (type1 == 'integer' and type2 == 'boolean')

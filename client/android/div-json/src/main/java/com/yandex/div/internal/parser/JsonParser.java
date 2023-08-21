@@ -2,15 +2,15 @@ package com.yandex.div.internal.parser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.json.expressions.ConstantExpressionList;
-import com.yandex.div.json.expressions.Expression;
-import com.yandex.div.json.expressions.ExpressionList;
-import com.yandex.div.json.expressions.MutableExpressionList;
 import com.yandex.div.json.JSONSerializable;
 import com.yandex.div.json.ParsingEnvironment;
 import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.ParsingException;
 import com.yandex.div.json.ParsingExceptionKt;
+import com.yandex.div.json.expressions.ConstantExpressionList;
+import com.yandex.div.json.expressions.Expression;
+import com.yandex.div.json.expressions.ExpressionList;
+import com.yandex.div.json.expressions.MutableExpressionList;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.Intrinsics;
@@ -533,7 +533,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!validator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return null;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return null;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 
@@ -602,7 +612,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!validator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return null;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return null;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 
@@ -672,7 +692,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!validator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return emptyList;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return emptyList;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 
@@ -759,7 +789,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!validator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return emptyList;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return emptyList;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 
@@ -919,6 +959,16 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!validator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return EMPTY_EXPRESSION_LIST;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return EMPTY_EXPRESSION_LIST;
+            }
             return EMPTY_EXPRESSION_LIST;
         }
 
@@ -1029,7 +1079,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!listValidator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return emptyList;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return emptyList;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 
@@ -1091,7 +1151,17 @@ public class JsonParser {
 
         int length = optJSONArray.length();
         if (length == 0) {
-            return Collections.emptyList();
+            List<T> emptyList = Collections.emptyList();
+            try {
+                if (!listValidator.isValid(emptyList)) {
+                    logger.logError(invalidValue(jsonObject, key, emptyList));
+                    return emptyList;
+                }
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(jsonObject, key, emptyList));
+                return emptyList;
+            }
+            return emptyList;
         }
         List<T> list = new ArrayList<>(length);
 

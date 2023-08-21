@@ -29,7 +29,12 @@ extension VideoBlockLegacy {
 private final class VideoBlockLegacyView: BlockView {
   var videoAssetHolder: VideoBlockLegacy.VideoAssetHolder! {
     didSet {
-      configurePlayer(with: videoAssetHolder.playerItem)
+      let actualURL = videoAssetHolder.url
+      videoAssetHolder.playerItem.map { (actualURL, $0) }.resolved { [weak self] url, playerItem in
+        if self?.videoAssetHolder.url == url {
+          self?.configurePlayer(with: playerItem)
+        }
+      }
     }
   }
 

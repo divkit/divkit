@@ -1,5 +1,5 @@
 import com.yandex.div.gradle.FileExtensions
-import org.json.simple.JSONObject
+import org.json.JSONObject
 
 apply from: "${project.projectDir}/../div-application.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
@@ -21,10 +21,10 @@ android {
     defaultConfig {
         versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
-        buildConfigField "String", "ADS_BLOCK_ID", "\"${property('mobileAds.blockId')}\""
-        buildConfigField "String", "METRICA_API_KEY", "\"${project.findProperty("metricaApiKey") ?: ""}\""
+        buildConfigField "String", "ADS_BLOCK_ID", JSONObject.quote(property('mobileAds.blockId'))
+        buildConfigField "String", "METRICA_API_KEY", JSONObject.quote(project.findProperty("metricaApiKey") ?: "")
         buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
-        buildConfigField "String", "HTTP_HEADERS", "\"${JSONObject.escape(project.findProperty("httpHeaders") ?: "{}")}\""
+        buildConfigField "String", "HTTP_HEADERS", JSONObject.quote(project.findProperty("httpHeaders") ?: "{}")
 
         testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
         if (!project.hasProperty("include-regression-tests")) {

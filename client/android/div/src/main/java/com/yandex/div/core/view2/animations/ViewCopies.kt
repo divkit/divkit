@@ -14,6 +14,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 
 @MainThread
@@ -60,13 +61,19 @@ private fun ImageView.setScreenshotFromView(view: View) {
         return setImageBitmap(it)
     }
 
-    view.doOnActualLayout {
+    val drawAndSet = {
         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).applyCanvas {
             translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
             view.draw(this)
         }
 
         setImageBitmap(bitmap)
+    }
+
+    if (view.isActuallyLaidOut) {
+        drawAndSet()
+    } else {
+        view.doOnActualLayout { drawAndSet() }
     }
 }
 

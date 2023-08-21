@@ -20,6 +20,7 @@ internal abstract class DivViewVisitor {
     open fun visit(view: DivStateLayout) {}
     open fun visit(view: TabsLayout) {}
     open fun visit(view: DivSliderView) {}
+    open fun visit(view: DivSelectView) {}
     open fun visit(view: DivVideoView) {}
     open fun visit(view: View) {}
 }
@@ -64,6 +65,7 @@ internal fun DivViewVisitor.visitViewTree(view: View) {
         is DivLineHeightTextView -> visit(view)
         is DivPagerIndicatorView -> visit(view)
         is DivSliderView -> visit(view)
+        is DivSelectView -> visit(view)
         is DivVideoView -> visit(view)
         else -> {
             visit(view)

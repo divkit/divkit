@@ -1,8 +1,7 @@
 {
   "non_empty_string": {
     "type": "string",
-    "minLength": 1,
-    "clientMinLength": 1
+    "minLength": 1
   },
   "color": {
     "type": "string",
@@ -21,10 +20,14 @@
     "constraint": "number >= 0"
   },
   "boolean_int": {
-    "type": "integer",
-    "enum": [
-      0, 1
-    ],
-    "format": "boolean"
+    "oneOf": [
+      {
+        "type": "boolean"
+      },
+      {
+        "type": "integer",
+        "enum": [ 0, 1 ]
+      }
+    ]
   }
 }

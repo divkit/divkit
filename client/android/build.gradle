@@ -8,9 +8,9 @@ def publicationType = PublicationType.fromString(project.findProperty("publicati
 
 ext {
     minSdkVersion = 21
-    compileSdkVersion = 33
+    compileSdkVersion = 34
     targetSdkVersion = 31
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "34.0.0"
 
     divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix()}"
 }
@@ -106,10 +106,8 @@ subprojects {
             }
         }
 
-        if (project.hasProperty("teamcity.version")) {
-            project.tasks.withType(PublishToMavenRepository) { task ->
-                task.finalizedBy(reportBuildNumberToTeamcity)
-            }
+        project.tasks.withType(PublishToMavenRepository) { task ->
+            task.finalizedBy(reportBuildNumber)
         }
 
         project.tasks.withType(PublishToMavenLocal) { task ->
@@ -119,7 +117,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion "7.6"
+    gradleVersion "7.6.1"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
@@ -145,9 +143,9 @@ task reportVersion {
     }
 }
 
-task reportBuildNumberToTeamcity {
+task reportBuildNumber {
     doLast {
-        println "##teamcity[buildNumber \'${rootProject.property('divkitVersionName')}\']"
+        println "buildNumber ${rootProject.property('divkitVersionName')}"
     }
 }
 

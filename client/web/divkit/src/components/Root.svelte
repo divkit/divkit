@@ -1,7 +1,22 @@
+<script lang="ts" context="module">
+    import { writable } from 'svelte/store';
+
+    let isPointerFocus = writable(true);
+    let rootInstancesCount = 0;
+
+    function onWindowKeyDown() {
+        isPointerFocus.set(false);
+    }
+
+    function onWindowPointerDown() {
+        isPointerFocus.set(true);
+    }
+</script>
+
 <script lang="ts">
     import type { Readable, Writable } from 'svelte/types/runtime/store';
-    import { onDestroy, setContext, tick } from 'svelte';
-    import { derived, writable } from 'svelte/store';
+    import { onDestroy, onMount, setContext, tick } from 'svelte';
+    import { derived } from 'svelte/store';
 
     import css from './Root.module.css';
 
@@ -20,14 +35,18 @@
         Customization,
         DivExtension,
         DivExtensionContext,
-        DivExtensionClass
+        DivExtensionClass,
+        TypefaceProvider,
+        DisappearAction
     } from '../../typings/common';
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
+    import type { VideoElements } from '../types/video';
+    import type { Patch } from '../types/patch';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { ROOT_CTX, RootCtxValue, Running } from '../context/root';
+    import { ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { wrapError, WrappedError } from '../utils/wrapError';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
@@ -65,6 +84,8 @@
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
+    export let typefaceProvider: TypefaceProvider = _fontFamily => '';
+    export let fetchInit: RequestInit | ((url: string) => RequestInit) = {};
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -114,7 +135,7 @@
             return;
         }
 
-        return variables;
+        return localVariables;
     }
 
     const builtinSet = new Set(builtinProtocols);
@@ -202,7 +223,7 @@
     function getJsonWithVars<T>(jsonProp: T): MaybeMissing<T> {
         const prepared = prepareVars(jsonProp, logError);
 
-        if (!prepared.vars.length) {
+        if (!prepared.hasExpression) {
             return jsonProp;
         }
 
@@ -437,7 +458,113 @@
         }
     }
 
-    export function execAction(action: MaybeMissing<Action | VisibilityAction>): void {
+    function callVideoAction(id: string | null, action: string | null): void {
+        if (id) {
+            const instance = getInstance<VideoElements>(id);
+
+            if (instance) {
+                if (action === 'start') {
+                    instance.start();
+                } else if (action === 'pause') {
+                    instance.pause();
+                } else {
+                    logError(wrapError(new Error('Unknown video action'), {
+                        additional: {
+                            id,
+                            action
+                        }
+                    }));
+                }
+            } else {
+                logError(wrapError(new Error('Video component is not found'), {
+                    additional: {
+                        id,
+                        action
+                    }
+                }));
+            }
+        } else {
+            logError(wrapError(new Error('Missing id in video action'), {
+                additional: {
+                    action
+                }
+            }));
+        }
+    }
+
+    function callDownloadAction(
+        url: string | null,
+        action: MaybeMissing<Action | VisibilityAction | DisappearAction>
+    ): void {
+        if (url) {
+            let init;
+            if (typeof fetchInit === 'function') {
+                init = fetchInit(url);
+            } else {
+                init = fetchInit;
+            }
+            fetch(url, init).then(res => {
+                if (!res.ok) {
+                    throw new Error('Response is not ok');
+                }
+                return res.json();
+            }).then((json: Patch) => {
+                if (!json) {
+                    logError(wrapError(new Error('Incorrect patch'), {
+                        additional: {
+                            url
+                        }
+                    }));
+                    return;
+                }
+                if (json.templates) {
+                    for (const name in json.templates) {
+                        if (!templates.hasOwnProperty(name)) {
+                            templates[name] = json.templates[name];
+                        }
+                    }
+                }
+                if (Array.isArray(json.patch?.changes)) {
+                    if (json.patch.mode === 'transactional') {
+                        const failed = json.patch.changes.find(change => !parentOfMap.has(change.id));
+                        if (failed) {
+                            logError(wrapError(new Error('Skipping transactional, child is not found'), {
+                                additional: {
+                                    url,
+                                    id: failed.id
+                                }
+                            }));
+                            execAnyActions(action.download_callbacks?.on_fail_actions);
+                            return;
+                        }
+                    }
+                    json.patch.changes.forEach(change => {
+                        const methods = parentOfMap.get(change.id);
+                        if (methods) {
+                            methods.replaceWith(change.id, change.items);
+                        }
+                    });
+                    execAnyActions(action.download_callbacks?.on_success_actions);
+                }
+            }).catch(err => {
+                logError(wrapError(new Error('Failed to download the patch'), {
+                    additional: {
+                        url,
+                        originalError: err
+                    }
+                }));
+                execAnyActions(action.download_callbacks?.on_fail_actions);
+            });
+        } else {
+            logError(wrapError(new Error('Missing url in download action'), {
+                additional: {
+                    url
+                }
+            }));
+        }
+    }
+
+    export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
         const actionUrl = action.url ? String(action.url) : '';
 
         if (actionUrl) {
@@ -469,7 +596,15 @@
                         if (name && value !== null) {
                             const variableInstance = variables.get(name);
                             if (variableInstance) {
-                                variableInstance.set(value);
+                                if (variableInstance.getType() === 'dict') {
+                                    logError(wrapError(new Error('Setting dict variables is not supported'), {
+                                        additional: {
+                                            name
+                                        }
+                                    }));
+                                } else {
+                                    variableInstance.set(value);
+                                }
                             } else {
                                 logError(wrapError(new Error('Cannot find variable'), {
                                     additional: {
@@ -486,19 +621,25 @@
                         }
                         break;
                     case 'timer':
-                        const action = params.get('action');
+                        const timerAction = params.get('action');
                         const id = params.get('id');
 
                         if (timersController) {
-                            timersController.execTimerAction(id, action);
+                            timersController.execTimerAction(id, timerAction);
                         } else {
                             logError(wrapError(new Error('Incorrect timer action'), {
                                 additional: {
                                     id,
-                                    action
+                                    action: timerAction
                                 }
                             }));
                         }
+                        break;
+                    case 'video':
+                        callVideoAction(params.get('id'), params.get('action'));
+                        break;
+                    case 'download':
+                        callDownloadAction(params.get('url'), action);
                         break;
                     default:
                         logError(wrapError(new Error('Unknown type of action'), {
@@ -518,7 +659,7 @@
     }
 
     async function execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void> {
-        if (!actions) {
+        if (!actions || !Array.isArray(actions)) {
             return;
         }
 
@@ -571,6 +712,7 @@
     }
 
     const instancesMap: Map<string, unknown> = new Map();
+    const parentOfMap: Map<string, ParentMethods> = new Map();
     function registerInstance<T>(id: string, block: T) {
         if (instancesMap.has(id)) {
             logError(wrapError(new Error('Duplicate instance id'), {
@@ -598,6 +740,14 @@
         }
 
         return instancesMap.get(id) as T;
+    }
+
+    function registerParentOf(id: string, methods: ParentMethods): void {
+        parentOfMap.set(id, methods);
+    }
+
+    function unregisterParentOf(id: string): void {
+        parentOfMap.delete(id);
     }
 
     const stores = new Map<string, Writable<any>>();
@@ -706,6 +856,8 @@
         setRunning,
         registerInstance,
         unregisterInstance,
+        registerParentOf,
+        unregisterParentOf,
         addSvgFilter,
         removeSvgFilter,
         getDerivedFromVars,
@@ -716,7 +868,9 @@
         getBuiltinProtocols,
         getExtension,
         getExtensionContext,
+        typefaceProvider,
         isDesktop,
+        isPointerFocus,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
     });
@@ -1049,7 +1203,23 @@
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     function emptyTouchstartHandler() {}
 
+    onMount(() => {
+        rootInstancesCount++;
+
+        if (rootInstancesCount === 1) {
+            window.addEventListener('keydown', onWindowKeyDown);
+            window.addEventListener('pointerdown', onWindowPointerDown);
+        }
+    });
+
     onDestroy(() => {
+        rootInstancesCount--;
+
+        if (!rootInstancesCount) {
+            window.removeEventListener('keydown', onWindowKeyDown);
+            window.removeEventListener('pointerdown', onWindowPointerDown);
+        }
+
         if (timersController) {
             timersController.destroy();
         }

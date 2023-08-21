@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Input with different font properties and with hint",
   "platforms": [
     "android",
     "ios",
@@ -119,7 +119,19 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=2-font_size_unit",
+          "url": "div-action://set_variable?name=input_value&value=2-font_size_unit_px",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=px",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=3-font_size_unit_dp",
           "log_id": "changing_text"
         },
         {
@@ -131,7 +143,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=3-font_weight",
+          "url": "div-action://set_variable?name=input_value&value=4-font_weight",
           "log_id": "changing_text"
         },
         {
@@ -143,7 +155,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=4-font_family",
+          "url": "div-action://set_variable?name=input_value&value=5-font_family",
           "log_id": "changing_text"
         },
         {
@@ -155,7 +167,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=5-text_color_n_letter_spacing",
+          "url": "div-action://set_variable?name=input_value&value=6-text_color_n_letter_spacing",
           "log_id": "changing_text"
         },
         {
@@ -171,7 +183,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=6-multi_line_text%0Aline_2%0Aline_3%0Aline_4",
+          "url": "div-action://set_variable?name=input_value&value=7-multi_line_text%0Aline_2%0Aline_3%0Aline_4",
           "log_id": "changing_text"
         }
       ]
@@ -187,7 +199,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=hint_text&value=8-hint_text_n_color",
+          "url": "div-action://set_variable?name=hint_text&value=9-hint_text_n_color",
           "log_id": "hint_text"
         },
         {

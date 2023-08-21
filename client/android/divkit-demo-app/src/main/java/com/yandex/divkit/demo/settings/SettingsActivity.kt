@@ -1,8 +1,10 @@
 package com.yandex.divkit.demo.settings
 
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.yandex.div.core.experiments.Experiment
@@ -37,7 +39,13 @@ class SettingsActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = getString(R.string.settings)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back_light)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_light_rtl
+        } else {
+            R.drawable.ic_back_light
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         div2View = UIDiv2ViewCreator(this).createDiv2View(

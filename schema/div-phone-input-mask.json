@@ -1,0 +1,21 @@
+{
+  "$description": "translations.json#/div_input_mask_phone",
+  "allOf": [
+    {
+      "$ref": "div-input-mask-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "phone"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

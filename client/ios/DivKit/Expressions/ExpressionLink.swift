@@ -15,29 +15,15 @@ public struct ExpressionLink<T> {
   let validator: ExpressionValueValidator<T>?
   let errorTracker: ExpressionErrorTracker?
 
-  init?(
-    expression: String,
-    validator: ExpressionValueValidator<T>?,
-    errorTracker: ExpressionErrorTracker? = nil,
-    resolveNested: Bool = true
-  ) throws {
-    try self.init(
-      rawValue: "@{\(expression)}",
-      validator: validator,
-      errorTracker: errorTracker,
-      resolveNested: resolveNested
-    )
-  }
-
   @usableFromInline
   init?(
     rawValue: String,
-    validator: ExpressionValueValidator<T>?,
+    validator: ExpressionValueValidator<T>? = nil,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
   ) throws {
     guard !rawValue.isEmpty else {
-      errorTracker?(.emptyValue)
+      errorTracker?(ExpressionError("Empty expression", expression: nil))
       return nil
     }
     guard rawValue.contains(expressionPrefix) else { return nil }
@@ -50,8 +36,9 @@ public struct ExpressionLink<T> {
       let currentValue = rawValue[index..<endIndex]
       if rawValue.hasExpression(at: index) {
         guard let (start, end) = currentValue.makeLinkIndices() else {
-          errorTracker?(.tokenizing(expression: rawValue))
-          throw ExpressionError.tokenizing(expression: rawValue)
+          let error = ExpressionError("Error tokenizing '\(rawValue)'.", expression: rawValue)
+          errorTracker?(error)
+          throw error
         }
         if !currentString.isEmpty {
           items.append(.string(currentString))
@@ -63,10 +50,10 @@ public struct ExpressionLink<T> {
           let value = String(currentValue[start...end])
           if resolveNested, let link = try ExpressionLink<String>(
             rawValue: value,
-            validator: nil,
             errorTracker: errorTracker
           ) {
             items.append(.nestedCalcExpression(link))
+            variablesNames.append(contentsOf: link.variablesNames)
           } else {
             let parsedCalcExpression = CalcExpression.parse(value)
             items.append(.calcExpression(parsedCalcExpression))

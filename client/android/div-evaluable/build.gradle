@@ -28,6 +28,7 @@ task replJar(type: Jar, dependsOn: "testClasses") {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
     implementation "javax.inject:javax.inject:$versions.javax"
+    compileOnly "org.json:json:$versions.json"
 
     testImplementation "org.json:json:$versions.json"
     testImplementation "junit:junit:$versions.junit"

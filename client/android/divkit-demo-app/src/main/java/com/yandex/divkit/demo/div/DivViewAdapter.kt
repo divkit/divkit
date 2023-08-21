@@ -31,6 +31,7 @@ class DivViewAdapter(
 
     override fun onBindViewHolder(holder: DivViewHolder, position: Int) {
         with(items[position]) {
+            holder.view.prepareForRecycleOrCleanup(this.data)
             holder.setData(this)
         }
         if (resetCount >= 0) {
@@ -48,7 +49,6 @@ class DivViewAdapter(
     }
 
     override fun onViewRecycled(holder: DivViewHolder) {
-        holder.view.cleanup()
         super.onViewRecycled(holder)
     }
 

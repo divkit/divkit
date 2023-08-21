@@ -1,7 +1,7 @@
 // Copyright 2021 Yandex LLC. All rights reserved.
 
 import CoreGraphics
-import UIKit
+@_exported import UIKit
 
 public typealias Color = RGBAColor
 public typealias SystemColor = UIColor
@@ -9,6 +9,14 @@ public typealias SystemColor = UIColor
 public typealias SystemShadow = NSShadow
 
 public typealias EdgeInsets = UIEdgeInsets
+
+public typealias UserInterfaceLayoutDirection = UIUserInterfaceLayoutDirection
+
+extension UIUserInterfaceLayoutDirection {
+  public static var system: UIUserInterfaceLayoutDirection {
+    return UIApplication.shared.userInterfaceLayoutDirection
+  }
+}
 
 extension NSShadow {
   public var cgColor: CGColor? { (shadowColor as? UIColor)?.cgColor }

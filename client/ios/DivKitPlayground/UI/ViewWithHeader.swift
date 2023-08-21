@@ -31,6 +31,9 @@ struct ViewWithHeader<Content>: View where Content: View {
       content()
       Spacer()
     }
+    .foregroundColor(.black)
+    .background(Color.white)
+    .colorScheme(.light)
     .modifier(StatusBarModifier(color: background))
     .navigationBarHidden(true)
   }

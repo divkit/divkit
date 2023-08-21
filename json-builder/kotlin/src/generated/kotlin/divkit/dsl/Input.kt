@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [input].
  * 
- * Required properties: `type, text_variable`.
+ * Required parameters: `type, text_variable`.
  */
 @Generated
 class Input internal constructor(
@@ -43,6 +43,7 @@ class Input internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             fontFamily = additive.fontFamily ?: properties.fontFamily,
@@ -54,7 +55,6 @@ class Input internal constructor(
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
-            inputMethod = additive.inputMethod ?: properties.inputMethod,
             keyboardType = additive.keyboardType ?: properties.keyboardType,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
@@ -63,10 +63,11 @@ class Input internal constructor(
             maxVisibleLines = additive.maxVisibleLines ?: properties.maxVisibleLines,
             nativeInterface = additive.nativeInterface ?: properties.nativeInterface,
             paddings = additive.paddings ?: properties.paddings,
-            rawTextVariable = additive.rawTextVariable ?: properties.rawTextVariable,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectAllOnFocus = additive.selectAllOnFocus ?: properties.selectAllOnFocus,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
+            textAlignmentHorizontal = additive.textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+            textAlignmentVertical = additive.textAlignmentVertical ?: properties.textAlignmentVertical,
             textColor = additive.textColor ?: properties.textColor,
             textVariable = additive.textVariable ?: properties.textVariable,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -75,6 +76,7 @@ class Input internal constructor(
             transitionIn = additive.transitionIn ?: properties.transitionIn,
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
+            validators = additive.validators ?: properties.validators,
             visibility = additive.visibility ?: properties.visibility,
             visibilityAction = additive.visibilityAction ?: properties.visibilityAction,
             visibilityActions = additive.visibilityActions ?: properties.visibilityActions,
@@ -113,6 +115,10 @@ class Input internal constructor(
          */
         val columnSpan: Property<Int>?,
         /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
+        /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
         val extensions: Property<List<Extension>>?,
@@ -122,9 +128,8 @@ class Input internal constructor(
         val focus: Property<Focus>?,
         /**
          * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
-         * Default value: `text`.
          */
-        val fontFamily: Property<FontFamily>?,
+        val fontFamily: Property<String>?,
         /**
          * Font size.
          * Default value: `12`.
@@ -163,14 +168,9 @@ class Input internal constructor(
          */
         val id: Property<String>?,
         /**
-         * Data entry method. If nothing is specified, the value will be taken from keyboard_type.
-         */
-        val inputMethod: Property<InputMethod>?,
-        /**
          * Keyboard type.
          * Default value: `multi_line_text`.
          */
-        @Deprecated("Marked as deprecated in json schema")
         val keyboardType: Property<KeyboardType>?,
         /**
          * Spacing between characters.
@@ -186,7 +186,7 @@ class Input internal constructor(
          */
         val margins: Property<EdgeInsets>?,
         /**
-         * Text input mask.
+         * Mask for entering text based on the specified template.
          */
         val mask: Property<InputMask>?,
         /**
@@ -202,10 +202,6 @@ class Input internal constructor(
          */
         val paddings: Property<EdgeInsets>?,
         /**
-         * Name of raw value storage variable.
-         */
-        val rawTextVariable: Property<String>?,
-        /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
         val rowSpan: Property<Int>?,
@@ -218,6 +214,16 @@ class Input internal constructor(
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
         val selectedActions: Property<List<Action>>?,
+        /**
+         * Horizontal text alignment.
+         * Default value: `left`.
+         */
+        val textAlignmentHorizontal: Property<AlignmentHorizontal>?,
+        /**
+         * Vertical text alignment.
+         * Default value: `center`.
+         */
+        val textAlignmentVertical: Property<AlignmentVertical>?,
         /**
          * Text color.
          * Default value: `#FF000000`.
@@ -252,6 +258,10 @@ class Input internal constructor(
          */
         val transitionTriggers: Property<List<TransitionTrigger>>?,
         /**
+         * Validator that checks that the field value meets the specified conditions.
+         */
+        val validators: Property<List<InputValidator>>?,
+        /**
          * Element visibility.
          * Default value: `visible`.
          */
@@ -280,6 +290,7 @@ class Input internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("font_family", fontFamily)
@@ -291,7 +302,6 @@ class Input internal constructor(
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
-            result.tryPutProperty("input_method", inputMethod)
             result.tryPutProperty("keyboard_type", keyboardType)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
@@ -300,10 +310,11 @@ class Input internal constructor(
             result.tryPutProperty("max_visible_lines", maxVisibleLines)
             result.tryPutProperty("native_interface", nativeInterface)
             result.tryPutProperty("paddings", paddings)
-            result.tryPutProperty("raw_text_variable", rawTextVariable)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("select_all_on_focus", selectAllOnFocus)
             result.tryPutProperty("selected_actions", selectedActions)
+            result.tryPutProperty("text_alignment_horizontal", textAlignmentHorizontal)
+            result.tryPutProperty("text_alignment_vertical", textAlignmentVertical)
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_variable", textVariable)
             result.tryPutProperty("tooltips", tooltips)
@@ -312,6 +323,7 @@ class Input internal constructor(
             result.tryPutProperty("transition_in", transitionIn)
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
+            result.tryPutProperty("validators", validators)
             result.tryPutProperty("visibility", visibility)
             result.tryPutProperty("visibility_action", visibilityAction)
             result.tryPutProperty("visibility_actions", visibilityActions)
@@ -333,7 +345,7 @@ class Input internal constructor(
      * 
      * Can be created using the method [inputNativeInterface].
      * 
-     * Required properties: `color`.
+     * Required parameters: `color`.
      */
     @Generated
     class NativeInterface internal constructor(
@@ -374,6 +386,7 @@ class Input internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -385,19 +398,19 @@ class Input internal constructor(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -406,6 +419,7 @@ class Input internal constructor(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -421,9 +435,10 @@ fun DivScope.input(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -432,7 +447,6 @@ fun DivScope.input(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
-    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -441,10 +455,11 @@ fun DivScope.input(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
-    rawTextVariable: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -453,6 +468,7 @@ fun DivScope.input(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -466,6 +482,7 @@ fun DivScope.input(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
@@ -477,7 +494,6 @@ fun DivScope.input(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
-        inputMethod = valueOrNull(inputMethod),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -486,10 +502,11 @@ fun DivScope.input(
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
-        rawTextVariable = valueOrNull(rawTextVariable),
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+        textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
@@ -498,6 +515,7 @@ fun DivScope.input(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        validators = valueOrNull(validators),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -513,6 +531,7 @@ fun DivScope.input(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -524,19 +543,19 @@ fun DivScope.input(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -545,6 +564,7 @@ fun DivScope.input(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -560,9 +580,10 @@ fun DivScope.inputProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -571,7 +592,6 @@ fun DivScope.inputProps(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
-    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -580,10 +600,11 @@ fun DivScope.inputProps(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
-    rawTextVariable: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -592,6 +613,7 @@ fun DivScope.inputProps(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -604,6 +626,7 @@ fun DivScope.inputProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     fontFamily = valueOrNull(fontFamily),
@@ -615,7 +638,6 @@ fun DivScope.inputProps(
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
     id = valueOrNull(id),
-    inputMethod = valueOrNull(inputMethod),
     keyboardType = valueOrNull(keyboardType),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
@@ -624,10 +646,11 @@ fun DivScope.inputProps(
     maxVisibleLines = valueOrNull(maxVisibleLines),
     nativeInterface = valueOrNull(nativeInterface),
     paddings = valueOrNull(paddings),
-    rawTextVariable = valueOrNull(rawTextVariable),
     rowSpan = valueOrNull(rowSpan),
     selectAllOnFocus = valueOrNull(selectAllOnFocus),
     selectedActions = valueOrNull(selectedActions),
+    textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+    textAlignmentVertical = valueOrNull(textAlignmentVertical),
     textColor = valueOrNull(textColor),
     textVariable = valueOrNull(textVariable),
     tooltips = valueOrNull(tooltips),
@@ -636,6 +659,7 @@ fun DivScope.inputProps(
     transitionIn = valueOrNull(transitionIn),
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
+    validators = valueOrNull(validators),
     visibility = valueOrNull(visibility),
     visibilityAction = valueOrNull(visibilityAction),
     visibilityActions = valueOrNull(visibilityActions),
@@ -650,6 +674,7 @@ fun DivScope.inputProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -661,19 +686,19 @@ fun DivScope.inputProps(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -682,6 +707,7 @@ fun DivScope.inputProps(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -697,9 +723,10 @@ fun TemplateScope.inputRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -708,7 +735,6 @@ fun TemplateScope.inputRefs(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -717,10 +743,11 @@ fun TemplateScope.inputRefs(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    rawTextVariable: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -729,6 +756,7 @@ fun TemplateScope.inputRefs(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -741,6 +769,7 @@ fun TemplateScope.inputRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     fontFamily = fontFamily,
@@ -752,7 +781,6 @@ fun TemplateScope.inputRefs(
     hintColor = hintColor,
     hintText = hintText,
     id = id,
-    inputMethod = inputMethod,
     keyboardType = keyboardType,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
@@ -761,10 +789,11 @@ fun TemplateScope.inputRefs(
     maxVisibleLines = maxVisibleLines,
     nativeInterface = nativeInterface,
     paddings = paddings,
-    rawTextVariable = rawTextVariable,
     rowSpan = rowSpan,
     selectAllOnFocus = selectAllOnFocus,
     selectedActions = selectedActions,
+    textAlignmentHorizontal = textAlignmentHorizontal,
+    textAlignmentVertical = textAlignmentVertical,
     textColor = textColor,
     textVariable = textVariable,
     tooltips = tooltips,
@@ -773,6 +802,7 @@ fun TemplateScope.inputRefs(
     transitionIn = transitionIn,
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
+    validators = validators,
     visibility = visibility,
     visibilityAction = visibilityAction,
     visibilityActions = visibilityActions,
@@ -787,6 +817,7 @@ fun TemplateScope.inputRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -798,19 +829,19 @@ fun TemplateScope.inputRefs(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -819,6 +850,7 @@ fun TemplateScope.inputRefs(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -834,9 +866,10 @@ fun Input.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -845,7 +878,6 @@ fun Input.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
-    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -854,10 +886,11 @@ fun Input.override(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
-    rawTextVariable: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -866,6 +899,7 @@ fun Input.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -879,6 +913,7 @@ fun Input.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         fontFamily = valueOrNull(fontFamily) ?: properties.fontFamily,
@@ -890,7 +925,6 @@ fun Input.override(
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
-        inputMethod = valueOrNull(inputMethod) ?: properties.inputMethod,
         keyboardType = valueOrNull(keyboardType) ?: properties.keyboardType,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
@@ -899,10 +933,11 @@ fun Input.override(
         maxVisibleLines = valueOrNull(maxVisibleLines) ?: properties.maxVisibleLines,
         nativeInterface = valueOrNull(nativeInterface) ?: properties.nativeInterface,
         paddings = valueOrNull(paddings) ?: properties.paddings,
-        rawTextVariable = valueOrNull(rawTextVariable) ?: properties.rawTextVariable,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectAllOnFocus = valueOrNull(selectAllOnFocus) ?: properties.selectAllOnFocus,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal) ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = valueOrNull(textAlignmentVertical) ?: properties.textAlignmentVertical,
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textVariable = valueOrNull(textVariable) ?: properties.textVariable,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -911,6 +946,7 @@ fun Input.override(
         transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        validators = valueOrNull(validators) ?: properties.validators,
         visibility = valueOrNull(visibility) ?: properties.visibility,
         visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
         visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
@@ -926,6 +962,7 @@ fun Input.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -937,19 +974,19 @@ fun Input.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -958,6 +995,7 @@ fun Input.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -973,9 +1011,10 @@ fun Input.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -984,7 +1023,6 @@ fun Input.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -993,10 +1031,11 @@ fun Input.defer(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    rawTextVariable: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1005,6 +1044,7 @@ fun Input.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1018,6 +1058,7 @@ fun Input.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
@@ -1029,7 +1070,6 @@ fun Input.defer(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
-        inputMethod = inputMethod ?: properties.inputMethod,
         keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
@@ -1038,10 +1078,11 @@ fun Input.defer(
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = nativeInterface ?: properties.nativeInterface,
         paddings = paddings ?: properties.paddings,
-        rawTextVariable = rawTextVariable ?: properties.rawTextVariable,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = selectedActions ?: properties.selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = textVariable ?: properties.textVariable,
         tooltips = tooltips ?: properties.tooltips,
@@ -1050,6 +1091,7 @@ fun Input.defer(
         transitionIn = transitionIn ?: properties.transitionIn,
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        validators = validators ?: properties.validators,
         visibility = visibility ?: properties.visibility,
         visibilityAction = visibilityAction ?: properties.visibilityAction,
         visibilityActions = visibilityActions ?: properties.visibilityActions,
@@ -1075,6 +1117,8 @@ fun Input.defer(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param visibility Element visibility.
  */
@@ -1085,7 +1129,7 @@ fun Input.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1098,6 +1142,8 @@ fun Input.evaluate(
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Input = Input(
@@ -1109,6 +1155,7 @@ fun Input.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         fontFamily = fontFamily ?: properties.fontFamily,
@@ -1120,7 +1167,6 @@ fun Input.evaluate(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = properties.id,
-        inputMethod = properties.inputMethod,
         keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
@@ -1129,10 +1175,11 @@ fun Input.evaluate(
         maxVisibleLines = maxVisibleLines ?: properties.maxVisibleLines,
         nativeInterface = properties.nativeInterface,
         paddings = properties.paddings,
-        rawTextVariable = properties.rawTextVariable,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectAllOnFocus = selectAllOnFocus ?: properties.selectAllOnFocus,
         selectedActions = properties.selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = properties.textVariable,
         tooltips = properties.tooltips,
@@ -1141,6 +1188,7 @@ fun Input.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
+        validators = properties.validators,
         visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
@@ -1156,6 +1204,7 @@ fun Input.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1167,19 +1216,19 @@ fun Input.evaluate(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1188,6 +1237,7 @@ fun Input.evaluate(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1203,9 +1253,10 @@ fun Component<Input>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1214,7 +1265,6 @@ fun Component<Input>.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
-    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -1223,10 +1273,11 @@ fun Component<Input>.override(
     maxVisibleLines: Int? = null,
     nativeInterface: Input.NativeInterface? = null,
     paddings: EdgeInsets? = null,
-    rawTextVariable: String? = null,
     rowSpan: Int? = null,
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
+    textAlignmentHorizontal: AlignmentHorizontal? = null,
+    textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
@@ -1235,6 +1286,7 @@ fun Component<Input>.override(
     transitionIn: AppearanceTransition? = null,
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<TransitionTrigger>? = null,
+    validators: List<InputValidator>? = null,
     visibility: Visibility? = null,
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
@@ -1249,6 +1301,7 @@ fun Component<Input>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         fontFamily = valueOrNull(fontFamily),
@@ -1260,7 +1313,6 @@ fun Component<Input>.override(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
-        inputMethod = valueOrNull(inputMethod),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -1269,10 +1321,11 @@ fun Component<Input>.override(
         maxVisibleLines = valueOrNull(maxVisibleLines),
         nativeInterface = valueOrNull(nativeInterface),
         paddings = valueOrNull(paddings),
-        rawTextVariable = valueOrNull(rawTextVariable),
         rowSpan = valueOrNull(rowSpan),
         selectAllOnFocus = valueOrNull(selectAllOnFocus),
         selectedActions = valueOrNull(selectedActions),
+        textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
+        textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
         tooltips = valueOrNull(tooltips),
@@ -1281,6 +1334,7 @@ fun Component<Input>.override(
         transitionIn = valueOrNull(transitionIn),
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
+        validators = valueOrNull(validators),
         visibility = valueOrNull(visibility),
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
@@ -1296,6 +1350,7 @@ fun Component<Input>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
@@ -1307,19 +1362,19 @@ fun Component<Input>.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param margins External margins from the element stroke.
- * @param mask Text input mask.
+ * @param mask Mask for entering text based on the specified template.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param nativeInterface Text input line used in the native interface.
  * @param paddings Internal margins from the element stroke.
- * @param rawTextVariable Name of raw value storage variable.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1328,6 +1383,7 @@ fun Component<Input>.override(
  * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param validators Validator that checks that the field value meets the specified conditions.
  * @param visibility Element visibility.
  * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
  * @param visibilityActions Actions when an element appears on the screen.
@@ -1343,9 +1399,10 @@ fun Component<Input>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1354,7 +1411,6 @@ fun Component<Input>.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
-    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -1363,10 +1419,11 @@ fun Component<Input>.defer(
     maxVisibleLines: ReferenceProperty<Int>? = null,
     nativeInterface: ReferenceProperty<Input.NativeInterface>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
-    rawTextVariable: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectAllOnFocus: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1375,6 +1432,7 @@ fun Component<Input>.defer(
     transitionIn: ReferenceProperty<AppearanceTransition>? = null,
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    validators: ReferenceProperty<List<InputValidator>>? = null,
     visibility: ReferenceProperty<Visibility>? = null,
     visibilityAction: ReferenceProperty<VisibilityAction>? = null,
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
@@ -1389,6 +1447,7 @@ fun Component<Input>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         fontFamily = fontFamily,
@@ -1400,7 +1459,6 @@ fun Component<Input>.defer(
         hintColor = hintColor,
         hintText = hintText,
         id = id,
-        inputMethod = inputMethod,
         keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
@@ -1409,10 +1467,11 @@ fun Component<Input>.defer(
         maxVisibleLines = maxVisibleLines,
         nativeInterface = nativeInterface,
         paddings = paddings,
-        rawTextVariable = rawTextVariable,
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = selectedActions,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = textVariable,
         tooltips = tooltips,
@@ -1421,6 +1480,7 @@ fun Component<Input>.defer(
         transitionIn = transitionIn,
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
+        validators = validators,
         visibility = visibility,
         visibilityAction = visibilityAction,
         visibilityActions = visibilityActions,
@@ -1446,6 +1506,8 @@ fun Component<Input>.defer(
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param visibility Element visibility.
  */
@@ -1456,7 +1518,7 @@ fun Component<Input>.evaluate(
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1469,6 +1531,8 @@ fun Component<Input>.evaluate(
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Input> = Component(
@@ -1481,6 +1545,7 @@ fun Component<Input>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        disappearActions = null,
         extensions = null,
         focus = null,
         fontFamily = fontFamily,
@@ -1492,7 +1557,6 @@ fun Component<Input>.evaluate(
         hintColor = hintColor,
         hintText = hintText,
         id = null,
-        inputMethod = null,
         keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
@@ -1501,10 +1565,11 @@ fun Component<Input>.evaluate(
         maxVisibleLines = maxVisibleLines,
         nativeInterface = null,
         paddings = null,
-        rawTextVariable = null,
         rowSpan = rowSpan,
         selectAllOnFocus = selectAllOnFocus,
         selectedActions = null,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = null,
         tooltips = null,
@@ -1513,6 +1578,7 @@ fun Component<Input>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
+        validators = null,
         visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,

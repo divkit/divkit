@@ -11,12 +11,14 @@ import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCustom
@@ -50,7 +52,11 @@ internal class DivAccessibilityVisitor(
 
     override fun visit(view: DivStateLayout) = updateAccessibilityMode(view, view.divState)
 
+    override fun visit(view: TabsLayout) = updateAccessibilityMode(view, view.div)
+
     override fun visit(view: DivSliderView) = updateAccessibilityMode(view, view.div)
+
+    override fun visit(view: DivSelectView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: DivVideoView) = updateAccessibilityMode(view, view.div)
 

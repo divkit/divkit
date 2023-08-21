@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [pager].
  * 
- * Required properties: `type, layout_mode, items`.
+ * Required parameters: `type, layout_mode, items`.
  */
 @Generated
 class Pager internal constructor(
@@ -44,6 +44,7 @@ class Pager internal constructor(
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             defaultItem = additive.defaultItem ?: properties.defaultItem,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
@@ -105,6 +106,10 @@ class Pager internal constructor(
          * Default value: `0`.
          */
         val defaultItem: Property<Int>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
@@ -215,6 +220,7 @@ class Pager internal constructor(
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("default_item", defaultItem)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
@@ -260,6 +266,7 @@ class Pager internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -295,6 +302,7 @@ fun DivScope.pager(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -328,6 +336,7 @@ fun DivScope.pager(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         defaultItem = valueOrNull(defaultItem),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -363,6 +372,7 @@ fun DivScope.pager(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -398,6 +408,7 @@ fun DivScope.pagerProps(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -430,6 +441,7 @@ fun DivScope.pagerProps(
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     defaultItem = valueOrNull(defaultItem),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
@@ -464,6 +476,7 @@ fun DivScope.pagerProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -499,6 +512,7 @@ fun TemplateScope.pagerRefs(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -531,6 +545,7 @@ fun TemplateScope.pagerRefs(
     border = border,
     columnSpan = columnSpan,
     defaultItem = defaultItem,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     height = height,
@@ -565,6 +580,7 @@ fun TemplateScope.pagerRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -600,6 +616,7 @@ fun Pager.override(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -633,6 +650,7 @@ fun Pager.override(
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         defaultItem = valueOrNull(defaultItem) ?: properties.defaultItem,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
@@ -668,6 +686,7 @@ fun Pager.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -703,6 +722,7 @@ fun Pager.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -736,6 +756,7 @@ fun Pager.defer(
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultItem = defaultItem ?: properties.defaultItem,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
@@ -795,6 +816,7 @@ fun Pager.evaluate(
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultItem = defaultItem ?: properties.defaultItem,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         height = properties.height,
@@ -830,6 +852,7 @@ fun Pager.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -865,6 +888,7 @@ fun Component<Pager>.override(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -899,6 +923,7 @@ fun Component<Pager>.override(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         defaultItem = valueOrNull(defaultItem),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -934,6 +959,7 @@ fun Component<Pager>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -969,6 +995,7 @@ fun Component<Pager>.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -1003,6 +1030,7 @@ fun Component<Pager>.defer(
         border = border,
         columnSpan = columnSpan,
         defaultItem = defaultItem,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         height = height,
@@ -1063,6 +1091,7 @@ fun Component<Pager>.evaluate(
         border = null,
         columnSpan = columnSpan,
         defaultItem = defaultItem,
+        disappearActions = null,
         extensions = null,
         focus = null,
         height = null,

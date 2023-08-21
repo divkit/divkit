@@ -74,7 +74,7 @@ internal class DivGridBinder @Inject constructor(
                         val patchViews = patchViewsToAdd[patchIndex]
                         val layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
                         view.addView(patchViews, gridIndex + viewsPositionDiff + patchIndex, layoutParams)
-                        if (patchDivValue.hasVisibilityActions) {
+                        if (patchDivValue.hasSightActions) {
                             divView.bindViewToDiv(patchViews, patchDivs[patchIndex])
                         }
                         bindLayoutParams(patchViews, childDivValue, resolver)
@@ -86,7 +86,7 @@ internal class DivGridBinder @Inject constructor(
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             divBinder.get().bind(childView, div.items[gridIndex], divView, path)
             bindLayoutParams(childView, childDivValue, resolver)
-            if (childDivValue.hasVisibilityActions) {
+            if (childDivValue.hasSightActions) {
                 divView.bindViewToDiv(childView, div.items[gridIndex])
             } else {
                 divView.unbindViewFromDiv(childView)
@@ -141,6 +141,16 @@ internal class DivGridBinder @Inject constructor(
         if (params.rowSpan != rowSpan) {
             params.rowSpan = rowSpan
             requestLayout()
+        }
+    }
+
+    fun setDataWithoutBinding(view: DivGridLayout, div: DivGrid) {
+        view.div = div
+        for (gridIndex in div.items.indices) {
+            divBinder.get().setDataWithoutBinding(
+                view.getChildAt(gridIndex),
+                div.items[gridIndex]
+            )
         }
     }
 }

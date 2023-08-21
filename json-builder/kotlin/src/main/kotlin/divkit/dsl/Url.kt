@@ -16,6 +16,9 @@ value class Url internal constructor(
             "Malformed uri string: $value"
         }
     }
+
+    override fun toString() = value
+
     companion object {
         private val pattern: Regex =
             Regex("(.+://[-a-zA-Z0-9+&@#\\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|{}]+|^(?![\\s\\S]))")

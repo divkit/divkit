@@ -1,0 +1,592 @@
+{
+  "description": "1st gallery yellow item 0 on start, 2nd gallery yellow item 8 on center, 3rd gallery yellow item 14 on end, 4th gallery yellow item 0 on start, 5th gallery yellow item 8 on start on small screens (portrait), undefined but 14th item on end in landscape or tablet, 6th gallery yellow item 14 on end",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "templates": {
+    "cube": {
+      "type": "text",
+      "background": [
+        {
+          "$color": "background_color",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 12
+      },
+      "height": {
+        "type": "fixed",
+        "value": 72
+      },
+      "width": {
+        "type": "fixed",
+        "value": 72
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 20,
+      "$text": "text"
+    },
+    "cube_gallery": {
+      "type": "gallery",
+      "$default_item": "default",
+      "$scroll_mode": "mode",
+      "item_spacing": 8
+    },
+    "title": {
+      "type": "text",
+      "$text": "text",
+      "font_size": 20,
+      "font_weight": "bold",
+      "margins": {
+        "top": 15,
+        "bottom": 5,
+        "left": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "default_item_galleries",
+    "variables": [
+      {
+        "name": "cyan",
+        "type": "color",
+        "value": "#57C5AD"
+      },
+      {
+        "name": "yellow",
+        "type": "color",
+        "value": "#FFCC00"
+      }
+    ],
+    "states": [
+      {
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "Paging, default_item: 0"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 0,
+              "mode": "paging",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "14"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Paging, default_item: 8"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 8,
+              "mode": "paging",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "14"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Paging, default_item: 100"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 100,
+              "mode": "paging",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "14"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Without paging, default_item: 0"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 0,
+              "mode": "default",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "14"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Without paging, default_item: 8"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 8,
+              "mode": "default",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "14"
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Without paging, default_item: 100"
+            },
+            {
+              "type": "cube_gallery",
+              "default": 100,
+              "mode": "default",
+              "items": [
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "0"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "1"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "2"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "3"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "4"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "5"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "6"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "7"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "8"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "9"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "10"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "11"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "12"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{cyan}",
+                  "text": "13"
+                },
+                {
+                  "type": "cube",
+                  "background_color": "@{yellow}",
+                  "text": "14"
+                }
+              ]
+            }
+          ]
+        },
+        "state_id": 0
+      }
+    ]
+  }
+}

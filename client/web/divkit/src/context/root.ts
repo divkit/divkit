@@ -1,7 +1,6 @@
 import type { Readable, Writable } from 'svelte/types/runtime/store';
 import type { WrappedError } from '../utils/wrapError';
-import type { Action, DivBase, DivExtension, DivExtensionContext, TemplateContext } from '../../typings/common';
-import type { VisibilityAction } from '../types/visibilityAction';
+import type { Action, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
@@ -12,9 +11,13 @@ export const ROOT_CTX = Symbol('root');
 
 export type Running = 'stateChange';
 
+export interface ParentMethods {
+    replaceWith: (id: string, items?: DivBase[]) => void;
+}
+
 export interface RootCtxValue {
     logError(error: WrappedError): void;
-    logStat(type: string, action: MaybeMissing<Action | VisibilityAction>): void;
+    logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     hasTemplate(templateName: string): boolean;
     processTemplate(json: DivBaseData, templateContext: TemplateContext): {
         json: DivBaseData;
@@ -22,13 +25,15 @@ export interface RootCtxValue {
     };
     genId(key: string): string;
     genClass(key: string): string;
-    execAction(action: MaybeMissing<Action | VisibilityAction>): void;
+    execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
     execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void>;
-    execCustomAction(action: (Action | VisibilityAction) & { url: string }): void;
+    execCustomAction(action: (Action | VisibilityAction | DisappearAction) & { url: string }): void;
     isRunning(type: Running): boolean;
     setRunning(type: Running, val: boolean): void;
     registerInstance<T>(id: string, block: T): void;
     unregisterInstance(id: string): void;
+    registerParentOf(id: string, methods: ParentMethods): void;
+    unregisterParentOf(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
     getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>>;
@@ -39,6 +44,8 @@ export interface RootCtxValue {
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
     getExtensionContext(): DivExtensionContext;
+    isPointerFocus: Readable<boolean>;
+    typefaceProvider: TypefaceProvider;
     isDesktop: Readable<boolean>;
 
     // Devtool

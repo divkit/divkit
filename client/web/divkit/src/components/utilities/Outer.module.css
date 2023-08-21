@@ -166,3 +166,8 @@
     opacity: var(--divkit-animation-opacity-end, 1);
     transform: scale(var(--divkit-animation-scale-end, 1));
 }
+
+.outer_has-custom-focus:focus,
+.outer_has-custom-focus:focus-visible {
+    outline: none;
+}

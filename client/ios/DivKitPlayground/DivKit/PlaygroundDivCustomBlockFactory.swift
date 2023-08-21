@@ -1,7 +1,4 @@
-import Foundation
-
 import BasePublic
-import BaseUIPublic
 import DivKit
 import LayoutKit
 
@@ -21,8 +18,7 @@ struct PlaygroundDivCustomBlockFactory: DivCustomBlockFactory {
     } else {
       return TextBlock(
         widthTrait: .intrinsic,
-        text: NSAttributedString(string: "DivCustom(custom_type = \(data.name))")
-          .with(typo: Typo(size: 16, weight: .regular))
+        text: "DivCustom(custom_type = \(data.name))".withTypo(size: 16, weight: .regular)
       )
     }
   }

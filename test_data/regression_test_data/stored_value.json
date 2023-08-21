@@ -1,0 +1,63 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "font_size": 20,
+              "line_height": 24,
+              "text_alignment_horizontal": "center",
+              "font_weight": "bold",
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "text": "@{getStoredStringValue('storedString', 'Nothing stored')}"
+            },
+            {
+              "type": "text",
+              "text": "Store value for 10 seconds",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "top": 16,
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#00B341"
+                }
+              ],
+              "font_size": 20,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "store value",
+                  "url": "div-action://set_stored_value?name=storedString&value=Stored&type=string&lifetime=10"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

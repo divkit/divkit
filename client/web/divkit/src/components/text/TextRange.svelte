@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { getContext } from 'svelte';
     import css from './TextRange.module.css';
 
     import type { TextRange } from '../../types/text';
@@ -14,12 +15,15 @@
     import { correctColor } from '../../utils/correctColor';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { getBackground } from '../../utils/background';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
 
     export let text: string;
     export let rootFontSize: number;
     export let textStyles: Partial<TextRange> = {};
     export let singleline = false;
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
+
+    const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     let decoration = 'none';
     $: {
@@ -58,8 +62,16 @@
     }
 
     let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight(textStyles.font_weight, fontWeight);
+        if (typeof textStyles.font_family === 'string' && textStyles.font_family) {
+            fontFamily = rootCtx.typefaceProvider(textStyles.font_family, {
+                fontWeight: fontWeight || 400
+            });
+        } else {
+            fontFamily = '';
+        }
     }
 
     let color = '';
@@ -96,6 +108,7 @@
         'line-height': lineHeight,
         'letter-spacing': letterSpacing,
         'font-weight': fontWeight,
+        'font-family': fontFamily,
         color,
         background: bg?.color || undefined,
         /**

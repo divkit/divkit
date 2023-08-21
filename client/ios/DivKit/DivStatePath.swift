@@ -12,20 +12,6 @@ public typealias DivStatePath = Tagged<DivStatePathTag, UIElementPath>
 public enum DivBlockPathTag {}
 public typealias DivBlockPath = Tagged<DivBlockPathTag, UIElementPath>
 
-extension UIElementPath {
-  public static func parseDivPath(_ string: String) -> Self? {
-    let split = string.split(separator: "/")
-    guard
-      let first = split.first,
-      Int(first) != nil
-    else {
-      return nil
-    }
-
-    return UIElementPath(String(first)) + split.dropFirst().map(String.init)
-  }
-}
-
 extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
   public static func makeDivStatePath(from string: String) -> Self? {
     guard let path = UIElementPath.parseDivPath(string) else {
@@ -89,5 +75,19 @@ extension Tagged where Tag == DivBlockPathTag, RawValue == UIElementPath {
       return nil
     }
     return DivStatePath(rawValue: parent)
+  }
+}
+
+extension UIElementPath {
+  fileprivate static func parseDivPath(_ string: String) -> Self? {
+    let split = string.split(separator: "/")
+    guard
+      let first = split.first,
+      Int(first) != nil
+    else {
+      return nil
+    }
+
+    return UIElementPath(String(first)) + split.dropFirst().map(String.init)
   }
 }

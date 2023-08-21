@@ -7,14 +7,16 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type {
+        ContentAlignmentHorizontal,
+        ContentAlignmentVertical
+    } from '../../types/alignment';
     import type { SeparatorStyle } from '../../utils/container';
+    import { prepareMargins } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
-    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
-    import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
     import { calcAdditionalPaddings, calcItemsGap } from '../../utils/container';
@@ -23,6 +25,8 @@
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
+    import { correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
+    import { correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
 
     export let json: Partial<DivContainerData> = {};
     export let templateContext: TemplateContext;
@@ -32,14 +36,22 @@
     const HALIGN_MAP = {
         left: 'start',
         center: 'center',
-        right: 'end'
+        right: 'end',
+        // 'space-*' values doesn't supported for cross-axis in wrap-container
+        'space-between': 'start',
+        'space-around': 'start',
+        'space-evenly': 'start'
     } as const;
 
     const VALIGN_MAP = {
         top: 'start',
         center: 'center',
         bottom: 'end',
-        baseline: 'baseline'
+        baseline: 'baseline',
+        // 'space-*' doesn't supported for cross-axis in wrap-container
+        'space-between': 'start',
+        'space-around': 'start',
+        'space-evenly': 'start'
     } as const;
 
     const AVAIL_SEPARATOR_SHAPES = ['rounded_rectangle', 'circle'];
@@ -55,6 +67,13 @@
         } else {
             hasItemsError = false;
         }
+    }
+
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
     }
 
     $: items = (!hasItemsError && jsonItems || []).map(item => {
@@ -79,16 +98,16 @@
         orientation = correctContainerOrientation($jsonOrientation, orientation);
     }
 
-    let contentVAlign: AlignmentVertical = 'top';
+    let contentVAlign: ContentAlignmentVertical = 'top';
     $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
     $: {
-        contentVAlign = correctAlignmentVertical($jsonContentVAlign, contentVAlign);
+        contentVAlign = correctContentAlignmentVertical($jsonContentVAlign, contentVAlign);
     }
 
-    let contentHAlign: AlignmentHorizontal = 'left';
+    let contentHAlign: ContentAlignmentHorizontal = 'left';
     $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
     $: {
-        contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, contentHAlign);
+        contentHAlign = correctContentAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
 
     $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
@@ -109,7 +128,8 @@
                     show_at_start: Boolean($jsonSeparator.show_at_start ?? false),
                     show_at_end: Boolean($jsonSeparator.show_at_end ?? false),
                     show_between: Boolean($jsonSeparator.show_between ?? true),
-                    style
+                    style,
+                    margins: prepareMargins($jsonSeparator.margins)
                 };
             } else {
                 separator = null;
@@ -134,7 +154,8 @@
                     show_at_start: Boolean($jsonLineSeparator.show_at_start ?? false),
                     show_at_end: Boolean($jsonLineSeparator.show_at_end ?? false),
                     show_between: Boolean($jsonLineSeparator.show_between ?? true),
-                    style
+                    style,
+                    margins: prepareMargins($jsonLineSeparator.margins)
                 };
             } else {
                 lineSeparator = null;
@@ -173,7 +194,7 @@
             newChildLayoutParams.overlapParent = true;
         }
         if (orientation !== 'horizontal') {
-            newChildLayoutParams.parentHAlign = HALIGN_MAP[contentHAlign];
+            newChildLayoutParams.parentHAlign = wrap ? 'start' : HALIGN_MAP[contentHAlign];
             if (
                 !aspect && (
                     !$jsonHeight ||
@@ -185,7 +206,7 @@
             }
         }
         if (orientation !== 'vertical') {
-            newChildLayoutParams.parentVAlign = VALIGN_MAP[contentVAlign];
+            newChildLayoutParams.parentVAlign = wrap ? 'start' : VALIGN_MAP[contentVAlign];
             if (
                 $jsonWidth?.type === 'wrap_content' ||
                 $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
@@ -231,10 +252,14 @@
         {layoutParams}
         {additionalPaddings}
         heightByAspect={Boolean(aspect)}
+        parentOf={jsonItems}
+        {replaceItems}
     >
-        {#each items as item}
-            <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
-        {/each}
+        {#key jsonItems}
+            {#each items as item}
+                <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
+            {/each}
+        {/key}
 
         {#if separator || lineSeparator}
             <ContainerSeparators

@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.viewpool.FixedPreCreationProfile
 import com.yandex.div.internal.viewpool.PseudoViewPool
 import com.yandex.div.json.expressions.ExpressionResolver
 import org.mockito.Mockito
@@ -70,7 +71,7 @@ open class DivBinderTest {
         whenever(divView.viewComponent).doReturn(this)
     }
 
-    internal val viewCreator =  spy(DivViewCreator(context(), PseudoViewPool(), validator))
+    internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, FixedPreCreationProfile()))
     internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
 
     companion object {

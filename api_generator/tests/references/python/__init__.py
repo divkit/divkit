@@ -14,6 +14,7 @@ from .entity_with_optional_complex_property import EntityWithOptionalComplexProp
 from .entity_with_optional_property import EntityWithOptionalProperty
 from .entity_with_optional_string_enum_property import EntityWithOptionalStringEnumProperty, EntityWithOptionalStringEnumPropertyProperty
 from .entity_with_property_with_default_value import EntityWithPropertyWithDefaultValue, EntityWithPropertyWithDefaultValueNested
+from .entity_with_raw_array import EntityWithRawArray
 from .entity_with_required_property import EntityWithRequiredProperty
 from .entity_with_simple_properties import EntityWithSimpleProperties
 from .entity_with_strict_array import EntityWithStrictArray
@@ -39,6 +40,7 @@ EntityWithOptionalProperty.update_forward_refs()
 EntityWithOptionalStringEnumProperty.update_forward_refs()
 EntityWithPropertyWithDefaultValue.update_forward_refs()
 EntityWithPropertyWithDefaultValueNested.update_forward_refs()
+EntityWithRawArray.update_forward_refs()
 EntityWithRequiredProperty.update_forward_refs()
 EntityWithSimpleProperties.update_forward_refs()
 EntityWithStrictArray.update_forward_refs()
@@ -47,4 +49,4 @@ EntityWithStringEnumProperty.update_forward_refs()
 EntityWithStringEnumPropertyWithDefaultValue.update_forward_refs()
 EntityWithoutProperties.update_forward_refs()
 
-__all__ = ('Entity', 'EntityWithArray', 'EntityWithArrayOfEnums', 'EntityWithArrayOfEnumsItem', 'EntityWithArrayOfExpressions', 'EntityWithArrayOfNestedItems', 'EntityWithArrayOfNestedItemsItem', 'EntityWithArrayWithTransform', 'EntityWithComplexProperty', 'EntityWithComplexPropertyProperty', 'EntityWithComplexPropertyWithDefaultValue', 'EntityWithComplexPropertyWithDefaultValueProperty', 'EntityWithEntityProperty', 'EntityWithOptionalComplexProperty', 'EntityWithOptionalComplexPropertyProperty', 'EntityWithOptionalProperty', 'EntityWithOptionalStringEnumProperty', 'EntityWithOptionalStringEnumPropertyProperty', 'EntityWithPropertyWithDefaultValue', 'EntityWithPropertyWithDefaultValueNested', 'EntityWithRequiredProperty', 'EntityWithSimpleProperties', 'EntityWithStrictArray', 'EntityWithStringArrayProperty', 'EntityWithStringEnumProperty', 'EntityWithStringEnumPropertyProperty', 'EntityWithStringEnumPropertyWithDefaultValue', 'EntityWithStringEnumPropertyWithDefaultValueValue', 'EntityWithoutProperties')
+__all__ = ('Entity', 'EntityWithArray', 'EntityWithArrayOfEnums', 'EntityWithArrayOfEnumsItem', 'EntityWithArrayOfExpressions', 'EntityWithArrayOfNestedItems', 'EntityWithArrayOfNestedItemsItem', 'EntityWithArrayWithTransform', 'EntityWithComplexProperty', 'EntityWithComplexPropertyProperty', 'EntityWithComplexPropertyWithDefaultValue', 'EntityWithComplexPropertyWithDefaultValueProperty', 'EntityWithEntityProperty', 'EntityWithOptionalComplexProperty', 'EntityWithOptionalComplexPropertyProperty', 'EntityWithOptionalProperty', 'EntityWithOptionalStringEnumProperty', 'EntityWithOptionalStringEnumPropertyProperty', 'EntityWithPropertyWithDefaultValue', 'EntityWithPropertyWithDefaultValueNested', 'EntityWithRawArray', 'EntityWithRequiredProperty', 'EntityWithSimpleProperties', 'EntityWithStrictArray', 'EntityWithStringArrayProperty', 'EntityWithStringEnumProperty', 'EntityWithStringEnumPropertyProperty', 'EntityWithStringEnumPropertyWithDefaultValue', 'EntityWithStringEnumPropertyWithDefaultValueValue', 'EntityWithoutProperties')

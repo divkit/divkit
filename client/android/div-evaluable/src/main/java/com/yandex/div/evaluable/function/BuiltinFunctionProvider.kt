@@ -115,6 +115,7 @@ class BuiltinFunctionProvider(variableProvider: VariableProvider) : FunctionProv
         registry.register(StringLastIndex)
         registry.register(StringEncodeUri)
         registry.register(StringDecodeUri)
+        registry.register(TestRegex)
         registry.register(ToLowerCase)
         registry.register(ToUpperCase)
         registry.register(Trim)
@@ -145,6 +146,18 @@ class BuiltinFunctionProvider(variableProvider: VariableProvider) : FunctionProv
         registry.register(GetColorValueString(variableProvider))
         registry.register(GetColorValue(variableProvider))
         registry.register(GetBooleanValue(variableProvider))
+
+        // Dict functions
+        registry.register(GetDictInteger(variableProvider))
+        registry.register(GetDictNumber(variableProvider))
+        registry.register(GetDictString(variableProvider))
+        registry.register(GetDictColor(variableProvider))
+        registry.register(GetDictBoolean(variableProvider))
+        registry.register(GetDictOptInteger(variableProvider))
+        registry.register(GetDictOptNumber(variableProvider))
+        registry.register(GetDictOptString(variableProvider))
+        registry.register(GetDictOptColor(variableProvider))
+        registry.register(GetDictOptBoolean(variableProvider))
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

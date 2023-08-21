@@ -596,7 +596,7 @@ expect:
   - Pager data was opened
   - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
 paths:
-  - 'regression_test_data/action_visibility/pager.json'
+  - 'regression_test_data/visibility_actions/pager.json'
 ---
 title: Visibility_actions on change page in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -607,7 +607,7 @@ expect:
   - Pager data is logged
   - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
 paths:
-  - 'regression_test_data/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
 ---
 title: Visibility actions performed and logged in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -620,7 +620,7 @@ expect:
     logViewShown(cardId = ..., id = container)
   - Cards description was changed
 paths:
-  - 'regression_test_data/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
 ---
 title: Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -631,7 +631,7 @@ expect:
     logViewShown(cardId = ..., id = content_item_show:0)
     logViewShown(cardId = ..., id = goose_shown)
 paths:
-  - 'regression_test_data/action_visibility/pager.json'
+  - 'regression_test_data/visibility_actions/pager.json'
 ---
 title: Send select Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -649,7 +649,7 @@ expect:
     DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
     Ya:PagerSelectedActionsTracker dispatch selected actions for page 1
 paths:
-  - 'regression_test_data/action_visibility/pager_selected_actions.json'
+  - 'regression_test_data/visibility_actions/pager_selected_actions.json'
 ---
 title: Grouped bulkActions logged in "dispatchActions:"
 tags: [ 'Visibility_actions' ]
@@ -662,7 +662,7 @@ expect:
     logViewShown(cardId = ..., id = content_item_show)
     logViewShown(cardId = ..., id = container)
 paths:
-  - 'regression_test_data/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/visibility_actions/swipe_div_pager.json'
 ---
 title: visibility_actions for default_item
 tags: [ 'Visibility_actions' ]
@@ -673,7 +673,7 @@ expect:
   - Card visibility logged, example
     logViewShown(cardId = ..., id = comments_counter_show:4)
 paths:
-  - 'regression_test_data/action_visibility/default_item.json'
+  - 'regression_test_data/visibility_actions/default_item.json'
 ---
 title: Nested visibility actions
 tags: [ 'Visibility_actions' ]
@@ -693,7 +693,7 @@ expect:
     logViewShown(cardId = ..., id = comment_03)
     logViewShown(cardId = ..., id = comment_04)
 paths:
-  - 'regression_test_data/action_visibility/article.json'
+  - 'regression_test_data/visibility_actions/article.json'
 ---
 title: 'Variables in tabs'
 tags: [ 'DivTabs' ]
@@ -739,7 +739,7 @@ expect:
   - On click on test button text field set correct visibility.
   - Showing text field is logged.
 paths:
-  - 'regression_test_data/action_visibility/set_visibility.json'
+  - 'regression_test_data/set_visibility.json'
 ---
 title: Showing animation on image loaded
 tags: [ 'Animations' ]

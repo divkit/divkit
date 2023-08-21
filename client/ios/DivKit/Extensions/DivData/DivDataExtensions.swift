@@ -11,6 +11,10 @@ extension DivData: DivBlockModeling {
       throw DivBlockModelingError("DivData has no states", path: context.parentPath)
     }
 
+    if let previousRootState = getPreviousRootState(stateManager: stateManager) {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath + previousRootState.rawValue)
+    }
+
     let stateId = String(state.stateId)
     let statePath = DivStatePath(rawValue: UIElementPath(stateId))
     let div = state.div
@@ -18,9 +22,6 @@ extension DivData: DivBlockModeling {
       $0.cardLogId = $0.cardLogId ?? logId
       $0.parentPath = $0.parentPath + stateId
       $0.parentDivStatePath = statePath
-      if case .divGallery = div {} else {
-        $0.galleryResizableInsets = nil
-      }
     }
 
     stateManager.updateBlockIdsWithStateChangeTransition(
@@ -36,11 +37,7 @@ extension DivData: DivBlockModeling {
       .addingStateBlock(
         ids: stateManager.getVisibleIds(statePath: statePath)
       )
-      .addingDebugInfo(
-        debugParams: divContext.debugParams,
-        errors: divContext.errorsStorage.errors,
-        parentPath: divContext.parentPath
-      )
+      .addingDebugInfo(context: divContext)
   }
 
   private func getCurrentState(
@@ -58,6 +55,22 @@ extension DivData: DivBlockModeling {
 
     context.addError(level: .error, message: "DivData.State not found: \(stateId)")
     return states.first
+  }
+
+  private func getPreviousRootState(stateManager: DivStateManager) -> DivStateID? {
+    guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
+      return nil
+    }
+
+    switch item.previousState {
+    case .empty, .initial:
+      return nil
+    case let .withID(id):
+      if item.currentStateID != id {
+        return id
+      }
+      return nil
+    }
   }
 }
 

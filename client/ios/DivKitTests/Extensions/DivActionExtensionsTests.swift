@@ -87,7 +87,7 @@ final class DivActionExtensionsTests: XCTestCase {
   }
 }
 
-private let context = DivBlockModelingContext.default.actionContext
+private let context = DivBlockModelingContext.default
 
 private let logId = "test/log_id"
 

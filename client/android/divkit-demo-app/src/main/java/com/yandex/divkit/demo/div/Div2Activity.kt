@@ -6,10 +6,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Path
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.animation.PathInterpolator
@@ -44,6 +46,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 import java.net.URL
@@ -82,7 +85,13 @@ class Div2Activity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = getString(R.string.demo)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val transitionScheduler = DivParentTransitionScheduler(binding.container)
@@ -98,9 +107,13 @@ class Div2Activity : AppCompatActivity() {
             .divDataChangeListener(transitionScheduler)
             .actionHandler(Div2ActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
-        val context = divContext(baseContext = this, configuration = divConfiguration)
+        val context = divContext(
+            baseContext = this,
+            configuration = divConfiguration,
+            lifecycleOwner = lifecycleOwner
+        )
 
         val prevValue = preferences.getString(DIV2_KEY_URL, "")?.takeIf { it.isNotBlank() } ?: ""
         variable = Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, prevValue)

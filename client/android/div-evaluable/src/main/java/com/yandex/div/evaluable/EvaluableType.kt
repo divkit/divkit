@@ -2,6 +2,8 @@ package com.yandex.div.evaluable
 
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
+import org.json.JSONArray
+import org.json.JSONObject
 
 enum class EvaluableType(internal val typeName: String) {
     INTEGER("Integer"),
@@ -10,6 +12,8 @@ enum class EvaluableType(internal val typeName: String) {
     STRING("String"),
     DATETIME("DateTime"),
     COLOR("Color"),
+    DICT("Dict"),
+    ARRAY("Array")
     ;
 
     override fun toString(): String {
@@ -28,6 +32,8 @@ enum class EvaluableType(internal val typeName: String) {
                 is String -> STRING
                 is DateTime -> DATETIME
                 is Color -> COLOR
+                is JSONObject -> DICT
+                is JSONArray -> ARRAY
                 null -> throw EvaluableException("Unable to find type for null")
                 else -> throw EvaluableException("Unable to find type for ${value!!::class.java.name}")
             }

@@ -8,20 +8,29 @@ public final class DivActionHandler {
   public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void
 
   private let divActionURLHandler: DivActionURLHandler
+  private let urlHandler: DivUrlHandler
   private let logger: DivActionLogger
   private let trackVisibility: TrackVisibility
+  private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
-  public init(
+  init(
     divActionURLHandler: DivActionURLHandler,
-    logger: DivActionLogger = EmptyDivActionLogger(),
-    trackVisibility: @escaping TrackVisibility = { _, _ in },
-    variablesStorage: DivVariablesStorage
+    urlHandler: DivUrlHandler,
+    logger: DivActionLogger,
+    trackVisibility: @escaping TrackVisibility,
+    trackDisappear: @escaping TrackVisibility,
+    variablesStorage: DivVariablesStorage,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.divActionURLHandler = divActionURLHandler
+    self.urlHandler = urlHandler
     self.logger = logger
     self.trackVisibility = trackVisibility
+    self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public convenience init(
@@ -30,10 +39,14 @@ public final class DivActionHandler {
     patchProvider: DivPatchProvider,
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
-    showTooltip: @escaping DivActionURLHandler.ShowTooltipAction,
+    showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
+    tooltipActionPerformer: TooltipActionPerformer? = nil,
     logger: DivActionLogger = EmptyDivActionLogger(),
     trackVisibility: @escaping TrackVisibility = { _, _ in },
-    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in }
+    trackDisappear: @escaping TrackVisibility = { _, _ in },
+    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
+    urlHandler: DivUrlHandler,
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
   ) {
     self.init(
       divActionURLHandler: DivActionURLHandler(
@@ -43,17 +56,22 @@ public final class DivActionHandler {
         variableUpdater: variablesStorage,
         updateCard: updateCard,
         showTooltip: showTooltip,
-        performTimerAction: performTimerAction
+        tooltipActionPerformer: tooltipActionPerformer,
+        performTimerAction: performTimerAction,
+        persistentValuesStorage: persistentValuesStorage
       ),
+      urlHandler: urlHandler,
       logger: logger,
       trackVisibility: trackVisibility,
-      variablesStorage: variablesStorage
+      trackDisappear: trackDisappear,
+      variablesStorage: variablesStorage,
+      persistentValuesStorage: persistentValuesStorage
     )
   }
 
   public func handle(
     params: UserInterfaceAction.DivActionParams,
-    urlOpener: @escaping UrlOpener
+    sender: AnyObject?
   ) {
     let action: DivActionBase?
     switch params.source {
@@ -61,6 +79,8 @@ public final class DivActionHandler {
       action = parseAction(type: DivActionTemplate.self, json: params.action)
     case .visibility:
       action = parseAction(type: DivVisibilityActionTemplate.self, json: params.action)
+    case .disappear:
+      action = parseAction(type: DivDisappearActionTemplate.self, json: params.action)
     }
     guard let action = action else {
       return
@@ -70,37 +90,40 @@ public final class DivActionHandler {
       action,
       cardId: DivCardID(rawValue: params.cardId),
       source: params.source,
-      urlOpener: urlOpener
+      sender: sender
     )
   }
 
-  public func handle(
+  func handle(
     _ action: DivActionBase,
     cardId: DivCardID,
     source: UserInterfaceAction.DivActionSource,
-    urlOpener: @escaping UrlOpener
+    sender: AnyObject?
   ) {
     let variables = variablesStorage.makeVariables(for: cardId)
-    let expressionResolver = ExpressionResolver(variables: variables)
+    let expressionResolver = ExpressionResolver(variables: variables, persistentValuesStorage: persistentValuesStorage)
     if let url = action.resolveUrl(expressionResolver) {
       let isDivActionURLHandled = divActionURLHandler.handleURL(
         url,
         cardId: cardId,
         completion: { [unowned self] result in
-          self.handleResult(
-            result: result,
-            callbacks: action.downloadCallbacks,
-            cardId: cardId,
-            source: source,
-            urlOpener: urlOpener
-          )
+          let callbackActions: [DivAction]
+          switch result {
+          case .success:
+            callbackActions = action.downloadCallbacks?.onSuccessActions ?? []
+          case .failure:
+            callbackActions = action.downloadCallbacks?.onFailActions ?? []
+          }
+          callbackActions.forEach {
+            self.handle($0, cardId: cardId, source: source, sender: sender)
+          }
         }
       )
       if !isDivActionURLHandled {
         switch source {
         case .tap, .custom:
-          urlOpener(url)
-        case .visibility:
+          urlHandler.handle(url, sender: sender)
+        case .visibility, .disappear:
           // For visibility actions url is treated as logUrl.
           let referer = action.resolveReferer(expressionResolver)
           logger.log(url: url, referer: referer, payload: action.payload)
@@ -115,6 +138,8 @@ public final class DivActionHandler {
 
     if source == .visibility {
       trackVisibility(action.logId, cardId)
+    } else if source == .disappear {
+      trackDisappear(action.logId, cardId)
     }
   }
 
@@ -126,27 +151,5 @@ public final class DivActionHandler {
       type: T.self,
       from: json.makeDictionary() ?? [:]
     ).unwrap()
-  }
-
-  private func handleResult(
-    result: Result<Void, Error>,
-    callbacks: DivDownloadCallbacks?,
-    cardId: DivCardID,
-    source: UserInterfaceAction.DivActionSource,
-    urlOpener: @escaping UrlOpener
-  ) {
-    guard let callbacks = callbacks else {
-      return
-    }
-    switch result {
-    case .success:
-      callbacks.onSuccessActions?.forEach {
-        handle($0, cardId: cardId, source: source, urlOpener: urlOpener)
-      }
-    case .failure:
-      callbacks.onFailActions?.forEach {
-        handle($0, cardId: cardId, source: source, urlOpener: urlOpener)
-      }
-    }
   }
 }

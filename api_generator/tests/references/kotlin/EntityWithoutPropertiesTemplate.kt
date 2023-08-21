@@ -14,6 +14,7 @@ import java.io.IOException
 import java.util.BitSet
 import org.json.JSONObject
 import com.yandex.div.data.*
+import org.json.JSONArray
 
 @Mockable
 class EntityWithoutPropertiesTemplate : JSONSerializable, JsonTemplate<EntityWithoutProperties> {

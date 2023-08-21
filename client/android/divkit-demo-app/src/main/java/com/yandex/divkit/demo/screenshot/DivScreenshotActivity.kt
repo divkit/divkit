@@ -74,6 +74,7 @@ class DivScreenshotActivity : AppCompatActivity() {
             id = R.id.morda_screenshot_div
             hideCursor()
         }
+        applyConfiguration(divView)
         setContentView(divView)
     }
 
@@ -86,6 +87,21 @@ class DivScreenshotActivity : AppCompatActivity() {
                 child.inputType = child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             } else {
                 (child as? ViewGroup)?.hideCursor()
+            }
+        }
+    }
+
+    private fun applyConfiguration(view: View) {
+        val divJson = getTestCaseJson()
+        val configuration = if (divJson.has("configuration")) {
+            divJson.getJSONObject("configuration")
+        } else {
+            return
+        }
+
+        if (configuration.has("layout_direction")) {
+            if (configuration.getString("layout_direction") == "rtl") {
+                view.layoutDirection = View.LAYOUT_DIRECTION_RTL
             }
         }
     }

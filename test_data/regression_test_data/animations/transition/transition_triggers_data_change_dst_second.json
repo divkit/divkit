@@ -148,7 +148,6 @@
               "text_alignment_vertical": "center",
               "text_alignment_horizontal": "center",
               "transition_animation_selector": "data_change",
-              "transition_triggers": [],
               "transition_in": {
                 "type": "fade",
                 "alpha": 0,

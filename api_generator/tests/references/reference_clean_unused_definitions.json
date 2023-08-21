@@ -4,8 +4,7 @@
       "common.json": {
         "non_empty_string": {
           "type": "string",
-          "minLength": 1,
-          "clientMinLength": 1
+          "minLength": 1
         },
         "color": {
           "type": "string",
@@ -24,13 +23,304 @@
           "constraint": "number >= 0"
         },
         "boolean_int": {
-          "type": "integer",
-          "enum": [
-            0,
-            1
-          ],
-          "format": "boolean"
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          ]
         }
+      }
+    },
+    {
+      "entity.json": {
+        "anyOf": [
+          {
+            "$resolved_refs": [
+              "entity_with_array.json"
+            ],
+            "type": "$defined_entity_with_array"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_array_of_enums.json"
+            ],
+            "type": "$defined_entity_with_array_of_enums"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_array_of_expressions.json"
+            ],
+            "type": "$defined_entity_with_array_of_expressions"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_array_of_nested_items.json"
+            ],
+            "type": "$defined_entity_with_array_of_nested_items"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_array_with_transform.json"
+            ],
+            "type": "$defined_entity_with_array_with_transform"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_complex_property.json"
+            ],
+            "type": "$defined_entity_with_complex_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_complex_property_with_default_value.json"
+            ],
+            "type": "$defined_entity_with_complex_property_with_default_value"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_entity_property.json"
+            ],
+            "type": "$defined_entity_with_entity_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_optional_complex_property.json"
+            ],
+            "type": "$defined_entity_with_optional_complex_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_optional_property.json"
+            ],
+            "type": "$defined_entity_with_optional_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_optional_string_enum_property.json"
+            ],
+            "type": "$defined_entity_with_optional_string_enum_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_property_with_default_value.json"
+            ],
+            "type": "$defined_entity_with_property_with_default_value"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_raw_array.json"
+            ],
+            "type": "$defined_entity_with_raw_array"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_required_property.json"
+            ],
+            "type": "$defined_entity_with_required_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_simple_properties.json"
+            ],
+            "type": "$defined_entity_with_simple_properties"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_strict_array.json"
+            ],
+            "type": "$defined_entity_with_strict_array"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_string_array_property.json"
+            ],
+            "type": "$defined_entity_with_string_array_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_string_enum_property.json"
+            ],
+            "type": "$defined_entity_with_string_enum_property"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_string_enum_property_with_default_value.json"
+            ],
+            "type": "$defined_entity_with_string_enum_property_with_default_value"
+          },
+          {
+            "$resolved_refs": [
+              "entity_without_properties.json"
+            ],
+            "type": "$defined_entity_without_properties"
+          }
+        ]
+      }
+    },
+    {
+      "entity_with_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "entity.json"
+              ],
+              "type": "$defined_entity"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_enums.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_enums"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "first",
+                "second"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_expressions.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_expressions"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "common.json#/non_empty_string"
+              ],
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_nested_items.json": {
+        "type": "object",
+        "definitions": {},
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_nested_items"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "#/definitions/item"
+              ],
+              "type": "object",
+              "properties": {
+                "property": {
+                  "$resolved_refs": [
+                    "common.json#/non_empty_string"
+                  ],
+                  "type": "string",
+                  "minLength": 1
+                },
+                "entity": {
+                  "$resolved_refs": [
+                    "entity.json"
+                  ],
+                  "type": "$defined_entity"
+                }
+              },
+              "required": [
+                "property",
+                "entity"
+              ],
+              "$typename": "item"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_with_transform.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_with_transform"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "common.json#/color"
+              ],
+              "type": "string",
+              "format": "color"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
       }
     },
     {
@@ -177,8 +467,7 @@
               "common.json#/non_empty_string"
             ],
             "type": "string",
-            "minLength": 1,
-            "clientMinLength": 1
+            "minLength": 1
           }
         },
         "required": [
@@ -215,6 +504,108 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {},
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "alias_dart": "iNum",
+            "$resolved_refs": [
+              "#/definitions/int_prop",
+              "common.json#/non_negative_integer"
+            ],
+            "default_value": "0",
+            "type": "integer",
+            "constraint": "number >= 0"
+          },
+          "url": {
+            "$resolved_refs": [
+              "#/definitions/url_prop",
+              "common.json#/url"
+            ],
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru",
+            "type": "string",
+            "format": "uri"
+          },
+          "nested": {
+            "$resolved_refs": [
+              "#/definitions/nested"
+            ],
+            "type": "object",
+            "properties": {
+              "int": {
+                "alias_dart": "iNum",
+                "$resolved_refs": [
+                  "#/definitions/int_prop",
+                  "common.json#/non_negative_integer"
+                ],
+                "default_value": "0",
+                "type": "integer",
+                "constraint": "number >= 0",
+                "$typename": "int_prop"
+              },
+              "url": {
+                "$resolved_refs": [
+                  "#/definitions/url_prop",
+                  "common.json#/url"
+                ],
+                "schemes": [
+                  "https"
+                ],
+                "default_value": "https://yandex.ru",
+                "type": "string",
+                "format": "uri",
+                "$typename": "url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "non_optional"
+            ],
+            "$typename": "nested",
+            "description_translations": {
+              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+            }
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
+      "entity_with_raw_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_raw_array"
+            ]
+          },
+          "array": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
       "entity_with_required_property.json": {
         "type": "object",
         "properties": {
@@ -229,13 +620,187 @@
               "common.json#/non_empty_string"
             ],
             "type": "string",
-            "minLength": 1,
-            "clientMinLength": 1
+            "minLength": 1
           }
         },
         "required": [
           "type",
           "property"
+        ]
+      }
+    },
+    {
+      "entity_with_simple_properties.json": {
+        "type": "object",
+        "swift_protocols": "EntityProtocol",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_simple_properties"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "supports_expressions": false,
+            "description_translations": {
+              "en": "ID. Can't contain expressions.",
+              "ru": "Идентификатор. Не может содержать выражение."
+            }
+          },
+          "string": {
+            "platforms": [
+              "android",
+              "ios",
+              "web"
+            ],
+            "description_translations": {
+              "en": "String.",
+              "ru": "Строка."
+            },
+            "$resolved_refs": [
+              "common.json#/non_empty_string"
+            ],
+            "type": "string",
+            "minLength": 1
+          },
+          "integer": {
+            "type": "integer",
+            "long_type": true,
+            "description_translations": {
+              "en": "Integer.",
+              "ru": "Целое число."
+            }
+          },
+          "double": {
+            "alias_dart": "dNum",
+            "type": "number",
+            "description_translations": {
+              "en": "Floating point number.",
+              "ru": "Число с плавающей точкой."
+            }
+          },
+          "boolean": {
+            "type": "boolean",
+            "description_translations": {
+              "en": "Boolean property.",
+              "ru": "Логическое значение."
+            }
+          },
+          "boolean_int": {
+            "deprecated": true,
+            "platforms": [
+              "android"
+            ],
+            "description_translations": {
+              "en": "Boolean value in numeric format.",
+              "ru": "Логическое значение в числовом формате."
+            },
+            "$resolved_refs": [
+              "common.json#/boolean_int"
+            ],
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "integer",
+                "enum": [
+                  0,
+                  1
+                ]
+              }
+            ]
+          },
+          "positive_integer": {
+            "platforms": [],
+            "description_translations": {
+              "en": "Positive integer.",
+              "ru": "Положительное целое число."
+            },
+            "$resolved_refs": [
+              "common.json#/positive_integer"
+            ],
+            "type": "integer",
+            "constraint": "number > 0"
+          },
+          "color": {
+            "description_translations": {
+              "en": "Color.",
+              "ru": "Цвет."
+            },
+            "$resolved_refs": [
+              "common.json#/color"
+            ],
+            "type": "string",
+            "format": "color"
+          },
+          "url": {
+            "$resolved_refs": [
+              "common.json#/url"
+            ],
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "description_translations": {
+          "en": "Entity with simple properties.",
+          "ru": "Объект с простыми свойствами."
+        }
+      }
+    },
+    {
+      "entity_with_strict_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_strict_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "entity.json"
+              ],
+              "type": "$defined_entity"
+            },
+            "minItems": 1,
+            "strictParsing": true
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_string_array_property.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_string_array_property"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
         ]
       }
     },
@@ -350,539 +915,6 @@
         "entity_with_simple_properties_color": {
           "en": "Color.",
           "ru": "Цвет."
-        }
-      }
-    },
-    {
-      "entity.json": {
-        "anyOf": [
-          {
-            "$resolved_refs": [
-              "entity_with_array.json"
-            ],
-            "type": "$defined_entity_with_array"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_array_of_enums.json"
-            ],
-            "type": "$defined_entity_with_array_of_enums"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_array_of_expressions.json"
-            ],
-            "type": "$defined_entity_with_array_of_expressions"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_array_of_nested_items.json"
-            ],
-            "type": "$defined_entity_with_array_of_nested_items"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_array_with_transform.json"
-            ],
-            "type": "$defined_entity_with_array_with_transform"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_complex_property.json"
-            ],
-            "type": "$defined_entity_with_complex_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_complex_property_with_default_value.json"
-            ],
-            "type": "$defined_entity_with_complex_property_with_default_value"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_entity_property.json"
-            ],
-            "type": "$defined_entity_with_entity_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_optional_complex_property.json"
-            ],
-            "type": "$defined_entity_with_optional_complex_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_optional_property.json"
-            ],
-            "type": "$defined_entity_with_optional_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_optional_string_enum_property.json"
-            ],
-            "type": "$defined_entity_with_optional_string_enum_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_property_with_default_value.json"
-            ],
-            "type": "$defined_entity_with_property_with_default_value"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_required_property.json"
-            ],
-            "type": "$defined_entity_with_required_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_simple_properties.json"
-            ],
-            "type": "$defined_entity_with_simple_properties"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_strict_array.json"
-            ],
-            "type": "$defined_entity_with_strict_array"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_string_array_property.json"
-            ],
-            "type": "$defined_entity_with_string_array_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_string_enum_property.json"
-            ],
-            "type": "$defined_entity_with_string_enum_property"
-          },
-          {
-            "$resolved_refs": [
-              "entity_with_string_enum_property_with_default_value.json"
-            ],
-            "type": "$defined_entity_with_string_enum_property_with_default_value"
-          },
-          {
-            "$resolved_refs": [
-              "entity_without_properties.json"
-            ],
-            "type": "$defined_entity_without_properties"
-          }
-        ]
-      }
-    },
-    {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {},
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "alias_dart": "iNum",
-            "$resolved_refs": [
-              "#/definitions/int_prop",
-              "common.json#/non_negative_integer"
-            ],
-            "default_value": "0",
-            "type": "integer",
-            "constraint": "number >= 0"
-          },
-          "url": {
-            "$resolved_refs": [
-              "#/definitions/url_prop",
-              "common.json#/url"
-            ],
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru",
-            "type": "string",
-            "format": "uri"
-          },
-          "nested": {
-            "$resolved_refs": [
-              "#/definitions/nested"
-            ],
-            "type": "object",
-            "properties": {
-              "int": {
-                "alias_dart": "iNum",
-                "$resolved_refs": [
-                  "#/definitions/int_prop",
-                  "common.json#/non_negative_integer"
-                ],
-                "default_value": "0",
-                "type": "integer",
-                "constraint": "number >= 0",
-                "$typename": "int_prop"
-              },
-              "url": {
-                "$resolved_refs": [
-                  "#/definitions/url_prop",
-                  "common.json#/url"
-                ],
-                "schemes": [
-                  "https"
-                ],
-                "default_value": "https://yandex.ru",
-                "type": "string",
-                "format": "uri",
-                "$typename": "url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "non_optional"
-            ],
-            "$typename": "nested",
-            "description_translations": {
-              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-            }
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
-      "entity_with_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "entity.json"
-              ],
-              "type": "$defined_entity"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_enums.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_enums"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "first",
-                "second"
-              ]
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_expressions.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_expressions"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "common.json#/non_empty_string"
-              ],
-              "type": "string",
-              "minLength": 1,
-              "clientMinLength": 1
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_nested_items.json": {
-        "type": "object",
-        "definitions": {},
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_nested_items"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "#/definitions/item"
-              ],
-              "type": "object",
-              "properties": {
-                "property": {
-                  "$resolved_refs": [
-                    "common.json#/non_empty_string"
-                  ],
-                  "type": "string",
-                  "minLength": 1,
-                  "clientMinLength": 1
-                },
-                "entity": {
-                  "$resolved_refs": [
-                    "entity.json"
-                  ],
-                  "type": "$defined_entity"
-                }
-              },
-              "required": [
-                "property",
-                "entity"
-              ],
-              "$typename": "item"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_with_transform.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_with_transform"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "common.json#/color"
-              ],
-              "type": "string",
-              "format": "color"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_strict_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_strict_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "entity.json"
-              ],
-              "type": "$defined_entity"
-            },
-            "minItems": 1,
-            "strictParsing": true
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_string_array_property.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_string_array_property"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_simple_properties.json": {
-        "type": "object",
-        "swift_protocols": "EntityProtocol",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_simple_properties"
-            ]
-          },
-          "id": {
-            "type": "integer",
-            "supports_expressions": false,
-            "description_translations": {
-              "en": "ID. Can't contain expressions.",
-              "ru": "Идентификатор. Не может содержать выражение."
-            }
-          },
-          "string": {
-            "platforms": [
-              "android",
-              "ios",
-              "web"
-            ],
-            "description_translations": {
-              "en": "String.",
-              "ru": "Строка."
-            },
-            "$resolved_refs": [
-              "common.json#/non_empty_string"
-            ],
-            "type": "string",
-            "minLength": 1,
-            "clientMinLength": 1
-          },
-          "integer": {
-            "type": "integer",
-            "long_type": true,
-            "description_translations": {
-              "en": "Integer.",
-              "ru": "Целое число."
-            }
-          },
-          "double": {
-            "alias_dart": "dNum",
-            "type": "number",
-            "description_translations": {
-              "en": "Floating point number.",
-              "ru": "Число с плавающей точкой."
-            }
-          },
-          "boolean": {
-            "type": "boolean",
-            "description_translations": {
-              "en": "Boolean property.",
-              "ru": "Логическое значение."
-            }
-          },
-          "boolean_int": {
-            "deprecated": true,
-            "platforms": [
-              "android"
-            ],
-            "description_translations": {
-              "en": "Boolean value in numeric format.",
-              "ru": "Логическое значение в числовом формате."
-            },
-            "$resolved_refs": [
-              "common.json#/boolean_int"
-            ],
-            "type": "integer",
-            "enum": [
-              0,
-              1
-            ],
-            "format": "boolean"
-          },
-          "positive_integer": {
-            "platforms": [],
-            "description_translations": {
-              "en": "Positive integer.",
-              "ru": "Положительное целое число."
-            },
-            "$resolved_refs": [
-              "common.json#/positive_integer"
-            ],
-            "type": "integer",
-            "constraint": "number > 0"
-          },
-          "color": {
-            "description_translations": {
-              "en": "Color.",
-              "ru": "Цвет."
-            },
-            "$resolved_refs": [
-              "common.json#/color"
-            ],
-            "type": "string",
-            "format": "color"
-          },
-          "url": {
-            "$resolved_refs": [
-              "common.json#/url"
-            ],
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "description_translations": {
-          "en": "Entity with simple properties.",
-          "ru": "Объект с простыми свойствами."
         }
       }
     }

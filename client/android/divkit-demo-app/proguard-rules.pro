@@ -16,3 +16,5 @@
 -keep class kotlin.reflect.**
 -keep class kotlin.Metadata { *; }
 -keep class kotlinx.**
+
+-keep class com.yandex.div.lottie.**

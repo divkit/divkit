@@ -36,29 +36,33 @@ extension DivTabs: DivBlockModeling {
       try? item.makeTab(context: tabsContext, index: index)
     }
 
+    let expressionResolver = context.expressionResolver
     let listModel = TabListViewModel(
       tabTitles: tabs.map { $0.title },
       titleStyle: tabTitleStyle.makeTitleStyle(
-        fontSpecifiers: context.fontSpecifiers,
-        expressionResolver: context.expressionResolver
+        fontProvider: context.fontProvider,
+        expressionResolver: expressionResolver,
+        context: context
       ),
-      listPaddings: titlePaddings.makeEdgeInsets(with: context.expressionResolver)
+      layoutDirection: context.layoutDirection,
+      listPaddings: titlePaddings.makeEdgeInsets(context: context)
     )
 
     let contentsModel = try TabContentsViewModel(
       pages: tabs.map { $0.page },
-      pagesHeight: resolveDynamicHeight(context.expressionResolver)
+      pagesHeight: resolveDynamicHeight(expressionResolver)
         ? .bySelectedPage
         : .byHighestPage,
       path: tabsContext.parentPath,
-      scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(context.expressionResolver)
+      scrollingEnabled: resolveSwitchTabsByContentSwipeEnabled(expressionResolver),
+      layoutDirection: context.layoutDirection
     )
 
     return try TabsBlock(
       model: try TabViewModel(
         listModel: listModel,
         contentsModel: contentsModel,
-        separatorStyle: makeSeparatorStyle(with: context.expressionResolver)
+        separatorStyle: makeSeparatorStyle(with: expressionResolver, context: context)
       ),
       state: makeState(context: tabsContext, tabs: tabs),
       widthTrait: makeContentWidthTrait(with: context),
@@ -67,11 +71,12 @@ extension DivTabs: DivBlockModeling {
   }
 
   private func makeSeparatorStyle(
-    with expressionResolver: ExpressionResolver
+    with expressionResolver: ExpressionResolver,
+    context: DivBlockModelingContext
   ) -> TabSeparatorStyle? {
     resolveHasSeparator(expressionResolver) ? TabSeparatorStyle(
       color: resolveSeparatorColor(expressionResolver),
-      insets: separatorPaddings.makeEdgeInsets(with: expressionResolver)
+      insets: separatorPaddings.makeEdgeInsets(context: context)
     ) : nil
   }
 
@@ -104,12 +109,12 @@ typealias Tab = (title: UILink, page: TabPageViewModel)
 
 extension DivTabs.TabTitleStyle {
   private func makeTypo(
-    fontSpecifiers: FontSpecifiers,
-    fontWeight: FontWeight,
-    with expressionResolver: ExpressionResolver
+    fontProvider: DivFontProvider,
+    fontWeight: DivFontWeight,
+    expressionResolver: ExpressionResolver
   ) -> Typo {
-    let font = fontSpecifiers.font(
-      family: resolveFontFamily(expressionResolver).fontFamily,
+    let font = fontProvider.font(
+      family: resolveFontFamily(expressionResolver) ?? "",
       weight: fontWeight,
       size: resolveFontSizeUnit(expressionResolver)
         .makeScaledValue(resolveFontSize(expressionResolver))
@@ -121,22 +126,23 @@ extension DivTabs.TabTitleStyle {
   }
 
   fileprivate func makeTitleStyle(
-    fontSpecifiers: FontSpecifiers,
-    expressionResolver: ExpressionResolver
+    fontProvider: DivFontProvider,
+    expressionResolver: ExpressionResolver,
+    context: DivBlockModelingContext
   ) -> LayoutKit.TabTitleStyle {
-    let defaultTypo = resolveFontWeight(expressionResolver).fontWeight
+    let defaultFontWeight = resolveFontWeight(expressionResolver)
     return LayoutKit.TabTitleStyle(
       typo: makeTypo(
-        fontSpecifiers: fontSpecifiers,
-        fontWeight: resolveActiveFontWeight(expressionResolver)?.fontWeight ?? defaultTypo,
-        with: expressionResolver
+        fontProvider: fontProvider,
+        fontWeight: resolveActiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        expressionResolver: expressionResolver
       ),
       inactiveTypo: makeTypo(
-        fontSpecifiers: fontSpecifiers,
-        fontWeight: resolveInactiveFontWeight(expressionResolver)?.fontWeight ?? defaultTypo,
-        with: expressionResolver
+        fontProvider: fontProvider,
+        fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
+        expressionResolver: expressionResolver
       ),
-      paddings: paddings.makeEdgeInsets(with: expressionResolver),
+      paddings: paddings.makeEdgeInsets(context: context),
       cornerRadius: makeCornerRadii(with: expressionResolver),
       baseTextColor: resolveInactiveTextColor(expressionResolver),
       activeTextColor: resolveActiveTextColor(expressionResolver),
@@ -192,12 +198,14 @@ extension DivTabs.Item {
   }
 
   private func makeTitle(context: DivBlockModelingContext) -> UILink {
-    let path = context.parentPath + "title"
-    let action = makeAction(context: context.actionContext)
+    let titleContext = modified(context) {
+      $0.parentPath += "title"
+    }
+    let action = makeAction(context: context)
     return UILink(
-      text: resolveTitle(context.expressionResolver) ?? "",
+      text: resolveTitle(titleContext.expressionResolver) ?? "",
       url: action?.url,
-      path: action?.path ?? path
+      path: action?.path ?? titleContext.parentPath
     )
   }
 }

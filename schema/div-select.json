@@ -58,13 +58,8 @@
           ]
         },
         "font_family": {
-          "$ref": "div-font-family.json",
-          "default_value": "text",
-          "$description": "translations.json#/div_font_family",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_font_family"
         },
         "font_weight": {
           "$ref": "div-font-weight.json",

@@ -38,6 +38,7 @@ public struct UserInterfaceAction: Equatable, Codable {
     case tap
     case visibility
     case custom
+    case disappear
   }
 
   public let payload: Payload

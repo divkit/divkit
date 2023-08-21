@@ -15,6 +15,7 @@ export interface TabsTitleStyle {
     font_weight?: FontWeight;
     active_font_weight?: FontWeight;
     inactive_font_weight?: FontWeight;
+    font_family?: string;
     active_text_color?: string;
     inactive_text_color?: string;
     active_background_color?: string;

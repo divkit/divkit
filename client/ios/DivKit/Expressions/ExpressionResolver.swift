@@ -7,19 +7,28 @@ public typealias ExpressionValueValidator<T> = (T) -> Bool
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
+  public typealias VariableTracker = (Set<DivVariableName>) -> Void
+
   @usableFromInline
   let variables: DivVariables
   private let errorTracker: ExpressionErrorTracker
+  let variableTracker: VariableTracker
+  private let persistentValuesStorage: DivPersistentValuesStorage
+  private let lock = AllocatedUnfairLock()
 
   public init(
     variables: DivVariables,
-    errorTracker: ExpressionErrorTracker? = nil
+    persistentValuesStorage: DivPersistentValuesStorage,
+    errorTracker: ExpressionErrorTracker? = nil,
+    variableTracker: @escaping VariableTracker = { _ in }
   ) {
     self.variables = variables
     self.errorTracker = {
       DivKitLogger.error($0.description)
       errorTracker?($0)
     }
+    self.variableTracker = variableTracker
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func resolveString(expression: String) -> String {
@@ -60,6 +69,7 @@ public final class ExpressionResolver {
     case let .value(val):
       return resolveEscaping(val)
     case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateStringBasedValue(
         link: link,
         initializer: initializer
@@ -69,7 +79,29 @@ public final class ExpressionResolver {
     }
   }
 
-  func resolveEscaping<T>(_ value: T?) -> T? {
+  func resolveNumericValue<T>(
+    expression: Expression<T>?
+  ) -> T? {
+    switch expression {
+    case let .value(val):
+      return val
+    case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
+      return evaluateSingleItem(link: link)
+    case .none:
+      return nil
+    }
+  }
+
+  @inlinable
+  func getVariableValue<T>(_ name: String) -> T? {
+    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
+      return nil
+    }
+    return value
+  }
+
+  private func resolveEscaping<T>(_ value: T?) -> T? {
     guard var value = value as? String, value.contains("\\") else {
       return value
     }
@@ -87,9 +119,9 @@ public final class ExpressionResolver {
           index = value.index(index, offsetBy: escaped.count)
         } else {
           if next.isEmpty {
-            errorTracker(ExpressionError.tokenizing(expression: value))
+            errorTracker(ExpressionError("Error tokenizing '\(value)'.", expression: value))
           } else {
-            errorTracker(ExpressionError.escaping)
+            errorTracker(ExpressionError("Incorrect string escape", expression: value))
           }
           return nil
         }
@@ -101,28 +133,11 @@ public final class ExpressionResolver {
     return value as? T
   }
 
-  @inlinable
-  func resolveNumericValue<T>(
-    expression: Expression<T>?
-  ) -> T? {
-    switch expression {
-    case let .value(val):
-      return val
-    case let .link(link):
-      return evaluateSingleItem(
-        link: link
-      )
-    case .none:
-      return nil
-    }
-  }
-
-  @usableFromInline
-  func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
+  private func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
     guard link.items.count == 1,
           case let .calcExpression(parsedExpression) = link.items.first
     else {
-      errorTracker(.incorrectSingleItemExpression(expression: link.rawValue, type: T.self))
+      errorTracker(ExpressionError("Incorrect single item expression", expression: link.rawValue))
       return nil
     }
     do {
@@ -135,21 +150,16 @@ public final class ExpressionResolver {
     } catch let error as CalcExpression.Error {
       let expression = parsedExpression.description
       errorTracker(
-        .calculating(
-          expression: link.rawValue,
-          scriptInject: expression,
-          description: error.makeOutputMessage(for: expression)
-        )
+        ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
       )
       return nil
     } catch {
-      errorTracker(.unknown(error: error))
+      errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
       return nil
     }
   }
 
-  @usableFromInline
-  func evaluateStringBasedValue<T>(
+  private func evaluateStringBasedValue<T>(
     link: ExpressionLink<T>,
     initializer: (String) -> T?
   ) -> T? {
@@ -167,15 +177,11 @@ public final class ExpressionResolver {
         } catch let error as CalcExpression.Error {
           let expression = parsedExpression.description
           errorTracker(
-            .calculating(
-              expression: link.rawValue,
-              scriptInject: expression,
-              description: error.makeOutputMessage(for: expression)
-            )
+            ExpressionError(error.makeOutputMessage(for: expression), expression: link.rawValue)
           )
           return nil
         } catch {
-          errorTracker(.unknown(error: error))
+          errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
           return nil
         }
       case let .string(value):
@@ -186,8 +192,7 @@ public final class ExpressionResolver {
           initializer: { $0 }
         ) {
           let link = try? ExpressionLink<String>(
-            expression: expression,
-            validator: nil,
+            rawValue: "@{\(expression)}",
             errorTracker: link.errorTracker,
             resolveNested: false
           )
@@ -201,22 +206,19 @@ public final class ExpressionResolver {
       }
     }
     guard let result = initializer(stringValue) else {
-      errorTracker(.initializingValue(
-        expression: link.rawValue,
-        stringValue: stringValue,
-        type: T.self
-      ))
+      errorTracker(
+        ExpressionError(
+          "Failed to initalize \(T.self) from string value: \(stringValue)",
+          expression: link.rawValue
+        )
+      )
       return nil
     }
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
   }
 
-  @inlinable
-  func getVariableValue<T>(_ name: String) -> T? {
-    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
-      return nil
-    }
-    return value
+  func getStoredValue<T>(_ name: String) -> T? {
+    persistentValuesStorage.get(name: name)
   }
 
   private func validatedValue<T>(
@@ -228,7 +230,7 @@ public final class ExpressionResolver {
       if validator(value) {
         return value
       } else {
-        errorTracker(.validating(expression: rawValue, value: "\(value)", type: T.self))
+        errorTracker(ExpressionError("Failed to validate value: \(value)", expression: rawValue))
         return nil
       }
     }
@@ -239,7 +241,7 @@ public final class ExpressionResolver {
     expression: String,
     initializer: (String) -> T?
   ) -> T? {
-    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression, validator: nil) else {
+    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression) else {
       return nil
     }
     return resolveStringBasedValue(
@@ -248,8 +250,12 @@ public final class ExpressionResolver {
     )
   }
 
-  private lazy var supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
-    _supportedFunctions + ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }.flat()
+  private lazy var supportedFunctions: [
+    AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator
+  ] = lock.withLock {
+    ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }
+      .reduce(into: _supportedFunctions) { $0[$1.0] = $1.1 }
+  }
 }
 
 private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
@@ -259,6 +265,7 @@ private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     + DatetimeFunctions.allCases.map(\.declaration).flat()
     + MathFunctions.allCases.map(\.declaration).flat()
     + IntervalFunctions.allCases.map(\.declaration).flat()
+    + DictFunctions.allCases.map(\.declaration).flat()
 
 extension ExpressionResolver: ConstantsProvider {
   func getValue(_ name: String) -> Any? {
@@ -271,3 +278,4 @@ extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     reduce([:], +)
   }
 }
+

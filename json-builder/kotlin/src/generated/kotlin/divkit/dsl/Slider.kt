@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [slider].
  * 
- * Required properties: `type, track_inactive_style, track_active_style, thumb_style`.
+ * Required parameters: `type, track_inactive_style, track_active_style, thumb_style`.
  */
 @Generated
 class Slider internal constructor(
@@ -43,6 +43,7 @@ class Slider internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
@@ -107,6 +108,10 @@ class Slider internal constructor(
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
         val columnSpan: Property<Int>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
@@ -247,6 +252,7 @@ class Slider internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
@@ -285,7 +291,7 @@ class Slider internal constructor(
     /**
      * Can be created using the method [sliderTextStyle].
      * 
-     * Required properties: `font_size`.
+     * Required parameters: `font_size`.
      */
     @Generated
     class TextStyle internal constructor(
@@ -352,6 +358,7 @@ class Slider internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -394,6 +401,7 @@ fun DivScope.slider(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -434,6 +442,7 @@ fun DivScope.slider(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -476,6 +485,7 @@ fun DivScope.slider(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -518,6 +528,7 @@ fun DivScope.sliderProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -557,6 +568,7 @@ fun DivScope.sliderProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
@@ -598,6 +610,7 @@ fun DivScope.sliderProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -640,6 +653,7 @@ fun TemplateScope.sliderRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -679,6 +693,7 @@ fun TemplateScope.sliderRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     height = height,
@@ -720,6 +735,7 @@ fun TemplateScope.sliderRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -762,6 +778,7 @@ fun Slider.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -802,6 +819,7 @@ fun Slider.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
@@ -844,6 +862,7 @@ fun Slider.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -886,6 +905,7 @@ fun Slider.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -926,6 +946,7 @@ fun Slider.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
@@ -990,6 +1011,7 @@ fun Slider.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         height = properties.height,
@@ -1032,6 +1054,7 @@ fun Slider.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -1074,6 +1097,7 @@ fun Component<Slider>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -1115,6 +1139,7 @@ fun Component<Slider>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -1157,6 +1182,7 @@ fun Component<Slider>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -1199,6 +1225,7 @@ fun Component<Slider>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -1240,6 +1267,7 @@ fun Component<Slider>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         height = height,
@@ -1305,6 +1333,7 @@ fun Component<Slider>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        disappearActions = null,
         extensions = null,
         focus = null,
         height = null,

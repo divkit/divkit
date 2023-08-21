@@ -37,6 +37,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         ensureVariablesSynced(result.variableController, data, errorCollector)
+        result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
     }
 
@@ -61,6 +62,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                 is DivVariable.Str -> existingVariable is Variable.StringVariable
                 is DivVariable.Color -> existingVariable is Variable.ColorVariable
                 is DivVariable.Url -> existingVariable is Variable.UrlVariable
+                is DivVariable.Dict -> existingVariable is Variable.DictVariable
+                is DivVariable.Array -> existingVariable is Variable.ArrayVariable
             }.apply { /*exhaustive*/ }
 
             // This usually happens when you're using same DivDataTag for DivData
@@ -103,7 +106,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         )
 
         val triggersController = TriggersController(
-            data.variableTriggers,
             variableController,
             expressionResolver,
             divActionHandler,
@@ -132,5 +134,7 @@ private val DivVariable.name: String
             is DivVariable.Str -> this.value.name
             is DivVariable.Color -> this.value.name
             is DivVariable.Url -> this.value.name
+            is DivVariable.Dict -> this.value.name
+            is DivVariable.Array -> this.value.name
         }
     }

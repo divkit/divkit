@@ -13,6 +13,7 @@ export * from './EntityWithOptionalComplexProperty';
 export * from './EntityWithOptionalProperty';
 export * from './EntityWithOptionalStringEnumProperty';
 export * from './EntityWithPropertyWithDefaultValue';
+export * from './EntityWithRawArray';
 export * from './EntityWithRequiredProperty';
 export * from './EntityWithSimpleProperties';
 export * from './EntityWithStrictArray';

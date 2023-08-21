@@ -15,6 +15,7 @@ public final class DivCustom: DivBase {
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let customProps: [String: Any]?
   public let customType: String
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
@@ -83,6 +84,9 @@ public final class DivCustom: DivBase {
   static let customPropsValidator: AnyValueValidator<[String: Any]> =
     makeNoOpValueValidator()
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
@@ -150,6 +154,7 @@ public final class DivCustom: DivBase {
     columnSpan: Expression<Int>? = nil,
     customProps: [String: Any]? = nil,
     customType: String,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     height: DivSize? = nil,
@@ -179,6 +184,7 @@ public final class DivCustom: DivBase {
     self.columnSpan = columnSpan
     self.customProps = customProps
     self.customType = customType
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
@@ -222,48 +228,53 @@ extension DivCustom: Equatable {
     guard
       lhs.columnSpan == rhs.columnSpan,
       lhs.customType == rhs.customType,
-      lhs.extensions == rhs.extensions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.extensions == rhs.extensions,
       lhs.focus == rhs.focus,
-      lhs.height == rhs.height,
-      lhs.id == rhs.id
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.items == rhs.items,
-      lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -286,6 +297,7 @@ extension DivCustom: Serializable {
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["custom_props"] = customProps
     result["custom_type"] = customType
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()

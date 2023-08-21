@@ -7,14 +7,15 @@ import Serialization
 public final class DivTooltip {
   @frozen
   public enum Position: String, CaseIterable {
-    case left = "left"
+    case left
     case topLeft = "top-left"
-    case top = "top"
+    case top
     case topRight = "top-right"
-    case right = "right"
+    case right
     case bottomRight = "bottom-right"
-    case bottom = "bottom"
+    case bottom
     case bottomLeft = "bottom-left"
+    case center
   }
 
   public let animationIn: DivAnimation?

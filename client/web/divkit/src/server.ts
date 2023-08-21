@@ -1,5 +1,5 @@
 import Root from './components/Root.svelte';
-import type { Platform } from '../typings/common';
+import type { Platform, TypefaceProvider } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 
 export function render(opts: {
@@ -10,6 +10,7 @@ export function render(opts: {
     customization?: unknown;
     builtinProtocols?: unknown;
     onError?: unknown;
+    typefaceProvider?: TypefaceProvider;
     platform?: Platform;
 }) {
     // Root has client-side typings, not a server one
@@ -21,6 +22,7 @@ export function render(opts: {
         customization: opts.customization,
         builtinProtocols: opts.builtinProtocols,
         onError: opts.onError,
+        typefaceProvider: opts.typefaceProvider,
         platform: opts.platform
     }).html;
 }

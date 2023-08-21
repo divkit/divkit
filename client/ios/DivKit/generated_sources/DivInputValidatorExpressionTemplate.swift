@@ -8,7 +8,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
   public static let type: String = "expression"
   public let parent: String? // at least 1 char
   public let allowEmpty: Field<Expression<Bool>>? // default value: false
-  public let condition: Field<Expression<String>>? // at least 1 char
+  public let condition: Field<Expression<Bool>>?
   public let labelId: Field<Expression<String>>? // at least 1 char
   public let variable: Field<String>? // at least 1 char
 
@@ -32,7 +32,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
   init(
     parent: String?,
     allowEmpty: Field<Expression<Bool>>? = nil,
-    condition: Field<Expression<String>>? = nil,
+    condition: Field<Expression<Bool>>? = nil,
     labelId: Field<Expression<String>>? = nil,
     variable: Field<String>? = nil
   ) {
@@ -45,7 +45,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputValidatorExpressionTemplate?) -> DeserializationResult<DivInputValidatorExpression> {
     let allowEmptyValue = parent?.allowEmpty?.resolveOptionalValue(context: context, validator: ResolvedValue.allowEmptyValidator) ?? .noValue
-    let conditionValue = parent?.condition?.resolveValue(context: context, validator: ResolvedValue.conditionValidator) ?? .noValue
+    let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
     let labelIdValue = parent?.labelId?.resolveValue(context: context, validator: ResolvedValue.labelIdValidator) ?? .noValue
     let variableValue = parent?.variable?.resolveValue(context: context, validator: ResolvedValue.variableValidator) ?? .noValue
     var errors = mergeErrors(
@@ -84,7 +84,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var allowEmptyValue: DeserializationResult<Expression<Bool>> = parent?.allowEmpty?.value() ?? .noValue
-    var conditionValue: DeserializationResult<Expression<String>> = parent?.condition?.value() ?? .noValue
+    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?.value() ?? .noValue
     var labelIdValue: DeserializationResult<Expression<String>> = parent?.labelId?.value() ?? .noValue
     var variableValue: DeserializationResult<String> = parent?.variable?.value(validatedBy: ResolvedValue.variableValidator) ?? .noValue
     context.templateData.forEach { key, __dictValue in
@@ -92,7 +92,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       case "allow_empty":
         allowEmptyValue = deserialize(__dictValue, validator: ResolvedValue.allowEmptyValidator).merged(with: allowEmptyValue)
       case "condition":
-        conditionValue = deserialize(__dictValue, validator: ResolvedValue.conditionValidator).merged(with: conditionValue)
+        conditionValue = deserialize(__dictValue).merged(with: conditionValue)
       case "label_id":
         labelIdValue = deserialize(__dictValue, validator: ResolvedValue.labelIdValidator).merged(with: labelIdValue)
       case "variable":
@@ -100,7 +100,7 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       case parent?.allowEmpty?.link:
         allowEmptyValue = allowEmptyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.allowEmptyValidator))
       case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.conditionValidator))
+        conditionValue = conditionValue.merged(with: deserialize(__dictValue))
       case parent?.labelId?.link:
         labelIdValue = labelIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.labelIdValidator))
       case parent?.variable?.link:

@@ -9,7 +9,8 @@
     "wrapped_text": {
       "type": "text",
       "width": {
-        "type": "wrap_content"
+        "type": "wrap_content",
+        "constrained": false
       },
       "paddings": {
         "left": 10,
@@ -51,7 +52,8 @@
               "type": "wrapped_container",
               "orientation": "horizontal",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "items": [
                 {
@@ -68,12 +70,14 @@
               "type": "wrapped_container",
               "width": {
                 "type": "wrap_content",
+                "constrained": false,
                 "max_size": {
                   "value": 100
                 }
               },
               "height": {
                 "type": "wrap_content",
+                "constrained": false,
                 "min_size": {
                   "value": 100
                 },

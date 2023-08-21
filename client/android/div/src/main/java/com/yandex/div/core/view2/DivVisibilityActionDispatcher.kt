@@ -10,6 +10,8 @@ import com.yandex.div.core.view2.divs.DivActionBeaconSender
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.arrayMap
 import com.yandex.div2.Div
+import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
 import java.util.UUID
 import javax.inject.Inject
@@ -25,7 +27,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
     private val actionLogCounters = arrayMap<CompositeLogId, Int>()
 
-    fun dispatchActions(scope: Div2View, view: View, actions: Array<DivVisibilityAction>) {
+    fun dispatchActions(scope: Div2View, view: View, actions: Array<DivSightAction>) {
         scope.bulkActions {
             actions.forEach {
                 dispatchAction(scope, view, it)
@@ -33,7 +35,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
         }
     }
 
-    fun dispatchAction(scope: Div2View, view: View, action: DivVisibilityAction) {
+    fun dispatchAction(scope: Div2View, view: View, action: DivSightAction) {
         val compositeLogId = compositeLogIdOf(scope, action)
         val counter = actionLogCounters.getOrPut(compositeLogId) { 0 }
 
@@ -60,13 +62,21 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
         }
     }
 
-    private fun logAction(scope: Div2View, view: View, action: DivVisibilityAction) {
-        logger.logViewShown(scope, view, action)
+    private fun logAction(scope: Div2View, view: View, action: DivSightAction) {
+        if (action is DivVisibilityAction) {
+            logger.logViewShown(scope, view, action)
+        } else {
+            logger.logViewDisappeared(scope, view, action as DivDisappearAction)
+        }
         divActionBeaconSender.sendVisibilityActionBeacon(action, scope.expressionResolver)
     }
 
-    private fun logAction(scope: Div2View, view: View, action: DivVisibilityAction, actionUid: String) {
-        logger.logViewShown(scope, view, action, actionUid)
+    private fun logAction(scope: Div2View, view: View, action: DivSightAction, actionUid: String) {
+        if (action is DivVisibilityAction) {
+            logger.logViewShown(scope, view, action, actionUid)
+        } else {
+            logger.logViewDisappeared(scope, view, action as DivDisappearAction, actionUid)
+        }
         divActionBeaconSender.sendVisibilityActionBeacon(action, scope.expressionResolver)
     }
 

@@ -1,5 +1,3 @@
-// Copyright (c) 2022 Yandex LLC. All rights reserved.
-
 package com.yandex.div.dsl
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
@@ -9,7 +7,6 @@ import com.yandex.div.dsl.context.define
 import com.yandex.div.dsl.context.override
 import com.yandex.div.dsl.context.resolve
 import com.yandex.div.dsl.context.templates
-import com.yandex.div.dsl.model.Div
 import com.yandex.div.dsl.model.DivContainer
 import com.yandex.div.dsl.model.DivSizeUnit
 import com.yandex.div.dsl.model.divAction
@@ -22,17 +19,18 @@ import com.yandex.div.dsl.model.divWrapContentSize
 import com.yandex.div.dsl.model.state
 import com.yandex.div.dsl.model.template
 import com.yandex.div.dsl.serializer.toJsonNode
+import divkit.dsl.readResource
 import java.net.URI
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode
 
-internal class CardWithTemplatesTest {
+class CardWithTemplatesTest {
 
     @Test
-    internal fun renderCard() {
+    fun renderCard() {
         val titleRef = reference<String>("title")
-        val templates = templates<Div> {
+        val templates = templates {
             define ("title_text",
                 divText(
                     width = divFixedSize(
@@ -40,30 +38,6 @@ internal class CardWithTemplatesTest {
                         unit = enum(DivSizeUnit.DP)
                     ),
                     text = titleRef
-                )
-            )
-            define("header",
-                divContainer(
-                    orientation = enum(DivContainer.Orientation.VERTICAL),
-                    items = listOf(
-                        divText(
-                            width = divWrapContentSize(),
-                            height  = divFixedSize(
-                                value = int(60),
-                            ),
-                            text = titleRef
-                        ),
-                        template(
-                            type = "title_text",
-                            override("width", divWrapContentSize())
-                        )
-                    )
-                )
-            )
-            define("subtitle_text",
-                template(
-                    type = "title_text",
-                    override("width", divWrapContentSize())
                 )
             )
         }

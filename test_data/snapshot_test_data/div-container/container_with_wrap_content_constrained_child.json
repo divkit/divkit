@@ -47,7 +47,8 @@
               "type": "container",
               "orientation": "horizontal",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "height": {
                 "type": "wrap_content"

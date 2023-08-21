@@ -354,7 +354,8 @@ final class DivTimerControllerTests: XCTestCase {
           variableValue = value
         }
       },
-      updateCard: {}
+      updateCard: {},
+      persistentValuesStorage: DivPersistentValuesStorage()
     )
   }
 }

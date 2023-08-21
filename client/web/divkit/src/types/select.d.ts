@@ -1,6 +1,5 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
-import type { BooleanInt } from '../../typings/common';
 
 export interface SelectItem {
     // text = value
@@ -15,7 +14,7 @@ export interface DivSelectData extends DivBaseData {
     value_variable: string;
     font_size?: number;
     // font_size_unit
-    // font_family
+    font_family?: string;
     font_weight?: FontWeight;
     hint_text?: string;
     hint_color?: string;

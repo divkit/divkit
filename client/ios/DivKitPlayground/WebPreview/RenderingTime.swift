@@ -1,11 +1,13 @@
+import DivKit
 import Foundation
+import LayoutKit
 
-extension DivBlockProvider {
+extension DebugParams.Measurements {
   var renderingTime: UIStatePayload.RenderingTime {
     UIStatePayload.RenderingTime(
-      div_render_total: divRenderTime.webTime,
+      div_render_total: renderTime.webTime,
       div_parsing_data: divDataParsingTime.webTime,
-      div_parsing_templates: divTemplateParsingTime.webTime
+      div_parsing_templates: templateParsingTime.webTime
     )
   }
 }
@@ -23,6 +25,8 @@ extension TimeMeasure.Status {
       return .cold
     case .warm:
       return .warm
+    @unknown default:
+      fatalError()
     }
   }
 }

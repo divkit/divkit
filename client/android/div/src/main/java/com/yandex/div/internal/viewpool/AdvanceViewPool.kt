@@ -3,6 +3,7 @@ package com.yandex.div.internal.viewpool
 import android.view.View
 import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
+import androidx.collection.ArrayMap
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.getOrThrow
 import com.yandex.div.internal.util.removeOrThrow
@@ -12,51 +13,60 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AdvanceViewPool(
-        private val profiler: ViewPoolProfiler?,
-        private val viewCreator: ViewCreator
+    private val profiler: ViewPoolProfiler?,
+    private val viewCreator: ViewCreator
 ) : ViewPool {
 
-    private val channels: MutableMap<String, Channel<out View>> = androidx.collection.ArrayMap()
+    private val viewFactories: MutableMap<String, ViewFactory<out View>> = ArrayMap()
 
     @AnyThread
     override fun <T : View> register(tag: String, factory: ViewFactory<T>, capacity: Int) {
-        synchronized(channels) {
-            if (tag in channels) {
+        synchronized(viewFactories) {
+            if (tag in viewFactories) {
                 Assert.fail("Factory is already registered")
                 return
             }
-            channels[tag] = Channel(tag, profiler, factory, viewCreator, capacity)
+            viewFactories[tag] = if (capacity == 0) {
+                factory.attachProfiler(tag, profiler)
+            } else {
+                Channel(tag, profiler, factory, viewCreator, capacity)
+            }
         }
     }
 
     @AnyThread
     override fun unregister(tag: String) {
-        val channel = synchronized(channels) {
-            if (tag !in channels) {
+        val viewFactory = synchronized(viewFactories) {
+            if (tag !in viewFactories) {
                 Assert.fail("Factory is not registered")
                 return
             }
-           channels.removeOrThrow(tag)
+            viewFactories.removeOrThrow(tag)
         }
 
-        channel.stop()
+        if (viewFactory is Channel) {
+            viewFactory.stop()
+        }
     }
 
     @AnyThread
     override fun <T : View> obtain(tag: String): T {
-        val channel = synchronized(channels) {
-            channels.getOrThrow(tag, "Factory is not registered")
+        val viewFactory = synchronized(viewFactories) {
+            viewFactories.getOrThrow(tag, "Factory is not registered")
         }
 
         @Suppress("UNCHECKED_CAST")
-        return channel.extractView() as T
+        return viewFactory.createView() as T
     }
 
-    internal class Channel<T : View>(val viewName: String,
-                                     private val profiler: ViewPoolProfiler?,
-                                     private val viewFactory: ViewFactory<T>,
-                                     private val viewCreator: ViewCreator,
-                                     capacity: Int) {
+    internal class Channel<T : View>(
+        val viewName: String,
+        private val profiler: ViewPoolProfiler?,
+        private val viewFactory: ViewFactory<T>,
+        private val viewCreator: ViewCreator,
+        capacity: Int
+    ) : ViewFactory<T> {
+        override fun createView(): T = extractView()
 
         private val viewQueue: BlockingQueue<T> = ArrayBlockingQueue(capacity, false)
         private val stopped = AtomicBoolean(false)
@@ -119,14 +129,27 @@ internal class AdvanceViewPool(
             viewQueue.clear()
         }
 
+        companion object {
+            private const val MAX_WAITING_TIME = 16L
+        }
+    }
+
+    companion object {
         private inline fun profile(crossinline section: () -> Unit): Long {
             val start = System.nanoTime()
             section()
             return System.nanoTime() - start
         }
 
-        companion object {
-            private const val MAX_WAITING_TIME = 16L
+        private fun <T : View> ViewFactory<T>.attachProfiler(
+            viewName: String, profiler: ViewPoolProfiler?
+        ): ViewFactory<T> {
+            return ViewFactory {
+                var view: T? = null
+                val duration = profile { view = createView() }
+                profiler?.onViewObtainedWithBlock(viewName, duration)
+                view!!
+            }
         }
     }
 }

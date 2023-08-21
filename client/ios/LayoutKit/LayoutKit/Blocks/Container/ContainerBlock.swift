@@ -48,6 +48,15 @@ public final class ContainerBlock: BlockWithLayout {
     case baseline
   }
 
+  public enum AxialAlignment {
+    case leading
+    case center
+    case trailing
+    case spaceBetween
+    case spaceAround
+    case spaceEvenly
+  }
+
   public struct Separator: Equatable {
     public let style: Child
     public let showAtEnd: Bool
@@ -79,11 +88,12 @@ public final class ContainerBlock: BlockWithLayout {
     var nonResizableSize: (width: CGFloat, height: CGFloat?)?
   }
 
+  public let blockLayoutDirection: UserInterfaceLayoutDirection
   public let layoutDirection: LayoutDirection
   public let layoutMode: LayoutMode
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
-  public let axialAlignment: Alignment
+  public let axialAlignment: AxialAlignment
   public let crossAlignment: CrossAlignment
   public let gaps: [CGFloat]
   public let children: [Child]
@@ -98,11 +108,12 @@ public final class ContainerBlock: BlockWithLayout {
   private var cached = CachedSizes()
 
   public init(
+    blockLayoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     layoutDirection: LayoutDirection,
     layoutMode: LayoutMode = .noWrap,
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
-    axialAlignment: Alignment = .leading,
+    axialAlignment: AxialAlignment = .leading,
     crossAlignment: CrossAlignment = .leading,
     gaps: [CGFloat]? = nil,
     children: [Child],
@@ -123,6 +134,7 @@ public final class ContainerBlock: BlockWithLayout {
       throw Error.childAndGapCountMismatch
     }
 
+    self.blockLayoutDirection = blockLayoutDirection
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
     self.widthTrait = widthTrait
@@ -159,6 +171,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -286,11 +299,13 @@ public final class ContainerBlock: BlockWithLayout {
         separator: separator,
         lineSeparator: lineSeparator,
         gaps: gaps,
+        blockLayoutDirection: blockLayoutDirection,
         layoutDirection: layoutDirection,
         layoutMode: layoutMode,
         axialAlignment: axialAlignment,
         crossAlignment: crossAlignment,
-        size: CGSize(width: width, height: .zero)
+        size: CGSize(width: width, height: .zero),
+        needCompressConstrainedBlocks: false
       )
       result = layout.blockFrames.map { $0.maxY }.max() ?? 0
     case .vertical:
@@ -370,6 +385,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -423,6 +439,7 @@ public final class ContainerBlock: BlockWithLayout {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -551,6 +568,24 @@ extension ContainerBlock.CrossAlignment {
       return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
     case .trailing:
       return availableSpace - contentSize
+    }
+  }
+}
+
+extension ContainerBlock.AxialAlignment {
+  public func offset(
+    forAvailableSpace availableSpace: CGFloat,
+    contentSize: CGFloat = 0
+  ) -> CGFloat {
+    switch self {
+    case .leading:
+      return 0
+    case .center:
+      return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
+    case .trailing:
+      return availableSpace - contentSize
+    case .spaceEvenly, .spaceBetween, .spaceAround:
+      return 0
     }
   }
 }

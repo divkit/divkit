@@ -2,99 +2,122 @@ import AVFoundation
 import BasePublic
 import Foundation
 
-public final class DefaultPlayer: Player {
-  let player = AVQueuePlayer()
-  private var currentItem: AVPlayerItem? {
-    didSet {
-      player.replaceCurrentItem(with: currentItem)
-    }
-  }
-
-  private var playerLooper: AVPlayerLooper?
-  private let eventPipe = SignalPipe<Event>()
-  private var statusObserving: NSKeyValueObservation?
-  private var config: PlaybackConfig?
-
-  public func set(data: PlayerData, config: PlaybackConfig) {
-    self.config = config
-    configureObservers()
-    currentItem = data.playerItem
-
-    if case .video = data {
-      if config.repeatable {
-        currentItem.flatMap { playerLooper = AVPlayerLooper(player: player, templateItem: $0) }
-      } else {
-        playerLooper = nil
-      }
-    }
-    player.isMuted = config.isMuted
-  }
-
-  private func configureObservers() {
-    player.addPeriodicTimeObserver(
-      forInterval: CMTimeMake(value: 1000, timescale: 1000),
-      queue: .main
-    ) { [weak self] time in
-      guard let self = self else { return }
-      self.eventPipe.send(.currentTimeUpdate(time: Int(time.seconds * 1000)))
-    }
-
-    NotificationCenter.default
-      .addObserver(
-        self,
-        selector: #selector(playerDidFinishPlaying),
-        name: .AVPlayerItemDidPlayToEndTime,
-        object: player.currentItem
-      )
-
-    statusObserving = player.observe(\.status) { [weak self] player, _ in
-      switch player.status {
-      case .readyToPlay:
-        player.seek(
-          to: self?.config?.startPosition ?? .zero,
-          toleranceBefore: .zero,
-          toleranceAfter: .zero
-        )
-        if self?.config?.autoPlay == true {
-          player.play()
-        }
-      case .failed:
-        self?.eventPipe.send(.error)
-      case .unknown:
-        break
-      default:
-        break
-      }
-    }
-  }
-
-  @objc func playerDidFinishPlaying(notification _: NSNotification) {
-    if config?.repeatable == false {
-      eventPipe.send(.videoOver)
-    }
-  }
-
-  public var signal: Signal<Event> {
+final class DefaultPlayer: Player {
+  private let eventPipe = SignalPipe<PlayerEvent>()
+  var signal: Signal<PlayerEvent> {
     eventPipe.signal
   }
 
-  public func play() {
+  private let player: CorePlayer
+  private var context: SourceContext?
+
+  private let playerObservers = AutodisposePool()
+  private let playbackConfigObservers = AutodisposePool()
+
+  init(player: CorePlayer? = nil) {
+    self.player = player ?? CorePlayerImpl()
+    configureObservers(for: self.player)
+  }
+
+  func set(data: VideoData, config: PlaybackConfig) {
+    context = SourceContext(videoData: data, playbackConfig: config)
+    guard let source = data.getSupportedVideo(player.staticScope.isMIMETypeSupported) else {
+      assertionFailure("Empty source")
+      eventPipe.send(.fatal)
+      return
+    }
+
+    player.set(source: source)
+    handle(config: config)
+  }
+
+  func play() {
     player.play()
   }
 
-  public func pause() {
+  func pause() {
     player.pause()
   }
 
-  public func set(isMuted: Bool) {
-    player.isMuted = isMuted
+  func set(isMuted: Bool) {
+    player.set(isMuted: isMuted)
   }
 
-  public func seek(to position: CMTime) {
-    player.seek(
-      to: position,
-      toleranceBefore: .zero,
-      toleranceAfter: .zero
-    )
+  func seek(to position: CMTime) {
+    player.seek(to: position)
+  }
+
+  private func handle(config: PlaybackConfig) {
+    playbackConfigObservers.drain()
+
+    if config.repeatable {
+      player
+        .playbackDidFinish
+        .addObserver { [weak self] _ in
+          self?.player.seek(to: .zero)
+          self?.player.play()
+        }
+        .dispose(in: playbackConfigObservers)
+    }
+
+    player.set(isMuted: config.isMuted)
+    config.autoPlay ? player.play() : player.pause()
+
+    if config.startPosition != .zero {
+      player.seek(to: config.startPosition)
+    }
+  }
+
+  private func configureObservers(for player: CorePlayer) {
+    weak var `self` = self
+
+    player
+      .playbackStatusDidChange
+      .map { playbackStatus -> PlayerEvent in
+        switch playbackStatus {
+          case .playing:
+            return .play
+          case .paused:
+            return .pause
+          case .buffering:
+            return .buffering
+        }
+      }
+      .addObserver { self?.eventPipe.send($0) }
+      .dispose(in: playerObservers)
+
+    player
+      .playbackDidFinish
+      .addObserver { self?.eventPipe.send(.end) }
+      .dispose(in: playerObservers)
+
+    player
+      .playbackDidFail
+      .addObserver { _ in self?.eventPipe.send(.fatal) }
+      .dispose(in: playerObservers)
+
+    player
+      .periodicCurrentTimeSignal(interval: 1)
+      .addObserver { self?.eventPipe.send(.currentTimeUpdate(Int($0 * 1000))) }
+      .dispose(in: playerObservers)
+  }
+}
+
+extension DefaultPlayer: VideoEngineProvider {
+  var videoEngine: VideoEngine {
+    player.videoEngine
+  }
+}
+
+private extension DefaultPlayer {
+  struct SourceContext {
+    var videoData: VideoData
+    var playbackConfig: PlaybackConfig
+  }
+}
+
+private extension VideoData {
+  func getSupportedVideo(_ mimeTypeChecker: (String) -> Bool) -> Video? {
+    videos.first { mimeTypeChecker($0.mimeType) }
   }
 }

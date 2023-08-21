@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.Px
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import kotlin.math.abs
 import kotlin.math.max
@@ -474,11 +475,13 @@ open class SliderView @JvmOverloads constructor(
         sliderDrawDelegate.drawInactiveTrack(canvas, inactiveTrackDrawable)
         val start = activeRange.start
         val end = activeRange.end
+        val startPosition = start.toPosition()
+        val endPosition = end.toPosition()
         sliderDrawDelegate.drawActiveTrack(
             canvas,
             activeTrackDrawable,
-            start.toPosition(),
-            end.toPosition()
+            startPosition.coerceAtMost(endPosition),
+            endPosition.coerceAtLeast(startPosition)
         )
         for (i in minValue.toInt()..maxValue.toInt()) {
             val tickmarkDrawable = if (i in start.toInt()..end.toInt()) {
@@ -595,7 +598,11 @@ open class SliderView @JvmOverloads constructor(
      */
     @Px
     private fun Float.toPosition(): Int {
-        return ((this - minValue) * (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) / (maxValue - minValue)).toInt()
+        return if (isLayoutRtl()) {
+            ((maxValue - this) * (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) / (maxValue - minValue)).toInt()
+        } else {
+            ((this - minValue) * (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) / (maxValue - minValue)).toInt()
+        }
     }
 
     @Px
@@ -605,7 +612,11 @@ open class SliderView @JvmOverloads constructor(
      * Calculates slider value on given horizontal position of the point.
      */
     private fun Int.toValue(): Float {
-        return this * (maxValue - minValue) / (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) + minValue
+        return if (isLayoutRtl()) {
+            maxValue - this * (maxValue - minValue) / (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) + minValue - 1
+        } else {
+            this * (maxValue - minValue) / (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) + minValue
+        }
     }
 
     private fun Float.inBoarders(): Float {

@@ -59,6 +59,13 @@
         }
     }
 
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
+    }
+
     const isDesktop = rootCtx.isDesktop;
 
     interface Item {
@@ -286,10 +293,18 @@
         const elementOffset: keyof HTMLElement = isHorizontal ? 'offsetLeft' : 'offsetTop';
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
 
-        scroller.scroll({
-            [scrollDirection]: Math.max(0, galleryElements[index][elementOffset] - itemSpacing / 2),
-            behavior
-        });
+        // 0.01 forces Chromium to use scroll-snap (exact correct scroll position will not trigger it)
+        // Chromium will save scroll-snapped value and will not save exact one
+        // Saved scroll position is used on resnapping (e.g. content change)
+
+        const elem = galleryElements[index];
+
+        if (elem) {
+            scroller.scroll({
+                [scrollDirection]: Math.max(0, elem[elementOffset] + .01 - itemSpacing / 2),
+                behavior
+            });
+        }
     }
 
     function checkIsIntersecting(scroller: DOMRect, item: DOMRect): boolean {
@@ -417,6 +432,8 @@
         {layoutParams}
         customPaddings={true}
         customActions={'gallery'}
+        parentOf={jsonItems}
+        {replaceItems}
     >
         <div
             class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
@@ -429,22 +446,24 @@
                 class={css['gallery__items-grid']}
                 style={makeStyle(gridStyle)}
             >
-                {#each itemsGrid as itemsRow, rowIndex}
-                    <div
-                        class={css.gallery__items}
-                        style={makeStyle(columnStyle)}
-                        bind:this={galleryItemsWrappers[rowIndex]}
-                    >
-                        {#each itemsRow as item}
-                            <Unknown
-                                layoutParams={childLayoutParams}
-                                div={item.json}
-                                templateContext={item.templateContext}
-                                origJson={item.origJson}
-                            />
-                        {/each}
-                    </div>
-                {/each}
+                {#key itemsGrid}
+                    {#each itemsGrid as itemsRow, rowIndex}
+                        <div
+                            class={css.gallery__items}
+                            style={makeStyle(columnStyle)}
+                            bind:this={galleryItemsWrappers[rowIndex]}
+                        >
+                            {#each itemsRow as item}
+                                <Unknown
+                                    layoutParams={childLayoutParams}
+                                    div={item.json}
+                                    templateContext={item.templateContext}
+                                    origJson={item.origJson}
+                                />
+                            {/each}
+                        </div>
+                    {/each}
+                {/key}
             </div>
         </div>
         {#if orientation === 'horizontal'}

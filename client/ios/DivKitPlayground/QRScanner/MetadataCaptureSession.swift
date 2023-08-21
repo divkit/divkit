@@ -3,18 +3,25 @@ import UIKit
 
 import CommonCorePublic
 
+typealias LogError = (String) -> Void
+
 final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDelegate {
   private let captureSession = AVCaptureSession()
   private let previewLayer: AVCaptureVideoPreviewLayer
 
   let result: ObservableProperty<String>
+  private let logError: LogError
 
   var layer: CALayer { previewLayer }
 
   private var isInitialized = false
 
-  init(result: ObservableProperty<String>) {
+  init(
+    result: ObservableProperty<String>,
+    logError: @escaping LogError
+  ) {
     self.result = result
+    self.logError = logError
 
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     previewLayer.videoGravity = .resizeAspectFill
@@ -22,7 +29,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
     super.init()
 
     guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
-      DemoAppLogger.error("Can't create video capture device")
+      logError("Can't create video capture device")
       return
     }
 
@@ -30,14 +37,14 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
     do {
       videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
     } catch {
-      DemoAppLogger.error("Can't create video input: \(error)")
+      logError("Can't create video input: \(error)")
       return
     }
 
     if captureSession.canAddInput(videoInput) {
       captureSession.addInput(videoInput)
     } else {
-      DemoAppLogger.error("Capture session can't add video input")
+      logError("Capture session can't add video input")
       return
     }
 
@@ -47,7 +54,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
       metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
       metadataOutput.metadataObjectTypes = [.qr]
     } else {
-      DemoAppLogger.error("Capture session can't add metadata output")
+      logError("Capture session can't add metadata output")
       return
     }
 
@@ -77,7 +84,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
   ) {
     guard let readableObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
           let stringValue = readableObject.stringValue else {
-      DemoAppLogger.error("Can't retrieve string value from metadata")
+      logError("Can't retrieve string value from metadata")
       return
     }
 

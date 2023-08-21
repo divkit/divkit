@@ -1,0 +1,134 @@
+{
+  "templates": {
+    "custom_gallery": {
+      "type": "gallery",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "restrict_parent_scroll": 1
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "paddings": {
+        "left": 12,
+        "top": 16,
+        "right": 12,
+        "bottom": 14
+      },
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "actions": [
+        {
+          "$log_id": "item_log_id"
+        }
+      ],
+      "disappear_actions": [
+        {
+          "$log_id": "item_log_id",
+          "log_limit": 0,
+          "disappear_duration": 200,
+          "visibility_percentage": 20,
+          "$url": "disappear_action_url"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "variables": [
+      {
+        "name": "disappear_item",
+        "type": "string",
+        "value": "None"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "title_paddings": {
+            "left": 12,
+            "right": 12,
+            "bottom": 8,
+            "top": 8
+          },
+          "items": [
+            {
+              "type": "custom_gallery",
+              "items": [
+                {
+                  "type": "text_block",
+                  "header": "Item 1",
+                  "item_log_id": "item/01",
+                  "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_1"
+                },
+                {
+                  "type": "text_block",
+                  "id": "blocks_2",
+                  "header": "Item 2",
+                  "item_log_id": "item/02",
+                  "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_2"
+                },
+                {
+                  "type": "text_block",
+                  "header": "Item 3",
+                  "item_log_id": "item/03",
+                  "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_3"
+                },
+                {
+                  "type": "text_block",
+                  "header": "Item 4",
+                  "item_log_id": "item/04",
+                  "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_4"
+                },
+                {
+                  "type": "text_block",
+                  "header": "Item 5",
+                  "item_log_id": "item/05",
+                  "disappear_action_url": "div-action://set_variable?name=disappear_item&value=Item_5"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Last dissapered item: @{disappear_item}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

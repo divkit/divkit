@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
@@ -21,7 +20,6 @@ import com.yandex.div2.DivTrigger
 
 @Mockable
 internal class TriggersController(
-    divTriggers: List<DivTrigger>? = null,
     private val variableController: VariableController,
     private val expressionResolver: ExpressionResolver,
     private val divActionHandler: DivActionHandler,
@@ -30,8 +28,19 @@ internal class TriggersController(
     private val logger: Div2Logger
 ) {
     private val executors = mutableListOf<TriggerExecutor>()
-    init {
-        divTriggers?.forEach { trigger ->
+    private var currentView: DivViewFacade? = null
+    private var activeTriggers: List<DivTrigger> = emptyList()
+
+    fun ensureTriggersSynced(divTriggers: List<DivTrigger>) {
+        if (activeTriggers === divTriggers) {
+            return
+        }
+
+        val activeView = currentView
+        clearBinding()
+        executors.clear()
+
+        divTriggers.forEach { trigger ->
             val rawExpression = trigger.condition.rawValue.toString()
             val evaluable = try {
                 Evaluable.lazy(rawExpression)
@@ -57,6 +66,8 @@ internal class TriggersController(
                 logger
             ))
         }
+
+        activeView?.let { onAttachedToWindow(it) }
     }
 
     private fun findErrors(variables: List<String>): Throwable? {
@@ -67,10 +78,12 @@ internal class TriggersController(
     }
 
     fun clearBinding() {
+        currentView = null
         executors.forEach { it.view = null }
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
+        currentView = view
         executors.forEach { it.view = view }
     }
 }

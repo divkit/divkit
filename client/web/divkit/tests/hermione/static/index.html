@@ -77,7 +77,7 @@
 <body>
 <div id="root"></div>
 
-<script src="../../../dist/browser/client.js"></script>
+<script src="../../../dist/browser/client-devtool.js"></script>
 
 <script>
     (function () {
@@ -159,6 +159,11 @@
                         elem.className = 'log-item';
                         elem.textContent = String(err && err.error || '<unknown>');
                         root.appendChild(elem);
+                    },
+                    onComponent(details) {
+                        if (details.type === 'mount' && details.json.id) {
+                            details.node.setAttribute('data-test-id', details.json.id);
+                        }
                     }
                 });
 

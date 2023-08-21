@@ -2,8 +2,10 @@ package com.yandex.div.internal.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.widget.addTextChangedListener
 import kotlin.math.roundToInt
 
 private const val UNDEFINED = -1
@@ -21,6 +23,26 @@ internal open class SuperLineHeightEditText constructor(context: Context) : AppC
         lineCount == 0 -> 1
         lineCount > maxLines -> maxLines
         else -> lineCount
+    }
+
+    private var currentLineCount = 0
+
+    init {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            addTextChangedListener { remeasureWrapContentConstrained() }
+        }
+    }
+
+    private fun remeasureWrapContentConstrained() {
+        if (layoutParams?.height != DivLayoutParams.WRAP_CONTENT_CONSTRAINED) {
+            currentLineCount = visibleLineCount
+            return
+        }
+
+        if (currentLineCount != visibleLineCount) {
+            currentLineCount = visibleLineCount
+            requestLayout()
+        }
     }
 
     fun setFixedLineHeight(lineHeight: Int?) {

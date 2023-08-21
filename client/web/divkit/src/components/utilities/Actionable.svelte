@@ -158,6 +158,15 @@
     }
 
     function onKeydown(event: KeyboardEvent): void {
+        // todo check event.target is not inside current element
+
+        const target = event.target;
+        if (target instanceof HTMLElement) {
+            if (target.tagName === 'INPUT' || target.contentEditable === 'true') {
+                return;
+            }
+        }
+
         if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
@@ -184,6 +193,8 @@
         on:touchend={longTapActions?.length ? onTouchEnd : null}
         on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
+        on:focus
+        on:blur
         {...attrs}
     >
         <slot />
@@ -204,6 +215,8 @@
         on:touchend={longTapActions?.length ? onTouchEnd : null}
         on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
+        on:focus
+        on:blur
         {...attrs}
     >
         <slot />

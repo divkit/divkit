@@ -28,7 +28,7 @@ import { wrapError } from '../utils/wrapError';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
-export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime';
+export type EvalTypes = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'datetime' | 'dict';
 
 export interface EvalValueBase {
     type: string;
@@ -70,8 +70,13 @@ export interface DatetimeValue extends EvalValueBase {
     value: Date;
 }
 
+export interface DictValue extends EvalValueBase {
+    type: 'dict';
+    value: object;
+}
+
 export type EvalValue = StringValue | UrlValue | ColorValue | NumberValue | IntegerValue |
-    BooleanValue | DatetimeValue;
+    BooleanValue | DatetimeValue | DictValue;
 
 export interface EvalError {
     type: 'error';

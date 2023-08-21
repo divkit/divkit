@@ -21,6 +21,7 @@ extension DivBase {
 
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       return EmptyBlock.zeroSized
     }
@@ -34,11 +35,12 @@ extension DivBase {
 
     let internalInsets = options.contains(.noPaddings)
       ? .zero
-      : paddings.makeEdgeInsets(with: expressionResolver)
+      : paddings.makeEdgeInsets(context: context)
     block = block.addingEdgeInsets(internalInsets)
 
-    let externalInsets = margins.makeEdgeInsets(with: expressionResolver)
+    let externalInsets = margins.makeEdgeInsets(context: context)
     if visibility == .invisible {
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
         to: block.addingEdgeInsets(externalInsets),
@@ -52,7 +54,8 @@ extension DivBase {
     // Properties should be applied in specific order.
     // For example, shadow should be applied to block with border
     // and alpha should be applied to block with border and shadow.
-    let visibilityActions = makeVisibilityActions(context: context)
+    var visibilityActions = makeVisibilityActions(context: context)
+    visibilityActions += makeDisappearActions(context: context)
 
     let focusState: FocusViewState = context.blockStateStorage
       .getState(context.parentPath) ?? .default
@@ -64,14 +67,24 @@ extension DivBase {
       background,
       to: block,
       imageHolderFactory: context.imageHolderFactory,
-      expressionResolver: expressionResolver
+      context: context
     )
     .addingDecorations(
       boundary: border.makeBoundaryTrait(with: expressionResolver),
       border: border.makeBlockBorder(with: expressionResolver),
       shadow: border.makeBlockShadow(with: expressionResolver),
       visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
-      tooltips: try makeTooltips(context: context)
+      lastVisibleBounds: visibilityActions.isEmpty ? nil : Property<CGRect>(
+        getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
+        setter: {
+          context.lastVisibleBoundsCache.updateLastVisibleBounds(
+            for: context.parentPath,
+            bounds: $0
+          )
+        }
+      ),
+      scheduler: context.scheduler,
+      tooltips: try tooltips.makeTooltips(context: context)
     )
     .addingTransform(
       transform: transform.resolveRotation(expressionResolver)
@@ -119,12 +132,13 @@ extension DivBase {
 
   func alignment2D(
     withDefault defaultAlignment: BlockAlignment2D,
-    expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveAlignmentHorizontal(expressionResolver)?.alignment
+      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?
+        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
-      vertical: resolveAlignmentVertical(expressionResolver)?.alignment
+      vertical: resolveAlignmentVertical(context.expressionResolver)?.alignment
         ?? defaultAlignment.vertical
     )
   }
@@ -133,10 +147,19 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     (visibilityActions ?? visibilityAction.asArray())
-      .enumerated()
-      .compactMap { index, action in
-        action.makeVisibilityAction(context: context, index: index)
+      .compactMap { action in
+        action.makeVisibilityAction(context: context, logId: action.logId)
       }
+  }
+
+  private func makeDisappearActions(
+    context: DivBlockModelingContext
+  ) -> [VisibilityAction] {
+    disappearActions?
+      .compactMap { action in
+        action.makeDisappearAction(context: context, logId: action.logId)
+      }
+      ?? []
   }
 
   private func makeAccessibilityElement(
@@ -153,15 +176,6 @@ extension DivBase {
     }
 
     return nil
-  }
-
-  private func makeTooltips(context: DivBlockModelingContext) throws -> [BlockTooltip] {
-    try tooltips?.iterativeFlatMap { div, index in
-      let tooltipContext = modified(context) {
-        $0.parentPath = $0.parentPath + "tooltip" + index
-      }
-      return try div.makeTooltip(context: tooltipContext)
-    } ?? []
   }
 
   private func applyTransitioningAnimations(
@@ -222,7 +236,7 @@ extension DivBase {
     _ backgrounds: [DivBackground]?,
     to block: Block,
     imageHolderFactory: ImageHolderFactory,
-    expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) -> Block {
     guard let backgrounds = backgrounds else {
       return block
@@ -232,7 +246,7 @@ extension DivBase {
     if backgrounds.count == 1 {
       guard let background = backgrounds[0].makeBlockBackground(
         with: imageHolderFactory,
-        expressionResolver: expressionResolver
+        context: context
       ) else {
         return block
       }
@@ -245,7 +259,7 @@ extension DivBase {
     let blockBackgrounds = backgrounds.compactMap {
       $0.makeBlockBackground(
         with: imageHolderFactory,
-        expressionResolver: expressionResolver
+        context: context
       )
     }
     guard let background = blockBackgrounds.composite() else {
@@ -275,14 +289,14 @@ extension DivBase {
   func makeContentWidthTrait(with context: DivBlockModelingContext) -> LayoutTrait {
     let overridenWidth = context.override(width: width)
     return overridenWidth.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).horizontalInsets
+      consideringInsets: paddings.makeEdgeInsets(context: context).horizontalInsets
     )
   }
 
   func makeContentHeightTrait(with context: DivBlockModelingContext) -> LayoutTrait {
     let overridenHeight = context.override(height: height)
     return overridenHeight.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).verticalInsets
+      consideringInsets: paddings.makeEdgeInsets(context: context).verticalInsets
     )
   }
 }
@@ -342,48 +356,6 @@ extension DivBorder {
       topRight: CGFloat(topRight),
       bottomLeft: CGFloat(bottomLeft),
       bottomRight: CGFloat(bottomRight)
-    )
-  }
-}
-
-extension DivTooltip {
-  fileprivate func makeTooltip(context: DivBlockModelingContext) throws
-    -> BlockTooltip? {
-    let expressionResolver = context.expressionResolver
-    guard let position = resolvePosition(expressionResolver)?.cast() else {
-      return nil
-    }
-    let block = try div.value.makeBlock(context: context)
-    return BlockTooltip(
-      id: id,
-      block: block,
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      offset: offset?.cast(with: expressionResolver) ?? .zero,
-      position: position
-    )
-  }
-}
-
-extension DivTooltip.Position {
-  fileprivate func cast() -> BlockTooltip.Position {
-    switch self {
-    case .left: return .left
-    case .topLeft: return .topLeft
-    case .top: return .top
-    case .topRight: return .topRight
-    case .right: return .right
-    case .bottomRight: return .bottomRight
-    case .bottom: return .bottom
-    case .bottomLeft: return .bottomLeft
-    }
-  }
-}
-
-extension DivPoint {
-  fileprivate func cast(with expressionResolver: ExpressionResolver) -> CGPoint {
-    CGPoint(
-      x: x.resolveUnit(expressionResolver).makeScaledValue(x.resolveValue(expressionResolver) ?? 0),
-      y: y.resolveUnit(expressionResolver).makeScaledValue(y.resolveValue(expressionResolver) ?? 0)
     )
   }
 }

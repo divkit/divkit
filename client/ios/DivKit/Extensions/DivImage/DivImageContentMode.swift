@@ -9,12 +9,13 @@ protocol DivImageContentMode {
 }
 
 extension DivImageContentMode {
-  func resolveContentMode(_ expressionResolver: ExpressionResolver) -> ImageContentMode {
-    ImageContentMode(
+  func contentMode(context: DivBlockModelingContext) -> ImageContentMode {
+    let expressionResolver = context.expressionResolver
+    return ImageContentMode(
       scale: resolveScale(expressionResolver).contentModeScale,
       verticalAlignment: resolveContentAlignmentVertical(expressionResolver).contentModeAlignment,
       horizontalAlignment: resolveContentAlignmentHorizontal(expressionResolver)
-        .contentModeAlignment
+        .makeContentModeAlignment(uiLayoutDirection: context.layoutDirection)
     )
   }
 }
@@ -53,12 +54,28 @@ extension DivAlignmentVertical {
 extension DivAlignmentHorizontal {
   fileprivate var contentModeAlignment: ImageContentMode.HorizontalAlignment {
     switch self {
+    case .left, .start:
+      return .left
+    case .center:
+      return .center
+    case .right, .end:
+      return .right
+    }
+  }
+
+  func makeContentModeAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ImageContentMode
+    .HorizontalAlignment {
+    switch self {
     case .left:
       return .left
     case .center:
       return .center
     case .right:
       return .right
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .left : .right
+    case .end:
+      return uiLayoutDirection == .leftToRight ? .right : .left
     }
   }
 }

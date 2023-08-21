@@ -163,6 +163,7 @@ public final class DivStateTemplate: TemplateValue {
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultStateId: Field<Expression<String>>?
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let divId: Field<String>?
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
@@ -172,6 +173,7 @@ public final class DivStateTemplate: TemplateValue {
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let stateIdVariable: Field<String>? // at least 1 char
   public let states: Field<[StateTemplate]>? // at least 1 elements
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
@@ -200,6 +202,7 @@ public final class DivStateTemplate: TemplateValue {
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         defaultStateId: try dictionary.getOptionalExpressionField("default_state_id"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         divId: try dictionary.getOptionalField("div_id"),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -209,6 +212,7 @@ public final class DivStateTemplate: TemplateValue {
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+        stateIdVariable: try dictionary.getOptionalField("state_id_variable"),
         states: try dictionary.getOptionalArray("states", templateToType: templateToType),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
@@ -237,6 +241,7 @@ public final class DivStateTemplate: TemplateValue {
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     defaultStateId: Field<Expression<String>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     divId: Field<String>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -246,6 +251,7 @@ public final class DivStateTemplate: TemplateValue {
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
+    stateIdVariable: Field<String>? = nil,
     states: Field<[StateTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
@@ -268,6 +274,7 @@ public final class DivStateTemplate: TemplateValue {
     self.border = border
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
+    self.disappearActions = disappearActions
     self.divId = divId
     self.extensions = extensions
     self.focus = focus
@@ -277,6 +284,7 @@ public final class DivStateTemplate: TemplateValue {
     self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
+    self.stateIdVariable = stateIdVariable
     self.states = states
     self.tooltips = tooltips
     self.transform = transform
@@ -300,6 +308,7 @@ public final class DivStateTemplate: TemplateValue {
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let defaultStateIdValue = parent?.defaultStateId?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultStateIdValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let divIdValue = parent?.divId?.resolveOptionalValue(context: context, validator: ResolvedValue.divIdValidator) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
@@ -309,6 +318,7 @@ public final class DivStateTemplate: TemplateValue {
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
+    let stateIdVariableValue = parent?.stateIdVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.stateIdVariableValidator) ?? .noValue
     let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
@@ -330,6 +340,7 @@ public final class DivStateTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       divIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "div_id", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -339,6 +350,7 @@ public final class DivStateTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      stateIdVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_id_variable", error: $0) },
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -369,6 +381,7 @@ public final class DivStateTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultStateId: defaultStateIdValue.value,
+      disappearActions: disappearActionsValue.value,
       divId: divIdValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -378,6 +391,7 @@ public final class DivStateTemplate: TemplateValue {
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
+      stateIdVariable: stateIdVariableValue.value,
       states: statesNonNil,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -406,6 +420,7 @@ public final class DivStateTemplate: TemplateValue {
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var defaultStateIdValue: DeserializationResult<Expression<String>> = parent?.defaultStateId?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var divIdValue: DeserializationResult<String> = parent?.divId?.value(validatedBy: ResolvedValue.divIdValidator) ?? .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -415,6 +430,7 @@ public final class DivStateTemplate: TemplateValue {
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var stateIdVariableValue: DeserializationResult<String> = parent?.stateIdVariable?.value(validatedBy: ResolvedValue.stateIdVariableValidator) ?? .noValue
     var statesValue: DeserializationResult<[DivState.State]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
@@ -445,6 +461,8 @@ public final class DivStateTemplate: TemplateValue {
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "default_state_id":
         defaultStateIdValue = deserialize(__dictValue, validator: ResolvedValue.defaultStateIdValidator).merged(with: defaultStateIdValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "div_id":
         divIdValue = deserialize(__dictValue, validator: ResolvedValue.divIdValidator).merged(with: divIdValue)
       case "extensions":
@@ -463,6 +481,8 @@ public final class DivStateTemplate: TemplateValue {
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+      case "state_id_variable":
+        stateIdVariableValue = deserialize(__dictValue, validator: ResolvedValue.stateIdVariableValidator).merged(with: stateIdVariableValue)
       case "states":
         statesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivStateTemplate.StateTemplate.self).merged(with: statesValue)
       case "tooltips":
@@ -503,6 +523,8 @@ public final class DivStateTemplate: TemplateValue {
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.defaultStateId?.link:
         defaultStateIdValue = defaultStateIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.defaultStateIdValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.divId?.link:
         divIdValue = divIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.divIdValidator))
       case parent?.extensions?.link:
@@ -521,6 +543,8 @@ public final class DivStateTemplate: TemplateValue {
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
+      case parent?.stateIdVariable?.link:
+        stateIdVariableValue = stateIdVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.stateIdVariableValidator))
       case parent?.states?.link:
         statesValue = statesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivStateTemplate.StateTemplate.self))
       case parent?.tooltips?.link:
@@ -552,6 +576,7 @@ public final class DivStateTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -577,6 +602,7 @@ public final class DivStateTemplate: TemplateValue {
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       defaultStateIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_state_id", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       divIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "div_id", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
@@ -586,6 +612,7 @@ public final class DivStateTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      stateIdVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "state_id_variable", error: $0) },
       statesValue.errorsOrWarnings?.map { .nestedObjectError(field: "states", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -616,6 +643,7 @@ public final class DivStateTemplate: TemplateValue {
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
       defaultStateId: defaultStateIdValue.value,
+      disappearActions: disappearActionsValue.value,
       divId: divIdValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -625,6 +653,7 @@ public final class DivStateTemplate: TemplateValue {
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
+      stateIdVariable: stateIdVariableValue.value,
       states: statesNonNil,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -658,6 +687,7 @@ public final class DivStateTemplate: TemplateValue {
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       defaultStateId: defaultStateId ?? mergedParent.defaultStateId,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       divId: divId ?? mergedParent.divId,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
@@ -667,6 +697,7 @@ public final class DivStateTemplate: TemplateValue {
       paddings: paddings ?? mergedParent.paddings,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
+      stateIdVariable: stateIdVariable ?? mergedParent.stateIdVariable,
       states: states ?? mergedParent.states,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
@@ -695,6 +726,7 @@ public final class DivStateTemplate: TemplateValue {
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
       defaultStateId: merged.defaultStateId,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       divId: merged.divId,
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
@@ -704,6 +736,7 @@ public final class DivStateTemplate: TemplateValue {
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
+      stateIdVariable: merged.stateIdVariable,
       states: try merged.states?.resolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),

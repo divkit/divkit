@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [dimension].
  * 
- * Required properties: `value`.
+ * Required parameters: `value`.
  */
 @Generated
 class Dimension internal constructor(

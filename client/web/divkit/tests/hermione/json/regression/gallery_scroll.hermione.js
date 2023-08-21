@@ -26,9 +26,6 @@ describe('regression', () => {
                 offset: 300
             });
             await this.browser.assertView('right_swipe', '#root');
-
-            const logs = await this.browser.execute(() => window.divkitLogs);
-            logs.length.should.equal(2);
         });
     });
 });

@@ -1,20 +1,21 @@
 package com.yandex.div.video
 
+import android.app.Activity
+import android.app.Application
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.SeekParameters
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.player.DivPlayer
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_FULL
+import com.yandex.div.core.player.DivPlayer.Companion.VOLUME_MUTED
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
-import com.yandex.div.core.player.DivVideoPauseReason
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.internal.KAssert
 
@@ -24,50 +25,74 @@ class ExoDivPlayer(
     config: DivPlayerPlaybackConfig
 ) : DivPlayer {
     val player: ExoPlayer by lazy {
-        SimpleExoPlayer.Builder(context).build()
+        ExoPlayer.Builder(context).build()
     }
-    private val mediaDataSourceFactory by lazy {
-        DefaultDataSourceFactory(context)
-    }
-    private val hlsFactory by lazy {
-        HlsMediaSource.Factory(mediaDataSourceFactory)
-    }
-    private val fileFactory by lazy {
-        ProgressiveMediaSource.Factory(mediaDataSourceFactory)
+    private val mediaSourceAbstractFactory by lazy {
+        ExoDivMediaSourceAbstractFactory(context)
     }
 
     private val observers = ObserverList<DivPlayer.Observer>()
     private val updateTimeHandler = Handler(Looper.getMainLooper())
     private var currentSource: DivVideoSource? = null
+    private var needToRenderFrameExplicitly = false
+
+    private var lastUnmutedVolume = VOLUME_FULL
+    private var isMuted = config.isMuted
 
     private var targetResolutionArea = 0
 
     private val playerPauseListener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             if (isPlaying) {
-                observers.forEach { it.onResume() }
+                observers.forEach { it.onPlay() }
                 startUpdatingPlaybackTime()
             } else {
-                observers.forEach { it.onPause(DivVideoPauseReason.PAUSE_CLICKED) }
+                observers.forEach { it.onPause() }
             }
         }
 
         override fun onPlaybackStateChanged(state: Int) {
-            val case = when (state) {
-                Player.STATE_BUFFERING -> DivVideoPauseReason.BUFFER_OVER
-                Player.STATE_ENDED -> DivVideoPauseReason.VIDEO_OVER
-                else -> null
-            }
-            case?.let {
-                observers.forEach { observer ->
-                    observer.onPause(case)
+            if (state == Player.STATE_ENDED) needToRenderFrameExplicitly = true
+
+            observers.forEach {
+                when (state) {
+                    Player.STATE_BUFFERING -> it.onBuffering()
+                    Player.STATE_ENDED -> it.onEnd()
+                    Player.STATE_READY -> it.onReady()
+                    else -> Unit
                 }
             }
         }
 
-        override fun onPlayerError(error: ExoPlaybackException) {
+        override fun onPlayerError(error: PlaybackException) {
             observers.forEach {
-                it.onPause(DivVideoPauseReason.ERROR)
+                it.onFatal()
+            }
+        }
+    }
+
+    private val playerActivityCallback = object : Application.ActivityLifecycleCallbacks {
+        override fun onActivityPaused(activity: Activity) = Unit
+
+        override fun onActivityStarted(activity: Activity) = Unit
+
+        override fun onActivityDestroyed(activity: Activity) {
+            (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(this)
+        }
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
+
+        override fun onActivityStopped(activity: Activity) = Unit
+
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
+
+        override fun onActivityResumed(activity: Activity) {
+            if (needToRenderFrameExplicitly) {
+                needToRenderFrameExplicitly = false
+                player.setSeekParameters(SeekParameters.CLOSEST_SYNC)
+                seek(player.currentPosition)
+                pause()
+                player.setSeekParameters(SeekParameters.EXACT)
             }
         }
     }
@@ -79,11 +104,14 @@ class ExoDivPlayer(
         } else {
             KAssert.fail { "Attempt to create a player with an empty source" }
         }
+        player.volume = if (isMuted) VOLUME_MUTED else VOLUME_FULL
+
+        (context.applicationContext as Application).registerActivityLifecycleCallbacks(playerActivityCallback)
     }
 
     private fun updatePlaybackTime() {
         observers.forEach {
-            it.onCurrentTimeUpdate(player.currentPosition)
+            it.onCurrentTimeChange(player.currentPosition)
         }
     }
 
@@ -103,7 +131,7 @@ class ExoDivPlayer(
     }
 
     private fun setConfig(config: DivPlayerPlaybackConfig) {
-        if (config.isMuted) player.volume = 0f
+        setMuted(config.isMuted)
         player.repeatMode = if (config.repeatable) {
             Player.REPEAT_MODE_ONE
         } else {
@@ -129,19 +157,24 @@ class ExoDivPlayer(
         currentSource = minSourceGreaterThanTarget ?: src.first()
 
         currentSource?.let { source ->
-            val mediaItem = MediaItem.Builder()
-                .setMimeType(source.mimeType)
-                .setUri(source.url)
-                .build()
-            val factory = when (source) {
-                is DivVideoSource.StreamVideoSource -> hlsFactory
-                is DivVideoSource.FileVideoSource -> fileFactory
-            }
-            val mediaSource = factory.createMediaSource(mediaItem)
+            mediaSourceAbstractFactory.create(source.url.toString())?.let { factory ->
+                val mediaItem = MediaItem.Builder()
+                    .setMimeType(source.mimeType)
+                    .setUri(source.url)
+                    .build()
+                val mediaSource = factory.createMediaSource(mediaItem)
 
-            player.setMediaSource(mediaSource)
-            player.prepare()
+                player.setMediaSource(mediaSource)
+                player.prepare()
+            }
         }
+    }
+
+    override fun setMuted(muted: Boolean) {
+        if (isMuted == muted) return
+
+        player.volume = if (muted) VOLUME_MUTED else lastUnmutedVolume
+        isMuted = muted
     }
 
     override fun addObserver(observer: DivPlayer.Observer) {
@@ -179,5 +212,6 @@ class ExoDivPlayer(
 
     override fun release() {
         player.release()
+        (context.applicationContext as Application).unregisterActivityLifecycleCallbacks(playerActivityCallback)
     }
 }

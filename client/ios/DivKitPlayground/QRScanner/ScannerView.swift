@@ -9,7 +9,11 @@ struct ScannerView: UIViewControllerRepresentable {
   var result: String
 
   func makeUIViewController(context _: Context) -> UIViewController {
-    let controller = ScannerViewController()
+    let controller = ScannerViewController(
+      logError: { message in
+        AppLogger.error(message)
+      }
+    )
     controller.result.currentAndNewValues
       .addObserver {
         if result != $0 {

@@ -25,7 +25,7 @@
           "$description": "translations.json#/div_font_size"
         },
         "font_family": {
-          "$ref": "div-font-family.json",
+          "$ref": "common.json#/non_empty_string",
           "$description": "translations.json#/div_font_family"
         },
         "font_size_unit": {
@@ -192,8 +192,7 @@
           "$description": "translations.json#/div_font_size"
         },
         "font_family": {
-          "$ref": "div-font-family.json",
-          "default_value": "text",
+          "$ref": "common.json#/non_empty_string",
           "$description": "translations.json#/div_font_family"
         },
         "font_size_unit": {
@@ -239,7 +238,7 @@
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
-          "default_value": "left",
+          "default_value": "start",
           "$description": "translations.json#/div_text_text_alignment_horizontal"
         },
         "text_alignment_vertical": {
@@ -256,7 +255,8 @@
           "$ref": "common.json#/color",
           "$description": "translations.json#/div_text_focused_text_color",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "text_gradient": {

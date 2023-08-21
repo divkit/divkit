@@ -20,7 +20,9 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
-    ObjectFormat
+    RawArray,
+    ObjectFormat,
+    SwiftGeneratorProperties,
 )
 from ...config import GenerationMode
 from ... import utils
@@ -83,6 +85,7 @@ class SwiftEntity(Entity):
         Color.__bases__ = (SwiftPropertyType, PropertyType,)
         String.__bases__ = (SwiftPropertyType, PropertyType,)
         Dictionary.__bases__ = (SwiftPropertyType, PropertyType,)
+        RawArray.__bases__ = (SwiftPropertyType, PropertyType,)
         for prop in self.properties:
             prop.__class__ = SwiftProperty
 
@@ -93,6 +96,12 @@ class SwiftEntity(Entity):
     @property
     def has_parent_property(self) -> bool:
         return self.has_static_type
+
+    @property
+    def swift_super_protocol(self) -> Optional[str]:
+        if not isinstance(self.generator_properties, SwiftGeneratorProperties):
+            return None
+        return cast(SwiftGeneratorProperties, self.generator_properties).super_protocol
 
     @property
     def properties_swift(self) -> List[SwiftProperty]:
@@ -147,7 +156,11 @@ class SwiftEntity(Entity):
             if not self.generation_mode.is_template:
                 if prop.parsed_value_is_optional:
                     nullability = '' if prop.should_be_optional else '?'
-                    optionality = ' = nil' if self._generate_swift_optional_args else ''
+                    generate_optional_args = True
+                    if isinstance(self.generator_properties, SwiftGeneratorProperties):
+                        properties = cast(SwiftGeneratorProperties, self.generator_properties)
+                        generate_optional_args = properties.generate_optional_args
+                    optionality = ' = nil' if generate_optional_args else ''
                 else:
                     nullability = ''
                     optionality = ''
@@ -693,6 +706,8 @@ class SwiftPropertyType(PropertyType):
             return 'Color'
         elif isinstance(self, Dictionary):
             return '[String: Any]'
+        elif isinstance(self, RawArray):
+            return '[Any]'
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')
@@ -815,7 +830,7 @@ class SwiftPropertyType(PropertyType):
 
     @property
     def is_equatable(self) -> bool:
-        if isinstance(self, Dictionary):
+        if isinstance(self, (Dictionary, RawArray)):
             return False
         elif isinstance(self, Array):
             return cast(SwiftPropertyType, self.property_type).is_equatable
@@ -823,7 +838,7 @@ class SwiftPropertyType(PropertyType):
             return True
 
     def serialization_suffix(self, use_expressions: bool) -> str:
-        if isinstance(self, Dictionary):
+        if isinstance(self, (Dictionary, RawArray)):
             return ''
         elif isinstance(self, (String, Int, Double, Bool, BoolInt)):
             return '.toValidSerializationValue()' if use_expressions else ''

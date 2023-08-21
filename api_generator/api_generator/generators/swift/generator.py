@@ -18,7 +18,8 @@ from ...schema.modeling.entities import (
     Entity,
     Declarable,
     Property,
-    String
+    String,
+    RawArray
 )
 from ...schema.modeling.text import Text, EMPTY
 from ...config import Config, GenerationMode, GeneratedLanguage
@@ -89,14 +90,27 @@ class SwiftGenerator(Generator):
             return []
 
     def __entity_extensions_declaration(self, entity: SwiftEntity) -> List[str]:
+
+        def get_extensions_declaration_warning(all_props: List[SwiftProperty],
+                                               equatable_props: List[SwiftProperty]) -> str:
+            only_raw_array_property = all(isinstance(prop.property_type, RawArray) for prop in all_props)
+            should_skip = len(all_props) > 0 and only_raw_array_property
+
+            if should_skip:
+                return '// WARNING: this == is incomplete because of [Any] in class fields'
+            if len(equatable_props) != len(all_props):
+                return '// WARNING: this == is incomplete because of [String: Any] in class fields'
+            return ''
+
         self_extensions = []
         if not entity.generate_as_protocol and not entity.generation_mode.is_template:
             equatable_extension = Text('#if DEBUG')
             props = entity.instance_properties_swift
             equatable_properties = list(filter(lambda p: cast(SwiftPropertyType, p.property_type).is_equatable,
                                                props))
-            if len(equatable_properties) != len(props):
-                equatable_extension += '// WARNING: this == is incomplete because of [String: Any] in class fields'
+            warning = get_extensions_declaration_warning(props, equatable_properties)
+            if len(warning) > 0:
+                equatable_extension += warning
             pref_decl = entity.prefixed_declaration
             equatable_extension += f'extension {pref_decl}: Equatable {{'
             access_modifier = self._access_level.value

@@ -1,0 +1,110 @@
+{
+  "templates": {
+    "control_button": {
+      "type": "image",
+      "aspect": {
+        "ratio": 1
+      },
+      "paddings": {
+        "top": 3,
+        "bottom": 3
+      },
+      "margins": {
+        "left": 5,
+        "right": 5
+      },
+      "scale": "fit",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "video",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "video_1_muted",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "video",
+              "id": "bears_video",
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://yastatic.net/s3/home/divkit/beep_test.mp4",
+                  "mime_type": "video/mp4"
+                }
+              ],
+              "repeatable": true,
+              "autostart": true,
+              "muted": "@{video_1_muted}",
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "top": 10
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/mute_button.png",
+                  "actions": [
+                    {
+                      "log_id": "mute",
+                      "url": "div-action://set_variable?name=video_1_muted&value=true"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/unmute_button.png",
+                  "actions": [
+                    {
+                      "log_id": "unmute",
+                      "url": "div-action://set_variable?name=video_1_muted&value=false"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

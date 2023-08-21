@@ -1,8 +1,9 @@
+@testable import DivKit
+
 import XCTest
 
 import BaseUIPublic
 import CommonCorePublic
-import DivKit
 import LayoutKit
 import NetworkingPublic
 
@@ -40,6 +41,14 @@ open class DivKitSnapshotTestCase: XCTestCase {
     return platforms.contains { $0 as? String == "ios" }
   }
 
+  func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
+    let configuration = try? jsonDict.getField("configuration") as [String: Any]
+    guard configuration?["layout_direction"] as? String == "rtl" else {
+      return .leftToRight
+    }
+    return .rightToLeft
+  }
+
   final func testDivs(
     _ fileName: String,
     testName: String = #function,
@@ -57,10 +66,11 @@ open class DivKitSnapshotTestCase: XCTestCase {
 
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
-      flagsInfo: DivFlagsInfo(),
+      fontProvider: YSFontProvider(),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
+      layoutDirection: getLayoutDirection(from: jsonDict),
       updateCardAction: nil,
-      urlOpener: { _ in }
+      urlHandler: DivUrlHandlerDelegate { _, _ in }
     )
     for (path, state) in blocksState {
       divKitComponents.blockStateStorage.setState(path: path, state: state)
@@ -127,7 +137,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
             divAction,
             cardId: testDivCardId,
             source: .custom,
-            urlOpener: divKitComponents.urlOpener
+            sender: nil
           )
         }
         try checkSnapshots(
@@ -315,18 +325,7 @@ extension DivData {
 extension ImageHolderFactory {
   static let placeholderOnly = ImageHolderFactory(
     make: { _, placeholder in
-      switch placeholder {
-      case let .image(image)?:
-        return image
-      case let .color(color)?:
-        return ColorHolder(color: color)
-      case let .view(view)?:
-        return ViewImageHolder(view: view)
-      case .none:
-        return NilImageHolder()
-      @unknown default:
-        return NilImageHolder()
-      }
+      placeholder?.toImageHolder() ?? NilImageHolder()
     }
   )
 }

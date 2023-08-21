@@ -7,6 +7,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.internal.Assert
+
 import com.yandex.div.json.missingVariable
 
 @Mockable
@@ -17,7 +18,6 @@ internal class VariableController {
 
     private var onAnyVariableChangeCallback: ((Variable) -> Unit)? = null
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
-    private val notifyVariableDeclaredCallback = { v : Variable -> onVariableDeclared(v) }
 
     private fun addObserver(name: String, observer: (Variable) -> Unit) {
         val observers = onChangeObservers.getOrPut(name) {
@@ -92,7 +92,7 @@ internal class VariableController {
      */
     fun addSource(source: VariableSource) {
         source.observeVariables(notifyVariableChangedCallback)
-        source.observeDeclaration(notifyVariableDeclaredCallback)
+        source.observeDeclaration { onVariableDeclared(it) }
         extraVariablesSources.add(source)
     }
 
@@ -128,12 +128,5 @@ internal class VariableController {
     fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) {
         Assert.assertNull(onAnyVariableChangeCallback)
         onAnyVariableChangeCallback = callback
-    }
-
-    fun removeGlobalObservers() {
-        extraVariablesSources.forEach {
-            it.removeOnChangeObserver(notifyVariableChangedCallback)
-            it.removeDeclarationObserver(notifyVariableDeclaredCallback)
-        }
     }
 }

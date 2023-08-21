@@ -64,14 +64,16 @@
               "text": "not constrained item not constrained item not constrained item",
               "column_span": 3,
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               }
             },
             {
               "type": "cell_with_one_pixel_margin",
               "text": "not constrained item with very very long text",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               }
             },
             {

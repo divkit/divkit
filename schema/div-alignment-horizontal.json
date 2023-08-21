@@ -3,6 +3,8 @@
   "enum": [
     "left",
     "center",
-    "right"
+    "right",
+    "start",
+    "end"
   ]
 }

@@ -1,7 +1,7 @@
 import XCTest
 
 import CommonCorePublic
-import DivKit
+@testable import DivKit
 import LayoutKit
 import NetworkingPublic
 import Serialization
@@ -49,15 +49,16 @@ extension DivBlockModelingContext {
 
   init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    galleryResizableInsets: InsetMode.Resizable? = nil
+    scheduler: Scheduling? = nil
   ) {
     self.init(
       cardId: DivKitTests.cardId,
       cardLogId: DivKitTests.cardLogId,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
-      galleryResizableInsets: galleryResizableInsets,
-      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() })
+      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
+      scheduler: scheduler,
+      persistentValuesStorage: DivPersistentValuesStorage()
     )
   }
 }

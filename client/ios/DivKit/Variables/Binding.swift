@@ -13,29 +13,56 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
   }
 
   init(context: DivBlockModelingContext, name: String) {
-    self.init(
+    self = makeBinding(
+      context: context,
       name: name,
-      getValue: { context.expressionResolver.getVariableValue($0) ?? .zero },
-      userInterfaceActionFactory: { name, value in
-        URL(string: "div-action://set_variable?name=\(name)&value=\(value.description)").flatMap {
-          DivAction(logId: "binding", url: .value($0))
-        }?.uiAction(context: context.actionContext)
-      }
+      valueConverter: { $0.description },
+      defaultValue: .zero
     )
   }
 }
 
 extension Binding where T == String {
   init(context: DivBlockModelingContext, name: String) {
-    self.init(
+    self = makeBinding(
+      context: context,
       name: name,
-      getValue: { context.expressionResolver.getVariableValue($0) ?? "" },
-      userInterfaceActionFactory: { name, value in
-        URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncodedURLString)")
-          .flatMap {
-            DivAction(logId: "binding", url: .value($0))
-          }?.uiAction(context: context.actionContext)
-      }
+      valueConverter: { $0.percentEncoded() },
+      defaultValue: ""
     )
   }
+}
+
+extension Binding where T == Bool {
+  init(context: DivBlockModelingContext, name: String) {
+    self = makeBinding(
+      context: context,
+      name: name,
+      valueConverter: { $0.description },
+      defaultValue: false
+    )
+  }
+}
+
+private func makeBinding<T>(
+  context: DivBlockModelingContext,
+  name: String,
+  valueConverter: @escaping (T) -> String,
+  defaultValue: T
+) -> Binding<T> {
+  context.variableTracker?.onVariablesUsed(
+    cardId: context.cardId,
+    variables: [DivVariableName(rawValue: name)]
+  )
+
+  let expressionResolver = context.expressionResolver
+  return Binding(
+    name: name,
+    getValue: { expressionResolver.getVariableValue($0) ?? defaultValue },
+    userInterfaceActionFactory: { name, value in
+      URL(string: "div-action://set_variable?name=\(name)&value=\(valueConverter(value))")
+        .flatMap { DivAction(logId: "binding", url: .value($0)) }?
+        .uiAction(context: context)
+    }
+  )
 }

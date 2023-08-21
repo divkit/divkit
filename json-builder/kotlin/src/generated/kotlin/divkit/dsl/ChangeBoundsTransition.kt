@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [changeBoundsTransition].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class ChangeBoundsTransition internal constructor(

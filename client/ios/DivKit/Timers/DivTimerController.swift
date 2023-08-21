@@ -19,6 +19,7 @@ final class DivTimerController {
   private let runActions: RunActions
   private let updateVariable: UpdateVariable
   private let updateCard: UpdateCard
+  private let persistentValuesStorage: DivPersistentValuesStorage
   private(set) var state: State = .stopped
 
   private var savedDuration: TimeInterval?
@@ -35,7 +36,8 @@ final class DivTimerController {
     timeMeasuring: TimeMeasuring,
     runActions: @escaping RunActions,
     updateVariable: @escaping UpdateVariable,
-    updateCard: @escaping UpdateCard
+    updateCard: @escaping UpdateCard,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.divTimer = divTimer
     self.timerScheduler = timerScheduler
@@ -43,6 +45,7 @@ final class DivTimerController {
     self.runActions = runActions
     self.updateVariable = updateVariable
     self.updateCard = updateCard
+    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func start(variables: DivVariables = [:]) {
@@ -50,7 +53,7 @@ final class DivTimerController {
       DivKitLogger.error("Timer '\(divTimer.id)' can't start because it has state '\(state)'.")
       return
     }
-    let expressionResolver = ExpressionResolver(variables: variables)
+    let expressionResolver = ExpressionResolver(variables: variables, persistentValuesStorage: persistentValuesStorage)
     guard divTimer.parametersAreValid(expressionResolver) else {
       DivKitLogger.failure("Timer '\(divTimer.id)' is not valid.")
       return

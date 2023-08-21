@@ -18,11 +18,11 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Text input mask with a fixed amount of characters.
+ * Mask for entering text with a fixed number of characters.
  * 
  * Can be created using the method [fixedLengthInputMask].
  * 
- * Required properties: `type, pattern_elements, pattern`.
+ * Required parameters: `type, raw_text_variable, pattern_elements, pattern`.
  */
 @Generated
 class FixedLengthInputMask internal constructor(
@@ -39,23 +39,28 @@ class FixedLengthInputMask internal constructor(
             alwaysVisible = additive.alwaysVisible ?: properties.alwaysVisible,
             pattern = additive.pattern ?: properties.pattern,
             patternElements = additive.patternElements ?: properties.patternElements,
+            rawTextVariable = additive.rawTextVariable ?: properties.rawTextVariable,
         )
     )
 
     class Properties internal constructor(
         /**
-         * Option to show mask before completion.
+         * If this option is enabled, the text field contains the mask before being filled in.
          * Default value: `false`.
          */
         val alwaysVisible: Property<Boolean>?,
         /**
-         * Text input mask's format.
+         * String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
          */
         val pattern: Property<String>?,
         /**
-         * Decoding of characters from pattern that are replaceable with user input.
+         * Template decoding is a description of the characters that will be replaced with user input.
          */
         val patternElements: Property<List<PatternElement>>?,
+        /**
+         * Name of the variable to store the unprocessed value.
+         */
+        val rawTextVariable: Property<String>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
@@ -63,16 +68,17 @@ class FixedLengthInputMask internal constructor(
             result.tryPutProperty("always_visible", alwaysVisible)
             result.tryPutProperty("pattern", pattern)
             result.tryPutProperty("pattern_elements", patternElements)
+            result.tryPutProperty("raw_text_variable", rawTextVariable)
             return result
         }
     }
 
     /**
-     * Decoding of characters from pattern that are replaceable with user input.
+     * Template decoding is a description of the characters that will be replaced with user input.
      * 
      * Can be created using the method [fixedLengthInputMaskPatternElement].
      * 
-     * Required properties: `key`.
+     * Required parameters: `key`.
      */
     @Generated
     class PatternElement internal constructor(
@@ -92,16 +98,16 @@ class FixedLengthInputMask internal constructor(
 
         class Properties internal constructor(
             /**
-             * Special character replaceable with user input.
+             * A character in the template that will be replaced with a user-defined character.
              */
             val key: Property<String>?,
             /**
-             * Character that is shown in the place of the special character if mask should be always visible.
+             * The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
              * Default value: `_`.
              */
             val placeholder: Property<String>?,
             /**
-             * Regular expression with which the character will be validated.
+             * Regular expression for validating character inputs. For example, when a mask is digit-only.
              */
             val regex: Property<String>?,
         ) {
@@ -119,9 +125,10 @@ class FixedLengthInputMask internal constructor(
 }
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
- * @param patternElements Decoding of characters from pattern that are replaceable with user input.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
  */
 @Generated
 fun DivScope.fixedLengthInputMask(
@@ -129,18 +136,21 @@ fun DivScope.fixedLengthInputMask(
     alwaysVisible: Boolean? = null,
     pattern: String? = null,
     patternElements: List<FixedLengthInputMask.PatternElement>? = null,
+    rawTextVariable: String? = null,
 ): FixedLengthInputMask = FixedLengthInputMask(
     FixedLengthInputMask.Properties(
         alwaysVisible = valueOrNull(alwaysVisible),
         pattern = valueOrNull(pattern),
         patternElements = valueOrNull(patternElements),
+        rawTextVariable = valueOrNull(rawTextVariable),
     )
 )
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
- * @param patternElements Decoding of characters from pattern that are replaceable with user input.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
  */
 @Generated
 fun DivScope.fixedLengthInputMaskProps(
@@ -148,16 +158,19 @@ fun DivScope.fixedLengthInputMaskProps(
     alwaysVisible: Boolean? = null,
     pattern: String? = null,
     patternElements: List<FixedLengthInputMask.PatternElement>? = null,
+    rawTextVariable: String? = null,
 ) = FixedLengthInputMask.Properties(
     alwaysVisible = valueOrNull(alwaysVisible),
     pattern = valueOrNull(pattern),
     patternElements = valueOrNull(patternElements),
+    rawTextVariable = valueOrNull(rawTextVariable),
 )
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
- * @param patternElements Decoding of characters from pattern that are replaceable with user input.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
  */
 @Generated
 fun TemplateScope.fixedLengthInputMaskRefs(
@@ -165,16 +178,19 @@ fun TemplateScope.fixedLengthInputMaskRefs(
     alwaysVisible: ReferenceProperty<Boolean>? = null,
     pattern: ReferenceProperty<String>? = null,
     patternElements: ReferenceProperty<List<FixedLengthInputMask.PatternElement>>? = null,
+    rawTextVariable: ReferenceProperty<String>? = null,
 ) = FixedLengthInputMask.Properties(
     alwaysVisible = alwaysVisible,
     pattern = pattern,
     patternElements = patternElements,
+    rawTextVariable = rawTextVariable,
 )
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
- * @param patternElements Decoding of characters from pattern that are replaceable with user input.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
  */
 @Generated
 fun FixedLengthInputMask.override(
@@ -182,18 +198,21 @@ fun FixedLengthInputMask.override(
     alwaysVisible: Boolean? = null,
     pattern: String? = null,
     patternElements: List<FixedLengthInputMask.PatternElement>? = null,
+    rawTextVariable: String? = null,
 ): FixedLengthInputMask = FixedLengthInputMask(
     FixedLengthInputMask.Properties(
         alwaysVisible = valueOrNull(alwaysVisible) ?: properties.alwaysVisible,
         pattern = valueOrNull(pattern) ?: properties.pattern,
         patternElements = valueOrNull(patternElements) ?: properties.patternElements,
+        rawTextVariable = valueOrNull(rawTextVariable) ?: properties.rawTextVariable,
     )
 )
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
- * @param patternElements Decoding of characters from pattern that are replaceable with user input.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
+ * @param patternElements Template decoding is a description of the characters that will be replaced with user input.
+ * @param rawTextVariable Name of the variable to store the unprocessed value.
  */
 @Generated
 fun FixedLengthInputMask.defer(
@@ -201,17 +220,19 @@ fun FixedLengthInputMask.defer(
     alwaysVisible: ReferenceProperty<Boolean>? = null,
     pattern: ReferenceProperty<String>? = null,
     patternElements: ReferenceProperty<List<FixedLengthInputMask.PatternElement>>? = null,
+    rawTextVariable: ReferenceProperty<String>? = null,
 ): FixedLengthInputMask = FixedLengthInputMask(
     FixedLengthInputMask.Properties(
         alwaysVisible = alwaysVisible ?: properties.alwaysVisible,
         pattern = pattern ?: properties.pattern,
         patternElements = patternElements ?: properties.patternElements,
+        rawTextVariable = rawTextVariable ?: properties.rawTextVariable,
     )
 )
 
 /**
- * @param alwaysVisible Option to show mask before completion.
- * @param pattern Text input mask's format.
+ * @param alwaysVisible If this option is enabled, the text field contains the mask before being filled in.
+ * @param pattern String that sets the text input template. For example, the `+7 (###) ###-##-## ` template for a phone number.
  */
 @Generated
 fun FixedLengthInputMask.evaluate(
@@ -223,6 +244,7 @@ fun FixedLengthInputMask.evaluate(
         alwaysVisible = alwaysVisible ?: properties.alwaysVisible,
         pattern = pattern ?: properties.pattern,
         patternElements = properties.patternElements,
+        rawTextVariable = properties.rawTextVariable,
     )
 )
 
@@ -230,9 +252,9 @@ fun FixedLengthInputMask.evaluate(
 fun FixedLengthInputMask.asList() = listOf(this)
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun DivScope.fixedLengthInputMaskPatternElement(
@@ -249,9 +271,9 @@ fun DivScope.fixedLengthInputMaskPatternElement(
 )
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun DivScope.fixedLengthInputMaskPatternElementProps(
@@ -266,9 +288,9 @@ fun DivScope.fixedLengthInputMaskPatternElementProps(
 )
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun TemplateScope.fixedLengthInputMaskPatternElementRefs(
@@ -283,9 +305,9 @@ fun TemplateScope.fixedLengthInputMaskPatternElementRefs(
 )
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun FixedLengthInputMask.PatternElement.override(
@@ -302,9 +324,9 @@ fun FixedLengthInputMask.PatternElement.override(
 )
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun FixedLengthInputMask.PatternElement.defer(
@@ -321,9 +343,9 @@ fun FixedLengthInputMask.PatternElement.defer(
 )
 
 /**
- * @param key Special character replaceable with user input.
- * @param placeholder Character that is shown in the place of the special character if mask should be always visible.
- * @param regex Regular expression with which the character will be validated.
+ * @param key A character in the template that will be replaced with a user-defined character.
+ * @param placeholder The character that's displayed in the input field where the user is expected to enter text. This is used if mask display is enabled.
+ * @param regex Regular expression for validating character inputs. For example, when a mask is digit-only.
  */
 @Generated
 fun FixedLengthInputMask.PatternElement.evaluate(

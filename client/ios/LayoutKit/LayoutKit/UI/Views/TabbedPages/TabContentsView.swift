@@ -88,6 +88,11 @@ internal class TabContentsView: BlockView {
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
 
+    if oldModel?.layoutDirection != model.layoutDirection {
+      collectionView.semanticContentAttribute = model
+        .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
+    }
+
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
       dataSource.models = [model.pages.map { $0.block as! CollectionCellModel }]
 

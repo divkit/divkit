@@ -1,7 +1,7 @@
 # Generated code. Do not modify.
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+from pydivkit.core import BaseDiv, Field, Expr
 import enum
 import typing
 
@@ -10,12 +10,14 @@ class EntityWithComplexProperty(BaseDiv):
 
     def __init__(
         self, *,
-        property: EntityWithComplexPropertyProperty,
         type: str = 'entity_with_complex_property',
+        property: typing.Optional[EntityWithComplexPropertyProperty] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             type=type,
             property=property,
+            **kwargs,
         )
 
     type: str = Field(default='entity_with_complex_property')
@@ -27,13 +29,15 @@ class EntityWithComplexPropertyProperty(BaseDiv):
 
     def __init__(
         self, *,
-        value: str,
+        value: typing.Optional[typing.Union[Expr, str]] = None,
+        **kwargs: typing.Any,
     ):
         super().__init__(
             value=value,
+            **kwargs,
         )
 
-    value: str = Field(
+    value: typing.Union[Expr, str] = Field(
         format="uri"
     )
 

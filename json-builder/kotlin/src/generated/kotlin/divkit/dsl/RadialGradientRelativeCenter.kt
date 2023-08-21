@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [radialGradientRelativeCenter].
  * 
- * Required properties: `value, type`.
+ * Required parameters: `value, type`.
  */
 @Generated
 class RadialGradientRelativeCenter internal constructor(

@@ -12,10 +12,15 @@ cd $apiGenDir
 echo Executing api_generator with [config = $config] [schemaDir = $schemaDir] [outputDir = $outputDir]
 python3 -m api_generator -c $config -s $schemaDir -o $outputDir
 
+if [[ $1 = "--no-lint" ]]; then
+  exit 0
+fi
+
 echo "Install poetry"
-python3 -m pip install poetry
+(cd $scriptDir && python3 -m venv env && env/bin/pip install poetry)
 
 echo "Install requirements"
-(cd $outputDir/../.. && python3 -m poetry install --no-root -n)
+(cd $scriptDir && env/bin/poetry install --no-root -n)
+
 echo "Reformat code"
-(cd $outputDir/../.. && python3 -m poetry run gray $outputDir)
+(cd $scriptDir && env/bin/poetry run gray $outputDir)

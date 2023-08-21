@@ -9,6 +9,7 @@ extension DivShapeDrawable {
     widthTrait: DivDrawableWidthTrait,
     corners: CGRect.Corners
   ) throws -> Block {
+    let expressionResolver = context.expressionResolver
     switch shape {
     case let .divRoundedRectangleShape(roundedRectangle):
       let separatorBlock: Block
@@ -16,7 +17,7 @@ extension DivShapeDrawable {
       case .fixed:
         let width = CGFloat(
           roundedRectangle.itemWidth
-            .resolveValue(context.expressionResolver) ?? 0
+            .resolveValue(expressionResolver) ?? 0
         )
         separatorBlock = SeparatorBlock(size: width)
       case .resizable:
@@ -25,23 +26,23 @@ extension DivShapeDrawable {
       let height = CGFloat(
         roundedRectangle
           .itemHeight
-          .resolveValue(context.expressionResolver) ?? 0
+          .resolveValue(expressionResolver) ?? 0
       )
       let cornerRadius = CGFloat(
         roundedRectangle
           .cornerRadius
-          .resolveValue(context.expressionResolver) ?? 0
+          .resolveValue(expressionResolver) ?? 0
       )
       let blockBorder = stroke.flatMap { BlockBorder(
-        color: $0.resolveColor(context.expressionResolver) ?? .black,
-        width: CGFloat($0.resolveWidth(context.expressionResolver)) / 2
+        color: $0.resolveColor(expressionResolver) ?? .black,
+        width: CGFloat($0.resolveWidth(expressionResolver)) / 2
       ) }
       return separatorBlock
         .addingVerticalGaps(height / 2 - 0.5)
         .addingDecorations(
           boundary: .clipCorner(radius: cornerRadius, corners: corners),
           border: blockBorder,
-          backgroundColor: resolveColor(context.expressionResolver)
+          backgroundColor: resolveColor(expressionResolver)
         )
     case .divCircleShape:
       context.addError(level: .error, message: "unsupported block")
@@ -62,9 +63,10 @@ extension DivShapeDrawable {
   func getHeight(context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
-      let stroke = stroke?.resolveWidth(context.expressionResolver) ?? 0
+      let expressionResolver = context.expressionResolver
+      let stroke = stroke?.resolveWidth(expressionResolver) ?? 0
       return CGFloat(
-        (rectangle.itemHeight.resolveValue(context.expressionResolver) ?? 0) + stroke
+        (rectangle.itemHeight.resolveValue(expressionResolver) ?? 0) + stroke
       )
     case .divCircleShape:
       context.addError(level: .error, message: "unsupported circle shape")

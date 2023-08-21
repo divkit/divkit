@@ -51,6 +51,7 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
+    private val scrollInterceptionAngle: Float,
 ) : DivViewBinder<DivGallery, DivRecyclerView> {
 
     @SuppressLint("ClickableViewAccessibility")
@@ -175,7 +176,8 @@ internal class DivGalleryBinder @Inject constructor(
                 )
         )
 
-        when (div.scrollMode.evaluate(resolver)) {
+        val scrollMode = div.scrollMode.evaluate(resolver)
+        when (scrollMode) {
             DivGallery.ScrollMode.DEFAULT -> {
                 view.pagerSnapStartHelper?.attachToRecyclerView(null)
             }
@@ -193,6 +195,7 @@ internal class DivGalleryBinder @Inject constructor(
             DivGridLayoutManager(divView, view, div, orientation)
         }
         view.layoutManager = layoutManager
+        view.scrollInterceptionAngle = scrollInterceptionAngle
         view.clearOnScrollListeners()
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
@@ -200,7 +203,7 @@ internal class DivGalleryBinder @Inject constructor(
             val position = galleryState?.visibleItemIndex
                 ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset
-            view.scrollToPositionInternal(position, offset)
+            view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
             view.addOnScrollListener(UpdateStateScrollListener(id, state, layoutManager))
         }
         view.addOnScrollListener(ScrollListener(divView, view, layoutManager, div))
@@ -213,17 +216,21 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.scrollToPositionInternal(position: Int, offset: Int? = null) {
+    private fun DivRecyclerView.scrollToPositionInternal(
+        position: Int,
+        offset: Int? = null,
+        scrollPosition: ScrollPosition
+    ) {
         val layoutManager = layoutManager as? DivGalleryItemHelper
         when {
             offset == null && position == 0 -> {
                 // Show left or top padding on first position without any snapping
-                layoutManager?.instantScrollToPosition(position)
+                layoutManager?.instantScrollToPosition(position, scrollPosition)
             }
-            offset != null -> layoutManager?.instantScrollToPositionWithOffset(position, offset)
+            offset != null -> layoutManager?.instantScrollToPositionWithOffset(position, offset, scrollPosition)
             else -> {
                 // Call on RecyclerView itself for proper snapping.
-                layoutManager?.instantScrollToPosition(position)
+                layoutManager?.instantScrollToPosition(position, scrollPosition)
             }
         }
     }
@@ -286,10 +293,14 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         private fun trackVisibleViews() {
+            val visibilityActionTracker = divView.div2Component.visibilityActionTracker
+            visibilityActionTracker.updateVisibleViews(recycler.children.toList())
+
             recycler.children.forEach { child ->
                 val position = recycler.getChildAdapterPosition(child)
+                if (position == RecyclerView.NO_POSITION) return@forEach
+
                 val div = (recycler.adapter as GalleryAdapter).items[position]
-                val visibilityActionTracker = divView.div2Component.visibilityActionTracker
                 visibilityActionTracker.trackVisibilityActionsOf(divView, child, div)
             }
         }
@@ -311,7 +322,6 @@ internal class DivGalleryBinder @Inject constructor(
 
         init {
             setHasStableIds(true)
-            updateActiveItems()
             subscribeOnElements()
         }
 

@@ -14,6 +14,7 @@ import java.io.IOException
 import java.util.BitSet
 import org.json.JSONObject
 import com.yandex.div.data.*
+import org.json.JSONArray
 
 @Mockable
 sealed class Entity : JSONSerializable {
@@ -29,6 +30,7 @@ sealed class Entity : JSONSerializable {
     class WithOptionalProperty(val value: EntityWithOptionalProperty) : Entity()
     class WithOptionalStringEnumProperty(val value: EntityWithOptionalStringEnumProperty) : Entity()
     class WithPropertyWithDefaultValue(val value: EntityWithPropertyWithDefaultValue) : Entity()
+    class WithRawArray(val value: EntityWithRawArray) : Entity()
     class WithRequiredProperty(val value: EntityWithRequiredProperty) : Entity()
     class WithSimpleProperties(val value: EntityWithSimpleProperties) : Entity()
     class WithStrictArray(val value: EntityWithStrictArray) : Entity()
@@ -51,6 +53,7 @@ sealed class Entity : JSONSerializable {
             is WithOptionalProperty -> value
             is WithOptionalStringEnumProperty -> value
             is WithPropertyWithDefaultValue -> value
+            is WithRawArray -> value
             is WithRequiredProperty -> value
             is WithSimpleProperties -> value
             is WithStrictArray -> value
@@ -75,6 +78,7 @@ sealed class Entity : JSONSerializable {
             is WithOptionalProperty -> value.writeToJSON()
             is WithOptionalStringEnumProperty -> value.writeToJSON()
             is WithPropertyWithDefaultValue -> value.writeToJSON()
+            is WithRawArray -> value.writeToJSON()
             is WithRequiredProperty -> value.writeToJSON()
             is WithSimpleProperties -> value.writeToJSON()
             is WithStrictArray -> value.writeToJSON()
@@ -105,6 +109,7 @@ sealed class Entity : JSONSerializable {
                 EntityWithOptionalProperty.TYPE -> return WithOptionalProperty(EntityWithOptionalProperty(env, json))
                 EntityWithOptionalStringEnumProperty.TYPE -> return WithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty(env, json))
                 EntityWithPropertyWithDefaultValue.TYPE -> return WithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue(env, json))
+                EntityWithRawArray.TYPE -> return WithRawArray(EntityWithRawArray(env, json))
                 EntityWithRequiredProperty.TYPE -> return WithRequiredProperty(EntityWithRequiredProperty(env, json))
                 EntityWithSimpleProperties.TYPE -> return WithSimpleProperties(EntityWithSimpleProperties(env, json))
                 EntityWithStrictArray.TYPE -> return WithStrictArray(EntityWithStrictArray(env, json))

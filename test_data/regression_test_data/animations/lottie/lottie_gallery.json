@@ -1,0 +1,387 @@
+{
+  "templates": {
+    "lottie_image": {
+      "type": "image",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "lottie_gif": {
+      "type": "gif",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "card_title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 14,
+      "paddings": {
+        "top": 8
+      },
+      "font_weight": "medium",
+      "line_height": 18
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 250
+      },
+      "margins": {
+        "left": 4,
+        "right": 4,
+        "bottom": 4,
+        "top": 4
+      },
+      "paddings": {
+        "top": 4,
+        "right": 2,
+        "left": 2
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "lottie_image_card": {
+      "type": "lottie_card",
+      "items": [
+        {
+          "type": "card_title",
+          "$text": "lottie_image_text"
+        },
+        {
+          "type": "lottie_image",
+          "$id": "image_id",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ],
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Johnrogershousemay2020.webp"
+        }
+      ]
+    },
+    "lottie_gif_card": {
+      "type": "lottie_card",
+      "items": [
+        {
+          "type": "card_title",
+          "$text": "lottie_image_text"
+        },
+        {
+          "type": "lottie_gif",
+          "$id": "image_id",
+          "scale": "fit",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ],
+          "gif_url": "https://i.gifer.com/VhdJ.gif"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "root",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "div_id": "gallery",
+          "type": "gallery",
+          "items": [
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 1",
+              "lottie_image_text": "DivGif 1",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif1.json",
+                "repeat_count": 3,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 2",
+              "lottie_image_text": "DivGif 2",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif2.json",
+                "repeat_count": 3,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 3",
+              "lottie_image_text": "DivGif 3",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif3.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 4",
+              "lottie_image_text": "DivGif 4",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif4.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 5",
+              "lottie_image_text": "DivGif 5",
+              "lottie_params": {
+                "lottie_url": "https://yastatic.net/s3/home/yandex-app/div_test_data/love_anim.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 6",
+              "lottie_image_text": "DivGif 6",
+              "lottie_params": {
+                "lottie_url": "empty://"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 7",
+              "lottie_image_text": "DivGif 7",
+              "lottie_params": {
+                "lottie_url": "https://yastatic.net/s3/home/yandex-app/div_test_data/banana.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 8",
+              "lottie_image_text": "DivGif 8",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif28.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 9",
+              "lottie_image_text": "DivGif 9",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif9.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 10",
+              "lottie_image_text": "DivGif 10",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif10.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 11",
+              "lottie_image_text": "DivGif 11",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif11.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 12",
+              "lottie_image_text": "DivGif 12",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif12.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 13",
+              "lottie_image_text": "DivGif 13",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif13.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 14",
+              "lottie_image_text": "DivGif 14",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif14.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 15",
+              "lottie_image_text": "DivGif 15",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif15.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 16",
+              "lottie_image_text": "DivGif 16",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif16.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 17",
+              "lottie_image_text": "DivGif 17",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif17.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 18",
+              "lottie_image_text": "DivGif 18",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif18.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 19",
+              "lottie_image_text": "DivGif 19",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif19.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 20",
+              "lottie_image_text": "DivGif 20",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif20.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 21",
+              "lottie_image_text": "DivGif 21",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif21.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 22",
+              "lottie_image_text": "DivGif 22",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif22.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 23",
+              "lottie_image_text": "DivGif 23",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif23.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 24",
+              "lottie_image_text": "DivGif 24",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif24.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 25",
+              "lottie_image_text": "DivGif 25",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif25.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 26",
+              "lottie_image_text": "DivGif 26",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif26.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "type": "lottie_gif_card",
+              "image_id": "DivGif 27",
+              "lottie_image_text": "DivGif 27",
+              "lottie_params": {
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif27.json",
+                "repeat_count": -1,
+                "repeat_mode": "reverse"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -8,12 +8,15 @@ import Serialization
 public enum DivInputMask {
   case divFixedLengthInputMask(DivFixedLengthInputMask)
   case divCurrencyInputMask(DivCurrencyInputMask)
+  case divPhoneInputMask(DivPhoneInputMask)
 
   public var value: Serializable & DivInputMaskBase {
     switch self {
     case let .divFixedLengthInputMask(value):
       return value
     case let .divCurrencyInputMask(value):
+      return value
+    case let .divPhoneInputMask(value):
       return value
     }
   }
@@ -26,6 +29,8 @@ extension DivInputMask: Equatable {
     case let (.divFixedLengthInputMask(l), .divFixedLengthInputMask(r)):
       return l == r
     case let (.divCurrencyInputMask(l), .divCurrencyInputMask(r)):
+      return l == r
+    case let (.divPhoneInputMask(l), .divPhoneInputMask(r)):
       return l == r
     default:
       return false

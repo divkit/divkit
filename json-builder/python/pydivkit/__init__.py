@@ -1,12 +1,12 @@
 # flake8: noqa: F405
-from typing import Dict, Any
+from typing import Any, Dict
 
 from pydivkit.core import Field, Ref
 from pydivkit.div import *
 from pydivkit.div import __all__ as __div_all__
 
 
-def make_card(log_id: str, *divs: Div):
+def make_card(log_id: str, *divs: Div) -> DivData:
     return DivData(
         log_id=log_id,
         states=[

@@ -1,3 +1,4 @@
+import BasePublic
 import DivKit
 import SwiftUI
 
@@ -16,8 +17,9 @@ struct WebPreviewView: View {
       presentationMode: presentationMode
     ) {
       WebPreviewViewRepresentable(
-        blockProvider: model.blockProvider,
+        jsonProvider: model.socket.response,
         divKitComponents: model.divKitComponents,
+        debugParams: model.debugParams,
         onScreenshotTaken: model.sendScreenshot(_:)
       )
       .onAppear { [model, url] in
@@ -30,31 +32,27 @@ struct WebPreviewView: View {
   }
 }
 
-private struct WebPreviewModel {
-  private let socket = WebPreviewSocket()
-  private(set) var divKitComponents: DivKitComponents!
-  private(set) var blockProvider: DivBlockProvider!
-  private(set) var payloadFactory: UIStatePayloadFactory!
-  private var renderingTime: UIStatePayload.RenderingTime {
-    blockProvider.renderingTime
-  }
+private final class WebPreviewModel {
+  let socket = WebPreviewSocket()
+  let divKitComponents: DivKitComponents
+  var debugParams: DebugParams!
+  private let payloadFactory: UIStatePayloadFactory
+  private var renderingTime: UIStatePayload.RenderingTime?
+  private let disposePool = AutodisposePool()
 
   init() {
-    weak var weakBlockProvider: DivBlockProvider?
-    divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { reasons in
-        weakBlockProvider?.update(reasons: reasons.asArray())
-      }
-    )
-    blockProvider = DivBlockProvider(
-      json: socket.response,
-      divKitComponents: divKitComponents,
-      shouldResetOnDataChange: false
-    )
-    weakBlockProvider = blockProvider
+    divKitComponents = AppComponents.makeDivKitComponents()
     payloadFactory = UIStatePayloadFactory(
-      deviceInfo: DeviceInfo(),
-      errors: blockProvider.$errors
+      deviceInfo: DeviceInfo()
+    )
+    debugParams = DebugParams(
+      isDebugInfoEnabled: true,
+      processDivKitError: { _, errors in
+        self.payloadFactory.updateErrors(errors: errors)
+      },
+      processMeasurements: { [weak self] _, measurement in
+        self?.renderingTime = measurement.renderingTime
+      }
     )
   }
 
@@ -67,6 +65,7 @@ private struct WebPreviewModel {
   }
 
   func sendScreenshot(_ screenshotInfo: ScreenshotInfo) {
+    guard let renderingTime else { return }
     socket.send(
       state: payloadFactory.makePayload(
         screenshotInfo: screenshotInfo,

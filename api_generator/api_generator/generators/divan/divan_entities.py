@@ -19,6 +19,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawArray,
     DivanGeneratorProperties,
 )
 from ... import utils
@@ -121,6 +122,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = DivanColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = DivanDictionary
+    elif isinstance(property_type, RawArray):
+        property_type.__class__ = DivanRawArray
     elif isinstance(property_type, Double):
         property_type.__class__ = DivanDouble
     elif isinstance(property_type, Int):
@@ -616,6 +619,8 @@ class DivanPropertyType(PropertyType):
             return 'Url'
         elif isinstance(self, Dictionary):
             return 'Map<String, Any>'
+        elif isinstance(self, RawArray):
+            return 'List<Any>'
         elif isinstance(self, Array):
             element_type = cast(DivanPropertyType, self.property_type).declaration(prefixed, remove_prefix)
             return f'List<{element_type}>'
@@ -668,6 +673,10 @@ class DivanColor(DivanPropertyType, Color):
 
 
 class DivanDictionary(DivanPropertyType, Dictionary):
+    pass
+
+
+class DivanRawArray(DivanPropertyType, RawArray):
     pass
 
 

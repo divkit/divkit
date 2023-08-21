@@ -180,6 +180,63 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
   }
 }
 
+struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
+  private let impl: (T1, [T2]) throws -> R
+
+  var signature: FunctionSignature {
+    get throws {
+      .init(
+        arguments: [
+          .init(type: try .from(type: T1.self)),
+          .init(type: try .from(type: T2.self), vararg: true),
+        ],
+        resultType: try .from(type: R.self)
+      )
+    }
+  }
+
+  init(impl: @escaping (T1, [T2]) throws -> R) {
+    self.impl = impl
+  }
+
+  func invoke(args: [Any]) throws -> Any {
+    guard let v1 = args[0] as? T1 else {
+      throw FunctionSignature.Error.arityMismatch.message
+    }
+    let v2 = args.dropFirst().map { $0 as! T2 }
+    return try impl(v1, v2)
+  }
+}
+
+struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
+  private let impl: (T1, T2, [T3]) throws -> R
+
+  var signature: FunctionSignature {
+    get throws {
+      .init(
+        arguments: [
+          .init(type: try .from(type: T1.self)),
+          .init(type: try .from(type: T2.self)),
+          .init(type: try .from(type: T3.self), vararg: true),
+        ],
+        resultType: try .from(type: R.self)
+      )
+    }
+  }
+
+  init(impl: @escaping (T1, T2, [T3]) throws -> R) {
+    self.impl = impl
+  }
+
+  func invoke(args: [Any]) throws -> Any {
+    guard let v1 = args[0] as? T1, let v2 = args[1] as? T2 else {
+      throw FunctionSignature.Error.arityMismatch.message
+    }
+    let v3 = args.dropFirst(2).map { $0 as! T3 }
+    return try impl(v1, v2, v3)
+  }
+}
+
 struct OverloadedFunction: Function {
   let functions: [SimpleFunction]
   let makeError: ([Any]) -> Error
@@ -234,6 +291,7 @@ struct FunctionSignature: Decodable {
     case datetime
     case color
     case url
+    case dict
 
     func check(arg: Any) -> Bool {
       type(of: arg) == swiftType
@@ -255,6 +313,8 @@ struct FunctionSignature: Decodable {
         return Color.self
       case .url:
         return URL.self
+      case .dict:
+        return [String: AnyHashable].self
       }
     }
 

@@ -1,4 +1,3 @@
-import SwiftUI
 import UIKit
 
 import CommonCorePublic
@@ -6,45 +5,29 @@ import DivKit
 import DivKitExtensions
 import LayoutKit
 
-struct DivView: UIViewControllerRepresentable {
-  let blockProvider: DivBlockProvider
-  let divKitComponents: DivKitComponents
-
-  func makeUIViewController(context _: Context) -> UIViewController {
-    DivViewController(
-      blockProvider: blockProvider,
-      divKitComponents: divKitComponents
-    )
-  }
-
-  func updateUIViewController(_: UIViewController, context _: Context) {}
-}
-
 open class DivViewController: UIViewController {
-  private let blockProvider: DivBlockProvider
   private let divKitComponents: DivKitComponents
+  private let debugParams: DebugParams
+  private let divView: DivView
   private let disposePool = AutodisposePool()
-
-  private let cardView = VisibilityTrackingCardView()
   private let scrollView = VisibilityTrackingScrollView()
 
-  private var lastBounds = CGRect.zero
-
-  private var blockView: BlockView! {
-    didSet {
-      oldValue?.removeFromSuperview()
-      scrollView.addSubview(blockView)
-    }
-  }
-
   init(
-    blockProvider: DivBlockProvider,
-    divKitComponents: DivKitComponents
+    jsonProvider: Signal<[String: Any]>,
+    divKitComponents: DivKitComponents,
+    debugParams: DebugParams
   ) {
-    self.blockProvider = blockProvider
     self.divKitComponents = divKitComponents
+    self.divView = DivView(divKitComponents: divKitComponents)
+    self.debugParams = debugParams
 
     super.init(nibName: nil, bundle: nil)
+
+    view.addSubview(divView)
+    
+    jsonProvider.addObserver { [weak self] in
+      self?.setData($0)
+    }.dispose(in: disposePool)
   }
 
   @available(*, unavailable)
@@ -54,16 +37,12 @@ open class DivViewController: UIViewController {
 
   public override func loadView() {
     scrollView.backgroundColor = .white
-    scrollView.cardView = cardView
-
-    blockProvider.parentScrollView = scrollView
-
     view = scrollView
+    scrollView.divView = divView
   }
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-
     let pinchToZoomExtensionHandler = PinchToZoomExtensionHandler(overlayView: view)
     divKitComponents.extensionHandlers = divKitComponents.extensionHandlers.filter {
       $0.id != pinchToZoomExtensionHandler.id
@@ -71,82 +50,22 @@ open class DivViewController: UIViewController {
     divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
   }
 
-  public override func viewWillAppear(_: Bool) {
-    blockProvider.$block
-      .currentAndNewValues
-      .addObserver(updateBlockView)
-      .dispose(in: disposePool)
-  }
-
-  public override func viewDidAppear(_: Bool) {
-    onVisibleBoundsChanged(to: scrollView.bounds)
-  }
-
-  public override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-
-    let blockSize = blockProvider.block.size(forResizableBlockSize: view.bounds.size)
-    cardView.frame = CGRect(origin: .zero, size: blockSize)
-    blockView.frame = cardView.bounds
-    scrollView.contentSize = blockSize
-
-    onVisibleBoundsChanged(to: scrollView.bounds)
-  }
-
-  public override func viewDidDisappear(_: Bool) {
+  public override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
     disposePool.drain()
-
-    onVisibleBoundsChanged(to: .zero)
   }
 
   open func onViewUpdated() {}
 
-  private func updateBlockView(block: Block) {
-    let elementStateObserver = self
-    if let blockView = blockView, block.canConfigureBlockView(blockView) {
-      block.configureBlockView(
-        blockView,
-        observer: elementStateObserver,
-        overscrollDelegate: nil,
-        renderingDelegate: nil
-      )
-    } else {
-      blockView = block.makeBlockView(observer: elementStateObserver)
-      cardView.blockView = blockView
-    }
-
-    view.setNeedsLayout()
-
-    onViewUpdated()
-  }
-
-  private func onVisibleBoundsChanged(to: CGRect) {
-    let from = lastBounds
-    lastBounds = to
-    scrollView.onVisibleBoundsChanged(from: from, to: to)
-  }
-}
-
-extension DivViewController: ElementStateObserver {
-  public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
-    divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    blockProvider.update(withStates: [path: state])
-  }
-}
-
-extension DivViewController: UIActionEventPerforming {
-  public func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
-    handle(event.payload)
-  }
-
-  private func handle(_ payload: UserInterfaceAction.Payload) {
-    switch payload {
-    case .composite, .empty, .json, .url:
-      break
-    case let .menu(menu):
-      showMenu(menu, actionPerformer: self)
-    case let .divAction(params):
-      divKitComponents.handleActions(params: params)
-    }
+  private func setData(_ data: [String: Any]) {
+    divView.setSource(
+      DivBlockProvider.Source(
+        kind: .json(data),
+        cardId: "DivViewCard"
+      ),
+      debugParams: debugParams,
+      shouldResetPreviousCardData: true
+    )
+    divView.setParentScrollView(scrollView)
   }
 }

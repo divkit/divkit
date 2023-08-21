@@ -1,10 +1,12 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -32,18 +34,16 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivWrapContentSize
 import javax.inject.Inject
 import javax.inject.Provider
 
 private const val INCORRECT_CHILD_SIZE =
     "Incorrect child size. Container with wrap_content size contains child with match_parent size."
 private const val INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
-    "Container with wrap layout mode contains child%s with %s size along the cross axis."
-private const val MATCH_PARENT_MESSAGE = "match parent"
-private const val WRAP_CONTENT_CONSTRAINED_MESSAGE = "wrap content with constrained=true"
+    "Container with wrap layout mode contains child%s with match_parent size along the cross axis."
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
@@ -96,7 +96,7 @@ internal class DivContainerBinder @Inject constructor(
             oldDiv = null
         }
         for (i in div.items.indices) {
-            if (div.items[i].value().hasVisibilityActions) {
+            if (div.items[i].value().hasSightActions) {
                 divView.bindViewToDiv(view.getChildAt(i), div.items[i])
             }
         }
@@ -128,7 +128,7 @@ internal class DivContainerBinder @Inject constructor(
                         val patchView = patchViewsToAdd[patchIndex]
                         view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
                         observeChildViewAlignment(div, patchDivValue, patchView, resolver, expressionSubscriber)
-                        if (patchDivValue.hasVisibilityActions) {
+                        if (patchDivValue.hasSightActions) {
                             divView.bindViewToDiv(patchView, patchDivs[patchIndex])
                         }
                     }
@@ -241,6 +241,9 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         observeSeparatorShowMode(separator, resolver) { showDividers = it }
         observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
+        observeSeparatorMargins(this, separator.margins, resolver) {
+            left, top, right, bottom -> setDividerMargins(left, top, right, bottom)
+        }
     }
 
     private fun DivWrapLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
@@ -253,10 +256,16 @@ internal class DivContainerBinder @Inject constructor(
         div.separator?.let { separator ->
             observeSeparatorShowMode(separator, resolver) { showSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { separatorDrawable = it }
+            observeSeparatorMargins(this, separator.margins, resolver)  {
+                left, top, right, bottom -> setSeparatorMargins(left, top, right, bottom)
+            }
         }
         div.lineSeparator?.let { separator ->
             observeSeparatorShowMode(separator, resolver) { showLineSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { lineSeparatorDrawable = it }
+            observeSeparatorMargins(this, separator.margins, resolver) {
+                left, top, right, bottom -> setLineSeparatorMargins(left, top, right, bottom)
+            }
         }
 
         this.div = div
@@ -295,6 +304,49 @@ internal class DivContainerBinder @Inject constructor(
         applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
     }
 
+    private fun ExpressionSubscriber.observeSeparatorMargins(
+        view: View,
+        margins: DivEdgeInsets,
+        resolver: ExpressionResolver,
+        applyMargins: (left: Int, top: Int, right: Int, bottom: Int) -> Unit
+    ) {
+        val metrics = view.resources.displayMetrics
+        val callback = { _: Any? ->
+            val sizeUnit = margins.unit.evaluate(resolver)
+            var left = 0
+            var right = 0
+            if (margins.start != null || margins.end != null) {
+                val layoutDirection = view.resources.configuration.layoutDirection
+                if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                    left = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                    right = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                } else {
+                    left = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                    right = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                }
+            } else {
+                left = margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                right = margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            }
+            val top = margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            val bottom = margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
+
+            applyMargins(left, top, right, bottom)
+        }
+
+        callback(null)
+        addSubscription(margins.unit.observe(resolver, callback))
+        addSubscription(margins.top.observe(resolver, callback))
+        addSubscription(margins.bottom.observe(resolver, callback))
+        if (margins.start != null || margins.end != null) {
+            addSubscription(margins.start?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(margins.end?.observe(resolver, callback) ?: Disposable.NULL)
+        } else {
+            addSubscription(margins.left.observe(resolver, callback))
+            addSubscription(margins.right.observe(resolver, callback))
+        }
+    }
+
     private fun observeChildViewAlignment(
         div: DivContainer,
         childDivValue: DivBase,
@@ -305,19 +357,19 @@ internal class DivContainerBinder @Inject constructor(
         val applyAlignments = { _: Any ->
             val childAlignmentHorizontal = childDivValue.alignmentHorizontal
             val alignmentHorizontal = when {
-                childAlignmentHorizontal != null -> childAlignmentHorizontal
+                childAlignmentHorizontal != null -> childAlignmentHorizontal.evaluate(resolver)
                 div.isWrapContainer(resolver) -> null
-                else -> div.contentAlignmentHorizontal
+                else -> div.contentAlignmentHorizontal.evaluate(resolver).toAlignmentHorizontal()
             }
 
             val childAlignmentVertical = childDivValue.alignmentVertical
             val alignmentVertical = when {
-                childAlignmentVertical != null -> childAlignmentVertical
+                childAlignmentVertical != null -> childAlignmentVertical.evaluate(resolver)
                 div.isWrapContainer(resolver) -> null
-                else -> div.contentAlignmentVertical
+                else -> div.contentAlignmentVertical.evaluate(resolver).toAlignmentVertical()
             }
 
-            childView.applyAlignment(alignmentHorizontal?.evaluate(resolver), alignmentVertical?.evaluate(resolver))
+            childView.applyAlignment(alignmentHorizontal, alignmentVertical)
         }
 
         expressionSubscriber.addSubscription(
@@ -338,22 +390,14 @@ internal class DivContainerBinder @Inject constructor(
         resolver: ExpressionResolver,
         errorCollector: ErrorCollector
     ) = if (isHorizontal(resolver)) {
-        childDiv.height.checkForCrossAxis(childDiv, resolver, errorCollector)
+        childDiv.height.checkForCrossAxis(childDiv, errorCollector)
     } else {
-        childDiv.width.checkForCrossAxis(childDiv, resolver, errorCollector)
+        childDiv.width.checkForCrossAxis(childDiv, errorCollector)
     }
 
-    private fun DivSize.checkForCrossAxis(
-        childDiv: DivBase,
-        resolver: ExpressionResolver,
-        errorCollector: ErrorCollector
-    ) {
-        when (val size = value()) {
-            is DivMatchParentSize ->
-                addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id, MATCH_PARENT_MESSAGE)
-            is DivWrapContentSize -> if (size.constrained?.evaluate(resolver) == true) {
-                addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id, WRAP_CONTENT_CONSTRAINED_MESSAGE)
-            }
+    private fun DivSize.checkForCrossAxis(childDiv: DivBase, errorCollector: ErrorCollector) {
+        if (value() is DivMatchParentSize) {
+            addIncorrectSizeALongCrossAxisWarning(errorCollector, childDiv.id)
         }
     }
 
@@ -372,13 +416,23 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE))
     }
 
-    private fun addIncorrectSizeALongCrossAxisWarning(
-        errorCollector: ErrorCollector,
-        childId: String?,
-        size: String
-    ) {
+    private fun addIncorrectSizeALongCrossAxisWarning(errorCollector: ErrorCollector, childId: String?) {
         val withId = childId?.let { " with id='$it'" } ?: ""
         errorCollector.logWarning(Throwable(
-            INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId, size)))
+            INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
+    }
+
+    fun setDataWithoutBinding(view: ViewGroup, div: DivContainer) {
+        when (view) {
+            is DivWrapLayout -> view.div = div
+            is DivLinearLayout -> view.div = div
+            is DivFrameLayout -> view.div = div
+        }
+        for (containerIndex in div.items.indices) {
+            divBinder.get().setDataWithoutBinding(
+                view.getChildAt(containerIndex),
+                div.items[containerIndex]
+            )
+        }
     }
 }

@@ -33,6 +33,10 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
     return filter(frames: frames, intersecting: rect)
       .map { UICollectionViewLayoutAttributes(index: $0.index, frame: $0.frame) }
   }
+
+  public override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+    true
+  }
 }
 
 extension UICollectionViewLayoutAttributes {

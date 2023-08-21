@@ -59,22 +59,27 @@ class SchemaDirectory(SchemaFilesystemItem):
         self._parent_dir: SchemaDirectory = parent_dir
         self._hash = sha256_dir(path)
         self._items: List[SchemaFilesystemItem] = list(
-            filter(
-                lambda schema_file: not (isinstance(schema_file, SchemaFile) and utils.code_generation_disabled(
-                    lang=lang,
-                    dictionary=schema_file.contents
-                )),
-                map(
-                    lambda content: preprocessor.internal_resolve_structure(
-                        path=f'{path}/{content}',
-                        lang=lang,
-                        parent_dir=self
+            sorted(
+                filter(
+                    lambda schema_file: not (
+                        isinstance(schema_file, SchemaFile) and utils.code_generation_disabled(
+                            lang=lang,
+                            dictionary=schema_file.contents
+                        )
                     ),
-                    filter(
-                        lambda file: file.endswith('.json') or '.' not in file,
-                        os.listdir(path)
+                    map(
+                        lambda content: preprocessor.internal_resolve_structure(
+                            path=f'{path}/{content}',
+                            lang=lang,
+                            parent_dir=self
+                        ),
+                        filter(
+                            lambda file: file.endswith('.json') or '.' not in file,
+                            os.listdir(path)
+                        )
                     )
-                )
+                ),
+                key=lambda x: x.name
             )
         )
 
@@ -84,7 +89,9 @@ class SchemaDirectory(SchemaFilesystemItem):
 
     @property
     def as_json(self) -> Dict[str, any]:
-        return {self._name: list(map(lambda i: i.as_json, self._items))}
+        return {
+            self._name: list(map(lambda i: i.as_json, self._items))
+        }
 
     @property
     def parent_dir(self) -> SchemaDirectory:

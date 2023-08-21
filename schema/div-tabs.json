@@ -1,11 +1,19 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_tabs",
-  "generate_swift_optional_arguments": false,
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
   "definitions": {
     "item": {
       "type": "object",
-      "generate_swift_optional_arguments": false,
+      "codegen": {
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
       "properties": {
         "title": {
           "$ref": "common.json#/non_empty_string",
@@ -100,8 +108,7 @@
               "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight"
             },
             "font_family": {
-              "$ref": "div-font-family.json",
-              "default_value": "text",
+              "$ref": "common.json#/non_empty_string",
               "$description": "translations.json#/div_font_family"
             },
             "active_text_color": {

@@ -1,11 +1,10 @@
 {
+  "$description": "translations.json#/div_visibility_action",
   "allOf": [
     {
-      "$ref": "div-action-base.json"
+      "$ref": "div-sight-action.json"
     },
     {
-      "type": "object",
-      "$description": "translations.json#/div_visibility_action",
       "properties": {
         "visibility_percentage": {
           "type": "integer",
@@ -17,16 +16,8 @@
           "$ref": "common.json#/non_negative_integer",
           "default_value": "800",
           "$description": "translations.json#/div_visibility_action_visibility_duration"
-        },
-        "log_limit": {
-          "$ref": "common.json#/non_negative_integer",
-          "default_value": "1",
-          "$description": "translations.json#/div_visibility_action_log_limit"
         }
-      },
-      "required": [
-        "log_id"
-      ]
+      }
     }
   ]
 }

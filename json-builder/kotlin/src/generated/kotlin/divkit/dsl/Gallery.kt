@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [gallery].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class Gallery internal constructor(
@@ -47,6 +47,7 @@ class Gallery internal constructor(
             crossContentAlignment = additive.crossContentAlignment ?: properties.crossContentAlignment,
             crossSpacing = additive.crossSpacing ?: properties.crossSpacing,
             defaultItem = additive.defaultItem ?: properties.defaultItem,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
@@ -121,6 +122,10 @@ class Gallery internal constructor(
          * Default value: `0`.
          */
         val defaultItem: Property<Int>?,
+        /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
          */
@@ -235,6 +240,7 @@ class Gallery internal constructor(
             result.tryPutProperty("cross_content_alignment", crossContentAlignment)
             result.tryPutProperty("cross_spacing", crossSpacing)
             result.tryPutProperty("default_item", defaultItem)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
@@ -299,6 +305,7 @@ class Gallery internal constructor(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -337,6 +344,7 @@ fun DivScope.gallery(
     crossContentAlignment: Gallery.CrossContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -373,6 +381,7 @@ fun DivScope.gallery(
         crossContentAlignment = valueOrNull(crossContentAlignment),
         crossSpacing = valueOrNull(crossSpacing),
         defaultItem = valueOrNull(defaultItem),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -411,6 +420,7 @@ fun DivScope.gallery(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -449,6 +459,7 @@ fun DivScope.galleryProps(
     crossContentAlignment: Gallery.CrossContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -484,6 +495,7 @@ fun DivScope.galleryProps(
     crossContentAlignment = valueOrNull(crossContentAlignment),
     crossSpacing = valueOrNull(crossSpacing),
     defaultItem = valueOrNull(defaultItem),
+    disappearActions = valueOrNull(disappearActions),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
     height = valueOrNull(height),
@@ -521,6 +533,7 @@ fun DivScope.galleryProps(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -559,6 +572,7 @@ fun TemplateScope.galleryRefs(
     crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -594,6 +608,7 @@ fun TemplateScope.galleryRefs(
     crossContentAlignment = crossContentAlignment,
     crossSpacing = crossSpacing,
     defaultItem = defaultItem,
+    disappearActions = disappearActions,
     extensions = extensions,
     focus = focus,
     height = height,
@@ -631,6 +646,7 @@ fun TemplateScope.galleryRefs(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -669,6 +685,7 @@ fun Gallery.override(
     crossContentAlignment: Gallery.CrossContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -705,6 +722,7 @@ fun Gallery.override(
         crossContentAlignment = valueOrNull(crossContentAlignment) ?: properties.crossContentAlignment,
         crossSpacing = valueOrNull(crossSpacing) ?: properties.crossSpacing,
         defaultItem = valueOrNull(defaultItem) ?: properties.defaultItem,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
@@ -743,6 +761,7 @@ fun Gallery.override(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -781,6 +800,7 @@ fun Gallery.defer(
     crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -817,6 +837,7 @@ fun Gallery.defer(
         crossContentAlignment = crossContentAlignment ?: properties.crossContentAlignment,
         crossSpacing = crossSpacing ?: properties.crossSpacing,
         defaultItem = defaultItem ?: properties.defaultItem,
+        disappearActions = disappearActions ?: properties.disappearActions,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
@@ -889,6 +910,7 @@ fun Gallery.evaluate(
         crossContentAlignment = crossContentAlignment ?: properties.crossContentAlignment,
         crossSpacing = crossSpacing ?: properties.crossSpacing,
         defaultItem = defaultItem ?: properties.defaultItem,
+        disappearActions = properties.disappearActions,
         extensions = properties.extensions,
         focus = properties.focus,
         height = properties.height,
@@ -927,6 +949,7 @@ fun Gallery.evaluate(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -965,6 +988,7 @@ fun Component<Gallery>.override(
     crossContentAlignment: Gallery.CrossContentAlignment? = null,
     crossSpacing: Int? = null,
     defaultItem: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     height: Size? = null,
@@ -1002,6 +1026,7 @@ fun Component<Gallery>.override(
         crossContentAlignment = valueOrNull(crossContentAlignment),
         crossSpacing = valueOrNull(crossSpacing),
         defaultItem = valueOrNull(defaultItem),
+        disappearActions = valueOrNull(disappearActions),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
         height = valueOrNull(height),
@@ -1040,6 +1065,7 @@ fun Component<Gallery>.override(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
@@ -1078,6 +1104,7 @@ fun Component<Gallery>.defer(
     crossContentAlignment: ReferenceProperty<Gallery.CrossContentAlignment>? = null,
     crossSpacing: ReferenceProperty<Int>? = null,
     defaultItem: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
@@ -1115,6 +1142,7 @@ fun Component<Gallery>.defer(
         crossContentAlignment = crossContentAlignment,
         crossSpacing = crossSpacing,
         defaultItem = defaultItem,
+        disappearActions = disappearActions,
         extensions = extensions,
         focus = focus,
         height = height,
@@ -1188,6 +1216,7 @@ fun Component<Gallery>.evaluate(
         crossContentAlignment = crossContentAlignment,
         crossSpacing = crossSpacing,
         defaultItem = defaultItem,
+        disappearActions = null,
         extensions = null,
         focus = null,
         height = null,

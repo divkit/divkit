@@ -1,9 +1,13 @@
 import type { DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
-import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
+import type {
+    ContentAlignmentHorizontal,
+    ContentAlignmentVertical
+} from './alignment';
 import type { BooleanInt } from '../../typings/common';
 import type { Drawable } from './drawable';
 import type { DivAspect } from './image';
+import type { EdgeInsets } from './edgeInserts';
 
 export type ContainerOrientation = 'vertical' | 'horizontal' | 'overlap';
 
@@ -14,12 +18,13 @@ export interface ContainerSeparator {
     show_at_end?: BooleanInt;
     show_between?: BooleanInt;
     style: Drawable;
+    margins?: EdgeInsets;
 }
 
 export interface DivContainerData extends DivBaseData, DivActionableData {
     type: 'container';
-    content_alignment_horizontal?: AlignmentHorizontal;
-    content_alignment_vertical?: AlignmentVertical;
+    content_alignment_horizontal?: ContentAlignmentHorizontal;
+    content_alignment_vertical?: ContentAlignmentVertical;
     orientation?: ContainerOrientation;
     items: DivBaseData[];
     // auto_animations_enabled

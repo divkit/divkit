@@ -40,7 +40,6 @@ def _build_generator_properties(
     generator_properties_location = location + "codegen"
     if generator_properties is None:
         return None
-
     if not isinstance(generator_properties, Dict):
         raise GenericError(
             location=generator_properties_location,
@@ -48,13 +47,7 @@ def _build_generator_properties(
         )
 
     lang: GeneratedLanguage = config.lang
-    specific_properties: Dict[str, Any] = generator_properties.get(lang.value, None)
-    if specific_properties is None:
-        return GeneralGeneratorProperties(
-            general_properties=generator_properties,
-            lang=lang,
-            mode=mode
-        )
+    specific_properties: Dict[str, Any] = generator_properties.get(lang.value, {})
     if not isinstance(specific_properties, Dict):
         raise GenericError(
             location=generator_properties_location + lang.value,
@@ -70,6 +63,7 @@ def _build_generator_properties(
             specific_properties=specific_properties,
             properties_list=properties_list,
         )
+
     generator_properties_classes = {
         GeneratedLanguage.SWIFT: SwiftGeneratorProperties,
         GeneratedLanguage.TYPE_SCRIPT: TypeScriptGeneratorProperties,
@@ -78,11 +72,46 @@ def _build_generator_properties(
     }
     specific_properties_class = generator_properties_classes.get(lang, None)
     if specific_properties_class is None:
-        raise NotImplementedError
-
+        return GeneralGeneratorProperties(
+            general_properties=generator_properties,
+            lang=lang,
+            mode=mode
+        )
     return specific_properties_class(
         general_properties=generator_properties,
         lang=lang,
+        mode=mode,
+        specific_properties=specific_properties,
+    )
+
+
+def _build_documentation_generator_properties(
+        dictionary: Dict[str, Any],
+        location: ElementLocation,
+        mode: GenerationMode,
+) -> Optional[DocumentationGeneratorProperties]:
+    generator_properties: Dict[str, Any] = dictionary.get("codegen", None)
+    generator_properties_location = location + "codegen"
+    if generator_properties is None:
+        return None
+
+    if not isinstance(generator_properties, Dict):
+        raise GenericError(
+            location=generator_properties_location,
+            text='Must have format {String : Any}'
+        )
+    lang_value = GeneratedLanguage.DOCUMENTATION.value
+    specific_properties: Dict[str, Any] = generator_properties.get(lang_value, None)
+    if specific_properties is None:
+        return None
+    if not isinstance(specific_properties, Dict):
+        raise GenericError(
+            location=generator_properties_location + lang_value,
+            text='Must have format {String : Any}'
+        )
+    return DocumentationGeneratorProperties(
+        general_properties=generator_properties,
+        lang=GeneratedLanguage.DOCUMENTATION,
         mode=mode,
         specific_properties=specific_properties,
     )
@@ -180,11 +209,6 @@ class Declarable(ABC):
 
     @property
     @abstractmethod
-    def include_in_documentation_toc(self) -> bool:
-        pass
-
-    @property
-    @abstractmethod
     def as_json(self) -> Dict:
         pass
 
@@ -231,11 +255,8 @@ class Entity(Declarable):
         self._resolved_name: str = alias(config.lang, dictionary) or fixing_reserved_typename(name, config.lang)
         self._name: str = self._resolved_name + mode.name_suffix
         self._root_entity: bool = dictionary.get('root_entity', False)
-        self._display_name: str = dictionary.get('display_name', name)
         self._description: str = dictionary.get('description', '')
         self._description_object: Dict[str, str] = dictionary.get('description_translations', {})
-        self._swift_super_protocol: Optional[str] = dictionary.get('swift_super_protocol')
-        self._include_in_documentation_toc: bool = dictionary.get('include_in_documentation_toc', False)
         self._original_name: str = name
         self._generation_mode: GenerationMode = mode
         self._errors_collector_enabled: bool = not mode.is_template and name in config.errors_collectors
@@ -278,7 +299,6 @@ class Entity(Declarable):
 
         self._is_deprecated: bool = dictionary.get('deprecated', False)
         self._type_script_templatable: bool = dictionary.get('typescript_templatable', True)
-        self._generate_swift_optional_args: bool = dictionary.get('generate_swift_optional_arguments', True)
         self._lang: GeneratedLanguage = config.lang
         self._inner_types: List[Declarable] = inner_types_from_definitions + inner_types
         for inner_type in self._inner_types:
@@ -336,10 +356,6 @@ class Entity(Declarable):
     def is_deprecated(self) -> bool:
         return self._is_deprecated
 
-    @property
-    def swift_super_protocol(self) -> Optional[str]:
-        return self._swift_super_protocol
-
     def protocol_plus_super_entities(self, with_impl_protocol=True) -> Optional[str]:
         protocols = []
         if with_impl_protocol and self._implemented_protocol is not None:
@@ -370,7 +386,9 @@ class Entity(Declarable):
 
     @property
     def include_in_documentation_toc(self) -> bool:
-        return self._include_in_documentation_toc
+        if not isinstance(self.generator_properties, DocumentationGeneratorProperties):
+            return False
+        return cast(DocumentationGeneratorProperties, self.generator_properties).include_in_toc
 
     @property
     def generate_as_protocol(self) -> bool:
@@ -640,7 +658,7 @@ class StringEnumeration(Declarable):
                  cases: Union[List[str], List[Tuple[str, str]]],
                  description: str,
                  description_object: Dict[str, str],
-                 include_documentation_toc: bool) -> None:
+                 include_in_documentation_toc: bool) -> None:
         super().__init__()
         self._name: str = name
         self._original_name: str = original_name
@@ -650,7 +668,7 @@ class StringEnumeration(Declarable):
             self._cases: List[Tuple[str, str]] = list(map(lambda case: (case, case), cases))
         else:
             self._cases: List[Tuple[str, str]] = cases
-        self._include_documentation_toc: bool = include_documentation_toc
+        self._include_in_documentation_toc: bool = include_in_documentation_toc
 
     @property
     def name(self) -> str:
@@ -673,7 +691,7 @@ class StringEnumeration(Declarable):
 
     @property
     def include_in_documentation_toc(self) -> bool:
-        return self._include_documentation_toc
+        return self._include_in_documentation_toc
 
     def resolve_dependencies(self, global_objects: List[Declarable]) -> None:
         pass
@@ -822,6 +840,11 @@ class Url(PropertyType):
 
 @dataclass
 class Dictionary(PropertyType):
+    pass
+
+
+@dataclass
+class RawArray(PropertyType):
     pass
 
 

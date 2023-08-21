@@ -341,6 +341,7 @@
           "margins": {
             "top": 16,
             "left": 20,
+            "start": 20,
             "bottom": 16
           },
           "line_height": 16,

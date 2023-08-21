@@ -49,7 +49,7 @@ export function rewriteTemplateVersions<T extends ITemplates>(
             throw new Error(`No template ${name}`);
         }
 
-        const hash = hashes[name] ?? getTemplateHash(template);
+        const hash = (hashes[name] = hashes[name] ?? getTemplateHash(template));
 
         return versionName(name, hash);
     };

@@ -87,7 +87,7 @@
                         ]
                       },
                       {
-                        "type": "container",
+                        "type": "separator",
                         "margins": {
                           "bottom": 8,
                           "top": 10,
@@ -110,10 +110,12 @@
                             "color": "#f1dff2"
                           }
                         ],
+                        "delimiter_style": {
+                          "color": "#f1dff2"
+                        },
                         "visibility_action": {
                           "log_id": "content_item_show"
-                        },
-                        "items": []
+                        }
                       }
                     ]
                   }

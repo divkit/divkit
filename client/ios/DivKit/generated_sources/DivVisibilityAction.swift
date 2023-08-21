@@ -4,7 +4,7 @@ import CommonCorePublic
 import Foundation
 import Serialization
 
-public final class DivVisibilityAction {
+public final class DivVisibilityAction: DivSightAction {
   public let downloadCallbacks: DivDownloadCallbacks?
   public let logId: String // at least 1 char
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1

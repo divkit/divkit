@@ -37,9 +37,10 @@ public final class DivInput: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
-  public let fontFamily: Expression<DivFontFamily> // default value: text
+  public let fontFamily: Expression<String>? // at least 1 char
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -59,6 +60,8 @@ public final class DivInput: DivBase {
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
+  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
+  public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
   public let textColor: Expression<Color> // default value: #FF000000
   public let textVariable: String // at least 1 char
   public let tooltips: [DivTooltip]? // at least 1 elements
@@ -89,8 +92,8 @@ public final class DivInput: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+  public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -141,6 +144,14 @@ public final class DivInput: DivBase {
     resolver.resolveNumericValue(expression: selectAllOnFocus) ?? false
   }
 
+  public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.start
+  }
+
+  public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: textAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
+  }
+
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
     resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
@@ -170,14 +181,17 @@ public final class DivInput: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
-  static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-    makeNoOpValueValidator()
+  static let fontFamilyValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -233,6 +247,12 @@ public final class DivInput: DivBase {
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
+  static let textAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
+    makeNoOpValueValidator()
+
+  static let textAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
+    makeNoOpValueValidator()
+
   static let textColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
@@ -280,9 +300,10 @@ public final class DivInput: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
-    fontFamily: Expression<DivFontFamily>? = nil,
+    fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -302,6 +323,8 @@ public final class DivInput: DivBase {
     rowSpan: Expression<Int>? = nil,
     selectAllOnFocus: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
+    textAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
+    textAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     textColor: Expression<Color>? = nil,
     textVariable: String,
     tooltips: [DivTooltip]? = nil,
@@ -323,9 +346,10 @@ public final class DivInput: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
-    self.fontFamily = fontFamily ?? .value(.text)
+    self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -345,6 +369,8 @@ public final class DivInput: DivBase {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
+    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.start)
+    self.textAlignmentVertical = textAlignmentVertical ?? .value(.center)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable
     self.tooltips = tooltips
@@ -380,56 +406,63 @@ extension DivInput: Equatable {
     }
     guard
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height,
-      lhs.highlightColor == rhs.highlightColor
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.highlightColor == rhs.highlightColor,
       lhs.hintColor == rhs.hintColor,
-      lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id
+      lhs.hintText == rhs.hintText
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.keyboardType == rhs.keyboardType,
-      lhs.letterSpacing == rhs.letterSpacing,
-      lhs.lineHeight == rhs.lineHeight
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
+      lhs.lineHeight == rhs.lineHeight,
       lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask,
-      lhs.maxVisibleLines == rhs.maxVisibleLines
+      lhs.mask == rhs.mask
     else {
       return false
     }
     guard
+      lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions,
+      lhs.selectedActions == rhs.selectedActions
+    else {
+      return false
+    }
+    guard
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
       lhs.textColor == rhs.textColor
     else {
       return false
@@ -478,9 +511,10 @@ extension DivInput: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()
@@ -500,6 +534,8 @@ extension DivInput: Serializable {
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["select_all_on_focus"] = selectAllOnFocus.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
+    result["text_alignment_horizontal"] = textAlignmentHorizontal.toValidSerializationValue()
+    result["text_alignment_vertical"] = textAlignmentVertical.toValidSerializationValue()
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_variable"] = textVariable
     result["tooltips"] = tooltips?.map { $0.toDictionary() }

@@ -11,7 +11,7 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class DivExtensionController @Inject constructor(
-    private val extensionHandlers: List<DivExtensionHandler>
+    private val extensionHandlers: List<DivExtensionHandler>,
 ) {
 
     fun preprocessExtensions(div: DivBase, resolver: ExpressionResolver) {

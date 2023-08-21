@@ -14,7 +14,7 @@ extension ImageViewBackgroundModel {
       self = .color(color)
     case let .view(view):
       self = .view(view)
-    case .image:
+    case .image, .imageData:
       return nil
     }
   }

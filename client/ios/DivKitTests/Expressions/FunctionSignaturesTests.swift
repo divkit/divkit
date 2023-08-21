@@ -26,12 +26,16 @@ private let functions: [String: Function] = {
   var result = [String: Function]()
   DatetimeFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   ColorFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
-  StringFunctions.allCases.forEach { result[$0.rawValue] = $0.function}
-  CastFunctions.allCases.forEach { result[$0.rawValue] = $0.function  }
+  StringFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  CastFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   MathFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  DictFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   IntervalFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   ValueFunctions.allCases.forEach {
-    result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(variables: [:]))
+    result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(
+      variables: [:],
+      persistentValuesStorage: DivPersistentValuesStorage()
+    ))
   }
   return result
 }()

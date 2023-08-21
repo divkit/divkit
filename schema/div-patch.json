@@ -1,10 +1,6 @@
 {
   "type": "object",
   "$description": "translations.json#/div_patch",
-  "platforms": [
-    "android",
-    "ios"
-  ],
   "definitions": {
     "change": {
       "type": "object",

@@ -8,35 +8,6 @@
         "unit": "dp",
         "value": 120
       }
-    },
-    "header": {
-      "type": "container",
-      "items": [
-        {
-          "type": "text",
-          "height": {
-            "type": "fixed",
-            "value": 60
-          },
-          "$text": "title",
-          "width": {
-            "type": "wrap_content"
-          }
-        },
-        {
-          "type": "title_text",
-          "width": {
-            "type": "wrap_content"
-          }
-        }
-      ],
-      "orientation": "vertical"
-    },
-    "subtitle_text": {
-      "type": "title_text",
-      "width": {
-        "type": "wrap_content"
-      }
     }
   },
   "card": {

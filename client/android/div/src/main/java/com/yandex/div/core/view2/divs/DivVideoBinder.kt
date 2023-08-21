@@ -1,19 +1,26 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.util.Base64
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
-import com.yandex.div.core.player.DivVideoPauseReason
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
+import com.yandex.div.core.player.DivVideoViewMapper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVideo
-import com.yandex.div2.DivVideoData
 import javax.inject.Inject
 
 @DivScope
@@ -21,70 +28,120 @@ internal class DivVideoBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
     private val divActionHandler: DivActionHandler,
+    private val videoViewMapper: DivVideoViewMapper,
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
-
         val resolver = divView.expressionResolver
-        view.closeAllSubscription()
 
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
-
-        view.removeAllViews()
-
-        val player = divView.div2Component.divVideoFactory.makePlayer(
-            div.createSource(resolver),
-            DivPlayerPlaybackConfig(
-                autoplay = div.autostart.evaluate(resolver),
-                isMuted = div.muted.evaluate(resolver),
-                repeatable = div.repeatable.evaluate(resolver),
-                payload = div.playerSettingsPayload
-            )
+        val source = div.createSource(resolver)
+        val config = DivPlayerPlaybackConfig(
+            autoplay = div.autostart.evaluate(resolver),
+            isMuted = div.muted.evaluate(resolver),
+            repeatable = div.repeatable.evaluate(resolver),
+            payload = div.playerSettingsPayload
         )
 
-        val playerView = divView.div2Component.divVideoFactory.makePlayerView(view.context)
-        view.addView(playerView)
+        val player = divView.div2Component.divVideoFactory.makePlayer(source, config)
 
-        playerView.attach(player)
+        val currentPlayerView = view.getPlayerView()
+        var currentPreviewView: ImageView? = null
 
-        baseBinder.bindView(view, div, oldDiv, divView)
+        for (i in 0 until view.childCount) {
+            val childView = view.getChildAt(i)
+            if (childView is ImageView) {
+                currentPreviewView = childView
+                break
+            }
+        }
+
+        val playerView = currentPlayerView ?: divView.div2Component.divVideoFactory.makePlayerView(view.context)
+
+        val preview = div.createPreview(resolver)
+        val previewImageView: ImageView = currentPreviewView ?: ImageView(view.context).apply {
+            layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        with(previewImageView) {
+            if (preview != null) {
+                visibility = View.VISIBLE
+                setImageBitmap(preview)
+            } else {
+                visibility = View.INVISIBLE
+            }
+        }
 
         val playerListener = object : DivPlayer.Observer {
-            override fun onResume() {
+            override fun onPlay() {
                 div.resumeActions?.forEach { divAction ->
-                    divView.let { divActionHandler.handleAction(divAction, it) }
+                    divActionHandler.handleAction(divAction, divView)
                 }
             }
 
-            override fun onPause(reason: DivVideoPauseReason) {
-                when (reason) {
-                    DivVideoPauseReason.BUFFER_OVER -> {
-                        div.bufferingActions?.forEach { divAction ->
-                            divView.let { divActionHandler.handleAction(divAction, it) }
-                        }
-                    }
-                    DivVideoPauseReason.VIDEO_OVER -> {
-                        div.endActions?.forEach { divAction ->
-                            divView.let { divActionHandler.handleAction(divAction, it) }
-                        }
-                    }
-                    else -> Unit
+            override fun onPause() {
+                div.pauseActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
                 }
+            }
+
+            override fun onBuffering() {
+                div.bufferingActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
+                }
+            }
+
+            override fun onEnd() {
+                div.endActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
+                }
+            }
+
+            override fun onFatal() {
+                div.fatalActions?.forEach { divAction ->
+                    divActionHandler.handleAction(divAction, divView)
+                }
+            }
+
+            override fun onReady() {
+                previewImageView.visibility = View.INVISIBLE
             }
         }
         player.addObserver(playerListener)
 
-        view.apply {
-            observeElapsedTime(div, divView, player)
+        playerView.attach(player)
+
+        if (div == oldDiv) {
+            view.observeElapsedTime(div, divView, player)
+            view.observeMuted(div, divView, player)
+            return
         }
+
+        view.closeAllSubscription()
+
+        view.div = div
+
+        view.observeElapsedTime(div, divView, player)
+        view.observeMuted(div, divView, player)
+
+        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
+
+        if (currentPreviewView == null && currentPlayerView == null) {
+            view.removeAllViews()
+
+            view.addView(playerView)
+            view.addView(previewImageView)
+        }
+
+        videoViewMapper.addView(view, div)
+        baseBinder.bindView(view, div, oldDiv, divView)
     }
 
     private fun DivVideoView.observeElapsedTime(
-            div: DivVideo,
-            divView: Div2View,
-            player: DivPlayer
+        div: DivVideo,
+        divView: Div2View,
+        player: DivPlayer
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -97,7 +154,7 @@ internal class DivVideoBinder @Inject constructor(
 
             override fun setViewStateChangeListener(valueUpdater: (Long) -> Unit) {
                 player.addObserver(object : DivPlayer.Observer {
-                    override fun onCurrentTimeUpdate(timeMs: Long) {
+                    override fun onCurrentTimeChange(timeMs: Long) {
                         valueUpdater(timeMs)
                     }
                 })
@@ -106,31 +163,38 @@ internal class DivVideoBinder @Inject constructor(
 
         addSubscription(variableBinder.bindVariable(divView, elapsedTimeVariable, callbacks))
     }
+
+    private fun DivVideoView.observeMuted(
+        div: DivVideo,
+        divView: Div2View,
+        player: DivPlayer
+    ) {
+        addSubscription(
+            div.muted.observeAndGet(divView.expressionResolver) {
+                player.setMuted(it)
+            }
+        )
+    }
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
-    return when (this.videoData) {
-        is DivVideoData.Video -> {
-            (this.videoData as DivVideoData.Video).value.videoSources.map {
-                DivVideoSource.FileVideoSource(
-                    url = it.url.evaluate(resolver),
-                    codec = it.codec?.evaluate(resolver),
-                    mimeType = it.mimeType?.evaluate(resolver),
-                    resolution = it.resolution?.let { resolution ->
-                        DivVideoResolution(
-                                resolution.width.evaluate(resolver).toInt(),
-                                resolution.height.evaluate(resolver).toInt()
-                        )
-                    }
+    return videoSources.map {
+        DivVideoSource(
+            url = it.url.evaluate(resolver),
+            mimeType = it.mimeType.evaluate(resolver),
+            resolution = it.resolution?.let { resolution ->
+                DivVideoResolution(
+                    resolution.width.evaluate(resolver).toInt(),
+                    resolution.height.evaluate(resolver).toInt()
                 )
-            }
-        }
-        is DivVideoData.Stream -> {
-            listOf(
-                DivVideoSource.StreamVideoSource(
-                    url = (this.videoData as DivVideoData.Stream).value.url.evaluate(resolver)
-                )
-            )
-        }
+            },
+            bitrate = it.bitrate?.evaluate(resolver)
+        )
     }
+}
+
+fun DivVideo.createPreview(resolver: ExpressionResolver): Bitmap? {
+    val base64String = preview?.evaluate(resolver) ?: return null
+    val imageBytes = Base64.decode(base64String, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
 }

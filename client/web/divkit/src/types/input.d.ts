@@ -1,6 +1,7 @@
 import type { DivBaseData } from './base';
 import type { FontWeight } from './text';
 import type { BooleanInt } from '../../typings/common';
+import { AlignmentHorizontal, AlignmentVertical } from './alignment';
 
 export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri';
 
@@ -33,10 +34,12 @@ export interface DivInputData extends DivBaseData {
 
     font_size?: number;
     // font_size_unit
-    // font_family
+    font_family?: string;
     font_weight?: FontWeight;
     text_color?: string;
     text_variable: string;
+    text_alignment_horizontal?: AlignmentHorizontal;
+    text_alignment_vertical?: AlignmentVertical;
     line_height?: number;
     max_visible_lines?: number;
     letter_spacing?: number;

@@ -4,7 +4,7 @@ describe('regression', () => {
             await this.browser.execute(() => {
                 window.divkitLogs = [];
             });
-            await this.browser.yaOpenRegressionJson('action_visibility/set_visibility');
+            await this.browser.yaOpenRegressionJson('set_visibility');
         });
 
         it('Click on visible', async function() {

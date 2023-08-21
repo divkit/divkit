@@ -8,7 +8,8 @@ import type {
     CustomActionCallback,
     Theme,
     Customization,
-    DivExtensionClass
+    DivExtensionClass,
+    TypefaceProvider
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
@@ -28,6 +29,7 @@ export function render(opts: {
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;
     onComponent?: ComponentCallback;
+    typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     customization?: Customization;
     builtinProtocols?: string[];

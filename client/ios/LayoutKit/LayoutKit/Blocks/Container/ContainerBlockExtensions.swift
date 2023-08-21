@@ -9,7 +9,7 @@ extension ContainerBlock {
     layoutMode: LayoutMode? = nil,
     widthTrait: LayoutTrait? = nil,
     heightTrait: LayoutTrait? = nil,
-    axialAlignment: Alignment? = nil,
+    axialAlignment: AxialAlignment? = nil,
     crossAlignment: CrossAlignment? = nil,
     gaps: [CGFloat]? = nil,
     children: [Child]? = nil,
@@ -51,15 +51,15 @@ extension ContainerBlock {
     clipContent: Bool = true,
     accessibilityElement: AccessibilityElement? = nil
   ) throws {
-    let axialAlignment: Alignment
+    let axialAlignment: AxialAlignment
     let crossAlignment: CrossAlignment
 
     switch layoutDirection {
     case .horizontal:
-      axialAlignment = horizontalChildrenAlignment
+      axialAlignment = horizontalChildrenAlignment.axialAlignment
       crossAlignment = verticalChildrenAlignment.crossAlignment
     case .vertical:
-      axialAlignment = verticalChildrenAlignment
+      axialAlignment = verticalChildrenAlignment.axialAlignment
       crossAlignment = horizontalChildrenAlignment.crossAlignment
     }
 
@@ -87,6 +87,17 @@ extension ContainerBlock {
 
 extension Alignment {
   fileprivate var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .leading:
+      return .leading
+    case .center:
+      return .center
+    case .trailing:
+      return .trailing
+    }
+  }
+
+  fileprivate var axialAlignment: ContainerBlock.AxialAlignment {
     switch self {
     case .leading:
       return .leading

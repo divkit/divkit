@@ -1,12 +1,20 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_state",
-  "generate_swift_optional_arguments": false,
+  "codegen": {
+    "swift": {
+      "generate_optional_arguments": false
+    }
+  },
   "definitions": {
     "div_state": {
       "type": "object",
-      "generate_swift_optional_arguments": false,
       "alias_divan": "item",
+      "codegen": {
+        "swift": {
+          "generate_optional_arguments": false
+        }
+      },
       "properties": {
         "state_id": {
           "type": "string",
@@ -72,6 +80,11 @@
           },
           "minItems": 1,
           "$description": "translations.json#/div_state_states"
+        },
+        "state_id_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_state_state_id_variable",
+          "platforms": []
         },
         "div_id": {
           "type": "string",

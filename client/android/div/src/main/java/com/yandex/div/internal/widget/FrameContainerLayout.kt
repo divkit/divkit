@@ -11,7 +11,6 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.dimensionAffecting
 import com.yandex.div.core.widget.forEach
-import com.yandex.div.core.widget.isAtMost
 import com.yandex.div.core.widget.isExact
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
@@ -79,7 +78,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
         matchParentChildren += measuredMatchParentChildren
         matchParentChildren += skippedMatchParentChildren
 
-        setParentSizeIfNeeded(widthMeasureSpec, heightSpec)
         considerMatchParentChildrenInMaxSize(widthMeasureSpec, heightSpec)
 
         val widthSizeAndState = resolveSizeAndState(getDynamicWidth(widthMeasureSpec), widthMeasureSpec, childState)
@@ -152,20 +150,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
     private fun updateMaxHeight(childHeight: Int) {
         maxHeight = max(maxHeight, childHeight)
-    }
-
-    private fun setParentSizeIfNeeded(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (matchParentChildren.isEmpty()) return
-
-        if (isAtMost(widthMeasureSpec) && maxWidth == 0) {
-            maxWidth = MeasureSpec.getSize(widthMeasureSpec)
-        }
-
-        if (useAspect) return
-
-        if (isAtMost(heightMeasureSpec) && maxHeight == 0) {
-            maxHeight = MeasureSpec.getSize(heightMeasureSpec)
-        }
     }
 
     private fun considerMatchParentChildrenInMaxSize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -291,14 +275,16 @@ open class FrameContainerLayout @JvmOverloads constructor(
             val absoluteGravity = Gravity.getAbsoluteGravity(lp.gravity, layoutDirection)
             val verticalGravity = lp.gravity and Gravity.VERTICAL_GRAVITY_MASK
             val childLeft = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-                Gravity.CENTER_HORIZONTAL -> parentLeft + (parentRight - parentLeft - width) / 2 +
-                        lp.leftMargin - lp.rightMargin
+                Gravity.CENTER_HORIZONTAL -> {
+                    parentLeft + (parentRight - parentLeft - width + lp.leftMargin - lp.rightMargin) / 2
+                }
                 Gravity.RIGHT -> parentRight - width - lp.rightMargin
                 else -> parentLeft + lp.leftMargin
             }
             val childTop = when (verticalGravity) {
-                Gravity.CENTER_VERTICAL -> parentTop + (parentBottom - parentTop - height) / 2 +
-                        lp.topMargin - lp.bottomMargin
+                Gravity.CENTER_VERTICAL -> {
+                    parentTop + (parentBottom - parentTop - height + lp.topMargin - lp.bottomMargin) / 2
+                }
                 Gravity.BOTTOM -> parentBottom - height - lp.bottomMargin
                 else -> parentTop + lp.topMargin
             }

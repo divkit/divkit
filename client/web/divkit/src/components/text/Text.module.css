@@ -1,3 +1,5 @@
+@value text-range from "./TextRange.module.css";
+
 .text {
     display: flex;
     /* Already hidden in outer */
@@ -72,4 +74,8 @@
 
 .text__image_hidden {
     display: none;
+}
+
+*:focus-visible .text__inner .text-range {
+    color: var(--divkit-text-focus-color) !important;
 }

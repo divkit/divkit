@@ -6,13 +6,14 @@ public enum DivVariableNameTag {}
 public typealias DivVariableName = Tagged<DivVariableNameTag, String>
 
 @frozen
-public enum DivVariableValue: Equatable {
+public enum DivVariableValue: Hashable {
   case string(String)
   case number(Double)
   case integer(Int)
   case bool(Bool)
   case color(Color)
   case url(URL)
+  case dict([String: AnyHashable])
 
   @inlinable
   public func typedValue<T>() -> T? {
@@ -28,6 +29,8 @@ public enum DivVariableValue: Equatable {
     case let .color(value):
       return value as? T
     case let .url(value):
+      return value as? T
+    case let .dict(value):
       return value as? T
     }
   }
@@ -80,7 +83,7 @@ public final class DivVariablesStorage {
     let variable = storage.local[cardId]?[name] ?? storage.global[name]
     return variable?.typedValue()
   }
-  
+
   public func set(
     cardId: DivCardID,
     variables: DivVariables
@@ -147,6 +150,12 @@ public final class DivVariablesStorage {
   public func reset() {
     rwLock.write {
       storage = Values()
+    }
+  }
+
+  public func reset(cardId: DivCardID) {
+    rwLock.write {
+      storage.local[cardId] = [:]
     }
   }
 
@@ -254,6 +263,9 @@ extension Dictionary where Key == DivVariableName, Value == DivVariableValue {
       } else {
         newValue = nil
       }
+    case .dict:
+      newValue = nil
+      DivKitLogger.warning("Unsupported variable type: dict")
     }
 
     if newValue == oldValue {
@@ -300,6 +312,15 @@ extension Collection where Element == DivVariable {
         let name = DivVariableName(rawValue: urlVariable.name)
         if variables[name] != nil { return }
         variables[name] = .url(urlVariable.value)
+      case let .dictVariable(dictVariable):
+        let name = DivVariableName(rawValue: dictVariable.name)
+        if variables.keys.contains(name) { return }
+        if let dictionary = NSDictionary(dictionary: dictVariable.value) as? [String: AnyHashable] {
+          variables[name] = .dict(dictionary)
+        } else {
+          DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")
+          variables[name] = .dict([:])
+        }
       }
     }
     return variables

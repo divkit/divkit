@@ -15,7 +15,6 @@ import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAnimationInterpolator
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
@@ -33,6 +32,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import com.yandex.div2.DivVideo
+import java.util.Collections.min
 
 internal val Div.type: String
     get() {
@@ -53,7 +53,6 @@ internal val Div.type: String
             is Div.Tabs -> DivTabs.TYPE
             is Div.Custom -> DivCustom.TYPE
             is Div.Select -> DivSelect.TYPE
-            is Div.Video -> TODO()
         }
     }
 
@@ -92,13 +91,30 @@ internal fun requestHierarchyLayout(v : View) {
 }
 
 internal fun DivBorder.getCornerRadii(
+    widthPx: Float,
+    heightPx: Float,
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
 ): FloatArray {
-    val topLeft = (cornersRadius?.topLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val topRight = (cornersRadius?.topRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val bottomLeft = (cornersRadius?.bottomLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
-    val bottomRight = (cornersRadius?.bottomRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+
+    var topLeft = (cornersRadius?.topLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var topRight = (cornersRadius?.topRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var bottomLeft = (cornersRadius?.bottomLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+    var bottomRight = (cornersRadius?.bottomRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
+
+    val top = topLeft + topRight
+    val bottom = bottomLeft + bottomRight
+    val left = topLeft + bottomLeft
+    val right = topRight + bottomRight
+
+    val f = min(listOf(widthPx / top, widthPx / bottom, heightPx / left, heightPx / right))
+
+    if (f > 0 && f < 1) {
+        topLeft *= f
+        topRight *= f
+        bottomLeft *= f
+        bottomRight *= f
+    }
 
     return floatArrayOf(
         topLeft, topLeft,
@@ -108,25 +124,29 @@ internal fun DivBorder.getCornerRadii(
     )
 }
 
-internal fun DivBase.containsStateInnerTransitions(): Boolean {
-    if (transitionIn != null || transitionChange != null || transitionOut != null) {
-        return true
+internal fun Div.containsStateInnerTransitions(): Boolean {
+    with(value()) {
+        if (transitionIn != null || transitionChange != null || transitionOut != null) {
+            return true
+        }
     }
     return when (this) {
-        is DivText -> false
-        is DivImage -> false
-        is DivGifImage -> false
-        is DivSeparator -> false
-        is DivIndicator -> false
-        is DivContainer -> items.map { div -> div.value().containsStateInnerTransitions() }.contains(true)
-        is DivGrid -> items.map { div -> div.value().containsStateInnerTransitions() }.contains(true)
-        is DivState -> false  // state binder should resolve by itself which animation description to use.
-        is DivGallery -> false
-        is DivPager -> false
-        is DivTabs -> false
-        is DivCustom -> false
-        is DivSelect -> false
-        else -> false
+        is Div.Container -> value.items.map(Div::containsStateInnerTransitions).contains(true)
+        is Div.Grid -> value.items.map(Div::containsStateInnerTransitions).contains(true)
+        is Div.Text -> false
+        is Div.Image -> false
+        is Div.GifImage -> false
+        is Div.Separator -> false
+        is Div.Indicator -> false
+        is Div.State -> false  // state binder should resolve by itself which animation description to use.
+        is Div.Gallery -> false
+        is Div.Pager -> false
+        is Div.Tabs -> false
+        is Div.Custom -> false
+        is Div.Select -> false
+        is Div.Slider -> false
+        is Div.Video -> false
+        is Div.Input -> false
     }
 }
 
@@ -137,32 +157,24 @@ internal fun DivState.getDefaultState(resolver: ExpressionResolver): DivState.St
     }
 
 internal val Div.isBranch: Boolean
-    get() = this.value().isBranch
-
-internal val DivBase.isBranch: Boolean
-    get() {
-        return when (this) {
-            is DivText -> false
-            is DivImage -> false
-            is DivGifImage -> false
-            is DivSeparator -> false
-            is DivIndicator -> false
-            is DivSlider -> false
-            is DivInput -> false
-            is DivCustom -> false
-            is DivSelect -> false
-            is DivContainer -> true
-            is DivGrid -> true
-            is DivGallery -> true
-            is DivPager -> true
-            is DivTabs -> true
-            is DivState -> true
-            else -> throw IllegalArgumentException("Please, handle ${this::class.java.name} is a branch or not")
-        }
+    get() = when (this) {
+        is Div.Text -> false
+        is Div.Image -> false
+        is Div.GifImage -> false
+        is Div.Separator -> false
+        is Div.Indicator -> false
+        is Div.Slider -> false
+        is Div.Input -> false
+        is Div.Custom -> false
+        is Div.Select -> false
+        is Div.Video -> false
+        is Div.Container -> true
+        is Div.Grid -> true
+        is Div.Gallery -> true
+        is Div.Pager -> true
+        is Div.Tabs -> true
+        is Div.State -> true
     }
 
 internal val Div.isLeaf: Boolean
-    get() = !isBranch
-
-internal val DivBase.isLeaf: Boolean
     get() = !isBranch

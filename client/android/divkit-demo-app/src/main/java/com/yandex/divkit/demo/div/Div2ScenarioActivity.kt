@@ -1,10 +1,12 @@
 package com.yandex.divkit.demo.div
 
 import android.content.Context
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
@@ -44,6 +46,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
 import com.yandex.divkit.demo.utils.longToast
 import com.yandex.divkit.regression.MetadataBottomSheet
@@ -75,7 +78,13 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = getString(R.string.demo)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbar.setNavigationOnClickListener {
             super.onBackPressed()
         }
@@ -103,10 +112,14 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .divDataChangeListener(transitionScheduler)
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
 
-        divContext = divContext(baseContext = this, configuration = divConfiguration)
+        divContext = divContext(
+            baseContext = this,
+            configuration = divConfiguration,
+            lifecycleOwner = lifecycleOwner
+        )
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 

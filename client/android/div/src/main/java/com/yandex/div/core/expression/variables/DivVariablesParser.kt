@@ -60,5 +60,15 @@ internal fun DivVariable.toVariable(): Variable {
                 this.value.name, this.value.value
             )
         }
+        is DivVariable.Dict -> {
+            Variable.DictVariable(
+                this.value.name, this.value.value
+            )
+        }
+        is DivVariable.Array -> {
+            Variable.ArrayVariable(
+                this.value.name, this.value.value
+            )
+        }
     }
 }

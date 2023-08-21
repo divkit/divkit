@@ -9,8 +9,8 @@
     "testcase_name": {
       "type": "text",
       "paddings": {
-        "top": 10,
-        "bottom": 10
+        "top": 8,
+        "bottom": 8
       },
       "font_size": 16,
       "background": [
@@ -20,7 +20,7 @@
         }
       ]
     },
-    "50x50_black": {
+    "50x15_black": {
       "type": "separator",
       "background": [
         {
@@ -30,7 +30,7 @@
       ],
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 15
       },
       "width": {
         "type": "fixed",
@@ -40,8 +40,8 @@
         "color": "#000"
       }
     },
-    "50x50_black_with_margins": {
-      "type": "50x50_black",
+    "50x15_black_with_margins": {
+      "type": "50x15_black",
       "margins": {
         "top": 1,
         "left": 1,
@@ -58,13 +58,13 @@
       },
       "height": {
         "type": "fixed",
-        "value": 150
+        "value": 45
       },
       "items": [
-        { "type": "50x50_black_with_margins" },
-        { "type": "50x50_black_with_margins" },
-        { "type": "50x50_black_with_margins" },
-        { "type": "50x50_black_with_margins" }
+        { "type": "50x15_black_with_margins" },
+        { "type": "50x15_black_with_margins" },
+        { "type": "50x15_black_with_margins" },
+        { "type": "50x15_black_with_margins" }
       ],
       "background": [{
         "color": "#AAA",

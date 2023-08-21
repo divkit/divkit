@@ -5,15 +5,29 @@ import LayoutKit
 
 extension DivVideo: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let resumeActions = resumeActions?
-      .compactMap { $0.makeUiAction(context: context.actionContext) } ?? []
-    let bufferingActions = bufferingActions?.compactMap {
-      $0.makeUiAction(context: context.actionContext)
-    } ?? []
-    let endActions = endActions?.compactMap {
-      $0.makeUiAction(context: context.actionContext)
-    } ?? []
+    try applyBaseProperties(
+      to: { try makeBaseBlock(context: context) },
+      context: context,
+      actions: nil,
+      actionAnimation: nil,
+      doubleTapActions: nil,
+      longTapActions: nil
+    )
+  }
+
+  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+    guard let playerFactory = context.playerFactory else {
+      DivKitLogger.warning("There is no player factory in the context")
+      return EmptyBlock()
+    }
+
+    let resumeActions = resumeActions?.makeActions(context: context) ?? []
+    let pauseActions = pauseActions?.makeActions(context: context) ?? []
+    let bufferingActions = bufferingActions?.makeActions(context: context) ?? []
+    let endActions = endActions?.makeActions(context: context) ?? []
+    let fatalActions = fatalActions?.makeActions(context: context) ?? []
     let resolver = context.expressionResolver
+    let aspectRatio = aspect.resolveAspectRatio(resolver)
     let repeatable = resolveRepeatable(resolver)
     let muted = resolveMuted(resolver)
     let autostart = resolveAutostart(resolver)
@@ -21,7 +35,7 @@ extension DivVideo: DivBlockModeling {
       Binding<Int>(context: context, name: $0)
     }
     let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
-    let videoData = videoData.makeVideoData(resolver: resolver)
+    let videoData = VideoData(videos: videoSources.map { $0.makeVideo(resolver: resolver) })
 
     let playbackConfig = PlaybackConfig(
       autoPlay: autostart,
@@ -37,51 +51,51 @@ extension DivVideo: DivBlockModeling {
       preview: preview,
       elapsedTime: elapsedTime,
       resumeActions: resumeActions,
+      pauseActions: pauseActions,
       bufferingActions: bufferingActions,
       endActions: endActions,
+      fatalActions: fatalActions,
       path: context.parentPath
     )
 
     let videoPath = context.parentPath + (id ?? DivVideo.type)
     let videoContext = modified(context) {
       $0.parentPath = videoPath
-      $0.galleryResizableInsets = nil
     }
 
     let state: VideoBlockViewState = videoContext.blockStateStorage
       .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
 
-    return VideoBlock(
+    let videoBlock = VideoBlock(
       widthTrait: width.makeLayoutTrait(with: resolver),
-      heightTrait: height.makeLayoutTrait(with: resolver),
+      heightTrait: height.makeHeightLayoutTrait(with: resolver, aspectRatio: aspectRatio),
       model: model,
       state: state,
-      playerFactory: context.playerFactory
+      playerFactory: playerFactory
     )
+
+    if let aspectRatio = aspectRatio {
+      return AspectBlock(content: videoBlock, aspectRatio: aspectRatio)
+    }
+
+    return videoBlock
   }
 }
 
-extension DivVideoData {
-  func makeVideoData(resolver: ExpressionResolver) -> VideoData {
-    switch self {
-    case let .divVideoDataStream(stream):
-      return .stream(stream.resolveUrl(resolver)!)
-    case let .divVideoDataVideo(videos):
-      return .video(videos.videoSources.map {
-        let resolution: CGSize? = $0.resolution.flatMap { resolution in
-          CGSize(
-            width: resolution.resolveWidth(resolver) ?? 0,
-            height: resolution.resolveHeight(resolver) ?? 0
-          )
-        }
-        return LayoutKit.Video(
-          url: $0.resolveUrl(resolver)!,
-          resolution: resolution ?? .zero,
-          codec: $0.resolveCodec(resolver),
-          mimeType: $0.resolveMimeType(resolver)
-        )
-      })
+extension DivVideoSource {
+  public func makeVideo(resolver: ExpressionResolver) -> Video {
+    let resolution: CGSize? = resolution.flatMap { resolution in
+      CGSize(
+        width: resolution.resolveWidth(resolver) ?? 0,
+        height: resolution.resolveHeight(resolver) ?? 0
+      )
     }
+    return Video(
+      url: resolveUrl(resolver)!,
+      resolution: resolution,
+      bitrate: resolveBitrate(resolver).flatMap { Double($0) },
+      mimeType: resolveMimeType(resolver)
+    )
   }
 }
 

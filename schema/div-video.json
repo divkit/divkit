@@ -13,8 +13,13 @@
             "video"
           ]
         },
-        "video_data": {
-          "$ref": "div-video-data.json"
+        "video_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "div-video-source.json",
+            "$description": "translations.json#/div_video_source"
+          },
+          "minItems": 1
         },
         "repeatable": {
           "$ref": "common.json#/boolean_int",
@@ -47,6 +52,14 @@
           "minItems": 1,
           "$description": "translations.json#/div_video_resume_actions"
         },
+        "pause_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_video_pause_actions"
+        },
         "end_actions": {
           "type": "array",
           "items": {
@@ -63,16 +76,33 @@
           "minItems": 1,
           "$description": "translations.json#/div_video_buffering_actions"
         },
+        "fatal_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_video_fatal_actions"
+        },
         "player_settings_payload": {
           "type": "object",
           "additionalProperties": true,
-          "$description": "translations.json#/div_video_player_settings_payload"
+          "$description": "translations.json#/div_video_player_settings_payload",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "aspect": {
+          "$ref": "div-aspect.json",
+          "$description": "translations.json#/div_aspect",
+          "platforms": []
         }
       }
     }
   ],
   "required": [
     "type",
-    "video_data"
+    "video_sources"
   ]
 }

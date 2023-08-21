@@ -3,13 +3,6 @@ import com.yandex.div.gradle.PublicationType
 def publishToBucket = rootProject.ext.has("publishToBucket") && rootProject.ext.publishToBucket
 
 afterEvaluate {
-    if (publishToMavenCentral) {
-        signing {
-            sign publishing.publications
-            sign configurations.archives
-        }
-    }
-
     publishing {
         if (publishToBucket) {
             repositories {

@@ -8,10 +8,12 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
+import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
 import javax.inject.Inject
 
@@ -87,7 +89,7 @@ internal class DivSelectBinder @Inject constructor(
     private fun DivSelectView.observeVariable(div: DivSelect, divView: Div2View, errorCollector: ErrorCollector) {
         val resolver = divView.expressionResolver
 
-        variableBinder.bindVariable(
+        val subscription = variableBinder.bindVariable(
             divView,
             div.valueVariable,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
@@ -116,6 +118,8 @@ internal class DivSelectBinder @Inject constructor(
                     this@observeVariable.valueUpdater = valueUpdater
                 }
             })
+
+        addSubscription(subscription)
     }
 
     private fun DivSelectView.observeFontSize(div: DivSelect, resolver: ExpressionResolver) {
@@ -132,15 +136,17 @@ internal class DivSelectBinder @Inject constructor(
     }
 
     private fun DivSelectView.observeTypeface(div: DivSelect, resolver: ExpressionResolver) {
-        val callback = { _: Any ->
-            typeface = typefaceResolver.getTypeface(
-                div.fontFamily.evaluate(resolver),
-                div.fontWeight.evaluate(resolver)
-            )
-        }
-
-        addSubscription(div.fontFamily.observeAndGet(resolver, callback))
+        applyTypeface(div, resolver)
+        val callback = { _: Any ->  applyTypeface(div, resolver) }
+        div.fontFamily?.observeAndGet(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
+    }
+
+    private fun DivSelectView.applyTypeface(div: DivSelect, resolver: ExpressionResolver) {
+        typeface = typefaceResolver.getTypeface(
+            div.fontFamily?.evaluate(resolver),
+            div.fontWeight.evaluate(resolver)
+        )
     }
 
     private fun DivSelectView.observeTextColor(div: DivSelect, resolver: ExpressionResolver) {

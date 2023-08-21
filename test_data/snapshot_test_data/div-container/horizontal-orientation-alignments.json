@@ -21,7 +21,7 @@
           "items": [
             {
               "type": "testcase_name",
-              "text": "Different vertical children alignments with some default on container level\n"
+              "text": "Different vertical children alignments with some default on container level"
             },
             {
               "type": "testcase_name",
@@ -53,7 +53,7 @@
     ]
   },
   "templates": {
-    "text_white_bg_50x50": {
+    "text_white_bg_50x40": {
       "type": "text",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
@@ -69,14 +69,14 @@
       },
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 40
       }
     },
     "testcase_name": {
       "type": "text",
       "paddings": {
-        "top": 10,
-        "bottom": 10
+        "top": 8,
+        "bottom": 8
       },
       "font_size": 16,
       "background": [
@@ -86,7 +86,7 @@
         }
       ]
     },
-    "horizontal_fixed_h150_container_black": {
+    "horizontal_fixed_h120_container_black": {
       "type": "container",
       "orientation": "horizontal",
       "width": {
@@ -95,7 +95,7 @@
       },
       "height": {
         "type": "fixed",
-        "value": 150
+        "value": 120
       },
       "background": [
         {
@@ -105,15 +105,15 @@
       ]
     },
     "horizontal_orientation_alignments_testcase": {
-      "type": "horizontal_fixed_h150_container_black",
+      "type": "horizontal_fixed_h120_container_black",
       "items": [
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "^",
           "alignment_vertical": "top"
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "*",
           "alignment_vertical": "center",
           "width": {
@@ -121,12 +121,12 @@
           }
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "˅",
           "alignment_vertical": "bottom"
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "default"
         }
       ]

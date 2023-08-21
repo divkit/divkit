@@ -9,8 +9,9 @@ import NetworkingPublic
 extension DivBackground {
   func makeBlockBackground(
     with imageHolderFactory: ImageHolderFactory,
-    expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) -> LayoutKit.Background? {
+    let expressionResolver = context.expressionResolver
     switch self {
     case let .divLinearGradient(gradient):
       return Gradient.Linear(
@@ -29,7 +30,7 @@ extension DivBackground {
         imageHolder: imageHolderFactory.make(
           imageBackground.resolveImageUrl(expressionResolver)
         ),
-        contentMode: imageBackground.resolveContentMode(expressionResolver),
+        contentMode: imageBackground.contentMode(context: context),
         alpha: imageBackground.resolveAlpha(expressionResolver),
         effects: imageBackground.makeEffects(with: expressionResolver)
       )

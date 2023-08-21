@@ -1,0 +1,28 @@
+{
+  "type": "state",
+  "id": "mystate",
+  "states": [
+    {
+      "state_id": "first",
+      "div": {
+        "type": "text",
+        "text": "state first",
+        "visibility_action": {
+          "log_id": "first state visible",
+          "log_limit": 0
+        }
+      }
+    },
+    {
+      "state_id": "second",
+      "div": {
+        "type": "text",
+        "text": "seconds first",
+        "visibility_action": {
+          "log_id": "second state visible",
+          "log_limit": 0
+        }
+      }
+    }
+  ]
+}

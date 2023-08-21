@@ -61,19 +61,24 @@ final class DivDataExtensionsTests: XCTestCase {
     XCTAssertEqual(galleryBlock?.model.path, expectedPath)
   }
 
-  func test_WhenTopLevelDivIsNotGallery_DiscardsResizableInsetsParams() throws {
-    let context = DivBlockModelingContext(
-      galleryResizableInsets: InsetMode.Resizable(minValue: 16, maxViewportSize: 240)
-    )
-    let block = try dataWithGalleryInContainer
-      .makeBlock(context: context)
-      .withoutStateBlock() as? DecoratingBlock
-    let containerBlock = block?.child as? ContainerBlock
-    let galleryContainerBlock = containerBlock?.children.first?.content as? DecoratingBlock
-    let innerGalleryBlock = galleryContainerBlock?.child as? GalleryBlock
-    let expectedInsets = SideInsets.zero
-    XCTAssertEqual(containerBlock?.gaps, expectedInsets.asArray())
-    XCTAssertEqual(innerGalleryBlock?.model.metrics.axialInsetMode, .fixed(values: expectedInsets))
+  func test_WhenStateChanges_ReportsVisibilityForNewState() throws {
+    let timerScheduler = TestTimerScheduler()
+    let context = DivBlockModelingContext(scheduler: timerScheduler)
+
+    for rootStateId in [nil, "1", "0", "1"] {
+      if let rootStateId {
+        context.stateManager.setStateWithHistory(path: DivData.rootPath, stateID: DivStateID(rawValue: rootStateId))
+      }
+
+      let block = try makeBlock(fromFile: "root_states_visibility", context: context)
+
+      let rect = CGRect(
+        origin: .zero,
+        size: CGSize(width: 100, height: block.intrinsicContentHeight(forWidth: 100))
+      )
+      let view = block.makeBlockView()
+      XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timerScheduler), 1)
+    }
   }
 }
 
@@ -110,15 +115,6 @@ private let dataWithGallery = makeDivData(
   states: [.init(div: .divGallery(gallery), stateId: 0)]
 )
 
-private let container = makeDivContainer(
-  items: [.divGallery(gallery)]
-)
-
-private let dataWithGalleryInContainer = makeDivData(
-  logId: DivKitTests.cardLogId,
-  states: [.init(div: .divContainer(container), stateId: 0)]
-)
-
 extension Block {
   fileprivate func withoutStateBlock() -> Block {
     if let stateBlock = self as? StateBlock {
@@ -127,3 +123,15 @@ extension Block {
     return self
   }
 }
+
+private func makeBlock(
+  fromFile filename: String,
+  context: DivBlockModelingContext = .default
+) throws -> Block {
+  try DivDataTemplate.make(
+    fromFile: filename,
+    subdirectory: "div-data",
+    context: context
+  )
+}
+

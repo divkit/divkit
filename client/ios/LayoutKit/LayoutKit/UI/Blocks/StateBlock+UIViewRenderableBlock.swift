@@ -60,6 +60,14 @@ private final class SubviewStorage: RenderingDelegate {
     wrappedRenderingDelegate?.mapView(view, to: id)
   }
 
+  func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
+    wrappedRenderingDelegate?.tooltipAnchorViewAdded(anchorView: anchorView)
+  }
+
+  func tooltipAnchorViewRemoved(anchorView: TooltipAnchorView) {
+    wrappedRenderingDelegate?.tooltipAnchorViewRemoved(anchorView: anchorView)
+  }
+
   func getView(_ id: BlockViewID) -> DetachableAnimationBlockView? {
     views.first { $0.id == id }?.view
   }
@@ -99,6 +107,7 @@ private final class SubviewStorage: RenderingDelegate {
 private final class StateBlockView: BlockView {
   private var subviewStorage = SubviewStorage(wrappedRenderingDelegate: nil, ids: [])
   private var childView: BlockView?
+  private var stateId: String?
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 

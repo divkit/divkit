@@ -9,7 +9,7 @@ import com.yandex.div.core.experiments.Experiment.VISIBILITY_BEACONS_ENABLED
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivSightAction
 import dagger.Lazy
 import javax.inject.Inject
 
@@ -33,9 +33,21 @@ internal class DivActionBeaconSender @Inject constructor(
         }
     }
 
-    fun sendVisibilityActionBeacon(action: DivVisibilityAction, resolver: ExpressionResolver) {
+    fun sendVisibilityActionBeacon(action: DivSightAction, resolver: ExpressionResolver) {
         val url = action.url?.evaluate(resolver)
         if (isVisibilityBeaconsEnabled && url != null) {
+            val sendBeaconManager = sendBeaconManagerLazy.get()
+            if (sendBeaconManager == null) {
+                KAssert.fail { "SendBeaconManager was not configured" }
+                return
+            }
+            sendBeaconManager.addUrl(url, action.toHttpHeaders(resolver), action.payload)
+        }
+    }
+
+    fun sendSwipeOutActionBeacon(action: DivAction, resolver: ExpressionResolver) {
+        val url = action.logUrl?.evaluate(resolver)
+        if (url != null) {
             val sendBeaconManager = sendBeaconManagerLazy.get()
             if (sendBeaconManager == null) {
                 KAssert.fail { "SendBeaconManager was not configured" }
@@ -53,7 +65,7 @@ internal class DivActionBeaconSender @Inject constructor(
         return headers
     }
 
-    private fun DivVisibilityAction.toHttpHeaders(resolver: ExpressionResolver): Map<String, String> {
+    private fun DivSightAction.toHttpHeaders(resolver: ExpressionResolver): Map<String, String> {
         val headers = mutableMapOf<String, String>()
         referer?.let { referer ->
             headers[HTTP_HEADER_REFERER] = referer.evaluate(resolver).toString()

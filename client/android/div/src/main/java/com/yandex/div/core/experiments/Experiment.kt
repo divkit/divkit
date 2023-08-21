@@ -20,7 +20,8 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
         "visual_errors"
     ),
     ACCESSIBILITY_ENABLED(
-        "accessibility_enabled"
+        "accessibility_enabled",
+        defaultValue = true
     ),
     VIEW_POOL_ENABLED(
         "view_pool_enabled",

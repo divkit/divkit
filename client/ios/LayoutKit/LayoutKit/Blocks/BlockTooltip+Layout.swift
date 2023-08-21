@@ -23,6 +23,7 @@ extension CGRect {
     case .bottomRight: return coordinate(ofCorner: .bottomRight)
     case .bottom: return CGPoint(x: midX, y: maxY)
     case .bottomLeft: return coordinate(ofCorner: .bottomLeft)
+    case .center: return CGPoint(x: midX, y: midY)
     }
   }
 }
@@ -38,6 +39,7 @@ extension BlockTooltip.Position {
     case .bottomRight: return .topLeft
     case .bottom: return .top
     case .bottomLeft: return .topRight
+    case .center: return .center
     }
   }
 }
@@ -66,6 +68,8 @@ extension CGRect {
       origin = coordinate.movingX(by: -0.5 * size.width).movingY(by: -size.height)
     case .bottomLeft:
       origin = coordinate.movingY(by: -size.height)
+    case .center:
+      origin = coordinate.movingX(by: -0.5 * size.width).movingY(by: -size.height / 2)
     }
     self.init(origin: origin, size: size)
   }

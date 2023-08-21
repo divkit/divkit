@@ -153,6 +153,56 @@
         "name",
         "value"
       ]
+    },
+    "dict_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_dict",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dict"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "object",
+          "additionalProperties": true,
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "array_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_array",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        "value": {
+          "type": "array",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
     }
   },
   "anyOf": [
@@ -173,6 +223,19 @@
     },
     {
       "$ref": "#/definitions/url_variable"
+    },
+    {
+      "$ref": "#/definitions/dict_variable",
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "$ref": "#/definitions/array_variable",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

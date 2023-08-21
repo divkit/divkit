@@ -27,6 +27,7 @@ extension ContainerBlock {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
@@ -54,9 +55,10 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     let separator: ContainerBlock.Separator?
     let lineSeparator: ContainerBlock.Separator?
     let gaps: [CGFloat]
+    let blockLayoutDirection: UserInterfaceLayoutDirection
     let layoutDirection: ContainerBlock.LayoutDirection
     let layoutMode: ContainerBlock.LayoutMode
-    let axialAlignment: Alignment
+    let axialAlignment: ContainerBlock.AxialAlignment
     let crossAlignment: ContainerBlock.CrossAlignment
     let contentAnimation: BlockAnimation?
     let anchorPoint: AnchorPoint
@@ -143,6 +145,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       separator: model.separator,
       lineSeparator: model.lineSeparator,
       gaps: model.gaps,
+      blockLayoutDirection: model.blockLayoutDirection,
       layoutDirection: model.layoutDirection,
       layoutMode: model.layoutMode,
       axialAlignment: model.axialAlignment,

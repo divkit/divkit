@@ -1,5 +1,5 @@
 import Foundation
-import BaseTinyPublic
+import BasePublic
 
 public protocol DivStateUpdater: AnyObject {
   func set(

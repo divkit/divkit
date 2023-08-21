@@ -93,7 +93,7 @@ internal class DivBinder @Inject constructor(
 
         extensionController.beforeBindView(divView, view, div.value())
 
-        when (div) {
+        return when (div) {
             is Div.Text -> bindText(view, div.value, divView)
             is Div.Image -> bindImage(view, div.value, divView)
             is Div.GifImage -> bindGifImage(view, div.value, divView)
@@ -110,11 +110,11 @@ internal class DivBinder @Inject constructor(
             is Div.Input -> bindInput(view, div.value, divView)
             is Div.Select -> bindSelect(view, div.value, divView)
             is Div.Video -> bindVideo(view, div.value, divView)
-        }
-
-        // extensionController bound new CustomView in DivCustomBinder after replacing in parent
-        if (div !is Div.Custom) {
-            extensionController.bindView(divView, view, div.value())
+        }.also {
+            // extensionController bound new CustomView in DivCustomBinder after replacing in parent
+            if (div !is Div.Custom) {
+                extensionController.bindView(divView, view, div.value())
+            }
         }
     }
 
@@ -189,5 +189,36 @@ internal class DivBinder @Inject constructor(
 
     private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {
         view.applyMargins(data.margins, resolver)
+    }
+
+    fun setDataWithoutBinding(view: View, div: Div) = when (div) {
+        is Div.Text -> (view as DivLineHeightTextView).div = div.value
+        is Div.Image -> (view as DivImageView).div = div.value
+        is Div.GifImage -> (view as DivGifImageView).div = div.value
+        is Div.Separator -> (view as DivSeparatorView).div = div.value
+        is Div.Container -> setContainerData(view, div.value)
+        is Div.Grid -> setGridData(view, div.value)
+        is Div.Gallery -> (view as DivRecyclerView).div = div.value
+        is Div.Pager -> (view as DivPagerView).div = div.value
+        is Div.Tabs -> (view as TabsLayout).div = div.value
+        is Div.State -> (view as DivStateLayout).divState = div.value
+        is Div.Custom -> setCustomData(view, div.value)
+        is Div.Indicator -> (view as DivPagerIndicatorView).div = div.value
+        is Div.Slider -> (view as DivSliderView).div = div.value
+        is Div.Input -> (view as DivInputView).div = div.value
+        is Div.Select -> (view as DivSelectView).div = div.value
+        is Div.Video -> (view as DivVideoView).div = div.value
+    }
+
+    private fun setContainerData(view: View, data: DivContainer) {
+        containerBinder.setDataWithoutBinding(view as ViewGroup, data)
+    }
+
+    private fun setGridData(view: View, data: DivGrid) {
+        gridBinder.setDataWithoutBinding(view as DivGridLayout, data)
+    }
+
+    private fun setCustomData(view: View, data: DivCustom) {
+        customBinder.setDataWithoutBinding(view, data)
     }
 }

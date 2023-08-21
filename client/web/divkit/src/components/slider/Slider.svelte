@@ -50,8 +50,8 @@
         checkTicks();
     }
 
-    const firstVariable = rootCtx.getJsonWithVars(json.thumb_value_variable);
-    const secondVariable = rootCtx.getJsonWithVars(json.thumb_secondary_value_variable);
+    const firstVariable = json.thumb_value_variable;
+    const secondVariable = json.thumb_secondary_value_variable;
 
     let valueVariable = firstVariable && rootCtx.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
     let value2Variable = secondVariable && rootCtx.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);

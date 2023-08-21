@@ -46,6 +46,7 @@ import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -66,7 +67,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.util.WeakHashMap
-import kotlin.collections.ArrayDeque
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -77,7 +77,7 @@ import kotlin.collections.set
 @SuppressLint("ViewConstructor")
 @Mockable
 class Div2View private constructor(
-    context: Div2Context,
+    internal val context: Div2Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
@@ -210,6 +210,7 @@ class Div2View private constructor(
 
     init {
         timeCreated = DivCreationTracker.currentUptimeMillis
+        div2Component.releaseManager.observeDivLifecycle(this)
     }
 
     @JvmOverloads
@@ -297,6 +298,8 @@ class Div2View private constructor(
             bindOnAttachRunnable?.cancel()
             rebind(oldData, false)
             divData = newDivData
+            val state = newDivData.stateToBind
+            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
@@ -382,7 +385,7 @@ class Div2View private constructor(
         histogramReporter.onMeasureFinished()
     }
 
-    override fun draw(canvas: Canvas?) {
+    override fun draw(canvas: Canvas) {
         drawWasSkipped = false
         histogramReporter.onDrawStarted()
         super.draw(canvas)
@@ -396,6 +399,7 @@ class Div2View private constructor(
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
+        divTimerEventDispatcher?.onAttach(this)
     }
 
     override fun onDetachedFromWindow() {
@@ -410,6 +414,24 @@ class Div2View private constructor(
         }
     }
 
+    /** Returns true if div can be replaced with given DivData or false otherwise **/
+    fun prepareForRecycleOrCleanup(newData: DivData, oldData: DivData? = null): Boolean {
+        val canBeReplaced = DivComparator.isDivDataReplaceable(
+            divData ?: oldData,
+            newData,
+            stateId,
+            expressionResolver
+        )
+        if (canBeReplaced) {
+            releaseChildren(this)
+            stopLoadAndSubscriptions()
+        } else {
+            cleanup()
+        }
+
+        return canBeReplaced
+    }
+
     override fun cleanup() = synchronized(monitor) {
         cleanup(removeChildren = true)
     }
@@ -421,6 +443,10 @@ class Div2View private constructor(
         divData = null
         dataTag = DivDataTag.INVALID
         cancelImageLoads()
+        stopLoadAndSubscriptions()
+    }
+
+    private fun stopLoadAndSubscriptions() {
         viewToDivBindings.clear()
         propagatedAccessibilityModes.clear()
         cancelTooltips()
@@ -835,11 +861,12 @@ class Div2View private constructor(
             }
             histogramReporter?.onRebindingStarted()
             viewComponent.errorCollectors.getOrCreate(dataTag, divData).cleanRuntimeWarningsAndErrors()
-            val state = newData.states.firstOrNull { it.stateId == stateId } ?: newData.states[0]
+            val state = newData.stateToBind
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
             }
             divData = newData
+            div2Component.stateManager.updateState(dataTag, state.stateId, true)
             div2Component.divBinder.bind(rootDivView, state.div, this, DivStatePath.fromState(stateId))
             requestLayout()
             if (isAutoanimations) {
@@ -852,6 +879,8 @@ class Div2View private constructor(
             KAssert.fail(error)
         }
     }
+
+    private val DivData.stateToBind get() = states.firstOrNull { it.stateId == stateId } ?: states[0]
 
     var visualErrorsEnabled: Boolean
         set(value) {

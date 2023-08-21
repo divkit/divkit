@@ -3,10 +3,12 @@ package com.yandex.divkit.demo.div
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -28,6 +30,7 @@ import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.SamplesActivityBinding
 import com.yandex.divkit.demo.utils.DivkitDemoPermissionHelper
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 
@@ -70,7 +73,13 @@ open class DivActivity : AppCompatActivity() {
         })
         setSupportActionBar(findViewById(R.id.toolbar))
         binding.toolbarLayout.title = getString(R.string.samples)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.toolbar.setNavigationIcon(icon)
         binding.toolbarLayout.setCollapsedTitleTextColor(Color.BLACK)
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
@@ -98,9 +107,15 @@ open class DivActivity : AppCompatActivity() {
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
             .extension(DivShimmerExtensionHandler())
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
+            .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(this)))
             .build()
-        return DivViewAdapter(divContext(baseContext = this, configuration = configuration))
+        val context = divContext(
+            baseContext = this,
+            configuration = configuration,
+            lifecycleOwner = lifecycleOwner
+        )
+
+        return DivViewAdapter(context)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -34,7 +34,8 @@ final class LottieAnimationBlock: SizeForwardingBlock {
       return false
     }
 
-    return self == other
+    return self.sizeProvider == other.sizeProvider
+      && self.animationHolder == other.animationHolder
   }
 }
 

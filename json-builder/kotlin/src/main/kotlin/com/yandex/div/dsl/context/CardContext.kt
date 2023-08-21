@@ -1,6 +1,3 @@
-// Copyright (c) 2022 Yandex LLC. All rights reserved.
-// Author: Anton Gulevsky <gulevsky@yandex-team.ru>.
-
 package com.yandex.div.dsl.context
 
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -11,6 +8,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+@Deprecated("Use divkit.dsl framework")
 class CardContext {
 
     @JvmField
@@ -27,6 +25,7 @@ class CardContext {
 }
 
 @OptIn(ExperimentalContracts::class)
+@Deprecated("Use divkit.dsl framework")
 fun card(
     initialize: CardContext.() -> Root
 ): CardContext {

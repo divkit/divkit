@@ -16,6 +16,7 @@ export type Truncate = 'none' | 'end';
 
 export interface TextStyles {
     font_size?: number;
+    font_family?: string;
     // font_size_unit
     letter_spacing?: number;
     font_weight?: FontWeight;
@@ -65,7 +66,7 @@ export interface DivTextData extends DivBaseData, DivActionableData, TextStyles 
     // auto_ellipsize;
     text_alignment_horizontal?: AlignmentHorizontal;
     text_alignment_vertical?: AlignmentVertical;
-    // focused_text_color?: string;
+    focused_text_color?: string;
     text_gradient?: GradientBackground;
     text: string;
     ranges?: TextRange[];

@@ -27,28 +27,24 @@
           "height": {
             "type": "wrap_content"
           },
-          "font_size": 24
-        },
-        {
-          "type": "text",
-          "$text": "value",
-          "width": {
-            "type": "wrap_content"
-          },
-          "height": {
-            "type": "wrap_content"
-          },
           "text_alignment_vertical": "center",
           "text_alignment_horizontal": "center",
           "font_size": 24,
-          "font_weight": "bold"
+          "ranges": [
+            {
+              "start": 0,
+              "$end": "title_end",
+              "font_weight": "bold"
+            }
+          ]
         }
       ]
     },
     "button": {
       "type": "text",
       "width": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 150
       },
       "height": {
         "type": "wrap_content"
@@ -243,13 +239,13 @@
           "items": [
             {
               "type": "field",
-              "title": "State: ",
-              "value": "@{timer_state}"
+              "title": "State: @{timer_state}",
+              "title_end": 6
             },
             {
               "type": "field",
-              "title": "Value: ",
-              "value": "@{timer_value}"
+              "title": "Value: @{timer_value}",
+              "title_end": 6
             },
             {
               "type": "grid",

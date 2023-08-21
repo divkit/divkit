@@ -38,8 +38,7 @@
           "$description": "translations.json#/div_font_size_unit"
         },
         "font_family": {
-          "$ref": "div-font-family.json",
-          "default_value": "text",
+          "$ref": "common.json#/non_empty_string",
           "$description": "translations.json#/div_font_family"
         },
         "font_weight": {
@@ -55,6 +54,24 @@
         "text_variable": {
           "$ref": "div-variable-name.json",
           "$description": "translations.json#/div_input_text_variable"
+        },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "start",
+          "$description": "translations.json#/div_text_text_alignment_horizontal",
+          "platforms": [
+            "android",
+            "web"
+          ]
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "center",
+          "$description": "translations.json#/div_text_text_alignment_vertical",
+          "platforms": [
+            "android",
+            "web"
+          ]
         },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
@@ -113,7 +130,9 @@
         "validators": {
           "type": "array",
           "$description": "translations.json#/div_input_validators",
-          "platforms": [],
+          "platforms": [
+            "android"
+          ],
           "items": {
             "$ref": "div-input-validator.json"
           }

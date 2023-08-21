@@ -15,6 +15,8 @@ import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -25,21 +27,26 @@ import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.reset
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 
 @RunWith(RobolectricTestRunner::class)
 class DivTooltipControllerTest {
+
+    private val div2ViewWidth = 1000
+    private val div2ViewHeight = 500
 
     private val displayMetrics = DisplayMetrics().apply {
         density = 1f
@@ -74,7 +81,7 @@ class DivTooltipControllerTest {
     private val div2View = mock<Div2View> {
         on { resources } doReturn resources
         on { getWindowVisibleDisplayFrame(any()) } doAnswer { inv ->
-            (inv.arguments[0] as Rect).set(0, 0, 500, 1000)
+            (inv.arguments[0] as Rect).set(0, 0, div2ViewWidth, div2ViewHeight)
         }
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
@@ -98,6 +105,11 @@ class DivTooltipControllerTest {
     }
     private val visibilityActionTracker = mock<DivVisibilityActionTracker>()
 
+    private val errorCollector = mock<ErrorCollector>()
+    private val errorCollectors = mock<ErrorCollectors> {
+        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn errorCollector
+    }
+
     private val divPreloader = mock<DivPreloader> {
         on { preload(any(), any(), any()) } doAnswer {
             (it.arguments[2] as DivPreloader.Callback).finish(false)
@@ -118,7 +130,7 @@ class DivTooltipControllerTest {
     }
 
     private val underTest = DivTooltipController(
-        { div2Builder }, tooltipRestrictor, visibilityActionTracker, divPreloader
+        { div2Builder }, tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors
     ) { _, _, _ ->
         popupWindow
     }
@@ -144,15 +156,15 @@ class DivTooltipControllerTest {
     }
 
     @Test
-    fun `tooltip is ignored if intersects screen horizontally`() {
-        prepareDiv(offset = divPoint(100, 0))
+    fun `tooltip fit in container bounds if bigger then container`() {
+        whenever(tooltipView.width).doReturn(div2ViewWidth.inc())
+        whenever(tooltipView.height).doReturn(div2ViewHeight.inc())
+        prepareDiv()
 
         underTest.showTooltip("tooltip_id", div2View)
 
-        verify(popupWindow).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
-        verify(popupWindow, never()).update(anyInt(), anyInt(), anyInt(), anyInt())
-        verify(tooltipShownCallback, never()).onDivTooltipShown(any(), any(), any())
-        verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
+        verify(tooltipShownCallback, times(1)).onDivTooltipShown(div2View, anchor, tooltips[0])
+        verify(errorCollector, times(2)).logWarning(any())
     }
 
     @Test

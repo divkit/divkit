@@ -1,0 +1,240 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "bottom": 16,
+        "top": 16,
+        "left": 16,
+        "right": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "select",
+    "variables": [
+      {
+        "name": "value_variable",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "visibility",
+        "type": "string",
+        "value": "visible"
+      },
+      {
+        "name": "timer_finished",
+        "type": "string",
+        "value": "IN PROGRESS"
+      },
+      {
+        "name": "width",
+        "type": "integer",
+        "value": 200
+      },
+      {
+        "name": "margin",
+        "type": "integer",
+        "value": 16
+      }
+    ],
+    "timers": [
+      {
+        "id": "visibility_invisible",
+        "duration": 1000,
+        "end_actions": [
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=visibility&value=invisible"
+          },
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=timer_finished&value=DONE"
+          }
+        ]
+      },
+      {
+        "id": "visibility_gone",
+        "duration": 1000,
+        "end_actions": [
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=visibility&value=gone"
+          },
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=timer_finished&value=DONE"
+          }
+        ]
+      },
+      {
+        "id": "width_change",
+        "duration": 1000,
+        "end_actions": [
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=width&value=150"
+          },
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=timer_finished&value=DONE"
+          }
+        ]
+      },
+      {
+        "id": "position_change",
+        "duration": 1000,
+        "end_actions": [
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=margin&value=64"
+          },
+          {
+            "log_id": "end",
+            "url": "div-action://set_variable?name=timer_finished&value=DONE"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "@{timer_finished}"
+            },
+            {
+              "type": "select",
+              "width": {
+                "type": "fixed",
+                "value": "@{width}"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": "@{margin}",
+                "top": "@{margin}"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "alpha": 1,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "value_variable": "value_variable",
+              "hint_text": "Select country",
+              "hint_color": "#888888",
+              "line_height": 22,
+              "visibility": "@{visibility}",
+              "options": [
+                {
+                  "value": ""
+                },
+                {
+                  "value": "ru",
+                  "text": "Russia"
+                },
+                {
+                  "value": "uk",
+                  "text": "United Kingdom"
+                },
+                {
+                  "value": "kz"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 18,
+                "right": 16,
+                "bottom": 16
+              },
+              "font_size": 16,
+              "text_color": "#000000",
+              "text": "Text: @{value_variable}"
+            },
+            {
+              "type": "text",
+              "text": "Timers",
+              "margins": {
+                "left": 16,
+                "top": 8
+              },
+              "font_size": 16
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "visibility_invisible",
+                  "action": {
+                    "log_id": "visibility_invisible",
+                    "url": "div-action://timer?id=visibility_invisible&action=start"
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "visibility_gone",
+                  "action": {
+                    "log_id": "visibility_gone",
+                    "url": "div-action://timer?id=visibility_gone&action=start"
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "width_change",
+                  "action": {
+                    "log_id": "width_change",
+                    "url": "div-action://timer?id=width_change&action=start"
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "position_change",
+                  "action": {
+                    "log_id": "position_change",
+                    "url": "div-action://timer?id=position_change&action=start"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,22 +1,20 @@
 package com.yandex.divkit.regression
 
+import android.content.res.Configuration
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
 import com.yandex.div.internal.Assert
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivAction
 import com.yandex.divkit.regression.databinding.RegressionActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
-import com.yandex.divkit.regression.di.provideRegressionConfig
 import kotlinx.coroutines.flow.FlowCollector
 
 private const val TAG_FILTER_MENU_ID = 1
@@ -27,7 +25,6 @@ class RegressionActivity : AppCompatActivity() {
     private val scenarioListAdapter by lazy(LazyThreadSafetyMode.NONE) {
         ScenarioListAdapter(this, provideDiv2ViewCreator())
     }
-    private val regressionConfig by lazy(LazyThreadSafetyMode.NONE) { provideRegressionConfig() }
 
     private val regressionViewModel: RegressionViewModel by viewModels {
         RegressionViewModel.Factory(this)
@@ -41,25 +38,25 @@ class RegressionActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.regressionToolbar)
         binding.toolbarLayout.title = getString(R.string.regression_label)
-        binding.regressionToolbar.setNavigationIcon(R.drawable.ic_back)
+        val config: Configuration = resources.configuration
+        val icon = if (config.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+            R.drawable.ic_back_rtl
+        } else {
+            R.drawable.ic_back
+        }
+        binding.regressionToolbar.setNavigationIcon(icon)
         binding.toolbarLayout.setCollapsedTitleTextColor(Color.BLACK)
         binding.regressionToolbar.setNavigationOnClickListener { onBackPressed() }
-        binding.scenarioList.addItemDecoration(DividerItemDecoration(this, 0))
 
-        binding.scenarioList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val scrollY = binding.scrollView.scrollY
-                if (scrollY > 500) {
-                    binding.scenarioList.setBackgroundColor(Color.WHITE)
-                } else {
-                    binding.scenarioList.setBackgroundResource(R.drawable.rounded_top_corners)
-                }
+        with(binding.scenarioList) {
+            addItemDecoration(DividerItemDecoration(this@RegressionActivity, 0))
+            layoutManager = LinearLayoutManager(this@RegressionActivity)
+            adapter = scenarioListAdapter.also {
+                it.stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-        })
+        }
 
         setContentView(binding.root)
-        setupRecordScreenSwitch()
         lifecycleScope.launchWhenCreated {
             regressionViewModel.uiState.collect(object : FlowCollector<RegressionUiState> {
                 override suspend fun emit(uiState: RegressionUiState) {
@@ -67,17 +64,14 @@ class RegressionActivity : AppCompatActivity() {
                         RegressionUiState.Loading -> Unit
                         is RegressionUiState.Data -> {
                             tagFilter = uiState.tagFilter
-                            scenarioListAdapter.submitList(uiState.scenarios)
+                            scenarioListAdapter.submitList(uiState.scenarios) {
+                                binding.scenarioList.scrollToPosition(0)
+                            }
                         }
                     }
                 }
             })
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setupScenarioList()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -108,29 +102,5 @@ class RegressionActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.addSubMenu(Menu.NONE, TAG_FILTER_MENU_ID, Menu.NONE, "Filter by tag")
         return true
-    }
-
-    private fun setupRecordScreenSwitch() {
-        val switcher = provideDiv2ViewCreator().createDiv2View(
-            this,
-            "application/screen_record_switcher.json",
-            binding.container,
-            ScenarioLogDelegate.Stub,
-        )
-
-        val state = if (regressionConfig.isRecordScreenEnabled) "active" else "inactive"
-        val url = "div-action://set_state?state_id=0/switcher/$state"
-        switcher.handleActionWithResult(
-            DivAction(
-                logId = "init record screen switcher",
-                url = Expression.constant(Uri.parse(url))
-            )
-        )
-        binding.container.addView(switcher, 0)
-    }
-
-    private fun setupScenarioList() {
-        binding.scenarioList.layoutManager = LinearLayoutManager(this)
-        binding.scenarioList.adapter = scenarioListAdapter
     }
 }

@@ -8,6 +8,7 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.player.DivPlayerView
+import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.KAssert
@@ -25,7 +26,8 @@ internal class DivVideoView @JvmOverloads constructor(
     DivBorderSupports,
     TransientView,
     DivExtensionView,
-    ExpressionSubscriber {
+    ExpressionSubscriber,
+    Releasable {
     internal var div: DivVideo? = null
 
     private var borderDrawer: DivBorderDrawer? = null
@@ -68,18 +70,17 @@ internal class DivVideoView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
-        getPlayerView()?.detach()
+        getPlayerView()?.let { playerView ->
+            val lastPlayer = playerView.getAttachedPlayer()
+            playerView.detach()
+            lastPlayer?.release()
+        }
         borderDrawer?.release()
     }
 
-    override fun onDetachedFromWindow() {
-        release()
-        super.onDetachedFromWindow()
-    }
-
     fun getPlayerView(): DivPlayerView? {
-        if (this.childCount > 1) {
-            KAssert.fail { "More than one player view inside DivVideo" }
+        if (this.childCount > 2) {
+            KAssert.fail { "Too many children in DivVideo" }
         }
         this.getChildAt(0)?.let {
             if (it !is DivPlayerView) {

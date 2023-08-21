@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [aspect].
  * 
- * Required properties: `ratio`.
+ * Required parameters: `ratio`.
  */
 @Generated
 class Aspect internal constructor(

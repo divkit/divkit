@@ -51,8 +51,11 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
+import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivDimension
+import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
@@ -71,6 +74,7 @@ import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
+import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
@@ -82,20 +86,43 @@ internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionReso
     val metrics = resources.displayMetrics
     when(insets?.unit?.evaluate(resolver)) {
         DivSizeUnit.DP -> {
-            setPadding(
-                insets.left.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
-                insets.right.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics))
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
+                        insets.end?.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics)
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
+                        insets.right.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics))
+            }
         }
         DivSizeUnit.SP -> {
-            setPadding(
-                insets.left.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
-                insets.right.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics))
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
+                        insets.end?.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics)
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
+                        insets.right.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics))
+            }
         }
         DivSizeUnit.PX -> {
-            setPadding(
-                    insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
-                    insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
-            )
+            if (insets.start != null || insets.end != null) {
+                setPaddingRelative(
+                        insets.start?.evaluate(resolver)?.toIntSafely() ?: 0,
+                        insets.top.evaluate(resolver).toIntSafely(),
+                        insets.end?.evaluate(resolver)?.toIntSafely() ?: 0,
+                        insets.bottom.evaluate(resolver).toIntSafely()
+                )
+            } else {
+                setPadding(
+                        insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
+                        insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
+                )
+            }
         }
     }
 }
@@ -108,6 +135,8 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
     var topMargin = 0
     var rightMargin = 0
     var bottomMargin = 0
+    var startMargin : Int? = null
+    var endMargin : Int? = null
 
     if (insets != null) {
         val unit = insets.unit.evaluate(resolver)
@@ -115,14 +144,27 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
         topMargin = insets.top.evaluate(resolver).unitToPx(metrics, unit)
         rightMargin = insets.right.evaluate(resolver).unitToPx(metrics, unit)
         bottomMargin = insets.bottom.evaluate(resolver).unitToPx(metrics, unit)
+        insets.start?.let {
+            startMargin = it.evaluate(resolver).unitToPx(metrics, unit)
+        }
+        insets.end?.let {
+            endMargin = it.evaluate(resolver).unitToPx(metrics, unit)
+        }
     }
 
     if (lp.leftMargin != leftMargin || lp.topMargin != topMargin
-        || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin) {
-        lp.leftMargin = leftMargin
+        || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin
+        || (startMargin != null && lp.marginStart != startMargin)
+        || (endMargin != null && lp.marginEnd != endMargin)) {
         lp.topMargin = topMargin
-        lp.rightMargin = rightMargin
         lp.bottomMargin = bottomMargin
+        if (startMargin != null || endMargin != null) {
+            lp.marginStart = startMargin ?: 0
+            lp.marginEnd = endMargin ?: 0
+        } else {
+            lp.leftMargin = leftMargin
+            lp.rightMargin = rightMargin
+        }
         requestLayout()
     }
 }
@@ -139,7 +181,7 @@ internal fun DivSize?.toLayoutParamsSize(
         is DivSize.WrapContent -> when {
             value.constrained?.evaluate(resolver) != true -> ViewGroup.LayoutParams.WRAP_CONTENT
             lp is DivLayoutParams -> DivLayoutParams.WRAP_CONTENT_CONSTRAINED
-            else -> ViewGroup.LayoutParams.MATCH_PARENT
+            else -> ViewGroup.LayoutParams.WRAP_CONTENT
         }
     }
 }
@@ -336,7 +378,9 @@ internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivA
         DivAlignmentHorizontal.LEFT -> Gravity.LEFT
         DivAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
         DivAlignmentHorizontal.RIGHT -> Gravity.RIGHT
-        else -> Gravity.LEFT
+        DivAlignmentHorizontal.START -> Gravity.START
+        DivAlignmentHorizontal.END -> Gravity.END
+        else -> Gravity.START
     }
 
     val verticalGravity = when (vertical) {
@@ -344,6 +388,26 @@ internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivA
         DivAlignmentVertical.CENTER -> Gravity.CENTER_VERTICAL
         DivAlignmentVertical.BOTTOM -> Gravity.BOTTOM
         else -> Gravity.TOP
+    }
+
+    return horizontalGravity or verticalGravity
+}
+
+internal fun evaluateGravity(horizontal: DivContentAlignmentHorizontal?, vertical: DivContentAlignmentVertical?): Int {
+    val horizontalGravity = when (horizontal) {
+        DivContentAlignmentHorizontal.LEFT -> Gravity.LEFT
+        DivContentAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
+        DivContentAlignmentHorizontal.RIGHT -> Gravity.RIGHT
+        DivContentAlignmentHorizontal.START -> Gravity.START
+        DivContentAlignmentHorizontal.END -> Gravity.END
+        else -> Gravity.START // TODO(grechka62): support additional variants
+    }
+
+    val verticalGravity = when (vertical) {
+        DivContentAlignmentVertical.TOP -> Gravity.TOP
+        DivContentAlignmentVertical.CENTER -> Gravity.CENTER_VERTICAL
+        DivContentAlignmentVertical.BOTTOM -> Gravity.BOTTOM
+        else -> Gravity.TOP // TODO(grechka62): support additional variants
     }
 
     return horizontalGravity or verticalGravity
@@ -555,11 +619,17 @@ internal inline fun <T> List<Any?>.applyIfNotEquals(second: List<T>, applyRef: (
     }
 }
 
-internal val DivBase.hasVisibilityActions: Boolean
-    get() = visibilityAction != null || !visibilityActions.isNullOrEmpty()
+internal val DivBase.hasSightActions: Boolean
+    get() = visibilityAction != null || !visibilityActions.isNullOrEmpty() || !disappearActions.isNullOrEmpty()
 
 internal val DivBase.allVisibilityActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
+
+internal val DivBase.allDisappearActions: List<DivDisappearAction>
+    get() = disappearActions.orEmpty()
+
+internal val DivBase.allSightActions: List<DivSightAction>
+    get() = this.allDisappearActions + this.allVisibilityActions
 
 internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
     applyWidth(div, resolver)
@@ -581,10 +651,10 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
 internal fun ViewGroup.trackVisibilityActions(newDivs: List<Div>, oldDivs: List<Div>?, divView: Div2View) {
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
     if (!oldDivs.isNullOrEmpty()) {
-        val newLogIds = newDivs.flatMap {it.value().allVisibilityActions }.mapTo(HashSet()) { it.logId }
+        val newLogIds = newDivs.flatMap {it.value().allSightActions }.mapTo(HashSet()) { it.logId }
 
         for (oldDiv in oldDivs) {
-            val actionsToRemove = oldDiv.value().allVisibilityActions.filter { it.logId !in newLogIds }
+            val actionsToRemove = oldDiv.value().allSightActions.filter { it.logId !in newLogIds }
             visibilityActionTracker.trackVisibilityActionsOf(divView, null, oldDiv, actionsToRemove)
         }
     }
@@ -825,4 +895,19 @@ internal fun View.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAs
             aspectRatio = ratio.toFloat()
         }
     )
+}
+
+internal fun DivContentAlignmentHorizontal.toAlignmentHorizontal(): DivAlignmentHorizontal = when (this) {
+    DivContentAlignmentHorizontal.LEFT -> DivAlignmentHorizontal.LEFT
+    DivContentAlignmentHorizontal.CENTER -> DivAlignmentHorizontal.CENTER
+    DivContentAlignmentHorizontal.RIGHT -> DivAlignmentHorizontal.RIGHT
+    else -> DivAlignmentHorizontal.LEFT
+}
+
+internal fun DivContentAlignmentVertical.toAlignmentVertical(): DivAlignmentVertical = when (this) {
+    DivContentAlignmentVertical.TOP -> DivAlignmentVertical.TOP
+    DivContentAlignmentVertical.CENTER -> DivAlignmentVertical.CENTER
+    DivContentAlignmentVertical.BOTTOM -> DivAlignmentVertical.BOTTOM
+    DivContentAlignmentVertical.BASELINE -> DivAlignmentVertical.BASELINE
+    else -> DivAlignmentVertical.TOP
 }

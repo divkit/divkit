@@ -52,8 +52,9 @@ export function valToString(val: EvalValue): string {
         return stringifyColor(safeConvertColor(val.value));
     } else if (val.type === 'url') {
         return val.value;
+    } else if (val.type === 'dict') {
+        return '<dict>';
     }
-
 
     // For purpose when new eval value types will be added
     throw new Error(`Unexpected type ${(val as EvalValueBase).type}`);
@@ -65,7 +66,7 @@ export function valToPreview(val: EvalValue): string {
     if (val.type === 'string') {
         res = "'" +
             res
-                .replace(/\\/g, '\\\'')
+                .replace(/\\/g, '\\\\')
                 .replace(/'/g, '\\\'') +
             "'";
     }

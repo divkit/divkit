@@ -22,13 +22,13 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [solidBackground].
  * 
- * Required properties: `type, color`.
+ * Required parameters: `type, color`.
  */
 @Generated
 class SolidBackground internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : TextRangeBackground, Background {
+) : Background, TextRangeBackground {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "solid")

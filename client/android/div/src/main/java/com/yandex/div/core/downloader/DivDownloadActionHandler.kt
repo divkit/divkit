@@ -7,7 +7,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivPatch
-import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivSightAction
 
 private const val PARAM_URL = "url"
 private const val AUTHORITY_DOWNLOAD = "download"
@@ -39,7 +39,7 @@ internal object DivDownloadActionHandler {
     }
 
     @JvmStatic
-    fun handleVisibilityAction(action: DivVisibilityAction, view: Div2View): Boolean {
+    fun handleVisibilityAction(action: DivSightAction, view: Div2View): Boolean {
         val uri = action.url?.evaluate(view.expressionResolver) ?: return false
         return handleAction(uri, action.downloadCallbacks, view)
     }

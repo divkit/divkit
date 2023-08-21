@@ -6,6 +6,7 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.KAssert
 
 internal class PaddingItemDecoration @JvmOverloads constructor(
@@ -33,16 +34,23 @@ internal class PaddingItemDecoration @JvmOverloads constructor(
             val itemCount = parent.adapter?.itemCount ?: return
             val position = parent.layoutManager?.getPosition(view) ?: return
 
-            val isFirst = position == 0
-            val isLast = position == itemCount - 1
+            var isFirst = position == 0
+            var isLast = position == itemCount - 1
 
             when (orientation) {
-                RecyclerView.HORIZONTAL -> outRect.set(
-                    if (isFirst) paddingLeft else 0,
-                    paddingTop,
-                    if (isLast) paddingRight else midItemPadding,
-                    paddingBottom
-                )
+                RecyclerView.HORIZONTAL -> {
+                    if (parent.isLayoutRtl()) {
+                        isFirst = position == itemCount - 1
+                        isLast = position == 0
+                    }
+                    outRect.set(
+                        if (isFirst) paddingLeft else 0,
+                        paddingTop,
+                        if (isLast) paddingRight else midItemPadding,
+                        paddingBottom
+                    )
+                }
+
                 RecyclerView.VERTICAL -> outRect.set(
                     paddingLeft,
                     if (isFirst) paddingTop else 0,

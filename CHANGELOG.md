@@ -1,3 +1,359 @@
+## 27.3.0
+
+# JSON Schema:
+* Added phone input mask schema
+* Added `state_id_variable` to `DivState`
+
+# Android Client:
+* Enabled accessibility flag by default
+* Fixed state update on rebind
+* Fixed showing `transition` from `visible` to `invisible`/`gone` on first draw
+* Fixed `SQLiteFullException` in `DivStorage` causing app crash
+
+# iOS Client:
+* Added RTL support for `DivImage`, `DivInput`, `DivSlider`.
+* Fixed `updateCardAction` calls for elements with variables binding.
+* Fixed visibility counters.
+* Fixed Lottie and Rive blocks comparison.
+
+# Web Client:
+Fixes:
+* Fixed an issue with a `gallery` component with the `default_item` outside of the items range
+
+
+## 27.2.0
+
+# JSON Schema:
+* Replaced `left` with `start` alignment by default
+* Added `center` `DivTooltip` position
+* Added `aspect` to `DivVideo`
+
+# Android Client:
+* Fixed `DivTooltip` with `match_parent` size
+* Fixed crash caused by `DivTimer` actions execution after `DivView` detach
+* Observe `DivVideo` `muted` property
+* Updated video player manager
+* Improved binding performance
+
+# iOS Client:
+* Added RTL-layout support for `DivTabs`.
+* Fixed crash in `DivInput` mask validator.
+
+# Web Client:
+Additions:
+* Added `div-patch`, `download` action and `download_callbacks` support
+* Added support for the `focus` parameters (including ``focused_text_color`)
+
+
+## 27.1.0
+
+# Android Client:
+* Lottie version updated to 6.1.0
+* Added configuration paramater for scroll interception angle.
+* Method DivConfiguration.Builder#enableAccessibility is deprecated now.
+* Fixed layout of children with match_parent size inside container with constrained wrap_content size.
+* Fixed input layout with constrained wrap_content height.
+* Fixed image layout with constrained wrap_content size.
+* Fixed visibility tracking of views that has been removed after patch.
+
+# iOS Client:
+* Added `DivView`.
+* Added RTL support for `DivText`, `DivGallery`, `DivPager` and `DivIndicator`.
+* Fixed state management for `DivGallery`.
+
+
+## 27.0.0
+
+# Android Client:
+* Added RTL support for container, tabs, slider and indicator
+* Fixed multiple find lifecycleOwner call
+* Fixed multiple out animations ignoring or view doubling
+
+# iOS Client:
+* Added `getStoredValue` functions support.
+* Added RTL layout support in `DivContainer`.
+* Added `updateCardSignal` to `DivKitComponents`.
+* Replaced `UrlOpener` with `DivUrlHandler` protocol. Changed `DivActionHandler` API.
+
+# Web Client:
+Fixes:
+* Fixed an issue with the integer values from the several functions: `getYear`, `getMonth`, `getDay`, `getDayOfWeek`, `getHours`, `getMinutes`, `getSeconds`, `getMillis`, `len`, `index` and `lastIndex`. These integer values previously could produce errors in integer operations
+
+
+## 26.2.0
+
+# JSON Schema:
+* Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `div-input`
+
+# Android Client:
+* Added `start` and `end` values to horizontal alignment
+* Added `start` and `end` values to paddings and margins
+* Supported right-to-left layout direction for `wrap` container
+* Supported dictionary functions
+* Fixed `visibility_actions` in DivStates
+
+# iOS Client:
+* Added `testRegex` function.
+* Fixed visibility action for `DivStates`.
+
+# Web Client:
+* Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
+
+## 26.1.0
+
+# JSON Schema:
+* Added `start` and `end` to horizontal alignment.
+
+# Android Client:
+* Added `testRegex` function.
+* Supported `constrained` property in `wrap_content` size for pagers.
+* Ignore constrained along wrap-container's cross axis.
+* Fixed gallery `item_space` in RTL layout direction.
+
+# iOS Client:
+* Ignore constrained along wrap-container's cross axis.
+* Supported `start` and `end` parameters in margins, padding.
+
+# Web Client:
+* Implemented `testRegex` function
+* `content_alignment_` properties along cross-axis in `container` with the `wrap` mode will now align rows / columns of items, instead of children components (to better match Android / iOS behavior).
+* Fixed expression processing without variables (constant expressions).
+
+# TypeScript JSON Builder:
+* `boolean_int` properties will now accept `true` and `false` values in addition to `1` / `0`. These boolean values will be automatically converted to `1` / `0`, but only if the `divCard` function is used. Beware of old clients with the old DivKit SDK, they may not accept boolean `true` / `false` values.
+
+## 26.0.0
+
+# JSON Schema:
+* Added `start` and `end` properties to edge insets.
+* Supported user-defined font families.
+
+# Android Client:
+* Added profile to configure number of precreated views.
+* Supported margins for wrap container separators.
+* Supported user-defined font families.
+* Supported beacons in swipe_out_actions
+* Fixed indicators alignment when they cannot fit to container
+* Fixed `release` method not called on destroy
+* Fixed sequential patch applyment
+
+# iOS Client:
+* Supported user-defined font families.
+* Added async image previews loading.
+* Fixed expressions support in `DivState.default_state_id`.
+* Fixed recurring visibility actions.
+
+# Web Client:
+* Fixed `fatal_actions` in the `video` component logic
+* Fixed `video` unmount logic
+* Incorrect non-array `background`s will not throw error
+* Fixed default `visibility_percentage` value in the `disappear_action`
+* Fixed `disappear_action` with the percentage equal to `0`
+* Allowed expressions in the `visibility_percentage`
+
+# Kotlin JSON Builder:
+* Added extension div data creation.
+
+## 25.7.0
+
+# Android Client:
+* `compileSdkVersion` updated to 34
+* Supported margins for linear container separators.
+
+# iOS Client:
+* Added Xcode 14.3 & Xcode 15 support.
+* Fixed player pausing in VideoBlock.
+
+# Web Client:
+* Fixed update of the`gallery` with the `scroll_mode` = `paging` and `default_item` in rare cases
+
+## 25.6.0
+
+# JSON Schema:
+* Fixed accessibility for `DivSelect`
+
+# Android Client:
+* Fixed `min_width` for horizontal container
+* Fixed accessibility for `DivSelect`
+
+# iOS Client:
+* Fixed borders with rounded corners.
+* Fixed `DivGallery` with `match_parent` items layout.
+
+## 25.5.0
+
+# Android Client:
+
+* ExoPlayer version updated to `2.18.4`
+* Supported preview image in DivVideo
+* Fixed trigger rebind for DivData with the same DivDataTag
+
+# iOS Client:
+
+* Fixed disappear actions timer invalidation
+
+## 25.4.1
+
+# Android Client:
+
+* Fixed video player engine disconnecting from view when any activity stopped
+
+## 25.4.0
+
+# Android Client:
+
+* Added regex validator for `div-input`
+* Added support of disappear actions
+* Added support of text alignment to `div-input`
+* `DivStorage` forwards IllegalStateExceptions to `LoadDataResult` now
+
+# iOS Client:
+
+* Supported resume, pause, fatal actions in `DivVideo`
+* Supported disappearing actions
+
+# Web Client:
+
+Added:
+* Supported `dict` variable type
+
+## 25.3.0
+
+# JSON Schema:
+
+Additions:
+* Added `text_alignment_` properties for `div-input`
+
+# Android Client:
+
+Additions:
+* Added `disappear_actions`
+* Added `DivCustomContainerViewAdapter` with `DivStatePath` propagation to implementations
+
+Fixes:
+* Fixed `DivSelect` line height
+* Fixed permanent destroying video manager on view detach
+* Fixed big corner radius drawing
+
+# iOS Client:
+
+Additions:
+* Added `disappear_actions`
+* Added `fixed_length` mask for `DivInput`
+* Added `margins` for separators in `DivContainer`
+
+# Web Client:
+
+Added:
+* New content alignments in the `container`: `space-between`, `space-around`, `space-evenly`
+* `font_family` property is now supported in the different components. Keep in mind, for this property to work, you need to provide a `typefaceProvider`
+* `margins` for a `container` separators are now supported
+
+# Kotlin JSON Builder:
+
+* Supported properties from scheme up to 25.2.0
+
+## 25.2.0
+
+# JSON Schema:
+
+Additions:
+* Added `disappear_actions`
+* Added new variable type: `dict`
+* Added new types of content-alignment: `space-between`, `space-around`, `space-evenly`
+* Added new property of container separators: `margins`
+
+# Android Client:
+
+Additions:
+* Supported multiple `RenderScript` contexts
+
+Fixes:
+* Fixed patch applying to pager
+* Fixed animation of disappearing views
+* Fixed black screen and state saving after detach in video-custom
+* Fixed black screen at the end of playback after onPause
+* Fixed `VariableController` potential memory leaks
+
+# iOS Client:
+
+Fixes:
+* Fixed cursor offset in `DivInput`
+* Deserialization optimization
+
+# Web Client:
+
+Additions:
+* `disappear_actions` is now supported
+* Added a new `video` component
+
+## 25.1.0
+
+# JSON Schema:
+
+Additions:
+* Added `pause_actions` and `fatal_actions` to `div-video`
+
+Changes:
+* Combined `stream` and `video` source types in `div-video`
+
+# Android Client:
+
+Additions:
+* Supported `DivVideo`
+
+Fixes & Changes:
+* Fixed center alignment of elements with margins in containers
+* Rolled back of `DivCustomContainerViewAdapter`
+* Fixed double closing of `DivStorage` database on cards removing
+* Extended API of `DivPlayer.Observer`
+* Fixed array validation at JSON parsing
+
+# iOS Client:
+
+Additions:
+* Supported `DivVideo`
+
+# TypeScript JSON Builder:
+
+Updates:
+* Optimized `rewriteTemplateVersions`
+
+## 25.0.0
+
+# JSON Schema:
+
+* Added `input` `valdator`
+* Moved `input` mask's `raw_text_variable` into the base `mask`
+
+# Android Client:
+
+Fixes:
+
+* Fixed crash at hardware accelerated bitmap animation
+* Fixed binding indicator with pager within gallery items
+* Fixed various DivStorage concurrency issues
+* Fixed various currency input mask issues
+
+# iOS Client:
+
+* Removed metal, selecting feature flags
+* Supported getValue functions
+* Supported stretch parameter for DivImage
+
+# Web Client:
+
+Additions:
+* Supported expressions in `tabs` title
+* Added `currency` mask for the `input`
+
+Fixes:
+* Fixed `select` sizes, paddings and other size-related properties
+* Fixed `select` `hint` show logic to match other platforms
+* Fixed several cases with incorrect json processing (color is not a string, etc)
+* Changed `actions` without `url` processing logic to match other platforms (previusly they was ignored as incorrect)
+* Fixed `input` cursor logic for the Safari (for the iOS in partucular)
+
 ## 24.4.0
 
 # Android Client:

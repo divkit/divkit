@@ -4,8 +4,8 @@ import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt, MAX_INT, MIN_INT } from './bigint';
 
-export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url';
-export type VariableValue = string | number | bigint | boolean;
+export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict';
+export type VariableValue = string | number | bigint | boolean | null | undefined | object;
 
 export abstract class Variable<ValueType = any, TypeName = VariableType> {
     protected name: string;
@@ -189,22 +189,39 @@ export class UrlVariable extends Variable<string, 'url'> {
     }
 }
 
-export const TYPE_TO_CLASS = {
+export class DictVariable extends Variable<object, 'dict'> {
+    protected convertValue(value: unknown) {
+        if (typeof value !== 'object' || !value) {
+            throw new Error('Incorrect variable value');
+        }
+
+        return value;
+    }
+
+    protected fromString(_val: string): object {
+        throw new Error('Dict variable does not support setter from string');
+    }
+
+    getType(): 'dict' {
+        return 'dict';
+    }
+}
+
+export const TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableValue, VariableType>> = {
     string: StringVariable,
     number: NumberVariable,
     integer: IntegerVariable,
     boolean: BooleanVariable,
     color: ColorVariable,
-    url: UrlVariable
+    url: UrlVariable,
+    dict: DictVariable
 };
 
 export function createVariable(
     name: string,
     type: VariableType,
     value: unknown
-):
-    StringVariable | NumberVariable | IntegerVariable |
-    BooleanVariable | ColorVariable | UrlVariable {
+): InstanceType<typeof TYPE_TO_CLASS[typeof type]> {
     if (!(type in TYPE_TO_CLASS)) {
         throw new Error('Unsupported variable type');
     }
@@ -218,6 +235,9 @@ export function defaultValueByType(type: keyof typeof TYPE_TO_CLASS): VariableVa
     }
     if (type === 'boolean' || type === 'number') {
         return 0;
+    }
+    if (type === 'dict') {
+        return {};
     }
 
     return '';

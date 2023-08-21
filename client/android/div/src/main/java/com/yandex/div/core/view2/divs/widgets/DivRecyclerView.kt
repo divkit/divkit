@@ -19,14 +19,32 @@ import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivGallery
+import kotlin.math.abs
+import kotlin.math.atan
+import kotlin.math.ceil
 
 @Mockable
-internal class DivRecyclerView  @JvmOverloads constructor(
+internal class DivRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : BackHandlingRecyclerView(context, attrs, defStyleAttr), DivBorderSupports,
-    OnInterceptTouchEventListenerHost, TransientView, ExpressionSubscriber {
+) : BackHandlingRecyclerView(context, attrs, defStyleAttr),
+    DivBorderSupports,
+    OnInterceptTouchEventListenerHost,
+    TransientView,
+    ExpressionSubscriber {
+
+    private var scrollPointerId = -1
+    private var pointTouchX = 0
+    private var pointTouchY = 0
+    var scrollInterceptionAngle = NOT_INTERCEPT
+        set(value) {
+            field = if (value == NOT_INTERCEPT) {
+                NOT_INTERCEPT
+            } else {
+                abs(value) % 90
+            }
+        }
 
     private var borderDrawer: DivBorderDrawer? = null
     override val border: DivBorder?
@@ -50,7 +68,64 @@ internal class DivRecyclerView  @JvmOverloads constructor(
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         val intercepted = onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event) ?: false
-        return intercepted || super.onInterceptTouchEvent(event)
+
+        if (intercepted) return true
+        if (scrollInterceptionAngle == NOT_INTERCEPT) {
+            return super.onInterceptTouchEvent(event)
+        }
+
+        val action = event.actionMasked
+        val actionIndex = event.actionIndex
+
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                scrollPointerId = event.getPointerId(0)
+                pointTouchX = event.x.toTouchPoint()
+                pointTouchY = event.y.toTouchPoint()
+                return super.onInterceptTouchEvent(event)
+            }
+
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                scrollPointerId = event.getPointerId(actionIndex)
+                pointTouchX = event.getX(actionIndex).toTouchPoint()
+                pointTouchY = event.getY(actionIndex).toTouchPoint()
+                return super.onInterceptTouchEvent(event)
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val layoutManager = layoutManager ?: return false
+
+                val index = event.findPointerIndex(scrollPointerId)
+                if (index < 0) {
+                    return false
+                }
+
+                val x = event.getX(index).toTouchPoint()
+                val y = event.getY(index).toTouchPoint()
+
+                if (scrollState == SCROLL_STATE_DRAGGING) {
+                    return super.onInterceptTouchEvent(event)
+                }
+
+                val dx = abs(x - pointTouchX)
+                val dy = abs(y - pointTouchY)
+
+                if (dx == 0 && dy == 0) return false
+                
+                val angle = if (dx != 0) {
+                    val radian = atan(dy.toDouble() / dx.toDouble())
+                    radian * 180 / Math.PI
+                } else {
+                    RIGHT_ANGLE
+                }
+
+                return (layoutManager.canScrollHorizontally() && angle <= scrollInterceptionAngle) ||
+                        (layoutManager.canScrollVertically() && angle > scrollInterceptionAngle)
+            }
+            else -> {
+                return super.onInterceptTouchEvent(event)
+            }
+        }
     }
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
@@ -85,5 +160,15 @@ internal class DivRecyclerView  @JvmOverloads constructor(
         if (currentAdapter is Releasable) {
             currentAdapter.release()
         }
+    }
+
+    private fun Float.toTouchPoint(): Int {
+        return ceil(this).toInt()
+    }
+
+    companion object {
+        private const val RIGHT_ANGLE = 90.0
+
+        const val NOT_INTERCEPT = 0f
     }
 }

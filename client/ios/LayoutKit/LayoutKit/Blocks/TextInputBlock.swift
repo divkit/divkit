@@ -39,51 +39,83 @@ public final class TextInputBlock: BlockWithTraits {
     public static let `default`: Self = .keyboard(.default)
   }
 
+  public enum TextAlignmentHorizontal: Equatable {
+    case left
+    case center
+    case right
+    case start
+    case end
+  }
+
+  public enum TextAlignmentVertical: Equatable {
+    case top
+    case center
+    case bottom
+  }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
   public let textValue: Binding<String>
+  public let rawTextValue: Binding<String>?
   public let textTypo: Typo
   public let multiLineMode: Bool
   public let inputType: InputType
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
+  public let maskValidator: MaskValidator?
   public let path: UIElementPath
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
+  public let textAlignmentHorizontal: TextAlignmentHorizontal
+  public let textAlignmentVertical: TextAlignmentVertical
   public weak var parentScrollView: ScrollView?
+  public let validators: [TextInputValidator]?
+  public let layoutDirection: UserInterfaceLayoutDirection
 
   public init(
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
     hint: NSAttributedString,
     textValue: Binding<String>,
+    rawTextValue: Binding<String>?,
     textTypo: Typo,
     multiLineMode: Bool = true,
     inputType: InputType = .default,
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
+    maskValidator: MaskValidator? = nil,
     path: UIElementPath,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
-    parentScrollView: ScrollView? = nil
+    parentScrollView: ScrollView? = nil,
+    validators: [TextInputValidator]? = nil,
+    layoutDirection: UserInterfaceLayoutDirection,
+    textAlignmentHorizontal: TextAlignmentHorizontal = .start,
+    textAlignmentVertical: TextAlignmentVertical = .center
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.hint = hint
     self.textValue = textValue
+    self.rawTextValue = rawTextValue
     self.textTypo = textTypo
     self.multiLineMode = multiLineMode
     self.inputType = inputType
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
+    self.maskValidator = maskValidator
     self.path = path
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
     self.parentScrollView = parentScrollView
+    self.validators = validators
+    self.layoutDirection = layoutDirection
+    self.textAlignmentHorizontal = textAlignmentHorizontal
+    self.textAlignmentVertical = textAlignmentVertical
   }
 
   public var intrinsicContentWidth: CGFloat {

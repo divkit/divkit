@@ -267,6 +267,7 @@ app.use((ctx, next) => {
             'font-src yastatic.net',
             'style-src \'unsafe-inline\' yastatic.net',
             'img-src * data:',
+            'media-src *',
             'script-src yastatic.net \'self\'',
             'default-src none',
             'connect-src \'self\'',

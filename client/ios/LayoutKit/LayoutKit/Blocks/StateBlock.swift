@@ -36,7 +36,9 @@ extension StateBlock: CustomDebugStringConvertible {
 }
 
 extension Block {
-  public func addingStateBlock(ids: Set<String>) -> Block {
+  public func addingStateBlock(
+    ids: Set<String>
+  ) -> Block {
     StateBlock(child: self, ids: ids)
   }
 }

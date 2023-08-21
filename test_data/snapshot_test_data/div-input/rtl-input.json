@@ -1,0 +1,97 @@
+{
+  "description": "RTL input. Text in the input must be on the right side.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "configuration": {
+    "layout_direction": "rtl"
+  },
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16,
+        "top": 24
+      },
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "my_edit_text",
+        "type": "string",
+        "value": "Initial text"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "RTL Input"
+            },
+            {
+              "type": "input",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 20,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "alpha": 1,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "text_variable": "my_edit_text",
+              "hint_text": "Hint",
+              "hint_color": "#888888",
+              "highlight_color": "#e0bae3",
+              "line_height": 22,
+              "select_all_on_focus": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

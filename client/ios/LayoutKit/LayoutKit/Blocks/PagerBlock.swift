@@ -146,3 +146,20 @@ extension Array where Element == GalleryViewModel.Item {
     }
   }
 }
+
+extension BlocksState {
+  public func pagerViewState(for pagerPath: PagerPath?) -> PagerViewState? {
+    pagerPath.flatMap { pagerPath in
+      first(where: { pagerPath.matches($0.key) })?.value as? PagerViewState
+    }
+  }
+}
+
+extension PagerPath {
+  fileprivate func matches(_ path: UIElementPath) -> Bool {
+    if path.root != cardId {
+      return false
+    }
+    return path.leaf == pagerId
+  }
+}

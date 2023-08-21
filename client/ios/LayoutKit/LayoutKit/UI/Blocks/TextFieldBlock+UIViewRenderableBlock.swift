@@ -121,17 +121,24 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   func updateInteraction(_ interaction: TextFieldBlock.Interaction) {
+    postponedUpdateOfInteraction = nil
     switch interaction {
     case .unchanged:
       break
     case let .enabled(isFirstResponder):
       textField.isUserInteractionEnabled = true
-      guard textField.window != nil else { break }
-      if isFirstResponder {
-        textField.becomeFirstResponder()
-      } else {
-        textField.resignFirstResponder()
+      let setFirstResponder = { [weak self] in
+        if isFirstResponder {
+          _ = self?.textField.becomeFirstResponder()
+        } else {
+          _ = self?.textField.resignFirstResponder()
+        }
       }
+      guard textField.window != nil else { 
+        self.postponedUpdateOfInteraction = setFirstResponder
+        break 
+      }
+      setFirstResponder()
     case .disabled:
       textField.isUserInteractionEnabled = false
     }
@@ -203,6 +210,7 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private let placeholderLabel = Label()
   private let animationLabel = Label()
   private let textField = UITextField()
+  private var postponedUpdateOfInteraction: Action?
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -226,6 +234,14 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     super.layoutSubviews()
     layoutTextField(animated: false)
+  }
+
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if window != nil, let postponedUpdateOfInteraction {
+      self.postponedUpdateOfInteraction = nil
+      postponedUpdateOfInteraction()
+    }
   }
 
   private func layoutTextField(animated: Bool) {

@@ -2,26 +2,31 @@ package com.yandex.div.core;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
-import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
+import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.state.DivStateChangeListener;
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView;
+import com.yandex.div.internal.viewpool.FixedPreCreationProfile;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
-import com.yandex.div.core.player.DivPlayerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import dagger.Module;
 import dagger.Provides;
-
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
@@ -64,7 +69,9 @@ public class DivConfiguration {
     @NonNull
     private final DivTypefaceProvider mTypefaceProvider;
     @NonNull
-    private final DivTypefaceProvider mDisplayTypefaceProvider;
+    private final Map<String, DivTypefaceProvider> mTypefaceProviders;
+    @NonNull
+    private final ViewPreCreationProfile mViewPreCreationProfile;
     @NonNull
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
 
@@ -85,6 +92,8 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
 
+    private float mRecyclerScrollInterceptionAngle;
+
     private DivConfiguration(
             @NonNull DivImageLoader imageLoader,
             @NonNull DivActionHandler actionHandler,
@@ -102,7 +111,8 @@ public class DivConfiguration {
             @NonNull List<DivExtensionHandler> extensionHandlers,
             @NonNull DivDownloader divDownloader,
             @NonNull DivTypefaceProvider typefaceProvider,
-            @NonNull DivTypefaceProvider displayTypefaceProvider,
+            @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
+            @NonNull ViewPreCreationProfile viewPreCreationProfile,
             @NonNull ViewPoolProfiler.Reporter reporter,
             @Nullable GlobalVariableController globalVariableController,
             boolean tapBeaconsEnabled,
@@ -116,7 +126,8 @@ public class DivConfiguration {
             boolean viewPoolProfilingEnabled,
             boolean resourceCacheEnabled,
             boolean multipleStateChangeEnabled,
-            boolean bindOnAttachEnabled
+            boolean bindOnAttachEnabled,
+            float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -134,7 +145,7 @@ public class DivConfiguration {
         mExtensionHandlers = extensionHandlers;
         mDivDownloader = divDownloader;
         mTypefaceProvider = typefaceProvider;
-        mDisplayTypefaceProvider = displayTypefaceProvider;
+        mTypefaceProviders = typefaceProviders;
         mViewPoolReporter = reporter;
         mTapBeaconsEnabled = tapBeaconsEnabled;
         mVisibilityBeaconsEnabled = visibilityBeaconsEnabled;
@@ -144,11 +155,13 @@ public class DivConfiguration {
         mSupportHyphenation = supportHyphenation;
         mAccessibilityEnabled = accessibilityEnabled;
         mViewPoolEnabled = viewPoolEnabled;
+        mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mGlobalVariableController = globalVariableController;
+        mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
     }
 
     @Provides
@@ -305,10 +318,15 @@ public class DivConfiguration {
     }
 
     @Provides
-    @Named(Names.TYPEFACE_DISPLAY)
     @NonNull
-    public DivTypefaceProvider getDisplayTypefaceProvider() {
-        return mDisplayTypefaceProvider;
+    public Map<String, ? extends DivTypefaceProvider> getAdditionalTypefaceProviders() {
+        return mTypefaceProviders;
+    }
+
+    @Provides
+    @NonNull
+    public ViewPreCreationProfile getViewPreCreationProfile() {
+        return mViewPreCreationProfile;
     }
 
     @Provides
@@ -324,6 +342,7 @@ public class DivConfiguration {
     }
 
     @Provides
+    @kotlin.Deprecated(message = "Accessibility is always enabled")
     @ExperimentFlag(experiment = Experiment.ACCESSIBILITY_ENABLED)
     public boolean isAccessibilityEnabled() {
         return mAccessibilityEnabled;
@@ -333,6 +352,11 @@ public class DivConfiguration {
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     public boolean isBindOnAttachEnabled() {
         return mBindOnAttachEnabled;
+    }
+
+    @Provides
+    public float getRecyclerScrollInterceptionAngle() {
+        return mRecyclerScrollInterceptionAngle;
     }
 
     @NonNull
@@ -363,9 +387,9 @@ public class DivConfiguration {
         @Nullable
         private DivCustomViewAdapter mDivCustomViewAdapter;
         @Nullable
-        private DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
-        @Nullable
         private DivPlayerFactory mDivPlayerFactory;
+        @Nullable
+        private DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
         @Nullable
         private DivTooltipRestrictor mTooltipRestrictor;
         @NonNull
@@ -375,7 +399,9 @@ public class DivConfiguration {
         @Nullable
         private DivTypefaceProvider mTypefaceProvider;
         @Nullable
-        private DivTypefaceProvider mDisplayTypefaceProvider;
+        private Map<String, DivTypefaceProvider> mAdditionalTypefaceProviders;
+        @Nullable
+        private ViewPreCreationProfile mViewPreCreationProfile;
         @Nullable
         private ViewPoolProfiler.Reporter mViewPoolReporter;
         @Nullable
@@ -393,6 +419,7 @@ public class DivConfiguration {
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
+        private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -529,14 +556,22 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder additionalTypefaceProviders(
+            @NonNull Map<String, DivTypefaceProvider> typefaceProviders
+        ) {
+            mAdditionalTypefaceProviders = typefaceProviders;
+            return this;
+        }
+
+        @NonNull
         public Builder typefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
             mTypefaceProvider = typefaceProvider;
             return this;
         }
 
         @NonNull
-        public Builder displayTypefaceProvider(@NonNull DivTypefaceProvider typefaceProvider) {
-            mDisplayTypefaceProvider = typefaceProvider;
+        public Builder viewPreCreationProfile(@NonNull ViewPreCreationProfile viewPreCreationProfile) {
+            mViewPreCreationProfile = viewPreCreationProfile;
             return this;
         }
 
@@ -571,6 +606,7 @@ public class DivConfiguration {
         }
 
         @NonNull
+        @Deprecated
         public Builder enableAccessibility(boolean enable) {
             mAcccessibilityEnabled = enable;
             return this;
@@ -612,6 +648,11 @@ public class DivConfiguration {
             return this;
         }
 
+        public Builder recyclerScrollInterceptionAngle(float angle) {
+            mRecyclerScrollInterceptionAngle = angle;
+            return this;
+        }
+
         @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
@@ -634,7 +675,8 @@ public class DivConfiguration {
                     mExtensionHandlers,
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,
                     nonNullTypefaceProvider,
-                    mDisplayTypefaceProvider == null ? nonNullTypefaceProvider : mDisplayTypefaceProvider,
+                    mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,
+                    mViewPreCreationProfile == null ? new FixedPreCreationProfile() : mViewPreCreationProfile,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
                     mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
                     mTapBeaconsEnabled,
@@ -648,7 +690,8 @@ public class DivConfiguration {
                     mViewPoolProfilingEnabled,
                     mResourceCacheEnabled,
                     mMultipleStateChangeEnabled,
-                    mBindOnAttachEnabled);
+                    mBindOnAttachEnabled,
+                    mRecyclerScrollInterceptionAngle);
         }
     }
 }

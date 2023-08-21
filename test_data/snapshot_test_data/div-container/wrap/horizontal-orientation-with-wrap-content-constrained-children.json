@@ -51,7 +51,8 @@
             {
               "type": "item",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "text": "not constrained"
             },
@@ -66,7 +67,8 @@
             {
               "type": "item",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": false
               },
               "text": "not constrained element with very very long text"
             },
@@ -88,7 +90,7 @@
                 "type": "wrap_content",
                 "constrained": true
               },
-              "text": "constrained height, should not be shown"
+              "text": "constrained height"
             }
           ]
         }

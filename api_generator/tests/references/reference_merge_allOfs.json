@@ -4,8 +4,7 @@
       "common.json": {
         "non_empty_string": {
           "type": "string",
-          "minLength": 1,
-          "clientMinLength": 1
+          "minLength": 1
         },
         "color": {
           "type": "string",
@@ -24,13 +23,226 @@
           "constraint": "number >= 0"
         },
         "boolean_int": {
-          "type": "integer",
-          "enum": [
-            0,
-            1
-          ],
-          "format": "boolean"
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
+            }
+          ]
         }
+      }
+    },
+    {
+      "entity.json": {
+        "anyOf": [
+          {
+            "$ref": "entity_with_array.json"
+          },
+          {
+            "$ref": "entity_with_array_of_enums.json"
+          },
+          {
+            "$ref": "entity_with_array_of_expressions.json"
+          },
+          {
+            "$ref": "entity_with_array_of_nested_items.json"
+          },
+          {
+            "$ref": "entity_with_array_with_transform.json"
+          },
+          {
+            "$ref": "entity_with_complex_property.json"
+          },
+          {
+            "$ref": "entity_with_complex_property_with_default_value.json"
+          },
+          {
+            "$ref": "entity_with_entity_property.json"
+          },
+          {
+            "$ref": "entity_with_optional_complex_property.json"
+          },
+          {
+            "$ref": "entity_with_optional_property.json"
+          },
+          {
+            "$ref": "entity_with_optional_string_enum_property.json"
+          },
+          {
+            "$ref": "entity_with_property_with_default_value.json"
+          },
+          {
+            "$ref": "entity_with_raw_array.json"
+          },
+          {
+            "$ref": "entity_with_required_property.json"
+          },
+          {
+            "$ref": "entity_with_simple_properties.json"
+          },
+          {
+            "$ref": "entity_with_strict_array.json"
+          },
+          {
+            "$ref": "entity_with_string_array_property.json"
+          },
+          {
+            "$ref": "entity_with_string_enum_property.json"
+          },
+          {
+            "$ref": "entity_with_string_enum_property_with_default_value.json"
+          },
+          {
+            "$ref": "entity_without_properties.json"
+          }
+        ]
+      }
+    },
+    {
+      "entity_with_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$ref": "entity.json"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_enums.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_enums"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "first",
+                "second"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_expressions.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_expressions"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "common.json#/non_empty_string"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_nested_items.json": {
+        "type": "object",
+        "definitions": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "property": {
+                "$ref": "common.json#/non_empty_string"
+              },
+              "entity": {
+                "$ref": "entity.json"
+              }
+            },
+            "required": [
+              "property",
+              "entity"
+            ]
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_nested_items"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/item"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_with_transform.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_with_transform"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$ref": "common.json#/color"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
       }
     },
     {
@@ -199,6 +411,84 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {
+          "int_prop": {
+            "$ref": "common.json#/non_negative_integer",
+            "default_value": "0"
+          },
+          "url_prop": {
+            "$ref": "common.json#/url",
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru"
+          },
+          "nested": {
+            "type": "object",
+            "properties": {
+              "int": {
+                "alias_dart": "iNum",
+                "$ref": "#/definitions/int_prop"
+              },
+              "url": {
+                "$ref": "#/definitions/url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "$description": "translations.json#/entity_with_property_with_default_value_nested",
+            "required": [
+              "non_optional"
+            ]
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "alias_dart": "iNum",
+            "$ref": "#/definitions/int_prop"
+          },
+          "url": {
+            "$ref": "#/definitions/url_prop"
+          },
+          "nested": {
+            "$ref": "#/definitions/nested"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
+      "entity_with_raw_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_raw_array"
+            ]
+          },
+          "array": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
       "entity_with_required_property.json": {
         "type": "object",
         "properties": {
@@ -215,6 +505,121 @@
         "required": [
           "type",
           "property"
+        ]
+      }
+    },
+    {
+      "entity_with_simple_properties.json": {
+        "type": "object",
+        "$description": "translations.json#/entity_with_simple_properties",
+        "swift_protocols": "EntityProtocol",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_simple_properties"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "supports_expressions": false,
+            "$description": "translations.json#/entity_with_simple_properties_id"
+          },
+          "string": {
+            "$ref": "common.json#/non_empty_string",
+            "$description": "translations.json#/entity_with_simple_properties_string",
+            "platforms": [
+              "android",
+              "ios",
+              "web"
+            ]
+          },
+          "integer": {
+            "type": "integer",
+            "long_type": true,
+            "$description": "translations.json#/entity_with_simple_properties_integer"
+          },
+          "double": {
+            "alias_dart": "dNum",
+            "type": "number",
+            "$description": "translations.json#/entity_with_simple_properties_double"
+          },
+          "boolean": {
+            "type": "boolean",
+            "$description": "translations.json#/entity_with_simple_properties_boolean"
+          },
+          "boolean_int": {
+            "$ref": "common.json#/boolean_int",
+            "$description": "translations.json#/entity_with_simple_properties_boolean_int",
+            "deprecated": true,
+            "platforms": [
+              "android"
+            ]
+          },
+          "positive_integer": {
+            "$ref": "common.json#/positive_integer",
+            "$description": "translations.json#/entity_with_simple_properties_positive_integer",
+            "platforms": []
+          },
+          "color": {
+            "$ref": "common.json#/color",
+            "$description": "translations.json#/entity_with_simple_properties_color"
+          },
+          "url": {
+            "$ref": "common.json#/url"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
+      "entity_with_strict_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_strict_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$ref": "entity.json"
+            },
+            "minItems": 1,
+            "strictParsing": true
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_string_array_property.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_string_array_property"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
         ]
       }
     },
@@ -330,383 +735,6 @@
           "en": "Color.",
           "ru": "Цвет."
         }
-      }
-    },
-    {
-      "entity.json": {
-        "anyOf": [
-          {
-            "$ref": "entity_with_array.json"
-          },
-          {
-            "$ref": "entity_with_array_of_enums.json"
-          },
-          {
-            "$ref": "entity_with_array_of_expressions.json"
-          },
-          {
-            "$ref": "entity_with_array_of_nested_items.json"
-          },
-          {
-            "$ref": "entity_with_array_with_transform.json"
-          },
-          {
-            "$ref": "entity_with_complex_property.json"
-          },
-          {
-            "$ref": "entity_with_complex_property_with_default_value.json"
-          },
-          {
-            "$ref": "entity_with_entity_property.json"
-          },
-          {
-            "$ref": "entity_with_optional_complex_property.json"
-          },
-          {
-            "$ref": "entity_with_optional_property.json"
-          },
-          {
-            "$ref": "entity_with_optional_string_enum_property.json"
-          },
-          {
-            "$ref": "entity_with_property_with_default_value.json"
-          },
-          {
-            "$ref": "entity_with_required_property.json"
-          },
-          {
-            "$ref": "entity_with_simple_properties.json"
-          },
-          {
-            "$ref": "entity_with_strict_array.json"
-          },
-          {
-            "$ref": "entity_with_string_array_property.json"
-          },
-          {
-            "$ref": "entity_with_string_enum_property.json"
-          },
-          {
-            "$ref": "entity_with_string_enum_property_with_default_value.json"
-          },
-          {
-            "$ref": "entity_without_properties.json"
-          }
-        ]
-      }
-    },
-    {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {
-          "int_prop": {
-            "$ref": "common.json#/non_negative_integer",
-            "default_value": "0"
-          },
-          "url_prop": {
-            "$ref": "common.json#/url",
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru"
-          },
-          "nested": {
-            "type": "object",
-            "properties": {
-              "int": {
-                "alias_dart": "iNum",
-                "$ref": "#/definitions/int_prop"
-              },
-              "url": {
-                "$ref": "#/definitions/url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "$description": "translations.json#/entity_with_property_with_default_value_nested",
-            "required": [
-              "non_optional"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "alias_dart": "iNum",
-            "$ref": "#/definitions/int_prop"
-          },
-          "url": {
-            "$ref": "#/definitions/url_prop"
-          },
-          "nested": {
-            "$ref": "#/definitions/nested"
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
-      "entity_with_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$ref": "entity.json"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_enums.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_enums"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "first",
-                "second"
-              ]
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_expressions.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_expressions"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "common.json#/non_empty_string"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_nested_items.json": {
-        "type": "object",
-        "definitions": {
-          "item": {
-            "type": "object",
-            "properties": {
-              "property": {
-                "$ref": "common.json#/non_empty_string"
-              },
-              "entity": {
-                "$ref": "entity.json"
-              }
-            },
-            "required": [
-              "property",
-              "entity"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_nested_items"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/item"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_with_transform.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_with_transform"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$ref": "common.json#/color"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_strict_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_strict_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$ref": "entity.json"
-            },
-            "minItems": 1,
-            "strictParsing": true
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_string_array_property.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_string_array_property"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_simple_properties.json": {
-        "type": "object",
-        "$description": "translations.json#/entity_with_simple_properties",
-        "swift_protocols": "EntityProtocol",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_simple_properties"
-            ]
-          },
-          "id": {
-            "type": "integer",
-            "supports_expressions": false,
-            "$description": "translations.json#/entity_with_simple_properties_id"
-          },
-          "string": {
-            "$ref": "common.json#/non_empty_string",
-            "$description": "translations.json#/entity_with_simple_properties_string",
-            "platforms": [
-              "android",
-              "ios",
-              "web"
-            ]
-          },
-          "integer": {
-            "type": "integer",
-            "long_type": true,
-            "$description": "translations.json#/entity_with_simple_properties_integer"
-          },
-          "double": {
-            "alias_dart": "dNum",
-            "type": "number",
-            "$description": "translations.json#/entity_with_simple_properties_double"
-          },
-          "boolean": {
-            "type": "boolean",
-            "$description": "translations.json#/entity_with_simple_properties_boolean"
-          },
-          "boolean_int": {
-            "$ref": "common.json#/boolean_int",
-            "$description": "translations.json#/entity_with_simple_properties_boolean_int",
-            "deprecated": true,
-            "platforms": [
-              "android"
-            ]
-          },
-          "positive_integer": {
-            "$ref": "common.json#/positive_integer",
-            "$description": "translations.json#/entity_with_simple_properties_positive_integer",
-            "platforms": []
-          },
-          "color": {
-            "$ref": "common.json#/color",
-            "$description": "translations.json#/entity_with_simple_properties_color"
-          },
-          "url": {
-            "$ref": "common.json#/url"
-          }
-        },
-        "required": [
-          "type"
-        ]
       }
     }
   ]

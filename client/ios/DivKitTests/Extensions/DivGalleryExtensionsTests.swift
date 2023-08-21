@@ -125,37 +125,6 @@ final class DivGalleryExtensionsTests: XCTestCase {
   ) throws {
     _ = try makeBlock(fromFile: "vertical_gallery_mixed_width_items")
   }
-
-  func test_WhenContextContainsGalleryResizableInsets_UsesThemToBuildBlocks() throws {
-    let insets = InsetMode.Resizable(minValue: 12, maxViewportSize: 240)
-    let context = DivBlockModelingContext(galleryResizableInsets: insets)
-
-    let block = try makeBlock(
-      fromFile: "gallery",
-      context: context
-    ) as? WrapperBlock
-    let gallery = block?.child as? GalleryBlock
-
-    XCTAssertEqual(gallery?.model.metrics.axialInsetMode, .resizable(params: insets))
-  }
-
-  func test_WhenContextContainsGalleryResizableInsets_DiscardsThemForNestedBlocks() throws {
-    let context = DivBlockModelingContext(
-      galleryResizableInsets: .init(minValue: 12, maxViewportSize: 240)
-    )
-
-    let block = try makeBlock(
-      fromFile: "nested_gallery",
-      context: context
-    ) as? WrapperBlock
-
-    let gallery = block?.child as? GalleryBlock
-
-    let nestedGalleryBlock = gallery?.model.items.first?.content as? WrapperBlock
-    let nestedGallery = nestedGalleryBlock?.child as? GalleryBlock
-    let expectedInsets = SideInsets.zero
-    XCTAssertEqual(nestedGallery?.model.metrics.axialInsetMode, .fixed(values: expectedInsets))
-  }
 }
 
 private func makeBlock(

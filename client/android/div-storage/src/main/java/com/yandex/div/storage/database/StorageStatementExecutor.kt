@@ -2,6 +2,7 @@ package com.yandex.div.storage.database
 
 import android.database.Cursor
 import android.database.SQLException
+import android.database.sqlite.SQLiteFullException
 import android.database.sqlite.SQLiteStatement
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
@@ -12,7 +13,7 @@ import com.yandex.div.storage.util.closeSilently
 import com.yandex.div.storage.util.endTransactionSilently
 import java.io.Closeable
 
-internal open class StorageStatementExecutor(
+internal class StorageStatementExecutor(
         private val dbProvider: () -> DatabaseOpenHelper.Database,
 ) {
     /**
@@ -25,8 +26,8 @@ internal open class StorageStatementExecutor(
             vararg statements: StorageStatement
     ): ExecutionResult {
         assertOnWorkerThread()
-        val db = dbProvider()
-        val compiler = ClosableSqlCompiler(db)
+        var db: DatabaseOpenHelper.Database? = null
+        var compiler: ClosableSqlCompiler? = null
         var statementNumber = 1
         var lastStatement: StorageStatement? = null
         val exceptions = mutableListOf<DivStorageErrorException>()
@@ -45,7 +46,7 @@ internal open class StorageStatementExecutor(
             }
         }
 
-        fun executeCatchingSqlException(statement: StorageStatement) {
+        fun executeCatchingSqlException(compiler: ClosableSqlCompiler, statement: StorageStatement) {
             try {
                 statement.execute(compiler)
             } catch (e: SQLException) {
@@ -56,10 +57,12 @@ internal open class StorageStatementExecutor(
         }
 
         try {
+            db = dbProvider()
+            compiler = ClosableSqlCompiler(db)
             db.beginTransaction()
             statements.forEach { statement ->
                 lastStatement = statement
-                executeCatchingSqlException(statement)
+                executeCatchingSqlException(compiler, statement)
                 statementNumber++
             }
             db.setTransactionSuccessful()
@@ -70,10 +73,12 @@ internal open class StorageStatementExecutor(
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } catch (e: IllegalStateException) {
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
+        } catch (e: SQLiteFullException) {
+            exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } finally {
-            db.endTransactionSilently()
-            compiler.close()
-            db.closeSilently()
+            db?.endTransactionSilently()
+            compiler?.close()
+            db?.closeSilently()
         }
         return ExecutionResult(exceptions)
     }
@@ -104,7 +109,7 @@ private class ClosableSqlCompiler(private val db: DatabaseOpenHelper.Database) :
     }
 
     override fun compileQuery(sql: String, vararg selectionArgs: String): ReadState {
-        return ReadState(db) {
+        return ReadState {
             db.rawQuery(sql, selectionArgs).also { createdCursors.add(it) }
         }
     }
@@ -120,5 +125,4 @@ private class ClosableSqlCompiler(private val db: DatabaseOpenHelper.Database) :
         }
         createdCursors.clear()
     }
-
 }

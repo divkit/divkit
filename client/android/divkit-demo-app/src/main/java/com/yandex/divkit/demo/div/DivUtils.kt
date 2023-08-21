@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.div
 import android.app.Activity
 import android.net.Uri
 import android.view.ContextThemeWrapper
+import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
@@ -12,6 +13,7 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.viewpool.FixedPreCreationProfile
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
@@ -27,6 +29,7 @@ import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
+import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import org.json.JSONObject
 
@@ -47,6 +50,7 @@ fun divConfiguration(
         .enableViewPool(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)
         )
+        .viewPreCreationProfile(FixedPreCreationProfile())
         .enableViewPoolProfiling(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_PROFILING_ENABLED)
         )
@@ -56,7 +60,7 @@ fun divConfiguration(
         .tooltipRestrictor { _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
-        .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(activity))
+        .additionalTypefaceProviders(mapOf("display" to YandexSansDisplayDivTypefaceProvider(activity)))
         .viewPoolReporter(object : ViewPoolProfiler.Reporter {
             override fun reportEvent(message: String, result: Map<String, Any>) {
                 reporter.reportEvent(message, result)
@@ -76,14 +80,15 @@ fun divContext(
         .configBuilder()
         .build()
 
-    return divContext(activity, configuration)
+    return divContext(activity, configuration, activity.lifecycleOwner)
 }
 
 fun divContext(
     baseContext: ContextThemeWrapper,
-    configuration: DivConfiguration
+    configuration: DivConfiguration,
+    lifecycleOwner: LifecycleOwner?
 ): Div2Context {
-    return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo)
+    return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo, lifecycleOwner)
 }
 
 open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {

@@ -5,20 +5,21 @@ import BaseUIPublic
 import LayoutKit
 
 final class ErrorListView: UIView {
-  private let listView: UIView
+  private let errorView: UIView
   private let errorString: String
 
   init(errors: [String]) {
     errorString = errors.joined(separator: "\n")
-    self.listView = makeErrorListView(errorsString: errorString, errorsCount: errors.count)
-    super.init(frame: .zero)
-
-    backgroundColor = .white
-    addSubview(listView)
+    let block = makeErrorBlock(errorsString: errorString, errorsCount: errors.count)
+    self.errorView = block.makeBlockView()
+    let blockFrame = CGRect(origin: .zero, size: block.intrinsicSize)
+    super.init(frame: blockFrame)
+    self.frame = blockFrame
+    addSubview(errorView)
   }
 
   public override func layoutSubviews() {
-    self.listView.frame = self.bounds.inset(by: safeAreaInsets)
+    self.errorView.frame = self.bounds.inset(by: safeAreaInsets)
   }
 
   @available(*, unavailable)
@@ -45,16 +46,19 @@ extension ErrorListView: UIActionEventPerforming {
   }
 }
 
-private func makeErrorListView(errorsString: String, errorsCount: Int) -> UIView {
+private func makeErrorBlock(errorsString: String, errorsCount: Int) -> Block {
   try! ContainerBlock(
     layoutDirection: .vertical,
-    widthTrait: .resizable,
-    heightTrait: .resizable,
+    widthTrait: .intrinsic,
+    heightTrait: .intrinsic,
     children: [
       .init(content: makeHeaderBlock(errorsCount: errorsCount)),
       .init(content: makeErrorListBlock(errorString: errorsString)),
     ]
-  ).addingDecorations(backgroundColor: .white).makeBlockView()
+  ).addingHorizontalGaps(15)
+    .addingVerticalGaps(top: 0, bottom: 15)
+    .addingDecorations(backgroundColor: .init(white: 0.8, alpha: 1))
+    .addingDecorations(border: .init(color: .black, width: 3))
 }
 
 private func makeCopyButtonBlock() -> Block {
@@ -98,7 +102,7 @@ private func makeTitleBlock(errorsCount: Int) -> Block {
 
   return try! ContainerBlock(
     layoutDirection: .horizontal,
-    widthTrait: .resizable,
+    widthTrait: .intrinsic,
     heightTrait: .fixed(headerHeight),
     axialAlignment: .center,
     children: [.init(content: errorsBlock)]
@@ -108,10 +112,10 @@ private func makeTitleBlock(errorsCount: Int) -> Block {
 private func makeHeaderBlock(errorsCount: Int) -> Block {
   try! ContainerBlock(
     layoutDirection: .horizontal,
-    widthTrait: .resizable,
+    widthTrait: .intrinsic,
     heightTrait: .fixed(headerHeight),
     axialAlignment: .leading,
-    gaps: [16, 20, 20, 16],
+    gaps: [0, 20, 20, 0],
     children: [
       .init(content: makeCloseButtonBlock()),
       .init(content: makeCopyButtonBlock()),
@@ -122,7 +126,7 @@ private func makeHeaderBlock(errorsCount: Int) -> Block {
 
 private func makeErrorListBlock(errorString: String) -> Block {
   let textBlock = TextBlock(
-    widthTrait: .resizable,
+    widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 350),
     heightTrait: .intrinsic,
     text: errorString.with(typo: errorsTypo),
     verticalAlignment: .leading,
@@ -135,16 +139,15 @@ private func makeErrorListBlock(errorString: String) -> Block {
     path: rootPath,
     direction: .vertical,
     crossAlignment: .leading,
-    widthTrait: .resizable,
-    heightTrait: .resizable
-  ).addingEdgeInsets(insets, clipsToBounds: true, forceWrapping: true)
+    widthTrait: .intrinsic,
+    heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 500)
+  ).addingDecorations(forceWrapping: true)
 }
 
 private let closeActionURL = URL(string: "errorList://close")!
 private let copyActionURL = URL(string: "errorList://copy")!
 private let rootPath: UIElementPath = "ErrorList"
 
-private let insets = EdgeInsets(vertical: 0, horizontal: 16)
 private let headerHeight: CGFloat = 56
 private let headerTypo = Typo(size: .textL, weight: .medium).with(height: .textL)
 private let errorsTypo = Typo(size: .textM, weight: .regular)

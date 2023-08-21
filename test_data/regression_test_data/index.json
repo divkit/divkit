@@ -160,6 +160,9 @@
     },
     {
       "title": "Gallery paging default item states",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -214,6 +217,9 @@
     },
     {
       "title": "Pager scroll",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager",
         "scroll"
@@ -230,6 +236,9 @@
     },
     {
       "title": "Pager item actions",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager"
       ],
@@ -244,6 +253,9 @@
     },
     {
       "title": "Pager default item states",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivPager"
       ],
@@ -853,9 +865,12 @@
       "file": "action_animation/button_press_action_animations.json"
     },
     {
-      "title": "Visibility_actions in gallery",
+      "title": "Visibility actions in gallery",
+      "automated": [
+        "web"
+      ],
       "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Scroll the gallery",
@@ -868,9 +883,35 @@
       "file": "gallery/gallery_swipe.json"
     },
     {
-      "title": "Visibility_actions in pager",
+      "title": "Disappear actions in gallery",
+      "automated": [
+        "web"
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ],
       "tags": [
-        "Visibility_actions",
+        "Disappear_actions"
+      ],
+      "steps": [
+        "Scroll the gallery",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Gallery data was opened",
+        "The text changes along with the item that disappeared",
+        "Items disappearing logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+      ],
+      "file": "gallery/gallery_swipe_disappear_action.json"
+    },
+    {
+      "title": "Visibility actions in pager",
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions",
         "DivPager"
       ],
       "steps": [
@@ -881,28 +922,15 @@
         "Pager data was opened",
         "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
       ],
-      "file": "action_visibility/pager.json"
-    },
-    {
-      "title": "Visibility_actions on change page in pager",
-      "tags": [
-        "Visibility_actions",
-        "DivPager"
-      ],
-      "steps": [
-        "Swipe cards",
-        "Check logs"
-      ],
-      "expected_results": [
-        "Pager data is logged",
-        "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
-      ],
-      "file": "action_visibility/swipe_div_pager.json"
+      "file": "visibility_actions/pager.json"
     },
     {
       "title": "Visibility actions performed and logged in pager",
+      "automated": [
+        "web"
+      ],
       "tags": [
-        "Visibility_actions",
+        "visibility_actions",
         "DivPager"
       ],
       "steps": [
@@ -913,26 +941,15 @@
         "Logged evens logViewShown(cardId = ..., id = content_item_show0) logViewShown(cardId = ..., id = container)",
         "Cards description was changed"
       ],
-      "file": "action_visibility/swipe_div_pager.json"
-    },
-    {
-      "title": "Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility",
-      "tags": [
-        "Visibility_actions",
-        "DivPager"
-      ],
-      "steps": [
-        "Check logs"
-      ],
-      "expected_results": [
-        "First element logged, example logViewShown(cardId = ..., id = content_item_show:0) logViewShown(cardId = ..., id = goose_shown)"
-      ],
-      "file": "action_visibility/pager.json"
+      "file": "visibility_actions/swipe_div_pager.json"
     },
     {
       "title": "Send select Pager using Div2View.tryLogVisibility",
+      "automated": [
+        "web"
+      ],
       "tags": [
-        "Visibility_actions",
+        "visibility_actions",
         "DivPager"
       ],
       "platforms": [
@@ -948,27 +965,15 @@
         "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
         "Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
       ],
-      "file": "action_visibility/pager_selected_actions.json"
+      "file": "visibility_actions/pager_selected_actions.json"
     },
     {
-      "title": "Grouped bulkActions logged in 'dispatchActions:'",
+      "title": "Visibility actions for default_item",
+      "automated": [
+        "web"
+      ],
       "tags": [
-        "Visibility_actions"
-      ],
-      "steps": [
-        "Swipe to change tab",
-        "Check logs"
-      ],
-      "expected_results": [
-        "Tabs changes on swipe",
-        "Logged item's visibility, exaple logViewShown(cardId = ..., id = content_item_show) logViewShown(cardId = ..., id = container)"
-      ],
-      "file": "action_visibility/swipe_div_pager.json"
-    },
-    {
-      "title": "Visibility_actions for default_item",
-      "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Check logs"
@@ -977,12 +982,15 @@
         "Card is opened",
         "Card visibility logged, example logViewShown(cardId = ..., id = comments_counter_show:4)"
       ],
-      "file": "action_visibility/default_item.json"
+      "file": "visibility_actions/default_item.json"
     },
     {
       "title": "Nested visibility actions",
+      "automated": [
+        "web"
+      ],
       "tags": [
-        "Visibility_actions"
+        "visibility_actions"
       ],
       "steps": [
         "Click EXPAND",
@@ -992,7 +1000,42 @@
         "Elements are expanded",
         "Visibility actions logged, example logViewShown(cardId = ..., id = separator) logViewShown(cardId = ..., id = text) logViewShown(cardId = ..., id = text2) logViewShown(cardId = ..., id = comment_state) logViewShown(cardId = ..., id = comment_01) logViewShown(cardId = ..., id = comment_02) logViewShown(cardId = ..., id = comment_03) logViewShown(cardId = ..., id = comment_04)"
       ],
-      "file": "action_visibility/article.json"
+      "file": "visibility_actions/article.json"
+    },
+    {
+      "title": "Visibility action in visible block",
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "visibility_actions"
+      ],
+      "steps": [
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/visibility_aciton.json"
+    },
+    {
+      "title": "Visibility actions in DivState",
+      "automated": [
+        "web"
+      ],
+      "tags": [
+        "DivState",
+        "visibility_actions"
+      ],
+      "steps": [
+        "Press 'State 2' button",
+        "Wait 2 seconds"
+      ],
+      "expected_results": [
+        "State changes",
+        "Text is changed to 'Triggered!'"
+      ],
+      "file": "visibility_actions/states.json"
     },
     {
       "title": "Variables in gallery",
@@ -1109,7 +1152,7 @@
         "On click on test button text field set correct visibility.",
         "Showing text field is logged."
       ],
-      "file": "action_visibility/set_visibility.json"
+      "file": "set_visibility.json"
     },
     {
       "title": "Showing animation on image loaded",
@@ -1262,6 +1305,9 @@
     },
     {
       "title": "Nested change bounds transitions",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Click 'PRESS HERE'",
         "Click 'PRESS AGAIN'"
@@ -1435,6 +1481,17 @@
       "file": "animations/lottie/lottie_animations.json"
     },
     {
+      "title": "Lottie gallery",
+      "platforms": [
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/lottie_gallery.json"
+    },
+    {
       "title": "Lottie cycled animations",
       "platforms": [
         "android"
@@ -1460,6 +1517,9 @@
     },
     {
       "title": "Grid layout",
+      "automated": [
+        "web"
+      ],
       "file": "grid_layout.json"
     },
     {
@@ -1501,7 +1561,17 @@
       "expected_results": [
         "Two-column grid with seven cards playing different rive animations"
       ],
-      "file": "rive_animation.json"
+      "file": "animations/rive/rive_animation.json"
+    },
+    {
+      "title": "Rive gallery",
+      "platforms": [
+        "ios"
+      ],
+      "expected_results": [
+        "Gallery with seven cards playing different rive animations"
+      ],
+      "file": "animations/rive/rive_gallery.json"
     },
     {
       "title": "Rive animation (loop=pingPong)",
@@ -1511,7 +1581,7 @@
       "expected_results": [
         "Infinite animation with changing direction"
       ],
-      "file": "rive_ping_pong_loop.json"
+      "file": "animations/rive/rive_ping_pong_loop.json"
     },
     {
       "title": "Rive animation (loop=oneShot)",
@@ -1525,7 +1595,7 @@
       "expected_results": [
         "Animation plays once then stops"
       ],
-      "file": "rive_one_shot_loop.json"
+      "file": "animations/rive/rive_one_shot_loop.json"
     },
     {
       "title": "Visibility transition trigger",
@@ -1590,6 +1660,9 @@
     },
     {
       "title": "Gallery items posing",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -1707,7 +1780,8 @@
       "title": "Input mask",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -1728,12 +1802,35 @@
       "title": "Phone input mask",
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "DivInput"
       ],
       "file": "phone_input_mask.json"
+    },
+    {
+      "title": "Regex input validator",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "regex_input_validator.json"
+    },
+    {
+      "title": "Expression input validator",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "expression_input_validator.json"
     },
     {
       "title": "Currency input mask",
@@ -1748,14 +1845,27 @@
     },
     {
       "title": "Video with controls",
-      "platforms": [
-        "android",
-        "ios"
-      ],
       "tags": [
         "DivVideo"
       ],
       "file": "video/video_with_controls.json"
+    },
+    {
+      "title": "Video volume control",
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_volume_control.json"
+    },
+    {
+      "title": "Disappearing actions with DivVideo",
+      "tags": [
+        "DivVideo",
+        "Disappear action",
+        "Visibility_actions",
+        "DivGallery"
+      ],
+      "file": "video/video_in_gallery.json"
     },
     {
       "title": "Video stream",
@@ -1767,6 +1877,133 @@
         "DivVideo"
       ],
       "file": "video/video_stream.json"
+    },
+    {
+      "title": "Video fullscreen",
+      "tags": [
+        "DivVideo",
+        "Disappear action",
+        "Visibility_actions",
+        "DivGallery"
+      ],
+      "file": "video/fullscreen_video_in_recycler.json"
+    },
+    {
+      "title": "Video in pager",
+      "tags": [
+        "DivVideo",
+        "DivPager"
+      ],
+      "file": "video/video_in_pager.json"
+    },
+    {
+      "title": "Video callbacks",
+      "tags": [
+        "DivVideo"
+      ],
+      "file": "video/video_callbacks.json"
+    },
+    {
+      "title": "Variables in default state id",
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Check default state"
+      ],
+      "expected_results": [
+        "OK - content in text"
+      ],
+      "file": "state/default_state_id.json"
+    },
+    {
+      "title": "Tooltips",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "Tooltips",
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Tooltips are shown",
+        "Tooltips are hidden when tapping into an empty area",
+        "The tooltip is closed by tapping on the cross button and disappears when the Disappear Action is called"
+      ],
+      "file": "tooltips.json"
+    },
+    {
+      "title": "Persistent values storage",
+      "platforms": [
+        "ios"
+      ],
+      "steps": [
+        "Press 'Store value for 10 seconds'",
+        "Reopen this json in less than 10 seconds",
+        "Reopen this json in after 10 seconds"
+      ],
+      "expected_results": [
+        "In the first open there should be the text 'Nothing stored'",
+        "In the second open there should be the text 'Stored'",
+        "In the last open there should be again the text 'Nothing stored'"
+      ],
+      "file": "stored_value.json"
+    },
+    {
+      "title": "Patch container",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/container.json"
+    },
+    {
+      "title": "Patch gallery",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/gallery.json"
+    },
+    {
+      "title": "Patch grid",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/grid.json"
+    },
+    {
+      "title": "Patch pager",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second"
+      ],
+      "expected_results": [
+        "2 orignal items should be replaced with the new ones, which background is red"
+      ],
+      "file": "patch/pager.json"
     }
   ]
 }

@@ -45,6 +45,13 @@
         }
     }
 
+    function replaceItems(items: DivBaseData[]): void {
+        json = {
+            ...json,
+            items
+        };
+    }
+
     $: items = (!hasItemsError && json.items || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
@@ -272,6 +279,8 @@
         {templateContext}
         {layoutParams}
         customPaddings={true}
+        parentOf={json.items}
+        {replaceItems}
     >
         <div
             class="{css.pager__items} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
@@ -279,16 +288,18 @@
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}
         >
-            {#each items as item}
-                <div class={css.pager__item}>
-                    <Unknown
-                        div={item.json}
-                        templateContext={item.templateContext}
-                        origJson={item.origJson}
-                        layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
-                    />
-                </div>
-            {/each}
+            {#key items}
+                {#each items as item}
+                    <div class={css.pager__item}>
+                        <Unknown
+                            div={item.json}
+                            templateContext={item.templateContext}
+                            origJson={item.origJson}
+                            layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
+                        />
+                    </div>
+                {/each}
+            {/key}
         </div>
     </Outer>
 {/if}

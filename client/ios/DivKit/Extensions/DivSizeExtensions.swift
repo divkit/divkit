@@ -28,6 +28,16 @@ extension DivSize {
     }
   }
 
+  func makeHeightLayoutTrait(
+    with expressionResolver: ExpressionResolver,
+    aspectRatio: CGFloat?
+  ) -> LayoutTrait {
+    if aspectRatio != nil {
+      return .resizable
+    }
+    return makeLayoutTrait(with: expressionResolver)
+  }
+
   var isIntrinsic: Bool {
     switch self {
     case .divFixedSize, .divMatchParentSize:

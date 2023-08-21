@@ -8,6 +8,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
+import com.yandex.div.core.view2.divs.gallery.ScrollPosition
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.DivGallery
 
@@ -142,12 +143,19 @@ internal class DivLinearLayoutManager(
 
     override fun getLayoutManagerOrientation(): Int = orientation
 
-    override fun instantScrollToPosition(position: Int) {
-        instantScroll(position)
+    override fun instantScrollToPosition(
+        position: Int,
+        scrollPosition: ScrollPosition
+    ) {
+        instantScroll(position, scrollPosition)
     }
 
-    override fun instantScrollToPositionWithOffset(position: Int, offset: Int) {
-        instantScroll(position, offset)
+    override fun instantScrollToPositionWithOffset(
+        position: Int,
+        offset: Int,
+        scrollPosition: ScrollPosition
+    ) {
+        instantScroll(position, scrollPosition, offset)
     }
 
     override fun checkLayoutParams(lp: RecyclerView.LayoutParams?) = lp is DivRecyclerViewLayoutParams

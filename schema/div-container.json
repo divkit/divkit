@@ -1,7 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_container",
-  "generate_swift_optional_arguments": false,
   "codegen": {
     "divan": {
       "forced_properties_order": [
@@ -27,6 +26,9 @@
           }
         }
       }
+    },
+    "swift": {
+      "generate_optional_arguments": false
     }
   },
   "definitions": {
@@ -51,6 +53,10 @@
         "style": {
           "$ref": "div-drawable.json",
           "$description": "translations.json#/div_container_separator_style"
+        },
+        "margins": {
+          "$ref": "div-edge-insets.json",
+          "$description": "translations.json#/div_base_margins"
         }
       },
       "required": [
@@ -74,13 +80,13 @@
           ]
         },
         "content_alignment_vertical": {
-          "$ref": "div-alignment-vertical.json",
+          "$ref": "div-content-alignment-vertical.json",
           "default_value": "top",
           "$description": "translations.json#/div_container_content_alignment_vertical"
         },
         "content_alignment_horizontal": {
-          "$ref": "div-alignment-horizontal.json",
-          "default_value": "left",
+          "$ref": "div-content-alignment-horizontal.json",
+          "default_value": "start",
           "$description": "translations.json#/div_container_content_alignment_horizontal"
         },
         "orientation": {

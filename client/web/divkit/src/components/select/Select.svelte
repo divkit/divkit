@@ -29,7 +29,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    const variable = rootCtx.getJsonWithVars(json.value_variable);
+    const variable = json.value_variable;
 
     let hasError = false;
     if (!variable) {
@@ -93,9 +93,18 @@
     }
 
     const jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
+    const jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
     let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
+        if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
+            fontFamily = rootCtx.typefaceProvider($jsonFontFamily, {
+                fontWeight: fontWeight || 400
+            });
+        } else {
+            fontFamily = '';
+        }
     }
 
     const jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
@@ -137,6 +146,7 @@
     $: stl = {
         '--divkit-input-hint-color': hintColor,
         'font-weight': fontWeight,
+        'font-family': fontFamily,
         color: textColor
     };
     $: innerStl = {
@@ -154,6 +164,9 @@
 
 {#if !hasError}
     <Outer
+        let:hasCustomFocus
+        let:focusHandler
+        let:blurHandler
         cls={genClassName('select', css, mods)}
         style={stl}
         customDescription={true}
@@ -169,7 +182,14 @@
             {selectText || hint || '​'}
         </span>
 
-        <select class={css.select__select} aria-label={description} bind:value={$valueVariable} style={makeStyle(selectStl)}>
+        <select
+            class={genClassName('select__select', css, { 'has-custom-focus': hasCustomFocus })}
+            aria-label={description}
+            bind:value={$valueVariable}
+            style={makeStyle(selectStl)}
+            on:focus={focusHandler}
+            on:blur={blurHandler}
+        >
             {#each filteredItems as item}
                 <option class={css.select__option} value={item.value}>{item.text || item.value}</option>
             {/each}

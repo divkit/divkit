@@ -22,6 +22,8 @@
               "text_collapse_action": "div-action://set_state?state_id=0/button_0/text_collapse"
             },
             {
+              "id": "blocks_2",
+              "expand_id": "expand_2",
               "type": "gallery_item_content",
               "header_text": "Item 1",
               "item_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
@@ -221,7 +223,8 @@
                     "log_id": "button_text_collapse",
                     "$url": "text_collapse_action"
                   }
-                ]
+                ],
+                "$id" : "expand_id"
               }
             },
             {

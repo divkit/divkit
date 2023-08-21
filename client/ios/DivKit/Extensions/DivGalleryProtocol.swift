@@ -15,7 +15,6 @@ extension DivGalleryProtocol {
     spacing: CGFloat,
     crossSpacing: CGFloat,
     defaultAlignment: Alignment,
-    resizableInsets: InsetMode.Resizable?,
     scrollMode: GalleryViewModel.ScrollMode,
     columnCount: Int? = nil
   ) throws -> GalleryViewModel {
@@ -47,13 +46,13 @@ extension DivGalleryProtocol {
       spacing: spacing,
       crossSpacing: crossSpacing,
       childrenCount: children.count,
-      resizableInsets: resizableInsets,
       direction: direction,
       with: expressionResolver
     )
 
     return GalleryViewModel(
       items: children,
+      layoutDirection: context.layoutDirection,
       metrics: metrics,
       scrollMode: scrollMode,
       path: context.parentPath,
@@ -66,7 +65,6 @@ extension DivGalleryProtocol {
     spacing: CGFloat,
     crossSpacing: CGFloat,
     childrenCount: Int,
-    resizableInsets: InsetMode.Resizable?,
     direction: GalleryViewModel.Direction,
     with expressionResolver: ExpressionResolver
   ) throws -> GalleryViewMetrics {
@@ -88,9 +86,8 @@ extension DivGalleryProtocol {
       crossInsets = horizontalInsets
     }
 
-    let axialInsetOverride = resizableInsets.map { InsetMode.resizable(params: $0) }
     return GalleryViewMetrics(
-      axialInsetMode: axialInsetOverride ?? .fixed(values: axialInsets),
+      axialInsetMode: .fixed(values: axialInsets),
       crossInsetMode: .fixed(values: crossInsets),
       spacings: spacings,
       crossSpacing: crossSpacing

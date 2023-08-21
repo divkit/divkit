@@ -8,8 +8,7 @@ extension CornerRadii {
       topRight,
       bottomLeft,
       bottomRight,
-    ].filter { $0 != 0 }
-      .uniqueElements
+    ].uniqueElements
     if differentRadiuses.count > 1 {
       return nil
     } else {

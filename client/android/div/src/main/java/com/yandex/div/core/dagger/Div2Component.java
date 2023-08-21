@@ -15,24 +15,26 @@ import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivPreloader;
-import com.yandex.div.core.player.DivPlayerFactory;
-import com.yandex.div.core.player.DivVideoActionHandler;
-import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionController;
+import com.yandex.div.core.player.DivPlayerFactory;
+import com.yandex.div.core.player.DivVideoActionHandler;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.state.DivStateManager;
 import com.yandex.div.core.state.TemporaryDivStateCache;
+import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
+import com.yandex.div.core.player.DivVideoViewMapper;
 import com.yandex.div.core.tooltip.DivTooltipController;
 import com.yandex.div.core.view2.Div2Builder;
 import com.yandex.div.core.view2.DivBinder;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
+import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import dagger.BindsInstance;
@@ -106,6 +108,9 @@ public interface Div2Component {
     DivVideoActionHandler getDivVideoActionHandler();
 
     @NonNull
+    DivVideoViewMapper getDivVideoViewMapper();
+
+    @NonNull
     DivStateManager getStateManager();
 
     @NonNull
@@ -140,6 +145,9 @@ public interface Div2Component {
 
     @NonNull
     RenderScript getRenderScript();
+
+    @NonNull
+    ReleaseManager getReleaseManager();
 
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)

@@ -24,6 +24,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let crossContentAlignment: Field<Expression<CrossContentAlignment>>? // default value: start
   public let crossSpacing: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
@@ -66,6 +67,7 @@ public final class DivGalleryTemplate: TemplateValue {
         crossContentAlignment: try dictionary.getOptionalExpressionField("cross_content_alignment"),
         crossSpacing: try dictionary.getOptionalExpressionField("cross_spacing"),
         defaultItem: try dictionary.getOptionalExpressionField("default_item"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
@@ -108,6 +110,7 @@ public final class DivGalleryTemplate: TemplateValue {
     crossContentAlignment: Field<Expression<CrossContentAlignment>>? = nil,
     crossSpacing: Field<Expression<Int>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
@@ -144,6 +147,7 @@ public final class DivGalleryTemplate: TemplateValue {
     self.crossContentAlignment = crossContentAlignment
     self.crossSpacing = crossSpacing
     self.defaultItem = defaultItem
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height
@@ -181,6 +185,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let crossContentAlignmentValue = parent?.crossContentAlignment?.resolveOptionalValue(context: context, validator: ResolvedValue.crossContentAlignmentValidator) ?? .noValue
     let crossSpacingValue = parent?.crossSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.crossSpacingValidator) ?? .noValue
     let defaultItemValue = parent?.defaultItem?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultItemValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
@@ -216,6 +221,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_content_alignment", error: $0) },
       crossSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_spacing", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -260,6 +266,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignment: crossContentAlignmentValue.value,
       crossSpacing: crossSpacingValue.value,
       defaultItem: defaultItemValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -302,6 +309,7 @@ public final class DivGalleryTemplate: TemplateValue {
     var crossContentAlignmentValue: DeserializationResult<Expression<DivGallery.CrossContentAlignment>> = parent?.crossContentAlignment?.value() ?? .noValue
     var crossSpacingValue: DeserializationResult<Expression<Int>> = parent?.crossSpacing?.value() ?? .noValue
     var defaultItemValue: DeserializationResult<Expression<Int>> = parent?.defaultItem?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
@@ -349,6 +357,8 @@ public final class DivGalleryTemplate: TemplateValue {
         crossSpacingValue = deserialize(__dictValue, validator: ResolvedValue.crossSpacingValidator).merged(with: crossSpacingValue)
       case "default_item":
         defaultItemValue = deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator).merged(with: defaultItemValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
@@ -417,6 +427,8 @@ public final class DivGalleryTemplate: TemplateValue {
         crossSpacingValue = crossSpacingValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.crossSpacingValidator))
       case parent?.defaultItem?.link:
         defaultItemValue = defaultItemValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
@@ -470,6 +482,7 @@ public final class DivGalleryTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -498,6 +511,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignmentValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_content_alignment", error: $0) },
       crossSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "cross_spacing", error: $0) },
       defaultItemValue.errorsOrWarnings?.map { .nestedObjectError(field: "default_item", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -542,6 +556,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignment: crossContentAlignmentValue.value,
       crossSpacing: crossSpacingValue.value,
       defaultItem: defaultItemValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -589,6 +604,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignment: crossContentAlignment ?? mergedParent.crossContentAlignment,
       crossSpacing: crossSpacing ?? mergedParent.crossSpacing,
       defaultItem: defaultItem ?? mergedParent.defaultItem,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
@@ -631,6 +647,7 @@ public final class DivGalleryTemplate: TemplateValue {
       crossContentAlignment: merged.crossContentAlignment,
       crossSpacing: merged.crossSpacing,
       defaultItem: merged.defaultItem,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),

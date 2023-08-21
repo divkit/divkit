@@ -12,10 +12,15 @@ final class ScannerViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  init() {
+  init(
+    logError: @escaping LogError
+  ) {
     captureSession = Lazy(
       onMainThreadGetter: { [result] in
-        MetadataCaptureSession(result: result)
+        MetadataCaptureSession(
+          result: result,
+          logError: logError
+        )
       }
     )
 

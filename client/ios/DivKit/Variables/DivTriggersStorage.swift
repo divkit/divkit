@@ -9,7 +9,7 @@ public final class DivTriggersStorage {
   private var cardsTriggers = DivCardsTriggers()
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
-  private let urlOpener: UrlOpener
+  private let persistentValuesStorage: DivPersistentValuesStorage
 
   private let cardsTriggersLock = RWLock()
   private let autodisposePool = AutodisposePool()
@@ -17,11 +17,12 @@ public final class DivTriggersStorage {
   public init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
-    urlOpener: @escaping UrlOpener
+    persistentValuesStorage: DivPersistentValuesStorage
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
-    self.urlOpener = urlOpener
+    self.persistentValuesStorage = persistentValuesStorage
+
     variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
       cardIdTriggersPairs.forEach { (cardId, triggers) in
@@ -79,14 +80,15 @@ public final class DivTriggersStorage {
       if trigger.shouldPerformActions(
         for: changesVariablesNames,
         newVariables: newVariables,
-        oldVariables: oldVariables
+        oldVariables: oldVariables,
+        persistentValuesStorage: persistentValuesStorage
       ) {
         trigger.actions.forEach {
           actionHandler?.handle(
             $0,
             cardId: cardId,
             source: .custom,
-            urlOpener: urlOpener
+            sender: nil
           )
         }
       }
@@ -121,9 +123,10 @@ extension DivTrigger {
   func shouldPerformActions(
     for changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
-    oldVariables: DivVariables
+    oldVariables: DivVariables,
+    persistentValuesStorage: DivPersistentValuesStorage
   ) -> Bool {
-    let resolverWithNewVariables = ExpressionResolver(variables: newVariables)
+    let resolverWithNewVariables = ExpressionResolver(variables: newVariables, persistentValuesStorage: persistentValuesStorage)
     guard
       !condition.variablesNames.intersection(changedVariablesNames).isEmpty,
       resolveCondition(resolverWithNewVariables) ?? false
@@ -133,7 +136,7 @@ extension DivTrigger {
     case .onVariable:
       return true
     case .onCondition:
-      let resolverWithOldVariables = ExpressionResolver(variables: oldVariables)
+      let resolverWithOldVariables = ExpressionResolver(variables: oldVariables, persistentValuesStorage: persistentValuesStorage)
       return !(resolveCondition(resolverWithOldVariables) ?? false)
     }
   }
@@ -142,8 +145,8 @@ extension DivTrigger {
 extension Expression {
   fileprivate var variablesNames: Set<DivVariableName> {
     switch self {
-    case let .link(resolver):
-      return Set(resolver.variablesNames.map(DivVariableName.init(rawValue:)))
+    case let .link(link):
+      return Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
     case .value:
       return []
     }

@@ -6,6 +6,7 @@ import CommonCorePublic
 public final class PageControlBlock: BlockWithTraits {
   public typealias State = PagerViewState
 
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let pagerPath: PagerPath?
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
@@ -13,12 +14,14 @@ public final class PageControlBlock: BlockWithTraits {
   public let state: State
 
   public init(
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     pagerPath: PagerPath?,
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait,
     configuration: PageIndicatorConfiguration,
     state: State
   ) {
+    self.layoutDirection = layoutDirection
     self.pagerPath = pagerPath
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -71,6 +74,7 @@ public final class PageControlBlock: BlockWithTraits {
       return self
     }
     return PageControlBlock(
+      layoutDirection: layoutDirection,
       pagerPath: pagerPath,
       widthTrait: widthTrait,
       heightTrait: heightTrait,

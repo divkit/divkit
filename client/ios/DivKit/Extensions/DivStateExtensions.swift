@@ -30,23 +30,24 @@ extension DivState: DivBlockModeling {
     let stateManager = context.stateManager
     let stateManagerItem = stateManager.get(stateBlockPath: divStatePath)
 
-    let selectedState = stateInterceptor?.getAppropriateState(divState: self, context: context)
+    let expressionResolver = context.expressionResolver
+    let activeState = stateInterceptor?.getAppropriateState(divState: self, context: context)
       ?? states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
-    let defaultState = states.first { $0.stateId == defaultStateId?.rawValue }
+      ?? states.first { $0.stateId == resolveDefaultStateId(expressionResolver) }
       ?? states[0]
-    let activeState = selectedState ?? defaultState
     let activeStateID = DivStateID(rawValue: activeState.stateId)
     let activeStatePath = divStatePath + activeStateID
 
     var previousBlock: Block?
     var animationIn: [TransitioningAnimation]?
     var animationOut: [TransitioningAnimation]?
-    let expressionResolver = context.expressionResolver
     let activeStateId = activeState.stateId
     if let stateManagerItem = stateManagerItem,
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {
+      // state changed -> drop visibility cache for all children
+      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       previousBlock = try previousDiv.value.makeBlock(
         context: context.makeContextForState(
           id: id,
@@ -82,7 +83,7 @@ extension DivState: DivBlockModeling {
       vertical: .leading
     )
     let stateAlignment = activeStateDiv?
-      .alignment2D(withDefault: defaultStateAlignment, expressionResolver: expressionResolver) ??
+      .alignment2D(withDefault: defaultStateAlignment, context: context) ??
       defaultStateAlignment
 
     return LayeredBlock(
@@ -116,7 +117,7 @@ extension DivState: DivBlockModeling {
       state: .default,
       path: context.parentPath + DivState.type,
       swipeOutActions: swipeOutActions.map {
-        $0.uiAction(context: context.actionContext)
+        $0.uiAction(context: context)
       }
     )
   }

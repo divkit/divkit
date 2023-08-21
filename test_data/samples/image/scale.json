@@ -128,12 +128,15 @@
             },
             {
               "type": "image_container",
-              "orientation": "horizontal",
+              "orientation": "overlap",
               "items": [
                 {
                   "type": "image_block",
                   "margins": {
-                    "left": 40
+                    "left": 40,
+                    "right": 40,
+                    "start": 40,
+                    "end": 40
                   },
                   "width": {
                     "type":"fixed",
@@ -144,7 +147,10 @@
                   "type": "scale_type_title",
                   "text": "WRAPPER AREA",
                   "font_size": 8,
-                  "line_height": 12
+                  "line_height": 12,
+                  "margins": {
+                    "left": 140
+                  }
                 }
               ]
             },

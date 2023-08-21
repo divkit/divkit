@@ -50,6 +50,8 @@ export function template<T extends string = any, U = object>(type: T, props?: U)
 export function escapeCard(obj: unknown): unknown {
     if (typeof obj === 'string') {
         return escapeExpression(obj);
+    } else if (obj === true || obj === false) {
+        return obj ? 1 : 0;
     } else if (obj instanceof SafeDivExpression) {
         return obj.toJSON();
     } else if (obj && typeof obj === 'object') {

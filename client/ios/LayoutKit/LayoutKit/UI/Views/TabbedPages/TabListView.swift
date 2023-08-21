@@ -5,7 +5,7 @@ import CommonCorePublic
 final class TabListView: UIView {
   private let collectionView: UICollectionView
   private let delegate: TabListViewDelegate
-  private let collectionViewLayout = UICollectionViewFlowLayout.make()
+  private let collectionViewLayout = GenericCollectionViewFlowLayout.make()
 
   private var selectedItemBackground: UIView!
   var isMovingToSelectedItem = false
@@ -22,6 +22,11 @@ final class TabListView: UIView {
         lastLayout = nil
         dataSource = TabListViewDataSource(tabs: model.items)
         delegate.tabs = model.items
+      }
+      if oldValue?.layoutDirection != model.layoutDirection {
+        collectionView.semanticContentAttribute = model
+          .layoutDirection == .rightToLeft ? .forceRightToLeft : .forceLeftToRight
+        delegate.layoutDirection = model.layoutDirection
       }
       collectionViewLayout.sectionInset = model.listPaddings
       collectionViewLayout.minimumLineSpacing = model.itemSpacing ?? 0
@@ -205,13 +210,17 @@ private struct AnimationInfo {
   }
 }
 
-extension UICollectionViewFlowLayout {
-  fileprivate static func make() -> UICollectionViewFlowLayout {
-    let flowLayout = UICollectionViewFlowLayout()
+final class GenericCollectionViewFlowLayout: UICollectionViewFlowLayout {
+  fileprivate static func make() -> GenericCollectionViewFlowLayout {
+    let flowLayout = GenericCollectionViewFlowLayout()
     flowLayout.scrollDirection = .horizontal
     flowLayout.minimumLineSpacing = 0
     flowLayout.minimumInteritemSpacing = 0
     return flowLayout
+  }
+
+  override var flipsHorizontallyInOppositeLayoutDirection: Bool {
+    true
   }
 }
 

@@ -20,6 +20,7 @@ public final class DivImage: DivBase {
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let filters: [DivFilter]? // at least 1 elements
@@ -156,6 +157,9 @@ public final class DivImage: DivBase {
   static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
     makeNoOpValueValidator()
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -255,6 +259,7 @@ public final class DivImage: DivBase {
     columnSpan: Expression<Int>? = nil,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     contentAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
     filters: [DivFilter]? = nil,
@@ -299,6 +304,7 @@ public final class DivImage: DivBase {
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.center)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.extensions = extensions
     self.filters = filters
@@ -365,74 +371,75 @@ extension DivImage: Equatable {
     guard
       lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.extensions == rhs.extensions,
-      lhs.filters == rhs.filters,
-      lhs.focus == rhs.focus
+      lhs.filters == rhs.filters
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow,
-      lhs.id == rhs.id
+      lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow
     else {
       return false
     }
     guard
+      lhs.id == rhs.id,
       lhs.imageUrl == rhs.imageUrl,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.paddings == rhs.paddings,
-      lhs.placeholderColor == rhs.placeholderColor,
-      lhs.preloadRequired == rhs.preloadRequired
+      lhs.placeholderColor == rhs.placeholderColor
     else {
       return false
     }
     guard
+      lhs.preloadRequired == rhs.preloadRequired,
       lhs.preview == rhs.preview,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scale == rhs.scale,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode
+      lhs.tintColor == rhs.tintColor
     else {
       return false
     }
     guard
+      lhs.tintMode == rhs.tintMode,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -460,6 +467,7 @@ extension DivImage: Serializable {
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["filters"] = filters?.map { $0.toDictionary() }

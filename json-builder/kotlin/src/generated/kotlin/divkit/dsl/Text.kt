@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [text].
  * 
- * Required properties: `type, text`.
+ * Required parameters: `type, text`.
  */
 @Generated
 class Text internal constructor(
@@ -48,6 +48,7 @@ class Text internal constructor(
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             doubletapActions = additive.doubletapActions ?: properties.doubletapActions,
             ellipsis = additive.ellipsis ?: properties.ellipsis,
             extensions = additive.extensions ?: properties.extensions,
@@ -105,7 +106,7 @@ class Text internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -143,6 +144,10 @@ class Text internal constructor(
          */
         val columnSpan: Property<Int>?,
         /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
+        /**
          * Action when double-clicking on an element.
          */
         val doubletapActions: Property<List<Action>>?,
@@ -164,9 +169,8 @@ class Text internal constructor(
         val focusedTextColor: Property<Color>?,
         /**
          * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
-         * Default value: `text`.
          */
-        val fontFamily: Property<FontFamily>?,
+        val fontFamily: Property<String>?,
         /**
          * Font size.
          * Default value: `12`.
@@ -292,7 +296,7 @@ class Text internal constructor(
          * Text cropping method. Use `ellipsis` instead.
          * Default value: `end`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val truncate: Property<Truncate>?,
         /**
          * Underline.
@@ -333,6 +337,7 @@ class Text internal constructor(
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("doubletap_actions", doubletapActions)
             result.tryPutProperty("ellipsis", ellipsis)
             result.tryPutProperty("extensions", extensions)
@@ -390,7 +395,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textEllipsis].
      * 
-     * Required properties: `text`.
+     * Required parameters: `text`.
      */
     @Generated
     class Ellipsis internal constructor(
@@ -445,7 +450,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textImage].
      * 
-     * Required properties: `url, start`.
+     * Required parameters: `url, start`.
      */
     @Generated
     class Image internal constructor(
@@ -515,7 +520,7 @@ class Text internal constructor(
      * 
      * Can be created using the method [textRange].
      * 
-     * Required properties: `start, end`.
+     * Required parameters: `start, end`.
      */
     @Generated
     class Range internal constructor(
@@ -565,7 +570,7 @@ class Text internal constructor(
             /**
              * Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
              */
-            val fontFamily: Property<FontFamily>?,
+            val fontFamily: Property<String>?,
             /**
              * Font size.
              */
@@ -637,7 +642,7 @@ class Text internal constructor(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -646,6 +651,7 @@ class Text internal constructor(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -701,12 +707,13 @@ fun DivScope.text(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     ellipsis: Text.Ellipsis? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -755,6 +762,7 @@ fun DivScope.text(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         ellipsis = valueOrNull(ellipsis),
         extensions = valueOrNull(extensions),
@@ -802,7 +810,7 @@ fun DivScope.text(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -811,6 +819,7 @@ fun DivScope.text(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -866,12 +875,13 @@ fun DivScope.textProps(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     ellipsis: Text.Ellipsis? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -919,6 +929,7 @@ fun DivScope.textProps(
     background = valueOrNull(background),
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
+    disappearActions = valueOrNull(disappearActions),
     doubletapActions = valueOrNull(doubletapActions),
     ellipsis = valueOrNull(ellipsis),
     extensions = valueOrNull(extensions),
@@ -965,7 +976,7 @@ fun DivScope.textProps(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -974,6 +985,7 @@ fun DivScope.textProps(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -1029,12 +1041,13 @@ fun TemplateScope.textRefs(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     ellipsis: ReferenceProperty<Text.Ellipsis>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1082,6 +1095,7 @@ fun TemplateScope.textRefs(
     background = background,
     border = border,
     columnSpan = columnSpan,
+    disappearActions = disappearActions,
     doubletapActions = doubletapActions,
     ellipsis = ellipsis,
     extensions = extensions,
@@ -1128,7 +1142,7 @@ fun TemplateScope.textRefs(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1137,6 +1151,7 @@ fun TemplateScope.textRefs(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -1192,12 +1207,13 @@ fun Text.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     ellipsis: Text.Ellipsis? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1246,6 +1262,7 @@ fun Text.override(
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
         ellipsis = valueOrNull(ellipsis) ?: properties.ellipsis,
         extensions = valueOrNull(extensions) ?: properties.extensions,
@@ -1293,7 +1310,7 @@ fun Text.override(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1302,6 +1319,7 @@ fun Text.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -1357,12 +1375,13 @@ fun Text.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     ellipsis: ReferenceProperty<Text.Ellipsis>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1411,6 +1430,7 @@ fun Text.defer(
         background = background ?: properties.background,
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = disappearActions ?: properties.disappearActions,
         doubletapActions = doubletapActions ?: properties.doubletapActions,
         ellipsis = ellipsis ?: properties.ellipsis,
         extensions = extensions ?: properties.extensions,
@@ -1489,7 +1509,7 @@ fun Text.evaluate(
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1520,6 +1540,7 @@ fun Text.evaluate(
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
+        disappearActions = properties.disappearActions,
         doubletapActions = properties.doubletapActions,
         ellipsis = properties.ellipsis,
         extensions = properties.extensions,
@@ -1567,7 +1588,7 @@ fun Text.evaluate(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1576,6 +1597,7 @@ fun Text.evaluate(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -1631,12 +1653,13 @@ fun Component<Text>.override(
     background: List<Background>? = null,
     border: Border? = null,
     columnSpan: Int? = null,
+    disappearActions: List<DisappearAction>? = null,
     doubletapActions: List<Action>? = null,
     ellipsis: Text.Ellipsis? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
     focusedTextColor: Color? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -1686,6 +1709,7 @@ fun Component<Text>.override(
         background = valueOrNull(background),
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
+        disappearActions = valueOrNull(disappearActions),
         doubletapActions = valueOrNull(doubletapActions),
         ellipsis = valueOrNull(ellipsis),
         extensions = valueOrNull(extensions),
@@ -1733,7 +1757,7 @@ fun Component<Text>.override(
  * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1742,6 +1766,7 @@ fun Component<Text>.override(
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param doubletapActions Action when double-clicking on an element.
  * @param ellipsis Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -1797,12 +1822,13 @@ fun Component<Text>.defer(
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     doubletapActions: ReferenceProperty<List<Action>>? = null,
     ellipsis: ReferenceProperty<Text.Ellipsis>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
     focusedTextColor: ReferenceProperty<Color>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -1852,6 +1878,7 @@ fun Component<Text>.defer(
         background = background,
         border = border,
         columnSpan = columnSpan,
+        disappearActions = disappearActions,
         doubletapActions = doubletapActions,
         ellipsis = ellipsis,
         extensions = extensions,
@@ -1930,7 +1957,7 @@ fun Component<Text>.evaluate(
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
@@ -1962,6 +1989,7 @@ fun Component<Text>.evaluate(
         background = null,
         border = null,
         columnSpan = columnSpan,
+        disappearActions = null,
         doubletapActions = null,
         ellipsis = null,
         extensions = null,
@@ -2326,7 +2354,7 @@ fun DivScope.textRange(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2381,7 +2409,7 @@ fun DivScope.textRangeProps(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2434,7 +2462,7 @@ fun TemplateScope.textRangeRefs(
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2487,7 +2515,7 @@ fun Text.Range.override(
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
     end: Int? = null,
-    fontFamily: FontFamily? = null,
+    fontFamily: String? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
@@ -2542,7 +2570,7 @@ fun Text.Range.defer(
     background: ReferenceProperty<TextRangeBackground>? = null,
     border: ReferenceProperty<TextRangeBorder>? = null,
     end: ReferenceProperty<Int>? = null,
-    fontFamily: ReferenceProperty<FontFamily>? = null,
+    fontFamily: ReferenceProperty<String>? = null,
     fontSize: ReferenceProperty<Int>? = null,
     fontSizeUnit: ReferenceProperty<SizeUnit>? = null,
     fontWeight: ReferenceProperty<FontWeight>? = null,
@@ -2591,7 +2619,7 @@ fun Text.Range.defer(
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     end: ExpressionProperty<Int>? = null,
-    fontFamily: ExpressionProperty<FontFamily>? = null,
+    fontFamily: ExpressionProperty<String>? = null,
     fontSize: ExpressionProperty<Int>? = null,
     fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,

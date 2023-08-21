@@ -46,6 +46,7 @@ final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {
 
     return TabTitlesViewModel(
       items: items,
+      layoutDirection: listModel.layoutDirection,
       listPaddings: listModel.listPaddings,
       titlePaddings: listModel.titleStyle.paddings,
       selectedBackgroundColor: listModel.titleStyle.activeBackgroundColor,

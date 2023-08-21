@@ -6,9 +6,9 @@ import LayoutKit
 extension DivVisibilityAction {
   func makeVisibilityAction(
     context: DivBlockModelingContext,
-    index: Int
+    logId: String
   ) -> VisibilityAction? {
-    guard let uiAction = uiAction(context: context, index: index) else {
+    guard let uiAction = uiAction(context: context, logId: logId) else {
       return nil
     }
 
@@ -16,11 +16,11 @@ extension DivVisibilityAction {
     let logLimitValue = resolveLogLimit(expressionResolver)
     return VisibilityAction(
       uiAction: uiAction,
-      requiredVisibilityDuration: TimeInterval(
+      requiredDuration: TimeInterval(
         resolveVisibilityDuration(expressionResolver)
       ) / 1000,
       targetPercentage: resolveVisibilityPercentage(expressionResolver),
-      limiter: VisibilityAction.Limiter(
+      limiter: ActionLimiter(
         canSend: {
           logLimitValue == 0
             || context.visibilityCounter.visibilityCount(for: uiAction.path) < logLimitValue
@@ -28,13 +28,14 @@ extension DivVisibilityAction {
         markSent: {
           context.visibilityCounter.incrementCount(for: uiAction.path)
         }
-      )
+      ),
+      actionType: .appear
     )
   }
 
   private func uiAction(
     context: DivBlockModelingContext,
-    index: Int
+    logId: String
   ) -> UserInterfaceAction? {
     let payloads = [
       makeDivActionPayload(cardId: context.cardId, source: .visibility),
@@ -45,7 +46,7 @@ extension DivVisibilityAction {
     }
     return UserInterfaceAction(
       payloads: payloads,
-      path: context.parentPath + index
+      path: context.parentPath + logId
     )
   }
 }

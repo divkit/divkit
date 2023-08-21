@@ -18,11 +18,13 @@ extension DivImageProtocol {
     return .trait(makeContentHeightTrait(with: context))
   }
 
-  func resolvePlaceholder(_ expressionResolver: ExpressionResolver) -> ImagePlaceholder {
+  func resolvePlaceholder(
+    _ expressionResolver: ExpressionResolver,
+    highPriority: Bool = false
+  ) -> ImagePlaceholder {
     if
-      let base64 = resolvePreview(expressionResolver),
-      let image = makeImage(base64) {
-      return .image(image)
+      let base64 = resolvePreview(expressionResolver) {
+      return .imageData(ImageData(base64: base64, highPriority: highPriority))
     } else {
       return .color(resolvePlaceholderColor(expressionResolver))
     }
@@ -51,26 +53,4 @@ extension DivImageProtocol {
     }
     return String(typeName)
   }
-}
-
-private let makeImage: (String) -> Image? = memoize(
-  sizeLimit: 10 * 1024 * 1024,
-  keyMapper: { $0 },
-  sizeByKey: { $0.count * 3 / 4 },
-  _makeImage
-)
-
-private func _makeImage(base64: String) -> Image? {
-  decode(base64: base64).flatMap(Image.init(data:))
-}
-
-fileprivate func decode(base64: String) -> Data? {
-  if let data = Data(base64Encoded: base64) {
-    return data
-  }
-  if let url = URL(string: base64),
-     let dataHoldingURL = try? Data(contentsOf: url) {
-    return dataHoldingURL
-  }
-  return nil
 }

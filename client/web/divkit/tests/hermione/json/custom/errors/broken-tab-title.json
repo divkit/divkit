@@ -1,0 +1,48 @@
+{
+    "description": "Tab title should be a non-empty string",
+    "templates": {},
+    "card": {
+      "log_id": "div2_sample_card",
+      "variables": [{
+        "name": "someVar",
+        "type": "string",
+        "value": ""
+      }],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "tabs",
+            "items": [{
+              "div": {
+                "type": "text",
+                "text": "Hello"
+              }
+            }, {
+              "title": "",
+              "div": {
+                "type": "text",
+                "text": "Hello"
+              }
+            }, {
+              "title": "@{someVar}",
+              "div": {
+                "type": "text",
+                "text": "Hello"
+              }
+            }, {
+              "title": "Correct",
+              "div": {
+                "type": "text",
+                "text": "Hello",
+                "action": {
+                  "log_id": "make_valid",
+                  "url": "div-action://set_variable?name=someVar&value=Valid"
+                }
+              }
+            }]
+          }
+        }
+      ]
+    }
+  }

@@ -6,10 +6,10 @@ extension DivGrid: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: makeActions(context: context.actionContext),
+      actions: makeActions(context: context),
       actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context.actionContext),
-      longTapActions: makeLongTapActions(context: context.actionContext)
+      doubleTapActions: makeDoubleTapActions(context: context),
+      longTapActions: makeLongTapActions(context: context)
     )
   }
 
@@ -45,17 +45,18 @@ extension DivBase {
     context: DivBlockModelingContext
   ) throws -> GridBlock.Item {
     let block = try makeBlock(context: context)
+    let expressionResolver = context.expressionResolver
     return try .init(
       span: GridBlock.Span(
-        rows: resolveRowSpan(context.expressionResolver) ?? 1,
-        columns: resolveColumnSpan(context.expressionResolver) ?? 1
+        rows: resolveRowSpan(expressionResolver) ?? 1,
+        columns: resolveColumnSpan(expressionResolver) ?? 1
       ),
       weight: .init(
-        column: width.makeWeight(with: context.expressionResolver),
-        row: height.makeWeight(with: context.expressionResolver)
+        column: width.makeWeight(with: expressionResolver),
+        row: height.makeWeight(with: expressionResolver)
       ),
       contents: block,
-      alignment: alignment2D(withDefault: .default, expressionResolver: context.expressionResolver)
+      alignment: alignment2D(withDefault: .default, context: context)
     )
   }
 }

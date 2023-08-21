@@ -54,6 +54,7 @@
         font_size: json.font_size,
         letter_spacing: json.letter_spacing,
         font_weight: json.font_weight,
+        font_family: json.font_family,
         text_color: json.text_color,
         underline: json.underline,
         strike: json.strike,
@@ -144,6 +145,12 @@
         }
 
         rootTextColor = newRootTextColor;
+    }
+
+    let focusTextColor = '';
+    $: jsonFocusTextColor = rootCtx.getDerivedFromVars(json.focused_text_color);
+    $: {
+        focusTextColor = correctColor($jsonFocusTextColor, 1, focusTextColor);
     }
 
     $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
@@ -373,7 +380,8 @@
         'max-height': maxHeight,
         '-webkit-line-clamp': lineClamp,
         color: rootTextColor,
-        'background-image': gradient
+        'background-image': gradient,
+        '--divkit-text-focus-color': focusTextColor
     };
 
     function onImgError(event: Event): void {

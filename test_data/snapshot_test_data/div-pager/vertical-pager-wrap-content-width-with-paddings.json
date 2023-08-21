@@ -1,13 +1,15 @@
 {
   "description": "Vertical pager with paddings and items which are wider than pager",
   "platforms": [
+    "android",
     "ios"
   ],
   "templates": {
     "text_page": {
       "type": "text",
       "width": {
-        "type": "wrap_content"
+        "type": "wrap_content",
+        "constrained": false
       },
       "margins": {
         "top": 5,

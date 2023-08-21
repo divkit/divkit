@@ -1,0 +1,33 @@
+{
+    "description": "Constant expressions should work properly",
+    "platforms": [
+      "android",
+      "ios",
+      "web"
+    ],
+    "templates": {},
+    "card": {
+      "log_id": "div2_sample_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "tabs",
+            "items": [{
+              "title": "Some @{1}",
+              "div": {
+                "type": "text",
+                "text": "Hello"
+              }
+            }, {
+              "title": "Other @{2}",
+              "div": {
+                "type": "text",
+                "text": "Hello"
+              }
+            }]
+          }
+        }
+      ]
+    }
+  }

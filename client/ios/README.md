@@ -1,20 +1,20 @@
 # DivKit for iOS client library
 
 [![SwiftPM](https://img.shields.io/badge/SPM-supported-DE5C43)](https://github.com/divkit/divkit-ios)
-[![CocoaPods](https://img.shields.io/cocoapods/v/DivKit)](https://cocoapods.org/pods/DivKit)
+[![CocoaPods](https://img.shields.io/badge/CocoaPods-supported-DE5C43)](https://github.com/divkit/divkit-ios/tree/main/Specs)
 ![Size](https://img.shields.io/badge/ipa%20size-~6%20MB-blue)
 
 ## How it works
 
 DivKit builds native views from JSON data.
 
-JSON → DivData → LayoutKit block → UIView
+JSON → DivData → DivView
 
 - JSON – raw data with templates in DivKit format (see [DivKit schema](../../schema)).
 
-- DivData – data objects parsed from JSON.
+- DivKitComponents – DivView dependencies.
 
-- LayoutKit is a library that builds UIKit views using declarative approach.
+- DivView - plain UIKit View.
 
 Although DivKit produces UIKit views, it can be easyly used in SwiftUI apps (see [playground application](DivKitPlayground)).
 

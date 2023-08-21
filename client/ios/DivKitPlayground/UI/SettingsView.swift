@@ -11,11 +11,13 @@ struct SettingsView: View {
   var showRenderingTime: Bool = UserPreferences.showRenderingTimeDefault
   @AppStorage(UserPreferences.playgroundThemeKey)
   var playgroundTheme: String = UserPreferences.playgroundThemeDefault.rawValue
+  @AppStorage(UserPreferences.isRTLEnabledKey)
+  var isRTLEnabled: Bool = UserPreferences.isRTLEnabledDefault
 
   var body: some View {
     ViewWithHeader(
       "Settings",
-      background: ThemeColor.settings,
+      background: ThemeColor.settingsLight,
       presentationMode: presentationMode
     ) {
       VStack(alignment: .leading, spacing: 20) {
@@ -25,6 +27,10 @@ struct SettingsView: View {
         }
         Toggle(isOn: $showRenderingTime) {
           Text("Show rendering time")
+            .font(ThemeFont.text)
+        }
+        Toggle(isOn: $isRTLEnabled) {
+          Text("Enable RTL layout direction")
             .font(ThemeFont.text)
         }
         VStack(alignment: .leading, spacing: 10) {

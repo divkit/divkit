@@ -195,11 +195,23 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   @objc private func handleTap(_ recognizer: UILongPressGestureRecognizer) {
     let location = recognizer.location(in: self)
 
-    let currentValue = clamp(
-      (location.x - sliderModel.horizontalInset / 2) / pointWidth,
-      min: 0.0,
-      max: CGFloat(sliderModel.maxValue - sliderModel.minValue)
-    ) + CGFloat(sliderModel.minValue)
+    var currentValue: CGFloat = 0
+    switch sliderModel.layoutDirection {
+    case .leftToRight:
+      currentValue = clamp(
+        (location.x - sliderModel.horizontalInset / 2) / pointWidth,
+        min: 0.0,
+        max: CGFloat(sliderModel.maxValue - sliderModel.minValue)
+      ) + CGFloat(sliderModel.minValue)
+    case .rightToLeft:
+      currentValue = CGFloat(sliderModel.maxValue) - clamp(
+        (location.x - sliderModel.horizontalInset / 2) / pointWidth,
+        min: 0.0,
+        max: CGFloat(sliderModel.maxValue - sliderModel.minValue)
+      )
+    @unknown default:
+      assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
+    }
 
     let updateProgress: (CGFloat) -> Void = { [self] value in
       if activeThumb == .first {
@@ -228,12 +240,12 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       updateProgress(currentValue)
     case .cancelled, .ended, .failed, .possible:
       thumbAnimator?.stopAnimation(true)
-      layoutIfNeeded()
       animateActiveThumb(
         to: currentValue.rounded(.toNearestOrAwayFromZero),
         from: currentValue,
         completion: { updateProgress($0) }
       )
+      layoutIfNeeded()
     @unknown default: break
     }
   }
@@ -393,7 +405,11 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   private func makeMarks(from startIndex: Int, to endIndex: Int, style: MarkStyle) {
     guard startIndex <= endIndex else { return }
     let thumbInsetY = (sliderModel.sliderTopTextPadding - sliderModel.sliderBottomTextPadding) / 2
-    for ind in (startIndex - sliderModel.minValue)...(endIndex - sliderModel.minValue) {
+    let range = sliderModel
+      .layoutDirection == .rightToLeft ?
+      (sliderModel.maxValue - endIndex)...(sliderModel.maxValue - startIndex) :
+      (startIndex - sliderModel.minValue)...(endIndex - sliderModel.minValue)
+    for ind in range {
       let visibleMark: BlockView?
       let invisibleMark: BlockView?
       let visibleMarkModel: SliderModel.MarkModel?
@@ -445,10 +461,20 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
           forWidth: .infinity
         )
     )) {
-      $0.origin
-        .x += (min(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) *
-        pointWidth
-      $0.size.width = abs(progressFirstThumb - progressSecondThumb) * pointWidth
+      switch sliderModel.layoutDirection {
+      case .leftToRight:
+        $0.origin
+          .x += (min(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) *
+          pointWidth
+        $0.size.width = abs(progressFirstThumb - progressSecondThumb) * pointWidth
+      case .rightToLeft:
+        $0.origin
+          .x -= (max(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.maxValue)) *
+          pointWidth
+        $0.size.width = abs(progressFirstThumb - progressSecondThumb) * pointWidth
+      @unknown default:
+        assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
+      }
     }
   }
 
@@ -462,8 +488,18 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       return
     }
 
+    var thumbProgress: CGFloat = 0
+    switch sliderModel.layoutDirection {
+    case .leftToRight:
+      thumbProgress = progress - CGFloat(sliderModel.minValue)
+    case .rightToLeft:
+      thumbProgress = CGFloat(sliderModel.maxValue) - progress
+    @unknown default:
+      assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
+    }
+
     thumbView.frame = CGRect(origin: CGPoint(
-      x: (progress - CGFloat(sliderModel.minValue)) * pointWidth
+      x: thumbProgress * pointWidth
         + (sliderModel.horizontalInset - thumbModel.size.width) / 2,
       y: 0
     ), size: CGSize(

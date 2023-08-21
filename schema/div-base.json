@@ -1,8 +1,14 @@
 {
   "protocol_name": "div-base",
-  "swift_super_protocol": "DivBlockModeling",
+  "codegen": {
+    "swift": {
+      "super_protocol": "DivBlockModeling"
+    },
+    "documentation": {
+      "include_in_toc": true
+    }
+  },
   "type": "object",
-  "include_in_documentation_toc": true,
   "properties": {
     "id": {
       "$ref": "common.json#/non_empty_string",
@@ -72,6 +78,14 @@
       },
       "minItems": 1,
       "$description": "translations.json#/div_base_visibility_actions"
+    },
+    "disappear_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-disappear-action.json"
+      },
+      "minItems": 1,
+      "$description": "translations.json#/div_base_disappear_actions"
     },
     "tooltips": {
       "type": "array",

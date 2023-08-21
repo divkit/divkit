@@ -79,8 +79,6 @@ internal inline fun ViewGroup.forEachIndexed(significantOnly: Boolean = false, a
 
 internal fun isExact(measureSpec: Int) = View.MeasureSpec.getMode(measureSpec) == View.MeasureSpec.EXACTLY
 
-internal fun isAtMost(measureSpec: Int) = View.MeasureSpec.getMode(measureSpec) == View.MeasureSpec.AT_MOST
-
 internal fun isUnspecified(measureSpec: Int) = View.MeasureSpec.getMode(measureSpec) == View.MeasureSpec.UNSPECIFIED
 
 internal fun makeExactSpec(size: Int) = View.MeasureSpec.makeMeasureSpec(size, View.MeasureSpec.EXACTLY)

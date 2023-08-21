@@ -1,0 +1,19 @@
+{
+  "type": "text",
+  "text": "text",
+  "visibility_actions": [
+    {
+      "log_id": "visibility-action-0",
+      "log_limit": 1,
+      "visibility_duration": 0
+    }
+  ],
+  "disappear_actions": [
+    {
+      "log_id": "disappear-action-0",
+      "log_limit": 1,
+      "disappear_duration": 0
+    }
+  ]
+}
+

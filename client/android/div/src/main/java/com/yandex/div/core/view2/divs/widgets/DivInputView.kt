@@ -37,7 +37,9 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
 
     private var isDrawing = false
 
-    private var boundVariableTextWatcher: TextWatcher? = null
+    private val onTextChangedActions = mutableListOf<(Editable?) -> Unit>()
+
+    private var textChangeWatcher: TextWatcher? = null
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
         borderDrawer = updateBorderDrawer(border, resolver)
@@ -69,14 +71,19 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
         borderDrawer?.release()
     }
 
-    fun setBoundVariableChangeAction(action: (Editable?) -> Unit) {
-        boundVariableTextWatcher = doAfterTextChanged { editable ->
-            action(editable)
+    fun addAfterTextChangeAction(action: (Editable?) -> Unit) {
+        if (textChangeWatcher == null) {
+            textChangeWatcher = doAfterTextChanged { editable ->
+                onTextChangedActions.forEach { it.invoke(editable) }
+            }
         }
+
+        onTextChangedActions.add(action)
     }
 
-    fun removeBoundVariableChangeAction() {
-        removeTextChangedListener(boundVariableTextWatcher)
-        boundVariableTextWatcher = null
+    fun removeAfterTextChangeListener() {
+        removeTextChangedListener(textChangeWatcher)
+        onTextChangedActions.clear()
+        textChangeWatcher = null
     }
 }

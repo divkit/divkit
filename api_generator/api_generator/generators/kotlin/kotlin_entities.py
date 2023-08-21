@@ -21,6 +21,7 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    RawArray,
     ObjectFormat
 )
 from ...config import GenerationMode
@@ -65,6 +66,7 @@ class KotlinEntity(Entity):
         Color.__bases__ = (KotlinPropertyType, PropertyType,)
         String.__bases__ = (KotlinPropertyType, PropertyType,)
         Dictionary.__bases__ = (KotlinPropertyType, PropertyType,)
+        RawArray.__bases__ = (KotlinPropertyType, PropertyType,)
         for prop in self.properties:
             prop.__class__ = KotlinProperty
 
@@ -676,6 +678,8 @@ class KotlinPropertyType(PropertyType):
             return 'CharSequence' if self.formatted else 'String'
         elif isinstance(self, Dictionary):
             return 'JSONObject'
+        elif isinstance(self, RawArray):
+            return 'JSONArray'
         elif isinstance(self, StaticString):
             return 'String'
         elif isinstance(self, Url):

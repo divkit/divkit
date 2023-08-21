@@ -1,10 +1,11 @@
 import Foundation
 
+import BaseTinyPublic
 import LayoutKit
 
 public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
-  private var statesById: [String: ElementState] = [:]
+  private var statesById: [IdAndCardId: ElementState] = [:]
 
   public init(states: BlocksState = [:]) {
     self.states = states
@@ -16,30 +17,36 @@ public final class DivBlockStateStorage {
   }
 
   public func getStateUntyped(_ path: UIElementPath) -> ElementState? {
-    statesById[path.leaf] ?? states[path]
+    statesById[IdAndCardId(path: path)] ?? states[path]
   }
 
   @inlinable
-  public func getState<T: ElementState>(_ id: String) -> T? {
-    getStateUntyped(id) as? T
+  public func getState<T: ElementState>(_ id: String, cardId: DivCardID) -> T? {
+    getStateUntyped(id, cardId: cardId) as? T
   }
 
-  public func getStateUntyped(_ id: String) -> ElementState? {
-    statesById[id] ?? states.first { $0.key.leaf == id }?.value
+  public func getStateUntyped(_ id: String, cardId: DivCardID) -> ElementState? {
+    let idKey = IdAndCardId(id: id, cardId: cardId)
+    return statesById[idKey] ?? states.first { IdAndCardId(path: $0.key) == idKey }?.value
   }
 
   public func setState(path: UIElementPath, state: ElementState) {
-    statesById[path.leaf] = nil
+    statesById[IdAndCardId(path: path)] = nil
     states[path] = state
   }
 
-  public func setState(id: String, state: ElementState) {
-    statesById[id] = state
+  public func setState(id: String, cardId: DivCardID, state: ElementState) {
+    statesById[IdAndCardId(id: id, cardId: cardId)] = state
   }
 
   public func reset() {
     states = [:]
     statesById = [:]
+  }
+
+  public func reset(cardId: DivCardID) {
+    states = states.filter { $0.key.root != cardId.rawValue }
+    statesById = statesById.filter { $0.key.cardId != cardId }
   }
 }
 
@@ -50,5 +57,20 @@ extension DivBlockStateStorage: ElementStateObserver {
 
   func state(for path: UIElementPath) -> ElementState? {
     getStateUntyped(path)
+  }
+}
+
+private struct IdAndCardId: Hashable {
+  let id: String
+  let cardId: DivCardID
+
+  init(id: String, cardId: DivCardID) {
+    self.id = id
+    self.cardId = cardId
+  }
+
+  init(path: UIElementPath) {
+    id = path.leaf
+    cardId = DivCardID(rawValue: path.root)
   }
 }

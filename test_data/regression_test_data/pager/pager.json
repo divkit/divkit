@@ -66,16 +66,19 @@
                     {
                       "type": "text_block",
                       "text": "Item 0",
+                      "id": "block_1",
                       "visibility_actions": [
                         {
                           "log_id": "content_item_show:0",
                           "visibility_percentage": 80,
                           "visibility_duration": 0
+
                         }
                       ]
                     },
                     {
                       "type": "image_block",
+                      "id": "block_2",
                       "visibility_actions": [
                         {
                           "log_id": "content_item_show:1",
@@ -155,7 +158,8 @@
               "margins": {
                 "top": 10,
                 "bottom": 10,
-                "left": 20
+                "left": 20,
+                "start": 20
               },
               "visibility_actions": [
                 {

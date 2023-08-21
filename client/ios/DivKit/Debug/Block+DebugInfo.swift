@@ -6,15 +6,13 @@ import CommonCorePublic
 import LayoutKit
 
 extension Block {
-  func addingDebugInfo(
-    debugParams: DebugParams,
-    errors: [DivError],
-    parentPath: UIElementPath
-  ) -> Block {
+  func addingDebugInfo(context: DivBlockModelingContext) -> Block {
+    let debugParams = context.debugParams
     guard debugParams.isDebugInfoEnabled else {
       return self
     }
 
+    let errors = context.errorsStorage.errors
     let errorsCount = errors.count
     guard errorsCount > 0 else {
       return self
@@ -24,12 +22,12 @@ extension Block {
       ? "\(maxCount)+"
       : "\(errorsCount)"
 
-    let typo = Typo(size: FontSize(rawValue: 14), weight: .regular)
+    let typo = Typo(font: context.fontProvider.font(size: 14))
       .with(color: .white)
 
     let action = UserInterfaceAction(
       payload: .url(DebugInfoBlock.showOverlayURL),
-      path: parentPath + "div_errors_indicator",
+      path: context.parentPath + "div_errors_indicator",
       accessibilityElement: nil
     )
 

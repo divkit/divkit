@@ -37,13 +37,13 @@ extension DivText.Range: ActionsHolder {
 }
 
 extension ActionHolder {
-  func makeAction(context: DivBlockModelingActionContext) -> UserInterfaceAction? {
+  func makeAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
     action?.uiAction(context: context)
   }
 }
 
 extension ActionsHolder {
-  func makeActions(context: DivBlockModelingActionContext)
+  func makeActions(context: DivBlockModelingContext)
     -> NonEmptyArray<UserInterfaceAction>? {
     let allActions = (actions ?? action.asArray()).map {
       $0.uiAction(context: context)
@@ -58,8 +58,14 @@ extension ActionsHolder {
   }
 }
 
+extension Array where Element == DivAction {
+  func makeActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
+    compactMap { $0.makeUiAction(context: context) }
+  }
+}
+
 extension LongTapActionsHolder {
-  func makeLongTapActions(context: DivBlockModelingActionContext)
+  func makeLongTapActions(context: DivBlockModelingContext)
     -> NonEmptyArray<UserInterfaceAction>? {
     NonEmptyArray(
       (longtapActions ?? []).map {
@@ -70,7 +76,7 @@ extension LongTapActionsHolder {
 }
 
 extension DoubleTapActionsHolder {
-  func makeDoubleTapActions(context: DivBlockModelingActionContext)
+  func makeDoubleTapActions(context: DivBlockModelingContext)
     -> NonEmptyArray<UserInterfaceAction>? {
     NonEmptyArray(
       (doubletapActions ?? []).map {
@@ -81,7 +87,7 @@ extension DoubleTapActionsHolder {
 }
 
 extension DivAction {
-  func uiAction(context: DivBlockModelingActionContext) -> UserInterfaceAction {
+  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction {
     let menuPayload = makeMenuPayload(context: context)
     // don't make .divAction payloads for menu actions until DivActionHandler
     // could handle it
@@ -107,10 +113,9 @@ extension DivAction {
     )
   }
 
-  private func makeMenuPayload(
-    context: DivBlockModelingActionContext
-  ) -> UserInterfaceAction.Payload? {
+  private func makeMenuPayload(context: DivBlockModelingContext) -> UserInterfaceAction.Payload? {
     guard let menuItems = menuItems else { return nil }
+    let expressionResolver = context.expressionResolver
 
     let items: [Menu.Item] = menuItems.compactMap { item in
       if let actions = item.actions {
@@ -118,14 +123,14 @@ extension DivAction {
         if !uiActions.isEmpty {
           return Menu.Item(
             actions: uiActions,
-            text: item.resolveText(context.expressionResolver) ?? ""
+            text: item.resolveText(expressionResolver) ?? ""
           )
         }
       }
       if let uiAction = item.action?.makeUiAction(context: context) {
         return Menu.Item(
           actions: [uiAction],
-          text: item.resolveText(context.expressionResolver) ?? ""
+          text: item.resolveText(expressionResolver) ?? ""
         )
       }
       return nil
@@ -136,7 +141,7 @@ extension DivAction {
     return .menu(menu)
   }
 
-  func makeUiAction(context: DivBlockModelingActionContext) -> UserInterfaceAction? {
+  func makeUiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
     let uiAction = uiAction(context: context)
     return uiAction.payload == .empty ? nil : uiAction
   }

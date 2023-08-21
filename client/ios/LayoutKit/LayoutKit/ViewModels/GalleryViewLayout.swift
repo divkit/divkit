@@ -171,11 +171,9 @@ extension GalleryViewModel {
     if let size = size {
       maxItemHeight = (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
         CGFloat(columnCount)
-    } else if let maxNonResizableHeight = blocks
-      .maxHeightOfVerticallyNonResizableBlocks(for: widths) {
+    } else if let maxNonResizableHeight = blocks.maxHeightOfVerticallyNonResizableBlocks(for: widths) {
       maxItemHeight = maxNonResizableHeight
     } else {
-      assertionFailure("Unable to calculate maxItemHeight")
       maxItemHeight = 0
     }
 
@@ -216,7 +214,6 @@ extension GalleryViewModel {
       if let maxNonResizebleWidth = blocks.maxWidthOfHorizontallyNonResizableBlocks {
         maxItemWidth = maxNonResizebleWidth
       } else {
-        assertionFailure("Unable to calculate maxItemWidth")
         maxItemWidth = 0
       }
     }

@@ -1,0 +1,237 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "control_button": {
+      "type": "image",
+      "scale": "fit",
+      "aspect": {
+        "ratio": 1
+      },
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Video"
+            },
+            {
+              "type": "subtitle",
+              "text": "A video player capable of playing a video sequence from a file or a streaming video received by URL. Depending on the parameters, the video can start automatically, be looped or run muted.\n\nIn this example, the slider displays and changes the variable of the current playback time. The rewind button sets the value of the time variable to 0, and the play and pause buttons call the corresponding actions.",
+              "margins": {
+                "bottom": 24
+              },
+              "ranges": [
+                {
+                  "start": 286,
+                  "end": 292,
+                  "font_weight": "bold"
+                },
+                {
+                  "start": 350,
+                  "end": 354,
+                  "font_weight": "bold"
+                },
+                {
+                  "start": 359,
+                  "end": 364,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "video",
+              "id": "bears_video",
+              "video_sources": [
+                {
+                  "type": "video_source",
+                  "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                  "mime_type": "video/mp4"
+                }
+              ],
+              "repeatable": false,
+              "autostart": false,
+              "muted": true,
+              "elapsed_time_variable": "video_time",
+              "height": {
+                "type": "fixed",
+                "value": 320
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#000000"
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "width": {
+                "type": "match_parent"
+              },
+              "text_alignment_horizontal": "center",
+              "text": "Time elapsed: @{video_time}ms"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 16,
+                "left": 12,
+                "right": 12
+              },
+              "max_value": 30000,
+              "min_value": 0,
+              "thumb_value_variable": "video_time",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FFCC00",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/rewind_button.png",
+                  "margins": {
+                    "right": 20
+                  },
+                  "actions": [
+                    {
+                      "log_id": "rewind",
+                      "url": "div-action://set_variable?name=video_time&value=0"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
+                  "margins": {
+                    "right": 15
+                  },
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "play",
+                      "url": "div-action://video?id=bears_video&action=start"
+                    }
+                  ]
+                },
+                {
+                  "type": "control_button",
+                  "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
+                  "paddings": {
+                    "top": 3,
+                    "bottom": 3
+                  },
+                  "actions": [
+                    {
+                      "log_id": "pause",
+                      "url": "div-action://video?id=bears_video&action=pause"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

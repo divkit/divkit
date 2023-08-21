@@ -100,7 +100,9 @@ internal class DivBorderDrawer(
             borderParams.setPaintParams(strokeWidth, borderColor)
         }
 
-        cornerRadii = border.getCornerRadii(metrics, resolver)
+        cornerRadii = border.getCornerRadii(view.width.dpToPx().toFloat(),
+                view.height.dpToPx().toFloat(),
+                metrics, resolver)
         hasDifferentCornerRadii = cornerRadii.let { radii ->
             val firstCorner = radii.first()
             !radii.all { it.equals(firstCorner) }
@@ -132,11 +134,6 @@ internal class DivBorderDrawer(
 
     private fun invalidatePaths() {
         val radii = cornerRadii.clone()
-
-        // clip corner radii
-        for (i in radii.indices) {
-            radii[i] = clampCornerRadius(radii[i], view.width.toFloat(), view.height.toFloat())
-        }
 
         clipParams.invalidatePath(radii)
 

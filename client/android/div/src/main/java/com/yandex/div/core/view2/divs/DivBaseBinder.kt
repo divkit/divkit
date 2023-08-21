@@ -85,7 +85,7 @@ internal class DivBaseBinder @Inject constructor(
         if(!divAccessibilityBinder.enabled) {
             view.applyFocusableState(div)
         }
-        view.observeVisibility(div, resolver, subscriber, divView)
+        view.observeVisibility(div, resolver, subscriber, divView, oldDiv)
         view.observeTransform(div, resolver, subscriber)
     }
 
@@ -250,10 +250,15 @@ internal class DivBaseBinder @Inject constructor(
         applyPaddings(padding, resolver)
 
         val callback = { _: Any -> applyPaddings(padding, resolver) }
-        subscriber.addSubscription(padding.left.observe(resolver, callback))
         subscriber.addSubscription(padding.top.observe(resolver, callback))
-        subscriber.addSubscription(padding.right.observe(resolver, callback))
         subscriber.addSubscription(padding.bottom.observe(resolver, callback))
+        if (paddings.start != null || paddings.end != null) {
+            subscriber.addSubscription(padding.start?.observe(resolver, callback) ?: Disposable.NULL)
+            subscriber.addSubscription(padding.end?.observe(resolver, callback) ?: Disposable.NULL)
+        } else {
+            subscriber.addSubscription(padding.left.observe(resolver, callback))
+            subscriber.addSubscription(padding.right.observe(resolver, callback))
+        }
     }
 
     private fun View.observeMargins(
@@ -266,10 +271,15 @@ internal class DivBaseBinder @Inject constructor(
         if (margins == null) return
 
         val callback = { _: Any -> applyMargins(margins, resolver) }
-        subscriber.addSubscription(margins.left.observe(resolver, callback))
         subscriber.addSubscription(margins.top.observe(resolver, callback))
-        subscriber.addSubscription(margins.right.observe(resolver, callback))
         subscriber.addSubscription(margins.bottom.observe(resolver, callback))
+        if (margins.start != null || margins.end != null) {
+            subscriber.addSubscription(margins.start?.observe(resolver, callback) ?: Disposable.NULL)
+            subscriber.addSubscription(margins.end?.observe(resolver, callback) ?: Disposable.NULL)
+        } else {
+            subscriber.addSubscription(margins.left.observe(resolver, callback))
+            subscriber.addSubscription(margins.right.observe(resolver, callback))
+        }
     }
 
     private fun View.observeAccessibility(
@@ -411,12 +421,15 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         divView: Div2View,
+        oldDiv: DivBase?,
     ) {
+        var isFirstApply = oldDiv == null
         subscriber.addSubscription(div.visibility.observeAndGet(resolver) { visibility ->
             if (visibility != DivVisibility.GONE) {
                 applyTransform(div, resolver)
             }
-            applyVisibility(div, visibility, divView, resolver)
+            applyVisibility(div, visibility, divView, resolver, isFirstApply)
+            isFirstApply = false
         })
     }
 
@@ -424,7 +437,8 @@ internal class DivBaseBinder @Inject constructor(
         div: DivBase,
         divVisibility: DivVisibility,
         divView: Div2View,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        firstApply: Boolean,
     ) {
         val divTransitionHandler = divView.divTransitionHandler
 
@@ -460,7 +474,7 @@ internal class DivBaseBinder @Inject constructor(
                     )
                 }
                 (newVisibility == View.INVISIBLE || newVisibility == View.GONE)
-                    && visibility == View.VISIBLE -> {
+                    && visibility == View.VISIBLE  && !firstApply-> {
                     transitionBuilder.createAndroidTransition(
                         div.transitionOut,
                         Visibility.MODE_OUT,

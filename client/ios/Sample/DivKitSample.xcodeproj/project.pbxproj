@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43E33AE32A83DD7F00CEFAD5 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 43E33AE22A83DD7F00CEFAD5 /* DivKit */; };
+		43E33AE52A83DD7F00CEFAD5 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 43E33AE42A83DD7F00CEFAD5 /* DivKitExtensions */; };
 		895BED8428BD0FF400F572B6 /* DivHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 895BED8328BD0FF400F572B6 /* DivHostView.swift */; };
 		8C705EF8258A3FDE00468EB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C705EF7258A3FDE00468EB6 /* AppDelegate.swift */; };
 		8C705EFC258A3FDE00468EB6 /* DivHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C705EFB258A3FDE00468EB6 /* DivHostViewController.swift */; };
@@ -15,7 +17,6 @@
 		8C705F04258A3FE000468EB6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C705F02258A3FE000468EB6 /* LaunchScreen.storyboard */; };
 		8C705F1E258A48CC00468EB6 /* div_json.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C705F1D258A48CC00468EB6 /* div_json.json */; };
 		8C705F23258A4F1000468EB6 /* DivJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C705F22258A4F1000468EB6 /* DivJson.swift */; };
-		8C896C8D28E1C6C500D864DB /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C896C8C28E1C6C500D864DB /* DivKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +37,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C896C8D28E1C6C500D864DB /* DivKit in Frameworks */,
+				43E33AE32A83DD7F00CEFAD5 /* DivKit in Frameworks */,
+				43E33AE52A83DD7F00CEFAD5 /* DivKitExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +94,8 @@
 			);
 			name = DivKitSample;
 			packageProductDependencies = (
-				8C896C8C28E1C6C500D864DB /* DivKit */,
+				43E33AE22A83DD7F00CEFAD5 /* DivKit */,
+				43E33AE42A83DD7F00CEFAD5 /* DivKitExtensions */,
 			);
 			productName = DivKitSample;
 			productReference = 8C705EF4258A3FDE00468EB6 /* DivKitSample.app */;
@@ -122,7 +125,7 @@
 			);
 			mainGroup = 8C705EEB258A3FDE00468EB6;
 			packageReferences = (
-				8C896C8B28E1C6C500D864DB /* XCRemoteSwiftPackageReference "divkit-ios" */,
+				43E33AE12A83DD7F00CEFAD5 /* XCRemoteSwiftPackageReference "divkit-ios" */,
 			);
 			productRefGroup = 8C705EF5258A3FDE00468EB6 /* Products */;
 			projectDirPath = "";
@@ -368,21 +371,26 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		8C896C8B28E1C6C500D864DB /* XCRemoteSwiftPackageReference "divkit-ios" */ = {
+		43E33AE12A83DD7F00CEFAD5 /* XCRemoteSwiftPackageReference "divkit-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/divkit/divkit-ios";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 27.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8C896C8C28E1C6C500D864DB /* DivKit */ = {
+		43E33AE22A83DD7F00CEFAD5 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8C896C8B28E1C6C500D864DB /* XCRemoteSwiftPackageReference "divkit-ios" */;
+			package = 43E33AE12A83DD7F00CEFAD5 /* XCRemoteSwiftPackageReference "divkit-ios" */;
 			productName = DivKit;
+		};
+		43E33AE42A83DD7F00CEFAD5 /* DivKitExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43E33AE12A83DD7F00CEFAD5 /* XCRemoteSwiftPackageReference "divkit-ios" */;
+			productName = DivKitExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

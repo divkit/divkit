@@ -11,7 +11,7 @@ public struct DivBlockModelingError: Error, CustomStringConvertible, Equatable {
   public let description: String
 
   init(_ message: String, path: UIElementPath) {
-    description = "\(message) [\(path)]"
+    description = "[\(path)]: \(message)"
     DivKitLogger.error(description)
   }
 }
@@ -20,7 +20,7 @@ public struct DivBlockModelingWarning: CustomStringConvertible {
   public let description: String
 
   init(_ message: String, path: UIElementPath) {
-    description = "\(message) [\(path)]"
+    description = "[\(path)]: \(message) "
     DivKitLogger.warning(description)
   }
 }

@@ -46,6 +46,7 @@ enum StringFunctions: String, CaseIterable {
   case decodeUri
   case padStart
   case padEnd
+  case testRegex
 
   var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     [.function(rawValue, arity: function.arity): function.symbolEvaluator]
@@ -93,6 +94,8 @@ enum StringFunctions: String, CaseIterable {
           FunctionTernary(impl: _padEndInt),
         ]
       )
+    case .testRegex:
+      return FunctionBinary(impl: _testRegex)
     }
   }
 }
@@ -228,5 +231,15 @@ private func castToInt(_ value: Any) -> Int? {
 extension String {
   fileprivate func distance(to index: Index) -> Int {
     distance(from: startIndex, to: index)
+  }
+}
+
+private func _testRegex(text: String, regex: String) throws -> Bool {
+  do {
+    let regex = try NSRegularExpression(pattern: regex)
+    let range = NSRange(text.startIndex..., in: text)
+    return regex.firstMatch(in: text, range: range) != nil
+  } catch {
+    throw CalcExpression.Error.shortMessage("Invalid regular expression.")
   }
 }

@@ -66,6 +66,7 @@ public final class DivSlider: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
@@ -150,6 +151,9 @@ public final class DivSlider: DivBase {
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
+
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
 
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
@@ -237,6 +241,7 @@ public final class DivSlider: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     height: DivSize? = nil,
@@ -276,6 +281,7 @@ public final class DivSlider: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
@@ -329,75 +335,76 @@ extension DivSlider: Equatable {
     }
     guard
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.margins == rhs.margins
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.maxValue == rhs.maxValue,
-      lhs.minValue == rhs.minValue,
-      lhs.paddings == rhs.paddings
+      lhs.minValue == rhs.minValue
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
-      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
       lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle,
-      lhs.thumbValueVariable == rhs.thumbValueVariable
+      lhs.thumbTextStyle == rhs.thumbTextStyle
     else {
       return false
     }
     guard
+      lhs.thumbValueVariable == rhs.thumbValueVariable,
       lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
-      lhs.tooltips == rhs.tooltips
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
-      lhs.transform == rhs.transform
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -419,6 +426,7 @@ extension DivSlider: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()

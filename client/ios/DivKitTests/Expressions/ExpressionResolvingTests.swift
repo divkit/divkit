@@ -61,6 +61,18 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_Functions_To_Color() throws {
+    let testCases = try makeTestCases(for: "functions_to_color")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
+  func test_Functions_To_Url() throws {
+    let testCases = try makeTestCases(for: "functions_to_url")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   func test_Functions_Datetime() throws {
     let testCases = try makeTestCases(for: "functions_datetime")
     let type: ExpressionType<String> = .singleItem
@@ -69,6 +81,12 @@ final class ExpressionResolvingTests: XCTestCase {
 
   func test_Functions_String() throws {
     let testCases = try makeTestCases(for: "functions_string")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
+  func test_Functions_Dict() throws {
+    let testCases = try makeTestCases(for: "functions_dict")
     let type: ExpressionType<String> = .stringBased(initializer: { $0 })
     perform(on: testCases, type: type)
   }
@@ -277,6 +295,18 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_string_regex() throws {
+    let testCases = try makeTestCases(for: "string_regex")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
+  func test_stored_values() throws {
+    let testCases = try makeTestCases(for: "functions_stored_values")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   private func perform<T: Equatable>(on testCases: TestCases, type: ExpressionType<T>) {
     testCases.cases.filter { $0.platforms.contains(.ios) }.forEach {
       testCase = $0
@@ -361,9 +391,7 @@ extension ExpressionTestCase {
 
   private func testErrorResult<T: Equatable>(type: ExpressionType<T>, expectedMessage: String) {
     var resultMessage = ""
-    _ = resolveValue(type: type, errorTracker: {
-      resultMessage = $0.description
-    })
+    _ = resolveValue(type: type, errorTracker: { resultMessage = $0.message })
     if expectedMessage.isEmpty {
       // Can throw any message
       XCTAssertFalse(resultMessage.isEmpty)
@@ -383,10 +411,13 @@ extension ExpressionTestCase {
   ) -> T? {
     let expression: Expression<T>? = try? ExpressionLink<T>(
       rawValue: expression,
-      validator: nil,
       errorTracker: errorTracker
     ).map { .link($0) } ?? .value(expression as! T)
-    let resolver = ExpressionResolver(variables: variables, errorTracker: errorTracker)
+    let resolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      errorTracker: errorTracker
+    )
     switch type {
     case .singleItem:
       return resolver.resolveNumericValue(expression: expression)
@@ -399,11 +430,12 @@ extension ExpressionTestCase {
   }
 
   private func testResolveSingleItem<T: Equatable>(expectedValue: T) {
-    let expression: Expression<T>? = try? ExpressionLink<T>(
-      rawValue: expression,
-      validator: nil
-    ).map { .link($0) }
-    let resolver = ExpressionResolver(variables: variables)
+    let expression: Expression<T>? = try? ExpressionLink<T>(rawValue: expression)
+      .map { .link($0) }
+    let resolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: DivPersistentValuesStorage()
+    )
     let result = resolver.resolveNumericValue(expression: expression)
     XCTAssertEqual(result, expectedValue, "test: \(name)")
   }
@@ -412,11 +444,12 @@ extension ExpressionTestCase {
     expectedValue: T,
     initializer: (String) -> T?
   ) {
-    let expression: Expression<T>? = try? ExpressionLink<T>(
-      rawValue: expression,
-      validator: nil
-    ).map { .link($0) } ?? .value(expression as! T)
-    let resolver = ExpressionResolver(variables: variables)
+    let expression: Expression<T>? = try? ExpressionLink<T>(rawValue: expression)
+      .map { .link($0) } ?? .value(expression as! T)
+    let resolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: DivPersistentValuesStorage()
+    )
     let result = resolver.resolveStringBasedValue(
       expression: expression,
       initializer: initializer
@@ -479,53 +512,9 @@ private enum ExpectedValue: Decodable {
 
 extension DivVariable: Decodable {
   public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    let type = try container.decode(String.self, forKey: .type)
-    let name = try container.decode(String.self, forKey: .name)
-    switch type {
-    case StringVariable.type:
-      let value = try container.decode(String.self, forKey: .value)
-      self = .stringVariable(StringVariable(name: name, value: value))
-    case NumberVariable.type:
-      let value = try container.decode(Double.self, forKey: .value)
-      self = .numberVariable(NumberVariable(name: name, value: value))
-    case IntegerVariable.type:
-      let value = try container.decode(Int.self, forKey: .value)
-      self = .integerVariable(IntegerVariable(name: name, value: value))
-    case BooleanVariable.type:
-      let boolValue = try? container.decode(Bool.self, forKey: .value)
-      let intValue = try? container.decode(Int.self, forKey: .value)
-      if boolValue == true || intValue == 1 {
-        self = .booleanVariable(BooleanVariable(name: name, value: true))
-      } else if boolValue == false || intValue == 0 {
-        self = .booleanVariable(BooleanVariable(name: name, value: false))
-      } else {
-        throw DecodingError.typeMismatch(
-          Bool.self,
-          DecodingError.Context(
-            codingPath: container.codingPath,
-            debugDescription: "incorrect boolean value"
-          )
-        )
-      }
-    case ColorVariable.type:
-      let value = try container.decode(String.self, forKey: .value)
-      self = .colorVariable(ColorVariable(name: name, value: Color.color(withHexString: value)!))
-    case UrlVariable.type:
-      let value = try container.decode(String.self, forKey: .value)
-      self = .urlVariable(UrlVariable(name: name, value: URL(string: value)!))
-    default:
-      throw DecodingError.valueNotFound(
-        String.self,
-        DecodingError.Context(
-          codingPath: container.codingPath,
-          debugDescription: "incorrect type: \(type)"
-        )
-      )
-    }
-  }
-
-  private enum CodingKeys: String, CodingKey {
-    case type, name, value
+    self = try DivTemplates(dictionary: [:]).parseValue(
+      type: DivVariableTemplate.self,
+      from: JSONDictionary(from: decoder).untypedJSON()
+    ).unwrap()
   }
 }

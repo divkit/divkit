@@ -62,7 +62,7 @@ class DocumentationGenerator(Generator):
         ])
 
     @staticmethod
-    def __menu_item(obj: Declarable) -> str:
+    def __menu_item(obj: DocumentationDeclarable) -> str:
         toc = '' if obj.include_in_documentation_toc else '\n   hidden: true'
         return '\n'.join([
             f'  -name: {obj.name}',
@@ -76,7 +76,7 @@ class DocumentationGenerator(Generator):
         deprecation = self.__translations['div_generator_type_deprecated'] if entity.is_deprecated else ''
         header = '\n'.join(filter(
             lambda text: text.strip(),
-            [entity.display_name, self.__description(entity), deprecation]
+            [entity.original_name, self.__description(entity), deprecation]
         ))
         params_header = self.__translations['div_generator_parameters']
         return Text([

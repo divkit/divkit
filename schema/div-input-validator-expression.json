@@ -13,7 +13,7 @@
           ]
         },
         "condition": {
-          "$ref": "common.json#/non_empty_string",
+          "$ref": "common.json#/boolean_int",
           "$description": "translations.json#/div_input_validators_expression_condition"
         }
       }

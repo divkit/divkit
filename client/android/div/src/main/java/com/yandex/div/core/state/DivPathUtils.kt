@@ -4,23 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.internal.Assert
 import com.yandex.div2.Div
-import com.yandex.div2.DivContainer
-import com.yandex.div2.DivCustom
-import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
-import com.yandex.div2.DivGrid
-import com.yandex.div2.DivImage
-import com.yandex.div2.DivIndicator
-import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
-import com.yandex.div2.DivSelect
-import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivSlider
 import com.yandex.div2.DivState
-import com.yandex.div2.DivTabs
-import com.yandex.div2.DivText
 
 internal object DivPathUtils {
 
@@ -77,25 +62,29 @@ internal object DivPathUtils {
     }
 
     private fun Div.findByPath(divId: String): Div? {
-        return when (val value = value()) {
-            is DivState -> {
+        return when (this) {
+            is Div.State -> {
                 if (value.getId() == divId) {
-                    return this
+                    this
+                } else {
+                    value.states.mapNotNull { it.div }.findRecursively(divId)
                 }
-                return value.states.mapNotNull { it.div }.findRecursively(divId)
             }
-            is DivTabs -> value.items.map { it.div }.findRecursively(divId)
-            is DivContainer -> value.items.findRecursively(divId)
-            is DivGrid -> value.items.findRecursively(divId)
-            is DivGallery -> value.items.findRecursively(divId)
-            is DivPager -> value.items.findRecursively(divId)
-            is DivCustom -> value.items?.findRecursively(divId)
-            is DivText, is DivImage, is DivSlider, is DivInput,
-            is DivGifImage, is DivIndicator, is DivSeparator, is DivSelect -> null
-            else -> {
-                Assert.fail("Please, add new div $value above")
-                return null
-            }
+            is Div.Tabs -> value.items.map { it.div }.findRecursively(divId)
+            is Div.Container -> value.items.findRecursively(divId)
+            is Div.Grid -> value.items.findRecursively(divId)
+            is Div.Gallery -> value.items.findRecursively(divId)
+            is Div.Pager -> value.items.findRecursively(divId)
+            is Div.Custom -> value.items?.findRecursively(divId)
+            is Div.Text -> null
+            is Div.Image -> null
+            is Div.Slider -> null
+            is Div.Input -> null
+            is Div.GifImage -> null
+            is Div.Indicator -> null
+            is Div.Separator -> null
+            is Div.Select -> null
+            is Div.Video -> null
         }
     }
 

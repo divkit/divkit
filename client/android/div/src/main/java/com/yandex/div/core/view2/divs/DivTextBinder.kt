@@ -46,7 +46,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivFixedSize
-import com.yandex.div2.DivFontFamily
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivLinearGradient
@@ -161,6 +160,8 @@ internal class DivTextBinder @Inject constructor(
             DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_VIEW_START
             DivAlignmentHorizontal.CENTER -> TextView.TEXT_ALIGNMENT_CENTER
             DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
+            DivAlignmentHorizontal.START -> TextView.TEXT_ALIGNMENT_VIEW_START
+            DivAlignmentHorizontal.END -> TextView.TEXT_ALIGNMENT_VIEW_END
             else -> TextView.TEXT_ALIGNMENT_VIEW_START
         }
     }
@@ -216,17 +217,17 @@ internal class DivTextBinder @Inject constructor(
         div: DivText,
         resolver: ExpressionResolver,
     ) {
-        applyTypeface(div.fontFamily.evaluate(resolver), div.fontWeight.evaluate(resolver))
+        applyTypeface(div.fontFamily?.evaluate(resolver), div.fontWeight.evaluate(resolver))
 
         val callback = { _: Any ->
-            applyTypeface(div.fontFamily.evaluate(resolver), div.fontWeight.evaluate(resolver))
+            applyTypeface(div.fontFamily?.evaluate(resolver), div.fontWeight.evaluate(resolver))
         }
-        addSubscription(div.fontFamily.observe(resolver, callback))
+        div.fontFamily?.observe(resolver, callback)?.let { addSubscription(it) }
         addSubscription(div.fontWeight.observe(resolver, callback))
     }
 
     private fun TextView.applyTypeface(
-        fontFamily: DivFontFamily,
+        fontFamily: String?,
         fontWeight: DivFontWeight,
     ) {
         typeface = typefaceResolver.getTypeface(fontFamily, fontWeight)
@@ -449,7 +450,7 @@ internal class DivTextBinder @Inject constructor(
             resolver,
             div.text.evaluate(resolver),
             div.fontSize.evaluate(resolver),
-            div.fontFamily.evaluate(resolver),
+            div.fontFamily?.evaluate(resolver),
             div.ranges,
             null,
             div.images
@@ -516,7 +517,7 @@ internal class DivTextBinder @Inject constructor(
             resolver,
             divEllipsis.text.evaluate(resolver),
             div.fontSize.evaluate(resolver),
-            div.fontFamily.evaluate(resolver),
+            div.fontFamily?.evaluate(resolver),
             divEllipsis.ranges,
             divEllipsis.actions,
             divEllipsis.images
@@ -545,7 +546,7 @@ internal class DivTextBinder @Inject constructor(
         private val resolver: ExpressionResolver,
         private val text: String,
         private val fontSize: Long,
-        private val fontFamily: DivFontFamily,
+        private val fontFamily: String?,
         private val ranges: List<DivText.Range>?,
         private val actions: List<DivAction>?,
         images: List<DivText.Image>?

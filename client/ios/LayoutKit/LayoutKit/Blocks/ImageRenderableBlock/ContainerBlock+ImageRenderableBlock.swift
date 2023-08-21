@@ -10,6 +10,7 @@ extension ContainerBlock: ImageRenderableBlock {
       separator: separator,
       lineSeparator: lineSeparator,
       gaps: gaps,
+      blockLayoutDirection: blockLayoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,

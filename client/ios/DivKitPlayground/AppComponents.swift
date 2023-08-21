@@ -7,9 +7,12 @@ import LayoutKit
 import NetworkingPublic
 
 enum AppComponents {
+  static let fontProvider = YSFontProvider()
+
   static func makeDivKitComponents(
-    updateCardAction: DivKitComponents.UpdateCardAction? = nil,
-    urlOpener: @escaping UrlOpener = { _ in }
+    layoutDirection: UserInterfaceLayoutDirection = .system,
+    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)
@@ -17,7 +20,6 @@ enum AppComponents {
       factory: LottieAnimationFactory(),
       requester: requester
     )
-    let variablesStorage = DivVariablesStorage()
     let sizeProviderExtensionHandler = SizeProviderExtensionHandler(
       variablesStorage: variablesStorage
     )
@@ -29,15 +31,24 @@ enum AppComponents {
         ShimmerImagePreviewExtension(),
       ],
       flagsInfo: DivFlagsInfo(),
+      fontProvider: fontProvider,
+      layoutDirection: layoutDirection,
       patchProvider: DemoPatchProvider(),
-      updateCardAction: updateCardAction,
+      trackVisibility: { logId, cardId in
+        AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")
+      },
+      trackDisappear: { logId, cardId in
+        AppLogger.info("Disappear: cardId = \(cardId), logId = \(logId)")
+      },
       playerFactory: DefaultPlayerFactory(),
-      urlOpener: urlOpener,
+      urlHandler: urlHandler,
       variablesStorage: variablesStorage
     )
   }
 
   static var debugParams: DebugParams {
-    DebugParams(isDebugInfoEnabled: true)
+    DebugParams(
+      isDebugInfoEnabled: true
+    )
   }
 }

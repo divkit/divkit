@@ -9,8 +9,8 @@
     "testcase_name": {
       "type": "text",
       "paddings": {
-        "top": 10,
-        "bottom": 10
+        "top": 8,
+        "bottom": 8
       },
       "font_size": 16,
       "background": [
@@ -20,7 +20,7 @@
         }
       ]
     },
-    "text_white_bg_50x50": {
+    "text_white_bg_50x40": {
       "type": "text",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
@@ -36,7 +36,7 @@
       },
       "height": {
         "type": "fixed",
-        "value": 50
+        "value": 40
       }
     },
     "vertical_fixed_w150_container_black": {
@@ -47,7 +47,7 @@
       },
       "height": {
         "type": "fixed",
-        "value": 200
+        "value": 160
       },
       "background": [
         {
@@ -60,12 +60,12 @@
       "type": "vertical_fixed_w150_container_black",
       "items": [
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "<",
           "alignment_horizontal": "left"
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "*",
           "alignment_horizontal": "center",
           "height": {
@@ -73,12 +73,12 @@
           }
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": ">",
           "alignment_horizontal": "right"
         },
         {
-          "type": "text_white_bg_50x50",
+          "type": "text_white_bg_50x40",
           "text": "default"
         }
       ]
@@ -100,7 +100,7 @@
           "items": [
             {
               "type": "testcase_name",
-              "text": "Different horizontal children alignments with some default on container level\n"
+              "text": "Different horizontal children alignments with some default on container level"
             },
             {
               "type": "testcase_name",

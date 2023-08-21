@@ -16,6 +16,7 @@ public final class DivCustomTemplate: TemplateValue {
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let customProps: Field<[String: Any]>?
   public let customType: Field<String>?
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
@@ -52,6 +53,7 @@ public final class DivCustomTemplate: TemplateValue {
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         customProps: try dictionary.getOptionalField("custom_props"),
         customType: try dictionary.getOptionalField("custom_type"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
@@ -88,6 +90,7 @@ public final class DivCustomTemplate: TemplateValue {
     columnSpan: Field<Expression<Int>>? = nil,
     customProps: Field<[String: Any]>? = nil,
     customType: Field<String>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
@@ -118,6 +121,7 @@ public final class DivCustomTemplate: TemplateValue {
     self.columnSpan = columnSpan
     self.customProps = customProps
     self.customType = customType
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height
@@ -149,6 +153,7 @@ public final class DivCustomTemplate: TemplateValue {
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let customPropsValue = parent?.customProps?.resolveOptionalValue(context: context, validator: ResolvedValue.customPropsValidator) ?? .noValue
     let customTypeValue = parent?.customType?.resolveValue(context: context) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
@@ -178,6 +183,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       customPropsValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_props", error: $0) },
       customTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_type", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -216,6 +222,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       customProps: customPropsValue.value,
       customType: customTypeNonNil,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -252,6 +259,7 @@ public final class DivCustomTemplate: TemplateValue {
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var customPropsValue: DeserializationResult<[String: Any]> = parent?.customProps?.value(validatedBy: ResolvedValue.customPropsValidator) ?? .noValue
     var customTypeValue: DeserializationResult<String> = parent?.customType?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
@@ -291,6 +299,8 @@ public final class DivCustomTemplate: TemplateValue {
         customPropsValue = deserialize(__dictValue, validator: ResolvedValue.customPropsValidator).merged(with: customPropsValue)
       case "custom_type":
         customTypeValue = deserialize(__dictValue).merged(with: customTypeValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
@@ -347,6 +357,8 @@ public final class DivCustomTemplate: TemplateValue {
         customPropsValue = customPropsValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.customPropsValidator))
       case parent?.customType?.link:
         customTypeValue = customTypeValue.merged(with: deserialize(__dictValue))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
@@ -392,6 +404,7 @@ public final class DivCustomTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -418,6 +431,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       customPropsValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_props", error: $0) },
       customTypeValue.errorsOrWarnings?.map { .nestedObjectError(field: "custom_type", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
@@ -456,6 +470,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpan: columnSpanValue.value,
       customProps: customPropsValue.value,
       customType: customTypeNonNil,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       height: heightValue.value,
@@ -497,6 +512,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       customProps: customProps ?? mergedParent.customProps,
       customType: customType ?? mergedParent.customType,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
@@ -533,6 +549,7 @@ public final class DivCustomTemplate: TemplateValue {
       columnSpan: merged.columnSpan,
       customProps: merged.customProps,
       customType: merged.customType,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),

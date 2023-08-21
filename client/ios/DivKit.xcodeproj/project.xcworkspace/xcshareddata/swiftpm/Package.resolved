@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Lottie",
-        "repositoryURL": "https://github.com/airbnb/lottie-ios.git",
-        "state": {
-          "branch": null,
-          "revision": "b4bd0604ded9574807f41b4004b57dd1226a30a4",
-          "version": "3.5.0"
-        }
-      },
-      {
-        "package": "RiveRuntime",
-        "repositoryURL": "https://github.com/rive-app/rive-ios",
-        "state": {
-          "branch": null,
-          "revision": "07a3aa52b38679b947be61e1b5ea190984db43ce",
-          "version": "3.1.2"
-        }
+  "pins" : [
+    {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios.git",
+      "state" : {
+        "revision" : "d6feea26a370019b4d3a85f5984cb95a2734776f",
+        "version" : "4.2.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "rive-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rive-app/rive-ios",
+      "state" : {
+        "revision" : "07a3aa52b38679b947be61e1b5ea190984db43ce",
+        "version" : "3.1.2"
+      }
+    }
+  ],
+  "version" : 2
 }

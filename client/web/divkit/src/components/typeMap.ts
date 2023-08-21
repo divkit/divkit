@@ -12,6 +12,7 @@ import Indicator from './indicator/Indicator.svelte';
 import Slider from './slider/Slider.svelte';
 import Input from './input/Input.svelte';
 import Select from './select/Select.svelte';
+import Video from './video/Video.svelte';
 
 export const TYPE_MAP: Record<string, typeof SvelteComponent> = {};
 
@@ -69,4 +70,8 @@ if (process.env.ENABLE_COMPONENT_INPUT || process.env.ENABLE_COMPONENT_INPUT ===
 
 if (process.env.ENABLE_COMPONENT_SELECT || process.env.ENABLE_COMPONENT_SELECT === undefined) {
     TYPE_MAP.select = Select;
+}
+
+if (process.env.ENABLE_COMPONENT_VIDEO || process.env.ENABLE_COMPONENT_VIDEO === undefined) {
+    TYPE_MAP.video = Video;
 }

@@ -101,7 +101,7 @@ public final class DivText: DivBase {
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
-    public let fontFamily: Expression<DivFontFamily>?
+    public let fontFamily: Expression<String>? // at least 1 char
     public let fontSize: Expression<Int>? // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight>?
@@ -117,8 +117,8 @@ public final class DivText: DivBase {
       resolver.resolveNumericValue(expression: end)
     }
 
-    public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily? {
-      resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:))
+    public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+      resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
@@ -173,8 +173,8 @@ public final class DivText: DivBase {
     static let endValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 > 0 })
 
-    static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-      makeNoOpValueValidator()
+    static let fontFamilyValidator: AnyValueValidator<String> =
+      makeStringValidator(minLength: 1)
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -208,7 +208,7 @@ public final class DivText: DivBase {
       background: DivTextRangeBackground? = nil,
       border: DivTextRangeBorder? = nil,
       end: Expression<Int>,
-      fontFamily: Expression<DivFontFamily>? = nil,
+      fontFamily: Expression<String>? = nil,
       fontSize: Expression<Int>? = nil,
       fontSizeUnit: Expression<DivSizeUnit>? = nil,
       fontWeight: Expression<DivFontWeight>? = nil,
@@ -250,12 +250,13 @@ public final class DivText: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let ellipsis: Ellipsis?
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
-  public let fontFamily: Expression<DivFontFamily> // default value: text
+  public let fontFamily: Expression<String>? // at least 1 char
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -275,7 +276,7 @@ public final class DivText: DivBase {
   public let selectedActions: [DivAction]? // at least 1 elements
   public let strike: Expression<DivLineStyle> // default value: none
   public let text: Expression<CFString> // at least 1 char
-  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
+  public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
@@ -315,8 +316,8 @@ public final class DivText: DivBase {
     resolver.resolveStringBasedValue(expression: focusedTextColor, initializer: Color.color(withHexString:))
   }
 
-  public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+  public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -364,7 +365,7 @@ public final class DivText: DivBase {
   }
 
   public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.start
   }
 
   public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
@@ -416,6 +417,9 @@ public final class DivText: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -431,8 +435,8 @@ public final class DivText: DivBase {
   static let focusedTextColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
-  static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-    makeNoOpValueValidator()
+  static let fontFamilyValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -545,12 +549,13 @@ public final class DivText: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     doubletapActions: [DivAction]? = nil,
     ellipsis: Ellipsis? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     focusedTextColor: Expression<Color>? = nil,
-    fontFamily: Expression<DivFontFamily>? = nil,
+    fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -597,12 +602,13 @@ public final class DivText: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.ellipsis = ellipsis
     self.extensions = extensions
     self.focus = focus
     self.focusedTextColor = focusedTextColor
-    self.fontFamily = fontFamily ?? .value(.text)
+    self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -622,7 +628,7 @@ public final class DivText: DivBase {
     self.selectedActions = selectedActions
     self.strike = strike ?? .value(.none)
     self.text = text
-    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
+    self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.start)
     self.textAlignmentVertical = textAlignmentVertical ?? .value(.top)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient
@@ -667,97 +673,102 @@ extension DivText: Equatable {
     guard
       lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.ellipsis == rhs.ellipsis,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.focusedTextColor == rhs.focusedTextColor,
-      lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize
+      lhs.fontFamily == rhs.fontFamily
     else {
       return false
     }
     guard
+      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height
+      lhs.fontWeight == rhs.fontWeight
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.images == rhs.images,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.images == rhs.images
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.maxLines == rhs.maxLines,
-      lhs.minHiddenLines == rhs.minHiddenLines,
-      lhs.paddings == rhs.paddings
+      lhs.minHiddenLines == rhs.minHiddenLines
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.ranges == rhs.ranges,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectable == rhs.selectable
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectable == rhs.selectable,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.strike == rhs.strike,
-      lhs.text == rhs.text
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
+      lhs.text == rhs.text,
       lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
-      lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor
+      lhs.textAlignmentVertical == rhs.textAlignmentVertical
     else {
       return false
     }
     guard
+      lhs.textColor == rhs.textColor,
       lhs.textGradient == rhs.textGradient,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.underline == rhs.underline,
-      lhs.visibility == rhs.visibility
+      lhs.underline == rhs.underline
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -782,12 +793,13 @@ extension DivText: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["ellipsis"] = ellipsis?.toDictionary()
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["focused_text_color"] = focusedTextColor?.toValidSerializationValue()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()

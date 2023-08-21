@@ -37,6 +37,7 @@ public struct GalleryViewModel: Equatable {
   }
 
   public var items: [Item]
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let metrics: GalleryViewMetrics
   public let scrollMode: ScrollMode
   public let path: UIElementPath
@@ -48,6 +49,7 @@ public struct GalleryViewModel: Equatable {
 
   public init(
     blocks: [Block],
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     metrics: GalleryViewMetrics,
     scrollMode: ScrollMode = .default,
     path: UIElementPath,
@@ -60,6 +62,7 @@ public struct GalleryViewModel: Equatable {
   ) {
     self.init(
       items: blocks.map { Item(crossAlignment: crossAlignment, content: $0) },
+      layoutDirection: layoutDirection,
       metrics: metrics,
       scrollMode: scrollMode,
       path: path,
@@ -73,6 +76,7 @@ public struct GalleryViewModel: Equatable {
 
   public init(
     items: [Item],
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     metrics: GalleryViewMetrics,
     scrollMode: ScrollMode = .default,
     path: UIElementPath,
@@ -87,6 +91,7 @@ public struct GalleryViewModel: Equatable {
     precondition(columnCount > 0)
 
     self.items = items
+    self.layoutDirection = layoutDirection
     self.metrics = metrics
     self.scrollMode = scrollMode
     self.path = path

@@ -94,9 +94,10 @@ public final class DivInputTemplate: TemplateValue {
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
-  public let fontFamily: Field<Expression<DivFontFamily>>? // default value: text
+  public let fontFamily: Field<Expression<String>>? // at least 1 char
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -116,6 +117,8 @@ public final class DivInputTemplate: TemplateValue {
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectAllOnFocus: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
+  public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textVariable: Field<String>? // at least 1 char
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
@@ -144,6 +147,7 @@ public final class DivInputTemplate: TemplateValue {
         background: try dictionary.getOptionalArray("background", templateToType: templateToType),
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         fontFamily: try dictionary.getOptionalExpressionField("font_family"),
@@ -166,6 +170,8 @@ public final class DivInputTemplate: TemplateValue {
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectAllOnFocus: try dictionary.getOptionalExpressionField("select_all_on_focus"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+        textAlignmentHorizontal: try dictionary.getOptionalExpressionField("text_alignment_horizontal"),
+        textAlignmentVertical: try dictionary.getOptionalExpressionField("text_alignment_vertical"),
         textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
         textVariable: try dictionary.getOptionalField("text_variable"),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
@@ -194,9 +200,10 @@ public final class DivInputTemplate: TemplateValue {
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
-    fontFamily: Field<Expression<DivFontFamily>>? = nil,
+    fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -216,6 +223,8 @@ public final class DivInputTemplate: TemplateValue {
     rowSpan: Field<Expression<Int>>? = nil,
     selectAllOnFocus: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
+    textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
+    textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     textColor: Field<Expression<Color>>? = nil,
     textVariable: Field<String>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
@@ -238,6 +247,7 @@ public final class DivInputTemplate: TemplateValue {
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.fontFamily = fontFamily
@@ -260,6 +270,8 @@ public final class DivInputTemplate: TemplateValue {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus
     self.selectedActions = selectedActions
+    self.textAlignmentHorizontal = textAlignmentHorizontal
+    self.textAlignmentVertical = textAlignmentVertical
     self.textColor = textColor
     self.textVariable = textVariable
     self.tooltips = tooltips
@@ -283,6 +295,7 @@ public final class DivInputTemplate: TemplateValue {
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context, validator: ResolvedValue.fontFamilyValidator) ?? .noValue
@@ -305,6 +318,8 @@ public final class DivInputTemplate: TemplateValue {
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectAllOnFocusValue = parent?.selectAllOnFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.selectAllOnFocusValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
+    let textAlignmentHorizontalValue = parent?.textAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentHorizontalValidator) ?? .noValue
+    let textAlignmentVerticalValue = parent?.textAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentVerticalValidator) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
     let textVariableValue = parent?.textVariable?.resolveValue(context: context, validator: ResolvedValue.textVariableValidator) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
@@ -326,6 +341,7 @@ public final class DivInputTemplate: TemplateValue {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
@@ -348,6 +364,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_variable", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -378,6 +396,7 @@ public final class DivInputTemplate: TemplateValue {
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
@@ -400,6 +419,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
+      textAlignmentHorizontal: textAlignmentHorizontalValue.value,
+      textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textVariable: textVariableNonNil,
       tooltips: tooltipsValue.value,
@@ -428,9 +449,10 @@ public final class DivInputTemplate: TemplateValue {
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
-    var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+    var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -450,6 +472,8 @@ public final class DivInputTemplate: TemplateValue {
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectAllOnFocusValue: DeserializationResult<Expression<Bool>> = parent?.selectAllOnFocus?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var textAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.textAlignmentHorizontal?.value() ?? .noValue
+    var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
     var textVariableValue: DeserializationResult<String> = parent?.textVariable?.value(validatedBy: ResolvedValue.textVariableValidator) ?? .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
@@ -479,6 +503,8 @@ public final class DivInputTemplate: TemplateValue {
         borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self).merged(with: borderValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
@@ -523,6 +549,10 @@ public final class DivInputTemplate: TemplateValue {
         selectAllOnFocusValue = deserialize(__dictValue, validator: ResolvedValue.selectAllOnFocusValidator).merged(with: selectAllOnFocusValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+      case "text_alignment_horizontal":
+        textAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator).merged(with: textAlignmentHorizontalValue)
+      case "text_alignment_vertical":
+        textAlignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.textAlignmentVerticalValidator).merged(with: textAlignmentVerticalValue)
       case "text_color":
         textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
       case "text_variable":
@@ -563,6 +593,8 @@ public final class DivInputTemplate: TemplateValue {
         borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
@@ -607,6 +639,10 @@ public final class DivInputTemplate: TemplateValue {
         selectAllOnFocusValue = selectAllOnFocusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.selectAllOnFocusValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
+      case parent?.textAlignmentHorizontal?.link:
+        textAlignmentHorizontalValue = textAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator))
+      case parent?.textAlignmentVertical?.link:
+        textAlignmentVerticalValue = textAlignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textAlignmentVerticalValidator))
       case parent?.textColor?.link:
         textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
       case parent?.textVariable?.link:
@@ -640,6 +676,7 @@ public final class DivInputTemplate: TemplateValue {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
@@ -666,6 +703,7 @@ public final class DivInputTemplate: TemplateValue {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
@@ -688,6 +726,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       selectAllOnFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "select_all_on_focus", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_variable", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
@@ -718,6 +758,7 @@ public final class DivInputTemplate: TemplateValue {
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
       fontFamily: fontFamilyValue.value,
@@ -740,6 +781,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpanValue.value,
       selectAllOnFocus: selectAllOnFocusValue.value,
       selectedActions: selectedActionsValue.value,
+      textAlignmentHorizontal: textAlignmentHorizontalValue.value,
+      textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textVariable: textVariableNonNil,
       tooltips: tooltipsValue.value,
@@ -773,6 +816,7 @@ public final class DivInputTemplate: TemplateValue {
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
       fontFamily: fontFamily ?? mergedParent.fontFamily,
@@ -795,6 +839,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectAllOnFocus: selectAllOnFocus ?? mergedParent.selectAllOnFocus,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
+      textAlignmentHorizontal: textAlignmentHorizontal ?? mergedParent.textAlignmentHorizontal,
+      textAlignmentVertical: textAlignmentVertical ?? mergedParent.textAlignmentVertical,
       textColor: textColor ?? mergedParent.textColor,
       textVariable: textVariable ?? mergedParent.textVariable,
       tooltips: tooltips ?? mergedParent.tooltips,
@@ -823,6 +869,7 @@ public final class DivInputTemplate: TemplateValue {
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       fontFamily: merged.fontFamily,
@@ -845,6 +892,8 @@ public final class DivInputTemplate: TemplateValue {
       rowSpan: merged.rowSpan,
       selectAllOnFocus: merged.selectAllOnFocus,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
+      textAlignmentHorizontal: merged.textAlignmentHorizontal,
+      textAlignmentVertical: merged.textAlignmentVertical,
       textColor: merged.textColor,
       textVariable: merged.textVariable,
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),

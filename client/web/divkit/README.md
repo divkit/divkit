@@ -1,6 +1,6 @@
 ## DivKit for the Web
 
-![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-47.7%20KB-brightgreen)
+![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-60.5%20KB-brightgreen)
 
 ### Installation
 
@@ -12,7 +12,11 @@ npm i @divkitframework/divkit --save
 
 [Example usage repos](../divkit-examples)
 
+### Inlude CSS
+
 For all variants of usage, css file `dist/client.css` is required. Include it in any way (import as module, link directly in html, etc).
+
+### Include js
 
 JS code can be bundled with various strategies. Basically you need to answer a few questions
 
@@ -222,12 +226,12 @@ function onError(detauls: {
 
 Function, optional.
 
-Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action`).
+Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action(s)` and `disappear_actions`).
 
 ```ts
 function onStat(details: {
-    type: 'click' | 'visible';
-    action: Action | VisibilityAction;
+    type: 'click' | 'visible' | 'disappear';
+    action: Action | VisibilityAction | DisappearAction;
 }) {
 }
 ```
@@ -242,6 +246,43 @@ Callback for a component with an action that contains non-standard protocols.
 
 ```ts
 function onCustomAction(action: Action): void {
+}
+```
+
+#### typefaceProvider
+
+Function, optional.
+
+Callback for a custom `font-family` css property value.
+
+```ts
+function typefaceProvider(fontFamily: string, opts?: {
+    fontWeight?: number;
+}): string {
+}
+```
+
+#### fetchInit
+
+`/client` and `/client-hydratable`
+
+Function or object, optional.
+
+Used as a second parameter for `fetch` requests in the `div-action://download` actions.
+
+```ts
+function fetchInit(url: string) {
+    return {
+        credentials: 'include'
+    };
+}
+```
+
+Or
+
+```ts
+fetchInit: {
+    credentials: 'include'
 }
 ```
 

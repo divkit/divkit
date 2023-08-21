@@ -311,7 +311,7 @@ public final class DivTextTemplate: TemplateValue {
     public let background: Field<DivTextRangeBackgroundTemplate>?
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
-    public let fontFamily: Field<Expression<DivFontFamily>>?
+    public let fontFamily: Field<Expression<String>>? // at least 1 char
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>?
@@ -352,7 +352,7 @@ public final class DivTextTemplate: TemplateValue {
       background: Field<DivTextRangeBackgroundTemplate>? = nil,
       border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
-      fontFamily: Field<Expression<DivFontFamily>>? = nil,
+      fontFamily: Field<Expression<String>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
       fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
       fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -454,7 +454,7 @@ public final class DivTextTemplate: TemplateValue {
       var backgroundValue: DeserializationResult<DivTextRangeBackground> = .noValue
       var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
-      var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+      var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
       var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
       var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -624,12 +624,13 @@ public final class DivTextTemplate: TemplateValue {
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let ellipsis: Field<EllipsisTemplate>?
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let focusedTextColor: Field<Expression<Color>>?
-  public let fontFamily: Field<Expression<DivFontFamily>>? // default value: text
+  public let fontFamily: Field<Expression<String>>? // at least 1 char
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -649,7 +650,7 @@ public final class DivTextTemplate: TemplateValue {
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let strike: Field<Expression<DivLineStyle>>? // default value: none
   public let text: Field<Expression<CFString>>? // at least 1 char
-  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
+  public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textGradient: Field<DivTextGradientTemplate>?
@@ -683,6 +684,7 @@ public final class DivTextTemplate: TemplateValue {
         background: try dictionary.getOptionalArray("background", templateToType: templateToType),
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
+        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
         doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
         ellipsis: try dictionary.getOptionalField("ellipsis", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
@@ -742,12 +744,13 @@ public final class DivTextTemplate: TemplateValue {
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
+    disappearActions: Field<[DivDisappearActionTemplate]>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     ellipsis: Field<EllipsisTemplate>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     focusedTextColor: Field<Expression<Color>>? = nil,
-    fontFamily: Field<Expression<DivFontFamily>>? = nil,
+    fontFamily: Field<Expression<String>>? = nil,
     fontSize: Field<Expression<Int>>? = nil,
     fontSizeUnit: Field<Expression<DivSizeUnit>>? = nil,
     fontWeight: Field<Expression<DivFontWeight>>? = nil,
@@ -795,6 +798,7 @@ public final class DivTextTemplate: TemplateValue {
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
     self.ellipsis = ellipsis
     self.extensions = extensions
@@ -849,6 +853,7 @@ public final class DivTextTemplate: TemplateValue {
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true) ?? .noValue
     let ellipsisValue = parent?.ellipsis?.resolveOptionalValue(context: context, validator: ResolvedValue.ellipsisValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
@@ -901,6 +906,7 @@ public final class DivTextTemplate: TemplateValue {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(field: "ellipsis", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -962,6 +968,7 @@ public final class DivTextTemplate: TemplateValue {
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       ellipsis: ellipsisValue.value,
       extensions: extensionsValue.value,
@@ -1021,12 +1028,13 @@ public final class DivTextTemplate: TemplateValue {
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
+    var disappearActionsValue: DeserializationResult<[DivDisappearAction]> = .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var ellipsisValue: DeserializationResult<DivText.Ellipsis> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var focusedTextColorValue: DeserializationResult<Expression<Color>> = parent?.focusedTextColor?.value() ?? .noValue
-    var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
+    var fontFamilyValue: DeserializationResult<Expression<String>> = parent?.fontFamily?.value() ?? .noValue
     var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
     var fontSizeUnitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.fontSizeUnit?.value() ?? .noValue
     var fontWeightValue: DeserializationResult<Expression<DivFontWeight>> = parent?.fontWeight?.value() ?? .noValue
@@ -1085,6 +1093,8 @@ public final class DivTextTemplate: TemplateValue {
         borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self).merged(with: borderValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
+      case "disappear_actions":
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "doubletap_actions":
         doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
       case "ellipsis":
@@ -1187,6 +1197,8 @@ public final class DivTextTemplate: TemplateValue {
         borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
+      case parent?.disappearActions?.link:
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
       case parent?.doubletapActions?.link:
         doubletapActionsValue = doubletapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self))
       case parent?.ellipsis?.link:
@@ -1277,6 +1289,7 @@ public final class DivTextTemplate: TemplateValue {
       actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
       ellipsisValue = ellipsisValue.merged(with: parent.ellipsis?.resolveOptionalValue(context: context, validator: ResolvedValue.ellipsisValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
@@ -1310,6 +1323,7 @@ public final class DivTextTemplate: TemplateValue {
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      disappearActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_actions", error: $0) },
       doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
       ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(field: "ellipsis", error: $0) },
       extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
@@ -1371,6 +1385,7 @@ public final class DivTextTemplate: TemplateValue {
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
+      disappearActions: disappearActionsValue.value,
       doubletapActions: doubletapActionsValue.value,
       ellipsis: ellipsisValue.value,
       extensions: extensionsValue.value,
@@ -1435,6 +1450,7 @@ public final class DivTextTemplate: TemplateValue {
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
+      disappearActions: disappearActions ?? mergedParent.disappearActions,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       ellipsis: ellipsis ?? mergedParent.ellipsis,
       extensions: extensions ?? mergedParent.extensions,
@@ -1494,6 +1510,7 @@ public final class DivTextTemplate: TemplateValue {
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,
+      disappearActions: merged.disappearActions?.tryResolveParent(templates: templates),
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       ellipsis: merged.ellipsis?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),

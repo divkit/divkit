@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [state].
  * 
- * Required properties: `type, states`.
+ * Required parameters: `type, states`.
  */
 @Generated
 class State internal constructor(
@@ -44,6 +44,7 @@ class State internal constructor(
             border = additive.border ?: properties.border,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             defaultStateId = additive.defaultStateId ?: properties.defaultStateId,
+            disappearActions = additive.disappearActions ?: properties.disappearActions,
             divId = additive.divId ?: properties.divId,
             extensions = additive.extensions ?: properties.extensions,
             focus = additive.focus ?: properties.focus,
@@ -103,9 +104,13 @@ class State internal constructor(
          */
         val defaultStateId: Property<String>?,
         /**
+         * Actions when an element disappears from the screen.
+         */
+        val disappearActions: Property<List<DisappearAction>>?,
+        /**
          * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val divId: Property<String>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -156,7 +161,7 @@ class State internal constructor(
          * It determines which events trigger transition animations.
          * Default value: `state_change`.
          */
-        @Deprecated("Marked as deprecated in json schema")
+        @Deprecated("Marked as deprecated in the JSON schema ")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
@@ -204,6 +209,7 @@ class State internal constructor(
             result.tryPutProperty("border", border)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("default_state_id", defaultStateId)
+            result.tryPutProperty("disappear_actions", disappearActions)
             result.tryPutProperty("div_id", divId)
             result.tryPutProperty("extensions", extensions)
             result.tryPutProperty("focus", focus)
@@ -232,7 +238,7 @@ class State internal constructor(
     /**
      * Can be created using the method [stateItem].
      * 
-     * Required properties: `state_id`.
+     * Required parameters: `state_id`.
      */
     @Generated
     class Item internal constructor(
@@ -256,12 +262,12 @@ class State internal constructor(
             /**
              * State appearance animation. Use `transition_in` instead.
              */
-            @Deprecated("Marked as deprecated in json schema")
+            @Deprecated("Marked as deprecated in the JSON schema ")
             val animationIn: Property<Animation>?,
             /**
              * State disappearance animation. Use `transition_out` instead.
              */
-            @Deprecated("Marked as deprecated in json schema")
+            @Deprecated("Marked as deprecated in the JSON schema ")
             val animationOut: Property<Animation>?,
             /**
              * Contents. If the parameter is missing, the state won't be displayed.
@@ -274,7 +280,7 @@ class State internal constructor(
             /**
              * Actions when swiping the state horizontally.
              */
-            @Deprecated("Marked as deprecated in json schema")
+            @Deprecated("Marked as deprecated in the JSON schema ")
             val swipeOutActions: Property<List<Action>>?,
         ) {
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -301,6 +307,7 @@ class State internal constructor(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -334,6 +341,7 @@ fun DivScope.state(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -365,6 +373,7 @@ fun DivScope.state(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
+        disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -398,6 +407,7 @@ fun DivScope.state(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -431,6 +441,7 @@ fun DivScope.stateProps(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -461,6 +472,7 @@ fun DivScope.stateProps(
     border = valueOrNull(border),
     columnSpan = valueOrNull(columnSpan),
     defaultStateId = valueOrNull(defaultStateId),
+    disappearActions = valueOrNull(disappearActions),
     divId = valueOrNull(divId),
     extensions = valueOrNull(extensions),
     focus = valueOrNull(focus),
@@ -493,6 +505,7 @@ fun DivScope.stateProps(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -526,6 +539,7 @@ fun TemplateScope.stateRefs(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -556,6 +570,7 @@ fun TemplateScope.stateRefs(
     border = border,
     columnSpan = columnSpan,
     defaultStateId = defaultStateId,
+    disappearActions = disappearActions,
     divId = divId,
     extensions = extensions,
     focus = focus,
@@ -588,6 +603,7 @@ fun TemplateScope.stateRefs(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -621,6 +637,7 @@ fun State.override(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -652,6 +669,7 @@ fun State.override(
         border = valueOrNull(border) ?: properties.border,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         defaultStateId = valueOrNull(defaultStateId) ?: properties.defaultStateId,
+        disappearActions = valueOrNull(disappearActions) ?: properties.disappearActions,
         divId = valueOrNull(divId) ?: properties.divId,
         extensions = valueOrNull(extensions) ?: properties.extensions,
         focus = valueOrNull(focus) ?: properties.focus,
@@ -685,6 +703,7 @@ fun State.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -718,6 +737,7 @@ fun State.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -749,6 +769,7 @@ fun State.defer(
         border = border ?: properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
+        disappearActions = disappearActions ?: properties.disappearActions,
         divId = divId ?: properties.divId,
         extensions = extensions ?: properties.extensions,
         focus = focus ?: properties.focus,
@@ -804,6 +825,7 @@ fun State.evaluate(
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         defaultStateId = defaultStateId ?: properties.defaultStateId,
+        disappearActions = properties.disappearActions,
         divId = properties.divId,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -837,6 +859,7 @@ fun State.evaluate(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -870,6 +893,7 @@ fun Component<State>.override(
     border: Border? = null,
     columnSpan: Int? = null,
     defaultStateId: String? = null,
+    disappearActions: List<DisappearAction>? = null,
     divId: String? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
@@ -902,6 +926,7 @@ fun Component<State>.override(
         border = valueOrNull(border),
         columnSpan = valueOrNull(columnSpan),
         defaultStateId = valueOrNull(defaultStateId),
+        disappearActions = valueOrNull(disappearActions),
         divId = valueOrNull(divId),
         extensions = valueOrNull(extensions),
         focus = valueOrNull(focus),
@@ -935,6 +960,7 @@ fun Component<State>.override(
  * @param border Element stroke.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
+ * @param disappearActions Actions when an element disappears from the screen.
  * @param divId ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
  * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
  * @param focus Parameters when focusing on an element or losing focus.
@@ -968,6 +994,7 @@ fun Component<State>.defer(
     border: ReferenceProperty<Border>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     defaultStateId: ReferenceProperty<String>? = null,
+    disappearActions: ReferenceProperty<List<DisappearAction>>? = null,
     divId: ReferenceProperty<String>? = null,
     extensions: ReferenceProperty<List<Extension>>? = null,
     focus: ReferenceProperty<Focus>? = null,
@@ -1000,6 +1027,7 @@ fun Component<State>.defer(
         border = border,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
+        disappearActions = disappearActions,
         divId = divId,
         extensions = extensions,
         focus = focus,
@@ -1056,6 +1084,7 @@ fun Component<State>.evaluate(
         border = null,
         columnSpan = columnSpan,
         defaultStateId = defaultStateId,
+        disappearActions = null,
         divId = null,
         extensions = null,
         focus = null,

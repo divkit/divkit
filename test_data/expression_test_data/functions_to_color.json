@@ -9,7 +9,8 @@
       },
       "variables": [],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -21,7 +22,8 @@
       },
       "variables": [],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]

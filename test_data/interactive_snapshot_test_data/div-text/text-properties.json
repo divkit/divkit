@@ -157,7 +157,19 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=3-font_size_unit",
+          "url": "div-action://set_variable?name=text&value=3-font_size_unit_px",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=font_size_unit&value=px",
+          "log_id": "font_size_unit"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=text&value=4-font_size_unit_dp",
           "log_id": "changing_text"
         },
         {
@@ -169,7 +181,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=4-font_size",
+          "url": "div-action://set_variable?name=text&value=5-font_size",
           "log_id": "changing_text"
         },
         {
@@ -181,7 +193,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=5-max_lines%0Aline_2%0Aline_3%0Aline_4",
+          "url": "div-action://set_variable?name=text&value=6-max_lines%0Aline_2%0Aline_3%0Aline_4",
           "log_id": "changing_text"
         },
         {
@@ -193,7 +205,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=6-line_height%0Aline_2%0Aline_3",
+          "url": "div-action://set_variable?name=text&value=7-line_height%0Aline_2%0Aline_3",
           "log_id": "changing_text"
         },
         {

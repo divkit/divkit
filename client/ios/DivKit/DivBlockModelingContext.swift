@@ -2,9 +2,16 @@ import CoreGraphics
 
 import BasePublic
 import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 import NetworkingPublic
 import Serialization
+
+#if os(iOS)
+import UIKit
+#else
+import AppKit
+#endif
 
 public struct DivBlockModelingContext {
   public let cardId: DivCardID
@@ -14,22 +21,41 @@ public struct DivBlockModelingContext {
   public var stateManager: DivStateManager
   public let blockStateStorage: DivBlockStateStorage
   public let visibilityCounter: DivVisibilityCounting
-  public var galleryResizableInsets: InsetMode.Resizable?
+  public let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: ImageHolderFactory
   public let highPriorityImageHolderFactory: ImageHolderFactory?
   public let divCustomBlockFactory: DivCustomBlockFactory
-  public let fontSpecifiers: FontSpecifiers
+  public let fontProvider: DivFontProvider
   public let flagsInfo: DivFlagsInfo
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
-  public let expressionResolver: ExpressionResolver
+  private let variables: DivVariables
+  public let layoutDirection: UserInterfaceLayoutDirection
   public let debugParams: DebugParams
-  public let playerFactory: PlayerFactory
+  public let scheduler: Scheduling
+  public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
+  internal let variableTracker: DivVariableTracker?
+  private let persistentValuesStorage: DivPersistentValuesStorage
+  public let tooltipViewFactory: DivTooltipViewFactory?
+
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
+
+  public var expressionResolver: ExpressionResolver {
+    ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: persistentValuesStorage,
+      errorTracker: { [weak errorsStorage] error in
+        errorsStorage?.add(DivBlockModelingError(error.description, path: parentPath))
+      },
+      variableTracker: { [weak variableTracker] variables in
+        variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
+      }
+    )
+  }
 
   public init(
     cardId: DivCardID,
@@ -39,20 +65,25 @@ public struct DivBlockModelingContext {
     stateManager: DivStateManager,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting = DivVisibilityCounter(),
-    galleryResizableInsets: InsetMode.Resizable? = nil,
+    lastVisibleBoundsCache: DivLastVisibleBoundsCache = DivLastVisibleBoundsCache(),
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
-    fontSpecifiers: FontSpecifiers = BaseUIPublic.fontSpecifiers,
+    fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
     variables: DivVariables = [:],
-    playerFactory: PlayerFactory = DefaultPlayerFactory(),
+    playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
+    scheduler: Scheduling? = nil,
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
-    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: [])
+    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
+    layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
+    variableTracker: DivVariableTracker? = nil,
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    tooltipViewFactory: DivTooltipViewFactory? = nil
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -61,28 +92,23 @@ public struct DivBlockModelingContext {
     self.stateManager = stateManager
     self.blockStateStorage = blockStateStorage
     self.visibilityCounter = visibilityCounter
-    self.galleryResizableInsets = galleryResizableInsets
+    self.lastVisibleBoundsCache = lastVisibleBoundsCache
     self.imageHolderFactory = imageHolderFactory
     self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
-    self.fontSpecifiers = fontSpecifiers
+    self.fontProvider = fontProvider ?? DefaultFontProvider()
+    self.variables = variables
     self.playerFactory = playerFactory
     self.debugParams = debugParams
+    self.scheduler = scheduler ?? TimerScheduler()
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage
-
-    if debugParams.isDebugInfoEnabled {
-      self.expressionResolver = ExpressionResolver(
-        variables: variables,
-        errorTracker: { [weak errorsStorage] error in
-          errorsStorage?.add(error)
-        }
-      )
-    } else {
-      self.expressionResolver = ExpressionResolver(variables: variables)
-    }
+    self.layoutDirection = layoutDirection
+    self.variableTracker = variableTracker
+    self.persistentValuesStorage = persistentValuesStorage
+    self.tooltipViewFactory = tooltipViewFactory
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {

@@ -11,12 +11,14 @@ from ...schema.modeling.entities import (
     BoolInt,
     Color,
     Dictionary,
+    RawArray,
     Double,
     Int,
     Object,
     StaticString,
     String,
-    Url
+    StringEnumeration,
+    Url,
 )
 from ... import utils
 from ...schema.modeling.text import Text, EMPTY
@@ -41,6 +43,8 @@ def update_property_type_base(property_type: PropertyType):
         property_type.__class__ = PythonColor
     elif isinstance(property_type, Dictionary):
         property_type.__class__ = PythonDictionary
+    elif isinstance(property_type, RawArray):
+        property_type.__class__ = PythonRawArray
     elif isinstance(property_type, Double):
         property_type.__class__ = PythonDouble
     elif isinstance(property_type, Int):
@@ -121,20 +125,19 @@ class PythonEntity(Entity):
         instance_properties = self.instance_properties
         optional = list(map(lambda p: f'{p.escaped_name}: str = {p.static_value}', static_properties))
         for p in cast(List[PythonProperty], instance_properties):
-            if p.optional:
-                optional.append(f'{p.escaped_name}: typing.Optional[{p.property_type_py.type_name(filename)}] = None')
-            else:
-                required.append(f'{p.escaped_name}: {p.property_type_py.type_name(filename)}')
+            optional.append(f'{p.escaped_name}: typing.Optional[{p.property_type_py.final_type(filename)}] = None')
         result = Text()
         result += 'def __init__('
         result += Text(', '.join(main_required) + ',').indented(indent_width=4)
         for p in required + optional:
             result += Text(p + ',').indented(indent_width=4)
+        result += Text('**kwargs: typing.Any,').indented(indent_width=4)
         result += '):'
         super_init = Text('super().__init__(')
         for p in cast(List[PythonProperty], static_properties + instance_properties):
             escaped_name = p.escaped_name
             super_init += Text(f'{escaped_name}={escaped_name},').indented(indent_width=4)
+        super_init += Text('**kwargs,').indented(indent_width=4)
         super_init += ')'
         result += super_init.indented(indent_width=4)
         return result
@@ -157,6 +160,7 @@ class PythonEntity(Entity):
                     commentary, indent=indent, indent_first_line=False
                 )
                 field += f", description={commentary}"
+
             result += Text(f'{p.escaped_name}: str = Field({field})').indented(indent_width=4)
         dynamic_declaration = self.dynamic_properties_declaration
         if dynamic_declaration.lines:
@@ -188,12 +192,12 @@ class PythonProperty(Property):
     def constructor_required_value(self, filename: str) -> Optional[str]:
         if self.optional:
             return None
-        return f'{self.escaped_name}: {self.property_type_py.type_name(filename)}'
+        return f'{self.escaped_name}: {self.property_type_py.final_type(filename)}'
 
     def constructor_optional_value(self, filename: str) -> Optional[str]:
         if not self.optional:
             return None
-        return f'{self.escaped_name}: typing.Optional[{self.property_type_py.type_name(filename)}] = None'
+        return f'{self.escaped_name}: typing.Optional[{self.property_type_py.final_type(filename)}] = None'
 
     @property
     def static_value(self) -> str:
@@ -237,7 +241,7 @@ class PythonProperty(Property):
         else:
             prefix = ''
             suffix = ''
-        type_decl = f'{prefix}{self.property_type_py.type_name(filename)}{suffix}'
+        type_decl = f'{prefix}{self.property_type_py.final_type(filename)}{suffix}'
 
         fields_text = utils.indent(", \n".join(fields), indent=4)
         return Text(f'{self.escaped_name}: {type_decl} = Field(\n{fields_text})')
@@ -255,6 +259,24 @@ class PythonPropertyType(PropertyType):
             return self.property_type_py.referenced_top_level_type_name
         return None
 
+    def is_expr(self) -> bool:
+        if isinstance(self, (Int, Double)):
+            return True
+        if isinstance(self, (Bool, BoolInt)):
+            return True
+        if isinstance(self, (Color, String, Url)):
+            return True
+        if isinstance(self, Object):
+            if isinstance(self.object, StringEnumeration):
+                return True
+        return False
+
+    def final_type(self, filename: str) -> str:
+        typename = self.type_name(filename)
+        if self.is_expr():
+            return f"typing.Union[Expr, {typename}]"
+        return typename
+
     def type_name(self, filename: str) -> str:
         if isinstance(self, Int):
             return 'int'
@@ -268,8 +290,10 @@ class PythonPropertyType(PropertyType):
             raise TypeError(f'{self} is a static type')
         elif isinstance(self, Dictionary):
             return 'typing.Dict[str, typing.Any]'
+        elif isinstance(self, RawArray):
+            return 'typing.Sequence[typing.Any]'
         elif isinstance(self, PythonArray):
-            return f'typing.List[{self.property_type_py.type_name(filename)}]'
+            return f'typing.Sequence[{self.property_type_py.final_type(filename)}]'
         elif isinstance(self, Object):
             if self.object is None:
                 raise ValueError(f'Invalid {self}')
@@ -282,7 +306,7 @@ class PythonPropertyType(PropertyType):
 
     @property
     def constraints(self) -> str:
-        if isinstance(self, (Bool, BoolInt, Dictionary)):
+        if isinstance(self, (Bool, BoolInt, Dictionary, RawArray)):
             return ''
         elif isinstance(self, Array):
             result = ''
@@ -331,6 +355,10 @@ class PythonColor(PythonPropertyType, Color):
 
 
 class PythonDictionary(PythonPropertyType, Dictionary):
+    pass
+
+
+class PythonRawArray(PythonPropertyType, RawArray):
     pass
 
 

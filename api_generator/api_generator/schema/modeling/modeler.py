@@ -1,11 +1,11 @@
 from typing import List, Dict, Tuple, Optional
 
-from ...config import Config
+from ...config import Config, GenerationMode
 from ..utils import is_list_of_type, is_dict_with_keys_of_type
 from ..preprocessing.entities import SchemaDirectory, SchemaFile, ElementLocation
 
 from . import builders
-from .entities import Declarable, StringEnumeration
+from .entities import Declarable, StringEnumeration, _build_documentation_generator_properties
 from .utils import (
     alias,
     generate_cases_for_templates
@@ -17,6 +17,12 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
     name: str = file.name.replace('.json', '')
     type_value: Optional[str] = contents.get('type')
     location = ElementLocation(file)
+    documentation_properties = _build_documentation_generator_properties(dictionary=contents,
+                                                                         location=location,
+                                                                         mode=GenerationMode.NORMAL_WITH_TEMPLATES)
+    include_in_documentation_toc = False
+    if documentation_properties is not None:
+        include_in_documentation_toc = documentation_properties.include_in_toc
     if type_value == 'object':
         return builders.entity_build(name=name,
                                      dictionary=contents,
@@ -31,7 +37,7 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
                                   cases=cases,
                                   description=contents.get('description', ''),
                                   description_object=contents.get('description_translations', {}),
-                                  include_documentation_toc=contents.get('include_in_documentation_toc', False))]
+                                  include_in_documentation_toc=include_in_documentation_toc)]
     elif contents.get('anyOf') is not None:
         entities: List[Dict[str, any]] = contents.get('anyOf')
         if not (is_list_of_type(entities, Dict) and all(is_dict_with_keys_of_type(entity, str) for entity in entities)):
@@ -40,7 +46,7 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
             entities=entities,
             name=alias(config.lang, contents) or name,
             original_name=name,
-            include_in_documentation_toc=contents.get('include_in_documentation_toc', False),
+            include_in_documentation_toc=include_in_documentation_toc,
             root_entity=contents.get('root_entity', False),
             generate_case_for_templates=generate_cases_for_templates(config.lang, contents),
             location=location,

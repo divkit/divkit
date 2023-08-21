@@ -10,10 +10,10 @@ extension DivContainer: DivBlockModeling {
       context: modified(context) {
         $0.childrenA11yDescription = makeChildrenA11yDescription(context: $0)
       },
-      actions: makeActions(context: context.actionContext),
+      actions: makeActions(context: context),
       actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context.actionContext),
-      longTapActions: makeLongTapActions(context: context.actionContext)
+      doubleTapActions: makeDoubleTapActions(context: context),
+      longTapActions: makeLongTapActions(context: context)
     )
   }
 
@@ -21,7 +21,8 @@ extension DivContainer: DivBlockModeling {
     let childContext = modified(context) {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
     }
-    let orientation = resolveOrientation(context.expressionResolver)
+    let expressionResolver = context.expressionResolver
+    let orientation = resolveOrientation(expressionResolver)
     switch orientation {
     case .overlap:
       return try makeOverlapBlock(context: childContext)
@@ -29,7 +30,7 @@ extension DivContainer: DivBlockModeling {
       return try makeContainerBlock(
         context: childContext,
         orientation: orientation,
-        layoutMode: resolveLayoutMode(context.expressionResolver)
+        layoutMode: resolveLayoutMode(expressionResolver)
       )
     }
   }
@@ -102,10 +103,11 @@ extension DivContainer: DivBlockModeling {
 
   private func makeOverlapBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let defaultAlignment = BlockAlignment2D(
+    let defaultStateAlignment = BlockAlignment2D(
       horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
+    let defaultAlignment = alignment2D(withDefault: defaultStateAlignment, context: context)
 
     let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
     let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)
@@ -119,7 +121,7 @@ extension DivContainer: DivBlockModeling {
           content: block,
           alignment: div.value.alignment2D(
             withDefault: defaultAlignment,
-            expressionResolver: expressionResolver
+            context: context
           )
         )
       }
@@ -129,7 +131,7 @@ extension DivContainer: DivBlockModeling {
       throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
     }
 
-    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let layeredBlock = LayeredBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
@@ -150,16 +152,23 @@ extension DivContainer: DivBlockModeling {
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
     let layoutDirection = orientation.layoutDirection
-    let axialAlignment: Alignment
-    let crossAlignment: ContainerBlock.CrossAlignment
-    switch layoutDirection {
-    case .horizontal:
-      axialAlignment = resolveContentAlignmentHorizontal(expressionResolver).alignment
-      crossAlignment = resolveContentAlignmentVertical(expressionResolver).crossAlignment
-    case .vertical:
-      axialAlignment = resolveContentAlignmentVertical(expressionResolver).alignment
-      crossAlignment = resolveContentAlignmentHorizontal(expressionResolver).crossAlignment
-    }
+
+    let divContentAlignmentVertical = resolveContentAlignmentVertical(expressionResolver)
+    let divContentAlignmentHorizontal = resolveContentAlignmentHorizontal(expressionResolver)
+
+    let axialAlignment = makeAxialAlignment(
+      layoutDirection,
+      verticalAlignment: divContentAlignmentVertical,
+      horizontalAlignment: divContentAlignmentHorizontal,
+      uiLayoutDirection: context.layoutDirection
+    )
+
+    let crossAlignment = makeCrossAlignment(
+      layoutDirection,
+      verticalAlignment: divContentAlignmentVertical,
+      horizontalAlignment: divContentAlignmentHorizontal,
+      uiLayoutDirection: context.layoutDirection
+    )
 
     let fallbackWidth = getFallbackWidth(
       orientation: orientation,
@@ -211,7 +220,7 @@ extension DivContainer: DivBlockModeling {
           content: block,
           crossAlignment: div.value.crossAlignment(
             for: layoutDirection,
-            expressionResolver: expressionResolver
+            context: context
           ) ?? defaultCrossAlignment
         )
       }
@@ -222,8 +231,9 @@ extension DivContainer: DivBlockModeling {
     }
 
     let widthTrait = makeContentWidthTrait(with: context)
-    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let containerBlock = try ContainerBlock(
+      blockLayoutDirection: context.layoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
       widthTrait: widthTrait,
@@ -248,14 +258,6 @@ extension DivContainer: DivBlockModeling {
     return containerBlock
   }
 
-  private func resolveAspectRatio(_ expressionResolver: ExpressionResolver) -> CGFloat? {
-    if let aspect = aspect, let ratio = aspect.resolveRatio(expressionResolver) {
-      // AspectBlock has inverted ratio
-      return 1 / ratio
-    }
-    return nil
-  }
-
   private func makeHeightTrait(
     context: DivBlockModelingContext,
     aspectRatio: CGFloat?
@@ -272,16 +274,21 @@ extension DivContainer: DivBlockModeling {
     guard let separator = separator else {
       return nil
     }
-    let separatorBlock = try separator.style.makeBlock(context: context, corners: .all)
+    let separatorBlock = try separator.style.makeBlock(
+      context: context, corners: .all
+    ).addingEdgeInsets(separator.margins.makeEdgeInsets(context: context))
+
     let style = ContainerBlock.Child(
       content: separatorBlock,
       crossAlignment: .center
     )
+
+    let expressionResolver = context.expressionResolver
     return ContainerBlock.Separator(
       style: style,
-      showAtEnd: separator.resolveShowAtEnd(context.expressionResolver),
-      showAtStart: separator.resolveShowAtStart(context.expressionResolver),
-      showBetween: separator.resolveShowBetween(context.expressionResolver)
+      showAtEnd: separator.resolveShowAtEnd(expressionResolver),
+      showAtStart: separator.resolveShowAtStart(expressionResolver),
+      showBetween: separator.resolveShowBetween(expressionResolver)
     )
   }
 
@@ -291,16 +298,21 @@ extension DivContainer: DivBlockModeling {
     guard let lineSeparator = lineSeparator else {
       return nil
     }
-    let lineSeparatorBlock = try lineSeparator.style.makeBlock(context: context, corners: .all)
+    let lineSeparatorBlock = try lineSeparator.style.makeBlock(
+      context: context, corners: .all
+    ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(context: context))
+
     let style = ContainerBlock.Child(
       content: lineSeparatorBlock,
       crossAlignment: .center
     )
+
+    let expressionResolver = context.expressionResolver
     return ContainerBlock.Separator(
       style: style,
-      showAtEnd: lineSeparator.resolveShowAtEnd(context.expressionResolver),
-      showAtStart: lineSeparator.resolveShowAtStart(context.expressionResolver),
-      showBetween: lineSeparator.resolveShowBetween(context.expressionResolver)
+      showAtEnd: lineSeparator.resolveShowAtEnd(expressionResolver),
+      showAtStart: lineSeparator.resolveShowAtStart(expressionResolver),
+      showBetween: lineSeparator.resolveShowBetween(expressionResolver)
     )
   }
 }
@@ -308,11 +320,13 @@ extension DivContainer: DivBlockModeling {
 extension DivBase {
   fileprivate func crossAlignment(
     for direction: ContainerBlock.LayoutDirection,
-    expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) -> ContainerBlock.CrossAlignment? {
+    let expressionResolver = context.expressionResolver
     switch direction {
     case .horizontal: return resolveAlignmentVertical(expressionResolver)?.crossAlignment
-    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?.crossAlignment
+    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?
+      .makeCrossAlignment(uiLayoutDirection: context.layoutDirection)
     }
   }
 }
@@ -334,23 +348,43 @@ extension DivContainer.Orientation {
 extension DivAlignmentHorizontal {
   var alignment: Alignment {
     switch self {
-    case .left:
+    case .left, .start:
       return .leading
     case .center:
       return .center
-    case .right:
+    case .right, .end:
       return .trailing
     }
   }
 
-  var crossAlignment: ContainerBlock.CrossAlignment {
+  func makeCrossAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> ContainerBlock
+    .CrossAlignment {
     switch self {
     case .left:
       return .leading
-    case .center:
-      return .center
     case .right:
       return .trailing
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      return .center
+    case .end:
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+    }
+  }
+
+  func makeContentAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> Alignment {
+    switch self {
+    case .left:
+      return .leading
+    case .right:
+      return .trailing
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      return .center
+    case .end:
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 }
@@ -384,6 +418,38 @@ extension DivAlignmentVertical {
   }
 }
 
+extension DivContentAlignmentHorizontal {
+  fileprivate var alignment: Alignment {
+    switch self {
+    case .left, .start:
+      return .leading
+    case .center:
+      return .center
+    case .right, .end:
+      return .trailing
+    case .spaceEvenly, .spaceAround, .spaceBetween:
+      DivKitLogger.warning("Alignment \(rawValue) is not supported")
+      return .leading
+    }
+  }
+}
+
+extension DivContentAlignmentVertical {
+  fileprivate var alignment: Alignment {
+    switch self {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .spaceEvenly, .spaceAround, .spaceBetween, .baseline:
+      DivKitLogger.warning("Alignment \(rawValue) is not supported")
+      return .leading
+    }
+  }
+}
+
 extension DivContainer.LayoutMode {
   fileprivate var system: ContainerBlock.LayoutMode {
     switch self {
@@ -397,7 +463,8 @@ extension DivContainer.LayoutMode {
 
 extension Div {
   fileprivate func makeA11yDecription(context: DivBlockModelingContext) -> String? {
-    guard value.accessibility.resolveMode(context.expressionResolver) != .exclude
+    let expressionResolver = context.expressionResolver
+    guard value.accessibility.resolveMode(expressionResolver) != .exclude
     else { return nil }
     switch self {
     case .divContainer,
@@ -415,15 +482,15 @@ extension Div {
          .divSlider,
          .divVideo,
          .divState:
-      return value.accessibility.resolveDescription(context.expressionResolver)
+      return value.accessibility.resolveDescription(expressionResolver)
     case let .divText(divText):
       let handlerDescription = context
         .getExtensionHandlers(for: divText)
         .compactMap { $0.accessibilityElement?.strings.label }
         .reduce(nil) { $0?.appending(" " + $1) ?? $1 }
       return handlerDescription ??
-        divText.accessibility.resolveDescription(context.expressionResolver) ??
-        divText.resolveText(context.expressionResolver) as String?
+        divText.accessibility.resolveDescription(expressionResolver) ??
+        divText.resolveText(expressionResolver) as String?
     }
   }
 }
@@ -432,3 +499,88 @@ private let defaultFallbackSize = DivOverridenSize(
   original: .divMatchParentSize(DivMatchParentSize()),
   overriden: .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
 )
+
+fileprivate func makeCrossAlignment(
+  _ direction: ContainerBlock.LayoutDirection,
+  verticalAlignment: DivContentAlignmentVertical,
+  horizontalAlignment: DivContentAlignmentHorizontal,
+  uiLayoutDirection: UserInterfaceLayoutDirection = .leftToRight
+) -> ContainerBlock.CrossAlignment {
+  switch direction {
+  case .horizontal:
+    switch verticalAlignment {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .baseline:
+      return .baseline
+    case .spaceBetween, .spaceEvenly, .spaceAround:
+      return .leading
+    }
+  case .vertical:
+    switch horizontalAlignment {
+    case .left:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+    case .right:
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+    case .start:
+      return .leading
+    case .center:
+      return .center
+    case .end:
+      return .trailing
+    case .spaceBetween, .spaceEvenly, .spaceAround:
+      return .center
+    }
+  }
+}
+
+fileprivate func makeAxialAlignment(
+  _ direction: ContainerBlock.LayoutDirection,
+  verticalAlignment: DivContentAlignmentVertical,
+  horizontalAlignment: DivContentAlignmentHorizontal,
+  uiLayoutDirection: UserInterfaceLayoutDirection = .leftToRight
+) -> ContainerBlock.AxialAlignment {
+  switch direction {
+  case .horizontal:
+    switch horizontalAlignment {
+    case .left:
+      return .leading
+    case .right:
+      return .trailing
+    case .start:
+      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+    case .center:
+      return .center
+    case .end:
+      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  case .vertical:
+    switch verticalAlignment {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .baseline:
+      DivKitLogger.warning("Baseline alignment not supported.")
+      return .leading
+    case .spaceBetween:
+      return .spaceBetween
+    case .spaceAround:
+      return .spaceAround
+    case .spaceEvenly:
+      return .spaceEvenly
+    }
+  }
+}

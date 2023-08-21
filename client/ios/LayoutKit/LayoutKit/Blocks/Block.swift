@@ -42,9 +42,13 @@ public protocol Block: AnyObject,
   var minHeight: CGFloat { get }
 
   func equals(_ other: Block) -> Bool
+
+  var blockLayoutDirection: UserInterfaceLayoutDirection { get }
 }
 
 extension Block {
+  public var blockLayoutDirection: UserInterfaceLayoutDirection { .leftToRight }
+
   public var calculateWidthFirst: Bool { true }
 
   public func widthOfHorizontallyNonResizableBlock(forHeight _: CGFloat) -> CGFloat {
@@ -69,14 +73,18 @@ extension Block {
         width = widthOfHorizontallyResizableBlock
       } else {
         let intrinsicWidth = widthOfHorizontallyNonResizableBlock
-        width = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) : intrinsicWidth
+        let constrainedWidth = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) :
+          intrinsicWidth
+        width = max(minWidth, constrainedWidth)
       }
       let height: CGFloat
       if isVerticallyResizable {
         height = heightOfVerticallyResizableBlock
       } else {
         let intrinsicHeight = heightOfVerticallyNonResizableBlock(forWidth: width)
-        height = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) : intrinsicHeight
+        let constrainedHeight = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) :
+          intrinsicHeight
+        height = max(minHeight, constrainedHeight)
       }
       return CGSize(width: width, height: height)
     } else {
@@ -85,14 +93,18 @@ extension Block {
         height = heightOfVerticallyResizableBlock
       } else {
         let intrinsicHeight = heightOfVerticallyNonResizableBlock
-        height = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) : intrinsicHeight
+        let constrainedHeight = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) :
+          intrinsicHeight
+        height = max(constrainedHeight, minHeight)
       }
       let width: CGFloat
       if isHorizontallyResizable {
         width = widthOfHorizontallyResizableBlock
       } else {
         let intrinsicWidth = widthOfHorizontallyNonResizableBlock(forHeight: height)
-        width = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) : intrinsicWidth
+        let constrainedWidth = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) :
+          intrinsicWidth
+        width = max(constrainedWidth, minWidth)
       }
       return CGSize(width: width, height: height)
     }

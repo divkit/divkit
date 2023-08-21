@@ -20,17 +20,23 @@ extension CGPath {
     let bottomLeft = rect.coordinate(ofCorner: .bottomLeft)
     let bottomRight = rect.coordinate(ofCorner: .bottomRight)
 
-    // (iOS 11) corner radius must be not greater than half rect height:
-    // Assertion failed: (corner_height >= 0 && 2 * corner_height <= CGRectGetHeight(rect)),
-    // function CGPathCreateWithRoundedRect,
-    // file /BuildRoot/Library/Caches/com.apple.xbs/Sources/Quartz2D_Sim/Quartz2D-1125.2.1/CoreGraphics/Paths/CGPath.cc,
-    // line 190.
-    let maxRadius = floor(size.minDimension / 2)
+    var r0 = cornerRadii.topLeft - inset
+    var r1 = cornerRadii.topRight - inset
+    var r2 = cornerRadii.bottomRight - inset
+    var r3 = cornerRadii.bottomLeft - inset
 
-    let r0 = clamp(cornerRadii.topLeft, min: 0, max: maxRadius) - inset
-    let r1 = clamp(cornerRadii.topRight, min: 0, max: maxRadius) - inset
-    let r2 = clamp(cornerRadii.bottomRight, min: 0, max: maxRadius) - inset
-    let r3 = clamp(cornerRadii.bottomLeft, min: 0, max: maxRadius) - inset
+    let top = r0 + r1
+    let bottom = r2 + r3
+    let left = r0 + r3
+    let right = r1 + r2
+
+    if let f = [rect.width / top, rect.width / bottom, rect.height / left, rect.height / right].min(),
+        f > 0, f < 1 {
+      r0 *= f
+      r1 *= f
+      r2 *= f
+      r3 *= f
+    }
 
     let p0 = topLeft.movingX(by: r0)
     let p1 = topRight.movingX(by: -r1)

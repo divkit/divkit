@@ -14,8 +14,17 @@ extension TextInputBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let inputView = view as! TextInputBlockView
+    inputView.setLayoutDirection(layoutDirection)
     inputView.setInputType(inputType)
-    inputView.setText(value: textValue, typo: textTypo)
+    inputView.setValidators(validators)
+    inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
+    inputView.setTextAlignmentVertical(textAlignmentVertical)
+    inputView.setText(
+      textValue: textValue,
+      rawTextValue: rawTextValue,
+      typo: textTypo,
+      mask: maskValidator
+    )
     inputView.setHint(hint)
     inputView.setHighlightColor(highlightColor)
     inputView.setMultiLineMode(multiLineMode)
@@ -42,22 +51,28 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
   @Binding private var textValue: String
+  @Binding private var rawTextValue: String
   private var selectAllOnFocus = false
+  private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
   private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
-  private var isRightToLeft = false
+  private var typo: Typo?
   private var selectionItems: [TextInputBlock.InputType.SelectionItem]?
+  private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
+  private var validators: [TextInputValidator]?
+  private let disposePool = AutodisposePool()
+  private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
+  private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
+  private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
     self._textValue = .empty
+    self._rawTextValue = .empty
     super.init(frame: frame)
-
-    isRightToLeft = UIView
-      .userInterfaceLayoutDirection(for: singleLineInput.semanticContentAttribute) == .rightToLeft
 
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
@@ -66,12 +81,15 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.backgroundColor = .clear
     multiLineInput.textContainerInset = .zero
     multiLineInput.delegate = self
+    multiLineInput.textContainerInset = .zero
+    multiLineInput.textContainer.lineFragmentPadding = 0
 
     singleLineInput.isHidden = true
     singleLineInput.autocorrectionType = .no
     singleLineInput.backgroundColor = .clear
     singleLineInput.delegate = self
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    singleLineInput.contentVerticalAlignment = .top
 
     hintView.backgroundColor = .clear
     hintView.numberOfLines = 0
@@ -96,6 +114,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.frame = bounds
     updateMultiLineOffset()
     singleLineInput.frame = bounds
+    updateSingleLineOffset()
     hintView.frame = bounds
     hintView.sizeToFit()
     hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
@@ -119,6 +138,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     return multiLineInput.attributedText.string
   }
 
+  func setLayoutDirection(_ layoutDirection: UserInterfaceLayoutDirection) {
+    if layoutDirection != self.layoutDirection {
+      self.layoutDirection = layoutDirection
+      hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
+    }
+  }
+
   func setInputType(_ type: TextInputBlock.InputType) {
     switch type {
     case let .keyboard(type):
@@ -132,6 +158,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       multiLineInput.tintColor = multiLineInput.backgroundColor
       multiLineInput.inputView = selectionView
     }
+  }
+
+  func setTextAlignmentHorizontal(_ alignment: TextInputBlock.TextAlignmentHorizontal) {
+    textAlignmentHorizontal = alignment
+  }
+
+  func setTextAlignmentVertical(_ alignment: TextInputBlock.TextAlignmentVertical) {
+    textAlignmentVertical = alignment
   }
 
   func setMultiLineMode(_ multiLineMode: Bool) {
@@ -172,25 +206,41 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.observer = observer
   }
 
-  func setText(value: Binding<String>, typo: Typo) {
-    let textTypo = isRightToLeft ? typo.with(alignment: .right) : typo
-    self._textValue = value
-    let attributedText: String
-    if let selectionItems = selectionItems {
-      attributedText = selectionItems.first { $0.value == value.wrappedValue }?.text ?? ""
+  func setText(
+    textValue: Binding<String>,
+    rawTextValue: Binding<String>?,
+    typo: Typo,
+    mask: MaskValidator?
+  ) {
+    self.typo = typo.with(alignment: textAlignment)
+    if let mask = mask, let rawTextValue = rawTextValue {
+      self._textValue = textValue
+      setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
-      attributedText = value.wrappedValue
+      if textValue != self._textValue {
+        self._textValue = textValue
+        let text: String
+        if let selectionItems = self.selectionItems {
+          text = selectionItems.first { $0.value == textValue.wrappedValue }?.text ?? ""
+        } else {
+          text = textValue.wrappedValue
+        }
+        setTextData(text)
+      }
     }
-    multiLineInput.attributedText = attributedText.with(typo: textTypo)
-    singleLineInput.attributedText = attributedText.with(typo: textTypo)
-    multiLineInput.typingAttributes = typo.attributes
-    singleLineInput.typingAttributes = typo.attributes
     updateHintVisibility()
     updateMultiLineOffset()
+    updateSingleLineOffset()
+    updateValidation()
+  }
+
+  func setValidators(_ validators: [TextInputValidator]?) {
+    self.validators = validators
   }
 
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
+    setNeedsLayout()
   }
 
   private func updateHintVisibility() {
@@ -200,6 +250,68 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateMultiLineOffset() {
     guard !multiLineInput.isHidden else { return }
     multiLineInput.frame.origin = CGPoint(x: 0, y: multiLineOffsetY)
+  }
+
+  private func updateSingleLineOffset() {
+    guard !singleLineInput.isHidden else { return }
+    singleLineInput.frame.origin = CGPoint(x: 0, y: singleLineOffsetY)
+  }
+
+  private func updateValidation() {
+    let accessibilityLabel = validators?.compactMap {
+      let isValid = $0.validate(currentText)
+      $0.isValid.setValue(isValid, responder: self)
+      return isValid ? nil : $0.message()
+    }.joined(separator: ". ")
+    singleLineInput.accessibilityLabel = accessibilityLabel
+    multiLineInput.accessibilityLabel = accessibilityLabel
+  }
+
+  private func setTextData(_ text: String) {
+    guard let typo else { return }
+    let attributedText = text.with(typo: typo)
+    multiLineInput.attributedText = attributedText
+    singleLineInput.attributedText = attributedText
+    multiLineInput.typingAttributes = typo.attributes
+    singleLineInput.defaultTextAttributes = typo.attributes
+  }
+
+  private func setupMaskedViewModelIfNeeded(mask: MaskValidator, rawTextValue: Binding<String>) {
+    self._rawTextValue = rawTextValue
+    guard self.maskedViewModel == nil else {
+      maskedViewModel?.rawText = rawTextValue.wrappedValue
+      maskedViewModel?.maskValidator = mask
+      return
+    }
+    self.maskedViewModel = MaskedInputViewModel(
+      rawText: $rawTextValue.wrappedValue,
+      maskValidator: mask,
+      signal: userInputPipe.signal
+    )
+    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
+      guard let self, let position else { return }
+      self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
+      if let textFieldPosition = self.singleLineInput.position(
+        from: self.singleLineInput.beginningOfDocument,
+        offset: position.rawValue
+      ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
+        self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
+          from: textFieldPosition,
+          to: textFieldPosition
+        )
+      }
+    }.dispose(in: disposePool)
+    maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
+      guard let self = self else { return }
+      self._rawTextValue.setValue(input, responder: self)
+    }.dispose(in: disposePool)
+
+    maskedViewModel?.$text.currentAndNewValues
+      .addObserver { [weak self] input in
+        guard let self = self else { return }
+        self.setTextData(input)
+        self._textValue.setValue(input, responder: self)
+      }.dispose(in: disposePool)
   }
 
   override func didMoveToWindow() {
@@ -338,6 +450,23 @@ extension TextInputBlockView {
     guard let path = path else { return }
     observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
   }
+
+  private func inputViewReplaceTextIn(view _: UIView, range: NSRange, text: String) -> Bool {
+    if maskedViewModel != nil {
+      if text == "" {
+        if range.length == 0 {
+          userInputPipe.send(.clear(pos: range.upperBound))
+        } else {
+          userInputPipe
+            .send(.clearRange(range: range.lowerBound..<range.upperBound))
+        }
+      } else {
+        userInputPipe.send(.insert(string: text, range: range.lowerBound..<range.upperBound))
+      }
+      return false
+    }
+    return true
+  }
 }
 
 extension TextInputBlockView: UITextViewDelegate {
@@ -352,6 +481,15 @@ extension TextInputBlockView: UITextViewDelegate {
 
   func textViewDidEndEditing(_ textView: UITextView) {
     inputViewDidEndEditing(textView)
+  }
+
+  func textView(
+    _: UITextView,
+    shouldChangeTextIn _: NSRange,
+    replacementText text: String
+  ) -> Bool {
+    let range = multiLineInput.selectedRange
+    return inputViewReplaceTextIn(view: self, range: range, text: text)
   }
 }
 
@@ -368,31 +506,61 @@ extension TextInputBlockView: UITextFieldDelegate {
     inputViewDidEndEditing(textField)
   }
 
-  func textView(_: UITextView, shouldChangeTextIn _: NSRange, replacementText _: String) -> Bool {
-    selectionItems == nil
+  func textField(
+    _ textField: UITextField,
+    shouldChangeCharactersIn range: NSRange,
+    replacementString string: String
+  ) -> Bool {
+    guard let selectionRange = textField.selectedTextRange else {
+      return inputViewReplaceTextIn(view: textField, range: range, text: string)
+    }
+    let location = textField.offset(from: textField.beginningOfDocument, to: selectionRange.start)
+    let length = textField.offset(from: selectionRange.start, to: selectionRange.end)
+    let range = NSRange(location: location, length: length)
+    return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
 }
 
 extension TextInputBlockView {
   private var multiLineOffsetY: CGFloat {
-    let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
-    guard emptySpace > 0 else { return 0 }
-    return emptySpace / 2
+    offsetY(multiLineInput.bounds.height - multiLineInput.contentSize.height)
+  }
+
+  private var singleLineOffsetY: CGFloat {
+    offsetY(singleLineInput.bounds.height - singleLineInput.intrinsicContentSize.height)
   }
 
   private func offsetX(_ view: UIView) -> CGFloat {
-    if isRightToLeft {
-      let emptySpace = bounds.size.width - view.bounds.size.width
+    let emptySpace = bounds.size.width - view.bounds.size.width
+    switch textAlignment {
+    case .left:
+      return cusorOffset
+    case .center:
+      guard emptySpace > 0 else { return 0 }
+      return (emptySpace - cusorOffset) / 2
+    case .right:
       guard emptySpace > 0 else { return 0 }
       return emptySpace - cusorOffset
+    default:
+      assertionFailure("Only .left, .center and .right cases of textAlignment are implemented")
+      return cusorOffset
     }
-    return cusorOffset
   }
 
   private func offsetY(_ view: UIView) -> CGFloat {
-    let emptySpace = bounds.size.height - view.bounds.size.height
+    offsetY(bounds.size.height - view.bounds.size.height)
+  }
+
+  private func offsetY(_ emptySpace: CGFloat) -> CGFloat {
     guard emptySpace > 0 else { return 0 }
-    return emptySpace / 2
+    switch textAlignmentVertical {
+    case .top:
+      return 0
+    case .center:
+      return emptySpace / 2
+    case .bottom:
+      return emptySpace
+    }
   }
 
   private var cusorOffset: CGFloat {
@@ -455,6 +623,36 @@ extension TextInputBlock.InputType.KeyboardType {
   }
 }
 
+extension TextInputBlockView {
+  fileprivate var textAlignment: TextAlignment {
+    switch textAlignmentHorizontal {
+    case .left:
+      return .left
+    case .center:
+      return .center
+    case .right:
+      return .right
+    case .start:
+      return layoutDirection == .rightToLeft ? .right : .left
+    case .end:
+      return layoutDirection == .rightToLeft ? .left : .right
+    }
+  }
+}
+
+extension TextInputBlock.TextAlignmentVertical {
+  fileprivate var contentAlignment: UIControl.ContentVerticalAlignment {
+    switch self {
+    case .top:
+      return .top
+    case .center:
+      return .center
+    case .bottom:
+      return .bottom
+    }
+  }
+}
+
 private let additionalOffset = 25.0
 private let singleLineCusorOffset = 2.0
-private let multiLineCusorOffset = 5.0
+private let multiLineCusorOffset = 0.0

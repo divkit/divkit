@@ -37,9 +37,10 @@ public final class DivSelect: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
+  public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
-  public let fontFamily: Expression<DivFontFamily> // default value: text
+  public let fontFamily: Expression<String>? // at least 1 char
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -83,8 +84,8 @@ public final class DivSelect: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
+  public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -148,14 +149,17 @@ public final class DivSelect: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
+    makeArrayValidator(minItems: 1)
+
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
-  static let fontFamilyValidator: AnyValueValidator<DivFontFamily> =
-    makeNoOpValueValidator()
+  static let fontFamilyValidator: AnyValueValidator<String> =
+    makeStringValidator(minLength: 1)
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -240,9 +244,10 @@ public final class DivSelect: DivBase {
     background: [DivBackground]? = nil,
     border: DivBorder? = nil,
     columnSpan: Expression<Int>? = nil,
+    disappearActions: [DivDisappearAction]? = nil,
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
-    fontFamily: Expression<DivFontFamily>? = nil,
+    fontFamily: Expression<String>? = nil,
     fontSize: Expression<Int>? = nil,
     fontSizeUnit: Expression<DivSizeUnit>? = nil,
     fontWeight: Expression<DivFontWeight>? = nil,
@@ -277,9 +282,10 @@ public final class DivSelect: DivBase {
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
+    self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
-    self.fontFamily = fontFamily ?? .value(.text)
+    self.fontFamily = fontFamily
     self.fontSize = fontSize ?? .value(12)
     self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
     self.fontWeight = fontWeight ?? .value(.regular)
@@ -328,70 +334,75 @@ extension DivSelect: Equatable {
     }
     guard
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.disappearActions == rhs.disappearActions,
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.height == rhs.height,
-      lhs.hintColor == rhs.hintColor
+      lhs.height == rhs.height
     else {
       return false
     }
     guard
+      lhs.hintColor == rhs.hintColor,
       lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins,
-      lhs.options == rhs.options
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.options == rhs.options,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.textColor == rhs.textColor,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.valueVariable == rhs.valueVariable,
-      lhs.visibility == rhs.visibility
+      lhs.valueVariable == rhs.valueVariable
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -412,9 +423,10 @@ extension DivSelect: Serializable {
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
+    result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
-    result["font_family"] = fontFamily.toValidSerializationValue()
+    result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize.toValidSerializationValue()
     result["font_size_unit"] = fontSizeUnit.toValidSerializationValue()
     result["font_weight"] = fontWeight.toValidSerializationValue()

@@ -11,6 +11,7 @@ import android.view.View
 import androidx.annotation.MainThread
 import androidx.annotation.StyleRes
 import androidx.core.view.LayoutInflaterCompat
+import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
@@ -36,8 +37,9 @@ import com.yandex.div.core.view2.Div2View
  */
 @Mockable
 class Div2Context @MainThread private constructor(
-    baseContext: ContextThemeWrapper,
-    internal val div2Component: Div2Component
+    private val baseContext: ContextThemeWrapper,
+    internal val div2Component: Div2Component,
+    internal val lifecycleOwner: LifecycleOwner? = null
 ) : ContextWrapper(baseContext) {
 
     val globalVariableController: GlobalVariableController
@@ -49,7 +51,8 @@ class Div2Context @MainThread private constructor(
     constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
-        @StyleRes themeId: Int = R.style.Div_Theme
+        @StyleRes themeId: Int = R.style.Div_Theme,
+        lifecycleOwner: LifecycleOwner? = null
     ) : this(
         baseContext,
         DivKit.getInstance(baseContext).component
@@ -59,14 +62,20 @@ class Div2Context @MainThread private constructor(
             .themeId(themeId)
             .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
             .globalVariableController(configuration.globalVariableController)
-            .build()
+            .build(),
+        lifecycleOwner
     )
 
     @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration) instead")
     constructor(
         activity: Activity,
         configuration: DivConfiguration
-    ) : this(activity as ContextThemeWrapper, configuration)
+    ) : this(
+        activity as ContextThemeWrapper,
+        configuration,
+        R.style.Div_Theme,
+        activity as? LifecycleOwner
+    )
 
     init {
         div2Component.divCreationTracker.onContextCreationFinished()
@@ -109,7 +118,23 @@ class Div2Context @MainThread private constructor(
     }
 
     fun childContext(baseContext: ContextThemeWrapper): Div2Context {
-        return Div2Context(baseContext, div2Component)
+        return Div2Context(baseContext, div2Component, lifecycleOwner)
+    }
+
+    /**
+     * Consider using to define a context for [Div2View] with a shorter lifecycle
+     * instead of creating a new instance of [Div2Context].
+     */
+    fun childContext(lifecycleOwner: LifecycleOwner?): Div2Context {
+        return Div2Context(baseContext, div2Component, lifecycleOwner)
+    }
+
+    /**
+     * Consider using to define a context for [Div2View] with a shorter lifecycle
+     * instead of creating a new instance of [Div2Context].
+     */
+    fun childContext(baseContext: ContextThemeWrapper, lifecycleOwner: LifecycleOwner?): Div2Context {
+        return Div2Context(baseContext, div2Component, lifecycleOwner)
     }
 
     private class Div2InflaterFactory(
