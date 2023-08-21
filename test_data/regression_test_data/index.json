@@ -718,7 +718,7 @@
         "After expanding of elements click on 'COLLAPSE'"
       ],
       "expected_results": [
-        "Expanding end collapsing the elements shoud be with animation"
+        "Expanding and collapsing the elements shoud be with animation"
       ],
       "file": "animations/article.json"
     },
@@ -1918,10 +1918,6 @@
     },
     {
       "title": "Tooltips",
-      "platforms": [
-        "android",
-        "ios"
-      ],
       "tags": [
         "Tooltips",
         "Visibility_actions"

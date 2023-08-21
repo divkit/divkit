@@ -5,7 +5,7 @@
 
     import type { DivBaseData } from '../../types/base';
     import type { Mods, Style } from '../../types/general';
-    import type { ActionAnimation, AnyAnimation, DivActionableData } from '../../types/actionable';
+    import type { DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, DivExtension, TemplateContext } from '../../../typings/common';
     import type { Visibility } from '../../types/base';
@@ -15,6 +15,7 @@
     import type { CornersRadius } from '../../types/border';
     import type { WrapContentSize } from '../../types/sizes';
     import type { Background } from '../../types/background';
+    import type { Animation, AnyAnimation } from '../../types/animation';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -548,7 +549,7 @@
     }
 
     $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
-    let actionAnimationList: AnyAnimation[] = [];
+    let actionAnimationList: MaybeMissing<AnyAnimation>[] = [];
     let actionAnimationTransition = '';
     let animationOpacityStart: number | undefined = undefined;
     let animationOpacityEnd: number | undefined = undefined;
@@ -556,12 +557,12 @@
     let animationScaleEnd: number | undefined = undefined;
     $: {
         if ($jsonActionAnimation) {
-            actionAnimationList = flattenAnimation($jsonActionAnimation as ActionAnimation);
+            actionAnimationList = flattenAnimation($jsonActionAnimation as Animation);
             actionAnimationTransition = actionAnimationList.map(parseActionAnimation).filter(Boolean).join(', ');
         }
     }
 
-    function hasNativeAnimation(list: AnyAnimation[]) {
+    function hasNativeAnimation(list: MaybeMissing<AnyAnimation>[]) {
         return list.some(it => it.name === 'native');
     }
 
@@ -785,6 +786,10 @@
             stateCtx.registerChild(id);
         }
 
+        json.tooltips?.forEach(tooltip => {
+            rootCtx.registerTooltip(node, tooltip);
+        });
+
         let dev: DevtoolResult | null = null;
 
         if (devtool && !layoutParams.fakeElement) {
@@ -857,6 +862,10 @@
             rootCtx.unregisterParentOf(id);
         });
         prevChilds = [];
+
+        json.tooltips?.forEach(tooltip => {
+            rootCtx.unregisterTooltip(tooltip);
+        });
     });
 </script>
 

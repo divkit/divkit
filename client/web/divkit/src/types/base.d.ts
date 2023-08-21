@@ -6,6 +6,7 @@ import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
 import type { Action, DisappearAction, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
+import type { Animation } from './animation';
 
 export interface Accessibility {
     description?: string;
@@ -87,6 +88,26 @@ export interface Extension {
     params?: object;
 }
 
+export interface Tooltip {
+    id: string;
+    div: DivBaseData;
+    position: 'left' | 'top-left' | 'top' | 'top-right' | 'right' |
+        'bottom-right' | 'bottom' | 'bottom-left' | 'center';
+    duration?: number;
+    offset?: {
+        x: {
+            value: number;
+            // unit;
+        };
+        y: {
+            value: number;
+            // unit;
+        };
+    };
+    animation_in?: Animation;
+    animation_out?: Animation;
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -105,7 +126,7 @@ export interface DivBaseData {
     visibility_action?: VisibilityAction;
     visibility_actions?: VisibilityAction[];
     disappear_actions?: DisappearAction[];
-    // tooltips;
+    tooltips?: Tooltip[];
     accessibility?: Accessibility;
     extensions?: Extension[];
     transition_in?: AppearanceTransition;

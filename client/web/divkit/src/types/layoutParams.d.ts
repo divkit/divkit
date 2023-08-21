@@ -1,4 +1,5 @@
-import { Orientation } from './orientation';
+import type { Tooltip } from './base';
+import type { Orientation } from './orientation';
 
 export type Align = 'start' | 'center' | 'end';
 export type AlignPlusBaseline = Align | 'baseline';
@@ -21,4 +22,10 @@ export interface LayoutParams {
     };
     scrollSnap?: ScrollSnap;
     fakeElement?: boolean;
+    tooltips?: {
+        internalId: number;
+        ownerNode: HTMLElement;
+        desc: Tooltip;
+        timeoutId: number | null;
+    }[];
 }

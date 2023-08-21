@@ -93,11 +93,7 @@
         "$ref": "div-tooltip.json"
       },
       "minItems": 1,
-      "$description": "translations.json#/div_base_tooltips",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_base_tooltips"
     },
     "accessibility": {
       "$ref": "div-accessibility.json",

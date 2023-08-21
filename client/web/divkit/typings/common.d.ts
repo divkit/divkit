@@ -161,6 +161,8 @@ export type TypefaceProvider = (fontFamily: string, opts?: {
     fontWeight?: number;
 }) => string;
 
+export type FetchInit = RequestInit | ((url: string) => RequestInit);
+
 export interface DivkitInstance {
     $destroy(): void;
     execAction(action: Action | VisibilityAction): void;

@@ -9,7 +9,8 @@ import type {
     Theme,
     Customization,
     DivExtensionClass,
-    TypefaceProvider
+    TypefaceProvider,
+    FetchInit
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
@@ -36,6 +37,8 @@ export function render(opts: {
     extensions?: Map<string, DivExtensionClass>;
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
+    fetchInit?: FetchInit;
+    tooltipRoot?: HTMLElement;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

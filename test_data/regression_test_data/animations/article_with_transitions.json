@@ -253,10 +253,6 @@
               "text": "Title",
               "width": {
                 "type": "wrap_content"
-              },
-              "action": {
-                "log_id": "show_tooltip",
-                "url": "div-action://show_tooltip?id=tooltip"
               }
             },
             {

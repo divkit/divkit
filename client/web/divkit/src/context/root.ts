@@ -1,7 +1,7 @@
 import type { Readable, Writable } from 'svelte/store';
 import type { WrappedError } from '../utils/wrapError';
 import type { Action, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
-import type { DivBaseData } from '../types/base';
+import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { TintMode } from '../types/image';
@@ -34,6 +34,10 @@ export interface RootCtxValue {
     unregisterInstance(id: string): void;
     registerParentOf(id: string, methods: ParentMethods): void;
     unregisterParentOf(id: string): void;
+    registerTooltip(node: HTMLElement, tooltip: Tooltip): void;
+    unregisterTooltip(tooltip: Tooltip): void;
+    onTooltipClose(internalId: number): void;
+    tooltipRoot: HTMLElement | undefined;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
     getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>>;

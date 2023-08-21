@@ -36,9 +36,10 @@
         DivExtensionContext,
         DivExtensionClass,
         TypefaceProvider,
-        DisappearAction
+        DisappearAction,
+        FetchInit
     } from '../../typings/common';
-    import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
+    import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
@@ -69,6 +70,7 @@
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
+    import TooltipView from './tooltip/Tooltip.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -84,7 +86,8 @@
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
     export let typefaceProvider: TypefaceProvider = _fontFamily => '';
-    export let fetchInit: RequestInit | ((url: string) => RequestInit) = {};
+    export let fetchInit: FetchInit = {};
+    export let tooltipRoot: HTMLElement | undefined = undefined;
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -175,6 +178,14 @@
     // Stores for notify unset global variables
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
     let timersController: TimersController | null = null;
+
+    let tooltipCounter = 0;
+    let tooltips: {
+        internalId: number;
+        ownerNode: HTMLElement;
+        desc: Tooltip;
+        timeoutId: number | null;
+    }[] = [];
 
     function getVariableInstance(name: string, type: VariableType): Variable | undefined {
         const variable = variables.get(name);
@@ -383,6 +394,7 @@
         if (!stateId) {
             throw new Error('Missing state id');
         }
+
         let state: StateInterface = stateInterface;
         let parts = stateId.split('/');
 
@@ -563,6 +575,58 @@
         }
     }
 
+    function callShowTooltip(id: string | null, multiple: string | null): void {
+        if (!id) {
+            logError(wrapError(new Error('Missing id in show_tooltip action')));
+            return;
+        }
+        const item = tooltipMap.get(id);
+        if (!item) {
+            logError(wrapError(new Error('Tooltip with the provided id is not found'), {
+                additional: {
+                    id
+                }
+            }));
+            return;
+        }
+        if (multiple !== 'true' && tooltips.some(it => it.desc.id === id)) {
+            return;
+        }
+
+        const info = {
+            internalId: ++tooltipCounter,
+            ownerNode: item.onwerNode,
+            desc: item.tooltip,
+            timeoutId: 0
+        };
+        tooltips = [...tooltips, info];
+
+        const duration = item.tooltip.duration ?? 5000;
+        if (duration) {
+            info.timeoutId = window.setTimeout(() => {
+                info.timeoutId = 0;
+                tooltips = tooltips.filter(it => it.internalId !== info.internalId);
+            }, duration);
+        }
+    }
+
+    function callHideTooltip(id: string | null): void {
+        if (!id) {
+            logError(wrapError(new Error('Missing id in hide_tooltip action')));
+            return;
+        }
+        tooltips = tooltips.filter(it => {
+            const res = it.desc.id !== id;
+
+            if (!res && it.timeoutId) {
+                clearTimeout(it.timeoutId);
+                it.timeoutId = null;
+            }
+
+            return res;
+        });
+    }
+
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
         const actionUrl = action.url ? String(action.url) : '';
 
@@ -640,6 +704,12 @@
                     case 'download':
                         callDownloadAction(params.get('url'), action);
                         break;
+                    case 'show_tooltip':
+                        callShowTooltip(params.get('id'), params.get('multiple'));
+                        break;
+                    case 'hide_tooltip':
+                        callHideTooltip(params.get('id'));
+                        break;
                     default:
                         logError(wrapError(new Error('Unknown type of action'), {
                             additional: {
@@ -712,6 +782,10 @@
 
     const instancesMap: Map<string, unknown> = new Map();
     const parentOfMap: Map<string, ParentMethods> = new Map();
+    const tooltipMap: Map<string, {
+        onwerNode: HTMLElement;
+        tooltip: Tooltip;
+    }> = new Map();
     function registerInstance<T>(id: string, block: T) {
         if (instancesMap.has(id)) {
             logError(wrapError(new Error('Duplicate instance id'), {
@@ -747,6 +821,29 @@
 
     function unregisterParentOf(id: string): void {
         parentOfMap.delete(id);
+    }
+
+    function registerTooltip(onwerNode: HTMLElement, tooltip: Tooltip): void {
+        if (tooltipMap.has(tooltip.id)) {
+            logError(wrapError(new Error('Duplicate tooltip id'), {
+                additional: {
+                    id: tooltip.id
+                }
+            }));
+        }
+
+        tooltipMap.set(tooltip.id, {
+            onwerNode,
+            tooltip
+        });
+    }
+
+    function unregisterTooltip(tooltip: Tooltip): void {
+        tooltipMap.delete(tooltip.id);
+
+        if (tooltips.some(it => it.desc.id === tooltip.id)) {
+            tooltips = tooltips.filter(it => it.desc.id !== tooltip.id);
+        }
     }
 
     const stores = new Map<string, Writable<any>>();
@@ -857,6 +954,10 @@
         unregisterInstance,
         registerParentOf,
         unregisterParentOf,
+        registerTooltip,
+        unregisterTooltip,
+        onTooltipClose,
+        tooltipRoot,
         addSvgFilter,
         removeSvgFilter,
         getDerivedFromVars,
@@ -1196,6 +1297,10 @@
         } : states[0].div;
     }
 
+    function onTooltipClose(internalId: number): void {
+        tooltips = tooltips.filter(it => it.internalId !== internalId);
+    }
+
     /**
      * Fix for the :active pseudo-class on iOS
      */
@@ -1222,6 +1327,13 @@
         if (timersController) {
             timersController.destroy();
         }
+
+        tooltips.forEach(info => {
+            if (info.timeoutId) {
+                clearTimeout(info.timeoutId);
+                info.timeoutId = null;
+            }
+        });
     });
 </script>
 
@@ -1231,6 +1343,12 @@
         on:touchstart={emptyTouchstartHandler}
     >
         <RootSvgFilters {svgFiltersMap} />
-        <Unknown div={rootStateDiv} {templateContext} />
+        <Unknown
+            div={rootStateDiv}
+            {templateContext}
+            layoutParams={{
+                tooltips
+            }}
+        />
     </div>
 {/if}

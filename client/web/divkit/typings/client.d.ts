@@ -8,7 +8,8 @@ import type {
     Theme,
     Customization,
     DivExtensionClass,
-    TypefaceProvider
+    TypefaceProvider,
+    FetchInit
 } from './common';
 import type { GlobalVariablesController } from './variables';
 
@@ -28,6 +29,8 @@ export function render(opts: {
     extensions?: Map<string, DivExtensionClass>;
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
+    fetchInit?: FetchInit;
+    tooltipRoot?: HTMLElement;
 }): DivkitInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

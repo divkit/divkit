@@ -1,5 +1,5 @@
 import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
-import { AnyTransition, Interpolation } from '../types/base';
+import type { AnyTransition, Interpolation } from '../types/base';
 import { ease } from './easings/ease';
 import { spring } from './easings/spring';
 

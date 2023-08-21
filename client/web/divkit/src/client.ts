@@ -6,6 +6,7 @@ import type {
     DivExtensionClass,
     DivJson,
     ErrorCallback,
+    FetchInit,
     Platform,
     StatCallback,
     Theme,
@@ -30,6 +31,8 @@ export function render(opts: {
     typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     theme?: Theme;
+    fetchInit?: FetchInit;
+    tooltipRoot?: HTMLElement;
 }) {
     return new Root({
         target: opts.target,
@@ -47,7 +50,9 @@ export function render(opts: {
             onComponent: opts.onComponent,
             typefaceProvider: opts.typefaceProvider,
             platform: opts.platform,
-            theme: opts.theme
+            theme: opts.theme,
+            fetchInit: opts.fetchInit,
+            tooltipRoot: opts.tooltipRoot
         },
         hydrate: opts.hydrate
     });

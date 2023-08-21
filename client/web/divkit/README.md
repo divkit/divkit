@@ -313,6 +313,14 @@ Default value is `['http', 'https', 'tel', 'mailto', 'intent']`
 
 Components with an action containing a protocol from the list will be rendered as `<a>`, and clicking on them will be processed by the browser. Protocols outside the list will cause the element to be rendered as a button-like, and clicking on them causes an 'onCustomAction'.
 
+#### tooltipRoot
+
+`/client` and `/client-hydratable`
+
+HTMLElement, optional.
+
+Allows to attach tooltips to the custom root, outside of `target`. Useful to avoid cropping.
+
 ### extensions
 
 `Map<string, DivExtensionClass>`, optional.
