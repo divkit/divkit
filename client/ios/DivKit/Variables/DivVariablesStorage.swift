@@ -278,27 +278,27 @@ extension Collection where Element == DivVariable {
       switch variable {
       case let .stringVariable(stringVariable):
         let name = DivVariableName(rawValue: stringVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .string(stringVariable.value)
       case let .numberVariable(numberVariable):
         let name = DivVariableName(rawValue: numberVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .number(numberVariable.value)
       case let .integerVariable(integerVariable):
         let name = DivVariableName(rawValue: integerVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .integer(integerVariable.value)
       case let .booleanVariable(booleanVariable):
         let name = DivVariableName(rawValue: booleanVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .bool(booleanVariable.value)
       case let .colorVariable(colorVariable):
         let name = DivVariableName(rawValue: colorVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .color(colorVariable.value)
       case let .urlVariable(urlVariable):
         let name = DivVariableName(rawValue: urlVariable.name)
-        if variables.keys.contains(name) { return }
+        if variables[name] != nil { return }
         variables[name] = .url(urlVariable.value)
       }
     }
