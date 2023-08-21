@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { typescript/*, postcss*/ } = require('svelte-preprocess');
-const { asMarkupPreprocessor } = require('svelte-as-markup-preprocessor');
 // const cssModules = require('svelte-preprocess-cssmodules');
 
 const { COMPONENTS } = require('./src/components');
@@ -72,14 +71,12 @@ const configCommon = isServer => ({
                     loader: 'svelte-loader',
                     options: {
                         preprocess: [
-                            asMarkupPreprocessor([
-                                typescript(),
-                                /*postcss({
-                                    plugins: [
-                                        require('autoprefixer')
-                                    ]
-                                })*/
-                            ]),
+                            typescript(),
+                            /*postcss({
+                                plugins: [
+                                    require('autoprefixer')
+                                ]
+                            })*/
                             /*cssModules({
                                 useAsDefaultScoping: true,
                                 // localIdentName: 'divkit-[local]',

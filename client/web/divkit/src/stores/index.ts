@@ -1,4 +1,4 @@
-import type { Writable } from 'svelte/types/runtime/store';
+import type { Writable } from 'svelte/store';
 import { createPagersStore } from './pagers';
 
 export const storesMap: Record<string, () => Writable<any>> = {

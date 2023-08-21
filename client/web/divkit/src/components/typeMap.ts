@@ -1,4 +1,4 @@
-import { SvelteComponent } from 'svelte';
+import type { ComponentType } from 'svelte';
 import Text from './text/Text.svelte';
 import Container from './container/Container.svelte';
 import Separator from './separator/Separator.svelte';
@@ -14,7 +14,7 @@ import Input from './input/Input.svelte';
 import Select from './select/Select.svelte';
 import Video from './video/Video.svelte';
 
-export const TYPE_MAP: Record<string, typeof SvelteComponent> = {};
+export const TYPE_MAP: Record<string, ComponentType> = {};
 
 if (process.env.ENABLE_COMPONENT_TEXT || process.env.ENABLE_COMPONENT_TEXT === undefined) {
     TYPE_MAP.text = Text;

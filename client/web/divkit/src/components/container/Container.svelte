@@ -257,7 +257,12 @@
     >
         {#key jsonItems}
             {#each items as item}
-                <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
+                <Unknown
+                    layoutParams={childLayoutParams}
+                    div={item.json}
+                    templateContext={item.templateContext}
+                    origJson={item.origJson}
+                />
             {/each}
         {/key}
 

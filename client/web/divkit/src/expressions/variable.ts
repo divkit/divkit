@@ -1,5 +1,5 @@
+import type { Writable, Subscriber, Unsubscriber } from 'svelte/store';
 import { writable } from 'svelte/store';
-import type { Subscriber, Unsubscriber, Writable } from 'svelte/types/runtime/store';
 import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt, MAX_INT, MIN_INT } from './bigint';

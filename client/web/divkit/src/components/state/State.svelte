@@ -461,22 +461,33 @@
                 {#if 'direction' in item}
                     <div
                         class={css['state__animation-child']}
-                        style="left:{item.offsetLeft}px;top:{item.offsetTop}px;width:{item.width}px;height:{item.height}px"
-                        in:inOutTransition={item}
+                        style:left="{item.offsetLeft}px"
+                        style:top="{item.offsetTop}px"
+                        style:width="{item.width}px"
+                        style:height="{item.height}px"
+                        in:inOutTransition|global={item}
                         on:introend={() => onOutro(item)}
                     >
                         <div class={css['state__animation-child-inner']}>
-                            <Unknown div={item.json} templateContext={item.templateContext} layoutParams={{ fakeElement: true }} />
+                            <Unknown
+                                div={item.json}
+                                templateContext={item.templateContext}
+                                layoutParams={{ fakeElement: true }}
+                            />
                         </div>
                     </div>
                 {:else}
                     <div
                         class={css['state__animation-child']}
-                        in:changeBoundsTransition={item}
+                        in:changeBoundsTransition|global={item}
                         on:introend={() => onOutro(item)}
                     >
                         <div class={css['state__animation-child-inner']}>
-                            <Unknown div={item.json} templateContext={item.templateContext} layoutParams={{ fakeElement: true }} />
+                            <Unknown
+                                div={item.json}
+                                templateContext={item.templateContext}
+                                layoutParams={{ fakeElement: true }}
+                            />
                         </div>
                     </div>
                 {/if}

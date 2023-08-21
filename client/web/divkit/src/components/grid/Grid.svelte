@@ -239,7 +239,12 @@
     >
         {#key resultItems}
             {#each resultItems as item}
-                <Unknown layoutParams={item.layoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
+                <Unknown
+                    layoutParams={item.layoutParams}
+                    div={item.json}
+                    templateContext={item.templateContext}
+                    origJson={item.origJson}
+                />
             {/each}
         {/key}
     </Outer>

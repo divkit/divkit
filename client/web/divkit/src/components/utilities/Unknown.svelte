@@ -52,5 +52,11 @@
 </script>
 
 {#if component}
-    <svelte:component this={component} json={childJson} templateContext={childContext} {layoutParams} origJson={origJson || div} />
+    <svelte:component
+        this={component}
+        json={childJson}
+        templateContext={childContext}
+        {layoutParams}
+        origJson={origJson || div}
+    />
 {/if}

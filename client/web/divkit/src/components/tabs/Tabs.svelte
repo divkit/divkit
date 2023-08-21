@@ -182,7 +182,12 @@
             const defaultRadius = tabStyle.corner_radius ?? 1000;
 
             if (tabStyle.corners_radius) {
-                tabBorderRadius = correctBorderRadius(tabStyle.corners_radius, defaultRadius, tabFontSize, tabBorderRadius);
+                tabBorderRadius = correctBorderRadius(
+                    tabStyle.corners_radius,
+                    defaultRadius,
+                    tabFontSize,
+                    tabBorderRadius
+                );
             } else if (isNonNegativeNumber(defaultRadius)) {
                 tabBorderRadius = pxToEm(defaultRadius / tabFontSize * 10);
             }
@@ -192,7 +197,10 @@
     let tabActiveFontWeight: number | undefined = undefined;
     let tabActiveFontFamily = '';
     $: {
-        tabActiveFontWeight = correctFontWeight(tabStyle.active_font_weight || tabStyle.font_weight, tabActiveFontWeight);
+        tabActiveFontWeight = correctFontWeight(
+            tabStyle.active_font_weight || tabStyle.font_weight,
+            tabActiveFontWeight
+        );
         if (tabStyle.font_family && typeof tabStyle.font_family === 'string') {
             tabActiveFontFamily = rootCtx.typefaceProvider(tabStyle.font_family, {
                 fontWeight: tabActiveFontWeight || 400

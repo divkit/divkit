@@ -204,7 +204,10 @@
         });
         usedTintColors = [];
 
-        if (!(Array.isArray(textRanges) && textRanges.length || Array.isArray(textImages) && textImages.length && text)) {
+        if (!(
+            Array.isArray(textRanges) && textRanges.length ||
+            Array.isArray(textImages) && textImages.length && text
+        )) {
             renderList = [];
             return;
         }

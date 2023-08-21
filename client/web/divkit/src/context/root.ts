@@ -1,4 +1,4 @@
-import type { Readable, Writable } from 'svelte/types/runtime/store';
+import type { Readable, Writable } from 'svelte/store';
 import type { WrappedError } from '../utils/wrapError';
 import type { Action, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData } from '../types/base';

@@ -1,4 +1,4 @@
-import type { Readable } from 'svelte/types/runtime/store';
+import type { Readable } from 'svelte/store';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 function voidUnsubscribe() {

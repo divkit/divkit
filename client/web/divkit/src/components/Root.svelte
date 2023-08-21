@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-    import { writable } from 'svelte/store';
+    import { type Readable, type Writable, writable } from 'svelte/store';
 
     let isPointerFocus = writable(true);
     let rootInstancesCount = 0;
@@ -14,7 +14,6 @@
 </script>
 
 <script lang="ts">
-    import type { Readable, Writable } from 'svelte/types/runtime/store';
     import { onDestroy, onMount, setContext, tick } from 'svelte';
     import { derived } from 'svelte/store';
 

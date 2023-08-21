@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { typescript/*, postcss*/ } = require('svelte-preprocess');
-const { asMarkupPreprocessor } = require('svelte-as-markup-preprocessor');
 // const cssModules = require('svelte-preprocess-cssmodules');
 
 const {COMPONENTS} = require('./src/components');
@@ -75,7 +74,6 @@ const configCommon = ({
 
             {
                 test: /\.([jt]s|svelte)$/,
-                exclude: /(node_modules|bower_components)/,
                 use: {
                     loader: require.resolve('babel-loader'),
                     options: {
@@ -94,14 +92,12 @@ const configCommon = ({
                     loader: 'svelte-loader',
                     options: {
                         preprocess: [
-                            asMarkupPreprocessor([
-                                typescript(),
-                                /*postcss({
-                                    plugins: [
-                                        require('autoprefixer')
-                                    ]
-                                })*/
-                            ]),
+                            typescript(),
+                            /*postcss({
+                                plugins: [
+                                    require('autoprefixer')
+                                ]
+                            })*/
                             /*cssModules({
                                 useAsDefaultScoping: true,
                                 // localIdentName: 'divkit-[local]'
@@ -126,12 +122,14 @@ const configCommon = ({
                             generate: 'ssr',
                             dev: !isProd,
                             immutable: true,
-                            accessors: false
+                            accessors: false,
+                            discloseVersion: false
                         } : {
                             dev: !isProd,
                             hydratable,
                             immutable: true,
-                            accessors: false
+                            accessors: false,
+                            discloseVersion: false
                         },
 
                         emitCss: !skipCss && isProd,

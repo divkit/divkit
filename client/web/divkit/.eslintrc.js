@@ -1,7 +1,8 @@
 module.exports = {
     extends: [
         './.eslintrc.base.js',
-        'plugin:@typescript-eslint/recommended'
+        'plugin:@typescript-eslint/recommended',
+        'plugin:svelte/recommended'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -14,11 +15,11 @@ module.exports = {
         browser: true
     },
     plugins: [
-        'svelte3',
+        'svelte',
         '@typescript-eslint'
     ],
     settings: {
-        'svelte3/typescript': () => require('typescript')
+        'svelte/typescript': () => require('typescript')
     },
     ignorePatterns: [
         'node_modules/**',
@@ -37,8 +38,14 @@ module.exports = {
         'no-multiple-empty-lines': 'off'
     },
 
-    overrides: [{
-        files: ['*.svelte'],
-        processor: 'svelte3/svelte3'
-    }]
+    overrides: [
+        {
+            files: ['*.svelte'],
+            parser: 'svelte-eslint-parser',
+            // Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
+            parserOptions: {
+                parser: '@typescript-eslint/parser'
+            }
+        }
+    ]
 };

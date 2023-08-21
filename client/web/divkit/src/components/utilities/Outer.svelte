@@ -190,7 +190,12 @@
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     let selfPadding: EdgeInsets | null = null;
     $: {
-        selfPadding = correctEdgeInsertsObject(($jsonPaddings && !customPaddings) ? $jsonPaddings : undefined, selfPadding);
+        selfPadding = correctEdgeInsertsObject(
+            ($jsonPaddings && !customPaddings) ?
+                $jsonPaddings :
+                undefined,
+            selfPadding
+        );
     }
 
     $: padding = edgeInsertsToCss(sumEdgeInsets(selfPadding, additionalPaddings));
@@ -281,7 +286,7 @@
         } else {
             const align = $jsonAlignmentHorizontal;
             if (align === 'left' || align === 'center' || align === 'right') {
-                newWidthMods['halign-self'] = HORIZONTAL_ALIGN_TO_GENERAL[align];
+                newWidthMods['halign-self'] = HORIZONTAL_ALIGN_TO_GENERAL[align as keyof typeof HORIZONTAL_ALIGN_TO_GENERAL];
             } else {
                 newWidthMods['halign-self'] = layoutParams.parentHAlign || 'start';
             }
@@ -868,6 +873,7 @@
         on:focus={focusHandler}
         on:blur={blurHandler}
     >
+        <!-- eslint-disable-next-line max-len -->
         {#if hasSeparateBg}<OuterBackground background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

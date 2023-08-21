@@ -2,6 +2,7 @@ module.exports = {
     transform: {
         '^.+\\.(js|jsx|ts|tsx)$': '<rootDir>/tools/test-transform.js'
     },
+    transformIgnorePatterns: [],
     testMatch: [
         '<rootDir>/tests/**/*.test.ts'
     ],
