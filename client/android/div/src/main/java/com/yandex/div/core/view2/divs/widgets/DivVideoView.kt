@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.widget.FrameLayout
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
@@ -13,6 +12,7 @@ import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -22,7 +22,7 @@ internal class DivVideoView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divImageStyle
-) : FrameLayout(context, attrs, defStyleAttr),
+) : FrameContainerLayout(context, attrs, defStyleAttr),
     DivBorderSupports,
     TransientView,
     DivExtensionView,

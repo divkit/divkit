@@ -136,6 +136,7 @@ internal class DivVideoBinder @Inject constructor(
 
         videoViewMapper.addView(view, div)
         baseBinder.bindView(view, div, oldDiv, divView)
+        view.observeAspectRatio(resolver, div.aspect)
     }
 
     private fun DivVideoView.observeElapsedTime(
