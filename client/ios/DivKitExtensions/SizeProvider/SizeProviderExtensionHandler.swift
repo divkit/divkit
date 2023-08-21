@@ -5,17 +5,17 @@ import Serialization
 
 public final class SizeProviderExtensionHandler: DivExtensionHandler {
   public let id = "size_provider"
-  
+
   private let variablesStorage: DivVariablesStorage
   private let autodisposePool = AutodisposePool()
 
   // Stores variables that has been updated during the layout cycle to prevent relayout.
   // onCardUpdated() must be called when the card is updated and new layout cycle begins.
   private var updatedVariables: Set<DivVariableName> = []
-  
+
   public init(variablesStorage: DivVariablesStorage) {
     self.variablesStorage = variablesStorage
-    
+
     variablesStorage.changeEvents.addObserver { [weak self] event in
       let variableNames: Set<DivVariableName>
       switch event.kind {
@@ -31,7 +31,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
       }
     }.dispose(in: autodisposePool)
   }
-  
+
   public func applyAfterBaseProperties(
     to block: Block,
     div: DivBase,
@@ -51,7 +51,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
       heightUpdater: makeValueUpdater(context: context, variableName: heightVariableName)
     )
   }
-  
+
   public func onCardUpdated(reasons: [DivActionURLHandler.UpdateReason]) {
     let hasNotVariableReason = reasons.isEmpty || reasons.contains {
       switch $0 {
@@ -65,7 +65,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
       updatedVariables = []
     }
   }
-  
+
   private func update(
     cardId: DivCardID,
     variableName: DivVariableName,
@@ -75,12 +75,12 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     if (value == previousValue) {
       return
     }
-    
+
     if updatedVariables.contains(variableName) {
       DivKitLogger.warning("[SizeProviderExtensionHandler] Variable '\(variableName)' was already updated during the layout cycle.")
       return
     }
-    
+
     updatedVariables.insert(variableName)
 
     variablesStorage.update(

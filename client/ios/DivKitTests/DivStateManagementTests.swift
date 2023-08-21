@@ -18,7 +18,7 @@ final class DivStateManagementTests: XCTestCase {
 
     stateManagement = makeStateManagement()
   }
-  
+
   func test_getStateManagerForCard_ReturnsSameStateManagerForSameCard() {
     let stateManager1 = stateManagement.getStateManagerForCard(cardId: "card1")
     let stateManager2 = stateManagement.getStateManagerForCard(cardId: "card1")

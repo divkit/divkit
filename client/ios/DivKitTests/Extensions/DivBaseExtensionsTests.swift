@@ -71,7 +71,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     invisibleBlockFile: String
   ) throws {
     let context = DivBlockModelingContext(scheduler: timer)
-    
+
     let blockVisibleFirst = try makeBlock(fromFile: file, context: context)
 
     // trigger visibility actions for first time

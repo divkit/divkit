@@ -170,7 +170,7 @@ private let missingTypeErrors: [DeserializationError] = [
           "div": [
             "type": "unknown_type",
           ],
-        ] as [String : Any]
+        ] as [String: Any]
       ),
       causes: NonEmptyArray(
         .nestedObjectError(

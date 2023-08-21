@@ -34,4 +34,3 @@ public final class CustomImagePreviewExtensionHandler: DivExtensionHandler {
 }
 
 private let defaultImageURL = URL(string: "empty://")
-

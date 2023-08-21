@@ -4,7 +4,7 @@ import XCTest
 
 final class DivLastVisibleBoundsCacheTests: XCTestCase {
   let cache = DivLastVisibleBoundsCache()
-    
+
   func test_WhenCacheIsEmpty_RetrievesZeroFromCache() {
     XCTAssertEqual(cache.lastVisibleBounds(for: "path"), .zero)
   }

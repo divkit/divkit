@@ -278,4 +278,3 @@ extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     reduce([:], +)
   }
 }
-

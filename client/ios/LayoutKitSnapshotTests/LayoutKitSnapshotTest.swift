@@ -4,8 +4,8 @@ import XCTest
 import BaseUIPublic
 import LayoutKit
 
-class LayoutKitSnapshotTest: XCTestCase {
-  override func setUp() {
+open class LayoutKitSnapshotTest: XCTestCase {
+  open override func setUp() {
     let fontProvider = YSFontProvider()
     fontSpecifiers = FontSpecifiers(
       text: fontProvider,

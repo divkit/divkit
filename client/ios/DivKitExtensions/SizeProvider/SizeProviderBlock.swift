@@ -7,7 +7,7 @@ final class SizeProviderBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let child: Block
   let widthUpdater: ValueUpdater?
   let heightUpdater: ValueUpdater?
-  
+
   public init(
     child: Block,
     widthUpdater: ValueUpdater?,

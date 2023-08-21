@@ -24,7 +24,7 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
     else {
       return block
     }
-    
+
     let expressionResolver = context.expressionResolver
     let imageURL = div.resolveImageUrl(expressionResolver)
     let view = viewFactory(div.getShimmerStyle(expressionResolver: expressionResolver) ?? .default)

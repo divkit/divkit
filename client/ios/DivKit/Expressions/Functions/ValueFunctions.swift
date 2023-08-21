@@ -153,7 +153,7 @@ extension ExpressionResolver {
     }
   }
 
-  fileprivate func getStoredValueFunctionWithTransform<T,U>(
+  fileprivate func getStoredValueFunctionWithTransform<T, U>(
     transform: @escaping (U) throws -> T
   ) -> GetOrDefaultWithTransform<U, T> {
     { name, fallbackValue in

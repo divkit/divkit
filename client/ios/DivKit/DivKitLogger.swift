@@ -1,6 +1,6 @@
 import Foundation
 
-private var externalLogger: (DivErrorLevel, String) -> Void = { _,_  in }
+private var externalLogger: (DivErrorLevel, String) -> Void = { _, _  in }
 
 public enum DivKitLogger {
   public static var isEnabled: Bool = false

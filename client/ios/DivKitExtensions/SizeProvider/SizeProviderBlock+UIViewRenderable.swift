@@ -34,12 +34,12 @@ private final class SizeProviderBlockView: BlockView {
   init() {
     super.init(frame: .zero)
   }
-  
+
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
   var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
 
   func configure(
@@ -58,7 +58,7 @@ private final class SizeProviderBlockView: BlockView {
     )
     setNeedsLayout()
   }
-  
+
   override func layoutSubviews() {
     super.layoutSubviews()
     childView.frame = bounds

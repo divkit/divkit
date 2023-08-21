@@ -24,7 +24,7 @@ open class DivViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
 
     view.addSubview(divView)
-    
+
     jsonProvider.addObserver { [weak self] in
       self?.setData($0)
     }.dispose(in: disposePool)

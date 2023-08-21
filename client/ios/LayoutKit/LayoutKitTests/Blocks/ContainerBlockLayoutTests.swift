@@ -911,7 +911,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
   }
 
   // MARK: Constrained elements layout tests
-  
+
   func test_WhenConstrainedItemsWithZeroSize_ProducedZeroSize() {
     let blockSizes =
       Array(decreaseConstrainedBlockSizes(

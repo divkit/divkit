@@ -9,7 +9,7 @@ public struct ShimmerStyle {
   public let colorsAndLocations: [(Color, CGFloat)]
   public let angle: CGFloat
   public let duration: CGFloat
-  
+
   public init(colorsAndLocations: [(Color, CGFloat)], angle: CGFloat, duration: CGFloat) {
     self.colorsAndLocations = colorsAndLocations
     self.angle = angle
@@ -90,7 +90,7 @@ extension Dictionary where Key == String {
       return expression.flatMap(fromExpression)
     }
   }
-  
+
   fileprivate func getOptionalArrayElementsAsExpression<T: ValidSerializationValue>(
     _ key: Key,
     fromExpression: (String) -> T?

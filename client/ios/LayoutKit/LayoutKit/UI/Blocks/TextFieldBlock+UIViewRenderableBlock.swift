@@ -134,9 +134,9 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
           _ = self?.textField.resignFirstResponder()
         }
       }
-      guard textField.window != nil else { 
+      guard textField.window != nil else {
         self.postponedUpdateOfInteraction = setFirstResponder
-        break 
+        break
       }
       setFirstResponder()
     case .disabled:

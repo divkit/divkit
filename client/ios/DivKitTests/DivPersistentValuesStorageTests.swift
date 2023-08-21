@@ -5,7 +5,7 @@ import XCTest
 
 import BasePublic
 
-class DivPersistentValuesStorageTests: XCTestCase {
+final class DivPersistentValuesStorageTests: XCTestCase {
   private var storage: DivPersistentValuesStorage!
   private var currentTimestamp: Milliseconds = 0
 
