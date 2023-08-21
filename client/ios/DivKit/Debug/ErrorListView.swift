@@ -9,8 +9,8 @@ final class ErrorListView: UIView {
   private let errorString: String
 
   init(errors: [String]) {
-    errorString = errors.joined(separator: "\n")
-    let block = makeErrorBlock(errorsString: errorString, errorsCount: errors.count)
+    errorString = errors.joined(separator: "\n\n")
+    let block = makeErrorBlock(errors: errors)
     self.errorView = block.makeBlockView()
     let blockFrame = CGRect(origin: .zero, size: block.intrinsicSize)
     super.init(frame: blockFrame)
@@ -46,14 +46,14 @@ extension ErrorListView: UIActionEventPerforming {
   }
 }
 
-private func makeErrorBlock(errorsString: String, errorsCount: Int) -> Block {
+private func makeErrorBlock(errors: [String]) -> Block {
   try! ContainerBlock(
     layoutDirection: .vertical,
     widthTrait: .intrinsic,
     heightTrait: .intrinsic,
     children: [
-      .init(content: makeHeaderBlock(errorsCount: errorsCount)),
-      .init(content: makeErrorListBlock(errorString: errorsString)),
+      .init(content: makeHeaderBlock(errorsCount: errors.count)),
+      .init(content: makeErrorListBlock(errors: errors)),
     ]
   ).addingHorizontalGaps(15)
     .addingVerticalGaps(top: 0, bottom: 15)
@@ -124,18 +124,20 @@ private func makeHeaderBlock(errorsCount: Int) -> Block {
   )
 }
 
-private func makeErrorListBlock(errorString: String) -> Block {
-  let textBlock = TextBlock(
-    widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 350),
-    heightTrait: .intrinsic,
-    text: errorString.with(typo: errorsTypo),
-    verticalAlignment: .leading,
-    minNumberOfHiddenLines: 0
-  )
+private func makeErrorListBlock(errors: [String]) -> Block {
+  let errorBlocks = errors.map {
+    TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 350),
+      heightTrait: .intrinsic,
+      text: $0.with(typo: errorsTypo),
+      verticalAlignment: .leading,
+      minNumberOfHiddenLines: 0
+    )
+  }
 
   return try! GalleryBlock(
-    gaps: [.zero, .zero],
-    children: [textBlock],
+    gaps: [0] + Array.init(repeating: 10, count: errorBlocks.count),
+    children: errorBlocks,
     path: rootPath,
     direction: .vertical,
     crossAlignment: .leading,

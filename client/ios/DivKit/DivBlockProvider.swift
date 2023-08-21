@@ -123,13 +123,14 @@ public final class DivBlockProvider {
       debugParams: debugParams,
       parentScrollView: parentScrollView
     )
+    dataErrors.forEach { context.errorsStorage.add($0) }
     do {
       block = try measurements.renderTime.updateMeasure {
         try divData.makeBlock(
           context: context
         )
       }
-      let errors: [DivError] = dataErrors + context.errorsStorage.errors
+      let errors = context.errorsStorage.errors
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       debugParams.processErrors((cardId: cardId, errors: errors))
     } catch {
@@ -195,9 +196,9 @@ public final class DivBlockProvider {
   ) -> Block {
     guard debugParams.isDebugInfoEnabled else { return noDataBlock }
 
-    var errors: [DivError] = dataErrors
+    var errors: [DivError] = []
     errors.append(error as DivError)
-    errors.append(contentsOf: context?.errorsStorage.errors ?? [])
+    errors.append(contentsOf: context?.errorsStorage.errors ?? dataErrors)
     DivKitLogger.error("\(message). Error: \(error).")
     debugParams.processErrors((cardId: cardId, errors: errors))
     return makeErrorsBlock(errors.map(errorMessage(_:)))
