@@ -37,8 +37,8 @@ extension DivInput: DivBlockModeling {
     if let lineHeightInt = resolveLineHeight(expressionResolver) {
       let lineHeight = CGFloat(lineHeightInt)
       typo = typo.with(height: lineHeight)
-      if lineHeight > font.lineHeight {
-        typo = typo.with(baseline: (lineHeight - font.lineHeight) / 2)
+      if lineHeight > font.defaultLineHeight() {
+        typo = typo.with(baseline: (lineHeight - font.defaultLineHeight()) / 2)
       }
     }
 
