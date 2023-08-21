@@ -34,6 +34,7 @@
     const MIN_SWIPE_PX = 8;
     const MIN_LONG_TAP_DURATION = 400;
 
+    let node: HTMLElement;
     let href = '';
     let target: string | undefined = undefined;
     let startTs = -1;
@@ -76,6 +77,40 @@
                     actions
                 }
             }));
+        }
+    }
+
+    $: if (node) {
+        if (href || hasJSAction) {
+            node.addEventListener('click', onClick);
+        } else {
+            node.removeEventListener('click', onClick);
+        }
+
+        if (doubleTapActions?.length) {
+            node.addEventListener('dblclick', onDoubleClick);
+        } else {
+            node.removeEventListener('dblclick', onDoubleClick);
+        }
+
+        if (longTapActions?.length) {
+            node.addEventListener('touchstart', onTouchStart, {
+                passive: true
+            });
+            node.addEventListener('touchmove', onTouchMove, {
+                passive: true
+            });
+            node.addEventListener('touchend', onTouchEnd, {
+                passive: true
+            });
+            node.addEventListener('touchcancel', onTouchEnd, {
+                passive: true
+            });
+        } else {
+            node.removeEventListener('touchstart', onTouchStart);
+            node.removeEventListener('touchmove', onTouchMove);
+            node.removeEventListener('touchend', onTouchEnd);
+            node.removeEventListener('touchcancel', onTouchEnd);
         }
     }
 
@@ -180,18 +215,13 @@
 
 {#if href}
     <a
+        bind:this={node}
         use:use
         {href}
         {target}
         {style}
         class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
-        on:click={onClick}
         on:click
-        on:dblclick={doubleTapActions?.length ? onDoubleClick : null}
-        on:touchstart={longTapActions?.length ? onTouchStart : null}
-        on:touchmove={longTapActions?.length ? onTouchMove : null}
-        on:touchend={longTapActions?.length ? onTouchEnd : null}
-        on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
         on:focus
         on:blur
@@ -202,18 +232,13 @@
 {:else}
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <span
+        bind:this={node}
         use:use
         class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         {style}
         role={hasJSAction ? 'button' : null}
         tabindex={hasJSAction ? 0 : null}
-        on:click={hasJSAction ? onClick : null}
         on:click
-        on:dblclick={doubleTapActions?.length ? onDoubleClick : null}
-        on:touchstart={longTapActions?.length ? onTouchStart : null}
-        on:touchmove={longTapActions?.length ? onTouchMove : null}
-        on:touchend={longTapActions?.length ? onTouchEnd : null}
-        on:touchcancel={longTapActions?.length ? onTouchEnd : null}
         on:keydown={onKeydown}
         on:focus
         on:blur
