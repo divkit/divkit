@@ -24,17 +24,21 @@ inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     }
 }
 
-internal inline fun View.doOnHierarchyLayout(crossinline action: (view: View) -> Unit) {
+internal inline fun View.doOnHierarchyLayout(
+    crossinline action: (view: View) -> Unit,
+    onEnqueuedAction: () -> Unit
+) {
     if (isHierarchyLaidOut && !isLayoutRequested) {
         action(this)
     } else {
-        doOnNextHierarchyLayout {
-            action(it)
-        }
+        doOnNextHierarchyLayout(action, onEnqueuedAction)
     }
 }
 
-internal inline fun View.doOnNextHierarchyLayout(crossinline action: (view: View) -> Unit) {
+internal inline fun View.doOnNextHierarchyLayout(
+    crossinline action: (view: View) -> Unit,
+    onEnqueuedAction: () -> Unit
+) {
     farthestLayoutCaller()?.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
         override fun onLayoutChange(
             view: View,
@@ -50,7 +54,9 @@ internal inline fun View.doOnNextHierarchyLayout(crossinline action: (view: View
             view.removeOnLayoutChangeListener(this)
             action(view)
         }
-    })
+    }).also {
+        onEnqueuedAction()
+    }
 }
 
 private fun View.farthestLayoutCaller(): View? {

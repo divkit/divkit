@@ -32,6 +32,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
     private val trackedTokens = DivVisibilityTokenHolder()
 
     private val visibleActions = WeakHashMap<View, Div>()
+    private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
 
     // Actions that was more visible than its disappear trigger percent, so they can be triggered for disappearing
     private val appearedForDisappearActions = WeakHashMap<View, Div>()
@@ -45,7 +46,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
     @AnyThread
     fun updateVisibleViews(viewList: List<View>) {
         val visibleIterator = visibleActions.iterator()
-        while(visibleIterator.hasNext()) {
+        while (visibleIterator.hasNext()) {
             if (visibleIterator.next().key !in viewList) visibleIterator.remove()
         }
 
@@ -66,12 +67,21 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
         val originalDivData = scope.divData
         if (view != null) {
-            view.doOnHierarchyLayout {
-                // Prevent visibility tracking when data has changed
-                if (scope.divData == originalDivData) {
-                    trackVisibilityActions(scope, view, div, visibilityActions)
+            if (enqueuedVisibilityActions.containsKey(view)) return
+
+            view.doOnHierarchyLayout(
+                action = {
+                    // Prevent visibility tracking when data has changed
+                    if (scope.divData == originalDivData) {
+                        trackVisibilityActions(scope, view, div, visibilityActions)
+                    }
+
+                    enqueuedVisibilityActions.remove(view)
+                },
+                onEnqueuedAction = {
+                    enqueuedVisibilityActions[view] = div
                 }
-            }
+            )
         } else {
             // Canceling tracking
             visibilityActions.forEach { action ->
