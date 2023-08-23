@@ -16,7 +16,7 @@ public final class MaskValidator: Equatable {
         .map { Pattern(regexp: $0.regex, placeHolder: $0.placeholder) }
     )
     self.decoding = decoding
-    self.inputLength = pattern.reduce(0) { $0 + (decoding.keys.contains($1) ? 1 : 0) }
+    self.inputLength = pattern.reduce(0) { $0 + (decoding[$1] != nil ? 1 : 0) }
   }
 
   public func formatted(rawText: String, rawCursorPosition: CursorData? = nil) -> InputData {

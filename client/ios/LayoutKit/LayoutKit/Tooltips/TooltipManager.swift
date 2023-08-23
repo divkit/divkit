@@ -80,7 +80,7 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public func showTooltip(info: TooltipInfo) {
     if !info.multiple, !shownTooltips.value.insert(info.id).inserted { return }
-    guard !showingTooltips.keys.contains(info.id),
+    guard showingTooltips[info.id] == nil,
           let tooltip = existingAnchorViews.compactMap({ $0?.makeTooltip(id: info.id) }).first
     else { return }
 
