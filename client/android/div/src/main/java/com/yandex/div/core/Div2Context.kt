@@ -51,6 +51,12 @@ class Div2Context @MainThread private constructor(
     constructor(
         baseContext: ContextThemeWrapper,
         configuration: DivConfiguration,
+        @StyleRes themeId: Int = R.style.Div_Theme
+    ) : this(baseContext, configuration, themeId, null)
+
+    constructor(
+        baseContext: ContextThemeWrapper,
+        configuration: DivConfiguration,
         @StyleRes themeId: Int = R.style.Div_Theme,
         lifecycleOwner: LifecycleOwner? = null
     ) : this(
