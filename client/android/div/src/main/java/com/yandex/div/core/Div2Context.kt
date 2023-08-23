@@ -47,6 +47,7 @@ class Div2Context @MainThread private constructor(
 
     private var inflater: LayoutInflater? = null
 
+    @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration, LifecycleOwner) instead")
     @JvmOverloads
     constructor(
         baseContext: ContextThemeWrapper,
@@ -72,7 +73,7 @@ class Div2Context @MainThread private constructor(
         lifecycleOwner
     )
 
-    @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration) instead")
+    @Deprecated("use Div2Context(ContextThemeWrapper, DivConfiguration, LifecycleOwner) instead")
     constructor(
         activity: Activity,
         configuration: DivConfiguration
