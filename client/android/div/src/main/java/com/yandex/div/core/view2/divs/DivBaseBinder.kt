@@ -24,6 +24,7 @@ import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBase
@@ -309,18 +310,23 @@ internal class DivBaseBinder @Inject constructor(
             } ?: Disposable.NULL
         )
 
-        divAccessibilityBinder.bindAccessibilityMode(
-            this, divView, accessibility.mode.evaluate(resolver)
-        )
+        applyAccessibilityMode(accessibility.mode.evaluate(resolver), divView)
         val accessibilityVisitor = DivAccessibilityVisitor(divAccessibilityBinder, divView, resolver)
         subscriber.addSubscription(
                 accessibility.mode.observe(resolver) {
+                    applyAccessibilityMode(it, divView)
                     accessibilityVisitor.visitViewTree(this)
                 })
 
         accessibility.type?.let { type ->
             divAccessibilityBinder.bindType(this, type)
         } ?: divAccessibilityBinder.bindTypeAutomatically(this, div)
+    }
+
+    private fun View.applyAccessibilityMode(mode: DivAccessibility.Mode, divView: Div2View) {
+        divAccessibilityBinder.bindAccessibilityMode(
+                this, divView, mode
+        )
     }
 
     private fun View.observeAlpha(
