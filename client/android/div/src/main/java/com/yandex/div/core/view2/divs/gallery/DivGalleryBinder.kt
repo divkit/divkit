@@ -288,11 +288,11 @@ internal class DivGalleryBinder @Inject constructor(
                     divView.div2Component.div2Logger.logGalleryScroll(divView)
                     direction = if (dx > 0 || dy > 0) ScrollDirection.NEXT else ScrollDirection.BACK
                 }
-                trackVisibleViews()
+                trackViews()
             }
         }
 
-        private fun trackVisibleViews() {
+        private fun trackViews() {
             val visibilityActionTracker = divView.div2Component.visibilityActionTracker
             visibilityActionTracker.updateVisibleViews(recycler.children.toList())
 
@@ -302,6 +302,14 @@ internal class DivGalleryBinder @Inject constructor(
 
                 val div = (recycler.adapter as GalleryAdapter).items[position]
                 visibilityActionTracker.trackVisibilityActionsOf(divView, child, div)
+            }
+
+            // Find and track recycled views containing DisappearActions that are waiting for disappear
+            with(visibilityActionTracker) {
+                getActionsWaitingForDisappear().filter { it.key !in recycler.children }.forEach {
+                    val (view, div) = it
+                    trackVisibilityActionsOf(divView, view, div)
+                }
             }
         }
     }
