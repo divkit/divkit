@@ -583,6 +583,7 @@ class DivanProperty(Property):
         if description_doc is not None:
             comment_lines.append(description_doc)
         if default_value is not None:
+            default_value = ' '.join(default_value.replace('\n', ' ').split())
             comment_lines.append(translations["div_generator_default_value"].format(default_value))
         if comment_lines:
             declaration += comment(*comment_lines)

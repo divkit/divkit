@@ -38,7 +38,7 @@ from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
 
 
 def __generate_templates(config: Config.GenerationConfig) -> bool:
-    return config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]
+    return config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN] and config.generate_templates
 
 
 def __resolve_string_field(name: str,

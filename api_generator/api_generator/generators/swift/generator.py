@@ -19,7 +19,8 @@ from ...schema.modeling.entities import (
     Declarable,
     Property,
     String,
-    RawArray
+    RawArray,
+    SwiftGeneratorProperties
 )
 from ...schema.modeling.text import Text, EMPTY
 from ...config import Config, GenerationMode, GeneratedLanguage
@@ -69,6 +70,7 @@ class SwiftGenerator(Generator):
     def __init__(self, config: Config):
         super(SwiftGenerator, self).__init__(config)
         self._access_level = SwiftAccessLevel.PUBLIC
+        self.generate_serialization = config.generation.generate_serialization
 
     def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.swift'
@@ -132,7 +134,8 @@ class SwiftGenerator(Generator):
             serialization += '    return result'
             serialization += '  }'
             serialization += '}'
-            self_extensions.append(str(serialization))
+            if self.generate_serialization:
+                self_extensions.append(str(serialization))
 
         inner_types_extensions = []
         for inner_type in entity.inner_types:
@@ -186,14 +189,17 @@ class SwiftGenerator(Generator):
         equatable_extension += '#endif'
         equatable_extension = str(equatable_extension)
 
-        if entity_enumeration.mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES:
-            result = [deserializable_extension, equatable_extension]
-        elif entity_enumeration.mode.is_template:
-            result = [deserializable_extension]
+        if self.generate_serialization:
+            if entity_enumeration.mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES:
+                result = [deserializable_extension, equatable_extension]
+            elif entity_enumeration.mode.is_template:
+                result = [deserializable_extension]
+            else:
+                result = [equatable_extension]
         else:
             result = [equatable_extension]
 
-        if not entity_enumeration.mode.is_template:
+        if not entity_enumeration.mode.is_template and self.generate_serialization:
             serialization_extension = Text(f'extension {entity_enumeration.prefixed_declaration}: Serializable {{')
             serialization_extension += f'  {access_modifier}func toDictionary() -> [String: ValidSerializationValue] {{'
             serialization_extension += '    return value.toDictionary()'
@@ -225,6 +231,11 @@ class SwiftGenerator(Generator):
                 result += prop.declaration(self._access_level).indented()
             result += EMPTY
 
+        if isinstance(entity.generator_properties, SwiftGeneratorProperties) \
+                and entity.generator_properties.public_default_values:
+            result += Text(entity.default_values_static_declaration).indented()
+            result += EMPTY
+
         filtered_props = list(filter(
             lambda p: p.supports_expressions and not p.mode.is_template,
             properties_to_declare))
@@ -237,8 +248,8 @@ class SwiftGenerator(Generator):
                 result += validator_decl.indented()
                 result += EMPTY
 
-        if entity.generation_mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES or \
-                entity.generation_mode.is_template:
+        if self.generate_serialization and (entity.generation_mode is GenerationMode.NORMAL_WITHOUT_TEMPLATES or
+                                            entity.generation_mode.is_template):
             result += entity.deserializing_constructor_declaration.indented()
             result += EMPTY
 

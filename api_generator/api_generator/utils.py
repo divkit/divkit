@@ -173,3 +173,10 @@ def python_long_sting_split(string: str, max_len: int = 59) -> str:
 
         fp.write("\n)")
         return fp.getvalue()
+
+
+def print_warning(message: str) -> None:
+    separator = "=" * 100
+    print(separator)
+    print(f'WARNING: {message}')
+    print(separator)

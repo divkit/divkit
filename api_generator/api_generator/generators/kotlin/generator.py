@@ -26,6 +26,7 @@ class KotlinGenerator(Generator):
         self.kotlin_annotations = config.generation.kotlin_annotations
         self._error_collectors = config.generation.errors_collectors
         self._generate_equality = config.generation.generate_equality
+        self.generate_serialization = config.generation.generate_serialization
 
     def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.kt'
@@ -58,8 +59,9 @@ class KotlinGenerator(Generator):
             result += EMPTY
             result += entity.value_resolving_declaration.indented(indent_width=4)
 
-        result += EMPTY
-        result += entity.serialization_declaration.indented(indent_width=4)
+        if self.generate_serialization:
+            result += EMPTY
+            result += entity.serialization_declaration.indented(indent_width=4)
 
         if not is_template and self._generate_equality and not entity.instance_properties:
             result += EMPTY
@@ -70,7 +72,7 @@ class KotlinGenerator(Generator):
             if patch:
                 result += patch
 
-        static_declarations = entity.static_declarations
+        static_declarations = entity.static_declarations(self.generate_serialization)
         if static_declarations.lines:
             result += EMPTY
             result += '    companion object {'
@@ -108,11 +110,13 @@ class KotlinGenerator(Generator):
             data_prefix = ''
         prefix = f'{data_prefix}class {utils.capitalize_camel_case(entity.name)}'
 
-        interfaces = 'JSONSerializable'
+        interfaces = ['JSONSerializable'] if self.generate_serialization else []
         protocol_plus_super_entities = entity.protocol_plus_super_entities()
         if protocol_plus_super_entities is not None:
-            interfaces += f', {protocol_plus_super_entities}'
-        suffix = f' : {interfaces} {{'
+            interfaces.append(protocol_plus_super_entities)
+        interfaces = ', '.join(interfaces)
+        suffix = f' : {interfaces}' if interfaces else ''
+        suffix += ' {'
 
         def add_instance_properties(text: Text, is_template: bool) -> Text:
             mixed_properties = entity.instance_properties_kotlin
@@ -175,12 +179,16 @@ class KotlinGenerator(Generator):
         result = Text()
         for annotation in self.kotlin_annotations.classes:
             result += annotation
-        interfaces = ['JSONSerializable', entity_enumeration.mode.protocol_name(
+        interfaces = ['JSONSerializable'] if self.generate_serialization else []
+        interfaces.append(entity_enumeration.mode.protocol_name(
             lang=GeneratedLanguage.KOTLIN,
-            name=entity_enumeration.resolved_prefixed_declaration)]
+            name=entity_enumeration.resolved_prefixed_declaration))
         interfaces = ', '.join(filter(None, interfaces))
 
-        result += f'sealed class {declaration_name} : {interfaces} {{'
+        suffix = f' : {interfaces}' if interfaces else ''
+        suffix += ' {'
+
+        result += f'sealed class {declaration_name}{suffix}'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
             decl = f'class {naming}(val value: {decl}) : {declaration_name}()'
@@ -197,15 +205,16 @@ class KotlinGenerator(Generator):
         result += '    }'
         result += EMPTY
 
-        result += '    override fun writeToJSON(): JSONObject {'
-        result += '        return when (this) {'
-        for decl in entity_declarations:
-            naming = entity_enumeration.format_case_naming(decl)
-            decl = f'is {naming} -> value.writeToJSON()'
-            result += Text(indent_width=12, init_lines=decl)
-        result += '        }'
-        result += '    }'
-        result += EMPTY
+        if self.generate_serialization:
+            result += '    override fun writeToJSON(): JSONObject {'
+            result += '        return when (this) {'
+            for decl in entity_declarations:
+                naming = entity_enumeration.format_case_naming(decl)
+                decl = f'is {naming} -> value.writeToJSON()'
+                result += Text(indent_width=12, init_lines=decl)
+            result += '        }'
+            result += '    }'
+            result += EMPTY
 
         if entity_enumeration.mode.is_template:
             self_name = entity_enumeration.resolved_prefixed_declaration
@@ -239,6 +248,10 @@ class KotlinGenerator(Generator):
             result += '        return false'
             result += '    }'
             result += EMPTY
+
+        if not self.generate_serialization:
+            result += '}'
+            return result
 
         result += '    companion object {'
         result += '        @Throws(ParsingException::class)'

@@ -7,6 +7,7 @@ export './entity_with_array_with_transform.dart';
 export './entity_with_complex_property.dart';
 export './entity_with_complex_property_with_default_value.dart';
 export './entity_with_entity_property.dart';
+export './entity_with_json_property.dart';
 export './entity_with_optional_complex_property.dart';
 export './entity_with_optional_property.dart';
 export './entity_with_optional_string_enum_property.dart';

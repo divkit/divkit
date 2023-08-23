@@ -332,6 +332,32 @@
       }
     },
     {
+      "entity_with_json_property.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_json_property"
+            ]
+          },
+          "json_property": {
+            "type": "object",
+            "additionalProperties": true,
+            "default_value": {
+              "key": "value",
+              "items": [
+                "value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_optional_complex_property.json": {
         "type": "object",
         "definitions": {

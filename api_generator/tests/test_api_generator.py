@@ -100,6 +100,24 @@ def test_divan_generator():
                           references_folder_name='divan')
 
 
+def test_shared_data_swift_generator():
+    assert_test_generator(config_filename='shared_data_swift_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='shared_data_swift')
+
+
+def test_shared_data_kotlin_generator():
+    assert_test_generator(config_filename='shared_data_kotlin_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='shared_data_kotlin')
+
+
+def test_not_templates_swift_generator():
+    assert_test_generator(config_filename='not_templates_swift_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='not_templates_swift')
+
+
 def assert_test_generator(config_filename: str,
                           schema_path: str,
                           references_folder_name: str,
@@ -114,6 +132,8 @@ def assert_test_generator(config_filename: str,
     references_path = utils.path_generator_tests(os.path.join('references', references_folder_name))
 
     if SHOULD_UPDATE_REFERENCES:
+        if not os.path.exists(references_path):
+            os.makedirs(references_path)
         utils.clear_content_of_directory(directory=references_path)
         utils.update_references(source_path=OUTPUT_PATH, destination_path=references_path)
         assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'

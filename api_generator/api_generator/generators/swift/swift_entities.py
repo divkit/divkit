@@ -175,7 +175,9 @@ class SwiftEntity(Entity):
             if self.generation_mode.is_template:
                 res = decl
             else:
-                res = prop.add_default_value_to(decl)
+                public_default_value = self.generator_properties.public_default_values if isinstance(
+                    self.generator_properties, SwiftGeneratorProperties) else False
+                res = prop.add_default_value_to(decl, public_default_value)
             result += Text(indent_width=2, init_lines=res)
         result += '}'
 
@@ -391,6 +393,16 @@ class SwiftEntity(Entity):
         result += '}'
         return result
 
+    @property
+    def default_values_static_declaration(self) -> List[str]:
+        default_values = []
+        for p in self.properties_to_declare_swift:
+            default_value = p.default_value_declaration
+            if default_value is not None:
+                declaration = f'public static let {p.static_default_value_name} = {default_value}'
+                default_values.append(declaration)
+        return default_values
+
 
 class SwiftProperty(Property):
     class SwiftMode:
@@ -405,6 +417,10 @@ class SwiftProperty(Property):
     @property
     def declaration_name(self) -> str:
         return utils.fixing_first_digit(utils.lower_camel_case(self.name))
+
+    @property
+    def static_default_value_name(self) -> str:
+        return utils.fixing_first_digit(utils.constant_upper_case(self.name)) + "_DEFAULT"
 
     @property
     def value_resolving_local_var_name(self) -> str:
@@ -624,11 +640,12 @@ class SwiftProperty(Property):
         expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}{type_arg}'
         return f'get{optional_suffix}{expression_suffix}{type_suffix}({expr})'
 
-    def add_default_value_to(self, declaration: str) -> str:
+    def add_default_value_to(self, declaration: str, public_default_value: bool = False) -> str:
         prop_type = cast(SwiftPropertyType, self.property_type)
         empty_dict_deserialization = prop_type.empty_constructor
         if self.default_value is not None:
-            default_value_declaration_to_use = prop_type.internal_declaration(self.default_value)
+            default_value_declaration_to_use = prop_type.internal_declaration(self.default_value) \
+                if not public_default_value else self.static_default_value_name
         elif empty_dict_deserialization is not None:
             default_value_declaration_to_use = empty_dict_deserialization
         else:
@@ -809,6 +826,8 @@ class SwiftPropertyType(PropertyType):
                 args.append(f'{prop.declaration_name}: {default_value}')
             args = ', '.join(args)
             return f'{entity.declaration_prefix}{utils.capitalize_camel_case(entity.original_name)}({args})'
+        elif isinstance(self, Dictionary):
+            return f'try JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""")'
         else:
             return None
 

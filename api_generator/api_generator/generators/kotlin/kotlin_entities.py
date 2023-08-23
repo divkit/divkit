@@ -22,7 +22,8 @@ from ...schema.modeling.entities import (
     String,
     Dictionary,
     RawArray,
-    ObjectFormat
+    ObjectFormat,
+    KotlinGeneratorProperties
 )
 from ...config import GenerationMode
 from ... import utils
@@ -136,20 +137,17 @@ class KotlinEntity(Entity):
         result += '}'
         return result
 
-    @property
-    def static_declarations(self) -> Text:
-        properties_kotlin = self.properties_kotlin
+    def static_declarations(self, generate_serialization: bool = True) -> Text:
         is_template = self.generation_mode.is_template
         name = utils.capitalize_camel_case(self.name)
-        static_properties = list(filter(lambda p: isinstance(p.property_type, StaticString), properties_kotlin))
-        default_values = []
-        instance_properties_kotlin = self.instance_properties_kotlin
-        for p in instance_properties_kotlin:
-            decl = p.default_value_declaration
-            if decl is not None:
-                default_values.append(decl)
+
+        is_private = True
+        if isinstance(self.generator_properties, KotlinGeneratorProperties):
+            is_private = not self.generator_properties.public_default_values
+        default_values = self.default_values_static_declaration(is_private)
+
         type_helpers = []
-        for p in instance_properties_kotlin:
+        for p in self.instance_properties_kotlin:
             if p.supports_expressions:
                 property_type = p.property_type
                 if isinstance(property_type, Array):
@@ -158,21 +156,18 @@ class KotlinEntity(Entity):
                 if property_type.is_enum_of_expressions:
                     type_helpers.append(property_type.type_helper_declaration(p))
         groups = []
-        if static_properties:
-            static_decl = Text()
-            for static in static_properties:
-                static_decl += static.declaration(overridden=False,
-                                                  in_interface=False,
-                                                  with_comma=False,
-                                                  with_default=False)
-            groups.append(static_decl)
+
+        static_properties_declaration = self.static_properties_declaration
+        if static_properties_declaration.lines:
+            groups.append(static_properties_declaration)
+
         if default_values:
             groups.append(Text(default_values))
 
-        if type_helpers:
+        if type_helpers and generate_serialization:
             groups.append(Text(type_helpers))
 
-        if not is_template:
+        if not is_template and generate_serialization:
             constructor = Text()
             constructor += '@JvmStatic'
             constructor += '@JvmName("fromJson")'
@@ -196,7 +191,7 @@ class KotlinEntity(Entity):
             groups.append(constructor)
 
         validators = Text()
-        for p in properties_kotlin:
+        for p in self.properties_kotlin:
             validator_or_empty = p.property_type.static_validator_expression(
                 property_name=p.name,
                 supports_expressions=p.supports_expressions,
@@ -220,11 +215,13 @@ class KotlinEntity(Entity):
 
         if is_template:
             readers = Text()
-            for p in properties_kotlin:
+            for p in self.properties_kotlin:
                 readers += p.static_reader_deserialization_expression
             groups.append(readers)
-        static_creator_lambda = f'env: ParsingEnvironment, it: JSONObject -> {name}(env, json = it)'
-        groups.append(Text(f'val {ENTITY_STATIC_CREATOR} = {{ {static_creator_lambda} }}'))
+
+        if generate_serialization:
+            static_creator_lambda = f'env: ParsingEnvironment, it: JSONObject -> {name}(env, json = it)'
+            groups.append(Text(f'val {ENTITY_STATIC_CREATOR} = {{ {static_creator_lambda} }}'))
 
         result = Text()
         for ind, group in enumerate(groups):
@@ -232,6 +229,28 @@ class KotlinEntity(Entity):
             if ind != (len(groups) - 1):
                 result += EMPTY
         return result
+
+    def default_values_static_declaration(self, is_private: bool = True) -> List[str]:
+        default_values = []
+        instance_properties_kotlin = self.instance_properties_kotlin
+        for p in instance_properties_kotlin:
+            decl = p.default_value_declaration(is_private)
+            if decl is not None:
+                default_values.append(decl)
+        return default_values
+
+    @property
+    def static_properties_declaration(self) -> Text:
+        static_properties = list(filter(lambda p: isinstance(p.property_type, StaticString), self.properties_kotlin))
+        static_decl = Text()
+        if not static_properties:
+            return static_decl
+        for static in static_properties:
+            static_decl += static.declaration(overridden=False,
+                                              in_interface=False,
+                                              with_comma=False,
+                                              with_default=False)
+        return static_decl
 
     @property
     def copy_with_new_array_declaration(self) -> Optional[Text]:
@@ -296,11 +315,11 @@ class KotlinProperty(Property):
     def default_value_var_name(self) -> str:
         return f'{utils.constant_upper_case(self.declaration_name)}_DEFAULT_VALUE'
 
-    @property
-    def default_value_declaration(self) -> Optional[str]:
+    def default_value_declaration(self, is_private: bool = True) -> Optional[str]:
         default_value_definition = self.default_value_definition
         if default_value_definition is not None:
-            return f'private val {self.default_value_var_name} = {default_value_definition}'
+            prefix = 'private ' if is_private else ''
+            return f'{prefix}val {self.default_value_var_name} = {default_value_definition}'
         return None
 
     @property
@@ -376,7 +395,7 @@ class KotlinProperty(Property):
         if with_default:
             if self.should_be_optional:
                 default_assignment = ' = null'
-            elif self.default_value_declaration is not None:
+            elif self.default_value_declaration() is not None:
                 default_assignment = f' = {self.default_value_var_name}'
         comment = declaration_comment(self, _kotlin_default_value_declaration_comment)
         return Text(f'{prefix}val {self.declaration_name}: {self.type_declaration}{default_assignment}{comma}{comment}')
@@ -645,6 +664,8 @@ class KotlinPropertyType(PropertyType):
                 args.append(f'{prop.declaration_name} = {declaration}')
             args = ', '.join(args)
             return wrap(f'{entity.resolved_prefixed_declaration}({args})')
+        elif isinstance(self, Dictionary):
+            return wrap(f'JSONObject("""\n{default_value}\n""")')
         else:
             return None
 

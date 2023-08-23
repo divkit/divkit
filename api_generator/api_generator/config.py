@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Text, List, Optional
 import json
 from enum import Enum, auto
-from .utils import sha256_file, sha256_dir
+from .utils import sha256_file, sha256_dir, print_warning
 import os
 
 
@@ -67,6 +67,20 @@ class Config:
             self.generate_equality: bool = dictionary.get('generateEquality') or False
             self.remove_prefix: str = dictionary.get('removePrefix') or ''
             self.supertype_entities: List[str] = dictionary.get('supertypeEntities') or []
+
+            self.generate_templates: bool = dictionary.get('generateTemplates', True)
+            self.generate_serialization: bool = dictionary.get('generateSerialization', True)
+
+            if ('generateTemplates' in dictionary or 'generateSerialization' in dictionary) and \
+                    self.lang not in [GeneratedLanguage.KOTLIN, GeneratedLanguage.SWIFT]:
+                raise NotImplementedError('generateTemplates & generateSerialization flags are supported only for '
+                                          'Kotlin and Swift languages')
+
+            if self.generate_templates and not self.generate_serialization:
+                if 'generateTemplates' in dictionary:
+                    print_warning('Templates can not be generated without Serialization. '
+                                  'Templates will not be generated.')
+                self.generate_templates = False
 
     def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path

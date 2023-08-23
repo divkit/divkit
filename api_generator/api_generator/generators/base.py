@@ -46,7 +46,8 @@ def declaration_comment(p: Property, default_value_comment_fun) -> str:
 
     if not comments:
         return ''
-    joined_comments = '; '.join(comments)
+    joined_comments = '; '.join(map(lambda comment: comment.replace('\n', ' '), comments))
+    joined_comments = ' '.join(joined_comments.split())
     return f' // {joined_comments}'
 
 

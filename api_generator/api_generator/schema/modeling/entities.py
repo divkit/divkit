@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import List, Optional, Dict, Union, Tuple, cast, Any, Set
@@ -67,6 +68,7 @@ def _build_generator_properties(
     generator_properties_classes = {
         GeneratedLanguage.SWIFT: SwiftGeneratorProperties,
         GeneratedLanguage.TYPE_SCRIPT: TypeScriptGeneratorProperties,
+        GeneratedLanguage.KOTLIN: KotlinGeneratorProperties,
         GeneratedLanguage.KOTLIN_DSL: KotlinDSLGeneratorProperties,
         GeneratedLanguage.DOCUMENTATION: DocumentationGeneratorProperties,
     }
@@ -115,6 +117,16 @@ def _build_documentation_generator_properties(
         mode=mode,
         specific_properties=specific_properties,
     )
+
+
+def _clean_dict_default_value(default_value: Dict) -> Dict:
+    keys = default_value.keys()
+    cleaned_dictionary = dict()
+    for key in keys:
+        if not key.startswith('$'):
+            cleaned_dictionary[key] = _clean_dict_default_value(default_value[key]) if isinstance(default_value[key], Dict)\
+                else default_value[key]
+    return cleaned_dictionary
 
 
 def _get_property_by_name(name: str, properties: List[Property], location: ElementLocation) -> Property:
@@ -731,6 +743,8 @@ def default_value(lang: GeneratedLanguage,
     if isinstance(result, str):
         property_type.validate(value=result, location=location + specific_key)
         return result
+    elif isinstance(result, Dict):
+        return json.dumps(_clean_dict_default_value(result), indent=4)
     return None
 
 
@@ -932,6 +946,19 @@ class SwiftGeneratorProperties(GeneratorProperties):
         super().__init__(general_properties, lang, mode)
         self.generate_optional_args: bool = specific_properties.get('generate_optional_arguments', True)
         self.super_protocol: Optional[str] = specific_properties.get('super_protocol')
+        self.public_default_values: bool = specific_properties.get('public_default_values', False)
+
+
+class KotlinGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+    ):
+        super().__init__(general_properties, lang, mode)
+        self.public_default_values: bool = specific_properties.get('public_default_values', False)
 
 
 class DocumentationGeneratorProperties(GeneratorProperties):

@@ -28,6 +28,9 @@ items:
   -name: entity_with_entity_property
    href: concepts/divs/entity_with_entity_property.md
    hidden: true
+  -name: entity_with_json_property
+   href: concepts/divs/entity_with_json_property.md
+   hidden: true
   -name: entity_with_optional_complex_property
    href: concepts/divs/entity_with_optional_complex_property.md
    hidden: true
@@ -39,6 +42,9 @@ items:
    hidden: true
   -name: entity_with_property_with_default_value
    href: concepts/divs/entity_with_property_with_default_value.md
+   hidden: true
+  -name: entity_with_raw_array
+   href: concepts/divs/entity_with_raw_array.md
    hidden: true
   -name: entity_with_required_property
    href: concepts/divs/entity_with_required_property.md

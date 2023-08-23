@@ -9,6 +9,7 @@ export * from './EntityWithArrayWithTransform';
 export * from './EntityWithComplexProperty';
 export * from './EntityWithComplexPropertyWithDefaultValue';
 export * from './EntityWithEntityProperty';
+export * from './EntityWithJsonProperty';
 export * from './EntityWithOptionalComplexProperty';
 export * from './EntityWithOptionalProperty';
 export * from './EntityWithOptionalStringEnumProperty';
