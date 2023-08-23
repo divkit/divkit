@@ -3,7 +3,9 @@ package com.yandex.div.core.view2
 import android.view.GestureDetector
 import android.view.MotionEvent
 
-internal class DivGestureListener : GestureDetector.SimpleOnGestureListener() {
+internal class DivGestureListener(
+    private val awaitLongClick: Boolean
+) : GestureDetector.SimpleOnGestureListener() {
     var onSingleTapListener: (() -> Unit)? = null
     var onDoubleTapListener: (() -> Unit)? = null
 
@@ -35,6 +37,6 @@ internal class DivGestureListener : GestureDetector.SimpleOnGestureListener() {
     }
 
     override fun onDown(e: MotionEvent): Boolean {
-        return false
+        return !awaitLongClick && (onDoubleTapListener != null || onSingleTapListener != null)
     }
 }

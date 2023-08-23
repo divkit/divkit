@@ -64,7 +64,9 @@ internal class DivActionBinder @Inject constructor(
         val clickableState = target.isClickable
         val longClickableState = target.isLongClickable
 
-        val divGestureListener = DivGestureListener()
+        val divGestureListener = DivGestureListener(
+            awaitLongClick = !longTapActions.isNullOrEmpty() || target.parentIsLongClickable()
+        )
         bindLongTapActions(divView, target, longTapActions, actions.isNullOrEmpty())
         bindDoubleTapActions(divView, target, divGestureListener, doubleTapActions)
         // Order is urgent: tap actions depend on double tap actions
