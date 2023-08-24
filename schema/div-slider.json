@@ -34,6 +34,32 @@
       "required": [
         "font_size"
       ]
+    },
+    "range": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "integer",
+          "$description": "translations.json#/div_slider_range_start"
+        },
+        "end": {
+          "type": "integer",
+          "$description": "translations.json#/div_slider_range_end"
+        },
+        "track_active_style": {
+          "$ref": "div-drawable.json",
+          "$description": "translations.json#/div_slider_track_active_style"
+        },
+        "track_inactive_style": {
+          "$ref": "div-drawable.json",
+          "$description": "translations.json#/div_slider_track_inactive_style"
+        },
+        "margins": {
+          "$ref": "div-edge-insets.json",
+          "$description": "translations.json#/div_slider_range_margins"
+    
+        }
+      }
     }
   },
   "allOf": [
@@ -97,6 +123,15 @@
         "tick_mark_inactive_style": {
           "$ref": "div-drawable.json",
           "$description": "translations.json#/div_slider_tick_mark_inactive_style"
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_slider_ranges",
+          "platforms": []
         },
         "secondary_value_accessibility": {
           "$ref": "div-accessibility.json",
