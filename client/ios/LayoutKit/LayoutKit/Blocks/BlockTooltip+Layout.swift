@@ -7,7 +7,7 @@ extension BlockTooltip {
     CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,
-      size: block.intrinsicSize
+      size: block.size(forResizableBlockSize: targetRect.size)
     ).offset(by: offset)
   }
 }
