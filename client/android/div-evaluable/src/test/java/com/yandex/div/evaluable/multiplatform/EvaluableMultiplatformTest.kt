@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.multiplatform
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
@@ -25,7 +26,11 @@ import java.io.File
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
 
     private val variableProvider = mock<VariableProvider>()
-    private val evaluator = Evaluator(variableProvider, BuiltinFunctionProvider(variableProvider))
+    private val storedValueProvider = mock<StoredValueProvider>()
+    private val evaluator = Evaluator(
+        variableProvider,
+        BuiltinFunctionProvider(variableProvider, storedValueProvider)
+    )
     private lateinit var testCase: ExpressionTestCase
 
     @Before

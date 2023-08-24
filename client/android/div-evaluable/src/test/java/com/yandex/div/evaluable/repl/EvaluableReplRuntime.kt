@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.repl
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.internal.Parser
@@ -13,7 +14,11 @@ import com.yandex.div.evaluable.types.DateTime
 
 internal object EvaluableReplRuntime {
     private val variableProvider = VariableProvider { variableName -> variableList[variableName] }
-    private val functionProvider = BuiltinFunctionProvider(variableProvider)
+    private val storedValueProvider = StoredValueProvider { null }
+    private val functionProvider = BuiltinFunctionProvider(
+        variableProvider,
+        storedValueProvider
+    )
     private val evaluator = Evaluator(variableProvider, functionProvider)
 
     private val variableList = mutableMapOf<String, Any?>()

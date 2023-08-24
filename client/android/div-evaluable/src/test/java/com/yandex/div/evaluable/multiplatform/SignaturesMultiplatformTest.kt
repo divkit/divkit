@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.multiplatform
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
@@ -19,7 +20,11 @@ import java.io.File
 @RunWith(Parameterized::class)
 class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase>) {
     private val variableProvider = mock<VariableProvider>()
-    private val functionProvider = BuiltinFunctionProvider(variableProvider)
+    private val storedValueProvider = mock<StoredValueProvider>()
+    private val functionProvider = BuiltinFunctionProvider(
+        variableProvider,
+        storedValueProvider
+    )
     private val signature = caseOrError.getCaseOrThrow()
 
     @Test

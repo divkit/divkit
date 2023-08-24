@@ -5,6 +5,7 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
@@ -29,7 +30,8 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     private val globalVariableController: GlobalVariableController,
     private val divActionHandler: DivActionHandler,
     private val errorCollectors: ErrorCollectors,
-    private val logger: Div2Logger
+    private val logger: Div2Logger,
+    private val storedValuesController: StoredValuesController,
 ) {
     private val runtimes = Collections.synchronizedMap(mutableMapOf<Any, ExpressionsRuntime>())
 
@@ -96,9 +98,14 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             addSource(globalVariableController.variableSource)
         }
 
-        val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider {
-            variableName -> variableController.getMutableVariable(variableName)?.getValue()
-        })
+        val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider(
+            variableProvider = { variableName ->
+                variableController.getMutableVariable(variableName)?.getValue()
+            },
+            storedValueProvider = { storedValueName ->
+                storedValuesController.getStoredValue(storedValueName)?.getValue()
+            },
+        ))
         val expressionResolver = ExpressionResolverImpl(
             variableController,
             evaluatorFactory,
@@ -120,7 +127,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         return ExpressionsRuntime(
             expressionResolver,
             variableController,
-            triggersController
+            triggersController,
         )
     }
 }

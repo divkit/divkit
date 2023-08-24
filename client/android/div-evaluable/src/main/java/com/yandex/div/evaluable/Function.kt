@@ -1,6 +1,9 @@
 package com.yandex.div.evaluable
 
-abstract class Function(open val variableProvider: VariableProvider? = null) {
+abstract class Function(
+    open val variableProvider: VariableProvider? = null,
+    open val storedValueProvider: StoredValueProvider? = null,
+) {
 
     abstract val name: String
     abstract val declaredArgs: List<FunctionArgument>

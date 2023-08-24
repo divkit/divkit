@@ -3,7 +3,10 @@ package com.yandex.div.evaluable.function
 import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
 
-class BuiltinFunctionProvider(variableProvider: VariableProvider) : FunctionProvider {
+class BuiltinFunctionProvider(
+    variableProvider: VariableProvider,
+    storedValueProvider: StoredValueProvider,
+) : FunctionProvider {
 
     private val registry = FunctionRegistry()
 

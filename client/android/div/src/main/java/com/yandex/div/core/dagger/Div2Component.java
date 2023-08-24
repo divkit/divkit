@@ -19,6 +19,7 @@ import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider;
+import com.yandex.div.core.expression.storedvalues.StoredValuesController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.player.DivPlayerFactory;
@@ -148,6 +149,9 @@ public interface Div2Component {
 
     @NonNull
     ReleaseManager getReleaseManager();
+
+    @NonNull
+    StoredValuesController getStoredValuesController();
 
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
