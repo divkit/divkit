@@ -233,16 +233,13 @@
       "$ref": "#/definitions/url_variable"
     },
     {
-      "$ref": "#/definitions/dict_variable",
-      "platforms": [
-        "web",
-        "ios"
-      ]
+      "$ref": "#/definitions/dict_variable"
     },
     {
       "$ref": "#/definitions/array_variable",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

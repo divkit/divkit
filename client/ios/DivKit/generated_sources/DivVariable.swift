@@ -13,6 +13,7 @@ public enum DivVariable {
   case colorVariable(ColorVariable)
   case urlVariable(UrlVariable)
   case dictVariable(DictVariable)
+  case arrayVariable(ArrayVariable)
 
   public var value: Serializable {
     switch self {
@@ -29,6 +30,8 @@ public enum DivVariable {
     case let .urlVariable(value):
       return value
     case let .dictVariable(value):
+      return value
+    case let .arrayVariable(value):
       return value
     }
   }
@@ -51,6 +54,8 @@ extension DivVariable: Equatable {
     case let (.urlVariable(l), .urlVariable(r)):
       return l == r
     case let (.dictVariable(l), .dictVariable(r)):
+      return l == r
+    case let (.arrayVariable(l), .arrayVariable(r)):
       return l == r
     default:
       return false
