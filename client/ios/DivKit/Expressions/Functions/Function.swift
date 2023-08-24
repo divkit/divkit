@@ -292,6 +292,7 @@ struct FunctionSignature: Decodable {
     case color
     case url
     case dict
+    case array
 
     func check(arg: Any) -> Bool {
       type(of: arg) == swiftType
@@ -315,6 +316,8 @@ struct FunctionSignature: Decodable {
         return URL.self
       case .dict:
         return [String: AnyHashable].self
+      case .array:
+        return [AnyHashable].self
       }
     }
 

@@ -122,6 +122,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private const val VALUE_TYPE_URL = "url"
         private const val VALUE_TYPE_COLOR = "color"
         private const val VALUE_TYPE_DICT = "dict"
+        private const val VALUE_TYPE_ARRAY = "array"
         private const val VALUE_TYPE_UNIT = "unit"
         private const val VALUE_TYPE_ERROR = "error"
 
@@ -214,6 +215,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 }
                 VALUE_TYPE_DATE_TIME -> TestDate(json.getString(VALUE_FIELD))
                 VALUE_TYPE_DICT -> json.getJSONObject(VALUE_FIELD)
+                VALUE_TYPE_ARRAY -> json.getJSONArray(VALUE_FIELD)
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_ERROR -> EvaluableException(json.optString(VALUE_FIELD))
                 else -> throw IllegalAccessException("Unknown variable type: $type")

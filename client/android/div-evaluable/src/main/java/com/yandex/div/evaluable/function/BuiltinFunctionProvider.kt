@@ -161,6 +161,19 @@ class BuiltinFunctionProvider(
         registry.register(GetDictOptString(variableProvider))
         registry.register(GetDictOptColor(variableProvider))
         registry.register(GetDictOptBoolean(variableProvider))
+
+        // Array functions
+        registry.register(GetArrayInteger(variableProvider))
+        registry.register(GetArrayNumber(variableProvider))
+        registry.register(GetArrayString(variableProvider))
+        registry.register(GetArrayColor(variableProvider))
+        registry.register(GetArrayBoolean(variableProvider))
+        registry.register(GetArrayOptInteger(variableProvider))
+        registry.register(GetArrayOptNumber(variableProvider))
+        registry.register(GetArrayOptString(variableProvider))
+        registry.register(GetArrayOptColorWithColorFallback(variableProvider))
+        registry.register(GetArrayOptColorWithStringFallback(variableProvider))
+        registry.register(GetArrayOptBoolean(variableProvider))
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {
