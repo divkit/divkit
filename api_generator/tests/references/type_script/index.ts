@@ -22,3 +22,6 @@ export * from './EntityWithStringArrayProperty';
 export * from './EntityWithStringEnumProperty';
 export * from './EntityWithStringEnumPropertyWithDefaultValue';
 export * from './EntityWithoutProperties';
+export * from './EnumWithDefaultType';
+export * from './WithDefault';
+export * from './WithoutDefault';

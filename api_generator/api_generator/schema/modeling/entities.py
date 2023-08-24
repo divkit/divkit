@@ -232,6 +232,10 @@ class Declarable(ABC):
     def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
         pass
 
+    @abstractmethod
+    def type_is_optional(self) -> bool:
+        pass
+
 
 def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any]) -> Optional[str]:
     super_entities_dict = {
@@ -509,6 +513,11 @@ class Entity(Declarable):
                                                        stack=stack + [self])
 
     @property
+    def type_is_optional(self) -> bool:
+        prop = next((p for p in self._properties if p.name == 'type'), None)
+        return prop.optional or False
+
+    @property
     def root_entity(self) -> bool:
         return self._root_entity
 
@@ -539,6 +548,7 @@ class EntityEnumeration(Declarable):
                  root_entity: bool,
                  generate_case_for_templates: bool,
                  entities: List[str],
+                 default_entity_declaration: str,
                  mode: GenerationMode) -> None:
         super().__init__()
         self._resolved_name: str = name
@@ -552,6 +562,7 @@ class EntityEnumeration(Declarable):
             lambda entity: (entity + mode.name_suffix, None),
             entities
         ))
+        self._default_entity_declaration = default_entity_declaration
         self._mode = mode
 
     @property
@@ -662,6 +673,14 @@ class EntityEnumeration(Declarable):
     def generate_case_for_templates(self) -> bool:
         return self._generate_case_for_templates
 
+    @property
+    def default_entity_declaration(self) -> str:
+        return self._default_entity_declaration
+
+    @property
+    def type_is_optional(self) -> bool:
+        return False
+
 
 class StringEnumeration(Declarable):
     def __init__(self,
@@ -710,6 +729,10 @@ class StringEnumeration(Declarable):
 
     def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
         pass
+
+    @property
+    def type_is_optional(self) -> bool:
+        return False
 
     @property
     def as_json(self) -> Dict:

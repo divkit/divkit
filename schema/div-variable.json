@@ -23,7 +23,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "integer_variable": {
@@ -49,7 +50,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "number_variable": {
@@ -74,7 +76,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "boolean_variable": {
@@ -100,7 +103,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "color_variable": {
@@ -126,7 +130,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "url_variable": {
@@ -151,7 +156,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "dict_variable": {
@@ -177,7 +183,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     },
     "array_variable": {
@@ -201,7 +208,8 @@
       },
       "required": [
         "name",
-        "value"
+        "value",
+        "type"
       ]
     }
   },

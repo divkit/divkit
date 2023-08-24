@@ -9,7 +9,7 @@ from .utils import (
 )
 from ..utils import is_list_of_type, is_dict_with_keys_of_type, code_generation_disabled
 
-from ...config import Config, GenerationMode, GeneratedLanguage
+from ...config import Config, GenerationMode, GeneratedLanguage, TEMPLATE_SUFFIX
 from ..preprocessing.entities import ElementLocation
 from .entities import (
     Entity,
@@ -34,7 +34,7 @@ from .entities import (
     RawArray,
     _build_documentation_generator_properties
 )
-from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
+from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError, GenericError
 
 
 def __generate_templates(config: Config.GenerationConfig) -> bool:
@@ -97,6 +97,7 @@ def __resolve_string_field(name: str,
 
 
 def _entity_enumeration_build(entities: List[Dict[str, any]],
+                              generated_entities: List[Declarable],
                               name: str,
                               original_name: str,
                               include_in_documentation_toc: bool,
@@ -107,6 +108,8 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                               config: Config.GenerationConfig) -> List[Declarable]:
     resulting_declarations: List[Declarable] = []
     property_types: List[str] = []
+    default_entity_declarations: List[str] = []
+    default_entity_declaration: str = ''
     for index, entity in enumerate(entities):
         entity_location = location + str(index)
         preprocessor_typename: str = entity.get('$typename')
@@ -124,13 +127,26 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                                                           mode=mode,
                                                           config=config)
 
+        default_names = [typename, f'{typename}{TEMPLATE_SUFFIX}']
+        decl = next((d for d in generated_entities + declarations if d.name in default_names), None)
+        use_as_default = decl is not None and decl.type_is_optional
+
         if isinstance(property_type, StaticString):
             raise InvalidFieldRepresentationError(entity_location, entity)
         elif isinstance(property_type, Object):
+            if use_as_default:
+                default_entity_declarations.append(property_type.name)
             property_types.append(property_type.name)
         else:
+            if use_as_default:
+                default_entity_declarations.append(typename)
             property_types.append(typename)
         resulting_declarations.extend(declarations)
+
+    if len(default_entity_declarations) > 1:
+        raise GenericError(entity_location, f'Defined multiple default type for anyOf : {default_entity_declarations}')
+    elif len(default_entity_declarations) == 1:
+        default_entity_declaration = default_entity_declarations[0]
 
     return [cast(Declarable, EntityEnumeration(name=name,
                                                original_name=original_name,
@@ -138,10 +154,12 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                                                root_entity=root_entity,
                                                generate_case_for_templates=generate_case_for_templates,
                                                entities=property_types,
+                                               default_entity_declaration=default_entity_declaration,
                                                mode=mode))] + resulting_declarations
 
 
 def entity_enumeration_build(entities: List[Dict[str, any]],
+                             generated_entities: List[Declarable],
                              name: str,
                              original_name: str,
                              include_in_documentation_toc: bool,
@@ -151,6 +169,7 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
                              config: Config.GenerationConfig) -> List[Declarable]:
     def make_result(mode: GenerationMode) -> List[Declarable]:
         return _entity_enumeration_build(entities=entities,
+                                         generated_entities=generated_entities,
                                          name=name,
                                          original_name=original_name,
                                          include_in_documentation_toc=include_in_documentation_toc,

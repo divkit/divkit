@@ -67,3 +67,12 @@ items:
   -name: entity_without_properties
    href: concepts/divs/entity_without_properties.md
    hidden: true
+  -name: enum_with_default_type
+   href: concepts/divs/enum_with_default_type.md
+   hidden: true
+  -name: with_default
+   href: concepts/divs/with_default.md
+   hidden: true
+  -name: without_default
+   href: concepts/divs/without_default.md
+   hidden: true

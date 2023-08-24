@@ -12,7 +12,11 @@ from .utils import (
 )
 
 
-def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> List[Declarable]:
+def __generate_objects(
+        file: SchemaFile,
+        config: Config.GenerationConfig,
+        generated_entities: List[Declarable]
+) -> List[Declarable]:
     contents: Dict[str, any] = file.contents
     name: str = file.name.replace('.json', '')
     type_value: Optional[str] = contents.get('type')
@@ -43,6 +47,7 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
         if not (is_list_of_type(entities, Dict) and all(is_dict_with_keys_of_type(entity, str) for entity in entities)):
             raise TypeError('AnyOf must have format [[String : Any]]')
         return builders.entity_enumeration_build(
+            generated_entities=generated_entities,
             entities=entities,
             name=alias(config.lang, contents) or name,
             original_name=name,
@@ -58,25 +63,39 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
 def __build_objects(schema_dir: SchemaDirectory,
                     config: Config.GenerationConfig) -> List[Tuple[ElementLocation, Declarable]]:
     result: List[Tuple[ElementLocation, Declarable]] = []
-    for item in schema_dir.items:
-        if isinstance(item, SchemaFile):
-            file: SchemaFile = item
-            objects: List[Declarable] = __generate_objects(file, config)
-            result.extend(map(lambda obj: (ElementLocation(file), obj), objects))
-        elif isinstance(item, SchemaDirectory):
-            result.extend(__build_objects(item, config))
+    files = __sort_by_any_of(__flatten_dirs(schema_dir))
+
+    for file in files:
+        objects: List[Declarable] = __generate_objects(file, config, __get_entities(result))
+        result.extend(map(lambda obj: (ElementLocation(file), obj), objects))
+
     return result
 
 
 def build_objects(schema_dir: SchemaDirectory, config: Config.GenerationConfig) -> List[Declarable]:
     result: List[Tuple[ElementLocation, Declarable]] = __build_objects(schema_dir, config)
 
-    def get_entities() -> List[Declarable]:
-        return list(map(lambda pair: pair[1], result))
-
     for _, entity in result:
-        entity.resolve_dependencies(global_objects=get_entities())
+        entity.resolve_dependencies(global_objects=__get_entities(result))
     for location, entity in result:
         entity.check_dependencies_resolved(location=location, stack=[])
 
-    return get_entities()
+    return __get_entities(result)
+
+
+def __flatten_dirs(schema_dir: SchemaDirectory) -> List[SchemaFile]:
+    result: List[SchemaFile] = []
+    for item in schema_dir.items:
+        if isinstance(item, SchemaFile):
+            result.append(item)
+        if isinstance(item, SchemaDirectory):
+            result.extend(__flatten_dirs(item))
+    return result
+
+
+def __sort_by_any_of(source: List[SchemaFile]) -> List[SchemaFile]:
+    return list(sorted(source, key=lambda file: file.contents.get('anyOf') is not None))
+
+
+def __get_entities(tuple: List[Tuple[ElementLocation, Declarable]]) -> List[Declarable]:
+    return list(map(lambda pair: pair[1], tuple))

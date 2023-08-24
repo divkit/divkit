@@ -20,3 +20,6 @@ export './entity_with_string_array_property.dart';
 export './entity_with_string_enum_property.dart';
 export './entity_with_string_enum_property_with_default_value.dart';
 export './entity_without_properties.dart';
+export './enum_with_default_type.dart';
+export './with_default.dart';
+export './without_default.dart';
