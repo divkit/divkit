@@ -12,6 +12,7 @@ XcodeBuild/
 xcuserdata/
 
 local.properties
+Package.resolved
 
 /client/ios/DivKit/generated_sources/*_hash
 /client/ios/DivKitTests/Entities/generated_sources/*_hash
