@@ -22,14 +22,17 @@ extension DivSlider: DivBlockModeling {
     let secondThumb: SliderModel.ThumbModel?
     if let thumbSecondaryStyle = thumbSecondaryStyle,
        let thumbSecondaryValueVariable = thumbSecondaryValueVariable {
-      let secondThumbValue = Binding<Int>(context: context, name: thumbSecondaryValueVariable)
+      let secondThumbValue = context.makeBinding(
+        variableName: thumbSecondaryValueVariable,
+        defaultValue: 0
+      )
       secondThumb = SliderModel.ThumbModel(
         block: makeThumbBlock(
           thumb: try thumbSecondaryStyle
             .makeBlock(context: context, corners: .all),
           textBlock: (thumbSecondaryTextStyle ?? thumbTextStyle)?.makeThumbTextBlock(
             context: context,
-            value: secondThumbValue.wrappedValue
+            value: secondThumbValue.value
           ),
           textOffset: thumbSecondaryTextStyle.flatMap {
             CGPoint(
@@ -51,8 +54,8 @@ extension DivSlider: DivBlockModeling {
     }
 
     let firstThumbValue: Binding<Int> = thumbValueVariable.flatMap {
-      Binding<Int>(context: context, name: $0)
-    } ?? .zero
+      context.makeBinding(variableName: $0, defaultValue: 0)
+    }!
 
     let sliderModel = SliderModel(
       firstThumb: SliderModel.ThumbModel(
@@ -61,7 +64,7 @@ extension DivSlider: DivBlockModeling {
             .makeBlock(context: context, corners: .all),
           textBlock: thumbTextStyle?.makeThumbTextBlock(
             context: context,
-            value: firstThumbValue.wrappedValue
+            value: firstThumbValue.value
           ),
           textOffset: thumbTextStyle.flatMap {
             CGPoint(

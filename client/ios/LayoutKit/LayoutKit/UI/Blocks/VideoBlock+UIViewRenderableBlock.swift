@@ -43,6 +43,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   private var model: VideoBlockViewModel = .zero
   private var playerSignal: Disposable?
+  private var previousTime: Int = 0
 
   private lazy var player: Player? = {
     let player = playerFactory?.makePlayer(
@@ -56,7 +57,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
         switch event {
         case let .currentTimeUpdate(time):
-          self.model.elapsedTime?.setValue(Int(time), responder: self)
+          self.model.elapsedTime?.value = Int(time)
+          self.previousTime = time
         case .end:
           self.observer?.elementStateChanged(self.state, forPath: self.model.path)
           self.model.endActions.perform(sendingFrom: self)
@@ -111,8 +113,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       player?.set(isMuted: model.playbackConfig.isMuted)
     }
 
-    if oldValue.elapsedTime != model.elapsedTime {
-      model.elapsedTime.flatMap { player?.seek(to: .init(value: $0.wrappedValue)) }
+    if (model.elapsedTime?.value ?? 0) != previousTime {
+      model.elapsedTime.flatMap { player?.seek(to: .init(value: $0.value)) }
     }
   }
 

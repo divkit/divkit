@@ -6,7 +6,7 @@ import CommonCorePublic
 public struct SliderModel: Equatable {
   public struct ThumbModel: Equatable {
     public let block: Block
-    @Binding public var value: Int
+    public var value: Binding<Int>
     public let size: CGSize
     public let offsetX: CGFloat
     public let offsetY: CGFloat
@@ -19,7 +19,7 @@ public struct SliderModel: Equatable {
       offsetY: CGFloat
     ) {
       self.block = block
-      self._value = value
+      self.value = value
       self.size = size
       self.offsetX = offsetX
       self.offsetY = offsetY
@@ -28,7 +28,7 @@ public struct SliderModel: Equatable {
     static var empty: Self {
       ThumbModel(
         block: EmptyBlock.zeroSized,
-        value: Binding(name: "", getValue: { _ in 0 }, userInterfaceActionFactory: { _, _ in nil }),
+        value: .zero,
         size: .zero,
         offsetX: 0,
         offsetY: 0

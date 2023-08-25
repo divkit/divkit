@@ -152,7 +152,7 @@ public final class TextInputBlock: BlockWithTraits {
     guard multiLineMode else {
       return defaultTextForMeasuring.with(typo: textTypo)
     }
-    let text = textValue.wrappedValue
+    let text = textValue.value
     if text.isEmpty {
       if hint.isEmpty {
         return defaultTextForMeasuring.with(typo: textTypo)
@@ -177,7 +177,7 @@ extension TextInputBlock {
     lhs.widthTrait == rhs.widthTrait
       && lhs.heightTrait == rhs.heightTrait
       && lhs.hint == rhs.hint
-      && lhs.textValue.wrappedValue == rhs.textValue.wrappedValue
+      && lhs.textValue.value == rhs.textValue.value
       && lhs.multiLineMode == rhs.multiLineMode
       && lhs.maxVisibleLines == rhs.maxVisibleLines
       && lhs.inputType == rhs.inputType

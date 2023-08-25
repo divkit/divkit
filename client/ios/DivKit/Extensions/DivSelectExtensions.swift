@@ -45,7 +45,8 @@ extension DivSelect: DivBlockModeling {
     let resolvedColor: Color = resolveTextColor(expressionResolver)
     let textTypo = typo.with(color: resolvedColor)
 
-    let textValue = Binding<String>(context: context, name: valueVariable)
+    let textValue: Binding<String> = context
+      .makeBinding(variableName: valueVariable, defaultValue: "")
 
     let onFocusActions = (focus?.onFocus ?? []).map {
       $0.uiAction(context: context)

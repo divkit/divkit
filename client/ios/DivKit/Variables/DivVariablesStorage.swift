@@ -37,6 +37,27 @@ public enum DivVariableValue: Hashable {
       return value as? T
     }
   }
+
+  init?<T>(_ value: T) {
+    switch value {
+    case let value as String:
+      self = .string(value)
+    case let value as Double:
+      self = .number(value)
+    case let value as Int:
+      self = .integer(value)
+    case let value as Bool:
+      self = .bool(value)
+    case let value as Color:
+      self = .color(value)
+    case let value as URL:
+      self = .url(value)
+    case let value as [String: AnyHashable]:
+      self = .dict(value)
+    default:
+      return nil
+    }
+  }
 }
 
 public typealias DivVariables = [DivVariableName: DivVariableValue]
@@ -192,30 +213,51 @@ extension DivVariablesStorage: DivVariableUpdater {
     name: DivVariableName,
     value: String
   ) {
+    update(
+      cardId: cardId,
+      name: name,
+      valueFactory: { makeDivVariableValue(oldValue: $0, name: name, value: value) }
+    )
+  }
+
+  func update(
+    cardId: DivCardID,
+    name: DivVariableName,
+    value: DivVariableValue
+  ) {
+    update(cardId: cardId, name: name, valueFactory: { _ in value })
+  }
+
+  private func update(
+    cardId: DivCardID,
+    name: DivVariableName,
+    valueFactory: (DivVariableValue) -> DivVariableValue?
+  ) {
     rwLock.write {
       var cardVariables = storage.local[cardId]
       if let localValue = cardVariables?[name] {
         let oldValues = storage
-        let isUpdated = cardVariables?
-          .update(name: name, oldValue: localValue, value: value) ?? false
-        storage.local[cardId] = cardVariables
-        if isUpdated {
-          update(ChangeEvent(
-            kind: .local(cardId, [name]),
-            oldValues: oldValues,
-            newValues: storage
-          ))
+        guard let newValue = valueFactory(localValue), newValue != localValue else {
+          return
         }
+        cardVariables?[name] = newValue
+        storage.local[cardId] = cardVariables
+        update(ChangeEvent(
+          kind: .local(cardId, [name]),
+          oldValues: oldValues,
+          newValues: storage
+        ))
       } else if let globalValue = storage.global[name] {
         let oldValues = storage
-        let isUpdated = storage.global.update(name: name, oldValue: globalValue, value: value)
-        if isUpdated {
-          update(ChangeEvent(
-            kind: .global([name]),
-            oldValues: oldValues,
-            newValues: storage
-          ))
+        guard let newValue = valueFactory(globalValue), newValue != globalValue else {
+          return
         }
+        storage.global[name] = newValue
+        update(ChangeEvent(
+          kind: .global([name]),
+          oldValues: oldValues,
+          newValues: storage
+        ))
       } else {
         DivKitLogger.error("Variable is not declared: \(name)")
       }
@@ -223,70 +265,61 @@ extension DivVariablesStorage: DivVariableUpdater {
   }
 }
 
-extension Dictionary where Key == DivVariableName, Value == DivVariableValue {
-  fileprivate mutating func update(
-    name: DivVariableName,
-    oldValue: DivVariableValue,
-    value: String
-  ) -> Bool {
-    let newValue: DivVariableValue?
-    switch oldValue {
-    case .string:
-      newValue = .string(value)
-    case .number:
-      if let newNumber = Double(value) {
-        newValue = .number(newNumber)
-      } else {
-        newValue = nil
-      }
-    case .integer:
-      if let newInteger = Int(value) {
-        newValue = .integer(newInteger)
-      } else {
-        newValue = nil
-      }
-    case .bool:
-      switch value.lowercased() {
-      case "0", "false":
-        newValue = .bool(false)
-      case "1", "true":
-        newValue = .bool(true)
-      default:
-        newValue = nil
-      }
-    case .color:
-      if let newColor = Color.color(withHexString: value) {
-        newValue = .color(newColor)
-      } else {
-        newValue = nil
-      }
-    case .url:
-      if let newURL = URL(string: value) {
-        newValue = .url(newURL)
-      } else {
-        newValue = nil
-      }
-    case .dict:
+private func makeDivVariableValue(
+  oldValue: DivVariableValue,
+  name: DivVariableName,
+  value: String
+) -> DivVariableValue? {
+  let newValue: DivVariableValue?
+  switch oldValue {
+  case .string:
+    newValue = .string(value)
+  case .number:
+    if let newNumber = Double(value) {
+      newValue = .number(newNumber)
+    } else {
       newValue = nil
-      DivKitLogger.warning("Unsupported variable type: dict")
-    case .array:
+    }
+  case .integer:
+    if let newInteger = Int(value) {
+      newValue = .integer(newInteger)
+    } else {
       newValue = nil
-      DivKitLogger.warning("Unsupported variable type: array")
     }
-
-    if newValue == oldValue {
-      return false
+  case .bool:
+    switch value.lowercased() {
+    case "0", "false":
+      newValue = .bool(false)
+    case "1", "true":
+      newValue = .bool(true)
+    default:
+      newValue = nil
     }
-
-    if let newValue = newValue {
-      self[name] = newValue
-      return true
+  case .color:
+    if let newColor = Color.color(withHexString: value) {
+      newValue = .color(newColor)
+    } else {
+      newValue = nil
     }
-
-    DivKitLogger.error("Incorrect value for variable \(name): \(value)")
-
-    return false
+  case .url:
+    if let newURL = URL(string: value) {
+      newValue = .url(newURL)
+    } else {
+      newValue = nil
+    }
+  case .dict:
+    newValue = nil
+    DivKitLogger.warning("Unsupported variable type: dict")
+  case .array:
+    newValue = nil
+    DivKitLogger.warning("Unsupported variable type: array")
   }
+
+  if newValue == nil {
+    DivKitLogger.error("Incorrect value for variable \(name): \(value)")
+  }
+
+  return newValue
 }
 
 extension Collection where Element == DivVariable {

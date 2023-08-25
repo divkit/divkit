@@ -43,6 +43,7 @@ public struct DivBlockModelingContext {
 
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
+  private let variablesStorage: DivVariablesStorage?
 
   public var expressionResolver: ExpressionResolver {
     ExpressionResolver(
@@ -73,7 +74,7 @@ public struct DivBlockModelingContext {
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
-    variables: DivVariables = [:],
+    variablesStorage: DivVariablesStorage? = nil,
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
     scheduler: Scheduling? = nil,
@@ -98,7 +99,7 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
-    self.variables = variables
+    self.variables = variablesStorage?.makeVariables(for: cardId) ?? [:]
     self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.scheduler = scheduler ?? TimerScheduler()
@@ -109,6 +110,7 @@ public struct DivBlockModelingContext {
     self.variableTracker = variableTracker
     self.persistentValuesStorage = persistentValuesStorage
     self.tooltipViewFactory = tooltipViewFactory
+    self.variablesStorage = variablesStorage
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {
@@ -179,5 +181,25 @@ public struct DivBlockModelingContext {
       return overridenHeight.overriden
     }
     return height
+  }
+
+  func makeBinding<T>(variableName: String, defaultValue: T) -> Binding<T> {
+    variableTracker?.onVariablesUsed(
+      cardId: cardId,
+      variables: [DivVariableName(rawValue: variableName)]
+    )
+    let value: T = expressionResolver.getVariableValue(variableName) ?? defaultValue
+    let valueProp = Property<T>.init(
+      getter: { value },
+      setter: {
+        guard let divVariableValue = DivVariableValue($0) else { return }
+        self.variablesStorage?.update(
+          cardId: cardId,
+          name: DivVariableName(rawValue: variableName),
+          value: divVariableValue
+        )
+      }
+    )
+    return Binding(name: variableName, value: valueProp)
   }
 }

@@ -31,8 +31,8 @@ extension DivVideo: DivBlockModeling {
     let repeatable = resolveRepeatable(resolver)
     let muted = resolveMuted(resolver)
     let autostart = resolveAutostart(resolver)
-    let elapsedTime = elapsedTimeVariable.flatMap {
-      Binding<Int>(context: context, name: $0)
+    let elapsedTime: Binding<Int>? = elapsedTimeVariable.flatMap {
+      context.makeBinding(variableName: $0, defaultValue: 0)
     }
     let preview: Image? = resolvePreview(resolver).flatMap(_makeImage(base64:))
     let videoData = VideoData(videos: videoSources.map { $0.makeVideo(resolver: resolver) })
@@ -41,7 +41,7 @@ extension DivVideo: DivBlockModeling {
       autoPlay: autostart,
       repeatable: repeatable,
       isMuted: muted,
-      startPosition: elapsedTime.flatMap { CMTime(value: $0.wrappedValue) } ?? .zero,
+      startPosition: elapsedTime.flatMap { CMTime(value: $0.value) } ?? .zero,
       settingsPayload: playerSettingsPayload ?? [:]
     )
 

@@ -272,7 +272,7 @@ public final class DivKitComponents {
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
-      variables: variablesStorage.makeVariables(for: cardId),
+      variablesStorage: variablesStorage,
       playerFactory: playerFactory,
       debugParams: debugParams,
       parentScrollView: parentScrollView,

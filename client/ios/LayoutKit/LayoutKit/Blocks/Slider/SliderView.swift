@@ -97,23 +97,17 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     )
 
     let clampedFirstThumbValue = Int(clampSliderValue(
-      CGFloat(sliderModel.firstThumb.value),
+      CGFloat(sliderModel.firstThumb.value.value),
       sliderModel: sliderModel
     ))
     let clampedSecondThumbValue =
       Int(clampSliderValue(
-        CGFloat(sliderModel.secondThumb?.value ?? sliderModel.minValue),
+        CGFloat(sliderModel.secondThumb?.value.value ?? sliderModel.minValue),
         sliderModel: sliderModel
       ))
 
-    self.sliderModel.firstThumb.$value.setValue(
-      clampedFirstThumbValue,
-      responder: nil
-    )
-    self.sliderModel.secondThumb?.$value.setValue(
-      clampedSecondThumbValue,
-      responder: nil
-    )
+    self.sliderModel.firstThumb.value.value = clampedFirstThumbValue
+    self.sliderModel.secondThumb?.value.value = clampedSecondThumbValue
 
     if recognizer.state != .began, recognizer.state != .changed {
       firstThumbProgress = CGFloat(clampedFirstThumbValue)
@@ -129,7 +123,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       newValue: value,
       thumbPosition: value < secondThumbProgress ? .left : .right
     ) {
-      sliderModel.firstThumb.$value.setValue(thumbValue, responder: self)
+      sliderModel.firstThumb.value.value = thumbValue
       setNeedsLayout()
     }
     firstThumbProgress = value
@@ -142,7 +136,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
          newValue: value,
          thumbPosition: value < firstThumbProgress ? .left : .right
        ) {
-      sliderModel.secondThumb?.$value.setValue(thumbValue, responder: self)
+      sliderModel.secondThumb?.value.value = thumbValue
       setNeedsLayout()
     }
     secondThumbProgress = value
@@ -305,11 +299,11 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     defer {
       configureMarks(
         firstThumbValue: Int(clampSliderValue(
-          CGFloat(sliderModel.firstThumb.value),
+          CGFloat(sliderModel.firstThumb.value.value),
           sliderModel: sliderModel
         )),
         secondThumbValue: sliderModel.secondThumb.flatMap {
-          Int(clampSliderValue(CGFloat($0.value), sliderModel: sliderModel))
+          Int(clampSliderValue(CGFloat($0.value.value), sliderModel: sliderModel))
         },
         minValue: sliderModel.minValue,
         maxValue: sliderModel.maxValue

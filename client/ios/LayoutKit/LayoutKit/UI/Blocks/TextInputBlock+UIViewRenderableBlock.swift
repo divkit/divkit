@@ -50,8 +50,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
-  @Binding private var textValue: String
-  @Binding private var rawTextValue: String
+  private var textValue: Binding<String>
+  private var rawTextValue: Binding<String>
   private var selectAllOnFocus = false
   private var maskedViewModel: MaskedInputViewModel?
   private var onFocusActions: [UserInterfaceAction] = []
@@ -70,8 +70,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
-    self._textValue = .empty
-    self._rawTextValue = .empty
+    textValue = .zero
+    rawTextValue = .zero
     super.init(frame: frame)
 
     multiLineInput.isEditable = true
@@ -214,16 +214,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   ) {
     self.typo = typo.with(alignment: textAlignment)
     if let mask = mask, let rawTextValue = rawTextValue {
-      self._textValue = textValue
+      self.textValue = textValue
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
-      if textValue != self._textValue {
-        self._textValue = textValue
+      if textValue != self.textValue {
+        self.textValue = textValue
         let text: String
         if let selectionItems = self.selectionItems {
-          text = selectionItems.first { $0.value == textValue.wrappedValue }?.text ?? ""
+          text = selectionItems.first { $0.value == textValue.value }?.text ?? ""
         } else {
-          text = textValue.wrappedValue
+          text = textValue.value
         }
         setTextData(text)
       }
@@ -260,7 +260,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func updateValidation() {
     let accessibilityLabel = validators?.compactMap {
       let isValid = $0.validate(currentText)
-      $0.isValid.setValue(isValid, responder: self)
+      $0.isValid.value = isValid
       return isValid ? nil : $0.message()
     }.joined(separator: ". ")
     singleLineInput.accessibilityLabel = accessibilityLabel
@@ -277,14 +277,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   private func setupMaskedViewModelIfNeeded(mask: MaskValidator, rawTextValue: Binding<String>) {
-    self._rawTextValue = rawTextValue
+    self.rawTextValue = rawTextValue
     guard self.maskedViewModel == nil else {
-      maskedViewModel?.rawText = rawTextValue.wrappedValue
+      maskedViewModel?.rawText = rawTextValue.value
       maskedViewModel?.maskValidator = mask
       return
     }
     self.maskedViewModel = MaskedInputViewModel(
-      rawText: $rawTextValue.wrappedValue,
+      rawText: self.rawTextValue.value,
       maskValidator: mask,
       signal: userInputPipe.signal
     )
@@ -303,14 +303,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }.dispose(in: disposePool)
     maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
       guard let self = self else { return }
-      self._rawTextValue.setValue(input, responder: self)
+      self.rawTextValue.value = input
     }.dispose(in: disposePool)
 
     maskedViewModel?.$text.currentAndNewValues
       .addObserver { [weak self] input in
         guard let self = self else { return }
         self.setTextData(input)
-        self._textValue.setValue(input, responder: self)
+        self.textValue.value = input
       }.dispose(in: disposePool)
   }
 
@@ -392,9 +392,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 extension TextInputBlockView {
   func inputViewDidBeginEditing(_ view: UIView) {
     if let pickerView = multiLineInput.inputView as? UIPickerView {
-      let index = selectionItems?.firstIndex { $0.value == textValue } ?? 0
+      let index = selectionItems?.firstIndex { $0.value == textValue.value } ?? 0
       pickerView.selectRow(index, inComponent: 0, animated: false)
-      $textValue.setValue(selectionItems?[index].value ?? "", responder: view)
+      textValue.value = selectionItems?[index].value ?? ""
     }
 
     startListeningTap()
@@ -404,9 +404,9 @@ extension TextInputBlockView {
     onFocus()
   }
 
-  func inputViewDidChange(_ view: UIView) {
+  func inputViewDidChange(_: UIView) {
     updateHintVisibility()
-    $textValue.setValue(currentText, responder: view)
+    textValue.value = currentText
   }
 
   func inputViewDidEndEditing(_: UIView) {
@@ -582,7 +582,7 @@ extension TextInputBlockView: UIPickerViewDataSource {
   }
 
   func pickerView(_: UIPickerView, didSelectRow row: Int, inComponent _: Int) {
-    $textValue.setValue(selectionItems?[row].value ?? "", responder: self)
+    textValue.value = selectionItems?[row].value ?? ""
   }
 }
 

@@ -9,7 +9,7 @@ extension TextInputBlock: CustomDebugStringConvertible {
 
     result += "\n  Hint text: \(hint)"
 
-    result += "\n  Variable text: \(textValue.wrappedValue)"
+    result += "\n  Variable text: \(textValue.value)"
 
     result += "\n  Input type: \(inputType)"
 
