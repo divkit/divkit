@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
+import com.yandex.div.internal.util.PositiveNumberDelegate
 
 class DivLayoutParams: MarginLayoutParams {
 
@@ -14,8 +15,8 @@ class DivLayoutParams: MarginLayoutParams {
     var verticalWeight = DEFAULT_WEIGHT
     var horizontalWeight = DEFAULT_WEIGHT
 
-    var columnSpan = DEFAULT_SPAN
-    var rowSpan = DEFAULT_SPAN
+    var columnSpan by PositiveNumberDelegate(DEFAULT_SPAN)
+    var rowSpan by PositiveNumberDelegate(DEFAULT_SPAN)
     var maxHeight = Integer.MAX_VALUE
     var maxWidth = Integer.MAX_VALUE
 

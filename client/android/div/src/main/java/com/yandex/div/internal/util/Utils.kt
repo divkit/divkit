@@ -47,3 +47,18 @@ private class WeakRef<T>(obj: T? = null) : ReadWriteProperty<Any?, T?> {
         weakReference = value?.let { WeakReference(it) }
     }
 }
+
+/**
+ * Delegate that will set to variable only numbers greater then 0 or else [fallbackValue] (default: 1)
+ */
+@Suppress("UNCHECKED_CAST")
+internal class PositiveNumberDelegate<T: Number>(
+    private var value: T,
+    private val fallbackValue: T = 1 as T
+) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = value
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+        this.value = if (value.toDouble() <= 0) fallbackValue else value
+    }
+}

@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.multiplatform
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
@@ -25,7 +26,11 @@ import java.io.File
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
 
     private val variableProvider = mock<VariableProvider>()
-    private val evaluator = Evaluator(variableProvider, BuiltinFunctionProvider(variableProvider))
+    private val storedValueProvider = mock<StoredValueProvider>()
+    private val evaluator = Evaluator(
+        variableProvider,
+        BuiltinFunctionProvider(variableProvider, storedValueProvider)
+    )
     private lateinit var testCase: ExpressionTestCase
 
     @Before
@@ -117,6 +122,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private const val VALUE_TYPE_URL = "url"
         private const val VALUE_TYPE_COLOR = "color"
         private const val VALUE_TYPE_DICT = "dict"
+        private const val VALUE_TYPE_ARRAY = "array"
         private const val VALUE_TYPE_UNIT = "unit"
         private const val VALUE_TYPE_ERROR = "error"
 
@@ -209,6 +215,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 }
                 VALUE_TYPE_DATE_TIME -> TestDate(json.getString(VALUE_FIELD))
                 VALUE_TYPE_DICT -> json.getJSONObject(VALUE_FIELD)
+                VALUE_TYPE_ARRAY -> json.getJSONArray(VALUE_FIELD)
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_ERROR -> EvaluableException(json.optString(VALUE_FIELD))
                 else -> throw IllegalAccessException("Unknown variable type: $type")

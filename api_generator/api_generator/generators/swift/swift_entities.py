@@ -925,9 +925,14 @@ class SwiftEntityEnumeration(EntityEnumeration):
         params = 'context: TemplatesContext, useOnlyLinks: Bool'
         return_type = f'DeserializationResult<{self.resolved_prefixed_declaration}>'
         result = Text(f'private static func resolveUnknownValue({params}) -> {return_type} {{')
-        result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'
-        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
-        result += '  }'
+        if self.default_entity_declaration:
+            default_type = utils.capitalize_camel_case(self.default_entity_declaration)
+            result += f'  let type = (context.templateData["type"] as? String ?? {default_type}.type)'
+            result += '    .flatMap { context.templateToType[$0] ?? $0 } '
+        else:
+            result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'
+            result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
+            result += '  }'
         result += EMPTY
         result += '  switch type {'
         for name in self._resolved_entity_names:

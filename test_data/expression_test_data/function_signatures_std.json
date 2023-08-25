@@ -739,6 +739,298 @@
       ]
     },
     {
+      "name": "getArrayString(array, integer) string",
+      "function_name": "getArrayString",
+      "doc": "Returns a string value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayNumber(array, integer) number",
+      "function_name": "getArrayNumber",
+      "doc": "Returns a number value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayInteger(array, integer) integer",
+      "function_name": "getArrayInteger",
+      "doc": "Returns an integer value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayBoolean(array, integer) boolean",
+      "function_name": "getArrayBoolean",
+      "doc": "Returns a boolean property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayColor(array, integer) color",
+      "function_name": "getArrayColor",
+      "doc": "Returns a color property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptString(array, integer, string) string",
+      "function_name": "getArrayOptString",
+      "doc": "Returns an optional string property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a string."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptNumber(array, integer, number) number",
+      "function_name": "getArrayOptNumber",
+      "doc": "Returns an optional number property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "number",
+          "doc": "Fallback value if value by index not exists or it's is not a number."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptInteger(array, integer, integer) integer",
+      "function_name": "getArrayOptInteger",
+      "doc": "Returns an optional integer property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptBoolean(array, integer, boolean) boolean",
+      "function_name": "getArrayOptBoolean",
+      "doc": "Returns an optional boolean value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "boolean",
+          "doc": "Fallback value if value by index not exists or it's is not a boolean."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptColor(array, integer, color) color",
+      "function_name": "getArrayOptColor",
+      "doc": "Returns an optional color value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "color",
+          "doc": "Fallback value if value by index not exists or it's is not a color."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptColor(array, integer, string) color",
+      "function_name": "getArrayOptColor",
+      "doc": "Returns an optional color value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a color."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayUrl(array, integer) url",
+      "function_name": "getArrayUrl",
+      "doc": "Returns an url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, integer, url) url",
+      "function_name": "getArrayOptUrl",
+      "doc": "Returns an optional url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "url",
+          "doc": "Fallback value if value by index not exists or it's is not a url."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, integer, string) url",
+      "function_name": "getArrayOptUrl",
+      "doc": "Returns an optional url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a url."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
       "name": "getStoredIntegerValue(string, integer) integer",
       "function_name": "getStoredIntegerValue",
       "doc": "Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.",

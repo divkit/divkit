@@ -1,0 +1,581 @@
+{
+  "cases": [
+    {
+      "name": "unknownArrayFunc(array) => error",
+      "expression": "@{unknownArrayFunc(array)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [unknownArrayFunc(<array>)]. Unknown function name: unknownArrayFunc."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [123]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayString(array, 'index_out_of_bounds') => error",
+      "expression": "@{getArrayString(array, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayString(<array>, 1)]. Requested index (1) out of bounds array size (0)"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": []
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayInteger(array, 0) => integer",
+      "expression": "@{getArrayInteger(array, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayInteger(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayInteger(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayInteger(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptInteger(array, 'integer_index', 'fallback') => integer",
+      "expression": "@{getArrayOptInteger(array, 1, 321)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptInteger(array, 'wrong_type_index', 'fallback') => fallback integer",
+      "expression": "@{getArrayOptInteger(array, 0, 321)}",
+      "expected": {
+        "type": "integer",
+        "value": 321
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayNumber(array, 0) => number",
+      "expression": "@{getArrayNumber(array, 0)}",
+      "expected": {
+        "type": "number",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayNumber(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayNumber(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayNumber(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptNumber(array, 'number_index', 'fallback') => number",
+      "expression": "@{getArrayOptNumber(array, 1, 321.00)}",
+      "expected": {
+        "type": "number",
+        "value": 123.00
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptNumber(array, 'wrong_type_index', 'fallback') => fallback number",
+      "expression": "@{getArrayOptNumber(array, 0, 321.00)}",
+      "expected": {
+        "type": "number",
+        "value": 321.00
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayString(array, 0) => string",
+      "expression": "@{getArrayString(array, 0)}",
+      "expected": {
+        "type": "string",
+        "value": "string"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayString(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayString(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayString(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptString(array, 'string_index', 'fallback') => string",
+      "expression": "@{getArrayOptString(array, 0, 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "string"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            123.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptString(array, 'wrong_type_index', 'fallback') => fallback string",
+      "expression": "@{getArrayOptString(array, 1, 'fallback')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string",
+            321.00
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayBoolean(array, 0) => boolean",
+      "expression": "@{getArrayBoolean(array, 0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            true
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayBoolean(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayBoolean(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptBoolean(array, 'boolean_index', 'fallback') => boolean",
+      "expression": "@{getArrayOptBoolean(array, 0, true)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            false
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptBoolean(array, 'wrong_type_index', 'fallback') => fallback boolean",
+      "expression": "@{getArrayOptBoolean(array, 0, true)}",
+      "expected": {
+        "type": "boolean",
+        "value": "true"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "string"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayColor(array, 0) => color",
+      "expression": "@{getArrayColor(array, 0)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF001122"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#012"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayColor(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayColor(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayColor(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptColor(array, 'color_index', 'color_fallback') => color",
+      "expression": "@{getArrayOptColor(array, 0, '#FF009988')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF112233"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#123"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptColor(array, 'wrong_type_index', 'color_fallback') => fallback color",
+      "expression": "@{getArrayOptColor(array, 1, color_fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF009988"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_fallback",
+          "value": "#098"
+        },
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#FF112233",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayOptColor(array, 'wrong_type_index', 'color_fallback') => fallback string color",
+      "expression": "@{getArrayOptColor(array, 1, '#FF009988')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF009988"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "#123",
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayUrl(array, 'url_index') => 'https://ya.ru'",
+      "expression": "@{getArrayUrl(array, 0)}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "name": "getArrayUrl(array, 'wrong_type_index') => error",
+      "expression": "@{getArrayUrl(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, 'url_index', 'fallback') => 'https://ya.ru'",
+      "expression": "@{getArrayOptUrl(array, 0, 'https://fallback.ru')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, 'wrong_type_index', 'fallback') => 'https://fallback.ru'",
+      "expression": "@{getArrayOptUrl(array, 0, 'https://fallback.ru')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, 'url_index', toUrl('fallback')) => 'https://ya.ru'",
+      "expression": "@{getArrayOptUrl(array, 0, toUrl('https://fallback.ru'))}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            "https://ya.ru"
+          ]
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "name": "getArrayOptUrl(array, 'wrong_type_index', toUrl('fallback')) => 'https://fallback.ru'",
+      "expression": "@{getArrayOptUrl(array, 0, toUrl('https://fallback.ru'))}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback.ru"
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

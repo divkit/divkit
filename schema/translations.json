@@ -1479,6 +1479,22 @@
     "en": "Style of the inactive part of a scale.",
     "ru": "Стиль неактивной части шкалы."
   },
+  "div_slider_ranges": {
+    "en": "Style of sections of a scale.",
+    "ru": "Стиль для отрезков шкалы."
+  },
+  "div_slider_range_start": {
+    "en": "Start of section.",
+    "ru": "Начало отрезка."
+  },
+  "div_slider_range_end": {
+    "en": "End of section.",
+    "ru": "Конец отрезка."
+  },
+  "div_slider_range_margins": {
+    "en": "Margins of section. Used only horizontal margins.",
+    "ru": "Отступы от отрезка. Используются только горизонтальные отступы."
+  },
   "div_solid_background": {
     "en": "Solid background color.",
     "ru": "Сплошной цвет фона."

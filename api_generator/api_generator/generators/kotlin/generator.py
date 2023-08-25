@@ -176,6 +176,7 @@ class KotlinGenerator(Generator):
         entity_enumeration.__class__ = KotlinEntityEnumeration
         declaration_name = utils.capitalize_camel_case(entity_enumeration.name)
         entity_declarations = list(map(utils.capitalize_camel_case, entity_enumeration.entity_names))
+        default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
         result = Text()
         for annotation in self.kotlin_annotations.classes:
             result += annotation
@@ -281,7 +282,11 @@ class KotlinGenerator(Generator):
             args = f'env: ParsingEnvironment, {source_name}: {source_type}'
             result += f'        operator fun invoke({args}): {declaration_name} {{'
             result += '            val logger = env.logger'
-            result += f'            val type: String = {read_type_expr}'
+            if default_entity_decl:
+                read_type_opt_expr = 'json.readOptional("type", logger = logger, env = env)'
+                result += f'            val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
+            else:
+                result += f'            val type: String = {read_type_expr}'
         result += '            when (type) {'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
+import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.PathFormatException;
 import com.yandex.div.core.view2.Div2View;
@@ -302,6 +303,8 @@ public class DivActionHandler {
             return div2View.applyVideoCommand(id, command);
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, view);
+        } else if (StoredValuesActionHandler.canHandle(action)) {
+            return StoredValuesActionHandler.handleAction(uri, view);
         }
 
         return false;

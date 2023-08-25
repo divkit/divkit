@@ -720,6 +720,45 @@
       }
     },
     {
+      "enum_with_default_type.json": {
+        "anyOf": [
+          {
+            "$ref": "#definitions/with_default"
+          },
+          {
+            "$ref": "#definitions/without_default"
+          }
+        ],
+        "definitions": {
+          "with_default": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "default"
+                ]
+              }
+            }
+          },
+          "without_default": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "non_default"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        }
+      }
+    },
+    {
       "translations.json": {
         "entity_with_property_with_default_value_nested": {
           "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",

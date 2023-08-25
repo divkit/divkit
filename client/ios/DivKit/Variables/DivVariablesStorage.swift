@@ -14,6 +14,7 @@ public enum DivVariableValue: Hashable {
   case color(Color)
   case url(URL)
   case dict([String: AnyHashable])
+  case array([AnyHashable])
 
   @inlinable
   public func typedValue<T>() -> T? {
@@ -31,6 +32,8 @@ public enum DivVariableValue: Hashable {
     case let .url(value):
       return value as? T
     case let .dict(value):
+      return value as? T
+    case let .array(value):
       return value as? T
     }
   }
@@ -266,6 +269,9 @@ extension Dictionary where Key == DivVariableName, Value == DivVariableValue {
     case .dict:
       newValue = nil
       DivKitLogger.warning("Unsupported variable type: dict")
+    case .array:
+      newValue = nil
+      DivKitLogger.warning("Unsupported variable type: array")
     }
 
     if newValue == oldValue {
@@ -320,6 +326,15 @@ extension Collection where Element == DivVariable {
         } else {
           DivKitLogger.error("Incorrect value for dict variable \(name): \(dictVariable.value)")
           variables[name] = .dict([:])
+        }
+      case let .arrayVariable(arrayVariable):
+        let name = DivVariableName(rawValue: arrayVariable.name)
+        if variables.keys.contains(name) { return }
+        if let array = NSArray(array: arrayVariable.value) as? [AnyHashable] {
+          variables[name] = .array(array)
+        } else {
+          DivKitLogger.error("Incorrect value for array variable \(name): \(arrayVariable.value)")
+          variables[name] = .array([])
         }
       }
     }
