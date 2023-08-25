@@ -260,6 +260,7 @@ class KotlinGenerator(Generator):
         source_name = 'json'
         source_type = 'JSONObject'
         read_type_expr = 'json.read("type", logger = logger, env = env)'
+        read_type_opt_expr = 'json.readOptional("type", logger = logger, env = env)'
         throwing_expr = 'throw typeMismatch(json = json, key = "type", value = type)'
 
         if entity_enumeration.mode.is_template:
@@ -271,7 +272,10 @@ class KotlinGenerator(Generator):
             result += f'            {source_name}: {source_type}'
             result += f'        ): {declaration_name} {{'
             result += '            val logger = env.logger'
-            result += f'            val receivedType: String = {read_type_expr}'
+            if default_entity_decl:
+                result += f'            val receivedType: String = {read_type_opt_expr} ?: {default_entity_decl}Template.TYPE'
+            else:
+                result += f'            val receivedType: String = {read_type_expr}'
             result += f'            val parent = env.templates[receivedType] as? {declaration_name}'
             result += '            val type = parent?.type ?: receivedType'
         else:
@@ -283,7 +287,6 @@ class KotlinGenerator(Generator):
             result += f'        operator fun invoke({args}): {declaration_name} {{'
             result += '            val logger = env.logger'
             if default_entity_decl:
-                read_type_opt_expr = 'json.readOptional("type", logger = logger, env = env)'
                 result += f'            val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
             else:
                 result += f'            val type: String = {read_type_expr}'

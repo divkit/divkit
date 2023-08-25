@@ -3,8 +3,8 @@ package com.yandex.divkit.demo.regression
 import android.net.Uri
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.parseToDiv2
@@ -20,13 +20,13 @@ class RegressionDivActionHandler(
     uriHandlerDivkit: DivkitDemoUriHandler,
     private val divAssetReader: DivAssetReader
 ) : DemoDivActionHandler(uriHandlerDivkit) {
-    override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-        val url = action.url?.evaluate(view.expressionResolver) ?: return false
+    override fun handleAction(info: DivActionInfo, view: DivViewFacade): Boolean {
+        val url = info.url ?: return false
         if (url.scheme == DIV_DEMO_ACTION_SCHEME) {
             handleDemoActionUrl(url, view)
             return true
         }
-        return super.handleAction(action, view)
+        return super.handleAction(info, view)
     }
 
     private fun handleDemoActionUrl(url: Uri, view: DivViewFacade) {

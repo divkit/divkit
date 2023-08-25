@@ -77,6 +77,8 @@ class TypeScriptGenerator(Generator):
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:
         imports = sorted(filter(None, map(lambda e: _type_script_full_name(e[1]) if e[1] is not None else None,
                                           entity_enumeration.entities)))
+        if entity_enumeration.default_entity_declaration:
+            imports.append(f'{utils.capitalize_camel_case(entity_enumeration.default_entity_declaration)}Props')
         result = _make_type_script_imports(items=imports)
         result += self.__entity_enumeration_declaration_without_imports(entity_enumeration)
         return result
@@ -86,6 +88,10 @@ class TypeScriptGenerator(Generator):
         result = Text(f'export type {_type_script_full_name(entity_enumeration)} =')
         names = list(filter(None, map(lambda e: _type_script_full_name(e[1]) if e[1] is not None else None,
                                       entity_enumeration.entities)))
+
+        if entity_enumeration.default_entity_declaration:
+            names.append(f'{utils.capitalize_camel_case(entity_enumeration.default_entity_declaration)}Props')
+
         if entity_enumeration.generate_case_for_templates:
             names.append('TemplateBlock')
         for ind, name in enumerate(names):

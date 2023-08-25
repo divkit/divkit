@@ -24,6 +24,7 @@ import com.google.zxing.integration.android.IntentResult
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div.core.state.DivStateChangeListener
 import com.yandex.div.core.state.DivStateTransition
 import com.yandex.div.core.util.SafeAlertDialogBuilder
@@ -36,7 +37,6 @@ import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
@@ -170,9 +170,9 @@ class Div2Activity : AppCompatActivity() {
         uriHandler: DivkitDemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
 
-        override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            val url = action.url?.evaluate(view.expressionResolver) ?: return false
-            return handleDemoActionUrl(url) || super.handleAction(action, view)
+        override fun handleAction(info: DivActionInfo, view: DivViewFacade): Boolean {
+            val url = info.url ?: return false
+            return handleDemoActionUrl(url) || super.handleAction(info, view)
         }
 
         private fun handleDemoActionUrl(uri: Uri): Boolean {

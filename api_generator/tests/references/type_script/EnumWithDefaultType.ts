@@ -7,8 +7,10 @@ import { Type } from '../template';
 import {
     WithDefault,
     WithoutDefault,
+    WithDefaultProps,
 } from './';
 
 export type EnumWithDefaultType =
     | WithDefault
-    | WithoutDefault;
+    | WithoutDefault
+    | WithDefaultProps;

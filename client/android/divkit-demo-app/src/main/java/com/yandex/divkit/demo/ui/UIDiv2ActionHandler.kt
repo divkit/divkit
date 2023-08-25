@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.startActivity
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.Div2Activity
@@ -31,11 +32,10 @@ class UIDiv2ActionHandler(
     private val context: Context
 ) : DemoDivActionHandler(uriHandler) {
 
-    override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-        if (action.url == null) return false
-        val uri = action.url!!.evaluate(view.expressionResolver)
+    override fun handleAction(info: DivActionInfo, view: DivViewFacade): Boolean {
+        val uri = info.url ?: return false
         return (handleActivityActionUrl(uri) || SettingsActionHandler.handleActionUrl(uri)
-                || super.handleAction(action, view))
+                || super.handleAction(info, view))
     }
 
     private fun handleActivityActionUrl(uri: Uri): Boolean {

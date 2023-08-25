@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
@@ -30,7 +31,6 @@ import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
@@ -343,14 +343,14 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         uriHandler: DivkitDemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
 
-        override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            val url = action.url?.evaluate(view.expressionResolver) ?: return false
+        override fun handleAction(info: DivActionInfo, view: DivViewFacade): Boolean {
+            val url = info.url ?: return false
             if (url.scheme == "div-demo-action" && url.host == "set_data") {
                 val assetName = url.getQueryParameter("path")
                 editorPresenter.readAsset("asset:///regression_test_data/$assetName")
                 return true
             }
-            return super.handleAction(action, view)
+            return super.handleAction(info, view)
         }
     }
 

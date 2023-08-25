@@ -127,8 +127,12 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                                                           mode=mode,
                                                           config=config)
 
-        default_names = [typename, f'{typename}{TEMPLATE_SUFFIX}']
-        decl = next((d for d in generated_entities + declarations if d.name in default_names), None)
+        if mode.is_template:
+            default_name = f'{typename}{TEMPLATE_SUFFIX}'
+        else:
+            default_name = typename
+
+        decl = next((d for d in generated_entities + declarations if d.name == default_name), None)
         use_as_default = decl is not None and decl.type_is_optional
 
         if isinstance(property_type, StaticString):

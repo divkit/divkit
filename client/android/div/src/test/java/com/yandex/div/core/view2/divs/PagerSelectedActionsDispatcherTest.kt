@@ -166,6 +166,8 @@ class PagerSelectedActionsDispatcherTest {
         private const val PAGER_DIR = "div-pager"
         private const val CARD_ID = "div_pager_card"
 
-        private fun urlEq(urlStr: String) = argThat<DivAction> { url?.evaluate(ExpressionResolver.EMPTY).toString() == urlStr }
+        private fun urlEq(urlStr: String) = argThat<DivAction.Default> {
+            value.url?.evaluate(ExpressionResolver.EMPTY).toString() == urlStr
+        }
     }
 }

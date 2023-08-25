@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.tabs
 
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.action.toInfo
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.DivActionBinder
@@ -55,11 +56,12 @@ internal class DivTabsEventManager(
     }
 
     override fun onActiveTabClicked(action: DivAction, tabPosition: Int) {
-        if (action.menuItems != null) {
+        if (action is DivAction.Default && action.value.menuItems != null) {
             // TODO(MORDAANDROID-90): handle case with menuItems != null
             KLog.w(TAG) { "non-null menuItems ignored in title click action" }
         }
-        div2Logger.logActiveTabTitleClick(div2View, tabPosition, action)
+        val info = action.toInfo(div2View.expressionResolver)
+        div2Logger.logActiveTabTitleClick(div2View, tabPosition, info)
         actionBinder.handleAction(div2View, action)
     }
 

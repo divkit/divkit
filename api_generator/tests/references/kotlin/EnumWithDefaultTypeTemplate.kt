@@ -58,7 +58,7 @@ sealed class EnumWithDefaultTypeTemplate : JSONSerializable, JsonTemplate<EnumWi
             json: JSONObject
         ): EnumWithDefaultTypeTemplate {
             val logger = env.logger
-            val receivedType: String = json.read("type", logger = logger, env = env)
+            val receivedType: String = json.readOptional("type", logger = logger, env = env) ?: WithDefaultTemplate.TYPE
             val parent = env.templates[receivedType] as? EnumWithDefaultTypeTemplate
             val type = parent?.type ?: receivedType
             when (type) {
