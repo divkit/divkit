@@ -13,7 +13,9 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
+import com.yandex.div.core.util.mask.DEFAULT_MASK_DATA
 import com.yandex.div.core.util.mask.FixedLengthInputMask
+import com.yandex.div.core.util.mask.PhoneInputMask
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.validator.ExpressionValidator
 import com.yandex.div.core.util.validator.RegexValidator
@@ -32,6 +34,7 @@ import com.yandex.div2.DivCurrencyInputMask
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputValidator
+import com.yandex.div2.DivPhoneInputMask
 import com.yandex.div2.DivSizeUnit
 import java.util.Locale
 import java.util.regex.PatternSyntaxException
@@ -529,6 +532,13 @@ internal class DivInputBinder @Inject constructor(
                         (inputMask as CurrencyInputMask)
                             .updateCurrencyParams(locale)
                     } ?: CurrencyInputMask(locale) {
+                        catchCommonMaskException(it) { }
+                    }
+                }
+                is DivPhoneInputMask -> {
+                    keyListener = DigitsKeyListener.getInstance("1234567890")
+
+                    inputMask?.apply { updateMaskData(DEFAULT_MASK_DATA) } ?: PhoneInputMask {
                         catchCommonMaskException(it) { }
                     }
                 }

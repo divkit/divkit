@@ -109,6 +109,12 @@ internal abstract class BaseInputMask(
                 }
             }
 
+        val tailStart = replaceBodyTail(textDiff, newValue)
+
+        calculateCursorPosition(textDiff, tailStart)
+    }
+
+    protected fun replaceBodyTail(textDiff: TextDiff, newValue: String): Int {
         val body = buildBodySubstring(textDiff, newValue)
         val tail = buildTailSubstring(textDiff)
 
@@ -124,7 +130,7 @@ internal abstract class BaseInputMask(
 
         replaceChars(tail, tailStart)
 
-        calculateCursorPosition(textDiff, tailStart)
+        return tailStart
     }
 
     private fun buildBodySubstring(textDiff: TextDiff, newValue: String): String {

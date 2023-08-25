@@ -3,6 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 def generatedSrcDir = new File(buildDir, "generated/source/api")
+def generatedSrcSharedDataDir = new File(buildDir, "generated/source/data")
 
 allOpen {
     annotation("com.yandex.div.core.annotations.Mockable")
@@ -13,11 +14,15 @@ android {
     sourceSets {
         main {
             java.srcDirs += generatedSrcDir
+            java.srcDirs += generatedSrcSharedDataDir
         }
     }
 
     libraryVariants.all { variant ->
-        variant.preBuildProvider.configure { dependsOn "generateDivModel" }
+        variant.preBuildProvider.configure {
+            dependsOn "generateDivModel"
+            dependsOn "generateDivSharedData"
+        }
     }
 }
 
@@ -45,6 +50,24 @@ task generateDivModel(type: Exec) {
 
     inputs.file configPath
     inputs.dir schemaPath
+    outputs.dir modelPath
+}
+
+task generateDivSharedData(type: Exec) {
+    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
+    def sharedDataConfigPath = new File(projectDir, 'div2-shared-data-generator-config.json').absolutePath
+    def sharedDataPath = new File(projectDir, "../../../shared_data").absolutePath
+    def modelPath = new File(generatedSrcSharedDataDir, "com/yandex/div2")
+
+    doFirst {
+        println "Process shared data: $sharedDataPath"
+        println commandLine
+    }
+
+    commandLine execPath, sharedDataConfigPath, sharedDataPath, modelPath
+
+    inputs.file sharedDataConfigPath
+    inputs.dir sharedDataPath
     outputs.dir modelPath
 }
 
