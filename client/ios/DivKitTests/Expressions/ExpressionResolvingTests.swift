@@ -91,6 +91,12 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_Functions_Array() throws {
+    let testCases = try makeTestCases(for: "functions_array")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   func test_Functions_Interval() throws {
     let testCases = try makeTestCases(for: "functions_interval")
     let type: ExpressionType<String> = .stringBased(initializer: { $0 })

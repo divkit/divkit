@@ -66,7 +66,7 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "string", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "string", result.actualType).message
     }
     return stringValue
   }
@@ -79,7 +79,7 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     if result.isBool {
-      throw Error.incorrectValueType(expression, "number", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "number", result.actualType).message
     }
     if let numberValue = result as? Double {
       return numberValue
@@ -87,7 +87,7 @@ enum DictFunctions: String, CaseIterable {
     if let intValue = result as? Int {
       return Double(intValue)
     }
-    throw Error.incorrectValueType(expression, "number", getActualType(result)).message
+    throw Error.incorrectValueType(expression, "number", result.actualType).message
   }
 
   private func _getDictInteger(dict: [String: AnyHashable], path: [String]) throws -> Int {
@@ -98,7 +98,7 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     if result.isBool {
-      throw Error.incorrectValueType(expression, "integer", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "integer", result.actualType).message
     }
     guard let intValue = result as? Int else {
       if let doubleValue = result as? Double {
@@ -107,7 +107,7 @@ enum DictFunctions: String, CaseIterable {
         }
         throw Error.cannotConvertToInteger(expression).message
       }
-      throw Error.incorrectValueType(expression, "integer", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "integer", result.actualType).message
     }
     return intValue
   }
@@ -120,10 +120,10 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     guard result.isBool else {
-      throw Error.incorrectValueType(expression, "boolean", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
     }
     guard let boolValue = result as? Bool else {
-      throw Error.incorrectValueType(expression, "boolean", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
     }
     return boolValue
   }
@@ -136,7 +136,7 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "color", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "color", result.actualType).message
     }
     guard let color = Color.color(withHexString: stringValue) else {
       throw Error.incorrectColorFormat(expression).message
@@ -152,10 +152,10 @@ enum DictFunctions: String, CaseIterable {
       expression: expression
     )
     guard let stringValue = result as? String else {
-      throw Error.incorrectValueType(expression, "url", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "url", result.actualType).message
     }
     guard let url = URL(string: stringValue) else {
-      throw Error.incorrectValueType(expression, "url", getActualType(result)).message
+      throw Error.incorrectValueType(expression, "url", result.actualType).message
     }
     return url
   }
@@ -276,24 +276,6 @@ enum DictFunctions: String, CaseIterable {
   }
 }
 
-private func getActualType(_ value: AnyHashable) -> String {
-  if value.isBool {
-    return "boolean"
-  }
-  switch value {
-  case is [String: AnyHashable]:
-    return "dict"
-  case is [Any]:
-    return "array"
-  case is String:
-    return "string"
-  case is Int, is Double:
-    return "number"
-  default:
-    return "null"
-  }
-}
-
 private func makeExpression(_ function: String, _ path: [String]) -> String {
   "\(function)(<dict>, \(path.map { "'\($0)'" }.joined(separator: ", ")))"
 }
@@ -325,11 +307,5 @@ private enum Error {
 
   var message: AnyCalcExpression.Error {
     AnyCalcExpression.Error.message(description)
-  }
-}
-
-extension AnyHashable {
-  fileprivate var isBool: Bool {
-    Bool(description) != nil && !(self is String)
   }
 }

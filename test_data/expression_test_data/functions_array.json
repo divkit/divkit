@@ -33,7 +33,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -53,7 +54,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -73,7 +75,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -94,7 +97,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -115,7 +119,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -135,7 +140,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -155,7 +161,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -176,7 +183,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -197,7 +205,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -217,7 +226,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -237,7 +247,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -258,7 +269,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -279,7 +291,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -299,7 +312,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -319,7 +333,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -339,7 +354,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -347,7 +363,7 @@
       "expression": "@{getArrayOptBoolean(array, 0, true)}",
       "expected": {
         "type": "boolean",
-        "value": "true"
+        "value": true
       },
       "variables": [
         {
@@ -359,7 +375,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -379,7 +396,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -399,7 +417,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -419,7 +438,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -445,7 +465,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -466,7 +487,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -485,14 +507,16 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayUrl(array, 'wrong_type_index') => error",
       "expression": "@{getArrayUrl(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
+        "value": "Failed to evaluate [getArrayUrl(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
       },
       "variables": [
         {
@@ -503,7 +527,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, 'url_index', 'fallback') => 'https://ya.ru'",
@@ -521,7 +547,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, 'wrong_type_index', 'fallback') => 'https://fallback.ru'",
@@ -539,7 +567,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, 'url_index', toUrl('fallback')) => 'https://ya.ru'",
@@ -557,7 +587,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, 'wrong_type_index', toUrl('fallback')) => 'https://fallback.ru'",
@@ -575,7 +607,9 @@
           ]
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

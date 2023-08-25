@@ -266,6 +266,7 @@ private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     + MathFunctions.allCases.map(\.declaration).flat()
     + IntervalFunctions.allCases.map(\.declaration).flat()
     + DictFunctions.allCases.map(\.declaration).flat()
+    + ArrayFunctions.allCases.map(\.declaration).flat()
 
 extension ExpressionResolver: ConstantsProvider {
   func getValue(_ name: String) -> Any? {

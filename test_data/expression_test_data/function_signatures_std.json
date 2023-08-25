@@ -754,7 +754,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -773,7 +774,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -792,7 +794,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -811,7 +814,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -830,7 +834,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -853,7 +858,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -876,7 +882,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -899,7 +906,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -922,7 +930,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -945,7 +954,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -968,7 +978,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -1007,7 +1018,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, integer, string) url",
@@ -1028,7 +1041,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "getStoredIntegerValue(string, integer) integer",

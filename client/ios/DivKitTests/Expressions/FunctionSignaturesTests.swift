@@ -30,6 +30,7 @@ private let functions: [String: Function] = {
   CastFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   MathFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   DictFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
+  ArrayFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   IntervalFunctions.allCases.forEach { result[$0.rawValue] = $0.function }
   ValueFunctions.allCases.forEach {
     result[$0.rawValue] = $0.getFunction(resolver: ExpressionResolver(
