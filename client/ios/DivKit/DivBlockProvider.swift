@@ -5,27 +5,9 @@ import CommonCorePublic
 import LayoutKit
 import Serialization
 
-public final class DivBlockProvider {
-  public struct Source {
-    public enum Kind {
-      case json([String: Any])
-      case data(Data)
-      case divData(DivData)
-    }
-
-    let kind: Kind
-    let cardId: DivCardID
-
-    public init(
-      kind: Kind,
-      cardId: DivCardID
-    ) {
-      self.kind = kind
-      self.cardId = cardId
-    }
-  }
-
+final class DivBlockProvider {
   private let divKitComponents: DivKitComponents
+  private let onCardSizeChanged: (DivCardID, DivViewSize) -> Void
   private let disposePool = AutodisposePool()
 
   private var divData: DivData? {
@@ -35,9 +17,16 @@ public final class DivBlockProvider {
     }
   }
 
-  private var cardId: DivCardID!
-  private var debugParams: DebugParams = .init()
-  private var dataErrors: [DeserializationError] = []
+  private(set) var cardId: DivCardID!
+  private(set) var cardSize: DivViewSize? {
+    didSet {
+      guard let cardSize else { return }
+      onCardSizeChanged(cardId, cardSize)
+    }
+  }
+
+  private var debugParams = DebugParams()
+  private var dataErrors = [DeserializationError]()
 
   private let measurements = DebugParams.Measurements(
     divDataParsingTime: TimeMeasure(),
@@ -54,22 +43,23 @@ public final class DivBlockProvider {
     }
   }
 
-  init(divKitComponents: DivKitComponents) {
+  var lastVisibleBounds: CGRect = .zero
+
+  init(
+    divKitComponents: DivKitComponents,
+    onCardSizeChanged: @escaping (DivCardID, DivViewSize) -> Void
+  ) {
     self.divKitComponents = divKitComponents
+    self.onCardSizeChanged = onCardSizeChanged
 
     divKitComponents.updateCardSignal
       .addObserver { [weak self] in self?.update(reasons: $0) }.dispose(in: disposePool)
   }
 
   func setSource(
-    _ source: Source,
-    debugParams: DebugParams,
-    shouldResetPreviousCardData: Bool
+    _ source: DivViewSource,
+    debugParams: DebugParams
   ) {
-    if shouldResetPreviousCardData {
-      cardId.flatMap(divKitComponents.reset(cardId:))
-    }
-
     block = noDataBlock
 
     cardId = source.cardId
@@ -136,6 +126,7 @@ public final class DivBlockProvider {
     } catch {
       block = handleError(error: error, message: "Failed to build block", context: context)
     }
+    cardSize = DivViewSize(block: block)
   }
 
   private func needUpdateBlock(reasons: [DivActionURLHandler.UpdateReason]) -> Bool {

@@ -59,7 +59,7 @@ open class DivViewController: UIViewController {
 
   private func setData(_ data: [String: Any]) {
     divView.setSource(
-      DivBlockProvider.Source(
+      DivViewSource(
         kind: .json(data),
         cardId: "DivViewCard"
       ),

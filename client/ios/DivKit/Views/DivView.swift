@@ -16,32 +16,33 @@ import LayoutKit
 
 public final class DivView: VisibleBoundsTrackingView {
   private let divKitComponents: DivKitComponents
-  private let blockProvider: DivBlockProvider
-  private let disposePool = AutodisposePool()
+  private let preloader: DivViewPreloader
+  private var blockProvider: DivBlockProvider?
+  private var blockSubscription: Disposable?
 
-  private var blockView: BlockView! {
+  private var blockView: BlockView? {
     didSet {
       if blockView !== oldValue {
         oldValue?.removeFromSuperview()
-        addSubview(blockView)
+        blockView.flatMap(addSubview(_:))
       }
     }
   }
+
+  private var oldFrame: CGRect = .zero
 
   /// Initializes a new `DivView` instance.
   ///
   /// - Parameters:
   ///  - divKitComponents: The ``DivKitComponents`` instance used for configuration and handling of
   /// the DivView.
-  public init(divKitComponents: DivKitComponents) {
+  public init(
+    divKitComponents: DivKitComponents,
+    divViewPreloader: DivViewPreloader? = nil
+  ) {
     self.divKitComponents = divKitComponents
-    self.blockProvider = DivBlockProvider(divKitComponents: divKitComponents)
-
+    preloader = divViewPreloader ?? DivViewPreloader(divKitComponents: divKitComponents)
     super.init(frame: .zero)
-
-    blockProvider.$block.currentAndNewValues.addObserver { [weak self] in
-      self?.update(block: $0)
-    }.dispose(in: disposePool)
   }
 
   /// Sets the source of the ``DivView`` and updates the layout.
@@ -52,22 +53,41 @@ public final class DivView: VisibleBoundsTrackingView {
   /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
   /// updating the ``DivView`` with new content.
   public func setSource(
-    _ source: DivBlockProvider.Source,
+    _ source: DivViewSource,
     debugParams: DebugParams = DebugParams(),
     shouldResetPreviousCardData: Bool = false
   ) {
-    blockProvider.setSource(
-      source,
-      debugParams: debugParams,
-      shouldResetPreviousCardData: shouldResetPreviousCardData
-    )
+    if shouldResetPreviousCardData {
+      blockProvider?.cardId.flatMap(divKitComponents.reset(cardId:))
+    }
+    preloader.setSource(source, debugParams: debugParams)
+    blockProvider = preloader.blockProvider(for: source.cardId)
+    blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
+      self?.update(block: $0)
+    }
+  }
+
+  /// Sets the source of the ``DivView`` and updates the layout.
+  /// - Parameters:
+  /// - cardId: ID of the card to show. (The card will not be shown if it has not been previously
+  /// uploaded to ``DivViewPreloader``)
+  /// - shouldResetPreviousCardData: Specifies whether to clear the data of the previous card when
+  /// updating the ``DivView`` with new content.
+  public func showCardId(_ cardId: DivCardID, shouldResetPreviousCardData: Bool = false) {
+    if shouldResetPreviousCardData {
+      blockProvider?.cardId.flatMap(divKitComponents.reset(cardId:))
+    }
+    blockProvider = preloader.blockProvider(for: cardId)
+    blockSubscription = blockProvider?.$block.currentAndNewValues.addObserver { [weak self] in
+      self?.update(block: $0)
+    }
   }
 
   /// Sets the parent scroll view for the DivView.
   /// - Parameter parentScrollView: The parent scroll view to set.
   /// This is used when you require a sub-scroll in a `DivInput`.
   public func setParentScrollView(_ parentScrollView: ScrollView) {
-    blockProvider.parentScrollView = parentScrollView
+    blockProvider?.parentScrollView = parentScrollView
   }
 
   @available(*, unavailable)
@@ -77,32 +97,65 @@ public final class DivView: VisibleBoundsTrackingView {
 
   public override func layoutSubviews() {
     super.layoutSubviews()
-
-    let blockSize = blockProvider.block.size(forResizableBlockSize: bounds.size)
-    blockView.frame = CGRect(origin: .zero, size: blockSize)
+    guard let blockView else { return }
+    blockView.frame = bounds
     blockView.layoutIfNeeded()
+    blockView.onVisibleBoundsChanged(
+      from: .zero,
+      to: blockProvider?.lastVisibleBounds ?? .zero
+    )
+  }
 
-    blockView.onVisibleBoundsChanged(from: .zero, to: blockView.bounds)
+  /// Returns ``DivCardSize`` of the ``DivView``.
+  ///
+  /// - Returns: The calculated ``DivCardSize``.
+  public var cardSize: DivViewSize? {
+    blockProvider?.cardSize
+  }
 
-    if bounds.size != blockSize {
-      invalidateIntrinsicContentSize()
+  /// Adds an observer to listen for ``DivView`` estimated size changes.
+  ///
+  /// - Parameters:
+  /// - `onCardSizeChanged`: A closure that gets invoked whenever a ``DivView`` estimated size
+  /// changes.
+  ///
+  /// - Returns: A `Disposable` which can be used to unregister the observer when it's no longer
+  /// needed.
+  public func addObserver(_ onCardSizeChanged: @escaping (DivViewSize) -> Void) -> Disposable {
+    preloader.changeEvents.filter { [weak self] in
+      $0.cardId == self?.blockProvider?.cardId
+    }.addObserver {
+      onCardSizeChanged($0.estimatedSize)
     }
   }
 
-  /// Returns the intrinsic content size of the `DivView` for a given available size.
-  /// - Parameters:
-  /// - availableSize: The available size to calculate the intrinsic content size.
-  ///
-  /// - Returns: The calculated intrinsic content size.
-  public func intrinsicContentSize(for availableSize: CGSize) -> CGSize {
-    blockProvider.block.size(forResizableBlockSize: availableSize)
-  }
-
-  /// Returns the intrinsic content size of the `DivView`.
+  /// Returns the intrinsic content size of the ``DivView``.
   ///
   /// - Returns: The calculated intrinsic content size.
   public override var intrinsicContentSize: CGSize {
-    blockProvider.block.size(forResizableBlockSize: bounds.size)
+    guard let cardSize = cardSize else {
+      return CGSize(width: DivView.noIntrinsicMetric, height: DivView.noIntrinsicMetric)
+    }
+    let width: CGFloat
+    switch cardSize.width {
+    case .matchParent:
+      width = bounds.width == 0 ? DivView.noIntrinsicMetric : bounds.width
+    case let .desired(value):
+      width = value
+    case .dependsOnOtherDimensionSize:
+      assertionFailure("Width depends on other dimension size")
+      width = DivView.noIntrinsicMetric
+    }
+    let height: CGFloat
+    switch cardSize.height {
+    case .matchParent:
+      height = bounds.height == 0 ? DivView.noIntrinsicMetric : bounds.height
+    case let .desired(value):
+      height = value
+    case let .dependsOnOtherDimensionSize(heightForWidth):
+      height = heightForWidth(width)
+    }
+    return CGSize(width: width, height: height)
   }
 
   private func update(block: Block) {
@@ -119,6 +172,7 @@ public final class DivView: VisibleBoundsTrackingView {
         renderingDelegate: divKitComponents.tooltipManager
       )
     }
+    invalidateIntrinsicContentSize()
     setNeedsLayout()
   }
 
@@ -126,15 +180,16 @@ public final class DivView: VisibleBoundsTrackingView {
   /// - Parameters:
   ///  - from: The original bounds rectangle.
   ///  - to: The new bounds rectangle.
-  public func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
-    blockView.onVisibleBoundsChanged(from: from, to: to)
+  public func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+    blockProvider?.lastVisibleBounds = to
+    setNeedsLayout()
   }
 }
 
 extension DivView: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    blockProvider.update(withStates: [path: state])
+    blockProvider?.update(withStates: [path: state])
   }
 }
 
@@ -148,6 +203,23 @@ extension DivView: UIActionEventPerforming {
     case let .divAction(params):
       divKitComponents.actionHandler.handle(params: params, sender: sender)
     }
+  }
+}
+
+extension DivView {
+  public override func layoutSublayers(of layer: CALayer) {
+    super.layoutSublayers(of: layer)
+    frameDidChange(frame: frame)
+  }
+
+  private func frameDidChange(frame: CGRect) {
+    if oldFrame.width != frame.width, blockProvider?.cardSize?.width == .matchParent {
+      invalidateIntrinsicContentSize()
+    }
+    if oldFrame.height != frame.height, blockProvider?.cardSize?.height == .matchParent {
+      invalidateIntrinsicContentSize()
+    }
+    oldFrame = frame
   }
 }
 

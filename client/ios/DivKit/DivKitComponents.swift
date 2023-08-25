@@ -185,7 +185,6 @@ public final class DivKitComponents {
 
     weakActionHandler = actionHandler
     weakTimerStorage = timerStorage
-
     variablesStorage.changeEvents.addObserver { [weak self] event in
       self?.onVariablesChanged(event: event)
     }.dispose(in: disposePool)

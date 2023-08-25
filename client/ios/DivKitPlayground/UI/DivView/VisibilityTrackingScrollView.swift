@@ -2,20 +2,23 @@ import UIKit
 
 import BaseUIPublic
 import CommonCorePublic
-import LayoutKit
 import DivKit
+import LayoutKit
 
 final class VisibilityTrackingScrollView: UIScrollView {
   var divView: DivView? {
     didSet {
       oldValue?.removeFromSuperview()
+      sizeChangedSubscription = divView?.addObserver { _ in self.setNeedsLayout() }
       divView.map { addSubview($0) }
       setNeedsLayout()
     }
   }
 
+  private var sizeChangedSubscription: Disposable?
+
   private var divViewSize: CGSize {
-    divView?.intrinsicContentSize(for: bounds.size) ?? .zero
+    divView?.cardSize?.sizeFor(parentViewSize: boundsSize) ?? .zero
   }
 
   var previousVisibleRect: CGRect = .zero
