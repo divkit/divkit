@@ -21,8 +21,9 @@ extension DivGalleryProtocol {
     let expressionResolver = context.expressionResolver
     let fallbackWidth = getFallbackWidth(direction: direction, context: context)
     let fallbackHeight = getFallbackHeight(direction: direction, context: context)
-    let children: [GalleryViewModel.Item] = try items.makeBlocks(
-      context: context,
+    let childrenContext = modified(context) { $0.errorsStorage = DivErrorsStorage(errors: []) }
+    let children: [GalleryViewModel.Item] = items.makeBlocks(
+      context: childrenContext,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
       mappedBy: {
@@ -37,10 +38,15 @@ extension DivGalleryProtocol {
       }
     )
 
-    try checkLayoutConstraints(
-      children,
-      path: context.parentPath
-    )
+    if children.isEmpty {
+      throw DivBlockModelingError(
+        "\(typeName) has no items",
+        path: context.parentPath,
+        causes: childrenContext.errorsStorage.errors
+      )
+    } else {
+      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
+    }
 
     let metrics = try makeMetrics(
       spacing: spacing,
@@ -102,8 +108,7 @@ extension DivGalleryProtocol {
       switch direction {
       case .vertical:
         if items.allHorizontallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "All items in vertical \(typeName) with wrap_content width has match_parent width"
           )
           return defaultFallbackSize
@@ -124,8 +129,7 @@ extension DivGalleryProtocol {
       switch direction {
       case .horizontal:
         if items.allVerticallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "All items in horizontal \(typeName) with wrap_content height has match_parent height"
           )
           return defaultFallbackSize
@@ -135,18 +139,6 @@ extension DivGalleryProtocol {
       }
     }
     return nil
-  }
-
-  private func checkLayoutConstraints(
-    _ children: [GalleryViewModel.Item],
-    path: UIElementPath
-  ) throws {
-    guard !children.isEmpty else {
-      throw DivBlockModelingError(
-        "\(typeName) has no items",
-        path: path
-      )
-    }
   }
 
   private var typeName: String {

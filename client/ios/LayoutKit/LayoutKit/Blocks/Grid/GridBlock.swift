@@ -4,30 +4,6 @@ import CommonCorePublic
 import LayoutKitInterface
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {
-  public struct Error: BlockError, Equatable {
-    public enum Payload: Swift.Error, Equatable {
-      public enum Span: String { case row, column }
-      public enum GridFormingError: Equatable {
-        public struct Coord: Equatable {
-          public let row: Int
-          public let column: Int
-        }
-
-        case noSpaceForItem(at: Int)
-        case emptyCell(at: Coord)
-      }
-
-      case invalidSpan(Span, Int)
-      case emptyItems
-      case invalidColumnCount(Int)
-      case unableToFormGrid(GridFormingError)
-      case incompatibleLayoutTraits(direction: Direction)
-    }
-
-    public let payload: Payload
-    public let path: UIElementPath
-  }
-
   public struct Span: Equatable {
     public let rows: Int
     public let columns: Int
@@ -38,12 +14,14 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       columns = 1
     }
 
-    public init(rows: Int = 1, columns: Int = 1) throws {
-      guard rows >= 1 else { throw Error.Payload.invalidSpan(.row, rows) }
-      guard columns >= 1 else { throw Error.Payload.invalidSpan(.column, columns) }
-
+    public init(rows: Int = 1, columns: Int = 1) {
       self.rows = rows
       self.columns = columns
+    }
+
+    func validate() throws {
+      if rows < 1 { throw BlockError("Grid block error: " + "invalid rows span \(rows) < 1") }
+      if columns < 1 { throw BlockError("Grid block error: " + "invalid columns span \(columns) < 1") }
     }
   }
 
@@ -91,7 +69,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
   public let contentAlignment: BlockAlignment2D
   public let items: [Item]
   public let columnCount: Int
-  public let path: UIElementPath
   let grid: Grid
 
   private var cachedIntrinsicWidth: CGFloat?
@@ -103,7 +80,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     contentAlignment: BlockAlignment2D,
     items: [Item],
     columnCount: Int,
-    path: UIElementPath,
     grid: Grid
   ) {
     self.widthTrait = widthTrait
@@ -111,7 +87,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     self.contentAlignment = contentAlignment
     self.items = items
     self.columnCount = columnCount
-    self.path = path
     self.grid = grid
   }
 
@@ -120,8 +95,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     heightTrait: LayoutTrait,
     contentAlignment: BlockAlignment2D = .default,
     items: [Item],
-    columnCount: Int,
-    path: UIElementPath
+    columnCount: Int
   ) throws {
     self.init(
       widthTrait: widthTrait,
@@ -129,10 +103,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment,
       items: items,
       columnCount: columnCount,
-      path: path,
-      grid: try modifyError({ Error(payload: $0, path: path) }) {
-        try Grid(spans: items.map { $0.span }, columnCount: columnCount)
-      }
+      grid: try Grid(spans: items.map { $0.span }, columnCount: columnCount)
     )
     try validateLayoutTraits()
   }
@@ -147,7 +118,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       with: items,
       resizableAtDirection: .horizontal
     ) {
-      throw Error(payload: .incompatibleLayoutTraits(direction: .horizontal), path: path)
+      throw BlockError("Grid block error: cannot create horizontally resizable grid with intrinsic width trait")
     }
 
     if case .intrinsic = heightTrait, Layout.isGrid(
@@ -155,7 +126,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       with: items,
       resizableAtDirection: .vertical
     ) {
-      throw Error(payload: .incompatibleLayoutTraits(direction: .vertical), path: path)
+      throw BlockError("Grid block error: cannot create vertically resizable grid with intrinsic height trait")
     }
   }
 
@@ -217,7 +188,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       && contentAlignment == other.contentAlignment
       && items == other.items
       && columnCount == other.columnCount
-      && path == other.path
     // grid is calculated from items + columnCount, so no need to check it
   }
 
@@ -232,7 +202,6 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment,
       items: laidOutItems,
       columnCount: columnCount,
-      path: path,
       grid: grid
     )
 
@@ -259,7 +228,6 @@ extension GridBlock {
         contentAlignment: contentAlignment,
         items: newItems,
         columnCount: columnCount,
-        path: path,
         grid: grid
       )
       : self
@@ -271,55 +239,5 @@ extension GridBlock.Item {
     lhs.span == rhs.span
       && lhs.contents == rhs.contents
       && lhs.alignment == rhs.alignment
-  }
-}
-
-extension GridBlock.Error {
-  public var errorMessage: NonEmptyString {
-    switch payload {
-    case .emptyItems: return "emptyItems"
-    case .invalidSpan: return "invalidSpan"
-    case .unableToFormGrid: return "unableToFormGrid"
-    case .invalidColumnCount: return "invalidColumnCount"
-    case .incompatibleLayoutTraits: return "incompatibleLayoutTraits"
-    }
-  }
-
-  public var userInfo: [String: String] {
-    var userInfo = ["path": path.description]
-
-    switch payload {
-    case let .invalidSpan(span, value):
-      userInfo["span"] = span.rawValue
-      userInfo["value"] = "\(value)"
-    case .emptyItems:
-      break
-    case let .invalidColumnCount(count):
-      userInfo["count"] = "\(count)"
-    case let .unableToFormGrid(error):
-      userInfo += error.userInfo
-    case let .incompatibleLayoutTraits(direction):
-      userInfo["direction"] = direction.rawValue
-    }
-
-    return userInfo
-  }
-}
-
-extension GridBlock.Error.Payload.GridFormingError {
-  fileprivate var userInfo: [String: String] {
-    switch self {
-    case let .noSpaceForItem(item):
-      return [
-        "type": "noSpaceForItem",
-        "item": "\(item)",
-      ]
-    case let .emptyCell(coord):
-      return [
-        "type": "emptyCell",
-        "row": "\(coord.row)",
-        "column": "\(coord.column)",
-      ]
-    }
   }
 }

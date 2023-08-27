@@ -3,7 +3,7 @@
 import XCTest
 
 import CommonCorePublic
-import DivKit
+@testable import DivKit
 
 final class DivGridExtensionsTests: XCTestCase {
   func test_WhenGridHasAction_AddsItToBlock() throws {
@@ -34,8 +34,8 @@ final class DivGridExtensionsTests: XCTestCase {
   }
 
   func test_WhenGridHasHorizontalIncompatibleTraits_ThrowsError() throws {
-    let expectedError = GridBlock.Error(
-      payload: .incompatibleLayoutTraits(direction: .horizontal),
+    let expectedError = DivBlockModelingError(
+      "Grid block error: cannot create horizontally resizable grid with intrinsic width trait",
       path: gridPath
     )
     XCTAssertThrowsError(
@@ -45,8 +45,8 @@ final class DivGridExtensionsTests: XCTestCase {
   }
 
   func test_WhenGridHasVerticalIncompatibleTraits_ThrowsError() throws {
-    let expectedError = GridBlock.Error(
-      payload: .incompatibleLayoutTraits(direction: .vertical),
+    let expectedError = DivBlockModelingError(
+      "Grid block error: cannot create vertically resizable grid with intrinsic height trait",
       path: gridPath
     )
     XCTAssertThrowsError(
@@ -56,14 +56,14 @@ final class DivGridExtensionsTests: XCTestCase {
   }
 
   func test_WhenGridDoesNotFormRect_ThrowsError() throws {
-    let makeError: (GridBlock.Error.Payload) -> GridBlock.Error = {
-      .init(payload: $0, path: gridPath)
+    let makeError: (String) -> DivBlockModelingError = {
+      DivBlockModelingError($0, path: gridPath)
     }
-    let makeEmptyCellError: (_ row: Int, _ column: Int) -> GridBlock.Error = {
-      makeError(.unableToFormGrid(.emptyCell(at: .init(row: $0, column: $1))))
+    let makeEmptyCellError: (_ row: Int, _ column: Int) -> DivBlockModelingError = {
+      makeError("Grid block error: empty cell at (\($0), \($1))")
     }
-    let makeNoSpaceError: (_ item: Int) -> GridBlock.Error = {
-      makeError(.unableToFormGrid(.noSpaceForItem(at: $0)))
+    let makeNoSpaceError: (_ item: Int) -> DivBlockModelingError = {
+      makeError("Grid block error: no space for item at index \($0)")
     }
 
     let fileToError = [

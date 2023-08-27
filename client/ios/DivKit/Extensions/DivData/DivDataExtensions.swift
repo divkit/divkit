@@ -53,7 +53,7 @@ extension DivData: DivBlockModeling {
       return state
     }
 
-    context.addError(level: .error, message: "DivData.State not found: \(stateId)")
+    context.addError(message: "DivData.State not found: \(stateId)")
     return states.first
   }
 

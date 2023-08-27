@@ -13,7 +13,10 @@ public final class TabViewModel: Equatable {
     separatorStyle: TabSeparatorStyle? = nil
   ) throws {
     if contentsModel.pages.count != listModel.tabTitles.count {
-      throw TabError.conflictingPagesAndTabsCount
+      throw BlockError(
+        "Tab error: " + "pages count \(contentsModel.pages.count) " +
+        "is not equal to tabs count \(listModel.tabTitles.count)"
+      )
     }
 
     self.listModel = listModel

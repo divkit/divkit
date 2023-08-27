@@ -10,12 +10,6 @@ public final class PagerBlock: BlockWithTraits {
     case neighbourPageSize(CGFloat)
   }
 
-  public enum Error: NonEmptyString, BlockError, Equatable {
-    case inconsistentChildLayoutTraits
-
-    public var errorMessage: NonEmptyString { rawValue }
-  }
-
   public let pagerPath: PagerPath?
   public let layoutMode: LayoutMode
   public let gallery: GalleryViewModel
@@ -44,7 +38,7 @@ public final class PagerBlock: BlockWithTraits {
 
     if case .intrinsic = widthTrait, case .vertical = gallery.direction {
       guard gallery.items.map({ $0.content }).hasHorizontallyNonResizable else {
-        throw Error.inconsistentChildLayoutTraits
+        throw BlockError( "Pager block error: in intrinsic-width vertical pager all children have resizable width")
       }
     }
   }

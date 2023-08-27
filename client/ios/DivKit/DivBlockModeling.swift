@@ -7,20 +7,56 @@ public protocol DivBlockModeling {
   func makeBlock(context: DivBlockModelingContext) throws -> Block
 }
 
-public struct DivBlockModelingError: Error, CustomStringConvertible, Equatable {
-  public let description: String
+struct DivBlockModelingError: Error, DivError {
+  public let kind: DivErrorKind = .blockModeling
+  public let message: String
+  public let path: UIElementPath
+  public let causes: [DivError]
+  public let level: DivErrorLevel = .error
 
-  init(_ message: String, path: UIElementPath) {
-    description = "[\(path)]: \(message)"
+  init(_ message: String, path: UIElementPath, causes: [DivError] = []) {
+    self.message = message
+    self.path = path
+    self.causes = causes
     DivKitLogger.error(description)
   }
 }
 
-public struct DivBlockModelingWarning: CustomStringConvertible {
-  public let description: String
+struct DivBlockModelingWarning: DivError {
+  public let kind = DivErrorKind.blockModeling
+  public let message: String
+  public let path: UIElementPath
+  public let level: DivErrorLevel = .warning
 
   init(_ message: String, path: UIElementPath) {
-    description = "[\(path)]: \(message) "
+    self.message = message
+    self.path = path
     DivKitLogger.warning(description)
+  }
+}
+
+struct DivExpressionError: Error, DivError {
+  public let kind = DivErrorKind.expression
+  public let message: String
+  public let path: UIElementPath
+  public let level: DivErrorLevel = .error
+
+  init(_ error: ExpressionError, path: UIElementPath) {
+    self.message = error.description
+    self.path = path
+    DivKitLogger.error(description)
+  }
+}
+
+struct DivUnknownError: Error, DivError {
+  public let kind = DivErrorKind.unknown
+  public let message: String
+  public let path: UIElementPath
+  public let level: DivErrorLevel = .error
+
+  init(_ error: Error, path: UIElementPath) {
+    self.message = (error as CustomStringConvertible).description
+    self.path = path
+    DivKitLogger.error(description)
   }
 }

@@ -8,10 +8,10 @@ extension DivDrawable {
     context: DivBlockModelingContext,
     widthTrait: DivDrawableWidthTrait = .fixed,
     corners: CGRect.Corners
-  ) throws -> Block {
+  ) -> Block {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return try shapeDrawable.makeBlock(
+      return shapeDrawable.makeBlock(
         context: context,
         widthTrait: widthTrait,
         corners: corners

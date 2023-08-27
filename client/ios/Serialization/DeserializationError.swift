@@ -88,7 +88,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     ]
   }
 
-  private var rootCauses: [DeserializationError] {
+  public var rootCauses: [DeserializationError] {
     switch self {
     case .composite(_, let causes):
       return causes.flatMap {

@@ -32,6 +32,7 @@
 		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
 		76FD0506294208890002A1F9 /* RiveDivCustomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0505294208890002A1F9 /* RiveDivCustomData.swift */; };
 		76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0507294208F70002A1F9 /* RiveContainerView.swift */; };
+		818EB5742A8E289E007F1007 /* BlockErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EB5732A8E289E007F1007 /* BlockErrorExtensions.swift */; };
 		891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */; };
 		896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896381842987C9D50064DDD4 /* RenderingTime.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
@@ -276,6 +277,7 @@
 		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
 		76FD0505294208890002A1F9 /* RiveDivCustomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveDivCustomData.swift; sourceTree = "<group>"; };
 		76FD0507294208F70002A1F9 /* RiveContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveContainerView.swift; sourceTree = "<group>"; };
+		818EB5732A8E289E007F1007 /* BlockErrorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockErrorExtensions.swift; sourceTree = "<group>"; };
 		891672362A5F6F9300121131 /* DivPersistentValuesStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivPersistentValuesStorageTests.swift; sourceTree = "<group>"; };
 		896381842987C9D50064DDD4 /* RenderingTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderingTime.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -1108,6 +1110,7 @@
 				8CF329472875D5C8003F799A /* WrapperBlockTests.swift */,
 				431DC9C329620AA1007FA268 /* BlockTestsModels.swift */,
 				435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */,
+				818EB5732A8E289E007F1007 /* BlockErrorExtensions.swift */,
 			);
 			name = Blocks;
 			path = LayoutKit/LayoutKitTests/Blocks;
@@ -1657,6 +1660,7 @@
 				8CF3294F2875D5C8003F799A /* VisibilityActionPerformerTests.swift in Sources */,
 				8CF3295C2875D5C8003F799A /* SwitchableContainerBlockTests.swift in Sources */,
 				8CF3295B2875D5C8003F799A /* WrapperBlockTests.swift in Sources */,
+				818EB5742A8E289E007F1007 /* BlockErrorExtensions.swift in Sources */,
 				8CF329552875D5C8003F799A /* ContainerBlockTests.swift in Sources */,
 				8CF329512875D5C8003F799A /* LayeredBlockTests.swift in Sources */,
 				8CF329532875D5C8003F799A /* TabsBlockTests.swift in Sources */,

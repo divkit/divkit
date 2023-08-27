@@ -1,12 +1,7 @@
 import BasePublic
 import Serialization
-
-public typealias DivError = CustomStringConvertible
-
-public enum DivErrorLevel {
-  case warning
-  case error
-}
+import LayoutKitInterface
+import LayoutKit
 
 public final class DivErrorsStorage {
   public private(set) var errors: [DivError] = []
@@ -18,10 +13,8 @@ public final class DivErrorsStorage {
   public func add(_ error: DivError) {
     errors.append(error)
   }
-}
 
-extension DivErrorsStorage {
-  public convenience init<T>(from deserializationResult: DeserializationResult<T>) {
-    self.init(errors: deserializationResult.errorsOrWarnings?.asArray() ?? [])
+  public func add(contentsOf errorStorage: DivErrorsStorage) {
+    self.errors.append(contentsOf: errorStorage.errors)
   }
 }

@@ -49,3 +49,27 @@ final class UIStatePayloadFactory {
     )
   }
 }
+
+extension UIStatePayload.Error {
+  var description: String {
+    return message
+  }
+
+  init(_ error: DivError) {
+    message = error.prettyMessage
+    level = .init(error.level)
+  }
+}
+
+extension UIStatePayload.Error.Level {
+  init(_ error: DivErrorLevel) {
+    switch error {
+    case .error:
+      self = .error
+    case .warning:
+      self = .warning
+    @unknown default:
+      self = .error
+    }
+  }
+}

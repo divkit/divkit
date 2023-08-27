@@ -228,7 +228,7 @@ public final class DivKitComponents {
     let result = DivData.resolve(
       card: rawDivData.card,
       templates: rawDivData.templates
-    )
+    ).asCardResult(cardId: cardId)
     if let divData = result.value {
       setVariablesAndTriggers(divData: divData, cardId: cardId)
       setTimers(divData: divData, cardId: cardId)
@@ -247,7 +247,10 @@ public final class DivKitComponents {
   ) throws -> DeserializationResult<DivData> {
     guard let jsonObj = try? JSONSerialization.jsonObject(with: jsonData),
           let jsonDict = jsonObj as? [String: Any] else {
-      throw DeserializationError.invalidJSONData(data: jsonData)
+      throw DeserializationError.nestedObjectError(
+        field: cardId.rawValue,
+        error: .invalidJSONData(data: jsonData)
+      )
     }
     return try parseDivDataWithTemplates(jsonDict, cardId: cardId)
   }

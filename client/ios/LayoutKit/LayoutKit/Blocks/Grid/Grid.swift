@@ -17,8 +17,9 @@ struct Grid {
   }
 
   init(spans: [GridBlock.Span], columnCount: Int) throws {
-    guard !spans.isEmpty else { throw Error.emptyItems }
-    guard columnCount > 0 else { throw Error.invalidColumnCount(columnCount) }
+    guard !spans.isEmpty else { throw BlockError("Grid block error: empty items") }
+    try spans.forEach { try $0.validate() }
+    guard columnCount > 0 else { throw BlockError("Grid block error: invalid column count " + "\(columnCount)") }
 
     let resultInitialRow = [Int?](repeating: nil, times: try! UInt(value: columnCount))
     var result = [resultInitialRow]
@@ -36,8 +37,9 @@ struct Grid {
         reserveRowsUpTo(iterator.next().row)
       }
 
+      let noSpaceError = BlockError("Grid block error: no space for item at index " + "\(index)")
       guard iterator.current.column + span.columns <= columnCount else {
-        throw Error.unableToFormGrid(.noSpaceForItem(at: index))
+        throw noSpaceError
       }
 
       reserveRowsUpTo(iterator.current.row + span.rows - 1)
@@ -45,7 +47,7 @@ struct Grid {
         for columnOffset in 0..<span.columns {
           let location = iterator.current + (rowOffset, columnOffset)
           guard result[location] == nil else {
-            throw Error.unableToFormGrid(.noSpaceForItem(at: index))
+            throw noSpaceError
           }
 
           result[location] = index
@@ -58,7 +60,7 @@ struct Grid {
         if let result = value {
           return result
         } else {
-          throw Error.unableToFormGrid(.emptyCell(at: .init(row: rowIdx, column: columnIdx)))
+          throw BlockError("Grid block error: empty cell at " + "(\(rowIdx), \(columnIdx))")
         }
       }
     }
@@ -84,5 +86,3 @@ private struct GridIterator {
     return current
   }
 }
-
-private typealias Error = GridBlock.Error.Payload

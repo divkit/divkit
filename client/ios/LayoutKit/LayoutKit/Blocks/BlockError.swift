@@ -2,9 +2,11 @@ import Foundation
 
 import CommonCorePublic
 
-public protocol BlockError: Error {
-  var errorMessage: NonEmptyString { get }
-  var userInfo: [String: String] { get }
+public struct BlockError: Error {
+  public let message: NonEmptyString
+  init(_ message: NonEmptyString) {
+    self.message = message
+  }
 }
 
 // Workaround for swift compiler bug, when protocol is not conforming parent protocol
@@ -18,8 +20,4 @@ public func modifyError<T: Error, R>(
   } catch let e as BlockError {
     throw modificator(e)
   }
-}
-
-extension BlockError {
-  public var userInfo: [String: String] { [:] }
 }

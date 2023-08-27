@@ -5,12 +5,6 @@ import CommonCorePublic
 import LayoutKitInterface
 
 public final class GalleryBlock: BlockWithTraits {
-  public enum Error: NonEmptyString, BlockError, Equatable {
-    case inconsistentChildLayoutTraits
-
-    public var errorMessage: NonEmptyString { rawValue }
-  }
-
   private lazy var contentSize: CGSize = model.intrinsicSize
 
   public let model: GalleryViewModel
@@ -31,7 +25,7 @@ public final class GalleryBlock: BlockWithTraits {
 
     if case .intrinsic = widthTrait, case .vertical = model.direction {
       guard model.items.map({ $0.content }).hasHorizontallyNonResizable else {
-        throw Error.inconsistentChildLayoutTraits
+        throw BlockError("Gallery block error: in intrinsic-width vertical gallery all children have resizable width")
       }
     }
   }

@@ -54,16 +54,14 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal:
         if items.hasHorizontallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "Horizontal DivContainer with wrap_content width contains item with match_parent width"
           )
           return defaultFallbackSize
         }
       case .vertical, .overlap:
         if items.allHorizontallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "All items in DivContainer with wrap_content width has match_parent width"
           )
           return defaultFallbackSize
@@ -82,16 +80,14 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal, .overlap:
         if items.allVerticallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "All items in DivContainer with wrap_content height has match_parent height"
           )
           return defaultFallbackSize
         }
       case .vertical:
         if items.hasVerticallyMatchParent {
-          context.addError(
-            level: .warning,
+          context.addWarning(
             message: "Vertical DivContainer with wrap_content height contains item with match_parent height"
           )
           return defaultFallbackSize
@@ -112,8 +108,9 @@ extension DivContainer: DivBlockModeling {
     let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
     let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)
 
-    let children = try items.makeBlocks(
-      context: context,
+    let childrenContext = modified(context, { $0.errorsStorage = DivErrorsStorage(errors: [])})
+    let children = items.makeBlocks(
+      context: childrenContext,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
       mappedBy: { div, block in
@@ -126,9 +123,14 @@ extension DivContainer: DivBlockModeling {
         )
       }
     )
-
-    guard !children.isEmpty else {
-      throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
+    if children.isEmpty {
+      throw DivBlockModelingError(
+        "DivContainer is empty",
+        path: context.parentPath,
+        causes: childrenContext.errorsStorage.errors
+      )
+    } else {
+      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
     }
 
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
@@ -179,28 +181,24 @@ extension DivContainer: DivBlockModeling {
       context: context
     )
 
+    let childrenContext = modified(context) { $0.errorsStorage = DivErrorsStorage(errors: []) }
     // Before block's making we need to filter items and remove
     // what has "matchParent" for opposite directions
     let filtredItems = items.filter {
       guard layoutMode == .wrap else { return true }
-      if orientation == .vertical {
-        if items.hasHorizontallyMatchParent {
-          context.addError(
-            level: .warning,
-            message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
-          )
-        }
-      } else {
-        if items.hasVerticallyMatchParent {
-          context.addError(
-            level: .warning,
-            message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
-          )
-        }
+      if orientation == .vertical && $0.isHorizontallyMatchParent {
+        childrenContext.addWarning(
+          message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
+        )
+        return false
       }
-
-      return orientation == .horizontal ? !$0.isVerticallyMatchParent : !$0
-        .isHorizontallyMatchParent
+      if orientation == .horizontal && $0.isVerticallyMatchParent {
+        childrenContext.addWarning(
+          message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
+        )
+        return false
+      }
+      return true
     }
 
     let defaultCrossAlignment: ContainerBlock.CrossAlignment
@@ -211,8 +209,8 @@ extension DivContainer: DivBlockModeling {
       defaultCrossAlignment = ContainerBlock.CrossAlignment.leading
     }
 
-    let children = try filtredItems.makeBlocks(
-      context: context,
+    let children = filtredItems.makeBlocks(
+      context: childrenContext,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
       mappedBy: { div, block in
@@ -226,8 +224,14 @@ extension DivContainer: DivBlockModeling {
       }
     )
 
-    guard !children.isEmpty else {
-      throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
+    if children.isEmpty {
+      throw DivBlockModelingError(
+        "DivContainer is empty",
+        path: context.parentPath,
+        causes: childrenContext.errorsStorage.errors
+      )
+    } else {
+      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
     }
 
     let widthTrait = makeContentWidthTrait(with: context)
@@ -249,8 +253,7 @@ extension DivContainer: DivBlockModeling {
       if containerBlock.calculateWidthFirst {
         return AspectBlock(content: containerBlock, aspectRatio: aspectRatio)
       }
-      context.addError(
-        level: .warning,
+      context.addWarning(
         message: "Aspect height is not supported for vertical container with wrap layout mode"
       )
     }
@@ -274,7 +277,7 @@ extension DivContainer: DivBlockModeling {
     guard let separator = separator else {
       return nil
     }
-    let separatorBlock = try separator.style.makeBlock(
+    let separatorBlock = separator.style.makeBlock(
       context: context, corners: .all
     ).addingEdgeInsets(separator.margins.makeEdgeInsets(context: context))
 
@@ -294,11 +297,11 @@ extension DivContainer: DivBlockModeling {
 
   private func makeLineSeparator(
     with context: DivBlockModelingContext
-  ) throws -> ContainerBlock.Separator? {
+  ) -> ContainerBlock.Separator? {
     guard let lineSeparator = lineSeparator else {
       return nil
     }
-    let lineSeparatorBlock = try lineSeparator.style.makeBlock(
+    let lineSeparatorBlock = lineSeparator.style.makeBlock(
       context: context, corners: .all
     ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(context: context))
 

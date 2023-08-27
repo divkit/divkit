@@ -7,7 +7,7 @@ extension Array where Element == Div {
     overridenWidth: DivOverridenSize? = nil,
     overridenHeight: DivOverridenSize? = nil,
     mappedBy modificator: (Div, Block) throws -> T
-  ) throws -> [T] {
+  ) rethrows -> [T] {
     try iterativeFlatMap { div, index in
       let itemContext = modified(context) {
         $0.parentPath += index
@@ -16,16 +16,18 @@ extension Array where Element == Div {
       }
       let block: Block
       do {
-        block = try div.value.makeBlock(context: itemContext)
+        block = try modifyError({ DivBlockModelingError($0.message.string, path: itemContext.parentPath) }) {
+          try div.value.makeBlock(context: itemContext)
+        }
       } catch {
-        context.addError(level: .error, message: "Failed to create block: \(error)")
+        context.addError(error: error)
         return nil
       }
       return try modificator(div, block)
     }
   }
 
-  func makeBlocks(context: DivBlockModelingContext) throws -> [Block] {
-    try makeBlocks(context: context, mappedBy: { $1 })
+  func makeBlocks(context: DivBlockModelingContext) -> [Block] {
+    makeBlocks(context: context, mappedBy: { $1 })
   }
 }

@@ -18,7 +18,7 @@ extension DivIndicator: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     guard let rectangle = shape.rectangle else {
-      context.addError(level: .error, message: "circle shape unsupported.")
+      context.addError(message: "circle shape unsupported.")
       return EmptyBlock()
     }
 

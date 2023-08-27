@@ -14,22 +14,40 @@ extension DivGrid: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let gridItems = try items.enumerated().map { tuple in
-      try tuple.element.value.makeGridItem(
-        context: modified(context) {
-          $0.parentPath = $0.parentPath + DivGrid.type + tuple.offset
-        }
+    let gridPath = context.parentPath + DivGrid.type
+    let gridContext = modified(context) {
+      $0.parentPath = gridPath
+    }
+    let gridItemsContext = modified(gridContext) {
+      $0.errorsStorage = DivErrorsStorage(errors: [])
+    }
+    let gridItems = items.enumerated().compactMap { tuple in
+      let itemContext = modified(gridItemsContext) {
+        $0.parentPath = $0.parentPath + tuple.offset
+      }
+      do {
+        return try tuple.element.value.makeGridItem(
+          context: itemContext
+        )
+      } catch {
+        itemContext.addError(error: error)
+        return nil
+      }
+    }
+    if items.count != gridItems.count {
+      throw DivBlockModelingError("Unable to form grid", path: gridPath, causes: gridItemsContext.errorsStorage.errors)
+    }
+
+    let expressionResolver = gridContext.expressionResolver
+    return try modifyError({ DivBlockModelingError($0.message.string, path: gridPath) }) {
+      try GridBlock(
+        widthTrait: makeContentWidthTrait(with: gridContext),
+        heightTrait: makeContentHeightTrait(with: gridContext),
+        contentAlignment: contentAlignment(with: expressionResolver),
+        items: gridItems,
+        columnCount: resolveColumnCount(expressionResolver) ?? 0
       )
     }
-    let expressionResolver = context.expressionResolver
-    return try GridBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context),
-      contentAlignment: contentAlignment(with: expressionResolver),
-      items: gridItems,
-      columnCount: resolveColumnCount(expressionResolver) ?? 0,
-      path: context.parentPath + DivGrid.type
-    )
   }
 
   private func contentAlignment(with expressionResolver: ExpressionResolver) -> BlockAlignment2D {
@@ -46,7 +64,7 @@ extension DivBase {
   ) throws -> GridBlock.Item {
     let block = try makeBlock(context: context)
     let expressionResolver = context.expressionResolver
-    return try .init(
+    return .init(
       span: GridBlock.Span(
         rows: resolveRowSpan(expressionResolver) ?? 1,
         columns: resolveColumnSpan(expressionResolver) ?? 1

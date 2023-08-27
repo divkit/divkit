@@ -4,12 +4,6 @@ import Foundation
 import CommonCorePublic
 
 public final class TabsBlock: BlockWithTraits {
-  public enum Error: NonEmptyString, BlockError {
-    case unsupportedWidthTrait
-
-    public var errorMessage: NonEmptyString { rawValue }
-  }
-
   public let model: TabViewModel
   public let state: TabViewState
   public let widthTrait: LayoutTrait
@@ -83,7 +77,7 @@ public final class TabsBlock: BlockWithTraits {
     let blocks = model.contentsModel.pages.map { $0.block }
 
     if case .intrinsic = widthTrait, !blocks.hasHorizontallyNonResizable {
-      throw Error.unsupportedWidthTrait
+      throw BlockError("Tabs block error: in intrinsic-width tab all children have resizable width")
     }
   }
 }

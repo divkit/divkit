@@ -12,8 +12,7 @@ final class GridBlockTests: XCTestCase {
       heightTrait: .intrinsic,
       contentAlignment: .default,
       items: [.init(contents: GalleryBlockTestModels.base)],
-      columnCount: 1,
-      path: "/"
+      columnCount: 1
     )
 
     let updatedBlock = try block.updated(withStates: states)
@@ -27,8 +26,7 @@ final class GridBlockTests: XCTestCase {
       heightTrait: .resizable,
       contentAlignment: .default,
       items: [.init(contents: SeparatorBlock(direction: .vertical))],
-      columnCount: 1,
-      path: "/"
+      columnCount: 1
     )
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: 100), 0)
   }

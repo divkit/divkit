@@ -8,12 +8,7 @@ import LayoutKit
 extension DivTabs: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let tabsPath = context.parentPath + (id ?? DivTabs.type)
-    return try modifyError({
-      DivBlockModelingError(
-        "DivTabs error: \($0.errorMessage)",
-        path: tabsPath
-      )
-    }) {
+    return try modifyError({ DivBlockModelingError($0.message.string, path: tabsPath) }) {
       try applyBaseProperties(
         to: { try makeBaseBlock(context: context, tabsPath: tabsPath) },
         context: context,
@@ -32,8 +27,21 @@ extension DivTabs: DivBlockModeling {
     let tabsContext = modified(context) {
       $0.parentPath = tabsPath
     }
+    let tabsItemContext = modified(tabsContext) {
+      $0.errorsStorage = DivErrorsStorage(errors: [])
+    }
     let tabs = items.iterativeFlatMap { item, index in
-      try? item.makeTab(context: tabsContext, index: index)
+      do {
+        return try item.makeTab(context: tabsItemContext, index: index)
+      } catch {
+        tabsItemContext.addError(error: error)
+        return nil
+      }
+    }
+    if tabs.isEmpty {
+      throw DivBlockModelingError("Tabs error: missing children", path: tabsPath, causes: tabsItemContext.errorsStorage.errors)
+    } else {
+      tabsContext.errorsStorage.add(contentsOf: tabsItemContext.errorsStorage)
     }
 
     let expressionResolver = context.expressionResolver

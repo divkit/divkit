@@ -29,25 +29,28 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         pagerId: $0
       )
     }
-    let gallery = try makeGalleryModel(
-      context: itemContext,
-      direction: resolveOrientation(expressionResolver).direction,
-      spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
-      crossSpacing: 0,
-      defaultAlignment: .center,
-      scrollMode: .autoPaging
-    )
     let width = context.override(width: width)
     let height = context.override(height: height)
-    return try PagerBlock(
-      pagerPath: pagerModelPath,
-      layoutMode: layoutMode.cast(with: expressionResolver),
-      gallery: gallery,
-      selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
-      state: getState(context: context, path: pagerPath, numberOfPages: gallery.items.count),
-      widthTrait: width.makeLayoutTrait(with: expressionResolver),
-      heightTrait: height.makeLayoutTrait(with: expressionResolver)
-    )
+
+    return  try modifyError({ DivBlockModelingError($0.message.string, path: pagerPath) }) {
+      let gallery = try makeGalleryModel(
+        context: itemContext,
+        direction: resolveOrientation(expressionResolver).direction,
+        spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
+        crossSpacing: 0,
+        defaultAlignment: .center,
+        scrollMode: .autoPaging
+      )
+      return try PagerBlock(
+        pagerPath: pagerModelPath,
+        layoutMode: layoutMode.cast(with: expressionResolver),
+        gallery: gallery,
+        selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
+        state: getState(context: context, path: pagerPath, numberOfPages: gallery.items.count),
+        widthTrait: width.makeLayoutTrait(with: expressionResolver),
+        heightTrait: height.makeLayoutTrait(with: expressionResolver)
+      )
+    }
   }
 
   private func getState(

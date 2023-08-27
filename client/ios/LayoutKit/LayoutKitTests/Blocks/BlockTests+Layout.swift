@@ -453,7 +453,7 @@ final class BlockTests_Layout: XCTestCase {
   func test_WhenMakingContainerWithNoChildren_Throws() {
     XCTAssertThrowsError(
       try ContainerBlock(layoutDirection: .horizontal, children: []),
-      ContainerBlock.Error.noChildrenProvided
+      BlockError("Container block error: no children provided")
     )
   }
 
@@ -464,7 +464,7 @@ final class BlockTests_Layout: XCTestCase {
         gaps: [12],
         children: [TextBlock(widthTrait: .resizable, text: text)]
       ),
-      ContainerBlock.Error.childAndGapCountMismatch
+      BlockError("Container block error: " + "gaps count is not equal to children count plus 1 (1 != 1 + 1)")
     )
   }
 
@@ -478,9 +478,7 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .intrinsic, heightTrait: .resizable, text: text),
         ]
       ),
-      ContainerBlock.Error.inconsistentChildLayoutTraits(
-        details: "failed to build horizontal wrap container with vertically resizable children"
-      )
+      BlockError("Container block error: horizontal wrap container has children with resizable height")
     )
   }
 
@@ -494,8 +492,8 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .resizable, text: text),
         ]
       ),
-      ContainerBlock.Error.inconsistentChildLayoutTraits(
-        details: "failed to build vertical wrap container with horizontally resizable children"
+      BlockError(
+        "Container block error: vertical wrap container has children with resizable width"
       )
     )
   }
@@ -511,8 +509,8 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .weighted(0.5), text: text),
         ]
       ),
-      ContainerBlock.Error.inconsistentChildLayoutTraits(
-        details: "failed to build intrinsic-width horizontal container with horizontally resizable children"
+      BlockError(
+        "Container block error: horizontal intrinsic-width container has children with resizable width"
       )
     )
   }
@@ -528,8 +526,8 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .resizable, text: text),
         ]
       ),
-      ContainerBlock.Error.inconsistentChildLayoutTraits(
-        details: "failed to build intrinsic-width vertical container wihtout any horizontally nonresizable children"
+      BlockError(
+        "Container block error: in vertical intrinsic-width container all children have resizable width"
       )
     )
   }
@@ -545,8 +543,8 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .resizable, text: text),
         ]
       ),
-      ContainerBlock.Error.inconsistentChildLayoutTraits(
-        details: "failed to build intrinsic-height vertical container with vertically resizable children"
+      BlockError(
+        "Container block error: vertical intrinsic-height container has children with resizable height"
       )
     )
   }

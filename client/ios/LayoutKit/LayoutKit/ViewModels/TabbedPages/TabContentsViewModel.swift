@@ -37,11 +37,11 @@ public struct TabContentsViewModel: Equatable {
 
   private func checkConstraints() throws {
     if pages.isEmpty {
-      throw TabError.missingChildren
+      throw BlockError("Tab error: no children provided")
     }
 
     if let footer = footer, footer.isVerticallyResizable {
-      throw TabError.unsupportedFooter
+      throw BlockError("Tab error: vertically resizable footer is unsupported")
     }
   }
 

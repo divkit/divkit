@@ -36,7 +36,7 @@ public struct DivBlockModelingContext {
   public let playerFactory: PlayerFactory?
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
-  public let errorsStorage: DivErrorsStorage
+  public internal(set) var errorsStorage: DivErrorsStorage
   internal let variableTracker: DivVariableTracker?
   private let persistentValuesStorage: DivPersistentValuesStorage
   public let tooltipViewFactory: DivTooltipViewFactory?
@@ -50,7 +50,7 @@ public struct DivBlockModelingContext {
       variables: variables,
       persistentValuesStorage: persistentValuesStorage,
       errorTracker: { [weak errorsStorage] error in
-        errorsStorage?.add(DivBlockModelingError(error.description, path: parentPath))
+        errorsStorage?.add(DivExpressionError(error, path: parentPath))
       },
       variableTracker: { [weak variableTracker] variables in
         variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
@@ -142,7 +142,7 @@ public struct DivBlockModelingContext {
     return extensions.compactMap {
       let id = $0.id
       if !extensionHandlers.keys.contains(id) && !stateInterceptors.keys.contains(id) {
-        addError(level: .warning, message: "No DivExtensionHandler/DivStateInterceptor for: \(id)")
+        addError(message: "No DivExtensionHandler/DivStateInterceptor for: \(id)")
       }
       return extensionHandlers[id]
     }
@@ -152,15 +152,20 @@ public struct DivBlockModelingContext {
     divState.extensions?.compactMap { stateInterceptors[$0.id] }.first
   }
 
-  public func addError(level: DivErrorLevel, message: String) {
-    let error: DivError
-    switch level {
-    case .warning:
-      error = DivBlockModelingWarning(message, path: parentPath)
-    case .error:
-      error = DivBlockModelingError(message, path: parentPath)
+  public func addError(message: String, causes: [DivError] = []) {
+    errorsStorage.add(DivBlockModelingError(message, path: parentPath, causes: causes))
+  }
+
+  public func addWarning(message: String) {
+    errorsStorage.add(DivBlockModelingWarning(message, path: parentPath))
+  }
+
+  func addError(error: Error) {
+    if let divError = error as? DivError {
+      errorsStorage.add(divError)
+      return
     }
-    errorsStorage.add(error)
+    errorsStorage.add(DivUnknownError(error, path: parentPath))
   }
 
   func override(width: DivSize) -> DivSize {

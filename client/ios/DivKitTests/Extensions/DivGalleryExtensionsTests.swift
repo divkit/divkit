@@ -9,10 +9,7 @@ final class DivGalleryExtensionsTests: XCTestCase {
   func test_WhenCantBuildBlockForItems_ThrowsError() {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "invalid_items"),
-      DivBlockModelingError(
-        "DivGallery has no items",
-        path: .root + "gallery"
-      )
+      noItemsCausedByItemHeightError
     )
   }
 
@@ -79,40 +76,28 @@ final class DivGalleryExtensionsTests: XCTestCase {
   func test_HorizontalGallery_WhenVerticallyInrinsic_Throws() {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "horizontal_gallery_wrap_content_constrained_height_items"),
-      DivBlockModelingError(
-        "DivGallery has no items",
-        path: .root + "gallery"
-      )
+      noItemsCausedByItemHeightError
     )
   }
 
   func test_HorizontalGallery_WhenAllItemsAreVerticallyResizable_FallbackHeight_Throws() {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "horizontal_gallery_match_parent_height_items"),
-      DivBlockModelingError(
-        "DivGallery has no items",
-        path: .root + "gallery"
-      )
+      noItemsCausedByItemHeightError
     )
   }
 
   func test_VerticalGallery_WhenHorizontallyInrinsic_Throws() {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "vertical_gallery_wrap_content_constrained_width_items"),
-      DivBlockModelingError(
-        "DivGallery has no items",
-        path: .root + "gallery"
-      )
+      noItemsCausedByItemWidthError
     )
   }
 
   func test_VerticalGallery_WhenAllItemsAreHorizontallyResizable_FallbackWidth_Throws() {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "vertical_gallery_match_parent_width_items"),
-      DivBlockModelingError(
-        "DivGallery has no items",
-        path: .root + "gallery"
-      )
+      noItemsCausedByItemWidthError
     )
   }
 
@@ -139,3 +124,25 @@ private func makeBlock(
 }
 
 private let expectedInsets = SideInsets(leading: 12, trailing: 24)
+
+private let noItemsCausedByItemHeightError = DivBlockModelingError(
+  "DivGallery has no items",
+  path: .root + "gallery",
+  causes: [
+    DivBlockModelingError(
+      "DivImage without aspect has wrap_content height",
+      path: .root + "gallery" + "0"
+    )
+  ]
+)
+
+private let noItemsCausedByItemWidthError = DivBlockModelingError(
+  "DivGallery has no items",
+  path: .root + "gallery",
+  causes: [
+    DivBlockModelingError(
+      "DivImage has wrap_content width",
+      path: .root + "gallery" + "0"
+    )
+  ]
+)

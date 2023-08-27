@@ -35,7 +35,13 @@ final class DivContainerExtensionsTests: XCTestCase {
       try makeBlock(fromFile: "invalid_items"),
       DivBlockModelingError(
         "DivContainer is empty",
-        path: .root + "container"
+        path: .root + "container",
+        causes: [
+          DivBlockModelingError(
+            "DivImage without aspect has wrap_content height",
+            path: .root + "container" + "0"
+          )
+        ]
       )
     )
   }
@@ -164,4 +170,12 @@ private func makeBlock(fromFile filename: String) throws -> Block {
     subdirectory: "div-container",
     context: .default
   )
+}
+
+extension DivBlockModelingError: Equatable {
+  public static func == (lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
+    return lhs.message == rhs.message
+    && lhs.path == rhs.path
+    && lhs.causes.map { $0.description } == rhs.causes.map { $0.description }
+  }
 }

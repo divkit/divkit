@@ -5,7 +5,7 @@ import LayoutKit
 
 extension DivCustom: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let children = try items?.makeBlocks(
+    let children = items?.makeBlocks(
       context: context
     ) ?? []
     return try applyBaseProperties(

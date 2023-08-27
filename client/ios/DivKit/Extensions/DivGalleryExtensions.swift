@@ -26,26 +26,28 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     let defaultAlignment = resolveCrossContentAlignment(expressionResolver)
       .blockAlignment
     let itemSpacing = resolveItemSpacing(expressionResolver)
-    let model = try makeGalleryModel(
-      context: galleryContext,
-      direction: resolveOrientation(expressionResolver).direction,
-      spacing: CGFloat(itemSpacing),
-      crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
-      defaultAlignment: defaultAlignment,
-      scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
-      columnCount: resolveColumnCount(expressionResolver)
-    )
 
     let width = context.override(width: width)
     let height = context.override(height: height)
 
-    return try GalleryBlock(
-      model: model,
-      state: getState(context: galleryContext, itemsCount: model.items.count),
-      widthTrait: width.makeLayoutTrait(with: expressionResolver),
-      // horizontal paddings are managed by gallery internally
-      heightTrait: height.makeLayoutTrait(with: expressionResolver)
-    )
+    return try modifyError({ DivBlockModelingError($0.message.string, path: galleryPath) }) {
+      let model = try makeGalleryModel(
+        context: galleryContext,
+        direction: resolveOrientation(expressionResolver).direction,
+        spacing: CGFloat(itemSpacing),
+        crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
+        defaultAlignment: defaultAlignment,
+        scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,
+        columnCount: resolveColumnCount(expressionResolver)
+      )
+      return try GalleryBlock(
+        model: model,
+        state: getState(context: galleryContext, itemsCount: model.items.count),
+        widthTrait: width.makeLayoutTrait(with: expressionResolver),
+        // horizontal paddings are managed by gallery internally
+        heightTrait: height.makeLayoutTrait(with: expressionResolver)
+      )
+    }
   }
 
   private func getState(

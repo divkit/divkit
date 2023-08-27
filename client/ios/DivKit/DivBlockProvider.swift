@@ -96,7 +96,7 @@ final class DivBlockProvider {
   private func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData = divData else {
       guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(dataErrors.map(errorMessage(_:)))
+      block = makeErrorsBlock(dataErrors.map { $0.prettyMessage })
       return
     }
 
@@ -171,7 +171,9 @@ final class DivBlockProvider {
       DivTemplates(dictionary: rawDivData.templates)
     }
     return try measurements.divDataParsingTime.updateMeasure {
-      let result = templates.parseValue(type: DivDataTemplate.self, from: rawDivData.card)
+      let result = templates
+        .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
+        .asCardResult(cardId: cardId)
       if let divData = result.value {
         divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
         divKitComponents.setTimers(divData: divData, cardId: cardId)
@@ -188,11 +190,43 @@ final class DivBlockProvider {
     guard debugParams.isDebugInfoEnabled else { return noDataBlock }
 
     var errors: [DivError] = []
-    errors.append(error as DivError)
+    if let divError = error as? DivError {
+      errors.append(divError)
+    } else {
+      errors.append(DivUnknownError(error, path: UIElementPath(cardId.rawValue)))
+    }
     errors.append(contentsOf: context?.errorsStorage.errors ?? dataErrors)
     DivKitLogger.error("\(message). Error: \(error).")
     debugParams.processErrors((cardId: cardId, errors: errors))
-    return makeErrorsBlock(errors.map(errorMessage(_:)))
+    return makeErrorsBlock(errors.map { $0.prettyMessage })
+  }
+
+  private func makeErrorsBlock(_ errors: [String]) -> Block {
+    guard !errors.isEmpty else {
+      return EmptyBlock.zeroSized
+    }
+    let headerTypo = Typo(size: 18, weight: .bold)
+    let errorsHeader = TextBlock(
+      widthTrait: .resizable,
+      text: "Errors: \(errors.count)".with(typo: headerTypo)
+    )
+
+    let errorBlockTypo = Typo(size: 14, weight: .regular)
+    let errorBlocks = errors.map {
+      TextBlock(
+        widthTrait: .resizable,
+        text: $0.with(typo: errorBlockTypo)
+      )
+    }
+    return try! GalleryBlock(
+      gaps: [0] + Array.init(repeating: 10, count: errorBlocks.count + 1),
+      children: [errorsHeader] + errorBlocks,
+      path: UIElementPath(cardId.rawValue),
+      direction: .vertical,
+      crossAlignment: .leading,
+      widthTrait: .resizable,
+      heightTrait: .resizable
+    ).addingDecorations(forceWrapping: true).addingEdgeGaps(15)
   }
 }
 
@@ -206,97 +240,5 @@ extension DivActionURLHandler.UpdateReason {
     case .timer, .variable, .state:
       return nil
     }
-  }
-}
-
-private func makeErrorsBlock(_ errors: [String]) -> Block {
-  guard !errors.isEmpty else {
-    return EmptyBlock.zeroSized
-  }
-
-  let separator = SeparatorBlock(color: .gray, direction: .horizontal)
-  let headerTypo = Typo(size: 18, weight: .bold)
-  let errorsHeader = TextBlock(
-    widthTrait: .resizable,
-    text: "Errors: \(errors.count)".with(typo: headerTypo)
-  ).addingEdgeGaps(10)
-
-  let errorBlockTypo = Typo(size: 14, weight: .regular)
-  let errorBlocks = errors.map {
-    TextBlock(
-      widthTrait: .resizable,
-      text: $0.with(typo: errorBlockTypo)
-    ).addingEdgeGaps(10)
-  }
-  return try! ContainerBlock(
-    layoutDirection: .vertical,
-    children: [separator, errorsHeader] + errorBlocks
-  )
-}
-
-private func errorMessage(_ error: DivError) -> String {
-  let message: String
-  let stack: [String]
-  let additional: [String: String]
-
-  switch error {
-  case let deserializationError as DeserializationError:
-    message = deserializationError.errorMessage
-    stack = deserializationError.stack
-    additional = deserializationError.userInfo
-  default:
-    message = (error as DivError).description
-    stack = []
-    additional = [:]
-  }
-
-  return "\(message)\nPath: \(stack.isEmpty ? "nil" : stack.joined(separator: "/"))"
-    + (additional.isEmpty ? "" : "\nAdditional: \(additional)")
-}
-
-extension DeserializationError {
-  fileprivate var stack: [String] {
-    switch self {
-    case let .nestedObjectError(field, error):
-      return [field] + error.stack
-    default:
-      return []
-    }
-  }
-}
-
-extension Block {
-  fileprivate func addingTime(
-    dataParsing: TimeMeasure.Time?,
-    templateParsing: TimeMeasure.Time?,
-    render: TimeMeasure.Time?
-  ) -> Block {
-    guard let render = render,
-          let dataParsing = dataParsing,
-          let templateParsing = templateParsing else {
-      return self
-    }
-
-    let text =
-      """
-      Rendering time:
-
-      - Div.Render.Total.\(render.description) ms
-      - Div.Parsing.Data.\(dataParsing.description) ms
-      - Div.Parsing.Templates.\(templateParsing.description) ms
-      """
-
-    let perfTypo = Typo(size: 18, weight: .regular)
-    let textBlock = TextBlock(
-      widthTrait: .resizable,
-      text: text.with(typo: perfTypo)
-    ).addingEdgeGaps(20)
-
-    let block = try? ContainerBlock(
-      layoutDirection: .vertical,
-      children: [self, textBlock]
-    )
-
-    return block ?? self
   }
 }
