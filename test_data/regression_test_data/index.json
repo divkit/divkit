@@ -1777,32 +1777,6 @@
       "file": "size_provider_recursive.json"
     },
     {
-      "title": "Large images in gallery",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
-      "tags": [],
-      "expected_results": [
-        "Smooth scroll during image loading"
-      ],
-      "file": "images/large.json"
-    },
-    {
-      "title": "Large images with blur in gallery",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
-      "tags": [],
-      "expected_results": [
-        "Smooth scroll during image loading"
-      ],
-      "file": "images/large_with_blur.json"
-    },
-    {
       "title": "Input mask",
       "platforms": [
         "android",
