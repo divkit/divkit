@@ -135,6 +135,7 @@ internal open class SelectView constructor(context: Context) : SuperLineHeightTe
                         MATCH_PARENT,
                         POPUP_ITEM_HEIGHT.dpToPx(resources.displayMetrics)
                     )
+                    textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
                 }
             }
         }
