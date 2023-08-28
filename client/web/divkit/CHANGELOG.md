@@ -1,3 +1,12 @@
+## 27.4.0 (August 28, 2023)
+
+Additions:
+* Added `tooltips` support
+
+Fixes:
+* Fixed an issue with the big amount of the unused event listeners on the DOM nodes
+
+
 ## 27.3.0 (August 21, 2023)
 
 Fixes:

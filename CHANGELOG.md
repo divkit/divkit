@@ -1,3 +1,27 @@
+## 27.4.0
+
+# JSON Schema:
+* Added an array variable type
+
+# Android Client:
+* Deprecate constructors without LifecycleOwner
+* Added aspect ratio for video
+* Fixed doubletaps
+* Improved visibility action binding performance
+
+# iOS Client:
+* Added center alignment for tooltips.
+* Fixed Swift 5.7 compatibility.
+* Fixed DivInput line height.
+
+# Web Client:
+* Added `tooltips` support
+* Fixed an issue with the big amount of the unused event listeners on the DOM nodes
+
+# Kotlin JSON Builder:
+* Added array variable
+
+
 ## 27.3.0
 
 # JSON Schema:
