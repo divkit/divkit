@@ -30,7 +30,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     let width = context.override(width: width)
     let height = context.override(height: height)
 
-    return try modifyError({ DivBlockModelingError($0.message.string, path: galleryPath) }) {
+    return try modifyError({ DivBlockModelingError($0.message, path: galleryPath) }) {
       let model = try makeGalleryModel(
         context: galleryContext,
         direction: resolveOrientation(expressionResolver).direction,

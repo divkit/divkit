@@ -39,7 +39,7 @@ extension DivGrid: DivBlockModeling {
     }
 
     let expressionResolver = gridContext.expressionResolver
-    return try modifyError({ DivBlockModelingError($0.message.string, path: gridPath) }) {
+    return try modifyError({ DivBlockModelingError($0.message, path: gridPath) }) {
       try GridBlock(
         widthTrait: makeContentWidthTrait(with: gridContext),
         heightTrait: makeContentHeightTrait(with: gridContext),

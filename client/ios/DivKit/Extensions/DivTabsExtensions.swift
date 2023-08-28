@@ -8,7 +8,7 @@ import LayoutKit
 extension DivTabs: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let tabsPath = context.parentPath + (id ?? DivTabs.type)
-    return try modifyError({ DivBlockModelingError($0.message.string, path: tabsPath) }) {
+    return try modifyError({ DivBlockModelingError($0.message, path: tabsPath) }) {
       try applyBaseProperties(
         to: { try makeBaseBlock(context: context, tabsPath: tabsPath) },
         context: context,

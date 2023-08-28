@@ -16,7 +16,7 @@ extension Array where Element == Div {
       }
       let block: Block
       do {
-        block = try modifyError({ DivBlockModelingError($0.message.string, path: itemContext.parentPath) }) {
+        block = try modifyError({ DivBlockModelingError($0.message, path: itemContext.parentPath) }) {
           try div.value.makeBlock(context: itemContext)
         }
       } catch {

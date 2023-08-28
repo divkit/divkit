@@ -32,7 +32,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     let width = context.override(width: width)
     let height = context.override(height: height)
 
-    return  try modifyError({ DivBlockModelingError($0.message.string, path: pagerPath) }) {
+    return  try modifyError({ DivBlockModelingError($0.message, path: pagerPath) }) {
       let gallery = try makeGalleryModel(
         context: itemContext,
         direction: resolveOrientation(expressionResolver).direction,

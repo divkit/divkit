@@ -1,10 +1,9 @@
 import Foundation
 
-import CommonCorePublic
-
 public struct BlockError: Error {
-  public let message: NonEmptyString
-  init(_ message: NonEmptyString) {
+  public let message: String
+
+  init(_ message: String) {
     self.message = message
   }
 }
