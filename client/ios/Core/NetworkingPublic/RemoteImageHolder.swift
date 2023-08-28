@@ -30,7 +30,8 @@ public final class RemoteImageHolder: ImageHolder {
     url: URL,
     placeholder: ImagePlaceholder? = nil,
     requester: URLResourceRequesting,
-    imageProcessingQueue: OperationQueueType
+    imageProcessingQueue: OperationQueueType,
+    imageLoadingOptimizationEnabled: Bool = false
   ) {
     weak var weakSelf: RemoteImageHolder?
     let shouldCallCompletionWithNil = placeholder == nil
@@ -55,7 +56,12 @@ public final class RemoteImageHolder: ImageHolder {
           case .gif:
             image = Image.animatedImage(with: value.data as CFData)
           case .jpeg, .png, .tiff, .unknown:
-            image = Image(data: value.data, scale: PlatformDescription.screenScale())
+            if imageLoadingOptimizationEnabled,
+                let decodedImage = makeDecodedImage(data: value.data) {
+              image = decodedImage
+            } else {
+              image = Image(data: value.data, scale: PlatformDescription.screenScale())
+            }
           }
           #else
           image = Image(data: value.data, scale: PlatformDescription.screenScale())
@@ -121,6 +127,30 @@ public final class RemoteImageHolder: ImageHolder {
   }
 }
 
+#if os(iOS)
+import ImageIO
+
+private func makeDecodedImage(data: Data) -> Image? {
+  let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+  guard let imageSource = CGImageSourceCreateWithData(data as CFData, imageSourceOptions) else {
+    return nil
+  }
+
+  let imageOptions = [kCGImageSourceShouldCacheImmediately: true] as CFDictionary
+  let index: Int
+  if #available(iOS 12.0, *) {
+    index = CGImageSourceGetPrimaryImageIndex(imageSource)
+  } else {
+    index = 0
+  }
+  guard let image = CGImageSourceCreateImageAtIndex(imageSource, index, imageOptions) else {
+    return nil
+  }
+
+  return Image(cgImage: image)
+}
+#endif
+
 extension RemoteImageHolder: CustomDebugStringConvertible {
   public var debugDescription: String {
     "URL = \(dbgStr(url)), placeholder = \(dbgStr(placeholder?.debugDescription))"
@@ -132,4 +162,3 @@ extension RemoteImageHolder {
     (self.placeholder === placeholder && url == remoteImageURL) ? self : nil
   }
 }
-

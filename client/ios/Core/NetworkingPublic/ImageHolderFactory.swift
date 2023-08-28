@@ -22,7 +22,8 @@ public struct ImageHolderFactory {
   public init(
     requester: URLResourceRequesting,
     localImageProvider: LocalImageProviding? = nil,
-    imageProcessingQueue: OperationQueueType
+    imageProcessingQueue: OperationQueueType,
+    imageLoadingOptimizationEnabled: Bool = false
   ) {
     _make = { url, placeholder in
       guard let url = url else {
@@ -35,7 +36,8 @@ public struct ImageHolderFactory {
         url: url,
         placeholder: placeholder,
         requester: requester,
-        imageProcessingQueue: imageProcessingQueue
+        imageProcessingQueue: imageProcessingQueue,
+        imageLoadingOptimizationEnabled: imageLoadingOptimizationEnabled
       )
     }
   }

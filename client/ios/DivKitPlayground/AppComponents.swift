@@ -30,7 +30,7 @@ enum AppComponents {
         sizeProviderExtensionHandler,
         ShimmerImagePreviewExtension(),
       ],
-      flagsInfo: DivFlagsInfo(),
+      flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,
       layoutDirection: layoutDirection,
       patchProvider: DemoPatchProvider(),

@@ -6,9 +6,13 @@
 /// included in the framework.
 /// You can access the default `DivFlagsInfo` instance using the static property `default`.
 public struct DivFlagsInfo {
+  /// Enable experimental image loading optimization
+  public let imageLoadingOptimizationEnabled: Bool
   /// Creates an instance of `DivFlagsInfo`.
-  public init() {}
+  public init(imageLoadingOptimizationEnabled: Bool) {
+    self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
+  }
 
   /// The default instance of `DivFlagsInfo`.
-  public static let `default` = DivFlagsInfo()
+  public static let `default` = DivFlagsInfo(imageLoadingOptimizationEnabled: false)
 }
