@@ -10,7 +10,6 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.action.toInfo
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -192,9 +191,8 @@ internal class DivStateBinder @Inject constructor(
                 divView.bulkActions {
                     actions.forEach {
                         divActionBinder.handleAction(divView, it)
-                        val actionInfo = it.toInfo(divView.expressionResolver)
-                        div2Logger.logSwipedAway(divView, layout, actionInfo)
-                        divActionBeaconSender.sendSwipeOutActionBeacon(actionInfo)
+                        div2Logger.logSwipedAway(divView, layout, it)
+                        divActionBeaconSender.sendSwipeOutActionBeacon(it, resolver)
                     }
                 }
             }

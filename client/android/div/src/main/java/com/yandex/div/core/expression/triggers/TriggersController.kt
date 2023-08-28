@@ -4,7 +4,6 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.action.toInfo
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
@@ -144,8 +143,7 @@ private class TriggerExecutor(
         }
 
         actions.forEach {
-            val info = it.toInfo(viewFacade.expressionResolver)
-            logger.logTrigger(viewFacade as Div2View, info)
+            logger.logTrigger(viewFacade as Div2View, it)
             divActionHandler.handleAction(it, viewFacade)
         }
     }

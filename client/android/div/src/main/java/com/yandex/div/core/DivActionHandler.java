@@ -4,7 +4,6 @@ import android.net.Uri;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.core.action.DivActionInfo;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
@@ -15,10 +14,9 @@ import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div2.DivAction;
+import com.yandex.div2.DivVisibilityAction;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivSightAction;
-import com.yandex.div2.DivVisibilityAction;
-
 import org.json.JSONObject;
 
 /**
@@ -64,27 +62,31 @@ public class DivActionHandler {
      * Handles the given div action.
      * Call super implementation to automatically handle internal div schemes when overriding.
      *
-     * @param info action info to handle
+     * @param action full div action to handle
      * @param view calling DivView
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivActionInfo info, @NonNull DivViewFacade view) {
-        return handleActionUrl(info.url, view);
+    public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view) {
+        Uri url = action.url != null ? action.url.evaluate(view.getExpressionResolver()) : null;
+        if (DivDownloadActionHandler.canHandle(url, view)) {
+            return DivDownloadActionHandler.handleAction(action, (Div2View) view);
+        }
+        return handleActionUrl(url, view);
     }
 
     /**
      * Handles the given div action.
      * Call super implementation to automatically handle internal div schemes when overriding.
      *
-     * @param info div action info to handle
+     * @param action full div action to handle
      * @param view calling DivView
      * @param actionUid action UUID string
      * @return TRUE if uri was handled
      */
     @CallSuper
-    public boolean handleAction(@NonNull DivActionInfo info, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return handleAction(info, view);
+    public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
+        return handleAction(action, view);
     }
 
     /**
@@ -178,33 +180,6 @@ public class DivActionHandler {
      * @param payload json to handle
      */
     public void handlePayload(@NonNull JSONObject payload) { /* not implemented */ }
-
-    /**
-     * Handles the given div action.
-     * Call super implementation to automatically handle internal div schemes when overriding.
-     *
-     * @param action full div action to handle
-     * @param view calling DivView
-     * @return TRUE if uri was handled
-     */
-    public final boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view) {
-        return DivActionHandlerInternal
-                .handleAction(action, view, info -> handleAction(info, view));
-    }
-
-    /**
-     * Handles the given div action.
-     * Call super implementation to automatically handle internal div schemes when overriding.
-     *
-     * @param action full div action to handle
-     * @param view calling DivView
-     * @param actionUid action UUID string
-     * @return TRUE if uri was handled
-     */
-    public final boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
-        return DivActionHandlerInternal
-                .handleAction(action, view, info -> handleAction(info, view, actionUid));
-    }
 
     /**
      * Handles the URI with {@code div-action} scheme.

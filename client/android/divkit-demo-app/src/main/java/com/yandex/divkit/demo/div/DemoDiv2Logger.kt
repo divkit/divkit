@@ -2,9 +2,9 @@ package com.yandex.divkit.demo.div
 
 import android.view.View
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivPager
@@ -37,25 +37,25 @@ class DemoDiv2Logger(
         fun clearLogActions() = capturedLogActions.clear()
     }
 
-    override fun logClick(divView: Div2View, view: View, action: DivActionInfo) {
+    override fun logClick(divView: Div2View, view: View, action: DivAction) {
         log(TAG) {
             "logClick(cardId = ${divView.logId}, id = ${action.logId})"
         }
     }
 
-    override fun logLongClick(divView: Div2View, view: View, action: DivActionInfo) {
+    override fun logLongClick(divView: Div2View, view: View, action: DivAction) {
         log(TAG) {
             "logLongClick(cardId = ${divView.logId}, id = ${action.logId})"
         }
     }
 
-    override fun logDoubleClick(divView: Div2View, view: View, action: DivActionInfo) {
+    override fun logDoubleClick(divView: Div2View, view: View, action: DivAction) {
         log(TAG) {
             "logDoubleClick(cardId = ${divView.logId}, id = ${action.logId})"
         }
     }
 
-    override fun logFocusChanged(divView: Div2View, view: View, action: DivActionInfo, haveFocus: Boolean) {
+    override fun logFocusChanged(divView: Div2View, view: View, action: DivAction, haveFocus: Boolean) {
         log(TAG) {
             "logFocusChanged(cardId = ${divView.logId}, id = ${action.logId}, haveFocus = $haveFocus)"
         }
@@ -119,7 +119,7 @@ class DemoDiv2Logger(
         }
     }
 
-    override fun logTrigger(divView: Div2View, action: DivActionInfo) {
+    override fun logTrigger(divView: Div2View, action: DivAction) {
         log(TAG) {
             "logTrigger(cardId = ${divView.logId}, id = ${action.logId})"
         }

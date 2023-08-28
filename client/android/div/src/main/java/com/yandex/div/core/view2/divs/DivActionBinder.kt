@@ -8,7 +8,6 @@ import androidx.appcompat.widget.PopupMenu
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
-import com.yandex.div.core.action.toInfo
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -28,7 +27,6 @@ import com.yandex.div.internal.util.allIsNullOrEmpty
 import com.yandex.div.internal.widget.menu.OverflowMenuWrapper
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivActionDefault
 import com.yandex.div2.DivAnimation
 import java.util.*
 import javax.inject.Inject
@@ -103,8 +101,8 @@ internal class DivActionBinder @Inject constructor(
             return
         }
 
-        val menuAction = actions.filterIsInstance<DivAction.Default>().firstOrNull { action ->
-            !action.value.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
+        val menuAction = actions.firstOrNull { action ->
+            !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
         }
 
         fun setTapListener(listener: View.OnClickListener) {
@@ -120,9 +118,9 @@ internal class DivActionBinder @Inject constructor(
         if (menuAction != null) {
             prepareMenu(target, divView, menuAction) { overflowMenuWrapper ->
                 setTapListener {
-                    val divActionInfo = menuAction.toInfo(divView.expressionResolver)
-                    logger.logClick(divView, target, divActionInfo)
-                    divActionBeaconSender.sendTapActionBeacon(divActionInfo)
+                    logger.logClick(divView, target, menuAction)
+                    divActionBeaconSender.sendTapActionBeacon(menuAction,
+                        divView.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
                 }
             }
@@ -145,21 +143,18 @@ internal class DivActionBinder @Inject constructor(
             return
         }
 
-        val menuAction = actions.filterIsInstance<DivAction.Default>().firstOrNull { action ->
-            !action.value.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
+        val menuAction = actions.firstOrNull { action ->
+            !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
         }
         if (menuAction != null) {
             prepareMenu(target, divView, menuAction) { overflowMenuWrapper ->
                 target.setOnLongClickListener {
                     val uuid = UUID.randomUUID().toString()
 
-                    divActionBeaconSender.sendTapActionBeacon(
-                        menuAction.toInfo(divView.expressionResolver))
+                    divActionBeaconSender.sendTapActionBeacon(menuAction,
+                        divView.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
-                    actions.forEach { action ->
-                        val info = action.toInfo(divView.expressionResolver)
-                        logger.logLongClick(divView, target, info, uuid)
-                    }
+                    actions.forEach { action -> logger.logLongClick(divView, target, action, uuid) }
 
                     return@setOnLongClickListener true
                 }
@@ -208,15 +203,15 @@ internal class DivActionBinder @Inject constructor(
             return
         }
 
-        val menuAction = actions.filterIsInstance<DivAction.Default>().firstOrNull { action ->
-            !action.value.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
+        val menuAction = actions.firstOrNull { action ->
+            !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
         }
         if (menuAction != null) {
             prepareMenu(target, divView, menuAction) { overflowMenuWrapper ->
                 divGestureListener.onDoubleTapListener = {
-                    val actionInfo = menuAction.toInfo(divView.expressionResolver)
-                    logger.logDoubleClick(divView, target, actionInfo)
-                    divActionBeaconSender.sendTapActionBeacon(actionInfo)
+                    logger.logDoubleClick(divView, target, menuAction)
+                    divActionBeaconSender.sendTapActionBeacon(menuAction,
+                        divView.expressionResolver)
                     overflowMenuWrapper.onMenuClickListener.onClick(target)
                 }
             }
@@ -237,16 +232,16 @@ internal class DivActionBinder @Inject constructor(
             val uuid = UUID.randomUUID().toString()
 
             actions.forEach { action ->
-                val actionInfo = action.toInfo(divView.expressionResolver)
                 when(actionLogType) {
-                    LOG_CLICK -> logger.logClick(divView, target, actionInfo, uuid)
-                    LOG_LONG_CLICK -> logger.logLongClick(divView, target, actionInfo, uuid)
-                    LOG_DOUBLE_CLICK -> logger.logDoubleClick(divView, target, actionInfo, uuid)
-                    LOG_FOCUS -> logger.logFocusChanged(divView, target, actionInfo, true)
-                    LOG_BLUR -> logger.logFocusChanged(divView, target, actionInfo, false)
+                    LOG_CLICK -> logger.logClick(divView, target, action, uuid)
+                    LOG_LONG_CLICK -> logger.logLongClick(divView, target, action, uuid)
+                    LOG_DOUBLE_CLICK -> logger.logDoubleClick(divView, target, action, uuid)
+                    LOG_FOCUS -> logger.logFocusChanged(divView, target, action, true)
+                    LOG_BLUR -> logger.logFocusChanged(divView, target, action, false)
                     else -> Assert.fail("Please, add new logType")
                 }
-                divActionBeaconSender.sendTapActionBeacon(actionInfo)
+                divActionBeaconSender.sendTapActionBeacon(action,
+                    divView.expressionResolver)
                 handleAction(divView, action, uuid)
             }
         }
@@ -266,13 +261,12 @@ internal class DivActionBinder @Inject constructor(
     }
 
     internal fun handleTapClick(divView: Div2View, target: View, actions: List<DivAction>) {
-        val menuAction = actions.filterIsInstance<DivAction.Default>()
-            .firstOrNull { action -> !action.value.menuItems.isNullOrEmpty() }
+        val menuAction = actions.firstOrNull { action -> !action.menuItems.isNullOrEmpty() }
         if (menuAction != null) {
             prepareMenu(target, divView, menuAction) { overflowMenuWrapper ->
-                val divActionInfo = menuAction.toInfo(divView.expressionResolver)
-                logger.logClick(divView, target, divActionInfo)
-                divActionBeaconSender.sendTapActionBeacon(divActionInfo)
+                logger.logClick(divView, target, menuAction)
+                divActionBeaconSender.sendTapActionBeacon(menuAction,
+                    divView.expressionResolver)
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         } else {
@@ -283,12 +277,12 @@ internal class DivActionBinder @Inject constructor(
     private inline fun prepareMenu(
         target: View,
         divView: Div2View,
-        action: DivAction.Default,
+        action: DivAction,
         onPrepared: (OverflowMenuWrapper) -> Unit
     ) {
-        val menuItems = action.value.menuItems
+        val menuItems = action.menuItems
         if (menuItems == null) {
-            KAssert.fail { "Unable to bind empty menu action: ${action.value.logId}" }
+            KAssert.fail { "Unable to bind empty menu action: ${action.logId}" }
             return
         }
 
@@ -308,7 +302,7 @@ internal class DivActionBinder @Inject constructor(
 
     private inner class MenuWrapperListener(
         private val divView: Div2View,
-        private val items: List<DivActionDefault.MenuItem>
+        private val items: List<DivAction.MenuItem>
     ) : OverflowMenuWrapper.Listener.Simple() {
 
         override fun onMenuCreated(popupMenu: PopupMenu) {
@@ -326,18 +320,17 @@ internal class DivActionBinder @Inject constructor(
                             KAssert.fail { "Menu item does not have any action" }
                             return@bulkActions
                         }
-                        actions
-                            .forEach { action ->
-                                val actionInfo = action.toInfo(divView.expressionResolver)
-                                logger.logPopupMenuItemClick(
-                                    divView,
-                                    itemPosition,
-                                    itemData.text.evaluate(expressionResolver),
-                                    actionInfo
-                                )
-                                divActionBeaconSender.sendTapActionBeacon(actionInfo)
-                                handleAction(divView, action)
-                            }
+                        actions.forEach { action ->
+                            logger.logPopupMenuItemClick(
+                                divView,
+                                itemPosition,
+                                itemData.text.evaluate(expressionResolver),
+                                action
+                            )
+                            divActionBeaconSender.sendTapActionBeacon(action,
+                                divView.expressionResolver)
+                            handleAction(divView, action)
+                        }
                         actionsHandled = true
                     }
                     actionsHandled

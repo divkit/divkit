@@ -1,7 +1,70 @@
 {
-  "anyOf": [
+  "definitions": {
+    "menu_item": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_action_menu_item_text"
+        },
+        "action": {
+          "$ref": "div-action.json",
+          "$description": "translations.json#/div_action_menu_item_action"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "$description": "translations.json#/div_action_menu_item_actions"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    }
+  },
+  "allOf": [
     {
-      "$ref": "div-action-default.json"
+      "$ref": "div-action-base.json"
+    },
+    {
+      "type": "object",
+      "$description": "translations.json#/div_action",
+      "properties": {
+        "menu_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/menu_item"
+          },
+          "$description": "translations.json#/div_action_menu_items",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "log_url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_action_log_url"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "_self",
+            "_blank"
+          ],
+          "force_enum_field": true,
+          "$description": "translations.json#/div_action_target",
+          "platforms": [
+            "web"
+          ],
+          "code_generation_disabled_swift": true
+        }
+      },
+      "required": [
+        "log_id"
+      ]
     }
   ]
 }

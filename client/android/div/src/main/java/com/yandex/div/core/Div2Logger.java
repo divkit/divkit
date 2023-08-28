@@ -4,9 +4,9 @@ import android.net.Uri;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.yandex.div.core.action.DivActionInfo;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.view2.Div2View;
+import com.yandex.div2.DivAction;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivGallery;
 import com.yandex.div2.DivPager;
@@ -27,49 +27,49 @@ public interface Div2Logger {
     /**
      * Is called when element is clicked.
      */
-    default void logClick(Div2View divView, View view, DivActionInfo action) {
+    default void logClick(Div2View divView, View view, DivAction action) {
         // do nothing
     }
 
     /**
      * Is called when element is clicked.
      */
-    default void logClick(Div2View divView, View view, DivActionInfo action, String actionUid) {
+    default void logClick(Div2View divView, View view, DivAction action, String actionUid) {
         logClick(divView, view, action);
     }
 
     /**
      * Is called when element is long clicked.
      */
-    default void logLongClick(Div2View divView, View view, DivActionInfo action) {
+    default void logLongClick(Div2View divView, View view, DivAction action) {
         // do nothing
     }
 
     /**
      * Is called when element is long clicked.
      */
-    default void logLongClick(Div2View divView, View view, DivActionInfo action, String actionUid) {
+    default void logLongClick(Div2View divView, View view, DivAction action, String actionUid) {
         logLongClick(divView, view, action);
     }
 
     /**
      * Is called when element is double clicked.
      */
-    default void logDoubleClick(Div2View divView, View view, DivActionInfo action) {
+    default void logDoubleClick(Div2View divView, View view, DivAction action) {
         // do nothing
     }
 
     /**
      * Is called when element is double clicked.
      */
-    default void logDoubleClick(Div2View divView, View view, DivActionInfo action, String actionUid) {
+    default void logDoubleClick(Div2View divView, View view, DivAction action, String actionUid) {
         logDoubleClick(divView, view, action);
     }
 
     /**
      * Is called when element focus changed.
      */
-    default void logFocusChanged(Div2View divView, View view, DivActionInfo action, Boolean haveFocus) {
+    default void logFocusChanged(Div2View divView, View view, DivAction action, Boolean haveFocus) {
         // do nothing
     }
 
@@ -80,7 +80,7 @@ public interface Div2Logger {
         // do nothing
     }
 
-    default void logActiveTabTitleClick(@NonNull Div2View divView, int selectedTab, @NonNull DivActionInfo action) {
+    default void logActiveTabTitleClick(@NonNull Div2View divView, int selectedTab, @NonNull DivAction action) {
         // do nothing
     }
 
@@ -160,21 +160,22 @@ public interface Div2Logger {
      * Is called when menu item is clicked.
      */
     default void logPopupMenuItemClick(Div2View divView, int position,
-                                       @Nullable String text, DivActionInfo action) {
-        logPopupMenuItemClick(divView, position, text, action.url);
+                                       @Nullable String text, DivAction action) {
+        Uri url = action.url != null ? action.url.evaluate(divView.getExpressionResolver()) : null;
+        logPopupMenuItemClick(divView, position, text, url);
     }
 
     /**
      * Is called when div state (alert) is swiped away.
      */
-    default void logSwipedAway(Div2View div2View, View view, DivActionInfo action) {
+    default void logSwipedAway(Div2View div2View, View view, DivAction action) {
         //do nothing
     }
 
     /**
      * Is called when trigger activates.
      */
-    default void logTrigger(Div2View divView, DivActionInfo action) {
+    default void logTrigger(Div2View divView, DivAction action) {
         //do nothing
     }
 }

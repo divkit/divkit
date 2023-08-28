@@ -8,7 +8,6 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.action.DivActionInfo
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
@@ -23,6 +22,7 @@ import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.sizeprovider.DivSizeProviderExtensionHandler
 import com.yandex.div.video.ExoDivPlayerFactory
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
@@ -101,9 +101,9 @@ open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandl
         return uriHandlerDivkit.handleUri(uri)
     }
 
-    override fun handleAction(info: DivActionInfo, view: DivViewFacade): Boolean {
-        val url = info.url
-        return super.handleAction(info, view) || url != null && handleUri(url, view)
+    override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
+        return super.handleAction(action, view) || action.url != null &&
+                handleUri(action.url!!.evaluate(view.expressionResolver), view)
     }
 
     private companion object {

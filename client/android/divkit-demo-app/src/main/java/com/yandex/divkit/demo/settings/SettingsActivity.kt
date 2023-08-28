@@ -11,7 +11,6 @@ import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivActionDefault
 import com.yandex.divkit.demo.BuildConfig
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
@@ -106,11 +105,9 @@ class SettingsActivity : AppCompatActivity() {
         val state = if (value) "active" else "inactive"
         val url = "$ACTION_SET_SWITCHER_STATE$name/$state"
         div2View.handleActionWithResult(
-            DivAction.Default(
-                DivActionDefault(
-                    logId = "init preferences",
-                    url = Expression.constant(Uri.parse(url))
-                )
+            DivAction(
+                logId = "init preferences",
+                url = Expression.constant(Uri.parse(url))
             )
         )
     }

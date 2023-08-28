@@ -23,8 +23,8 @@ internal fun assertActionApplied(divView: Div2View, target: View, actionUri: Uri
         actionAnimation = any(),
     )
 
-    val action = actionCaptor.firstValue.filterIsInstance<DivAction.Default>().find {
-            action -> action.value.url?.evaluate(divView.expressionResolver) == actionUri
+    val action = actionCaptor.firstValue.find {
+            action -> action.url?.evaluate(divView.expressionResolver) == actionUri
     }
     assertNotNull(action)
     assertTrue(target.hasOnClickListeners())

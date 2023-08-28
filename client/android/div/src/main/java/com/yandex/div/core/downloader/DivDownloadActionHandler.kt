@@ -33,10 +33,9 @@ internal object DivDownloadActionHandler {
     }
 
     @JvmStatic
-    fun handleAction(action: DivAction.Default, view: Div2View): Boolean {
-        val defaultAction = action.value
-        val uri = defaultAction.url?.evaluate(view.expressionResolver) ?: return false
-        return handleAction(uri, defaultAction.downloadCallbacks, view)
+    fun handleAction(action: DivAction, view: Div2View): Boolean {
+        val uri = action.url?.evaluate(view.expressionResolver) ?: return false
+        return handleAction(uri, action.downloadCallbacks, view)
     }
 
     @JvmStatic
