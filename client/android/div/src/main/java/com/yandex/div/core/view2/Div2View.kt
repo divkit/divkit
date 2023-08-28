@@ -560,28 +560,10 @@ class Div2View private constructor(
         oldState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
 
-        if (oldData?.allowsTransitionsOnDataChange(expressionResolver) == true ||
-            newData.allowsTransitionsOnDataChange(expressionResolver)) {
-            val transition = prepareTransition(oldData, newData, oldState?.div, newState.div)
-
-            if (transition != null) {
-                val currentScene = Scene.getCurrentScene(this)
-                currentScene?.setExitAction {
-                    releaseAndRemoveChildren(this)
-                }
-                val newStateScene = Scene(this, newStateView)
-                TransitionManager.endTransitions(this)
-                TransitionManager.go(newStateScene, transition)
-            } else {
-                releaseAndRemoveChildren(this)
-                addView(newStateView)
-                viewComponent.errorMonitor.connect(this)
-            }
-        } else {
-            releaseAndRemoveChildren(this)
-            addView(newStateView)
-            viewComponent.errorMonitor.connect(this)
-        }
+        val allowsTransition = oldData?.allowsTransitionsOnDataChange(expressionResolver) == true ||
+            newData.allowsTransitionsOnDataChange(expressionResolver)
+        addNewStateViewWithTransition(oldData, newData, oldState?.div, newState.div,
+            newStateView, allowsTransition)
 
         return true
     }
@@ -599,38 +581,64 @@ class Div2View private constructor(
         this.stateId = stateId
 
         val currentStateId = currentState?.currentDivStateId
-        val currentState = divData?.states?.firstOrNull { it.stateId == currentStateId }
-        val newState = divData?.states?.firstOrNull { it.stateId == stateId }
+        val data = divData ?: return false
 
-        newState?.let {
-            currentState?.let { discardStateVisibility(it) }
-            trackStateVisibility(newState)
-            if (DivComparator.areDivsReplaceable(
-                    currentState?.div,
-                    newState.div,
-                    expressionResolver
-                )
-            ) {
-                bindAndUpdateState(it, stateId, temporary)
-            } else {
-                releaseAndRemoveChildren(this)
-                val rootDivView = buildViewAndUpdateState(it, stateId, temporary)
-                addView(rootDivView)
-            }
+        val currentState = data.states.firstOrNull { it.stateId == currentStateId }
+        val newState = (data.states.firstOrNull { it.stateId == stateId }) ?: return false
+
+        currentState?.let { discardStateVisibility(it) }
+        trackStateVisibility(newState)
+        val newStateView = if (DivComparator.areDivsReplaceable(
+                currentState?.div,
+                newState.div,
+                expressionResolver)
+        ) {
+            bindAndUpdateState(newState, stateId, temporary)
+        } else {
+            buildViewAndUpdateState(newState, stateId, temporary)
         }
 
-        return newState != null
+        addNewStateViewWithTransition(data, data, currentState?.div, newState.div, newStateView,
+            data.allowsTransitionsOnDataChange(expressionResolver))
+
+        return true
+    }
+
+    private fun addNewStateViewWithTransition(
+        oldData: DivData?, newData: DivData, oldDiv: Div?, newDiv: Div?,
+        newStateView: View, allowsTransition: Boolean,
+    ) {
+        val transition = if (allowsTransition) {
+            prepareTransition(oldData, newData, oldDiv, newDiv)
+        } else {
+            null
+        }
+
+        if (transition != null) {
+            val currentScene = Scene.getCurrentScene(this)
+            currentScene?.setExitAction {
+                releaseAndRemoveChildren(this)
+            }
+            val newStateScene = Scene(this, newStateView)
+            TransitionManager.endTransitions(this)
+            TransitionManager.go(newStateScene, transition)
+        } else {
+            releaseAndRemoveChildren(this)
+            addView(newStateView)
+            viewComponent.errorMonitor.connect(this)
+        }
     }
 
     private fun bindAndUpdateState(
         newState: DivData.State,
         stateId: Long,
         temporary: Boolean,
-    ) {
+    ): View {
         val rootView = view.getChildAt(0)
         div2Component.divBinder.bind(rootView, newState.div, this, DivStatePath.fromState(stateId))
         div2Component.stateManager.updateState(dataTag, stateId, temporary)
         div2Component.divBinder.attachIndicators()
+        return rootView
     }
 
     private fun buildViewAndUpdateState(
