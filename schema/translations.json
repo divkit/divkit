@@ -320,8 +320,8 @@
     "ru": "Добавление тени."
   },
   "div_border_shadow": {
-    "en": "Shadow parameters.",
-    "ru": "Параметры тени."
+    "en": "Shadow parameters applied to the stroke of the element.",
+    "ru": "Параметры тени, применяемой к рамке элемента."
   },
   "div_border_stroke": {
     "en": "Stroke style.",
@@ -2166,5 +2166,13 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+  },
+  "div_text_shadow": {
+    "en": "Shadow parameters applied to the text.",
+    "ru": "Параметры тени, применяемой к тексту."
+  },
+  "div_text_range_shadow": {
+    "en": "Shadow parameters applied to a range of characters.",
+    "ru": "Параметры тени, применяемой к диапазону символов."
   }
 }

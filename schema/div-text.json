@@ -80,6 +80,11 @@
         "background": {
           "$ref": "div-text-range-background.json",
           "$description": "translations.json#/div_text_range_background"
+        },
+        "text_shadow": {
+          "$ref": "div-shadow.json",
+          "$description": "translations.json#/div_text_range_shadow",
+          "platforms": []
         }
       },
       "required": [
@@ -312,6 +317,11 @@
           "deprecated": true,
           "code_generation_disabled_kotlin": true,
           "code_generation_disabled_swift": true
+        },
+        "text_shadow": {
+          "$ref": "div-shadow.json",
+          "$description": "translations.json#/div_text_shadow",
+          "platforms": []
         }
       }
     }
