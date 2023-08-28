@@ -1,5 +1,6 @@
 package com.yandex.div.sizeprovider
 
+import android.content.res.Resources
 import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.view2.Div2View
@@ -37,6 +38,7 @@ class DivSizeProviderExtensionHandlerTest {
     private val listener = argumentCaptor<View.OnLayoutChangeListener>()
     private val view = mock<View> {
         on { addOnLayoutChangeListener(listener.capture()) } doAnswer {}
+        on { resources } doReturn Resources.getSystem()
     }
     private val data = DivData("", emptyList())
     private val onPreDrawListener = argumentCaptor<ViewTreeObserver.OnPreDrawListener>()

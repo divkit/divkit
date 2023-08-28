@@ -16,7 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.ListPopupWindow
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.internal.util.dpToPx
+import com.yandex.div.core.view2.divs.dpToPx
 
 private const val POPUP_ITEM_HEIGHT = 48
 
@@ -131,7 +131,10 @@ internal open class SelectView constructor(context: Context) : SuperLineHeightTe
                 return TextView(context, null, android.R.attr.spinnerDropDownItemStyle).apply {
                     ellipsize = TextUtils.TruncateAt.END
                     isSingleLine = true
-                    layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, dpToPx(POPUP_ITEM_HEIGHT))
+                    layoutParams = ViewGroup.LayoutParams(
+                        MATCH_PARENT,
+                        POPUP_ITEM_HEIGHT.dpToPx(resources.displayMetrics)
+                    )
                 }
             }
         }

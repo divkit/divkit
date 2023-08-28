@@ -7,9 +7,9 @@ import android.text.TextWatcher
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable.Params
-import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.slider.SliderView
 
 class SliderActivity : AppCompatActivity() {
@@ -17,32 +17,34 @@ class SliderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.slider_activity_layout)
 
+        val metrics = resources.displayMetrics
+
         val slider = findViewById<SliderView>(R.id.slider)
         slider.inactiveTrackDrawable = RoundedRectDrawable(
             Params(
                 0f,
-                dpToPx(5f),
+                5f.dpToPxF(metrics),
                 Color.GRAY,
-                dpToPx(4f)
+                4f.dpToPxF(metrics)
             )
         )
         slider.activeTrackDrawable = RoundedRectDrawable(
             Params(
                 0f,
-                dpToPx(5f),
+                5f.dpToPxF(metrics),
                 Color.RED,
-                dpToPx(4f)
+                4f.dpToPxF(metrics)
             )
         )
         slider.maxValue = 10f
         val thumbDrawable = RoundedRectDrawable(
             Params(
-                dpToPx(28f),
-                dpToPx(28f),
+                28f.dpToPxF(metrics),
+                28f,
                 Color.RED,
-                dpToPx(14f),
+                14f.dpToPxF(metrics),
                 Color.WHITE,
-                dpToPx(2f),
+                2f.dpToPxF(metrics),
             )
         )
         slider.setThumbValue(7f, false)
@@ -63,22 +65,22 @@ class SliderActivity : AppCompatActivity() {
                 if (isChecked) {
                     slider.activeTickMarkDrawable = RoundedRectDrawable(
                         Params(
-                            dpToPx(7f),
-                            dpToPx(7f),
+                            7f.dpToPxF(metrics),
+                            7f.dpToPxF(metrics),
                             Color.RED,
-                            dpToPx(3.5f),
+                            3.5f.dpToPxF(metrics),
                             Color.WHITE,
-                            dpToPx(2f),
+                            2f.dpToPxF(metrics),
                         )
                     )
                     slider.inactiveTickMarkDrawable = RoundedRectDrawable(
                         Params(
-                            dpToPx(7f),
-                            dpToPx(7f),
+                            7f.dpToPxF(metrics),
+                            7f.dpToPxF(metrics),
                             Color.GRAY,
-                            dpToPx(3.5f),
+                            3.5f.dpToPxF(metrics),
                             Color.WHITE,
-                            dpToPx(2f),
+                            2f.dpToPxF(metrics),
                         )
                     )
                 } else {

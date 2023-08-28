@@ -15,8 +15,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.FrameContainerLayout
 
 internal class ErrorView(
@@ -120,9 +120,11 @@ internal class ErrorView(
             setOnClickListener { errorModel.showDetails() }
         }
 
-        val side = 24.dpToPx()
+        val metrics = root.context.resources.displayMetrics
+
+        val side = 24.dpToPx(metrics)
         val layoutParams = MarginLayoutParams(side, side)
-        val sideMargin = 8.dpToPx()
+        val sideMargin = 8.dpToPx(metrics)
         layoutParams.topMargin = sideMargin
         layoutParams.leftMargin = sideMargin
         layoutParams.rightMargin = sideMargin
@@ -154,7 +156,7 @@ private class DetailsViewGroup(
     }
 
     init {
-        val padding = 8.dpToPx()
+        val padding = 8.dpToPx(resources.displayMetrics)
         setPadding(padding, padding, padding, padding)
         orientation = HORIZONTAL
         setBackgroundColor(Color.argb(186, 0, 0, 0))
@@ -186,7 +188,7 @@ private class DetailsViewGroup(
         }
         addView(
             controls, LayoutParams(
-                32.dpToPx(),
+                32.dpToPx(resources.displayMetrics),
                 LayoutParams.WRAP_CONTENT,
             )
         )

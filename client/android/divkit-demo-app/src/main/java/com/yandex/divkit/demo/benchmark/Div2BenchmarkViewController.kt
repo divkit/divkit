@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.internal.util.dp
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.divkit.demo.utils.padding
 import com.yandex.divkit.demo.utils.textColor
 
@@ -45,7 +45,7 @@ internal class Div2BenchmarkViewController(
     private fun messageView(message: CharSequence): TextView {
         return AppCompatTextView(context).apply {
             gravity = Gravity.CENTER
-            padding = dp(32)
+            padding = 32.dpToPx(resources.displayMetrics)
             textColor = Color.DKGRAY
             textSize = 24.0f
             text = message

@@ -5,13 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.internal.util.dpToPx
 
-private const val ITEM_SPACING_DEFAULT_VALUE = 8
-
-internal class PagerSnapStartHelper : PagerSnapHelper() {
-    internal var itemSpacing = dpToPx(ITEM_SPACING_DEFAULT_VALUE)
-
+internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     private var _verticalHelper: OrientationHelper? = null
     private var _horizontalHelper: OrientationHelper? = null
 

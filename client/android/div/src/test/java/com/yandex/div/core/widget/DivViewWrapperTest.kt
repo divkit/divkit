@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner
 class DivViewWrapperTest {
     private val context: Context = Robolectric.buildActivity(Activity::class.java).get()
     private val divBorder = DivBorder()
-    private val divBorderDrawer = DivBorderDrawer(mock(), mock(), mock(), divBorder)
+    private val divBorderDrawer = DivBorderDrawer(context.resources.displayMetrics, mock(), mock(), divBorder)
     private val viewWithBorder = object : DivBorderSupports, View(context) {
         override val border: DivBorder
             get() = divBorder

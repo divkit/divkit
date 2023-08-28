@@ -1,8 +1,9 @@
 package com.yandex.div
 
+import android.util.DisplayMetrics
 import android.view.ViewGroup
 import androidx.test.rule.ActivityTestRule
-import com.yandex.div.internal.util.dpToPx
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.superLineHeightTextView
 import com.yandex.divkit.demo.DummyActivity
@@ -13,6 +14,9 @@ class SuperLineHeightTextViewTest {
 
     private val activityTestRule = ActivityTestRule(DummyActivity::class.java)
 
+    private val metrics: DisplayMetrics
+        get() = activityTestRule.activity.resources.displayMetrics
+
     @get:Rule
     val rule = uiTestRule { activityTestRule }
 
@@ -20,7 +24,7 @@ class SuperLineHeightTextViewTest {
     fun applyExtraSpacing_whenTextMatchesParent() {
         superLineHeightTextView {
             testAsset = "div2-test/single_line_text.json"
-            activityTestRule.buildContainer(dpToPx(CONTAINER_HEIGHT_DP))
+            activityTestRule.buildContainer(CONTAINER_HEIGHT_DP.dpToPx(metrics))
             assert {
                 hasExtraSpacing()
             }
@@ -31,7 +35,7 @@ class SuperLineHeightTextViewTest {
     fun applyExtraSpacing_whenParentIsBigEnough() {
         superLineHeightTextView {
             testAsset = "div2-test/single_line_text_wrap_content.json"
-            activityTestRule.buildContainer(dpToPx(CONTAINER_HEIGHT_DP))
+            activityTestRule.buildContainer(CONTAINER_HEIGHT_DP.dpToPx(metrics))
             assert {
                 hasExtraSpacing()
             }
@@ -42,7 +46,7 @@ class SuperLineHeightTextViewTest {
     fun applyExtraSpacing_whenParentHeightIsNotEnough() {
         superLineHeightTextView {
             testAsset = "div2-test/single_line_text_wrap_content.json"
-            activityTestRule.buildContainer(dpToPx(15))
+            activityTestRule.buildContainer(15.dpToPx(metrics))
             assert {
                 hasExtraSpacing()
             }
@@ -64,7 +68,7 @@ class SuperLineHeightTextViewTest {
     fun applyExtraSpacing_afterResetToInitialState() {
         superLineHeightTextView {
             testAsset = "div2-test/single_line_text.json"
-            activityTestRule.buildContainer(dpToPx(CONTAINER_HEIGHT_DP))
+            activityTestRule.buildContainer(CONTAINER_HEIGHT_DP.dpToPx(metrics))
             runOnMainSync { div2View.resetToInitialState() }
             assert {
                 hasExtraSpacing()
@@ -76,8 +80,8 @@ class SuperLineHeightTextViewTest {
     fun keepRequestedSize_whenTextMultiline() {
         superLineHeightTextView {
             testAsset = "div2-test/multi_line_text.json"
-            val containerHeight = dpToPx(CONTAINER_HEIGHT_DP)
-            activityTestRule.buildContainer(dpToPx(CONTAINER_HEIGHT_DP))
+            val containerHeight = CONTAINER_HEIGHT_DP.dpToPx(metrics)
+            activityTestRule.buildContainer(containerHeight)
             assert {
                 noExtraSpacing()
                 hasHeight(containerHeight)

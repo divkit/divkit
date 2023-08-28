@@ -37,9 +37,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.yandex.div.R;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.util.ViewsKt;
+import com.yandex.div.core.view2.divs.BaseDivViewExtensionsKt;
 import com.yandex.div.internal.Log;
 import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
-import com.yandex.div.internal.util.SizeKt;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -890,7 +890,10 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // If we have a MeasureSpec which allows us to decide our height, try and use the default
         // height
-        final int idealHeight = SizeKt.dp(DEFAULT_HEIGHT) + getPaddingTop() + getPaddingBottom();
+        final int idealHeight = BaseDivViewExtensionsKt.dpToPx(
+                DEFAULT_HEIGHT,
+                getResources().getDisplayMetrics()
+        ) + getPaddingTop() + getPaddingBottom();
         switch (MeasureSpec.getMode(heightMeasureSpec)) {
             case MeasureSpec.AT_MOST:
                 heightMeasureSpec = MeasureSpec.makeMeasureSpec(
@@ -913,7 +916,10 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
             // the max tab width
             mTabMaxWidth = mRequestedTabMaxWidth > 0
                     ? mRequestedTabMaxWidth
-                    : specWidth - SizeKt.dp(TAB_MIN_WIDTH_MARGIN);
+                    : specWidth - BaseDivViewExtensionsKt.dpToPx(
+                            TAB_MIN_WIDTH_MARGIN,
+                            getResources().getDisplayMetrics()
+                    );
         }
 
         // Now super measure itself using the (possibly) modified height spec

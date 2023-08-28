@@ -15,7 +15,7 @@ import androidx.annotation.RequiresApi
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.androidInterpolator
-import com.yandex.div.internal.util.dpToPx
+import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivTooltip
@@ -95,8 +95,6 @@ private class TranslateAnimation(
     private val percentage: Float? = null,
 ) : Visibility() {
 
-    private val defaultTranslation: Float = dpToPx(10f)
-
     override fun onAppear(
         sceneRoot: ViewGroup,
         view: View,
@@ -107,9 +105,9 @@ private class TranslateAnimation(
         val directionY = initialDirectionY(position)
 
         view.translationX =
-            directionX * if (percentage != null) view.width * percentage else defaultTranslation
+            directionX * if (percentage != null) view.width * percentage else view.defaultTranslation
         view.translationY =
-            directionY * if (percentage != null) view.height * percentage else defaultTranslation
+            directionY * if (percentage != null) view.height * percentage else view.defaultTranslation
 
         return ObjectAnimator.ofPropertyValuesHolder(
             view,
@@ -141,12 +139,12 @@ private class TranslateAnimation(
             PropertyValuesHolder.ofFloat(
                 View.TRANSLATION_X,
                 0f,
-                directionX * if (percentage != null) view.width * percentage else defaultTranslation
+                directionX * if (percentage != null) view.width * percentage else view.defaultTranslation
             ),
             PropertyValuesHolder.ofFloat(
                 View.TRANSLATION_Y,
                 0f,
-                directionY * if (percentage != null) view.height * percentage else defaultTranslation
+                directionY * if (percentage != null) view.height * percentage else view.defaultTranslation
             )
         )
     }
@@ -171,6 +169,12 @@ private class TranslateAnimation(
             -1f
         DivTooltip.Position.CENTER -> 0.5f
         DivTooltip.Position.LEFT, DivTooltip.Position.RIGHT -> 0f
+    }
+
+    companion object {
+        private const val DEFAULT_TRANSLATION = 10
+        private val View.defaultTranslation
+            get() = DEFAULT_TRANSLATION.dpToPxF(resources.displayMetrics)
     }
 }
 

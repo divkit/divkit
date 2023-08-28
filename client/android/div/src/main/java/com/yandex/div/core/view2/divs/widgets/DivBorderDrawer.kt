@@ -23,7 +23,6 @@ import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -100,8 +99,8 @@ internal class DivBorderDrawer(
             borderParams.setPaintParams(strokeWidth, borderColor)
         }
 
-        cornerRadii = border.getCornerRadii(view.width.dpToPx().toFloat(),
-                view.height.dpToPx().toFloat(),
+        cornerRadii = border.getCornerRadii(view.width.dpToPx(metrics).toFloat(),
+                view.height.dpToPx(metrics).toFloat(),
                 metrics, resolver)
         hasDifferentCornerRadii = cornerRadii.let { radii ->
             val firstCorner = radii.first()
@@ -279,9 +278,9 @@ internal class DivBorderDrawer(
                 ?: DEFAULT_SHADOW_ALPHA
 
             offsetX = (shadow?.offset?.x?.toPx(metrics, expressionResolver)
-                ?: DEFAULT_DX.dpToPx()).toFloat() - radius
+                ?: DEFAULT_DX.dpToPx(metrics)).toFloat() - radius
             offsetY = (shadow?.offset?.y?.toPx(metrics, expressionResolver)
-                ?: DEFAULT_DY.dpToPx()).toFloat() - radius
+                ?: DEFAULT_DY.dpToPx(metrics)).toFloat() - radius
 
             paint.color = color
             paint.alpha = (shadowAlpha * 255).toInt()

@@ -1,10 +1,11 @@
 package com.yandex.div.sizeprovider
 
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.internal.util.pxToDp
+import com.yandex.div.core.view2.divs.pxToDp
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 
@@ -47,8 +48,9 @@ class DivSizeProviderExtensionHandler(
 
         val listener = View.OnLayoutChangeListener { _, left, top, right, bottom,
                                                      oldLeft, oldTop, oldRight, oldBottom ->
-            updateVariable(widthVariable, variablesHolder, left, right, oldLeft, oldRight)
-            updateVariable(heightVariable, variablesHolder, top, bottom, oldTop, oldBottom)
+            val metrics = view.resources.displayMetrics
+            updateVariable(metrics, widthVariable, variablesHolder, left, right, oldLeft, oldRight)
+            updateVariable(metrics, heightVariable, variablesHolder, top, bottom, oldTop, oldBottom)
         }
         view.addOnLayoutChangeListener(listener)
         view.setTag(R.id.div_size_provider_listener, listener)
@@ -66,6 +68,7 @@ class DivSizeProviderExtensionHandler(
     }
 
     private fun updateVariable(
+        metrics: DisplayMetrics,
         variableName: String,
         variablesHolder: DivSizeProviderVariablesHolder,
         start: Int,
@@ -84,7 +87,7 @@ class DivSizeProviderExtensionHandler(
             return
         }
 
-        sizes[variableName] = size.pxToDp()
+        sizes[variableName] = size.pxToDp(metrics)
     }
 
     override fun unbindView(divView: Div2View, view: View, div: DivBase) {

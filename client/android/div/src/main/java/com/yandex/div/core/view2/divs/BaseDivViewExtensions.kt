@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Gravity
@@ -33,9 +34,7 @@ import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.util.fontHeight
-import com.yandex.div.internal.util.spToPx
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.indicator.IndicatorParams
@@ -319,14 +318,14 @@ internal fun View.applyTransform(
     }
 }
 
-private fun getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionResolver): Float {
+private fun View.getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionResolver): Float {
     return when (val pivot = divPivot.value()) {
         is DivPivotFixed -> {
             val offset = pivot.value?.evaluate(resolver)?.toFloat() ?: return len / 2f
             when (pivot.unit.evaluate(resolver)) {
-                DivSizeUnit.DP -> dpToPx(offset)
+                DivSizeUnit.DP -> offset.dpToPxF(resources.displayMetrics)
                 DivSizeUnit.PX -> offset
-                DivSizeUnit.SP -> spToPx(offset)
+                DivSizeUnit.SP -> offset.spToPxF(resources.displayMetrics)
             }
         }
         is DivPivotPercentage -> pivot.value.evaluate(resolver).toFloat() / 100f * len
@@ -421,33 +420,48 @@ private fun View.applyBaselineAlignment(baselineAligned: Boolean) {
     }
 }
 
-fun Long?.dpToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
-}
+fun <T : Number> T?.dpToPxF(metrics: DisplayMetrics): Float =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics)
 
-fun Long?.dpToPxF(metrics: DisplayMetrics): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics)
-}
+fun <T : Number> T?.spToPxF(metrics: DisplayMetrics): Float =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toFloat() ?: 0f, metrics)
 
-fun Double?.dpToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics).roundToInt()
-}
+fun <T : Number> T?.unitToPxF(metrics: DisplayMetrics, unit: DivSizeUnit): Float =
+    TypedValue.applyDimension(unit.toAndroidUnit(), this?.toFloat() ?: 0f, metrics)
 
-fun Long?.spToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
-}
+fun <T : Number> T?.pxToDpF(metrics: DisplayMetrics): Float =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics)
+    } else {
+        (this?.toFloat() ?: 0f) / metrics.density
+    }
 
-fun Long?.spToPxF(metrics: DisplayMetrics): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this?.toFloat() ?: 0f, metrics)
-}
+fun <T : Number> T?.pxToSpF(metrics: DisplayMetrics): Float =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        TypedValue.deriveDimension(TypedValue.COMPLEX_UNIT_SP, this?.toFloat() ?: 0f, metrics)
+    } else {
+        (this?.toFloat() ?: 0f) / metrics.scaledDensity
+    }
 
-fun Double?.spToPx(metrics: DisplayMetrics): Int {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this?.toFloat() ?: 0f, metrics).roundToInt()
-}
+fun <T : Number> T?.dpToPx(metrics: DisplayMetrics): Int = dpToPxF(metrics).roundToInt()
 
-fun Long?.unitToPx(metrics: DisplayMetrics, unit: DivSizeUnit): Int {
-    return TypedValue.applyDimension(unit.toAndroidUnit(), this?.toIntSafely()?.toFloat() ?: 0f, metrics).roundToInt()
-}
+fun <T : Number> T?.spToPx(metrics: DisplayMetrics): Int = spToPxF(metrics).roundToInt()
+
+fun <T : Number> T?.unitToPx(metrics: DisplayMetrics, unit: DivSizeUnit): Int = unitToPxF(metrics, unit).roundToInt()
+
+fun <T : Number> T?.pxToDp(metrics: DisplayMetrics): Int = pxToDpF(metrics).roundToInt()
+
+fun <T : Number> T?.pxToSp(metrics: DisplayMetrics): Int = pxToSpF(metrics).roundToInt()
+
+fun Long?.dpToPx(metrics: DisplayMetrics): Int = this?.toIntSafely().dpToPx(metrics)
+
+fun Long?.spToPx(metrics: DisplayMetrics): Int = this?.toIntSafely().spToPx(metrics)
+
+fun Long?.unitToPx(metrics: DisplayMetrics, unit: DivSizeUnit): Int = this?.toIntSafely().unitToPx(metrics, unit)
+
+fun Long?.pxToDp(metrics: DisplayMetrics): Int = this?.toIntSafely().pxToDp(metrics)
+
+fun Long?.pxToSp(metrics: DisplayMetrics): Int = this?.toIntSafely().pxToSp(metrics)
 
 internal fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
     return when(this) {

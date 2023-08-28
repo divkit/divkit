@@ -35,7 +35,6 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.DivViewWrapper
-import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -182,10 +181,12 @@ internal class DivGalleryBinder @Inject constructor(
                 view.pagerSnapStartHelper?.attachToRecyclerView(null)
             }
             DivGallery.ScrollMode.PAGING -> {
-                val helper = view.pagerSnapStartHelper ?: PagerSnapStartHelper().also { view.pagerSnapStartHelper = it }
+                val itemSpacing = div.itemSpacing.evaluate(resolver).dpToPx(view.resources.displayMetrics)
+
+                val helper = view.pagerSnapStartHelper?.also { it.itemSpacing = itemSpacing } ?:
+                    PagerSnapStartHelper(itemSpacing).also { view.pagerSnapStartHelper = it }
 
                 helper.attachToRecyclerView(view)
-                helper.itemSpacing = dpToPx(div.itemSpacing.evaluate(resolver))
             }
         }
 

@@ -6,11 +6,12 @@ import android.graphics.Bitmap
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.ScriptIntrinsicBlur
+import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.internal.util.dpToPx
+import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBlur
 import com.yandex.div2.DivFilter
@@ -40,20 +41,26 @@ internal fun Bitmap.applyFilters(
         )
         for (filter in filters) {
             when (filter) {
-                is DivFilter.Blur -> bitmap = bitmap.getBlurredBitmap(filter.value, component, resolver)
+                is DivFilter.Blur -> bitmap =
+                    bitmap.getBlurredBitmap(filter.value, component, resolver, it.resources.displayMetrics)
             }
         }
         actionAfterFilters(bitmap)
     }
 }
 
-internal fun Bitmap.getBlurredBitmap(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver): Bitmap {
+internal fun Bitmap.getBlurredBitmap(
+    blur: DivBlur,
+    component: Div2Component,
+    resolver: ExpressionResolver,
+    metrics: DisplayMetrics
+): Bitmap {
     var radius = blur.radius.evaluate(resolver).toIntSafely()
     if (radius == 0) {
         return this
     }
 
-    radius = radius.dpToPx()
+    radius = radius.dpToPx(metrics)
     var sampling = 1f
     if (radius > RADIUS_MAX_VALUE_PX) {
         sampling = radius * 1f / RADIUS_MAX_VALUE_PX
