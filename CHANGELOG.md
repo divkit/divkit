@@ -1,8 +1,5 @@
 ## 27.4.0
 
-# JSON Schema:
-* Added an array variable type
-
 # Android Client:
 * Deprecate constructors without LifecycleOwner
 * Added aspect ratio for video
@@ -17,9 +14,6 @@
 # Web Client:
 * Added `tooltips` support
 * Fixed an issue with the big amount of the unused event listeners on the DOM nodes
-
-# Kotlin JSON Builder:
-* Added array variable
 
 
 ## 27.3.0
