@@ -41,7 +41,7 @@ internal class GetArrayInteger(
 
     override val name: String = "getArrayInteger"
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toLong()
             is Long -> it
@@ -58,7 +58,7 @@ internal class GetArrayOptInteger(
 
     override val name: String = "getArrayOptInteger"
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as Long
         return evaluateSafe(name, args).let {
             when (it) {
@@ -76,7 +76,7 @@ internal class GetArrayNumber(
 
     override val name: String = "getArrayNumber"
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         when (it) {
             is Double -> it
             is Int -> it.toDouble()
@@ -93,7 +93,7 @@ internal class GetArrayOptNumber(
 
     override val name: String = "getArrayOptNumber"
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as Double
         return evaluateSafe(name, args).let {
             when (it) {
@@ -113,7 +113,7 @@ internal class GetArrayString(
 
     override val name: String = "getArrayString"
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         it as? String ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
@@ -124,7 +124,7 @@ internal class GetArrayOptString(
 
     override val name: String = "getArrayOptString"
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as String
         return evaluateSafe(name, args) as? String ?: fallback
     }
@@ -136,7 +136,7 @@ internal class GetArrayColor(
 
     override val name: String = "getArrayColor"
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         (it as? Color) ?: (it as? String)?.runCatching {
             Color.parse(this)
         }?.getOrElse {
@@ -156,7 +156,7 @@ internal class GetArrayOptColorWithStringFallback(
         FunctionArgument(type = EvaluableType.STRING) // fallback
     )
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as String
         val evaluateSafe = evaluateSafe(name, args)
         return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
@@ -171,7 +171,7 @@ internal class GetArrayOptColorWithColorFallback(
 
     override val name: String = "getArrayOptColor"
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as Color
         val evaluateSafe = evaluateSafe(name, args)
         return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
@@ -186,7 +186,7 @@ internal class GetArrayBoolean(
 
     override val name: String = "getArrayBoolean"
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
@@ -197,7 +197,7 @@ internal class GetArrayOptBoolean(
 
     override val name: String = "getArrayOptBoolean"
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as Boolean
         return evaluateSafe(name, args) as? Boolean ?: fallback
     }

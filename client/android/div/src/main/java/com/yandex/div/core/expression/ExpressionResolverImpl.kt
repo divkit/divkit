@@ -25,9 +25,12 @@ internal class ExpressionResolverImpl(
     private val errorCollector: ErrorCollector,
 ) : ExpressionResolver {
 
-    private val evaluator = evaluatorFactory.create { variableName ->
-        variableController.getMutableVariable(variableName)?.getValue()
-    }
+    private val evaluator = evaluatorFactory.create(
+        variableProvider = { variableName ->
+            variableController.getMutableVariable(variableName)?.getValue()
+        },
+        onWarning = errorCollector::logWarning
+    )
 
     private val evaluationsCache = mutableMapOf<String, Any>()
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()

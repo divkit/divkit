@@ -12,5 +12,5 @@ internal class FunctionImpl(
 
     override val resultType = EvaluableType.BOOLEAN
 
-    override fun evaluate(args: List<Any>) = true
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = true
 }

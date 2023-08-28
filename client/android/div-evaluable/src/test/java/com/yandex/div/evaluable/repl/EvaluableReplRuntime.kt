@@ -2,7 +2,6 @@ package com.yandex.div.evaluable.repl
 
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableType
-import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
@@ -10,6 +9,7 @@ import com.yandex.div.evaluable.internal.Parser
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.internal.Tokenizer
 import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.evaluable.withEvaluator
 
 
 internal object EvaluableReplRuntime {
@@ -19,7 +19,6 @@ internal object EvaluableReplRuntime {
         variableProvider,
         storedValueProvider
     )
-    private val evaluator = Evaluator(variableProvider, functionProvider)
 
     private val variableList = mutableMapOf<String, Any?>()
 
@@ -64,7 +63,15 @@ internal object EvaluableReplRuntime {
     fun evaluateExpression(expression: String) {
         val evaluable = parseEvaluable(expression)?: return
         try {
-            evaluator.eval<Any?>(evaluable).also { println(it) }
+            withEvaluator(
+                variableProvider,
+                functionProvider,
+                warningsValidator = { warnings ->
+                    warnings.forEach { println("Warning: $it") }
+                }
+            ) {
+                eval<Any?>(evaluable).also { println(it) }
+            }
         } catch (t: Throwable) {
             println("Error evaluating '$expression'.")
             t.printStackTrace(System.out)

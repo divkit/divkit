@@ -18,7 +18,7 @@ internal object IntegerToNumber : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val integerValue = args.first() as Long
         return integerValue.toDouble()
     }
@@ -34,7 +34,7 @@ internal object StringToNumber : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val stringValue = args.first() as String
         try {
             val numberValue = java.lang.Double.parseDouble(stringValue)

@@ -10,10 +10,10 @@ abstract class Function(
     abstract val resultType: EvaluableType
     abstract val isPure: Boolean
 
-    protected abstract fun evaluate(args: List<Any>): Any
+    protected abstract fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any
 
-    operator fun invoke(args: List<Any>): Any {
-        val result = evaluate(args)
+    operator fun invoke(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val result = evaluate(args, onWarning)
         if (EvaluableType.of(result) != resultType) {
             throw EvaluableException("Function returned ${EvaluableType.of(result)}, but  $resultType was expected")
         }
@@ -63,7 +63,7 @@ abstract class Function(
             override val resultType = EvaluableType.BOOLEAN
             override val isPure = true
 
-            override fun evaluate(args: List<Any>): Any = true
+            override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = true
         }
     }
 

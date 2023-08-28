@@ -6,7 +6,8 @@ import kotlin.math.abs
 
 class Evaluator(
     private val variableProvider: VariableProvider,
-    private val functionProvider: FunctionProvider
+    private val functionProvider: FunctionProvider,
+    private val onWarning: (String, Evaluable) -> Unit
 ) {
 
     @Throws(EvaluableException::class)
@@ -178,7 +179,7 @@ class Evaluator(
 
         functionCall.updateIsCacheable(function.isPure)
         try {
-            return function.invoke(arguments)
+            return function.invoke(arguments) { onWarning(it, functionCall) }
         } catch (e: IntegerOverflow) {
             throw IntegerOverflow(functionToMessageFormat(function.name, arguments))
         }

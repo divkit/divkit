@@ -17,7 +17,7 @@ internal object IntegerToString : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val integerValue = args.first() as Long
         return integerValue.toString()
     }
@@ -33,7 +33,7 @@ internal object NumberToString : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val numberValue = args.first() as Double
         return numberValue.toString()
     }
@@ -49,7 +49,7 @@ internal object BooleanToString : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val booleanValue = args.first() as Boolean
         return if (booleanValue) "true" else "false"
     }
@@ -65,7 +65,7 @@ internal object ColorToString : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return (args.first() as Color).toString()
     }
 }

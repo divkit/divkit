@@ -17,7 +17,7 @@ internal abstract class ColorComponentGetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return componentGetter(args.first() as Color).toColorFloatComponentValue()
     }
 }
@@ -32,14 +32,14 @@ internal abstract class ColorStringComponentGetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val colorString = args.first() as String
         val color = try {
             Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return componentGetter.invoke(listOf(color))
+        return componentGetter.invoke(listOf(color), onWarning)
     }
 }
 
@@ -104,7 +104,7 @@ internal abstract class ColorComponentSetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val color = args[0] as Color
         val value = args[1] as Double
         return try {
@@ -128,14 +128,14 @@ internal abstract class ColorStringComponentSetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val colorString = args[0] as String
         val color = try {
             Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return componentSetter(listOf(color, args[1]))
+        return componentSetter(listOf(color, args[1]), onWarning)
     }
 }
 
@@ -230,7 +230,7 @@ internal object ColorArgb : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return try {
             val alpha = (args[0] as Double).toColorIntComponentValue()
             val red = (args[1] as Double).toColorIntComponentValue()
@@ -257,7 +257,7 @@ internal object ColorRgb : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return try {
             val red = (args[0] as Double).toColorIntComponentValue()
             val green = (args[1] as Double).toColorIntComponentValue()

@@ -17,7 +17,7 @@ internal class GetIntegerValue(override val variableProvider: VariableProvider) 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Long
         val variableValue = variableProvider.get(variableName) as? Long
@@ -40,7 +40,7 @@ internal class GetNumberValue(override val variableProvider: VariableProvider) :
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Number
         val variableValue = if (variableProvider.get(variableName) is Long)
@@ -66,7 +66,7 @@ internal class GetStringValue(override val variableProvider: VariableProvider) :
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as String
         val variableValue = variableProvider.get(variableName) as? String
@@ -89,7 +89,7 @@ internal class GetColorValueString(override val variableProvider: VariableProvid
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = Color.parse(args[1] as String)
         val variableValue = variableProvider.get(variableName) as? Color
@@ -112,7 +112,7 @@ internal class GetColorValue(override val variableProvider: VariableProvider) : 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Color
         val variableValue = variableProvider.get(variableName) as? Color
@@ -135,7 +135,7 @@ internal class GetBooleanValue(override val variableProvider: VariableProvider) 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Boolean
         val variableValue = variableProvider.get(variableName) as? Boolean

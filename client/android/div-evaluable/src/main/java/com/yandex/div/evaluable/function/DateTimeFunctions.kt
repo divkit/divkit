@@ -21,7 +21,7 @@ internal object ParseUnixTime : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val first = args.first()
         val timestampInSeconds = first as Long
         return DateTime(
@@ -39,7 +39,7 @@ internal object ParseUnixTimeAsLocal : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val first = args.first()
         val timestampInSeconds = first as Long
         return DateTime(
@@ -57,7 +57,7 @@ internal object NowLocal : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return DateTime(
             timestampMillis = System.currentTimeMillis(),
             timezone = TimeZone.getDefault(),
@@ -76,7 +76,7 @@ internal object AddMillis : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val millis = args[1] as Long
 
@@ -98,7 +98,7 @@ internal object SetYear : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -124,7 +124,7 @@ internal object SetMonth : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -153,7 +153,7 @@ internal object SetDay : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -184,7 +184,7 @@ internal object SetHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -214,7 +214,7 @@ internal object SetMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -243,7 +243,7 @@ internal object SetSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -272,7 +272,7 @@ internal object SetMillis : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
@@ -301,7 +301,7 @@ internal object GetYear : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -321,7 +321,7 @@ internal object GetMonth : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -341,7 +341,7 @@ internal object GetDay : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -361,7 +361,7 @@ internal object GetDayOfWeek : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -383,7 +383,7 @@ internal object GetHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -403,7 +403,7 @@ internal object GetMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -423,7 +423,7 @@ internal object GetSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -443,7 +443,7 @@ internal object GetMillis : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
 
         val calendar = datetime.toCalendar()
@@ -463,7 +463,7 @@ internal object FormatDateAsLocal : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
@@ -488,7 +488,7 @@ internal object FormatDateAsUTC : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
@@ -514,7 +514,7 @@ internal object FormatDateAsLocalWithLocale : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
         val locale = args[2] as String
@@ -541,7 +541,7 @@ internal object FormatDateAsUTCWithLocale : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
         val locale = args[2] as String

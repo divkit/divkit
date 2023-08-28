@@ -2,7 +2,6 @@ package com.yandex.div.evaluable.multiplatform
 
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
@@ -11,6 +10,7 @@ import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatfo
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSONObject
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.evaluable.withEvaluator
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert
@@ -27,10 +27,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     private val variableProvider = mock<VariableProvider>()
     private val storedValueProvider = mock<StoredValueProvider>()
-    private val evaluator = Evaluator(
-        variableProvider,
-        BuiltinFunctionProvider(variableProvider, storedValueProvider)
-    )
+    private val functionProvider = BuiltinFunctionProvider(variableProvider, storedValueProvider)
     private lateinit var testCase: ExpressionTestCase
 
     @Before
@@ -45,12 +42,12 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     fun runExpressionTestCase() {
         val expectedValue = testCase.expectedValue
         if (expectedValue is Exception) {
-            val actualValue = evalExpression()
+            val actualValue = evalExpression(testCase.expectedWarnings)
             Assert.assertTrue(actualValue is Exception)
             val expectedMessage = expectedValue.message.takeIf { it?.isNotEmpty() == true } ?: return
             Assert.assertEquals(expectedMessage, (actualValue as Throwable).message)
         } else {
-            val evalExpression = evalExpression()
+            val evalExpression = evalExpression(testCase.expectedWarnings)
             if (evalExpression is Throwable) {
                 throw AssertionError(
                     "Expecting '${testCase.expectedValue}' at expression '${testCase.expression}' " +
@@ -60,9 +57,20 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         }
     }
 
-    private fun evalExpression(): Any {
+    private fun evalExpression(expectedWarnings: List<String>): Any {
         return try {
-            evaluator.eval<Any>(Evaluable.prepare(testCase.expression))
+            withEvaluator(
+                variableProvider,
+                functionProvider,
+                warningsValidator = { actualWarnings ->
+                    Assert.assertTrue(
+                        "Expected warnings: $expectedWarnings, got: $actualWarnings",
+                        expectedWarnings.sorted() == actualWarnings.sorted()
+                    )
+                }
+            ) {
+                eval<Any>(Evaluable.prepare(testCase.expression))
+            }
         } catch (e: EvaluableException) {
             e
         }
@@ -74,7 +82,8 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         val expression: String,
         val variables: List<TestVariable>,
         val platform: List<String>,
-        val expectedValue: Any
+        val expectedValue: Any,
+        val expectedWarnings: List<String>
     ) {
         override fun toString(): String {
             return name
@@ -109,6 +118,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private const val CASE_VARIABLES_FIELD = "variables"
         private const val CASE_VARIABLE_NAME_FIELD = "name"
         private const val CASE_EXPECTED_VALUE_FIELD = "expected"
+        private const val CASE_EXPECTED_WARNINGS_FIELD = "expected_warnings"
         private const val CASE_EXPRESSION_VALUE_FIELD = "expression"
         private const val TYPE_FIELD = "type"
         private const val VALUE_FIELD = "value"
@@ -171,7 +181,8 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                     parsePlatform(json),
                     json.getJSONObject(CASE_EXPECTED_VALUE_FIELD).let { expected ->
                         parseValue(expected)
-                    }
+                    },
+                    json.optJSONArray(CASE_EXPECTED_WARNINGS_FIELD)?.map { it as String } ?: emptyList()
                 )
 
                 return TestCaseOrError(testCase)

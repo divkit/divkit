@@ -116,10 +116,13 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             variableController,
             expressionResolver,
             divActionHandler,
-            evaluatorFactory.create{ name ->
-                variableController.getMutableVariable(name)?.getValue()
-                    ?: throw EvaluableException("Unknown variable $name")
-            },
+            evaluatorFactory.create(
+                variableProvider = { name ->
+                    variableController.getMutableVariable(name)?.getValue()
+                        ?: throw EvaluableException("Unknown variable $name")
+                },
+                onWarning = errorCollector::logWarning
+            ),
             errorCollector,
             logger
         )

@@ -21,7 +21,7 @@ internal object StringLength : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return (args.first() as String).length.toLong()
     }
 }
@@ -39,7 +39,7 @@ internal object StringContains : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         val substring = args[1] as String
         return str.contains(substring, ignoreCase = false)
@@ -60,7 +60,7 @@ internal object StringSubstring : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         val startIndex = args[1] as Long
         val endIndex = args[2] as Long
@@ -86,7 +86,7 @@ internal object StringReplaceAll : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         val old = args[1] as String
         val new = args[2] as String
@@ -108,7 +108,7 @@ internal object StringIndex : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         val substring = args[1] as String
         return str.indexOf(substring, ignoreCase = false).toLong()
@@ -128,7 +128,7 @@ internal object StringLastIndex : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         val substring = args[1] as String
         return str.lastIndexOf(substring, ignoreCase = false).toLong()
@@ -145,7 +145,7 @@ internal object StringEncodeUri : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return URLEncoder.encode(str, Charsets.UTF_8.name())
             .replace("+", "%20")
@@ -167,7 +167,7 @@ internal object StringDecodeUri : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return URLDecoder.decode(str, Charsets.UTF_8.name())
     }
@@ -181,7 +181,7 @@ internal object Trim : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return str.trim()
     }
@@ -195,7 +195,7 @@ internal object TrimLeft : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return str.trimStart()
     }
@@ -209,7 +209,7 @@ internal object TrimRight : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return str.trimEnd()
     }
@@ -223,7 +223,7 @@ internal object ToUpperCase : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return str.toUpperCase()
     }
@@ -237,7 +237,7 @@ internal object ToLowerCase : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val str = args[0] as String
         return str.toLowerCase()
     }
@@ -255,14 +255,14 @@ internal object PadStartString : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val string = args[0] as String
         val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return buildRepeatableString(leftForRequired.toInt(), padStr) + string
+        return buildRepeatableString(leftForRequired.toInt(), padStr, onWarning) + string
     }
 }
 
@@ -278,14 +278,14 @@ internal object PadStartInteger : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val string = (args[0] as Long).toString()
         val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return buildRepeatableString(leftForRequired.toInt(), padStr) + string
+        return buildRepeatableString(leftForRequired.toInt(), padStr, onWarning) + string
     }
 }
 
@@ -301,14 +301,14 @@ internal object PadEndString : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val string = args[0] as String
         val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return string + buildRepeatableString(leftForRequired.toInt(), padStr)
+        return string + buildRepeatableString(leftForRequired.toInt(), padStr, onWarning)
     }
 }
 
@@ -324,14 +324,14 @@ internal object PadEndInteger : Function() {
     override val resultType = EvaluableType.STRING
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val string = (args[0] as Long).toString()
         val length = args[1] as Long
         val padStr = args[2] as String
 
         val leftForRequired = length - string.length
 
-        return string + buildRepeatableString(leftForRequired.toInt(), padStr)
+        return string + buildRepeatableString(leftForRequired.toInt(), padStr, onWarning)
     }
 }
 
@@ -346,7 +346,7 @@ internal object TestRegex : Function() {
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val string = args[0] as String
         val regex = args[1] as String
 
@@ -359,8 +359,13 @@ internal object TestRegex : Function() {
     }
 }
 
-private fun buildRepeatableString(length: Int, repeatable: String): String {
-    if (repeatable.isEmpty() || length <= 0) return ""
+private fun buildRepeatableString(length: Int, repeatable: String, onWarning: (String) -> Unit): String {
+    if (repeatable.isEmpty() || length <= 0) {
+        if (repeatable.isEmpty()) {
+            onWarning("String for padding is empty.")
+        }
+        return ""
+    }
 
     val stringBuilder = StringBuilder(length)
 

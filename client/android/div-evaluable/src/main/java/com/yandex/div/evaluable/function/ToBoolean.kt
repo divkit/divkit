@@ -18,7 +18,7 @@ internal object IntegerToBoolean : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return when (args.first() as Long) {
             0L -> false
             1L -> true
@@ -37,7 +37,7 @@ internal object StringToBoolean : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return when (args.first() as String) {
             "true" -> true
             "false" -> false

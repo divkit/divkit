@@ -20,7 +20,7 @@ internal object NumberToInteger : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val numberValue = args.first() as Double
         if (numberValue < NUMBER_MIN_INTEGER || numberValue > NUMBER_MAX_INTEGER) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_INTEGER)
@@ -39,7 +39,7 @@ internal object BooleanToInteger : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val booleanValue = args.first() as Boolean
         return if (booleanValue) 1L else 0L
     }
@@ -55,7 +55,7 @@ internal object StringToInteger : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val stringValue = args.first() as String
         return try {
             stringValue.toLong()

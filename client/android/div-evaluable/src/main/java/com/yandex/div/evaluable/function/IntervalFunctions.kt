@@ -23,7 +23,7 @@ internal object GetIntervalSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -45,7 +45,7 @@ internal object GetIntervalTotalSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -67,7 +67,7 @@ internal object GetIntervalMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -89,7 +89,7 @@ internal object GetIntervalTotalMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -111,7 +111,7 @@ internal object GetIntervalHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -133,7 +133,7 @@ internal object GetIntervalTotalHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -155,7 +155,7 @@ internal object GetIntervalTotalDays : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -177,7 +177,7 @@ internal object GetIntervalTotalWeeks : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {

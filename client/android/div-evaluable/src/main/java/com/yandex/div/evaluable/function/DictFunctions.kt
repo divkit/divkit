@@ -24,7 +24,7 @@ internal class GetDictInteger(override val variableProvider: VariableProvider) :
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toLong()
             is Long -> it
@@ -47,7 +47,7 @@ internal class GetDictNumber(override val variableProvider: VariableProvider) : 
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toDouble()
             is Long -> it.toDouble()
@@ -69,7 +69,7 @@ internal class GetDictString(override val variableProvider: VariableProvider) : 
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
         it as? String ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
@@ -86,7 +86,7 @@ internal class GetDictColor(override val variableProvider: VariableProvider) : F
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
         (it as? String)?.runCatching {
             Color.parse(this)
         }?.getOrElse {
@@ -107,7 +107,7 @@ internal class GetDictBoolean(override val variableProvider: VariableProvider) :
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>) = evaluate(name, args).let {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
         it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
@@ -161,7 +161,7 @@ internal class GetDictOptInteger(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as Long
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -186,7 +186,7 @@ internal class GetDictOptNumber(override val variableProvider: VariableProvider)
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as Double
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -212,7 +212,7 @@ internal class GetDictOptString(override val variableProvider: VariableProvider)
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
         return evaluateSafe(args, fallback) as? String ?: fallback
     }
@@ -231,7 +231,7 @@ internal class GetDictOptColor(override val variableProvider: VariableProvider) 
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
         return (evaluateSafe(args, fallback) as? String)?.runCatching {
             Color.parse(this)
@@ -252,7 +252,7 @@ internal class GetDictOptBoolean(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>): Any {
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as Boolean
         return evaluateSafe(args, fallback) as? Boolean ?: fallback
     }
