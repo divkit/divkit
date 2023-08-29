@@ -8,11 +8,14 @@
 public struct DivFlagsInfo {
   /// Enable experimental image loading optimization
   public let imageLoadingOptimizationEnabled: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
-  public init(imageLoadingOptimizationEnabled: Bool) {
+  public init(
+    imageLoadingOptimizationEnabled: Bool = false
+  ) {
     self.imageLoadingOptimizationEnabled = imageLoadingOptimizationEnabled
   }
 
   /// The default instance of `DivFlagsInfo`.
-  public static let `default` = DivFlagsInfo(imageLoadingOptimizationEnabled: false)
+  public static let `default` = DivFlagsInfo()
 }
