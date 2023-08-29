@@ -5,6 +5,133 @@ import Foundation
 import Serialization
 
 public final class DivSliderTemplate: TemplateValue {
+  public final class RangeTemplate: TemplateValue {
+    public let end: Field<Expression<Int>>?
+    public let margins: Field<DivEdgeInsetsTemplate>?
+    public let start: Field<Expression<Int>>?
+    public let trackActiveStyle: Field<DivDrawableTemplate>?
+    public let trackInactiveStyle: Field<DivDrawableTemplate>?
+
+    public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
+      self.init(
+        end: try dictionary.getOptionalExpressionField("end"),
+        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
+        start: try dictionary.getOptionalExpressionField("start"),
+        trackActiveStyle: try dictionary.getOptionalField("track_active_style", templateToType: templateToType),
+        trackInactiveStyle: try dictionary.getOptionalField("track_inactive_style", templateToType: templateToType)
+      )
+    }
+
+    init(
+      end: Field<Expression<Int>>? = nil,
+      margins: Field<DivEdgeInsetsTemplate>? = nil,
+      start: Field<Expression<Int>>? = nil,
+      trackActiveStyle: Field<DivDrawableTemplate>? = nil,
+      trackInactiveStyle: Field<DivDrawableTemplate>? = nil
+    ) {
+      self.end = end
+      self.margins = margins
+      self.start = start
+      self.trackActiveStyle = trackActiveStyle
+      self.trackInactiveStyle = trackInactiveStyle
+    }
+
+    private static func resolveOnlyLinks(context: TemplatesContext, parent: RangeTemplate?) -> DeserializationResult<DivSlider.Range> {
+      let endValue = parent?.end?.resolveOptionalValue(context: context) ?? .noValue
+      let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
+      let startValue = parent?.start?.resolveOptionalValue(context: context) ?? .noValue
+      let trackActiveStyleValue = parent?.trackActiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.trackActiveStyleValidator, useOnlyLinks: true) ?? .noValue
+      let trackInactiveStyleValue = parent?.trackInactiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.trackInactiveStyleValidator, useOnlyLinks: true) ?? .noValue
+      let errors = mergeErrors(
+        endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
+        marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        trackActiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_active_style", error: $0) },
+        trackInactiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_inactive_style", error: $0) }
+      )
+      let result = DivSlider.Range(
+        end: endValue.value,
+        margins: marginsValue.value,
+        start: startValue.value,
+        trackActiveStyle: trackActiveStyleValue.value,
+        trackInactiveStyle: trackInactiveStyleValue.value
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    public static func resolveValue(context: TemplatesContext, parent: RangeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlider.Range> {
+      if useOnlyLinks {
+        return resolveOnlyLinks(context: context, parent: parent)
+      }
+      var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
+      var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
+      var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
+      var trackActiveStyleValue: DeserializationResult<DivDrawable> = .noValue
+      var trackInactiveStyleValue: DeserializationResult<DivDrawable> = .noValue
+      context.templateData.forEach { key, __dictValue in
+        switch key {
+        case "end":
+          endValue = deserialize(__dictValue).merged(with: endValue)
+        case "margins":
+          marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
+        case "start":
+          startValue = deserialize(__dictValue).merged(with: startValue)
+        case "track_active_style":
+          trackActiveStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.trackActiveStyleValidator, type: DivDrawableTemplate.self).merged(with: trackActiveStyleValue)
+        case "track_inactive_style":
+          trackInactiveStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.trackInactiveStyleValidator, type: DivDrawableTemplate.self).merged(with: trackInactiveStyleValue)
+        case parent?.end?.link:
+          endValue = endValue.merged(with: deserialize(__dictValue))
+        case parent?.margins?.link:
+          marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self))
+        case parent?.start?.link:
+          startValue = startValue.merged(with: deserialize(__dictValue))
+        case parent?.trackActiveStyle?.link:
+          trackActiveStyleValue = trackActiveStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.trackActiveStyleValidator, type: DivDrawableTemplate.self))
+        case parent?.trackInactiveStyle?.link:
+          trackInactiveStyleValue = trackInactiveStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.trackInactiveStyleValidator, type: DivDrawableTemplate.self))
+        default: break
+        }
+      }
+      if let parent = parent {
+        marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
+        trackActiveStyleValue = trackActiveStyleValue.merged(with: parent.trackActiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.trackActiveStyleValidator, useOnlyLinks: true))
+        trackInactiveStyleValue = trackInactiveStyleValue.merged(with: parent.trackInactiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.trackInactiveStyleValidator, useOnlyLinks: true))
+      }
+      let errors = mergeErrors(
+        endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
+        marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        trackActiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_active_style", error: $0) },
+        trackInactiveStyleValue.errorsOrWarnings?.map { .nestedObjectError(field: "track_inactive_style", error: $0) }
+      )
+      let result = DivSlider.Range(
+        end: endValue.value,
+        margins: marginsValue.value,
+        start: startValue.value,
+        trackActiveStyle: trackActiveStyleValue.value,
+        trackInactiveStyle: trackInactiveStyleValue.value
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    private func mergedWithParent(templates: [TemplateName: Any]) throws -> RangeTemplate {
+      return self
+    }
+
+    public func resolveParent(templates: [TemplateName: Any]) throws -> RangeTemplate {
+      let merged = try mergedWithParent(templates: templates)
+
+      return RangeTemplate(
+        end: merged.end,
+        margins: merged.margins?.tryResolveParent(templates: templates),
+        start: merged.start,
+        trackActiveStyle: merged.trackActiveStyle?.tryResolveParent(templates: templates),
+        trackInactiveStyle: merged.trackInactiveStyle?.tryResolveParent(templates: templates)
+      )
+    }
+  }
+
   public final class TextStyleTemplate: TemplateValue {
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
@@ -168,6 +295,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let maxValue: Field<Expression<Int>>? // default value: 100
   public let minValue: Field<Expression<Int>>? // default value: 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
+  public let ranges: Field<[RangeTemplate]>? // at least 1 elements
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let secondaryValueAccessibility: Field<DivAccessibilityTemplate>?
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
@@ -215,6 +343,7 @@ public final class DivSliderTemplate: TemplateValue {
         maxValue: try dictionary.getOptionalExpressionField("max_value"),
         minValue: try dictionary.getOptionalExpressionField("min_value"),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
+        ranges: try dictionary.getOptionalArray("ranges", templateToType: templateToType),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         secondaryValueAccessibility: try dictionary.getOptionalField("secondary_value_accessibility", templateToType: templateToType),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
@@ -262,6 +391,7 @@ public final class DivSliderTemplate: TemplateValue {
     maxValue: Field<Expression<Int>>? = nil,
     minValue: Field<Expression<Int>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
+    ranges: Field<[RangeTemplate]>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     secondaryValueAccessibility: Field<DivAccessibilityTemplate>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
@@ -303,6 +433,7 @@ public final class DivSliderTemplate: TemplateValue {
     self.maxValue = maxValue
     self.minValue = minValue
     self.paddings = paddings
+    self.ranges = ranges
     self.rowSpan = rowSpan
     self.secondaryValueAccessibility = secondaryValueAccessibility
     self.selectedActions = selectedActions
@@ -345,6 +476,7 @@ public final class DivSliderTemplate: TemplateValue {
     let maxValueValue = parent?.maxValue?.resolveOptionalValue(context: context) ?? .noValue
     let minValueValue = parent?.minValue?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
+    let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let secondaryValueAccessibilityValue = parent?.secondaryValueAccessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.secondaryValueAccessibilityValidator, useOnlyLinks: true) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -385,6 +517,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       secondaryValueAccessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "secondary_value_accessibility", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -442,6 +575,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValue: maxValueValue.value,
       minValue: minValueValue.value,
       paddings: paddingsValue.value,
+      ranges: rangesValue.value,
       rowSpan: rowSpanValue.value,
       secondaryValueAccessibility: secondaryValueAccessibilityValue.value,
       selectedActions: selectedActionsValue.value,
@@ -489,6 +623,7 @@ public final class DivSliderTemplate: TemplateValue {
     var maxValueValue: DeserializationResult<Expression<Int>> = parent?.maxValue?.value() ?? .noValue
     var minValueValue: DeserializationResult<Expression<Int>> = parent?.minValue?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
+    var rangesValue: DeserializationResult<[DivSlider.Range]> = .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var secondaryValueAccessibilityValue: DeserializationResult<DivAccessibility> = .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -546,6 +681,8 @@ public final class DivSliderTemplate: TemplateValue {
         minValueValue = deserialize(__dictValue).merged(with: minValueValue)
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+      case "ranges":
+        rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivSliderTemplate.RangeTemplate.self).merged(with: rangesValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "secondary_value_accessibility":
@@ -624,6 +761,8 @@ public final class DivSliderTemplate: TemplateValue {
         minValueValue = minValueValue.merged(with: deserialize(__dictValue))
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self))
+      case parent?.ranges?.link:
+        rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivSliderTemplate.RangeTemplate.self))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.secondaryValueAccessibility?.link:
@@ -683,6 +822,7 @@ public final class DivSliderTemplate: TemplateValue {
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
+      rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
       secondaryValueAccessibilityValue = secondaryValueAccessibilityValue.merged(with: parent.secondaryValueAccessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.secondaryValueAccessibilityValidator, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
       thumbSecondaryStyleValue = thumbSecondaryStyleValue.merged(with: parent.thumbSecondaryStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryStyleValidator, useOnlyLinks: true))
@@ -719,6 +859,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_value", error: $0) },
       minValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_value", error: $0) },
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       secondaryValueAccessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "secondary_value_accessibility", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
@@ -776,6 +917,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValue: maxValueValue.value,
       minValue: minValueValue.value,
       paddings: paddingsValue.value,
+      ranges: rangesValue.value,
       rowSpan: rowSpanValue.value,
       secondaryValueAccessibility: secondaryValueAccessibilityValue.value,
       selectedActions: selectedActionsValue.value,
@@ -828,6 +970,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValue: maxValue ?? mergedParent.maxValue,
       minValue: minValue ?? mergedParent.minValue,
       paddings: paddings ?? mergedParent.paddings,
+      ranges: ranges ?? mergedParent.ranges,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       secondaryValueAccessibility: secondaryValueAccessibility ?? mergedParent.secondaryValueAccessibility,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
@@ -875,6 +1018,7 @@ public final class DivSliderTemplate: TemplateValue {
       maxValue: merged.maxValue,
       minValue: merged.minValue,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
+      ranges: merged.ranges?.tryResolveParent(templates: templates),
       rowSpan: merged.rowSpan,
       secondaryValueAccessibility: merged.secondaryValueAccessibility?.tryResolveParent(templates: templates),
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),

@@ -5,6 +5,45 @@ import Foundation
 import Serialization
 
 public final class DivSlider: DivBase {
+  public final class Range {
+    public let end: Expression<Int>?
+    public let margins: DivEdgeInsets
+    public let start: Expression<Int>?
+    public let trackActiveStyle: DivDrawable?
+    public let trackInactiveStyle: DivDrawable?
+
+    public func resolveEnd(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumericValue(expression: end)
+    }
+
+    public func resolveStart(_ resolver: ExpressionResolver) -> Int? {
+      resolver.resolveNumericValue(expression: start)
+    }
+
+    static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
+      makeNoOpValueValidator()
+
+    static let trackActiveStyleValidator: AnyValueValidator<DivDrawable> =
+      makeNoOpValueValidator()
+
+    static let trackInactiveStyleValidator: AnyValueValidator<DivDrawable> =
+      makeNoOpValueValidator()
+
+    init(
+      end: Expression<Int>? = nil,
+      margins: DivEdgeInsets? = nil,
+      start: Expression<Int>? = nil,
+      trackActiveStyle: DivDrawable? = nil,
+      trackInactiveStyle: DivDrawable? = nil
+    ) {
+      self.end = end
+      self.margins = margins ?? DivEdgeInsets()
+      self.start = start
+      self.trackActiveStyle = trackActiveStyle
+      self.trackInactiveStyle = trackInactiveStyle
+    }
+  }
+
   public final class TextStyle {
     public let fontSize: Expression<Int> // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
@@ -75,6 +114,7 @@ public final class DivSlider: DivBase {
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
   public let paddings: DivEdgeInsets
+  public let ranges: [Range]? // at least 1 elements
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let secondaryValueAccessibility: DivAccessibility
   public let selectedActions: [DivAction]? // at least 1 elements
@@ -173,6 +213,9 @@ public final class DivSlider: DivBase {
   static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
 
+  static let rangesValidator: AnyArrayValueValidator<DivSlider.Range> =
+    makeArrayValidator(minItems: 1)
+
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -250,6 +293,7 @@ public final class DivSlider: DivBase {
     maxValue: Expression<Int>? = nil,
     minValue: Expression<Int>? = nil,
     paddings: DivEdgeInsets? = nil,
+    ranges: [Range]? = nil,
     rowSpan: Expression<Int>? = nil,
     secondaryValueAccessibility: DivAccessibility? = nil,
     selectedActions: [DivAction]? = nil,
@@ -290,6 +334,7 @@ public final class DivSlider: DivBase {
     self.maxValue = maxValue ?? .value(100)
     self.minValue = minValue ?? .value(0)
     self.paddings = paddings ?? DivEdgeInsets()
+    self.ranges = ranges
     self.rowSpan = rowSpan
     self.secondaryValueAccessibility = secondaryValueAccessibility ?? DivAccessibility()
     self.selectedActions = selectedActions
@@ -356,56 +401,61 @@ extension DivSlider: Equatable {
     }
     guard
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility
+      lhs.ranges == rhs.ranges,
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.secondaryValueAccessibility == rhs.secondaryValueAccessibility,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle,
-      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle
+      lhs.thumbSecondaryStyle == rhs.thumbSecondaryStyle
     else {
       return false
     }
     guard
+      lhs.thumbSecondaryTextStyle == rhs.thumbSecondaryTextStyle,
       lhs.thumbSecondaryValueVariable == rhs.thumbSecondaryValueVariable,
-      lhs.thumbStyle == rhs.thumbStyle,
-      lhs.thumbTextStyle == rhs.thumbTextStyle
+      lhs.thumbStyle == rhs.thumbStyle
     else {
       return false
     }
     guard
+      lhs.thumbTextStyle == rhs.thumbTextStyle,
       lhs.thumbValueVariable == rhs.thumbValueVariable,
-      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle,
-      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle
+      lhs.tickMarkActiveStyle == rhs.tickMarkActiveStyle
     else {
       return false
     }
     guard
+      lhs.tickMarkInactiveStyle == rhs.tickMarkInactiveStyle,
       lhs.tooltips == rhs.tooltips,
-      lhs.trackActiveStyle == rhs.trackActiveStyle,
-      lhs.trackInactiveStyle == rhs.trackInactiveStyle
+      lhs.trackActiveStyle == rhs.trackActiveStyle
     else {
       return false
     }
     guard
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -435,6 +485,7 @@ extension DivSlider: Serializable {
     result["max_value"] = maxValue.toValidSerializationValue()
     result["min_value"] = minValue.toValidSerializationValue()
     result["paddings"] = paddings.toDictionary()
+    result["ranges"] = ranges?.map { $0.toDictionary() }
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["secondary_value_accessibility"] = secondaryValueAccessibility.toDictionary()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
@@ -463,6 +514,27 @@ extension DivSlider: Serializable {
 }
 
 #if DEBUG
+extension DivSlider.Range: Equatable {
+  public static func ==(lhs: DivSlider.Range, rhs: DivSlider.Range) -> Bool {
+    guard
+      lhs.end == rhs.end,
+      lhs.margins == rhs.margins,
+      lhs.start == rhs.start
+    else {
+      return false
+    }
+    guard
+      lhs.trackActiveStyle == rhs.trackActiveStyle,
+      lhs.trackInactiveStyle == rhs.trackInactiveStyle
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+#if DEBUG
 extension DivSlider.TextStyle: Equatable {
   public static func ==(lhs: DivSlider.TextStyle, rhs: DivSlider.TextStyle) -> Bool {
     guard
@@ -482,6 +554,18 @@ extension DivSlider.TextStyle: Equatable {
   }
 }
 #endif
+
+extension DivSlider.Range: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["end"] = end?.toValidSerializationValue()
+    result["margins"] = margins.toDictionary()
+    result["start"] = start?.toValidSerializationValue()
+    result["track_active_style"] = trackActiveStyle?.toDictionary()
+    result["track_inactive_style"] = trackInactiveStyle?.toDictionary()
+    return result
+  }
+}
 
 extension DivSlider.TextStyle: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {

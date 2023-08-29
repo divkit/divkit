@@ -188,16 +188,19 @@ extension DivInputMask {
   fileprivate func makeMaskValidator(_ resolver: ExpressionResolver) -> MaskValidator? {
     switch self {
     case let .divFixedLengthInputMask(divFixedLengthInputMask):
-      return MaskValidator(
+      return MaskValidator(formatter: FixedLengthMaskFormatter(
         pattern: divFixedLengthInputMask.resolvePattern(resolver) ?? "",
         alwaysVisible: divFixedLengthInputMask.resolveAlwaysVisible(resolver),
         patternElements: divFixedLengthInputMask.patternElements
           .map { $0.makePatternElement(resolver) }
-      )
+      ))
     case .divCurrencyInputMask:
       return nil
     case .divPhoneInputMask:
-      return nil
+      return MaskValidator(formatter: PhoneMaskFormatter(
+        masksByCountryCode: PhoneMasks().value.typedJSON(),
+        extraSymbols: PhoneMasks.extraNumbers
+      ))
     }
   }
 
@@ -210,8 +213,11 @@ extension DivInputMask {
       )
     case .divCurrencyInputMask:
       return nil
-    case .divPhoneInputMask:
-      return nil
+    case let .divPhoneInputMask(divPhoneInputMask):
+      return context.makeBinding(
+        variableName: divPhoneInputMask.rawTextVariable,
+        defaultValue: ""
+      )
     }
   }
 }

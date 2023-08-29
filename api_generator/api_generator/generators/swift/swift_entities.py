@@ -645,7 +645,7 @@ class SwiftProperty(Property):
         empty_dict_deserialization = prop_type.empty_constructor
         if self.default_value is not None:
             default_value_declaration_to_use = prop_type.internal_declaration(self.default_value) \
-                if not public_default_value else self.static_default_value_name
+                if not public_default_value else f'Self.{self.static_default_value_name}'
         elif empty_dict_deserialization is not None:
             default_value_declaration_to_use = empty_dict_deserialization
         else:
@@ -827,7 +827,7 @@ class SwiftPropertyType(PropertyType):
             args = ', '.join(args)
             return f'{entity.declaration_prefix}{utils.capitalize_camel_case(entity.original_name)}({args})'
         elif isinstance(self, Dictionary):
-            return f'try JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""")'
+            return f'try! JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""") as! [String: Any]'
         else:
             return None
 

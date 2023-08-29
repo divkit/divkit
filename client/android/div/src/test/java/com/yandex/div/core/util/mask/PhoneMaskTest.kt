@@ -81,11 +81,11 @@ class PhoneMaskTest {
 
     @Test
     fun `insert one decimal with mask changing`() {
-        val phoneMask = createPhoneMask().withValue("+351 (111) 11")
+        val phoneMask = createPhoneMask().withValue("+351 (11) 111-")
 
-        phoneMask.applyChangeFrom("+3501 (111) 11", 4)
+        phoneMask.applyChangeFrom("+3151 (11) 111-", 3)
 
-        phoneMask.assertMask("+350 (11) 111-1", 6)
+        phoneMask.assertMask("+31 51 111 11", 4)
     }
 
     @Test

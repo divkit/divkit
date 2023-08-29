@@ -1777,7 +1777,7 @@
       "file": "size_provider_recursive.json"
     },
     {
-      "title": "Input mask",
+      "title": "Fixed length input mask",
       "platforms": [
         "android",
         "web",
@@ -1796,10 +1796,10 @@
         "The symbol appeared",
         "Placeholders shown/hidden"
       ],
-      "file": "input_mask.json"
+      "file": "fixed_length_input_mask.json"
     },
     {
-      "title": "Phone input mask",
+      "title": "Fixed length phone input mask",
       "platforms": [
         "android",
         "web",
@@ -1807,6 +1807,27 @@
       ],
       "tags": [
         "DivInput"
+      ],
+      "file": "fixed_length_phone_input_mask.json"
+    },
+    {
+      "title": "Phone input mask",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Enter an inappropriate character for the place",
+        "Enter the appropriate character",
+        "Enter phone number"
+      ],
+      "expected_results": [
+        "The symbol did not appear",
+        "The symbol appeared",
+        "Mask for phone number is correct"
       ],
       "file": "phone_input_mask.json"
     },

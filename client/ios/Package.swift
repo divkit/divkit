@@ -104,6 +104,7 @@ let package = Package(
       path: "DivKit",
       exclude: [
         "generator_config.json",
+        "shared_data_generator_config.json",
       ],
       swiftSettings: [
         .unsafeFlags(

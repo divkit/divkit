@@ -26,6 +26,8 @@
 		52DED05129F7349000D64519 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52DED05029F7349000D64519 /* DivKitExtensions */; };
 		52DED05329F734B900D64519 /* ShimmerStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DED03C29F6E3D500D64519 /* ShimmerStyleTests.swift */; };
 		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
+		65509D272A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */; };
+		65509D292A98EA9200F75699 /* PhoneMaskFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
 		762661E7293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */; };
 		767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */; };
@@ -272,6 +274,8 @@
 		52DED03C29F6E3D500D64519 /* ShimmerStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTests.swift; sourceTree = "<group>"; };
 		52DED04729F7346900D64519 /* DivKitExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextErrorsTests.swift; sourceTree = "<group>"; };
+		65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedLengthMaskFormatterTests.swift; sourceTree = "<group>"; };
+		65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneMaskFormatterTests.swift; sourceTree = "<group>"; };
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
 		762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundDivCustomBlockFactory.swift; sourceTree = "<group>"; };
 		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
@@ -1071,6 +1075,8 @@
 				8CF329362875D5C8003F799A /* GalleryViewLayoutTests.swift */,
 				8CF3293B2875D5C8003F799A /* GalleryViewMetricsTests.swift */,
 				437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */,
+				65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */,
+				65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */,
 			);
 			name = ViewModels;
 			path = LayoutKit/LayoutKitTests/ViewModels;
@@ -1647,12 +1653,14 @@
 				8CF329502875D5C8003F799A /* GalleryViewMetricsTests.swift in Sources */,
 				8CF3294C2875D5C8003F799A /* ScrollableContentPagerTests.swift in Sources */,
 				8CF329542875D5C8003F799A /* GalleryBlockTests.swift in Sources */,
+				65509D292A98EA9200F75699 /* PhoneMaskFormatterTests.swift in Sources */,
 				8CF3294E2875D5C8003F799A /* TabContentsViewModelTests.swift in Sources */,
 				8CF32B7E2875E12F003F799A /* Utils.swift in Sources */,
 				8CF329582875D5C8003F799A /* GridBlockTests.swift in Sources */,
 				435653DB29742C9300224B9D /* BlockWithFixedWrapContent.swift in Sources */,
 				8C97EA3B2A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift in Sources */,
 				431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */,
+				65509D272A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift in Sources */,
 				8C97EA3C2A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift in Sources */,
 				431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */,
 				8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */,
