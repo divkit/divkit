@@ -12,6 +12,7 @@ describe('regression', () => {
             const logs = await this.browser.execute(() => window.divkitLogs);
 
             logs.length.should.equal(1);
+            logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
 
             await this.browser.assertView('menu', '#root');
         });
@@ -37,30 +38,33 @@ describe('regression', () => {
             await this.browser.assertView('menu', '#root');
         });
 
-        it ('Tap on middle button', async function() {
+        it ('Tap on button 2', async function() {
             await this.browser.$('span=Without double tap').then(elem => elem.click());
             const logs = await this.browser.execute(() => window.divkitLogs);
 
             logs.length.should.equal(1);
+            logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
 
             await this.browser.assertView('menu', '#root');
         });
 
-        it('Double tap on middle button', async function() {
+        it('Double tap on button 2', async function() {
             await this.browser.$('span=Without double tap').then(elem => elem.doubleClick());
             const logs = await this.browser.execute(() => window.divkitLogs);
 
             logs.length.should.equal(2);
+            logs.filter(it => it.action.log_id === 'single_tap').length.should.equal(2);
 
             await this.browser.assertView('menu', '#root');
         });
 
         hermione.only.in('chromeMobile', 'pointerType="touch" is not supported on firefox');
-        it('Long click on middle button', async function() {
+        it('Long click on button 2', async function() {
             await this.browser.yaLongTap('span=Without double tap', 500);
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(2);
+            logs.length.should.equal(3);
+            logs.some(it => it.action.log_id === 'single_tap').should.equal(true);
             logs.some(it => it.action.log_id === 'longtap_actions').should.equal(true);
 
             await this.browser.assertView('menu', '#root');

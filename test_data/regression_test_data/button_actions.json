@@ -124,6 +124,45 @@
                   "log_id": "single_tap",
                   "url": "ui-test://click?type=click&description=Without+double+tap"
                 }
+              ],
+              "longtap_actions": [
+                {
+                  "menu_items": [
+                    {
+                      "text": "Long tap",
+                      "action": {
+                        "url": "custom-menu://longTap",
+                        "log_id": "custom/menu/longTap"
+                      }
+                    }
+                  ],
+                  "log_id": "longtap_actions"
+                }
+              ]
+            },
+            {
+              "div_id": "without_long_tap",
+              "type": "button",
+              "text": "Without long tap",
+              "actions": [
+                {
+                  "log_id": "single_tap",
+                  "url": "ui-test://click?type=click&description=Without+long+tap"
+                }
+              ],
+              "doubletap_actions": [
+                {
+                  "menu_items": [
+                    {
+                      "text": "Double tap",
+                      "action": {
+                        "url": "custom-menu://doubleTap",
+                        "log_id": "custom/menu/doubleTap"
+                      }
+                    }
+                  ],
+                  "log_id": "doubletap_actions"
+                }
               ]
             },
             {
