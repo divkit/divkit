@@ -320,8 +320,8 @@
     "ru": "Добавление тени."
   },
   "div_border_shadow": {
-    "en": "Shadow parameters applied to the stroke of the element.",
-    "ru": "Параметры тени, применяемой к рамке элемента."
+    "en": "Shadow parameters.",
+    "ru": "Параметры тени."
   },
   "div_border_stroke": {
     "en": "Stroke style.",
@@ -1427,6 +1427,22 @@
     "en": "Minimum value.",
     "ru": "Минимальное значение."
   },
+  "div_slider_range_end": {
+    "en": "End of section.",
+    "ru": "Конец отрезка."
+  },
+  "div_slider_range_margins": {
+    "en": "Margins of section. Used only horizontal margins.",
+    "ru": "Отступы от отрезка. Используются только горизонтальные отступы."
+  },
+  "div_slider_range_start": {
+    "en": "Start of section.",
+    "ru": "Начало отрезка."
+  },
+  "div_slider_ranges": {
+    "en": "Style of sections of a scale.",
+    "ru": "Стиль для отрезков шкалы."
+  },
   "div_slider_secondary_value_accessibility": {
     "en": "Accessibility settings for the second pointer.",
     "ru": "Настройки доступности для второго указателя."
@@ -1478,22 +1494,6 @@
   "div_slider_track_inactive_style": {
     "en": "Style of the inactive part of a scale.",
     "ru": "Стиль неактивной части шкалы."
-  },
-  "div_slider_ranges": {
-    "en": "Style of sections of a scale.",
-    "ru": "Стиль для отрезков шкалы."
-  },
-  "div_slider_range_start": {
-    "en": "Start of section.",
-    "ru": "Начало отрезка."
-  },
-  "div_slider_range_end": {
-    "en": "End of section.",
-    "ru": "Конец отрезка."
-  },
-  "div_slider_range_margins": {
-    "en": "Margins of section. Used only horizontal margins.",
-    "ru": "Отступы от отрезка. Используются только горизонтальные отступы."
   },
   "div_solid_background": {
     "en": "Solid background color.",
@@ -1807,6 +1807,10 @@
     "en": "Line spacing of the text. Units specified in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
+  "div_text_range_shadow": {
+    "en": "Shadow parameters applied to a range of characters.",
+    "ru": "Параметры тени, применяемой к диапазону символов."
+  },
   "div_text_range_start": {
     "en": "Ordinal number of a character which the range begins from. The first character has a number `0`.",
     "ru": "Порядковый номер символа, с которого начинается диапазон. Первый символ имеет номер `0`."
@@ -1830,6 +1834,10 @@
   "div_text_selectable": {
     "en": "Ability to select and copy text.",
     "ru": "Возможность выделения и копирования текста."
+  },
+  "div_text_shadow": {
+    "en": "Shadow parameters applied to the text.",
+    "ru": "Параметры тени, применяемой к тексту."
   },
   "div_text_short": {
     "en": "Text.",
@@ -1979,6 +1987,10 @@
     "en": "Trigger activation mode:<li>`on_condition` — a trigger is activated when the condition changes from `false` to `true`;</li><li>`on_variable` — a trigger is activated when the condition is met and the variable value changes.</li>",
     "ru": "Режим запуска триггера:<li>`on_condition` — триггер сработает при изменении условия с `false` на `true`;</li><li>`on_variable` — триггер сработает при выполнении условия и изменении значения переменной.</li>"
   },
+  "div_variable_array": {
+    "en": "An arbitrary array in JSON format.",
+    "ru": "Произвольный массив в формате JSON."
+  },
   "div_variable_boolean": {
     "en": "A Boolean variable in binary format.",
     "ru": "Логическая переменная."
@@ -1990,10 +2002,6 @@
   "div_variable_dict": {
     "en": "An arbitrary object in JSON format.",
     "ru": "Произвольный объект в формате JSON."
-  },
-  "div_variable_array": {
-    "en": "An arbitrary array in JSON format.",
-    "ru": "Произвольный массив в формате JSON."
   },
   "div_variable_integer": {
     "en": "An integer variable.",
@@ -2166,13 +2174,5 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
-  },
-  "div_text_shadow": {
-    "en": "Shadow parameters applied to the text.",
-    "ru": "Параметры тени, применяемой к тексту."
-  },
-  "div_text_range_shadow": {
-    "en": "Shadow parameters applied to a range of characters.",
-    "ru": "Параметры тени, применяемой к диапазону символов."
   }
 }
