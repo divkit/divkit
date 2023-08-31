@@ -1,6 +1,7 @@
 {
   "description": "Tabs with items aligned right-to-left. First tab must be on the right edge.",
   "platforms": [
+    "android",
     "ios"
   ],
   "configuration": {
