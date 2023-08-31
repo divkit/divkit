@@ -4,6 +4,7 @@ import android.database.Cursor
 import android.database.SQLException
 import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.RawDataAndMetadata
+import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div.storage.templates.Template
 import com.yandex.div.storage.util.bindNullableBlob
 
@@ -50,9 +51,45 @@ internal object StorageStatements {
         }
     }
 
+    fun replaceRawJsons(
+        rawJsons: List<RawJson>,
+        onFailedTransactions: ((List<String>) -> Unit) = { failedTransactions ->
+            throw SQLException("Insertion failed for raw jsons with ids: " +
+                    failedTransactions.joinToString())
+        },
+    ) = object : StorageStatement {
+        override fun execute(compiler: SqlCompiler) {
+            val failedTransactions = mutableListOf<String>()
+            val replaceStatement = compiler.compileStatement(REPLACE_RAW_JSON)
+            rawJsons.forEach { json ->
+                with(replaceStatement) {
+                    bindString(1, json.id)
+                    bindBlob(2, json.data.toString().toByteArray())
+
+                    executeInsert().takeIf { id -> id < 0 }?.let { failedTransactions.add(json.id) }
+                }
+            }
+            if (failedTransactions.isNotEmpty()) {
+                onFailedTransactions(failedTransactions)
+            }
+        }
+
+        override fun toString(): String {
+            return "Replace raw jsons ($cardIdsString)"
+        }
+
+        private val cardIdsString by lazy(LazyThreadSafetyMode.NONE) {
+            rawJsons.joinToString { it.id }
+        }
+    }
+
     fun replaceCards(
-            groupId: String,
-            cards: List<RawDataAndMetadata>
+        groupId: String,
+        cards: List<RawDataAndMetadata>,
+        onFailedTransactions: ((List<String>) -> Unit) = { failedTransactions ->
+            throw SQLException("Insertion failed for cards with ids: " +
+                    failedTransactions.joinToString())
+        },
     ) = object : StorageStatement {
         private val cardIdsString by lazy(LazyThreadSafetyMode.NONE) {
             cards.joinToString { it.id }
@@ -77,8 +114,7 @@ internal object StorageStatements {
             }
 
             if (failedTransactions.isNotEmpty()) {
-                throw SQLException("Insertion failed for cards with ids: " +
-                        failedTransactions.joinToString())
+                onFailedTransactions(failedTransactions)
             }
         }
 
@@ -111,6 +147,18 @@ internal object StorageStatements {
 
         override fun toString(): String {
             return "Deleting cards with ids: $elementIds"
+        }
+    }
+
+    fun deleteRawJsons(elementIds: Set<String>) = object : StorageStatement {
+        override fun execute(compiler: SqlCompiler) {
+            compiler.compileStatement(
+                "$DELETE_RAW_JSON_BY_IDS ${elementIds.asSqlList()}"
+            ).executeUpdateDelete()
+        }
+
+        override fun toString(): String {
+            return "Deleting raw jsons with ids: $elementIds"
         }
     }
 
@@ -161,6 +209,17 @@ internal object StorageStatements {
 
         override fun toString(): String {
             return "Selecting all div data"
+        }
+    }
+
+    fun readRawJsons(reader: (r: ReadState) -> Unit) = object : StorageStatement {
+        override fun execute(compiler: SqlCompiler) {
+            val readState = compiler.compileQuery("SELECT * FROM $TABLE_RAW_JSON")
+            readState.use(reader)
+        }
+
+        override fun toString(): String {
+            return "Selecting all raw jsons"
         }
     }
 

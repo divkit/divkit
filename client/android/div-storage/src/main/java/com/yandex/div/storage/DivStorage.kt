@@ -3,7 +3,9 @@ package com.yandex.div.storage
 import androidx.annotation.WorkerThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.storage.database.ExecutionResult
+import com.yandex.div.storage.database.Migration
 import com.yandex.div.storage.database.StorageException
+import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div.storage.templates.RawTemplateData
 import com.yandex.div.storage.templates.Template
 import org.json.JSONObject
@@ -12,11 +14,24 @@ internal interface DivStorage {
     fun saveData(groupId: String,
                  divs: List<RawDataAndMetadata>,
                  templatesByHash: List<Template>,
-                 actionOnError: DivDataRepository.ActionOnError
+                 actionOnError: DivDataRepository.ActionOnError,
     ): ExecutionResult
 
+    fun saveRawJsons(
+        rawJsons: List<RawJson>,
+        actionOnError: DivDataRepository.ActionOnError,
+    ): ExecutionResult
+
+    @WorkerThread
+    fun readRawJsons(rawJsonIds: Set<String>): LoadDataResult<RawJson>
+
+    @WorkerThread
+    fun removeRawJsons(predicate: (RawJson) -> Boolean): RemoveResult
+
+    @WorkerThread
     fun loadData(ids: List<String>): LoadDataResult<RestoredRawData>
 
+    @WorkerThread
     fun remove(predicate: (RawDataAndMetadata) -> Boolean): RemoveResult
 
     @WorkerThread
@@ -35,6 +50,8 @@ internal interface DivStorage {
     fun isTemplateExists(templateHash: String): Boolean
 
     fun readTemplateReferences(): LoadDataResult<TemplateReference>
+
+    val migrations: Map<Pair<Int, Int>, Migration>
 
     data class RestoredRawData(
             val id: String,

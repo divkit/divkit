@@ -3,6 +3,7 @@ package com.yandex.div.storage
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.storage.DivStorage.LoadDataResult
 import com.yandex.div.storage.DivStorage.RemoveResult
+import com.yandex.div.storage.database.DB_VERSION
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
@@ -43,6 +44,14 @@ class DivStorageTest {
     private val metadata1 = JSONObject().put(METADATA_ID, 1)
 
     private val underTest = DivStorageComponent.createInternal(ApplicationProvider.getApplicationContext()).storage
+
+    @Test
+    fun `migration does exist for current database version`() {
+        val migrationVersions = underTest.migrations.keys
+        val migrationExist = migrationVersions.any { (_, newVersion) -> newVersion == DB_VERSION }
+
+        Assert.assertTrue(migrationExist)
+    }
 
     @Test
     fun `what is saved can be restored`() {

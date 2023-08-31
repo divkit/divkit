@@ -17,10 +17,13 @@ import com.yandex.div.storage.database.COLUMN_CARD_GROUP_ID
 import com.yandex.div.storage.database.COLUMN_CARD_METADATA
 import com.yandex.div.storage.database.COLUMN_GROUP_ID
 import com.yandex.div.storage.database.COLUMN_LAYOUT_ID
+import com.yandex.div.storage.database.COLUMN_RAW_JSON_DATA
+import com.yandex.div.storage.database.COLUMN_RAW_JSON_ID
 import com.yandex.div.storage.database.COLUMN_TEMPLATE_DATA
 import com.yandex.div.storage.database.COLUMN_TEMPLATE_HASH
 import com.yandex.div.storage.database.COLUMN_TEMPLATE_ID
 import com.yandex.div.storage.database.CREATE_TABLE_CARDS
+import com.yandex.div.storage.database.CREATE_TABLE_RAW_JSON
 import com.yandex.div.storage.database.CREATE_TABLE_TEMPLATES
 import com.yandex.div.storage.database.CREATE_TABLE_TEMPLATE_REFERENCES
 import com.yandex.div.storage.database.DB_VERSION
@@ -29,14 +32,18 @@ import com.yandex.div.storage.database.DELETE_TEMPLATES
 import com.yandex.div.storage.database.DELETE_TEMPLATE_USAGES
 import com.yandex.div.storage.database.DatabaseOpenHelper
 import com.yandex.div.storage.database.DatabaseOpenHelperProvider
+import com.yandex.div.storage.database.Migration
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.database.ReadState
+import com.yandex.div.storage.database.SELECT_RAW_JSONS_BY_IDS
 import com.yandex.div.storage.database.SELECT_TEMPLATES_BY_HASHES
-import com.yandex.div.storage.database.SingleTransactionCardSavePerformer
+import com.yandex.div.storage.database.SingleTransactionDataSavePerformer
+import com.yandex.div.storage.database.StorageStatement
 import com.yandex.div.storage.database.StorageStatementExecutor
 import com.yandex.div.storage.database.StorageStatements
 import com.yandex.div.storage.database.TABLE_CARDS
 import com.yandex.div.storage.database.TABLE_TEMPLATE_REFERENCES
+import com.yandex.div.storage.rawjson.RawJson
 import com.yandex.div.storage.templates.RawTemplateData
 import com.yandex.div.storage.templates.Template
 import com.yandex.div.storage.util.closeSilently
@@ -58,11 +65,29 @@ internal class DivStorageImpl(
             context, DB_NAME, DB_VERSION, this::onCreate, this::onUpgrade
     )
     @VisibleForTesting  // TODO: ticket for make a private pls
-    val statementExecutor: StorageStatementExecutor = StorageStatementExecutor {
-        openHelper.writableDatabase
-    }
-    private val cardSaveUseCase = SingleTransactionCardSavePerformer(statementExecutor)
+    val statementExecutor = StorageStatementExecutor { openHelper.writableDatabase }
+    private val dataSaveUseCase = SingleTransactionDataSavePerformer(statementExecutor)
 
+    override val migrations = mapOf(
+        /**
+         * Migration to add a new "raw_json" table
+         */
+        (2 to 3) to Migration { db ->
+            try {
+                db.execSQL(CREATE_TABLE_RAW_JSON)
+            } catch (e: SQLException) {
+                throw SQLException("Create \"raw_json\" table", e)
+            }
+        },
+    )
+
+    /**
+     * Migration to recreate schema and delete all data
+     */
+    private val defaultDropAllMigration = Migration { db ->
+        dropTables(db)
+        createTables(db)
+    }
 
     @VisibleForTesting
     fun onCreate(db: DatabaseOpenHelper.Database) {
@@ -74,9 +99,13 @@ internal class DivStorageImpl(
         KAssert.assertEquals(newVersion, DB_VERSION)
         if (oldVersion == DB_VERSION) return
 
-        // recreate schema and delete all data
-        dropTables(db)
-        createTables(db)
+        val migration = migrations[oldVersion to newVersion] ?: defaultDropAllMigration
+        try {
+            migration.migrate(db)
+        } catch (e: SQLException) {
+            KAssert.fail(e) { "Migration from $oldVersion to $newVersion throws exception" }
+            defaultDropAllMigration.migrate(db)
+        }
     }
 
     @VisibleForTesting
@@ -86,6 +115,7 @@ internal class DivStorageImpl(
             db.execSQL(CREATE_TABLE_CARDS)
             db.execSQL(CREATE_TABLE_TEMPLATE_REFERENCES)
             db.execSQL(CREATE_TABLE_TEMPLATES)
+            db.execSQL(CREATE_TABLE_RAW_JSON)
         } catch (e: SQLException) {
             throw SQLException("Create tables", e)
         }
@@ -102,13 +132,17 @@ internal class DivStorageImpl(
                           divs: List<RawDataAndMetadata>,
                           templatesByHash: List<Template>,
                           actionOnError: ActionOnError,
-    ) = cardSaveUseCase.save(
+    ) = dataSaveUseCase.saveDivData(
             groupId,
             divs,
             templatesByHash,
             actionOnError,
     )
 
+    override fun saveRawJsons(rawJsons: List<RawJson>, actionOnError: ActionOnError) =
+        dataSaveUseCase.saveRawJsons(rawJsons, actionOnError)
+
+    @WorkerThread
     override fun loadData(ids: List<String>): LoadDataResult<DivStorage.RestoredRawData> {
         val usedGroups = mutableSetOf<String>()
         val cards = ArrayList<DivStorage.RestoredRawData>(ids.size)
@@ -146,6 +180,8 @@ internal class DivStorageImpl(
         return LoadDataResult(cards, exceptions)
     }
 
+    @WorkerThread
+    @Throws(SQLException::class)
     override fun remove(predicate: (RawDataAndMetadata) -> Boolean): RemoveResult {
         val ids: Set<String> = collectsRecordsFor(predicate)
         val exceptions = statementExecutor.execute(
@@ -159,6 +195,35 @@ internal class DivStorageImpl(
     @WorkerThread
     override fun removeAllCards(): DivStorageErrorException? {
         return deleteTablesTransaction(actionDesc = "delete all cards", DELETE_CARDS)
+    }
+
+    @WorkerThread
+    override fun readRawJsons(rawJsonIds: Set<String>): LoadDataResult<RawJson> {
+        val actionDesc = "Read raw jsons with ids: $rawJsonIds"
+        val exceptions = mutableListOf<StorageException>()
+        var rawJsons = emptyList<RawJson>()
+
+        try {
+            rawJsons = collectsRawJsons(rawJsonIds)
+        } catch (e: SQLException) {
+            exceptions.add(e.toStorageException(actionDesc))
+        } catch (e: SQLiteDatabaseLockedException) {
+            exceptions.add(e.toStorageException(actionDesc))
+        } catch (e: IllegalStateException) {
+            exceptions.add(e.toStorageException(actionDesc))
+        }
+
+        return LoadDataResult(rawJsons, exceptions)
+    }
+
+    @WorkerThread
+    override fun removeRawJsons(predicate: (RawJson) -> Boolean): RemoveResult {
+        val ids: Set<String> = collectsRawJsonsIdsFor(predicate)
+        val exceptions = statementExecutor.execute(
+            ActionOnError.SKIP_ELEMENT,
+            StorageStatements.deleteRawJsons(ids)
+        ).errors
+        return RemoveResult(ids, exceptions)
     }
 
     @WorkerThread
@@ -316,6 +381,8 @@ internal class DivStorageImpl(
         return templates
     }
 
+    @WorkerThread
+    @Throws(SQLException::class)
     private fun collectsRecordsFor(predicate: (RawDataAndMetadata) -> Boolean): Set<String> {
         val results = mutableSetOf<String>()
         statementExecutor.execute(StorageStatements.readData {
@@ -331,6 +398,56 @@ internal class DivStorageImpl(
                 }
                 rawDataAndMetadata.close()
             } while (cursor.moveToNext())
+        })
+
+        return results
+    }
+
+    @WorkerThread
+    @Throws(SQLException::class)
+    private fun collectsRawJsonsIdsFor(predicate: (RawJson) -> Boolean): Set<String> {
+        val results = mutableSetOf<String>()
+        statementExecutor.execute(StorageStatements.readRawJsons {
+            val cursor = it.cursor
+            if (cursor.count == 0 || !cursor.moveToFirst()) {
+                return@readRawJsons
+            }
+
+            do {
+                val rawJson = CursorDrivenRawJson(cursor)
+                if (predicate(rawJson)) {
+                    results.add(rawJson.id)
+                }
+                rawJson.close()
+            } while (cursor.moveToNext())
+        })
+
+        return results
+    }
+
+    @WorkerThread
+    @Throws(SQLException::class)
+    private fun collectsRawJsons(rawJsonIds: Set<String>): List<RawJson> {
+        val readState = readStateFor {
+            rawQuery(
+                query = "$SELECT_RAW_JSONS_BY_IDS ${rawJsonIds.asSqlList()}",
+                selectionArgs = emptyArray()
+            )
+        }
+        val results = ArrayList<RawJson>(readState.cursor.count)
+        statementExecutor.execute(StorageStatement {
+            readState.use {
+                val cursor = it.cursor
+                if (cursor.count == 0 || !cursor.moveToFirst()) {
+                    return@StorageStatement
+                }
+
+                do {
+                    val rawJson = CursorDrivenRawJson(cursor)
+                    results.add(rawJson)
+                    rawJson.close()
+                } while (cursor.moveToNext())
+            }
         })
 
         return results
@@ -404,6 +521,23 @@ internal class DivStorageImpl(
                 throw IllegalStateException("Data no longer valid!")
             }
             cursor.getBlobOrNull(cursor.indexOf(COLUMN_CARD_METADATA))?.toJSONObject()
+        }
+
+        override fun close() {
+            cursorInvalid = true
+        }
+    }
+
+    private inner class CursorDrivenRawJson(val cursor: Cursor) : RawJson, Closeable {
+        private var cursorInvalid = false
+
+        override val id: String = cursor.getString(cursor.indexOf(COLUMN_RAW_JSON_ID))
+
+        override val data: JSONObject by lazy(LazyThreadSafetyMode.NONE) {
+            if (cursorInvalid) {
+                throw IllegalStateException("Data no longer valid!")
+            }
+            cursor.getBlob(cursor.indexOf(COLUMN_RAW_JSON_DATA)).toJSONObject()
         }
 
         override fun close() {
