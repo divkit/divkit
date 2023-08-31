@@ -10,11 +10,11 @@ public final class DivErrorsStorage {
     self.errors = errors
   }
 
-  public func add(_ error: DivError) {
+  func add(_ error: DivError) {
     errors.append(error)
   }
 
-  public func add(contentsOf errorStorage: DivErrorsStorage) {
+  func add(contentsOf errorStorage: DivErrorsStorage) {
     self.errors.append(contentsOf: errorStorage.errors)
   }
 }
