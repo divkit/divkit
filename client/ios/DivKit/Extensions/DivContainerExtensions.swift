@@ -99,11 +99,10 @@ extension DivContainer: DivBlockModeling {
 
   private func makeOverlapBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
-    let defaultStateAlignment = BlockAlignment2D(
+    let defaultAlignment = BlockAlignment2D(
       horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
-    let defaultAlignment = alignment2D(withDefault: defaultStateAlignment, context: context)
 
     let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
     let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)

@@ -135,8 +135,7 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?
-        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
+      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?.makeContentAlignment(uiLayoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
       vertical: resolveAlignmentVertical(context.expressionResolver)?.alignment
         ?? defaultAlignment.vertical

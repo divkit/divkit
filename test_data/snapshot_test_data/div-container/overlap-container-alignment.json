@@ -1,0 +1,127 @@
+{
+  "description": "Overlap container alignmnet. Foreground text should be on the left and foreground, background text should be on the right and background.",
+  "platforms": [
+    "ios",
+    "web",
+    "android"
+  ],
+  "templates": {
+    "big_text": {
+      "font_size": 11,
+      "line_height": 12,
+      "type": "text"
+    }
+  },
+  "card": {
+    "log_id": "test_logId",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "background": [
+                {
+                  "color": "#FFFFFF",
+                  "type": "solid"
+                }
+              ],
+              "border": {
+                "corner_radius": 7,
+                "stroke": {
+                  "color": "#000000",
+                  "width": 1
+                }
+              },
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "items": [
+                {
+                  "font_family": "display",
+                  "paddings": {
+                    "left": 18
+                  },
+                  "text": "placeholder left text",
+                  "text_color": "#FFFFFF",
+                  "type": "big_text"
+                },
+                {
+                  "paddings": {
+                    "left": 10,
+                    "top": 5,
+                    "bottom": 5,
+                    "right": 10
+                  },
+                  "text": "background right text",
+                  "type": "big_text"
+                }
+              ],
+              "orientation": "horizontal",
+              "paddings": {
+                "bottom": 5,
+                "left": 10,
+                "right": 10,
+                "top": 5
+              },
+              "type": "container",
+              "width": {
+                "type": "fixed",
+                "value": 280
+              }
+            },
+            {
+              "background": [
+                {
+                  "color": "#20d379",
+                  "type": "solid"
+                }
+              ],
+              "border": {
+                "corner_radius": 7
+              },
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "items": [
+                {
+                  "font_family": "display",
+                  "paddings": {
+                    "left": 2
+                  },
+                  "text": "foreground left text",
+                  "type": "big_text"
+                }
+              ],
+              "orientation": "horizontal",
+              "paddings": {
+                "bottom": 5,
+                "left": 10,
+                "top": 5,
+                "right": 10
+              },
+              "type": "container",
+              "width": {
+                "type": "fixed",
+                "value": 125
+              }
+            }
+          ],
+          "orientation": "overlap",
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          }
+        }
+      }
+    ]
+  }
+}
