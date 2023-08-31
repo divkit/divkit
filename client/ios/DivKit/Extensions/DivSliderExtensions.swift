@@ -55,7 +55,7 @@ extension DivSlider: DivBlockModeling {
 
     let firstThumbValue: Binding<Int> = thumbValueVariable.flatMap {
       context.makeBinding(variableName: $0, defaultValue: 0)
-    }!
+    } ?? .zero
 
     let sliderModel = SliderModel(
       firstThumb: SliderModel.ThumbModel(

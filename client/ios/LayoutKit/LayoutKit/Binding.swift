@@ -20,7 +20,7 @@ public struct Binding<T: Equatable>: Equatable {
 }
 
 extension Binding where T: AdditiveArithmetic {
-  static var zero: Binding<T> {
+  public static var zero: Binding<T> {
     Binding(name: "", value: .init(initialValue: .zero))
   }
 }

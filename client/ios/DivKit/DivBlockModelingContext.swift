@@ -37,13 +37,13 @@ public struct DivBlockModelingContext {
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public internal(set) var errorsStorage: DivErrorsStorage
-  internal let variableTracker: DivVariableTracker?
   private let persistentValuesStorage: DivPersistentValuesStorage
   public let tooltipViewFactory: DivTooltipViewFactory?
+  private let variablesStorage: DivVariablesStorage
+  private let variableTracker: DivVariableTracker?
 
   var overridenWidth: DivOverridenSize?
   var overridenHeight: DivOverridenSize?
-  private let variablesStorage: DivVariablesStorage?
 
   public var expressionResolver: ExpressionResolver {
     ExpressionResolver(
@@ -74,7 +74,7 @@ public struct DivBlockModelingContext {
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
-    variablesStorage: DivVariablesStorage? = nil,
+    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
     scheduler: Scheduling? = nil,
@@ -99,7 +99,7 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
-    self.variables = variablesStorage?.makeVariables(for: cardId) ?? [:]
+    self.variables = variablesStorage.makeVariables(for: cardId)
     self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.scheduler = scheduler ?? TimerScheduler()
@@ -189,22 +189,24 @@ public struct DivBlockModelingContext {
   }
 
   func makeBinding<T>(variableName: String, defaultValue: T) -> Binding<T> {
+    let variableName = DivVariableName(rawValue: variableName)
     variableTracker?.onVariablesUsed(
       cardId: cardId,
-      variables: [DivVariableName(rawValue: variableName)]
+      variables: [variableName]
     )
-    let value: T = expressionResolver.getVariableValue(variableName) ?? defaultValue
-    let valueProp = Property<T>.init(
+    let value: T = variablesStorage
+      .getVariableValue(cardId: cardId, name: variableName) ?? defaultValue
+    let valueProp = Property<T>(
       getter: { value },
       setter: {
-        guard let divVariableValue = DivVariableValue($0) else { return }
-        self.variablesStorage?.update(
+        guard let newValue = DivVariableValue($0) else { return }
+        self.variablesStorage.update(
           cardId: cardId,
-          name: DivVariableName(rawValue: variableName),
-          value: divVariableValue
+          name: variableName,
+          value: newValue
         )
       }
     )
-    return Binding(name: variableName, value: valueProp)
+    return Binding(name: variableName.rawValue, value: valueProp)
   }
 }
