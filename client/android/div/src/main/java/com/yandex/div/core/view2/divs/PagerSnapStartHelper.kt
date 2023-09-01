@@ -1,10 +1,12 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.util.isLayoutRtl
 
 internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     private var _verticalHelper: OrientationHelper? = null
@@ -33,8 +35,9 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
             }
             val velocity =
                 if (orientation == LinearLayoutManager.HORIZONTAL) velocityX else velocityY
+            val isRtl = manager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_RTL
             // have 2 items on screen and choose by direction
-            return if (velocity >= 0) {
+            return if ((velocity >= 0 && !isRtl) || (isRtl && velocity < 0)) {
                 lastVisibleItemPosition
             } else {
                 lastVisibleItemPosition - 1
@@ -54,8 +57,11 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
 
     private fun distanceToStart(view: View, helper: OrientationHelper): Int {
         helper.run {
-            val offset = if (layoutManager.getPosition(view) == 0) startAfterPadding else itemSpacing / 2
-            return getDecoratedStart(view) - offset
+            return if (view.isLayoutRtl()) {
+                getDecoratedEnd(view) - if (layoutManager.getPosition(view) == 0) endAfterPadding else (layoutManager.width + itemSpacing / 2)
+            } else {
+                getDecoratedStart(view) - if (layoutManager.getPosition(view) == 0) startAfterPadding else itemSpacing / 2
+            }
         }
     }
 }

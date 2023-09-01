@@ -76,7 +76,9 @@
               },
               "paddings": {
                 "left": 4,
-                "right": 200
+                "right": 200,
+                "start": 4,
+                "end": 200
               },
               "scroll_mode": "paging",
               "items": [
@@ -107,6 +109,7 @@
                 "value": 240
               },
               "margins": {
+                "start": 4,
                 "left": 4,
                 "bottom": 8
               },
@@ -122,6 +125,7 @@
                   "bottom-left": 8
                 }
               },
+              "alignment_horizontal": "start",
               "alignment_vertical": "center",
               "type": "text_14_18_regular",
               "paddings": {
