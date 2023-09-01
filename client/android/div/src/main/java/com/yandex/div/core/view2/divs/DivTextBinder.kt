@@ -3,7 +3,11 @@ package com.yandex.div.core.view2.divs
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Paint
-import android.text.*
+import android.text.Layout
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextPaint
+import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
@@ -29,10 +33,12 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
+import com.yandex.div.core.view2.spannable.ShadowSpan
+import com.yandex.div.core.view2.spannable.ShadowSpan.ShadowParams
 import com.yandex.div.core.widget.AdaptiveMaxLines
+import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.spannable.BitmapImageSpan
 import com.yandex.div.internal.spannable.ImagePlaceholderSpan
 import com.yandex.div.internal.spannable.LetterSpacingSpan
@@ -41,6 +47,7 @@ import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
 import com.yandex.div.internal.util.checkHyphenationSupported
 import com.yandex.div.internal.widget.EllipsizedTextView
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -55,6 +62,7 @@ import com.yandex.div2.DivRadialGradientFixedCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
+import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
@@ -106,6 +114,7 @@ internal class DivTextBinder @Inject constructor(
         view.observeEllipsis(divView, expressionResolver, div)
         view.observeAutoEllipsize(expressionResolver, div.autoEllipsize)
         view.observeTextGradient(expressionResolver, div.textGradient)
+        view.observeTextShadow(expressionResolver, div)
         view.addSubscription(
             div.selectable.observeAndGet(expressionResolver) { selectable -> view.applySelectable(selectable) }
         )
@@ -528,6 +537,43 @@ internal class DivTextBinder @Inject constructor(
         ranger.run()
     }
 
+    private fun DivLineHeightTextView.observeTextShadow(
+        resolver: ExpressionResolver,
+        div: DivText
+    ) {
+        applyTextShadow(resolver, div)
+
+        val shadow = div.textShadow ?: return
+        val callback = { _: Any? -> applyTextShadow(resolver, div) }
+
+        addSubscription(shadow.alpha.observe(resolver, callback))
+        addSubscription(shadow.color.observe(resolver, callback))
+        addSubscription(shadow.blur.observe(resolver, callback))
+        addSubscription(shadow.offset.x.value.observe(resolver, callback))
+        addSubscription(shadow.offset.x.unit.observe(resolver, callback))
+        addSubscription(shadow.offset.y.value.observe(resolver, callback))
+        addSubscription(shadow.offset.y.unit.observe(resolver, callback))
+    }
+
+    private fun DivLineHeightTextView.applyTextShadow(
+        resolver: ExpressionResolver,
+        div: DivText
+    ) {
+        val shadow = div.textShadow ?: return
+        val metrics = resources.displayMetrics
+        val shadowParams = shadow.getShadowParams(resolver, metrics, div.textColor.evaluate(resolver))
+
+        (parent as? DivViewWrapper)?.let {
+            it.clipChildren = false
+            it.clipToPadding = false
+        }
+        clipToOutline = false
+
+        with(shadowParams) {
+            setShadowLayer(radius, offsetX, offsetY, color)
+        }
+    }
+
     private fun DivLineHeightTextView.observeAutoEllipsize(
         resolver: ExpressionResolver,
         autoEllipsizeExpr: Expression<Boolean>?
@@ -662,6 +708,14 @@ internal class DivTextBinder @Inject constructor(
                 val lineHeight = range.lineHeight?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
                 setSpan(LineHeightWithTopOffsetSpan(offset, lineHeight), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
+            range.textShadow?.let {
+                val shadowParams = it.getShadowParams(
+                    resolver,
+                    textView.resources.displayMetrics,
+                    range.textColor?.evaluate(resolver) ?: textView.currentTextColor
+                )
+                setSpan(ShadowSpan(shadowParams), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
         }
 
         private fun DivLineHeightTextView.hasSuchSpan(sb: SpannableStringBuilder, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
@@ -730,6 +784,24 @@ internal class DivTextBinder @Inject constructor(
 
     private fun View.updateFocusableState(div: DivText) {
         isFocusable = isFocusable || (div.focusedTextColor != null)
+    }
+
+    private fun DivShadow.getShadowParams(
+        resolver: ExpressionResolver,
+        displayMetrics: DisplayMetrics,
+        fontColor: Int
+    ): ShadowParams {
+        val fontAlpha = fontColor ushr 24
+
+        val radius = blur.evaluate(resolver).dpToPxF(displayMetrics)
+        val offsetX = offset.x.toPx(displayMetrics, resolver).toFloat()
+        val offsetY = offset.y.toPx(displayMetrics, resolver).toFloat()
+        val color = Paint().apply {
+            color = this@getShadowParams.color.evaluate(resolver)
+            alpha = (this@getShadowParams.alpha.evaluate(resolver) * fontAlpha).toInt()
+        }.color
+
+        return ShadowParams(offsetX, offsetY, radius, color)
     }
 }
 

@@ -1,0 +1,240 @@
+{
+  "description": "Text with shadow",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "text_color": "#000000",
+      "font_size": 18,
+      "alignment_horizontal": "center",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "top": 7,
+        "bottom": 7
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "text_block",
+              "text": "The quick brown fox jumps over the lazy dog",
+              "text_shadow": {
+                "alpha": 0.3,
+                "color": "#FF00FF",
+                "blur": 1,
+                "offset": {
+                  "x": {
+                    "unit": "dp",
+                    "value": 2
+                  },
+                  "y": {
+                    "unit": "dp",
+                    "value": 2
+                  }
+                }
+              }
+            },
+            {
+              "type": "text_block",
+              "text": ".,_±~-=+$%^&§*;\\\\/|!#@()[]{}<>",
+              "text_shadow": {
+                "alpha": 0.5,
+                "color": "#00FFFF",
+                "blur": 2,
+                "offset": {
+                  "x": {
+                    "unit": "sp",
+                    "value": -5
+                  },
+                  "y": {
+                    "unit": "sp",
+                    "value": -5
+                  }
+                }
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "Съешь ещё этих мягких французских булок, да выпей же чаю",
+              "font_size": 32,
+              "auto_ellipsize": 1,
+              "max_lines": 1,
+              "alpha": 0.3,
+              "text_shadow": {
+                "alpha": 0.9,
+                "color": "#FFFF00",
+                "blur": 3,
+                "offset": {
+                  "x": {
+                    "unit": "px",
+                    "value": 2
+                  },
+                  "y": {
+                    "unit": "px",
+                    "value": -2
+                  }
+                }
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "Съешь ещё этих мягких французских булок, да выпей же чаю",
+              "width":{
+                "type": "fixed",
+                "value": 150
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "border": {
+                "stroke": {
+                  "width": 2,
+                  "unit": "dp",
+                  "color": "#000000"
+                },
+                "corner_radius": 15,
+                "has_shadow": 1,
+                "shadow": {
+                  "alpha": 0.5,
+                  "color": "#000000",
+                  "blur": 2,
+                  "offset": {
+                    "x": {
+                      "unit": "dp",
+                      "value": 3
+                    },
+                    "y": {
+                      "unit": "dp",
+                      "value": 3
+                    }
+                  }
+                }
+              },
+              "text_shadow": {
+                "alpha": 1,
+                "color": "#4eb0da",
+                "blur": 10,
+                "offset": {
+                  "x": {
+                    "unit": "dp",
+                    "value": 0
+                  },
+                  "y": {
+                    "unit": "dp",
+                    "value": 0
+                  }
+                }
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "\u270b\ud83d\ude00\uD83D\uDE31\uD83E\uDEF6\uD83D\uDCA9\uD83E\uDD1D\u2618\uD83D\uDD1C",
+              "text_shadow": {
+                "alpha": 1,
+                "color": "#666666",
+                "blur": 1,
+                "offset": {
+                  "x": {
+                    "unit": "dp",
+                    "value": 8
+                  },
+                  "y": {
+                    "unit": "dp",
+                    "value": 8
+                  }
+                }
+              }
+            },
+            {
+              "type": "text_block",
+              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam a mauris dui. Praesent vel varius enim. Sed eleifend purus mauris, et fringilla risus ultrices nec. Sed tincidunt quam urna, ut varius enim posuere ac. Aenean lacus sem, molestie eu massa at, gravida feugiat orci. Nam ut orci eu turpis tristique pellentesque vitae ac ipsum.",
+              "text_color": "#FFFFFF",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 11,
+                  "font_size": 36
+                },
+                {
+                  "start": 189,
+                  "end": 200,
+                  "text_color": "#FF0000",
+                  "text_shadow": {
+                    "alpha": 0.8,
+                    "color": "#FF0000",
+                    "blur": 4,
+                    "offset": {
+                      "x": {
+                        "unit": "dp",
+                        "value": 0
+                      },
+                      "y": {
+                        "unit": "dp",
+                        "value": 0
+                      }
+                    }
+                  }
+                },
+                {
+                  "start": 101,
+                  "end": 113,
+                  "text_color": "#0000FF",
+                  "text_shadow": {
+                    "alpha": 0.8,
+                    "color": "#0000FF",
+                    "blur": 10,
+                    "offset": {
+                      "x": {
+                        "unit": "dp",
+                        "value": 0
+                      },
+                      "y": {
+                        "unit": "dp",
+                        "value": 0
+                      }
+                    }
+                  }
+                }
+              ],
+              "text_shadow": {
+                "alpha": 0.8,
+                "color": "#666666",
+                "blur": 10,
+                "offset": {
+                  "x": {
+                    "unit": "dp",
+                    "value": 0
+                  },
+                  "y": {
+                    "unit": "dp",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

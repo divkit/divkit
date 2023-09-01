@@ -1,0 +1,106 @@
+{
+  "description": "Text that has shadow and alpha of block and font",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 18,
+      "alignment_horizontal": "center",
+      "text_alignment_horizontal": "center",
+      "text": "The quick brown fox jumps over the lazy dog",
+      "paddings": {
+        "top": 7,
+        "bottom": 7
+      },
+      "text_shadow": {
+        "alpha": 1,
+        "color": "#FF00FF",
+        "blur": 2,
+        "offset": {
+          "x": {
+            "unit": "dp",
+            "value": 0
+          },
+          "y": {
+            "unit": "dp",
+            "value": 0
+          }
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "type": "text_block"
+            },
+            {
+              "type": "text_block",
+              "alpha": 0.5
+            },
+            {
+              "type": "text_block",
+              "alpha": 0
+            },
+            {
+              "type": "text_block",
+              "text_color": "#BF000000"
+            },
+            {
+              "type": "text_block",
+              "text_color": "#80000000"
+            },
+            {
+              "type": "text_block",
+              "text_color": "#40000000"
+            },
+            {
+              "type": "text_block",
+              "text_color": "#00000000"
+            },
+            {
+              "type": "text_block",
+              "text_color": "#80000000",
+              "alpha": 0.5
+            },
+            {
+              "type": "text_block",
+              "text_color": "#80000000",
+              "text_shadow": {
+                "alpha": 0.5,
+                "color": "#FF00FF",
+                "blur": 2,
+                "offset": {
+                  "x": {
+                    "unit": "dp",
+                    "value": 0
+                  },
+                  "y": {
+                    "unit": "dp",
+                    "value": 0
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

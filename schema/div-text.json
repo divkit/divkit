@@ -84,7 +84,9 @@
         "text_shadow": {
           "$ref": "div-shadow.json",
           "$description": "translations.json#/div_text_range_shadow",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         }
       },
       "required": [
@@ -321,7 +323,9 @@
         "text_shadow": {
           "$ref": "div-shadow.json",
           "$description": "translations.json#/div_text_shadow",
-          "platforms": []
+          "platforms": [
+            "android"
+          ]
         }
       }
     }
