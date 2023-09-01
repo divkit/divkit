@@ -1,12 +1,7 @@
-import BasePublic
-import Serialization
-import LayoutKitInterface
-import LayoutKit
-
 public final class DivErrorsStorage {
   public private(set) var errors: [DivError] = []
 
-  public init(errors: [DivError]) {
+  init(errors: [DivError]) {
     self.errors = errors
   }
 

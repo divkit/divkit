@@ -1,5 +1,3 @@
-import Foundation
-
 import LayoutKit
 
 public protocol DivBlockModeling {

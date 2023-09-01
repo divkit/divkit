@@ -2,10 +2,8 @@ import CoreGraphics
 
 import BasePublic
 import BaseUIPublic
-import CommonCorePublic
 import LayoutKit
 import NetworkingPublic
-import Serialization
 
 #if os(iOS)
 import UIKit
@@ -15,30 +13,30 @@ import AppKit
 
 public struct DivBlockModelingContext {
   public let cardId: DivCardID
-  internal var cardLogId: String?
+  var cardLogId: String?
   public internal(set) var parentPath: UIElementPath
-  internal var parentDivStatePath: DivStatePath?
-  public var stateManager: DivStateManager
+  var parentDivStatePath: DivStatePath?
+  let stateManager: DivStateManager
   public let blockStateStorage: DivBlockStateStorage
-  public let visibilityCounter: DivVisibilityCounting
-  public let lastVisibleBoundsCache: DivLastVisibleBoundsCache
+  let visibilityCounter: DivVisibilityCounting
+  let lastVisibleBoundsCache: DivLastVisibleBoundsCache
   public let imageHolderFactory: ImageHolderFactory
-  public let highPriorityImageHolderFactory: ImageHolderFactory?
-  public let divCustomBlockFactory: DivCustomBlockFactory
-  public let fontProvider: DivFontProvider
-  public let flagsInfo: DivFlagsInfo
-  public let extensionHandlers: [String: DivExtensionHandler]
-  public let stateInterceptors: [String: DivStateInterceptor]
+  let highPriorityImageHolderFactory: ImageHolderFactory?
+  let divCustomBlockFactory: DivCustomBlockFactory
+  let fontProvider: DivFontProvider
+  let flagsInfo: DivFlagsInfo
+  let extensionHandlers: [String: DivExtensionHandler]
+  let stateInterceptors: [String: DivStateInterceptor]
   private let variables: DivVariables
-  public let layoutDirection: UserInterfaceLayoutDirection
-  public let debugParams: DebugParams
-  public let scheduler: Scheduling
-  public let playerFactory: PlayerFactory?
-  public var childrenA11yDescription: String?
-  public weak var parentScrollView: ScrollView?
+  let layoutDirection: UserInterfaceLayoutDirection
+  let debugParams: DebugParams
+  let scheduler: Scheduling
+  let playerFactory: PlayerFactory?
+  var childrenA11yDescription: String?
+  private(set) weak var parentScrollView: ScrollView?
   public internal(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
-  public let tooltipViewFactory: DivTooltipViewFactory?
+  let tooltipViewFactory: DivTooltipViewFactory?
   private let variablesStorage: DivVariablesStorage
   private let variableTracker: DivVariableTracker?
 
@@ -65,11 +63,11 @@ public struct DivBlockModelingContext {
     parentDivStatePath: DivStatePath? = nil,
     stateManager: DivStateManager,
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
-    visibilityCounter: DivVisibilityCounting = DivVisibilityCounter(),
-    lastVisibleBoundsCache: DivLastVisibleBoundsCache = DivLastVisibleBoundsCache(),
+    visibilityCounter: DivVisibilityCounting? = nil,
+    lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
-    divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
+    divCustomBlockFactory: DivCustomBlockFactory? = nil,
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
@@ -80,10 +78,10 @@ public struct DivBlockModelingContext {
     scheduler: Scheduling? = nil,
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
-    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: []),
+    errorsStorage: DivErrorsStorage? = nil,
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     variableTracker: DivVariableTracker? = nil,
-    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    persistentValuesStorage: DivPersistentValuesStorage? = nil,
     tooltipViewFactory: DivTooltipViewFactory? = nil
   ) {
     self.cardId = cardId
@@ -92,11 +90,11 @@ public struct DivBlockModelingContext {
     self.parentDivStatePath = parentDivStatePath
     self.stateManager = stateManager
     self.blockStateStorage = blockStateStorage
-    self.visibilityCounter = visibilityCounter
-    self.lastVisibleBoundsCache = lastVisibleBoundsCache
+    self.visibilityCounter = visibilityCounter ?? DivVisibilityCounter()
+    self.lastVisibleBoundsCache = lastVisibleBoundsCache ?? DivLastVisibleBoundsCache()
     self.imageHolderFactory = imageHolderFactory
     self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
-    self.divCustomBlockFactory = divCustomBlockFactory
+    self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.flagsInfo = flagsInfo
     self.fontProvider = fontProvider ?? DefaultFontProvider()
     self.variables = variablesStorage.makeVariables(for: cardId)
@@ -105,10 +103,10 @@ public struct DivBlockModelingContext {
     self.scheduler = scheduler ?? TimerScheduler()
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
-    self.errorsStorage = errorsStorage
+    self.errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
     self.layoutDirection = layoutDirection
     self.variableTracker = variableTracker
-    self.persistentValuesStorage = persistentValuesStorage
+    self.persistentValuesStorage = persistentValuesStorage ?? DivPersistentValuesStorage()
     self.tooltipViewFactory = tooltipViewFactory
     self.variablesStorage = variablesStorage
 

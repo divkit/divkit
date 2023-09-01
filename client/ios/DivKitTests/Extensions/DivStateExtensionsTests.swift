@@ -1,9 +1,9 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
 
 import CommonCorePublic
-import DivKit
 
 final class DivStateExtensionsTests: XCTestCase {
   private let timerScheduler = TestTimerScheduler()

@@ -1,27 +1,28 @@
 import CoreGraphics
-import LayoutKit
+
 import CommonCorePublic
+import LayoutKit
 
 public final class DivLastVisibleBoundsCache {
   private let rwLock = RWLock()
 
   private var storage: [UIElementPath: CGRect] = [:]
 
-  public init() {}
+  init() {}
 
-  public func lastVisibleBounds(for path: UIElementPath) -> CGRect {
+  func lastVisibleBounds(for path: UIElementPath) -> CGRect {
     rwLock.read {
       storage[path] ?? .zero
     }
   }
 
-  public func updateLastVisibleBounds(for path: UIElementPath, bounds: CGRect) {
+  func updateLastVisibleBounds(for path: UIElementPath, bounds: CGRect) {
     rwLock.write {
       storage[path] = bounds
     }
   }
 
-  public func dropVisibleBounds(forMatchingPrefix prefix: UIElementPath) {
+  func dropVisibleBounds(forMatchingPrefix prefix: UIElementPath) {
     let prefix = prefix.description + "/"
     rwLock.write {
       storage.forEach {
@@ -32,7 +33,7 @@ public final class DivLastVisibleBoundsCache {
     }
   }
 
-  public func reset() {
+  func reset() {
     rwLock.write {
       storage.removeAll()
     }

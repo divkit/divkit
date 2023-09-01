@@ -1,4 +1,5 @@
-import DivKit
+@testable import DivKit
+
 import LayoutKit
 import XCTest
 
