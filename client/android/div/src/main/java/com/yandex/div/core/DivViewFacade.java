@@ -155,6 +155,10 @@ public interface DivViewFacade {
         //do nothing by default
     }
 
+    default void showTooltip(@NonNull String tooltipId, boolean multiple) {
+        showTooltip(tooltipId);
+    }
+
     default void hideTooltip(@NonNull String tooltipId) {
         //do nothing by default
     }

@@ -39,6 +39,7 @@ public class DivActionHandler {
     private static final String PARAM_TEMPORARY = "temporary";
     private static final String PARAM_VARIABLE_NAME = "name";
     private static final String PARAM_VARIABLE_VALUE = "value";
+    private static final String PARAM_MULTIPLE = "multiple";
 
     public boolean getUseActionUid() {
         return false;
@@ -223,7 +224,8 @@ public class DivActionHandler {
                 Assert.fail(PARAM_ID + " param is required");
                 return false;
             }
-            view.showTooltip(tooltipId);
+            boolean multiple = uri.getBooleanQueryParameter(PARAM_MULTIPLE, false);
+            view.showTooltip(tooltipId, multiple);
             return true;
         } else if (AUTHORITY_HIDE_TOOLTIP.equals(action)) {
             String tooltipId = uri.getQueryParameter(PARAM_ID);

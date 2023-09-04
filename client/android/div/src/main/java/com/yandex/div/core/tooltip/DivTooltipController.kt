@@ -64,18 +64,18 @@ internal class DivTooltipController @VisibleForTesting constructor(
         errorCollectors,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
-    fun showTooltip(tooltipId: String, div2View: Div2View) {
+    fun showTooltip(tooltipId: String, div2View: Div2View, multiple: Boolean = false) {
         findChildWithTooltip(tooltipId, div2View)?.let { (divTooltip, anchor) ->
-            showTooltip(divTooltip, anchor, div2View)
+            showTooltip(divTooltip, anchor, div2View, multiple)
         }
     }
 
-    private fun showTooltip(divTooltip: DivTooltip, anchor: View, div2View: Div2View) {
+    private fun showTooltip(divTooltip: DivTooltip, anchor: View, div2View: Div2View, multiple: Boolean) {
         if (tooltips.contains(divTooltip.id)) {
             return
         }
         anchor.doOnActualLayout {
-            tryShowTooltip(anchor, divTooltip, div2View)
+            tryShowTooltip(anchor, divTooltip, div2View, multiple)
         }
         if (!anchor.isActuallyLaidOut && !anchor.isLayoutRequested) {
             anchor.requestLayout()
@@ -130,9 +130,10 @@ internal class DivTooltipController @VisibleForTesting constructor(
     private fun tryShowTooltip(
         anchor: View,
         divTooltip: DivTooltip,
-        div2View: Div2View
+        div2View: Div2View,
+        multiple: Boolean
     ) {
-        if (!tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip)) {
+        if (!tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple)) {
             return
         }
         val div = divTooltip.div
@@ -164,7 +165,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips[divTooltip.id] = tooltipData
         val ticket = divPreloader.preload(div, div2View.expressionResolver) { hasFailures ->
             if (!hasFailures && !tooltipData.dismissed && anchor.isViewAttachedToWindow()
-                    && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip)) {
+                    && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple)) {
                 tooltipView.doOnActualLayout {
                     val windowFrame = div2View.getWindowFrame()
                     val location = calcPopupLocation(tooltipView, anchor, divTooltip, div2View.expressionResolver)

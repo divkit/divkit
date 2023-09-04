@@ -791,6 +791,10 @@ class Div2View private constructor(
         tooltipController.showTooltip(tooltipId, this)
     }
 
+    override fun showTooltip(tooltipId: String, multiple: Boolean) {
+        tooltipController.showTooltip(tooltipId, this, multiple)
+    }
+
     override fun hideTooltip(tooltipId: String) {
         tooltipController.hideTooltip(tooltipId, this)
     }

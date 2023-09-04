@@ -100,7 +100,7 @@ class DivTooltipControllerTest {
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
 
     private val tooltipRestrictor = mock<DivTooltipRestrictor> {
-        on { canShowTooltip(any(), any(), any()) } doReturn true
+        on { canShowTooltip(any(), any(), any(), any()) } doReturn true
         on { tooltipShownCallback } doReturn tooltipShownCallback
     }
     private val visibilityActionTracker = mock<DivVisibilityActionTracker>()
