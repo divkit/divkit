@@ -9,6 +9,6 @@
     "author": "",
     "license": "UNLICENSED",
     "dependencies": {
-        "@yandex-int/tkit": "1.13.0"
+        "@yandex-int/tkit": "1.15.3"
     }
 }
