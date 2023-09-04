@@ -1,6 +1,7 @@
 {
   "description": "Pager aligned right-to-left.",
   "platforms": [
+    "android",
     "ios"
   ],
   "configuration": {

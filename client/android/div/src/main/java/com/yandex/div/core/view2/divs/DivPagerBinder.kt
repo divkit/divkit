@@ -20,6 +20,7 @@ import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -180,24 +181,8 @@ internal class DivPagerBinder @Inject constructor(
         val metrics = view.resources.displayMetrics
         val orientation = div.orientation.evaluate(resolver)
         val itemSpacing = div.itemSpacing.toPxF(metrics, resolver)
-        val startPadding = if (orientation == DivPager.Orientation.HORIZONTAL) {
-            if (div.paddings.start != null) {
-                div.paddings.start?.evaluate(resolver).dpToPxF(metrics)
-            } else {
-                div.paddings.left.evaluate(resolver).dpToPxF(metrics)
-            }
-        } else {
-            div.paddings.top.evaluate(resolver).dpToPxF(metrics)
-        }
-        val endPadding = if (orientation == DivPager.Orientation.HORIZONTAL) {
-            if (div.paddings.end != null) {
-                div.paddings.end?.evaluate(resolver).dpToPxF(metrics)
-            } else {
-                div.paddings.right.evaluate(resolver).dpToPxF(metrics)
-            }
-        } else {
-            div.paddings.bottom.evaluate(resolver).dpToPxF(metrics)
-        }
+        val startPadding = evaluateStartPadding(view, div, resolver)
+        val endPadding = evaluateEndPadding(view, div, resolver)
 
         view.viewPager.setPageTransformer { page, position ->
             val viewPager = page.parent.parent as ViewPager2
@@ -209,13 +194,62 @@ internal class DivPagerBinder @Inject constructor(
             val neighbourItemWidth = div.evaluateNeighbourItemWidth(view, resolver,
                 pagePosition, startPadding, endPadding)
 
-            val offset = -position * (widthOfThisItemAsNeighbour + neighbourItemWidth + itemSpacing)
+            var offset = -position * (widthOfThisItemAsNeighbour + neighbourItemWidth + itemSpacing)
+            if (view.isLayoutRtl() && orientation == DivPager.Orientation.HORIZONTAL) {
+                offset = -offset
+            }
             pageTranslations.put(pagePosition, offset)
             if (orientation == DivPager.Orientation.HORIZONTAL) {
                 page.translationX = offset
             } else {
                 page.translationY = offset
             }
+        }
+    }
+
+    private fun evaluateStartPadding(
+        view: DivPagerView,
+        div: DivPager,
+        resolver: ExpressionResolver,
+    ): Float {
+        val metrics = view.resources.displayMetrics
+        val orientation = div.orientation.evaluate(resolver)
+
+        return if (orientation == DivPager.Orientation.HORIZONTAL) {
+            if (div.paddings.start != null) {
+                div.paddings.start?.evaluate(resolver).dpToPxF(metrics)
+            } else {
+                if (view.isLayoutRtl()) {
+                    div.paddings.right.evaluate(resolver).dpToPxF(metrics)
+                } else {
+                    div.paddings.left.evaluate(resolver).dpToPxF(metrics)
+                }
+            }
+        } else {
+            div.paddings.top.evaluate(resolver).dpToPxF(metrics)
+        }
+    }
+
+    private fun evaluateEndPadding(
+        view: DivPagerView,
+        div: DivPager,
+        resolver: ExpressionResolver,
+    ): Float {
+        val metrics = view.resources.displayMetrics
+        val orientation = div.orientation.evaluate(resolver)
+
+        return if (orientation == DivPager.Orientation.HORIZONTAL) {
+            if (div.paddings.end != null) {
+                div.paddings.end?.evaluate(resolver).dpToPxF(metrics)
+            } else {
+                if (view.isLayoutRtl()) {
+                    div.paddings.left.evaluate(resolver).dpToPxF(metrics)
+                } else {
+                    div.paddings.right.evaluate(resolver).dpToPxF(metrics)
+                }
+            }
+        } else {
+            div.paddings.bottom.evaluate(resolver).dpToPxF(metrics)
         }
     }
 
@@ -231,13 +265,14 @@ internal class DivPagerBinder @Inject constructor(
                 layoutMode = div.layoutMode,
                 metrics = metrics,
                 resolver = resolver,
-                paddingLeft = div.paddings.left.evaluate(resolver).dpToPxF(metrics),
-                paddingRight = div.paddings.right.evaluate(resolver).dpToPxF(metrics),
+                paddingLeft = evaluateLeftPadding(view, div, resolver),
+                paddingRight = evaluateRightPadding(view, div, resolver),
                 paddingTop = div.paddings.top.evaluate(resolver).dpToPxF(metrics),
                 paddingBottom = div.paddings.bottom.evaluate(resolver).dpToPxF(metrics),
                 parentSize = if (isHorizontal) view.viewPager.width else view.viewPager.height,
                 itemSpacing = div.itemSpacing.toPxF(metrics, resolver),
-                orientation = if (isHorizontal) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+                orientation = if (isHorizontal) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL,
+                isLayoutRtl = { view.isLayoutRtl() },
             )
         )
 
@@ -247,6 +282,42 @@ internal class DivPagerBinder @Inject constructor(
         }
         if (neighbourItemIsShown && view.viewPager.offscreenPageLimit != 1) {
             view.viewPager.offscreenPageLimit = 1
+        }
+    }
+
+    private fun evaluateRightPadding (
+        view: DivPagerView,
+        div: DivPager,
+        resolver: ExpressionResolver,
+    ): Float {
+        val metrics = view.resources.displayMetrics
+        val orientation = div.orientation.evaluate(resolver)
+        val isLayoutRtl = view.isLayoutRtl()
+
+        return when {
+            orientation == DivPager.Orientation.HORIZONTAL && isLayoutRtl && div.paddings.start != null ->
+                div.paddings.start?.evaluate(resolver).dpToPxF(metrics)
+            orientation == DivPager.Orientation.HORIZONTAL && !isLayoutRtl && div.paddings.end != null ->
+                div.paddings.end?.evaluate(resolver).dpToPxF(metrics)
+            else -> div.paddings.right.evaluate(resolver).dpToPxF(metrics)
+        }
+    }
+
+    private fun evaluateLeftPadding (
+        view: DivPagerView,
+        div: DivPager,
+        resolver: ExpressionResolver,
+    ): Float {
+        val metrics = view.resources.displayMetrics
+        val orientation = div.orientation.evaluate(resolver)
+        val isLayoutRtl = view.isLayoutRtl()
+
+        return when {
+            orientation == DivPager.Orientation.HORIZONTAL && isLayoutRtl && div.paddings.end != null ->
+                div.paddings.end?.evaluate(resolver).dpToPxF(metrics)
+            orientation == DivPager.Orientation.HORIZONTAL && !isLayoutRtl && div.paddings.start != null ->
+                div.paddings.start?.evaluate(resolver).dpToPxF(metrics)
+            else -> div.paddings.left.evaluate(resolver).dpToPxF(metrics)
         }
     }
 

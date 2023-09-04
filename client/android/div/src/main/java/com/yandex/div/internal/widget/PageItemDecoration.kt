@@ -2,6 +2,7 @@ package com.yandex.div.internal.widget
 
 import android.graphics.Rect
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import androidx.annotation.Px
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,8 @@ internal class PageItemDecoration @JvmOverloads constructor(
     @Px private val paddingBottom: Float = 0f,
     @Px private val parentSize: Int,
     @Px private val itemSpacing: Float = 0f,
-    private val orientation: Int = RecyclerView.HORIZONTAL
+    private val isLayoutRtl: () -> Boolean,
+    private val orientation: Int = RecyclerView.HORIZONTAL,
 ) : RecyclerView.ItemDecoration() {
 
     private val paddingLeftInt = paddingLeft.roundToInt()
@@ -38,8 +40,8 @@ internal class PageItemDecoration @JvmOverloads constructor(
         val isFirst = parent.layoutManager?.getPosition(view) == 0
         val isLast = parent.layoutManager?.getPosition(view) == parent.adapter!!.itemCount - 1
 
-        when (orientation) {
-            RecyclerView.HORIZONTAL -> outRect.set(
+        when {
+            orientation == RecyclerView.HORIZONTAL && !isLayoutRtl() -> outRect.set(
                 when {
                     isFirst -> paddingLeftInt
                     isLast -> paddingStartForLastItem
@@ -53,7 +55,21 @@ internal class PageItemDecoration @JvmOverloads constructor(
                 },
                 paddingBottomInt
             )
-            RecyclerView.VERTICAL -> outRect.set(
+            orientation == RecyclerView.HORIZONTAL && isLayoutRtl() -> outRect.set(
+                when {
+                    isFirst -> paddingStartForLastItem
+                    isLast -> paddingLeftInt
+                    else -> middlePadding
+                },
+                paddingTopInt,
+                when {
+                    isFirst -> paddingRightInt
+                    isLast -> paddingEndForFirstItem
+                    else -> middlePadding
+                },
+                paddingBottomInt
+            )
+            orientation == RecyclerView.VERTICAL -> outRect.set(
                 paddingLeftInt,
                 when {
                     isFirst -> paddingTopInt
