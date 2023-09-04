@@ -1,6 +1,7 @@
 {
   "description": "Horizontal container with content_alignment_horizontal = space-between",
   "platforms": [
+    "android",
     "web"
   ],
   "card": {

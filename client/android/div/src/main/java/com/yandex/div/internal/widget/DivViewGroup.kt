@@ -1,9 +1,12 @@
 package com.yandex.div.internal.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GravityCompat
 import kotlin.math.max
 import kotlin.math.min
 
@@ -12,6 +15,22 @@ abstract class DivViewGroup @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
+
+    @DivGravity
+    var gravity: Int = DivLayoutParams.DEFAULT_GRAVITY
+        set(value) {
+            if (field == value) return
+
+            var newGravity = value
+            if ((newGravity.toHorizontalGravity()) == 0) {
+                newGravity = newGravity or GravityCompat.START
+            }
+            if ((newGravity.toVerticalGravity()) == 0) {
+                newGravity = newGravity or Gravity.TOP
+            }
+            field = newGravity
+            requestLayout()
+        }
 
     init {
         clipToPadding = false
@@ -61,6 +80,10 @@ abstract class DivViewGroup @JvmOverloads constructor(
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
 
+    internal val horizontalGravity get() = gravity.toHorizontalGravity()
+
+    internal val verticalGravity get() = gravity.toVerticalGravity()
+
     override fun checkLayoutParams(p: LayoutParams?): Boolean = p is DivLayoutParams
 
     override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams = DivLayoutParams(context, attrs)
@@ -78,7 +101,7 @@ abstract class DivViewGroup @JvmOverloads constructor(
 
         val View.lp inline get() = layoutParams as DivLayoutParams
 
-        internal fun getChildMeasureSpec(
+        fun getChildMeasureSpec(
             parentMeasureSpec: Int,
             padding: Int,
             childDimension: Int,
@@ -171,5 +194,11 @@ abstract class DivViewGroup @JvmOverloads constructor(
 
             return MeasureSpec.makeMeasureSpec(resultSize, resultMode)
         }
+
+        @SuppressLint("WrongConstant")
+        fun Int.toHorizontalGravity() = this and DivGravity.HORIZONTAL_GRAVITY_MASK
+
+        @SuppressLint("WrongConstant")
+        fun Int.toVerticalGravity() = this and DivGravity.VERTICAL_GRAVITY_MASK
     }
 }

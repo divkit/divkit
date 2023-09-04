@@ -1,6 +1,7 @@
 {
   "description": "Horizontal wrap-container with content_alignment_horizontal = space-around",
   "platforms": [
+    "android",
     "web"
   ],
   "templates": {

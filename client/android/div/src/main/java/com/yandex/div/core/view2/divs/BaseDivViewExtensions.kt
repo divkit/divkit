@@ -36,6 +36,7 @@ import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
 import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.internal.widget.DivGravity
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
@@ -399,14 +400,20 @@ internal fun evaluateGravity(horizontal: DivContentAlignmentHorizontal?, vertica
         DivContentAlignmentHorizontal.RIGHT -> Gravity.RIGHT
         DivContentAlignmentHorizontal.START -> Gravity.START
         DivContentAlignmentHorizontal.END -> Gravity.END
-        else -> Gravity.START // TODO(grechka62): support additional variants
+        DivContentAlignmentHorizontal.SPACE_AROUND -> DivGravity.SPACE_AROUND_HORIZONTAL
+        DivContentAlignmentHorizontal.SPACE_BETWEEN -> DivGravity.SPACE_BETWEEN_HORIZONTAL
+        DivContentAlignmentHorizontal.SPACE_EVENLY -> DivGravity.SPACE_EVENLY_HORIZONTAL
+        else -> Gravity.START
     }
 
     val verticalGravity = when (vertical) {
         DivContentAlignmentVertical.TOP -> Gravity.TOP
         DivContentAlignmentVertical.CENTER -> Gravity.CENTER_VERTICAL
         DivContentAlignmentVertical.BOTTOM -> Gravity.BOTTOM
-        else -> Gravity.TOP // TODO(grechka62): support additional variants
+        DivContentAlignmentVertical.SPACE_AROUND -> DivGravity.SPACE_AROUND_VERTICAL
+        DivContentAlignmentVertical.SPACE_BETWEEN -> DivGravity.SPACE_BETWEEN_VERTICAL
+        DivContentAlignmentVertical.SPACE_EVENLY -> DivGravity.SPACE_EVENLY_VERTICAL
+        else -> Gravity.TOP
     }
 
     return horizontalGravity or verticalGravity

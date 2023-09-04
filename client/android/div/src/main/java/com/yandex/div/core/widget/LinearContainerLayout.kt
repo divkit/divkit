@@ -13,6 +13,10 @@ import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
+import androidx.core.view.isGone
+import com.yandex.div.core.util.getIndices
+import com.yandex.div.core.util.getOffsets
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.internal.KAssert
@@ -38,37 +42,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var maxBaselineDescent = -1
 
     @LinearLayoutCompat.OrientationMode
-    var orientation = HORIZONTAL
-        set(value) {
-            if (field != value) {
-                field = value
-                requestLayout()
-            }
-        }
-
-    private var _gravity = GravityCompat.START or Gravity.TOP
-
-    /**
-     * Describes how the child views are positioned. Defaults to GRAVITY_TOP. If
-     * this layout has a VERTICAL orientation, this controls where all the child
-     * views are placed if there is extra vertical space. If this layout has a
-     * HORIZONTAL orientation, this controls the alignment of the children.
-     */
-    var gravity: Int
-        get() = _gravity
-        set(value) {
-            if (_gravity == value) return
-
-            var newGravity = value
-            if ((newGravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK) == 0) {
-                newGravity = newGravity or GravityCompat.START
-            }
-            if ((newGravity and Gravity.VERTICAL_GRAVITY_MASK) == 0) {
-                newGravity = newGravity or Gravity.TOP
-            }
-            _gravity = newGravity
-            requestLayout()
-        }
+    var orientation by dimensionAffecting(HORIZONTAL)
 
     private var totalLength = 0
     private var totalConstrainedLength = 0
@@ -84,6 +58,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var dividerMarginBottom = 0
     private var dividerMarginLeft = 0
     private var dividerMarginRight = 0
+
+    private var edgeDividerOffset = 0
+    private var spaceBetweenChildren = 0f
 
     var dividerDrawable: Drawable? = null
         set(value) {
@@ -105,12 +82,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     }
 
     @ShowSeparatorsMode
-    var showDividers: Int = 0
-        set(value) {
-            if (field == value) return
-            field = value
-            requestLayout()
-        }
+    var showDividers by dimensionAffecting(0)
 
     private val constrainedChildren = mutableListOf<View>()
     private val skippedMatchParentChildren = mutableSetOf<View>()
@@ -140,14 +112,15 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private fun drawDividersVertical(canvas: Canvas) {
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
-                val top = child.top - child.lp.topMargin - dividerHeight - dividerMarginBottom
+                val top = child.top - child.lp.topMargin - dividerHeight - dividerMarginBottom -
+                    getDividerOffsetBeforeChildAt(i)
                 drawHorizontalDivider(canvas, top)
             }
         }
         if (hasDividerBeforeChildAt(childCount)) {
             val bottom = getChildAt(childCount - 1)?.let {
-                it.bottom + it.lp.bottomMargin + dividerMarginTop
-            } ?: (height - paddingBottom - dividerHeight - dividerMarginBottom)
+                it.bottom + it.lp.bottomMargin + dividerMarginTop + edgeDividerOffset
+            } ?: (height - paddingBottom - dividerHeight - dividerMarginBottom - edgeDividerOffset)
             drawHorizontalDivider(canvas, bottom)
         }
     }
@@ -156,10 +129,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val isLayoutRtl = isLayoutRtl()
         forEachSignificantIndexed { child, i ->
             if (hasDividerBeforeChildAt(i)) {
+                val offset = getDividerOffsetBeforeChildAt(i)
                 val position = if (isLayoutRtl) {
-                    child.right + child.lp.rightMargin + dividerMarginLeft
+                    child.right + child.lp.rightMargin + dividerMarginLeft + offset
                 } else {
-                    child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight
+                    child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight - offset
                 }
                 drawVerticalDivider(canvas, position)
             }
@@ -168,10 +142,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (hasDividerBeforeChildAt(childCount)) {
             val child = getChildAt(childCount - 1)
             val position = when {
-                child == null && isLayoutRtl -> paddingLeft + dividerMarginLeft
-                child == null -> width - paddingRight - dividerWidth - dividerMarginRight
-                isLayoutRtl -> child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight
-                else -> child.right + child.lp.rightMargin + dividerMarginLeft
+                child == null && isLayoutRtl -> paddingLeft + dividerMarginLeft + edgeDividerOffset
+                child == null -> width - paddingRight - dividerWidth - dividerMarginRight - edgeDividerOffset
+                isLayoutRtl -> child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight - edgeDividerOffset
+                else -> child.right + child.lp.rightMargin + dividerMarginLeft + edgeDividerOffset
             }
             drawVerticalDivider(canvas, position)
         }
@@ -238,19 +212,24 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun hasDividerBeforeChildAt(childIndex: Int): Boolean {
         return when {
-            childIndex == 0 -> showDividers and ShowSeparatorsMode.SHOW_AT_START != 0
-            childIndex == childCount -> showDividers and ShowSeparatorsMode.SHOW_AT_END != 0
+            childIndex == firstVisibleChildIndex -> showDividers and ShowSeparatorsMode.SHOW_AT_START != 0
+            childIndex > lastVisibleChildIndex -> showDividers and ShowSeparatorsMode.SHOW_AT_END != 0
             showDividers and ShowSeparatorsMode.SHOW_BETWEEN != 0 -> {
                 for (i in childIndex - 1 downTo 0) {
-                    if (getChildAt(i).visibility != GONE) {
-                        return true
-                    }
+                    if (!getChildAt(childIndex).isGone) return true
                 }
                 false
             }
             else -> false
         }
     }
+
+    private val firstVisibleChildIndex get() = children.indexOfFirst { !it.isGone }
+
+    private val lastVisibleChildIndex get() = children.indexOfLast { !it.isGone }
+
+    private fun getDividerOffsetBeforeChildAt(index: Int) =
+        if (index == firstVisibleChildIndex) edgeDividerOffset else (spaceBetweenChildren / 2).roundToInt()
 
     /**
      * Measures the children when the orientation of this LinearLayout is set
@@ -831,151 +810,83 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
     }
 
-    /**
-     * Position the children during a layout pass if the orientation of this
-     * LinearLayout is set to [VERTICAL].
-     *
-     * @see orientation
-     * @see onLayout
-     * @param left
-     * @param top
-     * @param right
-     * @param bottom
-     */
-    open fun layoutVertical(left: Int, top: Int, right: Int, bottom: Int) {
-
-        // Where right end of child should go
-        val width = right - left
-        val childRight = width - paddingRight
-
-        // Space available for child
-        val childSpace = width - paddingLeft - paddingRight
-        val majorGravity = gravity and Gravity.VERTICAL_GRAVITY_MASK
-        val minorGravity = gravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK
-        var childTop = when (majorGravity) {
-            Gravity.BOTTOM -> paddingTop + bottom - top - totalLength
-            Gravity.CENTER_VERTICAL -> paddingTop + (bottom - top - totalLength) / 2
-            Gravity.TOP -> paddingTop
-            else -> paddingTop
+    private fun layoutVertical(left: Int, top: Int, right: Int, bottom: Int) {
+        val childSpace = right - left - paddingLeft - paddingRight
+        val freeSpace = (bottom - top - totalLength).toFloat()
+        var childTop = paddingTop.toFloat()
+        getOffsets(freeSpace, verticalGravity, visibleChildCount).let {
+            childTop += it.firstChildOffset
+            spaceBetweenChildren = it.spaceBetweenChildren
+            edgeDividerOffset = it.edgeDividerOffset
         }
         forEachSignificantIndexed { child, i ->
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
             val lp = child.lp
-            var gravity = lp.gravity
+            var gravity = lp.gravity.toHorizontalGravity()
             if (gravity < 0) {
-                gravity = minorGravity
+                gravity = horizontalGravity
             }
             val layoutDirection = ViewCompat.getLayoutDirection(this)
-            val absoluteGravity = GravityCompat.getAbsoluteGravity(gravity, layoutDirection)
-            val childLeft = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
-                Gravity.CENTER_HORIZONTAL -> {
-                    paddingLeft + (childSpace - childWidth + lp.leftMargin - lp.rightMargin) / 2
-                }
-                Gravity.RIGHT -> childRight - childWidth - lp.rightMargin
-                Gravity.LEFT -> paddingLeft + lp.leftMargin
-                else -> paddingLeft + lp.leftMargin
+            val childLeft = paddingLeft + when (GravityCompat.getAbsoluteGravity(gravity, layoutDirection)) {
+                Gravity.LEFT -> lp.leftMargin
+                Gravity.CENTER_HORIZONTAL -> (childSpace - childWidth + lp.leftMargin - lp.rightMargin) / 2
+                Gravity.RIGHT -> childSpace - childWidth - lp.rightMargin
+                else -> lp.leftMargin
             }
             if (hasDividerBeforeChildAt(i)) {
                 childTop += dividerHeightWithMargins
             }
             childTop += lp.topMargin
-            setChildFrame(child, childLeft, childTop, childWidth, childHeight)
-            childTop += childHeight + lp.bottomMargin
+            setChildFrame(child, childLeft, childTop.roundToInt(), childWidth, childHeight)
+            childTop += childHeight + lp.bottomMargin + spaceBetweenChildren
         }
     }
 
-    /**
-     * Position the children during a layout pass if the orientation of this
-     * LinearLayout is set to [HORIZONTAL].
-     *
-     * @see orientation
-     * @see onLayout
-     * @param left
-     * @param top
-     * @param right
-     * @param bottom
-     */
-    open fun layoutHorizontal(left: Int, top: Int, right: Int, bottom: Int) {
-        val isLayoutRtl = isLayoutRtl()
-        var childTop: Int
+    private val visibleChildCount get() = children.count { !it.isGone }
 
-        // Where bottom of child should go
-        val height = bottom - top
-        val childBottom = height - paddingBottom
-
-        // Space available for child
-        val childSpace = height - paddingTop - paddingBottom
-        val majorGravity = gravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK
-        val minorGravity = gravity and Gravity.VERTICAL_GRAVITY_MASK
+    private fun layoutHorizontal(left: Int, top: Int, right: Int, bottom: Int) {
+        val childSpace = bottom - top - paddingTop - paddingBottom
         val layoutDirection = ViewCompat.getLayoutDirection(this)
-        var childLeft = when (GravityCompat.getAbsoluteGravity(majorGravity, layoutDirection)) {
-            Gravity.RIGHT -> paddingLeft + right - left - totalLength
-            Gravity.CENTER_HORIZONTAL -> paddingLeft + (right - left - totalLength) / 2
-            Gravity.LEFT -> paddingLeft
-            else -> paddingLeft
+        val freeSpace = (right - left - totalLength).toFloat()
+        var childLeft = paddingLeft.toFloat()
+        val absoluteGravity = GravityCompat.getAbsoluteGravity(horizontalGravity, layoutDirection)
+        getOffsets(freeSpace, absoluteGravity, visibleChildCount).let {
+            childLeft += it.firstChildOffset
+            spaceBetweenChildren = it.spaceBetweenChildren
+            edgeDividerOffset = it.edgeDividerOffset
         }
-        var start = 0
-        var dir = 1
-        //In case of RTL, start drawing from the last child.
-        if (isLayoutRtl) {
-            start = childCount - 1
-            dir = -1
-        }
-        for (i in 0 until childCount) {
-            val childIndex = start + dir * i
+        for (childIndex in getIndices(0, childCount)) {
             val child = getChildAt(childIndex)
-            if (child == null || child.visibility == GONE) continue
+            if (child == null || child.isGone) continue
 
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
-            var childBaseline = -1
             val lp = child.lp
-            if (lp.isBaselineAligned && lp.height != MATCH_PARENT) {
-                childBaseline = child.baseline
-            }
-            var gravity = lp.gravity
+            var gravity = lp.gravity.toVerticalGravity()
             if (gravity < 0) {
-                gravity = minorGravity
+                gravity = verticalGravity
             }
-            when (gravity and Gravity.VERTICAL_GRAVITY_MASK) {
+            val childTop = paddingTop + when (gravity) {
                 Gravity.TOP -> {
-                    childTop = paddingTop + lp.topMargin
-                    if (childBaseline != -1) {
-                        childTop += maxBaselineAscent - childBaseline - lp.topMargin
-                    }
+                    val considerBaseline = lp.isBaselineAligned && lp.height != MATCH_PARENT
+                    if (considerBaseline) maxBaselineAscent - child.baseline else lp.topMargin
                 }
-                Gravity.CENTER_VERTICAL -> {
-                    childTop = paddingTop + (childSpace - childHeight + lp.topMargin - lp.bottomMargin) / 2
-                }
-                Gravity.BOTTOM -> childTop = childBottom - childHeight - lp.bottomMargin
-                else -> childTop = paddingTop
+                Gravity.CENTER_VERTICAL -> (childSpace - childHeight + lp.topMargin - lp.bottomMargin) / 2
+                Gravity.BOTTOM -> childSpace - childHeight - lp.bottomMargin
+                else -> 0
             }
-            if (hasDividerBeforeChildAt(childIndex)) {
+            if (hasDividerBeforeChildAt(if (isLayoutRtl()) childIndex + 1 else childIndex)) {
                 childLeft += dividerWidthWithMargins
             }
             childLeft += lp.leftMargin
-            setChildFrame(child, childLeft, childTop, childWidth, childHeight)
-            childLeft += childWidth + lp.rightMargin
+            setChildFrame(child, childLeft.roundToInt(), childTop, childWidth, childHeight)
+            childLeft += childWidth + lp.rightMargin + spaceBetweenChildren
         }
     }
 
     private fun setChildFrame(child: View, left: Int, top: Int, width: Int, height: Int) =
         child.layout(left, top, left + width, top + height)
-
-    fun setHorizontalGravity(horizontalGravity: Int) {
-        val newGravity = horizontalGravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK
-        if ((gravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK) == newGravity) return
-        _gravity = (gravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK.inv()) or newGravity
-        requestLayout()
-    }
-
-    fun setVerticalGravity(verticalGravity: Int) {
-        val newGravity = verticalGravity and Gravity.VERTICAL_GRAVITY_MASK
-        if ((gravity and Gravity.VERTICAL_GRAVITY_MASK) == newGravity) return
-        _gravity = (gravity and Gravity.VERTICAL_GRAVITY_MASK.inv()) or newGravity
-        requestLayout()
-    }
 
     /**
      * Returns a set of layout parameters with a width of [MATCH_PARENT] and a height of [WRAP_CONTENT]

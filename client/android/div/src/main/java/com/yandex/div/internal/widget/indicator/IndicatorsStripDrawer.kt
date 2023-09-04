@@ -2,9 +2,10 @@ package com.yandex.div.internal.widget.indicator
 
 import android.graphics.Canvas
 import android.view.View
+import com.yandex.div.core.util.getIndices
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.widget.indicator.animations.IndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.SingleIndicatorDrawer
-import com.yandex.div.core.util.isLayoutRtl
 
 internal class IndicatorsStripDrawer(
     private val styleParams: IndicatorParams.Style,
@@ -154,14 +155,8 @@ internal class IndicatorsStripDrawer(
                 return
             }
 
-            val left: Int
-            val indicatorsPosition = if (view.isLayoutRtl()) {
-                left = itemsCount - 1
-                (itemsCount - 1 downTo 0)
-            } else {
-                left =  0
-                (0 until itemsCount)
-            }
+            val indicatorsPosition = view.getIndices(0, itemsCount)
+            val left = indicatorsPosition.first
             indicatorsPosition.forEach { position ->
                 val size = getItemSizeAt(position)
                 val centerOffset = when (position) {

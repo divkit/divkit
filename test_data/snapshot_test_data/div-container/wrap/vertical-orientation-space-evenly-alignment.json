@@ -1,6 +1,7 @@
 {
   "description": "Vertical wrap-container with content_alignment_horizontal = space-evenly",
   "platforms": [
+    "android",
     "web"
   ],
   "templates": {

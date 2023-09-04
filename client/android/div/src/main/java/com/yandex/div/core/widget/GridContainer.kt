@@ -36,12 +36,6 @@ internal open class GridContainer @JvmOverloads constructor(
     val rowCount: Int
         get() = grid.rowCount
 
-    var gravity: Int = DEFAULT_GRAVITY
-        set(value) {
-            field = value
-            requestLayout()
-        }
-
     private val grid = Grid()
     private var lastLayoutHashCode = UNINITIALIZED_HASH
     private var initialized = false

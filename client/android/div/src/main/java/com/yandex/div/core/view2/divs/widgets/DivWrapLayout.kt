@@ -5,15 +5,19 @@ import android.graphics.Canvas
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.invalidateAfter
-import com.yandex.div.core.widget.wraplayout.WrapLayout
+import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
 
-internal class DivWrapLayout(context: Context) : WrapLayout(context), DivAnimator, DivBorderSupports,
-        TransientView, ExpressionSubscriber {
+internal class DivWrapLayout(context: Context) :
+    WrapContainerLayout(context),
+    DivAnimator,
+    DivBorderSupports,
+    TransientView,
+    ExpressionSubscriber {
 
     internal var div: DivContainer? = null
 
