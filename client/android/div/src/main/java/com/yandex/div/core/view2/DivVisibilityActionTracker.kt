@@ -92,6 +92,15 @@ internal class DivVisibilityActionTracker @Inject constructor(
         }
     }
 
+    fun trackDetachedView(
+        scope: Div2View,
+        view: View,
+        div: Div
+    ) {
+        val actions = div.value().disappearActions ?: return
+        trackVisibilityActions(scope, view, div, actions)
+    }
+
     private fun trackVisibilityActions(
         scope: Div2View,
         view: View,
@@ -183,11 +192,11 @@ internal class DivVisibilityActionTracker @Inject constructor(
             return@associateTo compositeLogId to action
         }.let { Collections.synchronizedMap(it) }
         trackedTokens.add(logIds)
-        appearedForDisappearActions.remove(view)
         /* We use map of CompositeLogId to DivSightAction as token here, so we can cancel
          * individual actions while still execute the rest of it as a bulk. */
         handler.postDelayed(delayInMillis = delayMs, token = logIds) {
             KLog.e(TAG) { "dispatchActions: id=${logIds.keys.joinToString()}" }
+            appearedForDisappearActions.remove(view)
             visibilityActionDispatcher.dispatchActions(scope, view, logIds.values.toTypedArray())
         }
     }
