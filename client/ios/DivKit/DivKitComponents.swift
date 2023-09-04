@@ -29,8 +29,10 @@ public final class DivKitComponents {
   public let stateManagement: DivStateManagement
   public let showToolip: DivActionURLHandler.ShowTooltipAction?
   public let tooltipManager: TooltipManager
+  public let triggersStorage: DivTriggersStorage
   public let urlHandler: DivUrlHandler
   public let variablesStorage: DivVariablesStorage
+  public let visibilityCounter = DivVisibilityCounter()
 
   public var updateCardSignal: Signal<[DivActionURLHandler.UpdateReason]> {
     updateCardPipe.signal
@@ -40,12 +42,10 @@ public final class DivKitComponents {
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   private let persistentValuesStorage = DivPersistentValuesStorage()
   private let timerStorage: DivTimerStorage
-  private let triggersStorage: DivTriggersStorage
   private let updateAggregator: RunLoopCardUpdateAggregator
   private let updateCard: DivActionURLHandler.UpdateCardAction
   private let updateCardPipe: SignalPipe<[DivActionURLHandler.UpdateReason]>
   private let variableTracker = DivVariableTracker()
-  private let visibilityCounter = DivVisibilityCounter()
 
   /// You can create an instance of `DivKitComponents` with various optional parameters that allow
   /// you to customize the behavior and functionality of `DivKit` to suit your specific needs.

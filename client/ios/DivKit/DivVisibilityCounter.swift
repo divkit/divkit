@@ -5,20 +5,20 @@ public protocol DivVisibilityCounting {
   func incrementCount(for path: UIElementPath)
 }
 
-final class DivVisibilityCounter: DivVisibilityCounting {
+public final class DivVisibilityCounter: DivVisibilityCounting {
   private var storage: [UIElementPath: UInt] = [:]
 
-  init() {}
+  public init() {}
 
-  func visibilityCount(for path: UIElementPath) -> UInt {
+  public func visibilityCount(for path: UIElementPath) -> UInt {
     storage[path] ?? 0
   }
 
-  func incrementCount(for path: UIElementPath) {
+  public func incrementCount(for path: UIElementPath) {
     storage[path] = visibilityCount(for: path) + 1
   }
 
-  func reset() {
+  public func reset() {
     storage.removeAll()
   }
 
