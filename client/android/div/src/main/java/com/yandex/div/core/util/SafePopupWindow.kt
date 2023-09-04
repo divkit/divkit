@@ -1,5 +1,3 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 package com.yandex.div.core.util
 
 import android.view.View
