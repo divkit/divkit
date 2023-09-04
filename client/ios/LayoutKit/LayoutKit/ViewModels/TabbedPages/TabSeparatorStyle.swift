@@ -2,6 +2,10 @@ import CoreGraphics
 
 import CommonCorePublic
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public struct TabSeparatorStyle: Equatable {
   public let color: Color
   public let insets: EdgeInsets

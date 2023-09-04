@@ -2,103 +2,33 @@
 
 import PackageDescription
 
+let vgsl = (
+  url: "https://github.com/yandex/vgsl.git",
+  packageName: "vgsl",
+  branch: "main"
+)
+
 let package = Package(
   name: "DivKit",
   platforms: [
     .iOS(.v11),
   ],
   products: [
-    .library(name: "BaseUIPublic", targets: ["BaseUIPublic"]),
     .library(name: "DivKit", targets: ["DivKit"]),
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
   ],
+  dependencies: [
+    .package(url: vgsl.url, branch: vgsl.branch)
+  ],
   targets: [
-    .target(
-      name: "BasePublic",
-      dependencies: [
-        "BaseTinyPublic",
-        "BaseUIPublic",
-      ],
-      path: "Core/BasePublic",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-          ]
-        )
-      ]
-    ),
-
-    .target(
-      name: "BaseTinyPublic",
-      path: "Core/BaseTinyPublic",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-          ]
-        )
-      ]
-    ),
-
-    .target(
-      name: "BaseUIPublic",
-      dependencies: [
-        "BaseTinyPublic",
-      ],
-      path: "Core/BaseUIPublic",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-          ]
-        )
-      ]
-    ),
-
-    .target(
-      name: "CommonCorePublic",
-      dependencies: [
-        "BasePublic",
-      ],
-      path: "Core/CommonCorePublic",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-          ]
-        )
-      ]
-    ),
-
-    .target(
-      name: "NetworkingPublic",
-      dependencies: [
-        "BasePublic",
-      ],
-      path: "Core/NetworkingPublic",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-emit-module-interface",
-            "-enable-library-evolution",
-          ]
-        )
-      ]
-    ),
-
     .target(
       name: "DivKit",
       dependencies: [
-        "CommonCorePublic",
         "LayoutKit",
-        "NetworkingPublic",
+        .product(name: "CommonCorePublic", package: vgsl.packageName),
+        .product(name: "NetworkingPublic", package: vgsl.packageName),
         "Serialization",
       ],
       path: "DivKit",
@@ -109,14 +39,11 @@ let package = Package(
       swiftSettings: [
         .unsafeFlags(
           [
-            "-emit-module-interface",
-            "-enable-library-evolution",
             "-warnings-as-errors",
           ]
         )
       ]
     ),
-
     .target(
       name: "DivKitExtensions",
       dependencies: [
@@ -126,60 +53,49 @@ let package = Package(
       swiftSettings: [
         .unsafeFlags(
           [
-            "-emit-module-interface",
-            "-enable-library-evolution",
             "-warnings-as-errors",
           ]
         )
       ]
     ),
-
     .target(
       name: "LayoutKit",
       dependencies: [
-        "CommonCorePublic",
+        .product(name: "CommonCorePublic", package: vgsl.packageName),
         "LayoutKitInterface",
       ],
       path: "LayoutKit/LayoutKit",
       swiftSettings: [
         .unsafeFlags(
           [
-            "-emit-module-interface",
-            "-enable-library-evolution",
             "-warnings-as-errors",
           ]
         )
       ]
     ),
-
     .target(
       name: "LayoutKitInterface",
       dependencies: [
-        "BasePublic",
+        .product(name: "BasePublic", package: vgsl.packageName)
       ],
       path: "LayoutKit/Interface",
       swiftSettings: [
         .unsafeFlags(
           [
-            "-emit-module-interface",
-            "-enable-library-evolution",
             "-warnings-as-errors",
           ]
         )
       ]
     ),
-
     .target(
       name: "Serialization",
       dependencies: [
-        "CommonCorePublic",
+        .product(name: "CommonCorePublic", package: vgsl.packageName)
       ],
       path: "Serialization",
       swiftSettings: [
         .unsafeFlags(
           [
-            "-emit-module-interface",
-            "-enable-library-evolution",
             "-warnings-as-errors",
           ]
         )

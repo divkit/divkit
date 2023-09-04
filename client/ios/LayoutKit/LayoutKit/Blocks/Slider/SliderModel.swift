@@ -3,6 +3,10 @@ import Foundation
 
 import CommonCorePublic
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public struct SliderModel: Equatable {
   public struct ThumbModel: Equatable {
     public let block: Block

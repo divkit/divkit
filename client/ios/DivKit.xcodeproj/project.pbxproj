@@ -39,7 +39,6 @@
 		896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896381842987C9D50064DDD4 /* RenderingTime.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
-		89FE120129B60CF5009AA1B8 /* BaseUIPublic in Frameworks */ = {isa = PBXBuildFile; productRef = 89FE120029B60CF5009AA1B8 /* BaseUIPublic */; };
 		8C0149982873297900BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149972873297900BA5402 /* DivKit */; };
 		8C01499A2873297D00BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149992873297D00BA5402 /* DivKit */; };
 		8C01499E287329D700BA5402 /* expression_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C01499D287329D700BA5402 /* expression_test_data */; };
@@ -544,7 +543,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89FE120129B60CF5009AA1B8 /* BaseUIPublic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1261,7 +1259,6 @@
 			);
 			name = SnapshotTestsHostApp;
 			packageProductDependencies = (
-				89FE120029B60CF5009AA1B8 /* BaseUIPublic */,
 			);
 			productName = SnapshotTestsHostApp;
 			productReference = 8C9284F7288ADEEA00BEA1FA /* SnapshotTestsHostApp.app */;
@@ -1727,6 +1724,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitExtensionsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1737,6 +1738,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitExtensionsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1795,6 +1800,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitSnapshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
 			name = Debug;
@@ -1812,6 +1821,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitSnapshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
 			name = Release;
@@ -1828,6 +1841,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1843,6 +1860,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1859,6 +1880,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitSnapshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
 			name = Debug;
@@ -1876,6 +1901,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitSnapshotTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
 			};
 			name = Release;
@@ -1947,6 +1976,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1957,6 +1990,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -2078,10 +2115,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */;
 			productName = RiveRuntime;
-		};
-		89FE120029B60CF5009AA1B8 /* BaseUIPublic */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = BaseUIPublic;
 		};
 		8C01498F2873296000BA5402 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -248,8 +248,6 @@ extension DeserializationError.DerivedError: Equatable {
     switch (lhs, rhs) {
     case (.invalidValue, .invalidValue):
       return true
-    @unknown default:
-      return false
     }
   }
 }

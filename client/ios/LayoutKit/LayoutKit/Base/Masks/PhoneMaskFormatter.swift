@@ -68,8 +68,6 @@ public final class PhoneMaskFormatter: MaskFormatter {
         }
       case .array, .bool, .null, .number, .string:
         assertionFailure("Unexpected mask value for \(rawText)")
-      @unknown default:
-        assertionFailure("Unexpected mask value for \(rawText)")
       }
     }
     if resultMask.isEmpty {

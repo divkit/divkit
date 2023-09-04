@@ -3,6 +3,10 @@ import CoreGraphics
 import BaseUIPublic
 import CommonCorePublic
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public final class TabListViewModel: Equatable {
   public static let defaultListPaddings = EdgeInsets(top: 7, left: 12, bottom: 12, right: 12)
 

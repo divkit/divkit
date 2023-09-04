@@ -25,8 +25,6 @@ extension TimeMeasure.Status {
       return .cold
     case .warm:
       return .warm
-    @unknown default:
-      fatalError()
     }
   }
 }

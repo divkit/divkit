@@ -4,6 +4,10 @@ import Foundation
 import BaseUIPublic
 import CommonCorePublic
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public final class ContainerBlock: BlockWithLayout {
   typealias Layout = ContainerBlockLayout
   public static let defaultAnchorPoint = AnchorPoint(

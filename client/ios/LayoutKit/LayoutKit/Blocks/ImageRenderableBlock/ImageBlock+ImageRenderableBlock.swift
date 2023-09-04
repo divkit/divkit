@@ -15,8 +15,6 @@ extension ImageBlock: ImageRenderableBlock {
       context.fill(rect)
     case .none, .view?, .imageData?:
       break
-    @unknown default:
-      break
     }
   }
 }

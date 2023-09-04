@@ -1,3 +1,5 @@
+import CoreGraphics
+
 import BaseUIPublic
 import CommonCorePublic
 import LayoutKit

@@ -3,6 +3,10 @@ import CoreGraphics
 import BasePublic
 import LayoutKitInterface
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public struct TabContentsViewModel: Equatable {
   public let path: UIElementPath!
   public var pages: [TabPageViewModel]

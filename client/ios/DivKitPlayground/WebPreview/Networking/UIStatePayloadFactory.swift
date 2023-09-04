@@ -68,8 +68,6 @@ extension UIStatePayload.Error.Level {
       self = .error
     case .warning:
       self = .warning
-    @unknown default:
-      self = .error
     }
   }
 }

@@ -101,10 +101,8 @@ private enum SnapshotTestError: LocalizedError {
 }
 
 private let allowedDevices: Set<String> = [
-  UIDevice.Model.iPhone8,
-  UIDevice.Model.iPhone8_China,
-  UIDevice.Model.iPhone8Plus,
-  UIDevice.Model.iPhone8Plus_China,
+  "iPhone10,4",
+  "iPhone10,5",
 ]
 
 extension XCTAttachment {

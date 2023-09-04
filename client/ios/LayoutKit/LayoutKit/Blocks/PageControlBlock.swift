@@ -3,6 +3,10 @@ import Foundation
 
 import CommonCorePublic
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public final class PageControlBlock: BlockWithTraits {
   public typealias State = PagerViewState
 

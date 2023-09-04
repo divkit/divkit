@@ -87,9 +87,6 @@ extension ImagePlaceholder {
     case .color, .view, .imageData:
       assertionFailure("cannot get size of color, view or imageData")
       return .zero
-    @unknown default:
-      assertionFailure("cannot get size of unknown image placeholder")
-      return .zero
     }
   }
 }

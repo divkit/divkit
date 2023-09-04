@@ -4,6 +4,10 @@ import Foundation
 import CommonCorePublic
 import LayoutKitInterface
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
 public struct GalleryViewModel: Equatable {
   public enum ScrollMode: Equatable {
     case `default`
