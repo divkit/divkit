@@ -16,7 +16,7 @@ public final class PhoneMaskFormatter: MaskFormatter {
     var stringIndex = rawText.startIndex
     var newCursorPosition: CursorPosition?
     let mask = findMask(for: rawText)
-    for element in mask {
+    maskLoop: for element in mask {
       if element.isPlaceHolder {
         guard stringIndex < rawText.endIndex else {
           if let rawCursorPosition, rawData.count == rawCursorPosition.cursorPosition.rawValue,
@@ -25,8 +25,11 @@ public final class PhoneMaskFormatter: MaskFormatter {
           }
           break
         }
-        while !rawText[stringIndex].isNumber, stringIndex < rawText.endIndex {
+        while !rawText[stringIndex].isNumber {
           stringIndex = rawText.index(after: stringIndex)
+          if stringIndex == rawText.endIndex {
+            break maskLoop
+          }
         }
         text.append(rawText[stringIndex])
         rawData.append(.init(char: rawText[stringIndex], index: String(text).endIndex))
