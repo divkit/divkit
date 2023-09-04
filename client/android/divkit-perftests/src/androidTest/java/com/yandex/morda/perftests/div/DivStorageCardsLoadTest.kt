@@ -2,20 +2,16 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
-import com.yandex.divkit.perftests.divStorageBenchmarkActivityExtras
 import com.yandex.divkit.perftests.DIV_STORAGE_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
+import com.yandex.divkit.perftests.divStorageBenchmarkActivityExtras
 import com.yandex.divkit.perftests.report
 import com.yandex.divkit.perftests.startActivity
 import com.yandex.perftests.runner.PerfTest
-import com.yandex.perftests.runner.PerfTestJUnit4Runner
 import com.yandex.perftests.runner.PerfTestParameter
-import com.yandex.perftests.runner.PerfTestUtils
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(PerfTestJUnit4Runner::class)
 @PerfTest(
     packageName = PACKAGE_NAME,
     description = "Div storage loading test",
@@ -23,10 +19,7 @@ import org.junit.runner.RunWith
     defaultRepeat = 20,
     timeoutSeconds = 1200
 )
-class DivStorageCardsLoadTest {
-
-    private val utils = PerfTestUtils(PACKAGE_NAME)
-
+class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
     @Before
     fun setUp() {
         utils.forceStop()

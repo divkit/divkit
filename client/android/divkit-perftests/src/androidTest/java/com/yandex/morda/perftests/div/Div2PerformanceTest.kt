@@ -8,14 +8,10 @@ import com.yandex.divkit.perftests.divBenchmarkActivityExtras
 import com.yandex.divkit.perftests.report
 import com.yandex.divkit.perftests.startActivity
 import com.yandex.perftests.runner.PerfTest
-import com.yandex.perftests.runner.PerfTestJUnit4Runner
 import com.yandex.perftests.runner.PerfTestParameter
-import com.yandex.perftests.runner.PerfTestUtils
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(PerfTestJUnit4Runner::class)
 @PerfTest(
     packageName = PACKAGE_NAME,
     description = "Div2 performance test",
@@ -24,10 +20,7 @@ import org.junit.runner.RunWith
     skipFirstResult = true,
     timeoutSeconds = 1200
 )
-class Div2PerformanceTest {
-
-    private val utils = PerfTestUtils(PACKAGE_NAME)
-
+class Div2PerformanceTest : Div2BasePerformanceTest() {
     @Before
     fun setUp() {
         utils.forceStop()

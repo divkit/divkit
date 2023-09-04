@@ -8,13 +8,9 @@ import com.yandex.divkit.perftests.divStateBenchmarkActivityExtras
 import com.yandex.divkit.perftests.report
 import com.yandex.divkit.perftests.startActivity
 import com.yandex.perftests.runner.PerfTest
-import com.yandex.perftests.runner.PerfTestJUnit4Runner
 import com.yandex.perftests.runner.PerfTestParameter
-import com.yandex.perftests.runner.PerfTestUtils
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(PerfTestJUnit4Runner::class)
 @PerfTest(
     packageName = PACKAGE_NAME,
     description = "Div2 state performance test",
@@ -22,10 +18,7 @@ import org.junit.runner.RunWith
     defaultRepeat = 20,
     timeoutSeconds = 1200
 )
-class Div2StatePerformanceTest {
-
-    private val utils = PerfTestUtils(PACKAGE_NAME)
-
+class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
         requiredMetrics = [
             "Div.Parsing.JSON.Cold",

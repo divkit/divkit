@@ -10,14 +10,10 @@ import com.yandex.divkit.perftests.pressBack
 import com.yandex.divkit.perftests.report
 import com.yandex.divkit.perftests.startActivity
 import com.yandex.perftests.runner.PerfTest
-import com.yandex.perftests.runner.PerfTestJUnit4Runner
 import com.yandex.perftests.runner.PerfTestParameter
-import com.yandex.perftests.runner.PerfTestUtils
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(PerfTestJUnit4Runner::class)
 @PerfTest(
     packageName = PACKAGE_NAME,
     description = "Div2 recycling performance test",
@@ -26,10 +22,7 @@ import org.junit.runner.RunWith
     skipFirstResult = false,
     timeoutSeconds = 600
 )
-class Div2RecyclingPerformanceTest {
-
-    private val utils = PerfTestUtils(PACKAGE_NAME)
-
+class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
     private var assets = arrayOf("div2-perf/benchmark-with-templates.json")
 
     @Before
