@@ -1,3 +1,35 @@
+## 28.0.0
+
+# JSON Schema:
+* Added `text_shadow` property
+* Added `ranges` to slider
+* Added `array` variable type
+
+# Android Client:
+
+Breaking changes:
+* Added ArrayVariable case into Variable class.
+
+Added:
+* RTL for div-select
+* Support non-linear font scaling
+* Phone masks
+* Array get functions
+
+# iOS Client:
+
+Braking changes:
+* Added array variables support. Added `array` case into `DivVariableValue` enum.
+* Improved error types: reduced visibility of `DivBlockModelingError`, `DivBlockModelingWarning` types, `DivError` typealias replaced with protocol.
+* Reduced visibility of types and methods not intended to be used outside the framework: `DivLastVisibleBoundsCache`, `DivVisibilityCounter`, `EmptyDivCustomBlockFactory`,
+
+Other changes:
+* Added some array functions
+* Added phone masks support in `DivInput`
+* Added `DivViewPreloader` for `DivView`
+* Added `match_parent` size support for tooltips
+
+
 ## 27.4.0
 
 # Android Client:
