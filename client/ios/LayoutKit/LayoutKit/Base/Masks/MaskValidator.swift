@@ -50,11 +50,11 @@ public final class MaskValidator: Equatable {
         data.text.distance(
           from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
           to: $0.index
-        ) < 0 ||
+        ) <= 0 ||
           data.text.distance(
             from: data.text.index(data.text.startIndex, offsetBy: range.upperBound),
             to: $0.index
-          ) >= 0
+          ) > 0
       }.map(\.char)),
       index
         .flatMap { CursorData(cursorPosition: .init(rawValue: $0), afterNonDecodingSymbols: false) }

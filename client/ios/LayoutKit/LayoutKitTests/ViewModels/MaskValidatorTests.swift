@@ -22,11 +22,11 @@ final class MaskValidatorTests: XCTestCase {
 
     // "   ab cde f g hi j "
 
-    XCTAssertEqual(validator.removeSymbols(at: 0..<3, data: inputData).0, "abcdefghij")
+    XCTAssertEqual(validator.removeSymbols(at: 0..<3, data: inputData).0, "bcdefghij")
     XCTAssertEqual(validator.removeSymbols(at: 0..<5, data: inputData).0, "cdefghij")
-    XCTAssertEqual(validator.removeSymbols(at: 2..<7, data: inputData).0, "defghij")
+    XCTAssertEqual(validator.removeSymbols(at: 2..<7, data: inputData).0, "efghij")
     XCTAssertEqual(validator.removeSymbols(at: 0..<18, data: inputData).0, "")
-    XCTAssertEqual(validator.removeSymbols(at: 15..<16, data: inputData).0, "abcdefghj")
+    XCTAssertEqual(validator.removeSymbols(at: 15..<16, data: inputData).0, "abcdefghij")
   }
 
   func test_addSymbolsAtPosition() {
