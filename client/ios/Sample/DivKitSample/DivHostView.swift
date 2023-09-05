@@ -1,17 +1,19 @@
 import UIKit
 
-import BasePublic
-import CommonCorePublic
 import DivKit
-import LayoutKit
 
 final class DivHostView: UICollectionView {
   private let components: DivKitComponents
+  private let preloader: DivViewPreloader
+
   var items: [DivData] = []
 
   init(components: DivKitComponents) {
     self.components = components
+    self.preloader = DivViewPreloader(divKitComponents: components)
+
     super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+
     setupCollectionView()
   }
 
@@ -36,18 +38,31 @@ final class DivHostView: UICollectionView {
       }
     }
 
-    func configureCell(divKitComponents: DivKitComponents, divData: DivData) {
+    func configureCell(
+      divKitComponents: DivKitComponents,
+      preloader: DivViewPreloader,
+      divData: DivData
+    ) {
       if divView == nil {
-        self.divView = DivView(divKitComponents: divKitComponents)
+        self.divView = DivView(
+          divKitComponents: divKitComponents,
+          divViewPreloader: preloader
+        )
       }
-      divView?.setSource(.init(kind: .divData(divData), cardId: DivCardID(rawValue: divData.logId)))
+
+      divView?.showCardId(divData.cardId)
     }
 
     override func layoutSubviews() {
       super.layoutSubviews()
-      divView?.frame = CGRect(
+
+      guard let divView = divView else {
+        return
+      }
+
+      divView.frame = CGRect(
         origin: .zero,
-        size: divView?.intrinsicContentSize(for: bounds.size) ?? .zero
+        size: divView.cardSize?.sizeFor(parentViewSize: bounds.size) ?? .zero
       )
     }
   }
@@ -69,7 +84,11 @@ extension DivHostView: UICollectionViewDataSource {
       withReuseIdentifier: Cell.reuseIdentifier,
       for: indexPath
     ) as! Cell
-    cell.configureCell(divKitComponents: components, divData: items[indexPath.row])
+    cell.configureCell(
+      divKitComponents: components,
+      preloader: preloader,
+      divData: items[indexPath.row]
+    )
     return cell
   }
 }
@@ -80,11 +99,15 @@ extension DivHostView: UICollectionViewDelegateFlowLayout {
     layout _: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
-    let view = DivView(divKitComponents: components)
-    view.setSource(.init(
-      kind: .divData(items[indexPath.row]),
-      cardId: DivCardID(rawValue: items[indexPath.row].logId)
-    ))
-    return view.intrinsicContentSize(for: bounds.size)
+    let divData = items[indexPath.row]
+    let cardId = divData.cardId
+    preloader.setSource(.init(kind: .divData(divData), cardId: cardId))
+    return preloader.expectedSize(for: cardId)?.sizeFor(parentViewSize: bounds.size) ?? .zero
+  }
+}
+
+extension DivData {
+  fileprivate var cardId: DivCardID {
+    DivCardID(rawValue: logId)
   }
 }

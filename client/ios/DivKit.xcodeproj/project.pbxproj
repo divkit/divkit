@@ -619,11 +619,11 @@
 		8C1A378328B5143200A047C8 /* DivView */ = {
 			isa = PBXGroup;
 			children = (
+				431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */,
 				8C1A378628B5143200A047C8 /* DivViewController.swift */,
 				4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */,
 				8C1A378728B5143200A047C8 /* DivViewProvider.swift */,
 				8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */,
-				431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */,
 			);
 			path = DivView;
 			sourceTree = "<group>";

@@ -1,7 +1,6 @@
 import UIKit
 
 import DivKit
-import LayoutKit
 
 final class DivHostViewController: UIViewController {
   private var divHostView: DivHostView!
