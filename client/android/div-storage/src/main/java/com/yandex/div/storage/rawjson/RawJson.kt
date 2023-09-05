@@ -2,11 +2,11 @@ package com.yandex.div.storage.rawjson
 
 import org.json.JSONObject
 
-internal interface RawJson {
+interface RawJson {
     val id: String
     val data: JSONObject
 
-    private data class Ready(
+    data class Ready(
         override val id: String,
         override val data: JSONObject,
     ) : RawJson

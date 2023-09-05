@@ -1,5 +1,6 @@
 package com.yandex.div.storage
 
+import androidx.annotation.WorkerThread
 import com.yandex.div2.DivData
 import org.json.JSONObject
 
@@ -12,21 +13,25 @@ interface DivDataRepository {
      * Will try to parse raw json payload and after successful
      * parse this data will be available at in-memory and saved to persistent storage.
      */
+    @WorkerThread
     fun put(payload: Payload): DivDataRepositoryResult
 
     /**
      * @param ids list of specific identifiers for loading.
      */
+    @WorkerThread
     fun get(ids: List<String>): DivDataRepositoryResult
 
     /**
      * Requests all divs from storage.
      */
+    @WorkerThread
     fun getAll(): DivDataRepositoryResult
 
     /**
      * Allows to remove data from in-memory and persistent storage.
      */
+    @WorkerThread
     fun remove(predicate: (RawDataAndMetadata) -> Boolean): DivDataRepositoryRemoveResult
 
     class DivDataWithMeta(

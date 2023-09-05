@@ -18,6 +18,7 @@ import javax.inject.Provider
 
 interface DivStorageComponent {
     val repository: DivDataRepository
+    val rawJsonRepository: RawJsonRepository
 
     companion object {
 
@@ -82,8 +83,12 @@ interface DivStorageComponent {
                     parsingHistogramProxy,
                     cardErrorLoggerFactory,
             )
+            val rawJsonRepository = RawJsonRepositoryImpl(
+                    divStorage,
+            )
             return InternalStorageComponent(
                     repository = repository,
+                    rawJsonRepository = rawJsonRepository,
                     storage = divStorage,
             )
         }

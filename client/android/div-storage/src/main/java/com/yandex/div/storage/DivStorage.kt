@@ -1,6 +1,6 @@
 package com.yandex.div.storage
 
-import androidx.annotation.WorkerThread
+import androidx.annotation.AnyThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.storage.database.ExecutionResult
 import com.yandex.div.storage.database.Migration
@@ -11,36 +11,38 @@ import com.yandex.div.storage.templates.Template
 import org.json.JSONObject
 
 internal interface DivStorage {
+    @AnyThread
     fun saveData(groupId: String,
                  divs: List<RawDataAndMetadata>,
                  templatesByHash: List<Template>,
                  actionOnError: DivDataRepository.ActionOnError,
     ): ExecutionResult
 
+    @AnyThread
     fun saveRawJsons(
         rawJsons: List<RawJson>,
         actionOnError: DivDataRepository.ActionOnError,
     ): ExecutionResult
 
-    @WorkerThread
+    @AnyThread
     fun readRawJsons(rawJsonIds: Set<String>): LoadDataResult<RawJson>
 
-    @WorkerThread
+    @AnyThread
     fun removeRawJsons(predicate: (RawJson) -> Boolean): RemoveResult
 
-    @WorkerThread
+    @AnyThread
     fun loadData(ids: List<String>): LoadDataResult<RestoredRawData>
 
-    @WorkerThread
+    @AnyThread
     fun remove(predicate: (RawDataAndMetadata) -> Boolean): RemoveResult
 
-    @WorkerThread
+    @AnyThread
     fun removeAllCards(): DivStorageErrorException?
 
-    @WorkerThread
+    @AnyThread
     fun readTemplates(templateHashes: Set<String>): LoadDataResult<RawTemplateData>
 
-    @WorkerThread
+    @AnyThread
     fun removeAllTemplates(): DivStorageErrorException?
 
     @Throws(DivStorageErrorException::class)

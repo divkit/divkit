@@ -5,5 +5,6 @@ package com.yandex.div.storage
  */
 internal class InternalStorageComponent(
         override val repository: DivDataRepository,
+        override val rawJsonRepository: RawJsonRepository,
         val storage: DivStorage,
 ) : DivStorageComponent

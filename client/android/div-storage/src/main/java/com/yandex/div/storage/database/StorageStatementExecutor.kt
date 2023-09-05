@@ -4,9 +4,7 @@ import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteFullException
 import android.database.sqlite.SQLiteStatement
-import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
-import com.yandex.div.internal.KAssert
+import androidx.annotation.AnyThread
 import com.yandex.div.storage.DivDataRepository.ActionOnError
 import com.yandex.div.storage.DivStorageErrorException
 import com.yandex.div.storage.util.closeSilently
@@ -19,13 +17,12 @@ internal class StorageStatementExecutor(
     /**
      * Executes provided statements one by one in a single transaction.
      */
-    @WorkerThread
+    @AnyThread
     @Throws(SQLException::class)
     fun execute(
             actionOnError: ActionOnError,
             vararg statements: StorageStatement
     ): ExecutionResult {
-        assertOnWorkerThread()
         var db: DatabaseOpenHelper.Database? = null
         var compiler: ClosableSqlCompiler? = null
         var statementNumber = 1
@@ -83,16 +80,13 @@ internal class StorageStatementExecutor(
         return ExecutionResult(exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     @Throws(SQLException::class)
     fun execute(
             vararg statements: StorageStatement
     ): ExecutionResult {
         return execute(ActionOnError.ABORT_TRANSACTION, *statements)
     }
-
-    @VisibleForTesting
-    fun assertOnWorkerThread() = KAssert.assertNotMainThread()
 
     @Throws(SQLException::class)
     private fun throwWithLogging(message: String, exception: Exception): Nothing {

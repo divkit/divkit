@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.Cursor
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabaseLockedException
+import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
 import androidx.core.database.getBlobOrNull
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.KAssert
@@ -128,6 +128,7 @@ internal class DivStorageImpl(
                 .execute(StorageStatements.dropAllTables())
     }
 
+    @AnyThread
     override fun saveData(groupId: String,
                           divs: List<RawDataAndMetadata>,
                           templatesByHash: List<Template>,
@@ -139,10 +140,11 @@ internal class DivStorageImpl(
             actionOnError,
     )
 
+    @AnyThread
     override fun saveRawJsons(rawJsons: List<RawJson>, actionOnError: ActionOnError) =
         dataSaveUseCase.saveRawJsons(rawJsons, actionOnError)
 
-    @WorkerThread
+    @AnyThread
     override fun loadData(ids: List<String>): LoadDataResult<DivStorage.RestoredRawData> {
         val usedGroups = mutableSetOf<String>()
         val cards = ArrayList<DivStorage.RestoredRawData>(ids.size)
@@ -180,7 +182,7 @@ internal class DivStorageImpl(
         return LoadDataResult(cards, exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     @Throws(SQLException::class)
     override fun remove(predicate: (RawDataAndMetadata) -> Boolean): RemoveResult {
         val ids: Set<String> = collectsRecordsFor(predicate)
@@ -192,12 +194,12 @@ internal class DivStorageImpl(
         return RemoveResult(ids, exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     override fun removeAllCards(): DivStorageErrorException? {
         return deleteTablesTransaction(actionDesc = "delete all cards", DELETE_CARDS)
     }
 
-    @WorkerThread
+    @AnyThread
     override fun readRawJsons(rawJsonIds: Set<String>): LoadDataResult<RawJson> {
         val actionDesc = "Read raw jsons with ids: $rawJsonIds"
         val exceptions = mutableListOf<StorageException>()
@@ -216,7 +218,7 @@ internal class DivStorageImpl(
         return LoadDataResult(rawJsons, exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     override fun removeRawJsons(predicate: (RawJson) -> Boolean): RemoveResult {
         val ids: Set<String> = collectsRawJsonsIdsFor(predicate)
         val exceptions = statementExecutor.execute(
@@ -226,7 +228,7 @@ internal class DivStorageImpl(
         return RemoveResult(ids, exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     override fun readTemplates(templateHashes: Set<String>): LoadDataResult<RawTemplateData> {
         val actionDesc = "Read templates with hashes: $templateHashes"
         val exceptions = mutableListOf<StorageException>()
@@ -251,7 +253,7 @@ internal class DivStorageImpl(
         return LoadDataResult(templates, exceptions)
     }
 
-    @WorkerThread
+    @AnyThread
     override fun removeAllTemplates(): DivStorageErrorException? {
         return deleteTablesTransaction(
                 actionDesc = "Delete all templates",
@@ -381,7 +383,7 @@ internal class DivStorageImpl(
         return templates
     }
 
-    @WorkerThread
+    @AnyThread
     @Throws(SQLException::class)
     private fun collectsRecordsFor(predicate: (RawDataAndMetadata) -> Boolean): Set<String> {
         val results = mutableSetOf<String>()
@@ -403,7 +405,35 @@ internal class DivStorageImpl(
         return results
     }
 
-    @WorkerThread
+    @AnyThread
+    @Throws(SQLException::class)
+    private fun collectsRawJsons(rawJsonIds: Set<String>): List<RawJson> {
+        val results = ArrayList<RawJson>(rawJsonIds.size)
+        readStateFor {
+            rawQuery(
+                query = "$SELECT_RAW_JSONS_BY_IDS ${rawJsonIds.asSqlList()}",
+                selectionArgs = emptyArray()
+            )
+        }.use {
+            val cursor = it.cursor
+            if (cursor.count == 0 || !cursor.moveToFirst()) {
+                return@use
+            }
+
+            do {
+                val cursorRawJson = CursorDrivenRawJson(cursor)
+                val rawJson = with(cursorRawJson) {
+                    RawJson.Ready(id, data)
+                }
+                results.add(rawJson)
+                cursorRawJson.close()
+            } while (cursor.moveToNext())
+        }
+
+        return results
+    }
+
+    @AnyThread
     @Throws(SQLException::class)
     private fun collectsRawJsonsIdsFor(predicate: (RawJson) -> Boolean): Set<String> {
         val results = mutableSetOf<String>()
@@ -425,35 +455,7 @@ internal class DivStorageImpl(
         return results
     }
 
-    @WorkerThread
-    @Throws(SQLException::class)
-    private fun collectsRawJsons(rawJsonIds: Set<String>): List<RawJson> {
-        val readState = readStateFor {
-            rawQuery(
-                query = "$SELECT_RAW_JSONS_BY_IDS ${rawJsonIds.asSqlList()}",
-                selectionArgs = emptyArray()
-            )
-        }
-        val results = ArrayList<RawJson>(readState.cursor.count)
-        statementExecutor.execute(StorageStatement {
-            readState.use {
-                val cursor = it.cursor
-                if (cursor.count == 0 || !cursor.moveToFirst()) {
-                    return@StorageStatement
-                }
-
-                do {
-                    val rawJson = CursorDrivenRawJson(cursor)
-                    results.add(rawJson)
-                    rawJson.close()
-                } while (cursor.moveToNext())
-            }
-        })
-
-        return results
-    }
-
-    @WorkerThread
+    @AnyThread
     private fun deleteTablesTransaction(
             actionDesc: String, vararg queries: String
     ): DivStorageErrorException? {
@@ -545,7 +547,7 @@ internal class DivStorageImpl(
         }
     }
 
-    @WorkerThread
+    @AnyThread
     private fun readStateFor(func: DatabaseOpenHelper.Database.() -> Cursor): ReadState {
         val db = openHelper.readableDatabase
         return ReadState({ db.closeSilently() }, { db.run(func) })

@@ -1,7 +1,9 @@
 package com.yandex.div.storage
 
 import android.os.SystemClock
+import androidx.annotation.WorkerThread
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.ParsingException
 import com.yandex.div.storage.DivDataRepositoryException.JsonParsingException
@@ -29,7 +31,9 @@ internal class DivDataRepositoryImpl(
     private var areCardsSynchronizedWithInMemory = false
     private var cardsWithErrors = mapOf<String, List<DivDataRepositoryException>>()
 
+    @WorkerThread
     override fun put(payload: DivDataRepository.Payload): DivDataRepositoryResult {
+        KAssert.assertNotMainThread()
         val exceptions = mutableListOf<DivDataRepositoryException>()
 
         // Generating in-memory templates group so we could check that DivData
@@ -109,7 +113,9 @@ internal class DivDataRepositoryImpl(
             this.templates,
     )
 
+    @WorkerThread
     override fun getAll(): DivDataRepositoryResult {
+        KAssert.assertNotMainThread()
         if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty()) {
             return DivDataRepositoryResult(inMemoryData.values.toList(), emptyList())
         }
@@ -140,7 +146,9 @@ internal class DivDataRepositoryImpl(
         return newMap
     }
 
+    @WorkerThread
     override fun get(ids: List<String>): DivDataRepositoryResult {
+        KAssert.assertNotMainThread()
         if (ids.isEmpty()) {
             return DivDataRepositoryResult.EMPTY
         }
@@ -205,7 +213,9 @@ internal class DivDataRepositoryImpl(
         return DivDataRepositoryResult(results, exceptions)
     }
 
+    @WorkerThread
     override fun remove(predicate: (RawDataAndMetadata) -> Boolean): DivDataRepositoryRemoveResult {
+        KAssert.assertNotMainThread()
         val (deletedIds, storageErrors) = divStorage.remove(predicate)
         val exceptions = storageErrors.toDivDataRepositoryExceptions()
         removeFromInMemory(deletedIds)
