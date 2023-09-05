@@ -2174,5 +2174,17 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+  },
+  "div_action_array_insert_value": {
+    "en": "Insert value to array",
+    "ru": "Добавляет значение в массив"
+  },
+  "div_action_array_remove_value": {
+    "en": "Remove value from array",
+    "ru": "Удаляет значение из массива"
+  },
+  "div_action_set_variable": {
+    "en": "Sets variable value",
+    "ru": "Присваивает переменной значение"
   }
 }

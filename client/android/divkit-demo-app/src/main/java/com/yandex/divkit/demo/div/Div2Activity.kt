@@ -171,7 +171,8 @@ class Div2Activity : AppCompatActivity() {
     ) : DemoDivActionHandler(uriHandler) {
 
         override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            val url = action.url?.evaluate(view.expressionResolver) ?: return false
+            val url = action.url?.evaluate(view.expressionResolver)
+                ?: return super.handleAction(action, view)
             return handleDemoActionUrl(url) || super.handleAction(action, view)
         }
 

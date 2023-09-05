@@ -515,7 +515,7 @@ class Entity(Declarable):
     @property
     def type_is_optional(self) -> bool:
         prop = next((p for p in self._properties if p.name == 'type'), None)
-        return prop.optional or False
+        return prop is not None and (prop.optional or False)
 
     @property
     def root_entity(self) -> bool:

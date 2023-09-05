@@ -219,7 +219,11 @@ sealed class Variable {
             }
             is UrlVariable -> value = newValue.parseAsUri()
             is DictVariable -> value = newValue.parseAsJsonObject()
-            is ArrayVariable -> value = newValue.parseAsJsonArray()
+            is ArrayVariable -> {
+                throw VariableMutationException(
+                    "Url action set_variable not allowed for arrays, use property \"typed\" instead"
+                )
+            }
         }
     }
 

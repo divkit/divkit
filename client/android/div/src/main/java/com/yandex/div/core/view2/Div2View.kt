@@ -48,6 +48,7 @@ import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
@@ -847,6 +848,28 @@ class Div2View private constructor(
 
         try {
             mutableVariable.set(value)
+        } catch (e: VariableMutationException) {
+            val error = VariableMutationException("Variable '$name' mutation failed!", e)
+            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
+            return error
+        }
+        return null
+    }
+
+    /**
+     * @return exception if setting variable failed, null otherwise.
+     * @param valueMutation - gets variable as argument for modification opportunities
+     */
+    internal fun <T : Variable> setVariable(name: String, valueMutation: (T) -> T): VariableMutationException? {
+        val mutableVariable = variableController?.getMutableVariable(name) ?: run {
+            val error = VariableMutationException("Variable '$name' not defined!")
+            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
+            return error
+        }
+
+        try {
+            val newValue = valueMutation.invoke(mutableVariable as T)
+            mutableVariable.setValue(newValue)
         } catch (e: VariableMutationException) {
             val error = VariableMutationException("Variable '$name' mutation failed!", e)
             viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)

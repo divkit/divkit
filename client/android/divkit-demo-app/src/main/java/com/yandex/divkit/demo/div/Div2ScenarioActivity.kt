@@ -344,7 +344,8 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     ) : DemoDivActionHandler(uriHandler) {
 
         override fun handleAction(action: DivAction, view: DivViewFacade): Boolean {
-            val url = action.url?.evaluate(view.expressionResolver) ?: return false
+            val url = action.url?.evaluate(view.expressionResolver)
+                ?: return super.handleAction(action, view)
             if (url.scheme == "div-demo-action" && url.host == "set_data") {
                 val assetName = url.getQueryParameter("path")
                 editorPresenter.readAsset("asset:///regression_test_data/$assetName")

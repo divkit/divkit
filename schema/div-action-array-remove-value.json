@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_array_remove_value",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "array_remove_value"
+      ]
+    },
+    "variable_name": {
+      "$ref": "common.json#/non_empty_string"
+    },
+    "index": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "type",
+    "variable_name",
+    "index"
+  ]
+}

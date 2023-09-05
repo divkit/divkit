@@ -4,6 +4,8 @@ import android.net.Uri;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
 import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
@@ -69,6 +71,9 @@ public class DivActionHandler {
      */
     @CallSuper
     public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view) {
+        if (DivActionTypedHandlerProxy.handleAction(action, view)) {
+            return true;
+        }
         Uri url = action.url != null ? action.url.evaluate(view.getExpressionResolver()) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleAction(action, (Div2View) view);
@@ -126,6 +131,9 @@ public class DivActionHandler {
      */
     @CallSuper
     public boolean handleAction(@NonNull DivSightAction action, @NonNull DivViewFacade view) {
+        if (DivActionTypedHandlerProxy.handleVisibilityAction(action, view)) {
+            return true;
+        }
         Uri url = action.getUrl() != null ? action.getUrl().evaluate(view.getExpressionResolver()) : null;
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view);

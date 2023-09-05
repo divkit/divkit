@@ -1,0 +1,177 @@
+{
+  "definitions": {
+    "string_value": {
+      "alias_kotlin": "str_value",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "integer_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "integer"
+          ]
+        },
+        "value": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "number_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "number"
+          ]
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "color_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "color"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/color"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "boolean_value": {
+      "alias_kotlin": "bool_value",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "boolean"
+          ]
+        },
+        "value": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "url_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "url"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/url"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "dict_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "dict"
+          ]
+        },
+        "value": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "array_value": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "array"
+          ]
+        },
+        "value": {
+          "type": "array"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#definitions/string_value"
+    },
+    {
+      "$ref": "#definitions/integer_value"
+    },
+    {
+      "$ref": "#definitions/number_value"
+    },
+    {
+      "$ref": "#definitions/color_value"
+    },
+    {
+      "$ref": "#definitions/boolean_value"
+    },
+    {
+      "$ref": "#definitions/url_value"
+    },
+    {
+      "$ref": "#definitions/dict_value"
+    },
+    {
+      "$ref": "#definitions/array_value"
+    }
+  ]
+}

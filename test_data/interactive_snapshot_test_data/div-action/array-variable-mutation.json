@@ -1,0 +1,229 @@
+{
+  "description": "Array variable mutation",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "card": {
+        "type": "container",
+        "items": [
+          {
+            "type": "text",
+            "font_size": 21,
+            "font_weight": "bold",
+            "$text": "content"
+          }
+        ],
+        "orientation": "vertical",
+        "paddings": {
+          "top": 16,
+          "bottom": 16,
+          "left": 16,
+          "right": 16
+        }
+      }
+    },
+    "card": {
+      "log_id": "array_variable_mutation_test",
+      "variables": [
+        {
+          "type": "color",
+          "name": "color_variable",
+          "value": "#123"
+        },
+        {
+          "type": "array",
+          "name": "array_variable",
+          "value": []
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "card",
+                "content": "@{array_variable}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 0,
+            "value": {
+              "type": "integer",
+              "value": 12345
+            }
+          },
+          "log_id": "insert_integer_at_index_0"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 1,
+            "value": {
+              "type": "number",
+              "value": 987.30
+            }
+          },
+          "log_id": "insert_number_at_index_1"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 2,
+            "value": {
+              "type": "string",
+              "value": "new_string_value"
+            }
+          },
+          "log_id": "insert_string_at_index_2"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 3,
+            "value": {
+              "type": "string",
+              "format": "uri",
+              "value": "https://ya.ru"
+            }
+          },
+          "log_id": "insert_uri_at_index_3"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 4,
+            "value": {
+              "type": "array",
+              "value": [
+                [
+                  1,
+                  15.50
+                ],
+                "inner_string"
+              ]
+            }
+          },
+          "log_id": "insert_array_at_index_4"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 5,
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            }
+          },
+          "log_id": "insert_dict_at_index_5"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "index": 6,
+            "value": {
+              "type": "boolean",
+              "value": false
+            }
+          },
+          "log_id": "insert_boolean_at_index_6"
+        },
+        {
+          "typed": {
+            "type": "array_insert_value",
+            "variable_name": "array_variable",
+            "value": {
+              "type": "string",
+              "format": "color",
+              "value": "@{color_variable}"
+            }
+          },
+          "log_id": "insert_color_at_last_index"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "array_variable",
+            "value": {
+              "type": "array",
+              "value": [
+                false,
+                "#00332211",
+                "new_string_value",
+                987.30,
+                657,
+                [
+                  555,
+                  "inner_value"
+                ],
+                {
+                  "key": "value"
+                }
+              ]
+            }
+          },
+          "log_id": "set array variable"
+        }
+      ],
+      "expected_screenshot": "step2.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "array_remove_value",
+            "variable_name": "array_variable",
+            "index": 6
+          },
+          "log_id": "remove_index_6"
+        },
+        {
+          "typed": {
+            "type": "array_remove_value",
+            "variable_name": "array_variable",
+            "index": 0
+          },
+          "log_id": "remove_index_0"
+        },
+        {
+          "typed": {
+            "type": "array_remove_value",
+            "variable_name": "array_variable",
+            "index": 2
+          },
+          "log_id": "remove_index_2"
+        }
+      ],
+      "expected_screenshot": "step3.png"
+    }
+  ]
+}

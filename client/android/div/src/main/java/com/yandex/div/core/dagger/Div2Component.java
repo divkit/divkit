@@ -15,6 +15,7 @@ import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivPreloader;
+import com.yandex.div.core.actions.DivActionTypedHandlerCombiner;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
@@ -47,7 +48,12 @@ import javax.inject.Named;
  * Context scoped component for div2 {@link com.yandex.div.core.Div2Context}
  */
 @DivScope
-@Subcomponent(modules = {Div2Module.class, DivConfiguration.class, DivHistogramsModule.class})
+@Subcomponent(modules = {
+        Div2Module.class,
+        DivConfiguration.class,
+        DivHistogramsModule.class,
+        DivActionTypedModule.class
+})
 public interface Div2Component {
 
     @NonNull
@@ -156,6 +162,9 @@ public interface Div2Component {
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     boolean isBindOnAttachEnabled();
+
+    @NonNull
+    DivActionTypedHandlerCombiner getActionTypedHandlerCombiner();
 
     /**
      * Builder for Div2Component

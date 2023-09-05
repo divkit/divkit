@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_array_insert_value",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "array_insert_value"
+      ]
+    },
+    "variable_name": {
+      "$ref": "common.json#/non_empty_string"
+    },
+    "index": {
+      "type": "integer"
+    },
+    "value": {
+      "$ref": "div-typed-value.json"
+    }
+  },
+  "required": [
+    "type",
+    "variable_name",
+    "value"
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "description": "Set variable",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "templates": {
+      "card": {
+        "type": "container",
+        "items": [
+          {
+            "type": "text",
+            "font_size": 21,
+            "font_weight": "bold",
+            "$text": "title"
+          },
+          {
+            "type": "text",
+            "font_size": 16,
+            "$text": "body"
+          }
+        ],
+        "orientation": "vertical",
+        "paddings": {
+          "top": 6,
+          "bottom": 6,
+          "left": 6,
+          "right": 6
+        }
+      }
+    },
+    "card": {
+      "log_id": "div2_sample_card",
+      "variables": [
+        {
+          "name": "integer_variable",
+          "type": "integer",
+          "value": 111
+        },
+        {
+          "name": "number_variable",
+          "type": "number",
+          "value": 123.00
+        },
+        {
+          "name": "string_variable",
+          "type": "string",
+          "value": "string"
+        },
+        {
+          "name": "color_variable",
+          "type": "color",
+          "value": "#FF112233"
+        },
+        {
+          "name": "boolean_variable",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "url_variable",
+          "type": "url",
+          "value": "https://yandex.ru"
+        },
+        {
+          "name": "array_variable",
+          "type": "array",
+          "value": []
+        },
+        {
+          "name": "dict_variable",
+          "type": "dict",
+          "value": {}
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "card",
+                "title": "Integer",
+                "body": "@{integer_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Number",
+                "body": "@{number_variable}"
+              },
+              {
+                "type": "card",
+                "title": "String",
+                "body": "@{string_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Color",
+                "body": "@{color_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Boolean",
+                "body": "@{boolean_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Url",
+                "body": "@{url_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Array",
+                "body": "@{array_variable}"
+              },
+              {
+                "type": "card",
+                "title": "Dict",
+                "body": "@{dict_variable}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "integer",
+              "value": 1234567890
+            },
+            "variable_name": "integer_variable"
+          },
+          "log_id": "set_integer"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "number",
+              "value": 987.65
+            },
+            "variable_name": "number_variable"
+          },
+          "log_id": "set_number"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "string",
+              "value": "new_string_value"
+            },
+            "variable_name": "string_variable"
+          },
+          "log_id": "set_string"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "color",
+              "value": "#00998877"
+            },
+            "variable_name": "color_variable"
+          },
+          "log_id": "set_color"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "boolean",
+              "value": false
+            },
+            "variable_name": "boolean_variable"
+          },
+          "log_id": "set_boolean"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "url",
+              "value": "https://ya.ru"
+            },
+            "variable_name": "url_variable"
+          },
+          "log_id": "set_url"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "array",
+              "value": [
+                123
+              ]
+            },
+            "variable_name": "array_variable"
+          },
+          "log_id": "set_array"
+        },
+        {
+          "typed": {
+            "type": "set_variable",
+            "value": {
+              "type": "dict",
+              "value": {
+                "key": "value"
+              }
+            },
+            "variable_name": "dict_variable"
+          },
+          "log_id": "set_dict"
+        }
+      ]
+    }
+  ]
+}
