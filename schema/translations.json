@@ -35,6 +35,14 @@
     "en": "It defines an action when clicking on an element.",
     "ru": "Определяет действие при нажатии на элемент."
   },
+  "div_action_array_insert_value": {
+    "en": "Insert value to array",
+    "ru": "Добавляет значение в массив"
+  },
+  "div_action_array_remove_value": {
+    "en": "Remove value from array",
+    "ru": "Удаляет значение из массива"
+  },
   "div_action_base_download_callbacks": {
     "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
     "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data)."
@@ -74,6 +82,10 @@
   "div_action_menu_items": {
     "en": "Context menu.",
     "ru": "Контекстное меню."
+  },
+  "div_action_set_variable": {
+    "en": "Sets variable value",
+    "ru": "Присваивает переменной значение"
   },
   "div_action_target": {
     "en": "The tab in which the URL must be opened.",
@@ -320,8 +332,8 @@
     "ru": "Добавление тени."
   },
   "div_border_shadow": {
-    "en": "Shadow parameters.",
-    "ru": "Параметры тени."
+    "en": "Shadow parameters applied to the stroke of the element.",
+    "ru": "Параметры тени, применяемой к рамке элемента."
   },
   "div_border_stroke": {
     "en": "Stroke style.",
@@ -988,8 +1000,8 @@
     "ru": "Регулярное выражение для валидации вводимого символа. Например, если маска предполагает только ввод цифр."
   },
   "div_input_mask_phone": {
-    "en": "Mask for entering a phone with a dynamic definition of the regional format.",
-    "ru": "Маска для ввода телефона c динамическим определением регионального формата."
+    "en": "Mask for entering phone numbers with dynamic regional format identification.",
+    "ru": "Маска для ввода номера телефона c динамическим определением регионального формата."
   },
   "div_input_mask_raw_text_variable": {
     "en": "Name of the variable to store the unprocessed value.",
@@ -1540,8 +1552,8 @@
     "ru": "Состояние."
   },
   "div_state_state_id_variable": {
-    "en": "Name of the variable where the current state ID value is stored. If the value of a variable changes, then the active state will also be changed. The variable takes precedence over the `default_state_id` field.",
-    "ru": "Название переменной, в которую сохраняется текущее идентификатор активного состояния. Если меняется значение переменной, то и активное состояние будет изменено. Переменная приоритетнее поля `default_state_id`."
+    "en": "The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.",
+    "ru": "Имя переменной, в которой хранится идентификатор текущего состояния. Если изменится значение переменной, то и активное состояние будет изменено. Переменная имеет приоритет над параметром `default_state_id`."
   },
   "div_state_states": {
     "en": "States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.",
@@ -2174,17 +2186,5 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
-  },
-  "div_action_array_insert_value": {
-    "en": "Insert value to array",
-    "ru": "Добавляет значение в массив"
-  },
-  "div_action_array_remove_value": {
-    "en": "Remove value from array",
-    "ru": "Удаляет значение из массива"
-  },
-  "div_action_set_variable": {
-    "en": "Sets variable value",
-    "ru": "Присваивает переменной значение"
   }
 }
