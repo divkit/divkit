@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.div
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
@@ -15,6 +16,12 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class DemoDivImageLoader(
     context: Context
@@ -59,8 +66,24 @@ class DemoDivImageLoader(
     }
 
     override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
-        // TODO: load raw bytes instead of Bitmap
-        return loadImage(imageUrl, callback)
+        val request = Request.Builder().url(imageUrl).build()
+        val call = OkHttpClient.Builder().build().newCall(request)
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val response = call.execute()
+                val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
+                val bytes = response.body?.bytes() ?: return@withContext null
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {
+                    CachedBitmap(it, bytes, Uri.parse(imageUrl), source)
+                }
+            }?.let {
+                callback.onSuccess(it)
+            } ?: callback.onError()
+        }
+
+        return LoadReference {
+            call.cancel()
+        }
     }
 
     fun resetIdle() {
