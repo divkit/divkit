@@ -150,7 +150,7 @@ class BuiltinFunctionProvider(
         registry.register(GetColorValue(variableProvider))
         registry.register(GetBooleanValue(variableProvider))
 
-        // Dict functions
+        // Dict functions legacy
         registry.register(GetDictInteger(variableProvider))
         registry.register(GetDictNumber(variableProvider))
         registry.register(GetDictString(variableProvider))
@@ -162,7 +162,19 @@ class BuiltinFunctionProvider(
         registry.register(GetDictOptColor(variableProvider))
         registry.register(GetDictOptBoolean(variableProvider))
 
-        // Array functions
+        // Dict functions
+        registry.register(GetIntegerFromDict(variableProvider))
+        registry.register(GetNumberFromDict(variableProvider))
+        registry.register(GetStringFromDict(variableProvider))
+        registry.register(GetColorFromDict(variableProvider))
+        registry.register(GetBooleanFromDict(variableProvider))
+        registry.register(GetOptIntegerFromDict(variableProvider))
+        registry.register(GetOptNumberFromDict(variableProvider))
+        registry.register(GetOptStringFromDict(variableProvider))
+        registry.register(GetOptColorFromDict(variableProvider))
+        registry.register(GetOptBooleanFromDict(variableProvider))
+
+        // Array functions legacy
         registry.register(GetArrayInteger(variableProvider))
         registry.register(GetArrayNumber(variableProvider))
         registry.register(GetArrayString(variableProvider))
@@ -174,6 +186,23 @@ class BuiltinFunctionProvider(
         registry.register(GetArrayOptColorWithColorFallback(variableProvider))
         registry.register(GetArrayOptColorWithStringFallback(variableProvider))
         registry.register(GetArrayOptBoolean(variableProvider))
+
+        // Array functions
+        registry.register(GetIntegerFromArray(variableProvider))
+        registry.register(GetNumberFromArray(variableProvider))
+        registry.register(GetStringFromArray(variableProvider))
+        registry.register(GetColorFromArray(variableProvider))
+        registry.register(GetBooleanFromArray(variableProvider))
+        registry.register(GetArrayFromArray(variableProvider))
+        registry.register(GetDictFromArray(variableProvider))
+        registry.register(GetOptIntegerFromArray(variableProvider))
+        registry.register(GetOptNumberFromArray(variableProvider))
+        registry.register(GetOptStringFromArray(variableProvider))
+        registry.register(GetOptColorFromArrayWithColorFallback(variableProvider))
+        registry.register(GetOptColorFromArrayWithStringFallback(variableProvider))
+        registry.register(GetOptBooleanFromArray(variableProvider))
+        registry.register(GetOptArrayFromArray(variableProvider))
+        registry.register(GetOptDictFromArray(variableProvider))
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

@@ -11,7 +11,9 @@
         {
           "type": "array",
           "name": "array",
-          "value": [123]
+          "value": [
+            123
+          ]
         }
       ],
       "platforms": [
@@ -19,11 +21,11 @@
       ]
     },
     {
-      "name": "getArrayString(array, 'index_out_of_bounds') => error",
-      "expression": "@{getArrayString(array, 1)}",
+      "name": "getStringFromArray(array, 'index_out_of_bounds') => error",
+      "expression": "@{getStringFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayString(<array>, 1)]. Requested index (1) out of bounds array size (0)"
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Requested index (0) out of bounds array size (0)"
       },
       "variables": [
         {
@@ -33,13 +35,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayInteger(array, 0) => integer",
-      "expression": "@{getArrayInteger(array, 0)}",
+      "name": "getIntegerFromArray(array, 0) => integer",
+      "expression": "@{getIntegerFromArray(array, 0)}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -54,16 +55,15 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayInteger(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayInteger(array, 0)}",
+      "name": "getIntegerFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getIntegerFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayInteger(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\""
+        "value": "Failed to evaluate [getIntegerFromArray(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\""
       },
       "variables": [
         {
@@ -75,13 +75,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptInteger(array, 'integer_index', 'fallback') => integer",
-      "expression": "@{getArrayOptInteger(array, 1, 321)}",
+      "name": "getOptIntegerFromArray(array, 'integer_index', 'fallback') => integer",
+      "expression": "@{getOptIntegerFromArray(array, 1, 321)}",
       "expected": {
         "type": "integer",
         "value": 123
@@ -97,13 +96,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptInteger(array, 'wrong_type_index', 'fallback') => fallback integer",
-      "expression": "@{getArrayOptInteger(array, 0, 321)}",
+      "name": "getOptIntegerFromArray(array, 'wrong_type_index', 'fallback') => fallback integer",
+      "expression": "@{getOptIntegerFromArray(array, 0, 321)}",
       "expected": {
         "type": "integer",
         "value": 321
@@ -119,13 +117,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayNumber(array, 0) => number",
-      "expression": "@{getArrayNumber(array, 0)}",
+      "name": "getNumberFromArray(array, 0) => number",
+      "expression": "@{getNumberFromArray(array, 0)}",
       "expected": {
         "type": "number",
         "value": 123
@@ -140,16 +137,15 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayNumber(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayNumber(array, 0)}",
+      "name": "getNumberFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getNumberFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayNumber(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\""
+        "value": "Failed to evaluate [getNumberFromArray(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\""
       },
       "variables": [
         {
@@ -161,13 +157,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptNumber(array, 'number_index', 'fallback') => number",
-      "expression": "@{getArrayOptNumber(array, 1, 321.00)}",
+      "name": "getOptNumberFromArray(array, 'number_index', 'fallback') => number",
+      "expression": "@{getOptNumberFromArray(array, 1, 321.00)}",
       "expected": {
         "type": "number",
         "value": 123.00
@@ -183,13 +178,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptNumber(array, 'wrong_type_index', 'fallback') => fallback number",
-      "expression": "@{getArrayOptNumber(array, 0, 321.00)}",
+      "name": "getOptNumberFromArray(array, 'wrong_type_index', 'fallback') => fallback number",
+      "expression": "@{getOptNumberFromArray(array, 0, 321.00)}",
       "expected": {
         "type": "number",
         "value": 321.00
@@ -205,13 +199,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayString(array, 0) => string",
-      "expression": "@{getArrayString(array, 0)}",
+      "name": "getStringFromArray(array, 0) => string",
+      "expression": "@{getStringFromArray(array, 0)}",
       "expected": {
         "type": "string",
         "value": "string"
@@ -226,16 +219,15 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayString(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayString(array, 0)}",
+      "name": "getStringFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getStringFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayString(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\""
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\""
       },
       "variables": [
         {
@@ -247,13 +239,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptString(array, 'string_index', 'fallback') => string",
-      "expression": "@{getArrayOptString(array, 0, 'fallback')}",
+      "name": "getOptStringFromArray(array, 'string_index', 'fallback') => string",
+      "expression": "@{getOptStringFromArray(array, 0, 'fallback')}",
       "expected": {
         "type": "string",
         "value": "string"
@@ -269,13 +260,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptString(array, 'wrong_type_index', 'fallback') => fallback string",
-      "expression": "@{getArrayOptString(array, 1, 'fallback')}",
+      "name": "getOptStringFromArray(array, 'wrong_type_index', 'fallback') => fallback string",
+      "expression": "@{getOptStringFromArray(array, 1, 'fallback')}",
       "expected": {
         "type": "string",
         "value": "fallback"
@@ -291,13 +281,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayBoolean(array, 0) => boolean",
-      "expression": "@{getArrayBoolean(array, 0)}",
+      "name": "getBooleanFromArray(array, 0) => boolean",
+      "expression": "@{getBooleanFromArray(array, 0)}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -312,16 +301,15 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayBoolean(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayBoolean(array, 0)}",
+      "name": "getBooleanFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getBooleanFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayBoolean(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\""
+        "value": "Failed to evaluate [getBooleanFromArray(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\""
       },
       "variables": [
         {
@@ -333,13 +321,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptBoolean(array, 'boolean_index', 'fallback') => boolean",
-      "expression": "@{getArrayOptBoolean(array, 0, true)}",
+      "name": "getOptBooleanFromArray(array, 'boolean_index', 'fallback') => boolean",
+      "expression": "@{getOptBooleanFromArray(array, 0, true)}",
       "expected": {
         "type": "boolean",
         "value": false
@@ -354,13 +341,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptBoolean(array, 'wrong_type_index', 'fallback') => fallback boolean",
-      "expression": "@{getArrayOptBoolean(array, 0, true)}",
+      "name": "getOptBooleanFromArray(array, 'wrong_type_index', 'fallback') => fallback boolean",
+      "expression": "@{getOptBooleanFromArray(array, 0, true)}",
       "expected": {
         "type": "boolean",
         "value": true
@@ -375,13 +361,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayColor(array, 0) => color",
-      "expression": "@{getArrayColor(array, 0)}",
+      "name": "getColorFromArray(array, 0) => color",
+      "expression": "@{getColorFromArray(array, 0)}",
       "expected": {
         "type": "color",
         "value": "#FF001122"
@@ -396,16 +381,15 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayColor(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayColor(array, 0)}",
+      "name": "getColorFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getColorFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayColor(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\""
+        "value": "Failed to evaluate [getColorFromArray(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\""
       },
       "variables": [
         {
@@ -417,13 +401,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptColor(array, 'color_index', 'color_fallback') => color",
-      "expression": "@{getArrayOptColor(array, 0, '#FF009988')}",
+      "name": "getOptColorFromArray(array, 'color_index', 'color_fallback') => color",
+      "expression": "@{getOptColorFromArray(array, 0, '#FF009988')}",
       "expected": {
         "type": "color",
         "value": "#FF112233"
@@ -438,13 +421,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptColor(array, 'wrong_type_index', 'color_fallback') => fallback color",
-      "expression": "@{getArrayOptColor(array, 1, color_fallback)}",
+      "name": "getOptColorFromArray(array, 'wrong_type_index', 'color_fallback') => fallback color",
+      "expression": "@{getOptColorFromArray(array, 1, color_fallback)}",
       "expected": {
         "type": "color",
         "value": "#FF009988"
@@ -465,13 +447,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayOptColor(array, 'wrong_type_index', 'color_fallback') => fallback string color",
-      "expression": "@{getArrayOptColor(array, 1, '#FF009988')}",
+      "name": "getOptColorFromArray(array, 'wrong_type_index', 'color_fallback') => fallback string color",
+      "expression": "@{getOptColorFromArray(array, 1, '#FF009988')}",
       "expected": {
         "type": "color",
         "value": "#FF009988"
@@ -487,13 +468,12 @@
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ]
     },
     {
-      "name": "getArrayUrl(array, 'url_index') => 'https://ya.ru'",
-      "expression": "@{getArrayUrl(array, 0)}",
+      "name": "getUrlFromArray(array, 'url_index') => 'https://ya.ru'",
+      "expression": "@{getUrlFromArray(array, 0)}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -508,15 +488,14 @@
         }
       ],
       "platforms": [
-        "ios"
       ]
     },
     {
-      "name": "getArrayUrl(array, 'wrong_type_index') => error",
-      "expression": "@{getArrayUrl(array, 0)}",
+      "name": "getUrlFromArray(array, 'wrong_type_index') => error",
+      "expression": "@{getUrlFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayUrl(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
+        "value": "Failed to evaluate [getUrlFromArray(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
       },
       "variables": [
         {
@@ -528,12 +507,11 @@
         }
       ],
       "platforms": [
-        "ios"
       ]
     },
     {
-      "name": "getArrayOptUrl(array, 'url_index', 'fallback') => 'https://ya.ru'",
-      "expression": "@{getArrayOptUrl(array, 0, 'https://fallback.ru')}",
+      "name": "getOptUrlFromArray(array, 'url_index', 'fallback') => 'https://ya.ru'",
+      "expression": "@{getOptUrlFromArray(array, 0, 'https://fallback.ru')}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -548,12 +526,11 @@
         }
       ],
       "platforms": [
-        "ios"
       ]
     },
     {
-      "name": "getArrayOptUrl(array, 'wrong_type_index', 'fallback') => 'https://fallback.ru'",
-      "expression": "@{getArrayOptUrl(array, 0, 'https://fallback.ru')}",
+      "name": "getOptUrlFromArray(array, 'wrong_type_index', 'fallback') => 'https://fallback.ru'",
+      "expression": "@{getOptUrlFromArray(array, 0, 'https://fallback.ru')}",
       "expected": {
         "type": "url",
         "value": "https://fallback.ru"
@@ -568,12 +545,11 @@
         }
       ],
       "platforms": [
-        "ios"
       ]
     },
     {
-      "name": "getArrayOptUrl(array, 'url_index', toUrl('fallback')) => 'https://ya.ru'",
-      "expression": "@{getArrayOptUrl(array, 0, toUrl('https://fallback.ru'))}",
+      "name": "getOptUrlFromArray(array, 'url_index', toUrl('fallback')) => 'https://ya.ru'",
+      "expression": "@{getOptUrlFromArray(array, 0, toUrl('https://fallback.ru'))}",
       "expected": {
         "type": "url",
         "value": "https://ya.ru"
@@ -588,12 +564,11 @@
         }
       ],
       "platforms": [
-        "ios"
       ]
     },
     {
-      "name": "getArrayOptUrl(array, 'wrong_type_index', toUrl('fallback')) => 'https://fallback.ru'",
-      "expression": "@{getArrayOptUrl(array, 0, toUrl('https://fallback.ru'))}",
+      "name": "getOptUrlFromArray(array, 'wrong_type_index', toUrl('fallback')) => 'https://fallback.ru'",
+      "expression": "@{getOptUrlFromArray(array, 0, toUrl('https://fallback.ru'))}",
       "expected": {
         "type": "url",
         "value": "https://fallback.ru"
@@ -608,7 +583,188 @@
         }
       ],
       "platforms": [
-        "ios"
+      ]
+    },
+    {
+      "name": "getArrayFromArray(array, 'array_index') => array",
+      "expression": "@{getArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          123,
+          "string_value"
+        ]
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            [
+              123,
+              "string_value"
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getArrayFromArray(array, 'wrong_index') => error",
+      "expression": "@{getArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayFromArray(<array>, 0)]. Incorrect value type: expected \"array\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptArrayFromArray(array, 'array_index') => array",
+      "expression": "@{getOptArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": [
+          123,
+          "string_value"
+        ]
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            [
+              123,
+              "string_value"
+            ]
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptArrayFromArray(array, 'wrong_type_index') => []",
+      "expression": "@{getOptArrayFromArray(array, 0)}",
+      "expected": {
+        "type": "array",
+        "value": []
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123,
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDictFromArray(array, 'dict_index') => dict",
+      "expression": "@{getDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "key": "value"
+        }
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDictFromArray(array, 'wrong_index') => error",
+      "expression": "@{getDictFromArray(array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected \"dict\", got \"number\""
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptDictFromArray(array, 'dict_index') => dict",
+      "expression": "@{getOptDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "key": "value"
+        }
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptDictFromArray(array, 'wrong_type_index') => {}",
+      "expression": "@{getOptDictFromArray(array, 0)}",
+      "expected": {
+        "type": "dict",
+        "value": {}
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123,
+            "string_value"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
       ]
     }
   ]

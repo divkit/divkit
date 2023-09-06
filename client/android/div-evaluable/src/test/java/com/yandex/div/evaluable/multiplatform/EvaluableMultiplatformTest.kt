@@ -11,6 +11,7 @@ import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSO
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.withEvaluator
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert
@@ -40,21 +41,37 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
     @Test
     fun runExpressionTestCase() {
-        val expectedValue = testCase.expectedValue
-        if (expectedValue is Exception) {
-            val actualValue = evalExpression(testCase.expectedWarnings)
-            Assert.assertTrue(actualValue is Exception)
-            val expectedMessage = expectedValue.message.takeIf { it?.isNotEmpty() == true } ?: return
-            Assert.assertEquals(expectedMessage, (actualValue as Throwable).message)
-        } else {
-            val evalExpression = evalExpression(testCase.expectedWarnings)
-            if (evalExpression is Throwable) {
-                throw AssertionError(
-                    "Expecting '${testCase.expectedValue}' at expression '${testCase.expression}' " +
-                    "but got exception instead!", evalExpression)
+        when (val expectedValue = testCase.expectedValue) {
+            is Exception -> {
+                val actualValue = evalExpression(testCase.expectedWarnings)
+                Assert.assertTrue(actualValue is Exception)
+                val expectedMessage =
+                    expectedValue.message.takeIf { it?.isNotEmpty() == true } ?: return
+                Assert.assertEquals(expectedMessage, (actualValue as Throwable).message)
             }
-            Assert.assertEquals("expression: '${testCase.expression}'", testCase.expectedValue, evalExpression)
+
+            is JSONArray, is JSONObject -> {
+                checkEquality(testCase) { message, expected, actual ->
+                    Assert.assertEquals(message, expected.toString(), actual.toString())
+                }
+            }
+
+            else -> {
+                checkEquality(testCase) { message, expected, actual ->
+                    Assert.assertEquals(message, expected, actual)
+                }
+            }
         }
+    }
+
+    private fun checkEquality(testCase: ExpressionTestCase, validate: (String, Any, Any) -> Unit) {
+        val evalExpression = evalExpression(testCase.expectedWarnings)
+        if (evalExpression is Throwable) {
+            throw AssertionError(
+                "Expecting '${testCase.expectedValue}' at expression '${testCase.expression}' " +
+                    "but got exception instead!", evalExpression)
+        }
+        validate("expression: '${testCase.expression}'", testCase.expectedValue, evalExpression)
     }
 
     private fun evalExpression(expectedWarnings: List<String>): Any {

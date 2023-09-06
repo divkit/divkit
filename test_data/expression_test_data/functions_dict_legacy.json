@@ -1,0 +1,1284 @@
+{
+  "cases": [
+    {
+      "name": "unknownDictFunc(dict) => error",
+      "expression": "@{unknownDictFunc(dict)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [unknownDictFunc(<dict>)]. Unknown function name: unknownDictFunc."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => 'val'",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "val"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'missing_prop') => error",
+      "expression": "@{getDictString(dict, 'missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'prop2') => 'val'",
+      "expression": "@{getDictString(dict, 'prop', 'prop2')}",
+      "expected": {
+        "type": "string",
+        "value": "val"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": "val"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'prop2', 'prop3') => 'val'",
+      "expression": "@{getDictString(dict, 'prop', 'prop2', 'prop3')}",
+      "expected": {
+        "type": "string",
+        "value": "val"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": {
+                "prop3": "val"
+              }
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'missing_prop') => error",
+      "expression": "@{getDictString(dict, 'prop', 'missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": "val"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'wrong_prop_type') => error",
+      "expression": "@{getDictString(dict, 'prop', 'wrong_prop_type')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'wrong_prop_type')]. Missing property \"wrong_prop_type\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => error",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected \"string\", got \"dict\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": "val"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => error (2)",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected \"string\", got \"array\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": []
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => error (3)",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected \"string\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => error (4)",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected \"string\", got \"boolean\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop') => error (5)",
+      "expression": "@{getDictString(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop')]. Incorrect value type: expected \"string\", got \"null\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": null
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictString(dict, 'prop', 'missing_prop') => error (2)",
+      "expression": "@{getDictString(dict, 'prop', 'missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictString(<dict>, 'prop', 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": null
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, 'prop') => 123.4",
+      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expected": {
+        "type": "number",
+        "value": 123.4
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123.4
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, 'prop') => 123.0",
+      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expected": {
+        "type": "number",
+        "value": 123.0
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, 'prop') => error",
+      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictNumber(<dict>, 'prop')]. Incorrect value type: expected \"number\", got \"boolean\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictNumber(dict, 'prop') => error (2)",
+      "expression": "@{getDictNumber(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictNumber(<dict>, 'prop')]. Incorrect value type: expected \"number\", got \"string\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, 'prop') => 123",
+      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, 'prop') => error",
+      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Cannot convert value to integer."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123.4
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, 'prop') => error (2)",
+      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Incorrect value type: expected \"integer\", got \"boolean\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, 'prop') => 12345678901",
+      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 12345678901
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 12345678901
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictInteger(dict, 'prop') => error (3)",
+      "expression": "@{getDictInteger(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictInteger(<dict>, 'prop')]. Integer overflow."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 9223372036854775808000000000000000000000
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictBoolean(dict, 'prop') => true",
+      "expression": "@{getDictBoolean(dict, 'prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictBoolean(dict, 'prop') => error",
+      "expression": "@{getDictBoolean(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'prop')]. Incorrect value type: expected \"boolean\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 1
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictBoolean(dict, 'prop') => error (2)",
+      "expression": "@{getDictBoolean(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'prop')]. Incorrect value type: expected \"boolean\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 0
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictBoolean(dict, 'prop') => error (3)",
+      "expression": "@{getDictBoolean(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictBoolean(<dict>, 'prop')]. Incorrect value type: expected \"boolean\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 2
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictColor(dict, 'prop') => '#FFFFFFFF'",
+      "expression": "@{getDictColor(dict, 'prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "#fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictColor(dict, 'prop') => error",
+      "expression": "@{getDictColor(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictColor(<dict>, 'prop')]. Unable to convert value to Color, expected format #AARRGGBB."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictUrl(dict, 'prop') => 'https://ya.ru'",
+      "expression": "@{getDictUrl(dict, 'prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictUrl(dict, 'prop') => error",
+      "expression": "@{getDictUrl(dict, 'prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictUrl(<dict>, 'prop')]. Incorrect value type: expected \"url\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop') => 'val'",
+      "expression": "@{getDictOptString('fallback', dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "val"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'missing_prop') => 'fallback'",
+      "expression": "@{getDictOptString('fallback', dict, 'missing_prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop', 'missing_prop') => 'fallback'",
+      "expression": "@{getDictOptString('fallback', dict, 'prop', 'missing_prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": "val"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop', 'wrong_prop_type') => 'fallback'",
+      "expression": "@{getDictOptString('fallback', dict, 'prop', 'wrong_prop_type')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "val"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop') => 'fallback'",
+      "expression": "@{getDictOptString('fallback', dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "prop2": "val"
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop') => 'fallback' (2)",
+      "expression": "@{getDictOptString('fallback', dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop') => 'fallback' (3)",
+      "expression": "@{getDictOptString('fallback', dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop') => 'fallback' (4)",
+      "expression": "@{getDictOptString('fallback', dict, 'prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": null
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptString('fallback', dict, 'prop', 'missing_prop') => 'fallback' (2)",
+      "expression": "@{getDictOptString('fallback', dict, 'prop', 'missing_prop')}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": null
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptNumber(7.0, dict, 'prop') => 123.4",
+      "expression": "@{getDictOptNumber(7.0, dict, 'prop')}",
+      "expected": {
+        "type": "number",
+        "value": 123.4
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123.4
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptNumber(7.0, dict, 'prop') => 123.0",
+      "expression": "@{getDictOptNumber(7.0, dict, 'prop')}",
+      "expected": {
+        "type": "number",
+        "value": 123.0
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptNumber(7.0, dict, 'prop') => 7.0",
+      "expression": "@{getDictOptNumber(7.0, dict, 'prop')}",
+      "expected": {
+        "type": "number",
+        "value": 7.0
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptInteger(7, dict, 'prop') => 123",
+      "expression": "@{getDictOptInteger(7, dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptInteger(7, dict, 'prop') => 7",
+      "expression": "@{getDictOptInteger(7, dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123.4
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptInteger(7, dict, 'prop') => 12345678901",
+      "expression": "@{getDictOptInteger(7, dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 12345678901
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 12345678901
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptInteger(7, dict, 'prop') => 7 (2)",
+      "expression": "@{getDictOptInteger(7, dict, 'prop')}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 922337203685477580800
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean(false, dict, 'prop') => true",
+      "expression": "@{getDictOptBoolean(false, dict, 'prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": true
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean(false, dict, 'prop') => true (2)",
+      "expression": "@{getDictOptBoolean(false, dict, 'prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 1
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean(false, dict, 'prop') => false",
+      "expression": "@{getDictOptBoolean(false, dict, 'prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 0
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptBoolean(false, dict, 'prop') => false (2)",
+      "expression": "@{getDictOptBoolean(false, dict, 'prop')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 2
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptColor('#000', dict, 'prop') => '#FFFFFFFF'",
+      "expression": "@{getDictOptColor('#000', dict, 'prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "#fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptColor('#000', dict, 'prop') => '#FF000000'",
+      "expression": "@{getDictOptColor('#000', dict, 'prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios",
+        "android"
+      ]
+    },
+    {
+      "name": "getDictOptColor(toColor('#000'), dict, 'prop') => '#FFFFFFFF'",
+      "expression": "@{getDictOptColor(toColor('#000'), dict, 'prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "#fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptColor(toColor('#000'), dict, 'prop') => '#FF000000'",
+      "expression": "@{getDictOptColor(toColor('#000'), dict, 'prop')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "fff"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptUrl('https://fallback', dict, 'prop') => 'https://ya.ru'",
+      "expression": "@{getDictOptUrl('https://fallback', dict, 'prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptUrl('https://fallback', dict, 'prop') => 'https://fallback'",
+      "expression": "@{getDictOptUrl('https://fallback', dict, 'prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptUrl(toUrl('https://fallback'), dict, 'prop') => 'https://ya.ru'",
+      "expression": "@{getDictOptUrl(toUrl('https://fallback'), dict, 'prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://ya.ru"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": "https://ya.ru"
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "getDictOptUrl(toUrl('https://fallback'), dict, 'prop') => 'https://fallback'",
+      "expression": "@{getDictOptUrl(toUrl('https://fallback'), dict, 'prop')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": 123
+          }
+        }
+      ],
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    }
+  ]
+}

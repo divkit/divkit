@@ -35,9 +35,54 @@ internal class GetDictInteger(override val variableProvider: VariableProvider) :
     }
 }
 
+internal class GetIntegerFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getIntegerFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+        when (it) {
+            is Int -> it.toLong()
+            is Long -> it
+            is BigInteger -> throwException(name, args, "Integer overflow.")
+            is BigDecimal -> throwException(name, args, "Cannot convert value to integer.")
+            else -> throwWrongTypeException(name, args, resultType, it)
+        }
+    }
+}
+
 internal class GetDictNumber(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictNumber"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.NUMBER
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+        when (it) {
+            is Int -> it.toDouble()
+            is Long -> it.toDouble()
+            is BigDecimal -> it.toDouble()
+            else -> throwWrongTypeException(name, args, resultType, it)
+        }
+    }
+}
+
+internal class GetNumberFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getNumberFromDict"
 
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.DICT), // variable name
@@ -74,6 +119,23 @@ internal class GetDictString(override val variableProvider: VariableProvider) : 
     }
 }
 
+internal class GetStringFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getStringFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.STRING
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+        it as? String ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
 internal class GetDictColor(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictColor"
@@ -95,9 +157,47 @@ internal class GetDictColor(override val variableProvider: VariableProvider) : F
     }
 }
 
+internal class GetColorFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getColorFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.COLOR
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+        (it as? String)?.runCatching {
+            Color.parse(this)
+        }?.getOrElse {
+            throwException(name, args, "Unable to convert value to Color, expected format #AARRGGBB.")
+        } ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
 internal class GetDictBoolean(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictBoolean"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.BOOLEAN
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+        it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal class GetBooleanFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getBooleanFromDict"
 
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.DICT), // variable name
@@ -173,9 +273,60 @@ internal class GetDictOptInteger(override val variableProvider: VariableProvider
     }
 }
 
+internal class GetOptIntegerFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getOptIntegerFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.INTEGER), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Long
+        return evaluateSafe(args, fallback).let {
+            when (it) {
+                is Int -> it.toLong()
+                is Long -> it
+                else -> fallback
+            }
+        }
+    }
+}
+
 internal class GetDictOptNumber(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictOptNumber"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.NUMBER), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.NUMBER
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Double
+        return evaluateSafe(args, fallback).let {
+            when (it) {
+                is Int -> it.toDouble()
+                is Long -> it.toDouble()
+                is BigDecimal -> it.toDouble()
+                else -> fallback
+            }
+        }
+    }
+}
+
+internal class GetOptNumberFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getOptNumberFromDict"
 
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.NUMBER), // fallback
@@ -218,6 +369,25 @@ internal class GetDictOptString(override val variableProvider: VariableProvider)
     }
 }
 
+internal class GetOptStringFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getOptStringFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.STRING
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as String
+        return evaluateSafe(args, fallback) as? String ?: fallback
+    }
+}
+
 internal class GetDictOptColor(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictOptColor"
@@ -239,9 +409,49 @@ internal class GetDictOptColor(override val variableProvider: VariableProvider) 
     }
 }
 
+internal class GetOptColorFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getOptColorFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.COLOR
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as String
+        return (evaluateSafe(args, fallback) as? String)?.runCatching {
+            Color.parse(this)
+        }?.getOrNull() ?: Color.parse(fallback)
+    }
+}
+
 internal class GetDictOptBoolean(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
     override val name = "getDictOptBoolean"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.BOOLEAN), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.BOOLEAN
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Boolean
+        return evaluateSafe(args, fallback) as? Boolean ?: fallback
+    }
+}
+
+internal class GetOptBooleanFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getOptBooleanFromDict"
 
     override val declaredArgs = listOf(
         FunctionArgument(type = EvaluableType.BOOLEAN), // fallback

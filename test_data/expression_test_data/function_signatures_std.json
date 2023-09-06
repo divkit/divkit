@@ -739,6 +739,312 @@
       ]
     },
     {
+      "name": "getStringFromDict(dict, vararg string) string",
+      "function_name": "getStringFromDict",
+      "doc": "Returns a string value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getNumberFromDict(dict, vararg string) number",
+      "function_name": "getNumberFromDict",
+      "doc": "Returns a number value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getIntegerFromDict(dict, vararg string) integer",
+      "function_name": "getIntegerFromDict",
+      "doc": "Returns an integer value from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getBooleanFromDict(dict, vararg string) boolean",
+      "function_name": "getBooleanFromDict",
+      "doc": "Returns a boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getColorFromDict(dict, vararg string) color",
+      "function_name": "getColorFromDict",
+      "doc": "Returns a color property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getUrlFromDict(dict, vararg string) url",
+      "function_name": "getUrlFromDict",
+      "doc": "Returns an url property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getOptStringFromDict(string, dict, vararg string) string",
+      "function_name": "getOptStringFromDict",
+      "doc": "Returns an optional string property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a string."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptNumberFromDict(number, dict, vararg string) number",
+      "function_name": "getOptNumberFromDict",
+      "doc": "Returns an optional number property from dictionary.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Fallback value if property does not exist or a property value is not a number."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptIntegerFromDict(integer, dict, vararg string) integer",
+      "function_name": "getOptIntegerFromDict",
+      "doc": "Returns an optional integer property from dictionary.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptBooleanFromDict(boolean, dict, vararg string) boolean",
+      "function_name": "getOptBooleanFromDict",
+      "doc": "Returns an optional boolean property from dictionary.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Fallback value if property does not exist or a property value is not a boolean."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptColorFromDict(color, dict, vararg string) color",
+      "function_name": "getOptColorFromDict",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptColorFromDict(string, dict, vararg string) color",
+      "function_name": "getOptColorFromDict",
+      "doc": "Returns an optional color property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not a color."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptUrlFromDict(url, dict, vararg string) url",
+      "function_name": "getOptUrlFromDict",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "url",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getOptUrlFromDict(string, dict, vararg string) url",
+      "function_name": "getOptUrlFromDict",
+      "doc": "Returns an optional url property from dictionary.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "Fallback value if property does not exist or a property value is not an url."
+        },
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
       "name": "getArrayString(array, integer) string",
       "function_name": "getArrayString",
       "doc": "Returns a string value from array.",
@@ -1043,6 +1349,374 @@
       "result_type": "url",
       "platforms": [
         "ios"
+      ]
+    },
+    {
+      "name": "getStringFromArray(array, integer) string",
+      "function_name": "getStringFromArray",
+      "doc": "Returns a string value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getNumberFromArray(array, integer) number",
+      "function_name": "getNumberFromArray",
+      "doc": "Returns a number value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getIntegerFromArray(array, integer) integer",
+      "function_name": "getIntegerFromArray",
+      "doc": "Returns an integer value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getBooleanFromArray(array, integer) boolean",
+      "function_name": "getBooleanFromArray",
+      "doc": "Returns a boolean property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getColorFromArray(array, integer) color",
+      "function_name": "getColorFromArray",
+      "doc": "Returns a color property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptStringFromArray(array, integer, string) string",
+      "function_name": "getOptStringFromArray",
+      "doc": "Returns an optional string property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a string."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptNumberFromArray(array, integer, number) number",
+      "function_name": "getOptNumberFromArray",
+      "doc": "Returns an optional number property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "number",
+          "doc": "Fallback value if value by index not exists or it's is not a number."
+        }
+      ],
+      "result_type": "number",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptIntegerFromArray(array, integer, integer) integer",
+      "function_name": "getOptIntegerFromArray",
+      "doc": "Returns an optional integer property from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "integer",
+          "doc": "Fallback value if property does not exist or a property value is not an integer."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptBooleanFromArray(array, integer, boolean) boolean",
+      "function_name": "getOptBooleanFromArray",
+      "doc": "Returns an optional boolean value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "boolean",
+          "doc": "Fallback value if value by index not exists or it's is not a boolean."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptColorFromArray(array, integer, color) color",
+      "function_name": "getOptColorFromArray",
+      "doc": "Returns an optional color value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "color",
+          "doc": "Fallback value if value by index not exists or it's is not a color."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptColorFromArray(array, integer, string) color",
+      "function_name": "getOptColorFromArray",
+      "doc": "Returns an optional color value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a color."
+        }
+      ],
+      "result_type": "color",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getUrlFromArray(array, integer) url",
+      "function_name": "getUrlFromArray",
+      "doc": "Returns an url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getOptUrlFromArray(array, integer, url) url",
+      "function_name": "getOptUrlFromArray",
+      "doc": "Returns an optional url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "url",
+          "doc": "Fallback value if value by index not exists or it's is not a url."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getOptUrlFromArray(array, integer, string) url",
+      "function_name": "getOptUrlFromArray",
+      "doc": "Returns an optional url value from array.",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        },
+        {
+          "type": "string",
+          "doc": "Fallback value if value by index not exists or it's is not a url."
+        }
+      ],
+      "result_type": "url",
+      "platforms": []
+    },
+    {
+      "name": "getArrayFromArray(array, integer) array",
+      "function_name": "getArrayFromArray",
+      "doc": "Returns an array value from array",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptArrayFromArray(array, integer) array",
+      "function_name": "getOptArrayFromArray",
+      "doc": "Returns an array value from array if exist or empty array otherwise",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDictFromArray(array, integer) dict",
+      "function_name": "getDictFromArray",
+      "doc": "Returns an dict value from array",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getOptDictFromArray(array, integer) dict",
+      "function_name": "getOptDictFromArray",
+      "doc": "Returns an dict value from array if exist or empty dict otherwise",
+      "arguments": [
+        {
+          "type": "array",
+          "doc": "Array."
+        },
+        {
+          "type": "integer",
+          "doc": "Index at array."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "android"
       ]
     },
     {
