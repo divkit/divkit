@@ -18,9 +18,8 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div2 recycling performance test",
     owners = ["gulevsky"],
-    defaultRepeat = 10,
-    skipFirstResult = false,
-    timeoutSeconds = 600
+    defaultRepeat = 31,
+    timeoutSeconds = 1200
 )
 class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
     private var assets = arrayOf("div2-perf/benchmark-with-templates.json")

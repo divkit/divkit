@@ -16,8 +16,7 @@ import org.junit.Test
     packageName = PACKAGE_NAME,
     description = "Div2 performance test",
     owners = ["gulevsky"],
-    defaultRepeat = 21,
-    skipFirstResult = true,
+    defaultRepeat = 31,
     timeoutSeconds = 1200
 )
 class Div2PerformanceTest : Div2BasePerformanceTest() {
