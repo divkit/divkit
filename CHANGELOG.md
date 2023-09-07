@@ -1,3 +1,14 @@
+## 28.1.0
+
+# Android Client:
+* Support RTL for `DivPager`.
+* Added `get<Type>FromDict/get<Type>FromArray` functions for arrays.
+
+# iOS Client:
+* Fixed `DivInput` mask.
+* Fixed alignment in overlapped `DivContainer`.
+
+
 ## 28.0.0
 
 # JSON Schema:
