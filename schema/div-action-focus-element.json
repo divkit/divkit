@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_focus_element",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "focus_element"
+      ]
+    },
+    "element_id": {
+      "$ref": "common.json#/non_empty_string"
+    }
+  },
+  "required": [
+    "type",
+    "element_id"
+  ]
+}
