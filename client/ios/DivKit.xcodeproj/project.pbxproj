@@ -1335,13 +1335,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				52DED04629F7346900D64519 /* DivKitExtensionsTests */,
 				8C4409EC2864C4D200EF4175 /* DivKitPlayground */,
 				8C9284C4288ACCBA00BEA1FA /* DivKitSnapshotTests */,
 				8C7B1B192865BFF10036EF4C /* DivKitTests */,
 				8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329232875D534003F799A /* LayoutKitTests */,
 				8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
-				52DED04629F7346900D64519 /* DivKitExtensionsTests */,
 			);
 		};
 /* End PBXProject section */
