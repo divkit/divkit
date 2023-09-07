@@ -1,6 +1,9 @@
 package com.yandex.div.core.actions
 
 import com.yandex.div.core.view2.Div2View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
+import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTypedValue
 
@@ -23,4 +26,9 @@ internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any
         is DivTypedValue.Dict -> value.value
     }
     return newValue
+}
+
+internal fun DivInputView.openKeyboard() {
+    val imm = ContextCompat.getSystemService(context, InputMethodManager::class.java)
+    imm?.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
