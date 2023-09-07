@@ -47,7 +47,6 @@
 		8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0DC7112865CA1100286F6B /* DivKitTests.swift */; };
 		8C0E7371288AE219009BEB3C /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0E7370288AE219009BEB3C /* DivKit */; };
 		8C0E7373288AE563009BEB3C /* snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7372288AE563009BEB3C /* snapshot_test_data */; };
-		8C0E7375288AE576009BEB3C /* production_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7374288AE576009BEB3C /* production_data */; };
 		8C0E7395288AEF18009BEB3C /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7391288AEF18009BEB3C /* YSText-Medium.ttf */; };
 		8C0E7396288AEF18009BEB3C /* YSText-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */; };
 		8C0E7397288AEF18009BEB3C /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7393288AEF18009BEB3C /* YSText-Regular.ttf */; };
@@ -192,7 +191,6 @@
 		8C9284DF288ACCE400BEA1FA /* DivSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D4288ACCE400BEA1FA /* DivSnapshotTests.swift */; };
 		8C9284E0288ACCE400BEA1FA /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */; };
 		8C9284E1288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D6288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift */; };
-		8C9284E2288ACCE400BEA1FA /* MordaProductionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D7288ACCE400BEA1FA /* MordaProductionTests.swift */; };
 		8C9284E4288ACCE400BEA1FA /* DivIndicatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D9288ACCE400BEA1FA /* DivIndicatorTests.swift */; };
 		8C9284FA288ADEEA00BEA1FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284F9288ADEEA00BEA1FA /* AppDelegate.swift */; };
 		8C9284FE288ADEEA00BEA1FA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284FD288ADEEA00BEA1FA /* ViewController.swift */; };
@@ -290,7 +288,6 @@
 		8C0C0766288FE8F30052C4A9 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8C0DC7112865CA1100286F6B /* DivKitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivKitTests.swift; sourceTree = "<group>"; };
 		8C0E7372288AE563009BEB3C /* snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = snapshot_test_data; path = ../../../test_data/snapshot_test_data; sourceTree = "<group>"; };
-		8C0E7374288AE576009BEB3C /* production_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = production_data; path = ../../../test_data/production_data; sourceTree = "<group>"; };
 		8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
 		8C0E7391288AEF18009BEB3C /* YSText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Medium.ttf"; sourceTree = "<group>"; };
 		8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Light.ttf"; sourceTree = "<group>"; };
@@ -446,7 +443,6 @@
 		8C9284D4288ACCE400BEA1FA /* DivSnapshotTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivSnapshotTests.swift; sourceTree = "<group>"; };
 		8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceSet.swift; sourceTree = "<group>"; };
 		8C9284D6288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivKitSnapshotTestCase.swift; sourceTree = "<group>"; };
-		8C9284D7288ACCE400BEA1FA /* MordaProductionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MordaProductionTests.swift; sourceTree = "<group>"; };
 		8C9284D9288ACCE400BEA1FA /* DivIndicatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivIndicatorTests.swift; sourceTree = "<group>"; };
 		8C9284F7288ADEEA00BEA1FA /* SnapshotTestsHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapshotTestsHostApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C9284F9288ADEEA00BEA1FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -951,7 +947,6 @@
 			isa = PBXGroup;
 			children = (
 				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
-				8C0E7374288AE576009BEB3C /* production_data */,
 				8C0E7372288AE563009BEB3C /* snapshot_test_data */,
 				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
 				8C035199288EC5AB0016A747 /* Images.xcassets */,
@@ -959,7 +954,6 @@
 				E94B516428D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift */,
 				8C9284D6288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift */,
 				8C9284D4288ACCE400BEA1FA /* DivSnapshotTests.swift */,
-				8C9284D7288ACCE400BEA1FA /* MordaProductionTests.swift */,
 				8C9284D5288ACCE400BEA1FA /* ReferenceSet.swift */,
 				8C9284D3288ACCE400BEA1FA /* RuntimeTestCase.swift */,
 				8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */,
@@ -1401,7 +1395,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */,
-				8C0E7375288AE576009BEB3C /* production_data in Resources */,
 				8C0E7373288AE563009BEB3C /* snapshot_test_data in Resources */,
 				8C03519A288EC5AB0016A747 /* Images.xcassets in Resources */,
 			);
@@ -1623,7 +1616,6 @@
 				8C9898402A4C570400FDC858 /* YSFontProvider.swift in Sources */,
 				8C9284E1288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift in Sources */,
 				8C9284DB288ACCE400BEA1FA /* Snapshot.swift in Sources */,
-				8C9284E2288ACCE400BEA1FA /* MordaProductionTests.swift in Sources */,
 				8C9284E4288ACCE400BEA1FA /* DivIndicatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
