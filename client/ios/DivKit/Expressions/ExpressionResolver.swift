@@ -23,12 +23,12 @@ public final class ExpressionResolver {
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
     self.variables = variables
+    self.persistentValuesStorage = persistentValuesStorage
     self.errorTracker = {
       DivKitLogger.error($0.description)
       errorTracker?($0)
     }
     self.variableTracker = variableTracker
-    self.persistentValuesStorage = persistentValuesStorage
   }
 
   public func resolveString(expression: String) -> String {
