@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -68,16 +69,18 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
         activityMap[value] = isActive
     }
 
-    fun applyPatch(divPatchCache: DivPatchCache): Boolean {
-        if (divPatchCache.getPatch(div2View.dataTag) == null) return false
+    fun applyPatch(divPatchCache: DivPatchCache, divView: Div2View): Boolean {
+        val patch = divPatchCache.getPatch(div2View.dataTag) ?: return false
+        val divPatchApply = DivPatchApply(patch)
 
-        var isPatchApplied = false
+        val appliedToListPatchIds = mutableSetOf<String>()
         var index = 0
         var activeIndex = 0
 
         while (index < _items.size) {
             val childDiv = _items[index]
-            val patchDivs = childDiv.value().id?.let {
+            val patchId = childDiv.value().id
+            val patchDivs = patchId?.let {
                 divPatchCache.getPatchDivListById(div2View.dataTag, it)
             }
 
@@ -96,7 +99,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
 
                 index += patchDivs.size - 1
                 activeIndex += activeItemsInserted - 1
-                isPatchApplied = true
+                appliedToListPatchIds.add(patchId)
             }
 
             if (isActive) {
@@ -106,9 +109,20 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
             index++
         }
 
+        // Apply patch inside items if needed
+        patch.patches.keys.filter { it !in appliedToListPatchIds }.forEach { idToFind ->
+            for (i in 0 until _items.size) {
+                val childDiv = _items[i]
+                divPatchApply.patchDivChild(childDiv, idToFind, divView.expressionResolver)?.let {
+                    _items[i] = it
+                    return@forEach
+                }
+            }
+        }
+
         updateActiveItems()
 
-        return isPatchApplied
+        return appliedToListPatchIds.isNotEmpty()
     }
 
     companion object {
