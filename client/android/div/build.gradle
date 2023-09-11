@@ -28,6 +28,7 @@ dependencies {
     api project(path: ':div-histogram')
     api project(path: ':div-json')
     api project(path: ':div-states')
+    api project(path: ':div-storage')
 
     implementation "com.google.dagger:dagger:$versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"

@@ -103,7 +103,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                 variableController.getMutableVariable(variableName)?.getValue()
             },
             storedValueProvider = { storedValueName ->
-                storedValuesController.getStoredValue(storedValueName)?.getValue()
+                storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },
         ))
         val expressionResolver = ExpressionResolverImpl(

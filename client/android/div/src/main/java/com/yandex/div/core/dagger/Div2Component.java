@@ -39,6 +39,8 @@ import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
+import com.yandex.div.storage.DivStorageComponent;
+
 import dagger.BindsInstance;
 import dagger.Subcomponent;
 
@@ -52,7 +54,8 @@ import javax.inject.Named;
         Div2Module.class,
         DivConfiguration.class,
         DivHistogramsModule.class,
-        DivActionTypedModule.class
+        DivActionTypedModule.class,
+        DivStorageModule.class
 })
 public interface Div2Component {
 
@@ -190,6 +193,10 @@ public interface Div2Component {
         @NonNull
         @BindsInstance
         Builder globalVariableController(@NonNull GlobalVariableController globalVariableController);
+
+        @NonNull
+        @BindsInstance
+        Builder divStorageComponent(@Nullable @Named(Names.HAS_DEFAULTS) DivStorageComponent divStorageComponent);
 
         @NonNull
         Div2Component build();

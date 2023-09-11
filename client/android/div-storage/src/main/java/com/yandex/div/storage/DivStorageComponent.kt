@@ -1,7 +1,6 @@
 package com.yandex.div.storage
 
 import android.content.Context
-import com.yandex.div.core.DivKit
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.json.ParsingErrorLogger
@@ -29,7 +28,7 @@ interface DivStorageComponent {
                 errorLogger: ParsingErrorLogger = ParsingErrorLogger.LOG,
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
-                    LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
+                    LazyProvider { DivParsingHistogramReporter.DEFAULT },
                 experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride: Boolean = true,
         ): DivStorageComponent = createInternal(
                 context,
@@ -48,7 +47,7 @@ interface DivStorageComponent {
                 errorLogger: ParsingErrorLogger = ParsingErrorLogger.LOG,
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
-                    LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
+                    LazyProvider { DivParsingHistogramReporter.DEFAULT },
                 useDatabaseManager: Boolean = true,
         ): InternalStorageComponent {
             val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->

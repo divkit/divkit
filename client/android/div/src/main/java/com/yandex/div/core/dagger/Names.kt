@@ -6,4 +6,5 @@ internal object Names {
     const val CONTEXT = "context"
     const val THEMED_CONTEXT = "themed_context"
     const val THEME = "theme"
+    const val HAS_DEFAULTS = "has_defaults"
 }

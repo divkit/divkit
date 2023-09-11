@@ -3,7 +3,11 @@ package com.yandex.div.core.expression.storedvalues
 import android.net.Uri
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.data.StoredValue
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
+import com.yandex.div.internal.parser.toBoolean
 
 private const val AUTHORITY_SET_STORED_VALUE = "set_stored_value"
 
@@ -27,11 +31,23 @@ internal object StoredValuesActionHandler {
 
         val name = uri.getParam(forName = PARAM_NAME) ?: return false
         val value = uri.getParam(forName = PARAM_VALUE) ?: return false
-        val lifetime = uri.getParam(forName = PARAM_LIFETIME) ?: return false
-        val type = uri.getParam(forName = PARAM_TYPE) ?: return false
+        val lifetime = uri.getParam(forName = PARAM_LIFETIME)?.toLongOrNull() ?: return false
+        val type = uri.getParam(forName = PARAM_TYPE)
+            ?.run { StoredValue.Type.fromString(this) }
+            ?: return false
 
-        val storedValuesController = div2View.div2Component.storedValuesController
-        return storedValuesController.setStoredValue(name, value, lifetime, type)
+        return try {
+            val storedValue = createStoredValue(type, name, value)
+            val storedValuesController = div2View.div2Component.storedValuesController
+            val errorCollector = div2View.viewComponent.errorCollectors.getOrCreate(
+                div2View.divTag,
+                div2View.divData
+            )
+            storedValuesController.setStoredValue(storedValue, lifetime, errorCollector)
+        } catch (e: StoredValueDeclarationException) {
+            KAssert.fail {"Stored value '$name' declaration failed: ${e.message}" }
+            false
+        }
     }
 
     private fun Uri.getParam(forName: String): String? {
@@ -41,6 +57,72 @@ internal object StoredValuesActionHandler {
             return null
         }
         return param
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun createStoredValue(
+        type: StoredValue.Type,
+        name: String,
+        value: String,
+    ): StoredValue = when (type) {
+        StoredValue.Type.STRING -> StoredValue.StringStoredValue(name, value)
+        StoredValue.Type.INTEGER -> StoredValue.IntegerStoredValue(name, value.parseAsLong())
+        StoredValue.Type.BOOLEAN -> StoredValue.BooleanStoredValue(name, value.parseAsBoolean())
+        StoredValue.Type.NUMBER -> StoredValue.DoubleStoredValue(name, value.parseAsDouble())
+        StoredValue.Type.COLOR -> StoredValue.ColorStoredValue(name, value.parseAsColor())
+        StoredValue.Type.URL -> StoredValue.UrlStoredValue(name, value.parseAsUri())
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsLong(): Long {
+        return try {
+            this.toLong()
+        } catch (e: NumberFormatException) {
+            throw StoredValueDeclarationException(cause = e)
+        }
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsInt(): Int {
+        return try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            throw StoredValueDeclarationException(cause = e)
+        }
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsBoolean(): Boolean {
+        try {
+            return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
+        } catch (e: IllegalArgumentException) {
+            throw StoredValueDeclarationException(cause = e)
+        }
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsDouble(): Double {
+        return try {
+            this.toDouble()
+        } catch (e: NumberFormatException) {
+            throw StoredValueDeclarationException(cause = e)
+        }
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsUri(): Uri {
+        return try {
+            Uri.parse(this)
+        } catch (e: IllegalArgumentException) {
+            throw StoredValueDeclarationException(cause = e)
+        }
+    }
+
+    @Throws(StoredValueDeclarationException::class)
+    private fun String.parseAsColor(): Color {
+        val intColor = STRING_TO_COLOR_INT(this) ?: throw StoredValueDeclarationException(
+            "Wrong value format for color stored value: '$this'")
+        return Color(intColor)
     }
 
 }
