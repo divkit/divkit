@@ -30,6 +30,10 @@ public class DivPatchDownloader: DivPatchProvider {
     requests.forEach { $0.cancel() }
     requests.removeAll()
   }
+
+  deinit {
+    cancelRequests()
+  }
 }
 
 private func parseResult(
