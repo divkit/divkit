@@ -18,10 +18,23 @@ import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.internal.viewpool.AdvanceViewPool;
+import com.yandex.div.internal.viewpool.ConstrainedPreCreationProfile;
+import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionRepository;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
 import com.yandex.div.internal.viewpool.ViewCreator;
 import com.yandex.div.internal.viewpool.ViewPool;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
+import com.yandex.div.internal.viewpool.Profiler;
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
+import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileOptimizer;
+import com.yandex.div.internal.viewpool.FrameProfiler;
+import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
+import kotlin.collections.ArraysKt;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -67,11 +80,62 @@ abstract class Div2Module {
     @Provides
     @DivScope
     @Nullable
-    static ViewPoolProfiler provideViewPoolProfiler(
+    static FrameProfiler provideFrameProfiler(
             @ExperimentFlag(experiment = Experiment.VIEW_POOL_PROFILING_ENABLED) boolean profilingEnabled,
             @NonNull ViewPoolProfiler.Reporter reporter
     ) {
-        return profilingEnabled ? new ViewPoolProfiler(reporter) : null;
+        return profilingEnabled ? new FrameProfiler(reporter) : null;
+    }
+
+    @Provides
+    @DivScope
+    @Nullable
+    static ViewPoolProfiler provideViewPoolProfiler(
+            @Nullable FrameProfiler frameProfiler,
+            @Nullable PerformanceDependentSessionProfiler sessionProfiler
+    ) {
+        List<Profiler> profilers = ArraysKt.filterNotNull(new Profiler[]{frameProfiler, sessionProfiler});
+        return profilers.isEmpty() ? null : new ViewPoolProfiler(profilers);
+    }
+
+    @Provides
+    @DivScope
+    @Nullable
+    static ConstrainedPreCreationProfile provideOptimizableViewPreCreationProfile(
+            @NonNull ViewPreCreationProfile profile
+    ) {
+        return profile instanceof ConstrainedPreCreationProfile ? (ConstrainedPreCreationProfile) profile : null;
+    }
+
+    @Provides
+    @DivScope
+    @Nullable
+    static PerformanceDependentSessionRepository providePerformanceDependentSessionRepository(
+            @NonNull @Named(Names.APP_CONTEXT) Context context,
+            @Nullable ConstrainedPreCreationProfile profile
+    ) {
+        return profile != null ? new PerformanceDependentSessionRepository(context, profile) : null;
+    }
+
+    @Provides
+    @DivScope
+    @Nullable
+    static ViewPreCreationProfileOptimizer provideViewPreCreationProfileOptimizer(
+            @Nullable PerformanceDependentSessionRepository repository,
+            @NonNull ExecutorService executorService
+    ) {
+        return repository != null ? new ViewPreCreationProfileOptimizer(repository, executorService) : null;
+    }
+
+    @Provides
+    @DivScope
+    @Nullable
+    static PerformanceDependentSessionProfiler providePerformanceDependentSessionProfiler(
+            @Nullable PerformanceDependentSessionRepository repository,
+            @Nullable ViewPreCreationProfileOptimizer optimizer,
+            @NonNull ExecutorService executorService
+    ) {
+        return (repository != null && optimizer != null) ? new PerformanceDependentSessionProfiler(repository, optimizer, executorService) : null;
     }
 
     @Provides

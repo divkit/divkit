@@ -17,6 +17,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 
 /**
  * Context to be used to create instance of [Div2View]
@@ -44,6 +45,9 @@ class Div2Context @MainThread private constructor(
 
     val globalVariableController: GlobalVariableController
         get() = div2Component.globalVariableController
+
+    val performanceDependentSessionProfiler: PerformanceDependentSessionProfiler?
+        get() = div2Component.performanceDependentSessionProfiler
 
     private var inflater: LayoutInflater? = null
 

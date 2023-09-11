@@ -40,6 +40,7 @@ import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import com.yandex.div.storage.DivStorageComponent;
+import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 
 import dagger.BindsInstance;
 import dagger.Subcomponent;
@@ -143,6 +144,9 @@ public interface Div2Component {
 
     @NonNull
     GlobalVariableController getGlobalVariableController();
+
+    @Nullable
+    PerformanceDependentSessionProfiler getPerformanceDependentSessionProfiler();
 
     @NonNull
     HistogramReporter getHistogramReporter();

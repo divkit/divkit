@@ -86,9 +86,9 @@ internal class AdvanceViewPool(
 
             if (view == null) {
                 duration = profile { view = extractViewBlocked() }
-                profiler?.onViewObtainedWithBlock(viewName, duration)
+                profiler?.onViewObtainedWithBlock(viewName, duration, viewQueue.size)
             } else {
-                profiler?.onViewObtainedWithoutBlock(duration)
+                profiler?.onViewObtainedWithoutBlock(viewName, duration, viewQueue.size)
             }
             requestViewCreation()
             return view!!  // there is no any chance for null
@@ -110,7 +110,7 @@ internal class AdvanceViewPool(
                 val priority = viewQueue.size
                 viewCreator.request(this, priority)
             }
-            profiler?.onViewRequested(duration)
+            profiler?.onViewRequested(viewName, duration, viewQueue.size)
         }
 
         @WorkerThread
@@ -147,7 +147,7 @@ internal class AdvanceViewPool(
             return ViewFactory {
                 var view: T? = null
                 val duration = profile { view = createView() }
-                profiler?.onViewObtainedWithBlock(viewName, duration)
+                profiler?.onViewObtainedWithBlock(viewName, duration, 0)
                 view!!
             }
         }
