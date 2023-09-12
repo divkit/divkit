@@ -28,42 +28,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     }
     self.sliderModel = sliderModel
 
-    let newCount = sliderModel.maxValue - sliderModel.minValue + 1
-
-    if marks.count > newCount {
-      marks.suffix(from: newCount + 1).forEach {
-        $0.active?.removeFromSuperview()
-        $0.inactive?.removeFromSuperview()
-      }
-    } else {
-      marks.append(contentsOf: Array(
-        repeating: (active: nil, inactive: nil),
-        times: UInt(max(0, newCount - marks.count))
-      ))
-    }
-
-    let configureMark: (BlockView?, SliderModel.MarkModel?) -> BlockView? = {
-      let blockView = $1?.block.reuse(
-        $0,
-        observer: observer,
-        overscrollDelegate: overscrollDelegate,
-        renderingDelegate: renderingDelegate,
-        superview: self
-      )
-      blockView?.frame.size = CGSize(
-        width: $1?.block.intrinsicContentWidth ?? 0,
-        height: $1?.block.intrinsicContentHeight(forWidth: .infinity) ?? 0
-      )
-      blockView?.isHidden = true
-      return blockView
-    }
-    self.marks = marks.map {
-      (
-        configureMark($0.active, sliderModel.activeMarkModel),
-        configureMark($0.inactive, sliderModel.inactiveMarkModel)
-      )
-    }
-
     inactiveTrack = sliderModel.inactiveTrack.reuse(
       inactiveTrack,
       observer: observer,
@@ -95,6 +59,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       renderingDelegate: renderingDelegate,
       superview: self
     )
+
+    marksView.configuration = sliderModel.marksConfiguration
 
     let clampedFirstThumbValue = Int(clampSliderValue(
       CGFloat(sliderModel.firstThumb.value.value),
@@ -163,7 +129,12 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   private var secondThumb: BlockView?
   private var activeTrack: BlockView?
   private var inactiveTrack: BlockView?
-  private var marks: [(active: BlockView?, inactive: BlockView?)] = []
+  private lazy var marksView: MarksView = {
+    let view = MarksView()
+    self.insertSubview(view, at: 1)
+    return view
+  }()
+
   private lazy var sliderBackgroundView: UIView = {
     let view = UIView()
     self.insertSubview(view, at: 0)
@@ -296,20 +267,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     let firstThumbProgress = clampSliderValue(firstThumbProgress, sliderModel: sliderModel)
     let secondThumbProgress = clampSliderValue(secondThumbProgress, sliderModel: sliderModel)
 
-    defer {
-      configureMarks(
-        firstThumbValue: Int(clampSliderValue(
-          CGFloat(sliderModel.firstThumb.value.value),
-          sliderModel: sliderModel
-        )),
-        secondThumbValue: sliderModel.secondThumb.flatMap {
-          Int(clampSliderValue(CGFloat($0.value.value), sliderModel: sliderModel))
-        },
-        minValue: sliderModel.minValue,
-        maxValue: sliderModel.maxValue
-      )
-    }
-
     guard thumbAnimator?.state != .active else {
       return
     }
@@ -325,6 +282,18 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       thumbView: secondThumb,
       progress: secondThumbProgress,
       thumbModel: sliderModel.secondThumb
+    )
+
+    marksView.configuration.horizontalInset = sliderModel.horizontalInset
+    marksView.frame = CGRect(
+      x: 0,
+      y: 0,
+      width: bounds
+        .width - max(
+          abs(sliderModel.firstThumb.offsetX),
+          abs(sliderModel.secondThumb?.offsetX ?? 0)
+        ),
+      height: bounds.height
     )
 
     sliderBackgroundView.frame = CGRect(
@@ -356,77 +325,6 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       progressSecondThumb: sliderModel
         .secondThumb != nil ? secondThumbProgress : CGFloat(sliderModel.minValue)
     )
-  }
-
-  private func configureMarks(
-    firstThumbValue: Int,
-    secondThumbValue: Int?,
-    minValue: Int,
-    maxValue: Int
-  ) {
-    if let secondThumbValue {
-      let leftThumb = min(firstThumbValue, secondThumbValue)
-      let rightThumb = max(firstThumbValue, secondThumbValue)
-      makeMarks(
-        from: minValue,
-        to: leftThumb - 1,
-        style: .inactive
-      )
-      makeMarks(
-        from: leftThumb,
-        to: rightThumb,
-        style: .active
-      )
-      makeMarks(
-        from: rightThumb + 1,
-        to: maxValue,
-        style: .inactive
-      )
-    } else {
-      makeMarks(
-        from: minValue,
-        to: firstThumbValue,
-        style: .active
-      )
-      makeMarks(
-        from: firstThumbValue + 1,
-        to: maxValue,
-        style: .inactive
-      )
-    }
-  }
-
-  private func makeMarks(from startIndex: Int, to endIndex: Int, style: MarkStyle) {
-    guard startIndex <= endIndex else { return }
-    let thumbInsetY = (sliderModel.sliderTopTextPadding - sliderModel.sliderBottomTextPadding) / 2
-    let range = sliderModel
-      .layoutDirection == .rightToLeft ?
-      (sliderModel.maxValue - endIndex)...(sliderModel.maxValue - startIndex) :
-      (startIndex - sliderModel.minValue)...(endIndex - sliderModel.minValue)
-    for ind in range {
-      let visibleMark: BlockView?
-      let invisibleMark: BlockView?
-      let visibleMarkModel: SliderModel.MarkModel?
-      switch style {
-      case .active:
-        visibleMark = marks[ind].active
-        invisibleMark = marks[ind].inactive
-        visibleMarkModel = sliderModel.activeMarkModel
-      case .inactive:
-        visibleMark = marks[ind].inactive
-        invisibleMark = marks[ind].active
-        visibleMarkModel = sliderModel.inactiveMarkModel
-      }
-      visibleMark?.isHidden = false
-      visibleMark?.frame.origin
-        .x = CGFloat(ind) * pointWidth +
-        (
-          sliderModel.horizontalInset - (visibleMarkModel?.size.width ?? 0)
-        ) / 2
-      visibleMark?.frame.center.y = bounds.center
-        .movingY(by: thumbInsetY).y
-      invisibleMark?.isHidden = true
-    }
   }
 
   private func configureTracks(
@@ -470,6 +368,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
         assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
       }
     }
+
+    marksView.firstThumbProgress = firstThumbProgress
+    marksView.secondThumbProgress = secondThumbProgress
   }
 
   private func configureThumb(
@@ -527,11 +428,6 @@ private func updatedThumbsValue(
 private enum ThumbPosition {
   case left
   case right
-}
-
-private enum MarkStyle {
-  case active
-  case inactive
 }
 
 private let animationDuration = 0.3

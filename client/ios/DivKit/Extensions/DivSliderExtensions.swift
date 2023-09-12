@@ -57,6 +57,20 @@ extension DivSlider: DivBlockModeling {
       context.makeBinding(variableName: $0, defaultValue: 0)
     } ?? .zero
 
+    let activeMark = makeRoundedRectangle(with: tickMarkActiveStyle, resolver: expressionResolver)
+    let inactiveMark = makeRoundedRectangle(
+      with: tickMarkInactiveStyle,
+      resolver: expressionResolver
+    )
+
+    let marksConfiguration = MarksConfiguration(
+      minValue: CGFloat(resolveMinValue(expressionResolver)),
+      maxValue: CGFloat(resolveMaxValue(expressionResolver)),
+      activeMark: activeMark ?? .empty,
+      inactiveMark: inactiveMark ?? .empty,
+      layoutDirection: context.layoutDirection
+    )
+
     let sliderModel = SliderModel(
       firstThumb: SliderModel.ThumbModel(
         block: makeThumbBlock(
@@ -112,6 +126,7 @@ extension DivSlider: DivBlockModeling {
         widthTrait: .resizable,
         corners: .all
       ),
+      marksConfiguration: marksConfiguration,
       layoutDirection: context.layoutDirection
     )
     let width = context.override(width: width)
@@ -143,6 +158,28 @@ private func makeThumbBlock(
       thumb,
       textBlock?.addingEdgeInsets(insets),
     ].compactMap { $0 }
+  )
+}
+
+private func makeRoundedRectangle(
+  with mark: DivDrawable?,
+  resolver: ExpressionResolver
+) -> MarksConfiguration
+  .RoundedRectangle? {
+  guard let mark = mark,
+        let divShapeDrawable = mark.value as? DivShapeDrawable,
+        let shape = divShapeDrawable.shape.value as? DivRoundedRectangleShape else {
+    return nil
+  }
+  return MarksConfiguration.RoundedRectangle(
+    size: CGSize(
+      width: shape.itemWidth.resolveValue(resolver) ?? 0,
+      height: shape.itemHeight.resolveValue(resolver) ?? 0
+    ),
+    cornerRadius: CGFloat(shape.cornerRadius.resolveValue(resolver) ?? 0),
+    color: divShapeDrawable.resolveColor(resolver) ?? .clear,
+    borderWidth: CGFloat(divShapeDrawable.stroke?.resolveWidth(resolver) ?? 0),
+    borderColor: divShapeDrawable.stroke?.resolveColor(resolver) ?? .clear
   )
 }
 
