@@ -14,7 +14,12 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DivKitConfiguration::class, DivKitModule::class, DivKitHistogramsModule::class])
+@Component(modules = [
+    DivKitConfiguration::class,
+    DivKitModule::class,
+    DivKitHistogramsModule::class,
+    DivActionTypedModule::class
+])
 interface DivKitComponent {
 
     val sendBeaconManager: SendBeaconManager?

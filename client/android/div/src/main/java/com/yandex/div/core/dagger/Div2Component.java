@@ -55,7 +55,6 @@ import javax.inject.Named;
         Div2Module.class,
         DivConfiguration.class,
         DivHistogramsModule.class,
-        DivActionTypedModule.class,
         DivStorageModule.class
 })
 public interface Div2Component {
