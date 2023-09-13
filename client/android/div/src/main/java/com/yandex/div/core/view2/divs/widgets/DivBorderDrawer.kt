@@ -23,7 +23,6 @@ import com.yandex.div.core.view2.divs.*
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -110,7 +109,7 @@ internal class DivBorderDrawer(
 
         val hadCustomShadow = hasCustomShadow
         hasShadow = border.hasShadow.evaluate(resolver)
-        hasCustomShadow = (border.shadow != null || view.parent is FrameContainerLayout) && hasShadow
+        hasCustomShadow = hasShadow && (border.shadow != null || view.parent is DivFrameLayout)
 
         view.elevation = when {
             !hasShadow -> NO_ELEVATION
