@@ -63,6 +63,10 @@
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).",
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
   },
+  "div_action_focus_element": {
+    "en": "Requests focus for element. On the web may work unstable.",
+    "ru": "Запрашивает фокус для элемента. В вебе может нестабильно работать."
+  },
   "div_action_log_url": {
     "en": "URL for logging.",
     "ru": "Ссылка для логирования."
@@ -2186,9 +2190,5 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
-  },
-  "div_action_focus_element": {
-    "en": "Requests focus for element. On the web may work unstable.",
-    "ru": "Запрашивает фокус для элемента. В вебе может нестабильно работать."
   }
 }
