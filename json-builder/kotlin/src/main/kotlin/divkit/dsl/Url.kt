@@ -21,7 +21,7 @@ value class Url internal constructor(
 
     companion object {
         private val pattern: Regex =
-            Regex("(.+://[-a-zA-Z0-9+&@#\\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|{}]+|^(?![\\s\\S]))")
+            Regex("(.+://[-a-zA-Z0-9+&@#\\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|{}*]+|^(?![\\s\\S]))")
 
         fun create(url: String): Url = Url(url)
     }
