@@ -4,8 +4,7 @@ import PackageDescription
 
 let vgsl = (
   url: "https://github.com/yandex/vgsl.git",
-  packageName: "vgsl",
-  branch: "main"
+  packageName: "vgsl"
 )
 
 let package = Package(
@@ -20,7 +19,7 @@ let package = Package(
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
   ],
   dependencies: [
-    .package(url: vgsl.url, branch: vgsl.branch)
+    .package(url: vgsl.url, from: "2.2.0")
   ],
   targets: [
     .target(
