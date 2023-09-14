@@ -11,11 +11,11 @@ import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivGallery
@@ -31,7 +31,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
 ) : BackHandlingRecyclerView(context, attrs, defStyleAttr),
     DivBorderSupports,
     OnInterceptTouchEventListenerHost,
-    TransientView,
+    TransientView by TransientViewMixin(),
     ExpressionSubscriber {
 
     private var scrollPointerId = -1
@@ -51,11 +51,6 @@ internal class DivRecyclerView @JvmOverloads constructor(
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     var div: DivGallery? = null
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null

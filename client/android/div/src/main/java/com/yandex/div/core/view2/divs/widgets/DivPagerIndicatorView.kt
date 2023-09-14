@@ -5,9 +5,9 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.internal.widget.indicator.PagerIndicatorView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
@@ -17,7 +17,7 @@ internal class DivPagerIndicatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : PagerIndicatorView(context, attrs, defStyleAttr), DivBorderSupports, TransientView, ExpressionSubscriber {
+) : PagerIndicatorView(context, attrs, defStyleAttr), DivBorderSupports, TransientView by TransientViewMixin(), ExpressionSubscriber {
 
     internal var div: DivIndicator? = null
 
@@ -27,10 +27,6 @@ internal class DivPagerIndicatorView @JvmOverloads constructor(
 
     override fun getDivBorderDrawer() = borderDrawer
 
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
     override val subscriptions = mutableListOf<Disposable>()
 
     private var isDrawing = false

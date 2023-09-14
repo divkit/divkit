@@ -11,11 +11,11 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.AdaptiveMaxLines
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.widget.SuperLineHeightTextView
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivText
@@ -25,7 +25,7 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     private val defStyleAttr: Int = R.attr.divTextStyle
-) : SuperLineHeightTextView(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView,
+) : SuperLineHeightTextView(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView by TransientViewMixin(),
     ExpressionSubscriber {
 
     internal var div: DivText? = null
@@ -40,11 +40,6 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     override val subscriptions = mutableListOf<Disposable>()
 

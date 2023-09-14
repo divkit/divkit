@@ -18,23 +18,23 @@ class TransientViewTest {
 
     @Test
     fun `transient view is not in transient hierarchy when it is not in transient state`() {
-        val view = TransientViewImpl(context)
+        val view = TransientViewTestImpl(context)
 
         assertFalse(view.isInTransientHierarchy())
     }
 
     @Test
     fun `transient view is in transient hierarchy when it is in transient state`() {
-        val view = TransientViewImpl(context)
+        val view = TransientViewTestImpl(context)
 
-        view.isTransient = true
+        view.transitionStarted(view)
 
         assertTrue(view.isInTransientHierarchy())
     }
 
     @Test
     fun `transient view is in transient hierarchy when one of ascendants is in transient state`() {
-        val view = TransientViewImpl(context)
+        val view = TransientViewTestImpl(context)
         val innerViewGroup = TransientViewGroup(context).apply {
             addView(view)
         }
@@ -42,14 +42,14 @@ class TransientViewTest {
             addView(innerViewGroup)
         }
 
-        outerViewGroup.isTransient = true
+        outerViewGroup.transitionStarted(view)
 
         assertTrue(view.isInTransientHierarchy())
     }
 
     @Test
     fun `non transient view breaks transient hierarchy`() {
-        val view = TransientViewImpl(context)
+        val view = TransientViewTestImpl(context)
         val innerViewGroup = NonTransientViewGroup(context).apply {
             addView(view)
         }
@@ -57,24 +57,19 @@ class TransientViewTest {
             addView(innerViewGroup)
         }
 
-        outerViewGroup.isTransient = true
+        outerViewGroup.transitionStarted(view)
 
         assertFalse(view.isInTransientHierarchy())
     }
 }
 
-private class TransientViewImpl(
+private class TransientViewTestImpl(
     context: Context
-) : View(context), TransientView {
-
-    override var isTransient = false
-}
+) : View(context), TransientView by TransientViewMixin()
 
 private class TransientViewGroup(
     context: Context
-) : ViewGroup(context), TransientView {
-
-    override var isTransient = false
+) : ViewGroup(context), TransientView by TransientViewMixin() {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) = Unit
 }

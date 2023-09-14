@@ -18,10 +18,10 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBorder
@@ -35,7 +35,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, ExpressionSubscriber, TransientView {
+) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, ExpressionSubscriber, TransientView by TransientViewMixin() {
 
     var path: DivStatePath? = null
     val stateId: String?
@@ -46,10 +46,6 @@ internal class DivStateLayout @JvmOverloads constructor(
     internal var divState: DivState? = null
     internal var activeStateDiv: Div? = null
     var valueUpdater: ((String) -> Unit)? = null
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     private var borderDrawer: DivBorderDrawer? = null
     override val border: DivBorder?

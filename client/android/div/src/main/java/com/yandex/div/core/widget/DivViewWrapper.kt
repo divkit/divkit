@@ -10,6 +10,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 
@@ -23,12 +24,7 @@ internal class DivViewWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, TransientView {
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
+): FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports, TransientView by TransientViewMixin() {
 
     val child: View?
         get() = if (childCount == 0) null else getChildAt(0)

@@ -16,8 +16,8 @@ internal open class OutlineAwareVisibility : Visibility() {
         endVisibility: Int
     ): Animator? {
         val transientView = endValues?.view as? TransientView
-        transientView?.isTransient = true
-        doOnEnd { transientView?.isTransient = false }
+        transientView?.transitionStarted(endValues.view)
+        doOnEnd { transientView?.transitionFinished(endValues.view) }
         return super.onAppear(sceneRoot, startValues, startVisibility, endValues, endVisibility)
     }
 
@@ -29,8 +29,8 @@ internal open class OutlineAwareVisibility : Visibility() {
         endVisibility: Int
     ): Animator? {
         val transientView = startValues?.view as? TransientView
-        transientView?.isTransient = true
-        doOnEnd { transientView?.isTransient = false }
+        transientView?.transitionStarted(startValues.view)
+        doOnEnd { transientView?.transitionFinished(startValues.view) }
         return super.onDisappear(sceneRoot, startValues, startVisibility, endValues, endVisibility)
     }
 }

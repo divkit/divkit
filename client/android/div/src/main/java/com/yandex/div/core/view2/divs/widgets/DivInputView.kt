@@ -8,17 +8,17 @@ import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.SuperLineHeightEditText
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivInput
 
 @Mockable
 internal class DivInputView constructor(context: Context) : SuperLineHeightEditText(context),
-    DivAnimator, DivBorderSupports, TransientView, ExpressionSubscriber {
+    DivAnimator, DivBorderSupports, TransientView by TransientViewMixin(), ExpressionSubscriber {
 
     internal var div: DivInput? = null
 
@@ -27,11 +27,6 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     override val subscriptions = mutableListOf<Disposable>()
 

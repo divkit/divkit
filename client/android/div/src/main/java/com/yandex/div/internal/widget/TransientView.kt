@@ -9,9 +9,38 @@ import android.view.ViewGroup
 interface TransientView {
 
     /**
+     *  Tells view that one transition started
+     */
+    fun transitionStarted(view: View)
+
+    /**
+     * Tells view that one transition finished
+     */
+    fun transitionFinished(view: View)
+
+    /**
      * @return whether this [View] is in a transient state.
      */
-    var isTransient: Boolean
+    val isTransient: Boolean
+}
+
+class TransientViewMixin(): TransientView {
+    private var transitionCount = 0
+
+    override fun transitionStarted(view: View) {
+        if (++transitionCount == 1) {
+            view.invalidate()
+        }
+    }
+
+    override fun transitionFinished(view: View) {
+        if (transitionCount > 0 && --transitionCount == 0) {
+            view.invalidate()
+        }
+    }
+
+    override val isTransient: Boolean
+        get() = transitionCount != 0
 }
 
 /**

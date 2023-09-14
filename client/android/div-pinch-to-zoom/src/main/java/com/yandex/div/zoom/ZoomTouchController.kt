@@ -36,13 +36,13 @@ internal class ZoomTouchController(
 
         sourceView.getLocationInWindow(tempIntArray)
         tempPoint.set(tempIntArray[INDEX_X].toFloat(), tempIntArray[INDEX_Y].toFloat())
-        (sourceView as? TransientView)?.isTransient = true
+        (sourceView as? TransientView)?.transitionStarted(sourceView)
         viewController.showImage(
             location = tempPoint,
             pivotPoint = initialFocalPoint,
             imageBitmap = sourceView.drawToBitmap()
         )
-        (sourceView as? TransientView)?.isTransient = false
+        (sourceView as? TransientView)?.transitionFinished(sourceView)
 
         sourceView.parent?.requestDisallowInterceptTouchEvent(true)
         sourceView.visibility = View.INVISIBLE

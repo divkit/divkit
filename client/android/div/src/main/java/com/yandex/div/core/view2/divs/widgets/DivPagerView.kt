@@ -9,11 +9,11 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.ViewPager2Wrapper
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivPager
@@ -25,7 +25,7 @@ internal class DivPagerView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr), DivBorderSupports,
         OnInterceptTouchEventListenerHost,
-    TransientView,
+    TransientView by TransientViewMixin(),
     ExpressionSubscriber {
 
     internal var div: DivPager? = null
@@ -40,11 +40,6 @@ internal class DivPagerView @JvmOverloads constructor(
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     override val subscriptions = mutableListOf<Disposable>()
 

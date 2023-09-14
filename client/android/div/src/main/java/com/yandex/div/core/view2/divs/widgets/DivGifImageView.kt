@@ -8,9 +8,9 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.DivExtendableView
 import com.yandex.div.core.widget.LoadableImageView
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivGifImage
@@ -19,7 +19,7 @@ internal open class DivGifImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LoadableImageView(context, attrs, defStyleAttr), DivBorderSupports, TransientView, DivExtendableView,
+) : LoadableImageView(context, attrs, defStyleAttr), DivBorderSupports, TransientView by TransientViewMixin(), DivExtendableView,
     ExpressionSubscriber {
 
     internal var div: DivGifImage? = null
@@ -30,11 +30,6 @@ internal open class DivGifImageView @JvmOverloads constructor(
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     override val subscriptions = mutableListOf<Disposable>()
 

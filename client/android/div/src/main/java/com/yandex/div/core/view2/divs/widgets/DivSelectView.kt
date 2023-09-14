@@ -5,10 +5,10 @@ import android.graphics.Canvas
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.SelectView
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivSelect
@@ -16,7 +16,7 @@ import com.yandex.div2.DivSelect
 
 @Mockable
 internal class DivSelectView constructor(context: Context) : SelectView(context), DivAnimator,
-    DivBorderSupports, TransientView, ExpressionSubscriber {
+    DivBorderSupports, TransientView by TransientViewMixin(), ExpressionSubscriber {
 
     var div: DivSelect? = null
 
@@ -24,9 +24,6 @@ internal class DivSelectView constructor(context: Context) : SelectView(context)
 
     override val border: DivBorder?
         get() = borderDrawer?.border
-
-    override var isTransient = false
-        set(value) = invalidateAfter { field = value }
 
     override val subscriptions = mutableListOf<Disposable>()
 

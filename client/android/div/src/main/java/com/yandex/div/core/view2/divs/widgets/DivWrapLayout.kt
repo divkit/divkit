@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
-import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
+import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
@@ -16,7 +16,7 @@ internal class DivWrapLayout(context: Context) :
     WrapContainerLayout(context),
     DivAnimator,
     DivBorderSupports,
-    TransientView,
+    TransientView by TransientViewMixin(),
     ExpressionSubscriber {
 
     internal var div: DivContainer? = null
@@ -26,11 +26,6 @@ internal class DivWrapLayout(context: Context) :
         get() = borderDrawer?.border
 
     override fun getDivBorderDrawer() = borderDrawer
-
-    override var isTransient = false
-        set(value) = invalidateAfter {
-            field = value
-        }
 
     override val subscriptions = mutableListOf<Disposable>()
 
