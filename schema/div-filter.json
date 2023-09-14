@@ -3,6 +3,11 @@
     {
       "$ref": "div-blur.json",
       "$description": "translations.json#/div_filter"
+    },
+    {
+      "$ref": "div-filter-rtl-mirror.json",
+      "$description": "translations.json#/div_filter_rtl_mirror",
+      "platforms": []
     }
   ]
 }

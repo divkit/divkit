@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_filter_rtl_mirror",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "rtl_mirror"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

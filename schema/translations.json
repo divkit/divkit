@@ -859,6 +859,10 @@
     "en": "Blend mode of the color specified in `tint_color`.",
     "ru": "Метод наложения цвета, указанного в `tint_color`."
   },
+  "div_filter_rtl_mirror": {
+    "en": "The image is mirrored if the RTL (Right-to-Left) direction is specified in the system.",
+    "ru": "Изображение зеркально отображается, в случае если в системе указан RTL (Right-to-Left)."
+  },
   "div_indicator": {
     "en": "Progress indicator for [pager](div-pager.md).",
     "ru": "Индикатор прогресса для [пейджера](div-pager.md)."
