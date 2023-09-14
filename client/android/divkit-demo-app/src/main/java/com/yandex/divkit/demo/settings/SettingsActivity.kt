@@ -86,12 +86,14 @@ class SettingsActivity : AppCompatActivity() {
         setPreferenceState(DIV2_VIEW_POOL_PROFILING, Experiment.VIEW_POOL_PROFILING_ENABLED)
         setPreferenceState(DIV2_MULTIPLE_STATE_CHANGE, Experiment.MULTIPLE_STATE_CHANGE_ENABLED)
         setPreferenceState(DIV2_DEMO_SHOW_RENDERING_TIME, Experiment.SHOW_RENDERING_TIME)
-        val nightMode = when(Container.preferences.nightMode){
+        val nightMode = when (Container.preferences.nightMode) {
             AppCompatDelegate.MODE_NIGHT_YES -> NIGHT_MODE_NIGHT
             AppCompatDelegate.MODE_NIGHT_NO -> NIGHT_MODE_DAY
             else -> NIGHT_MODE_AUTO
         }
         div2View.setVariable(NIGHT_MODE, nightMode)
+        setPreferenceState(IMAGE_LOADER, Container.preferences.imageLoader)
+
         val appName = resources.getText(R.string.app_name)
         val appVersion = "$appName ${BuildConfig.VERSION_NAME}.${BuildConfig.BUILD_NUMBER} ${BuildConfig.BUILD_TYPE}"
         div2View.setVariable(APP_VERSION, appVersion)

@@ -10,6 +10,7 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.picasso.PicassoDivImageLoader
 import tech.divkit.sample.databinding.ActivityMainPageBinding
 import com.yandex.div2.DivAction
 
@@ -43,7 +44,7 @@ class MainPageActivity : AppCompatActivity() {
     }
 
     fun createDivConfiguration(): DivConfiguration {
-        return DivConfiguration.Builder(DemoDivImageLoader(this))
+        return DivConfiguration.Builder(PicassoDivImageLoader(this))
             .actionHandler(DemoDivActionHandler())
             .supportHyphenation(true)
             .visualErrorsEnabled(true)

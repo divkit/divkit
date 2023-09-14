@@ -1,0 +1,12 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':div-core')
+
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
+}

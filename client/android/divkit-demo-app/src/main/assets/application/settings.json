@@ -329,6 +329,26 @@
                             ]
                         },
                         {
+                            "type": "settings_item",
+                            "items": [
+                                {
+                                    "type": "settings_item_title",
+                                    "text": "Div image loader.\nInactive = GlideDivImageLoader.\nActive = PicassoImageLoader."
+                                },
+                                {
+                                    "type": "setting_switch_state",
+                                    "div_id": "image_loader",
+                                    "content_alignment_vertical": "center",
+                                    "active_click_log_id": "set_glide_image_loader",
+                                    "active_click_change_state_url": "div-action://set_state?state_id=0/image_loader/inactive",
+                                    "active_click_change_settings_url": "div-action://set_preferences?name=image_loader&value=0",
+                                    "inactive_click_log_id": "set_picasso_image_loader",
+                                    "inactive_click_change_settings_url": "div-action://set_preferences?name=image_loader&value=1",
+                                    "inactive_click_change_state_url": "div-action://set_state?state_id=0/image_loader/active"
+                                }
+                            ]
+                        },
+                        {
                             "type": "settings_category",
                             "text": "Theme",
                             "visibility": "gone"

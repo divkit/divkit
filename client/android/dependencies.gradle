@@ -8,6 +8,7 @@ ext.versions = [
         googleTestingPlatform           : '0.0.8-alpha07',
         gradlePlugin                    : '7.4.2',
         gson                            : '2.8.7',
+        glide                           : '4.16.0',
         hamcrestJUnit                   : '2.0.0.0',
         hamcrestLibrary                 : '2.2',
         jacoco                          : '0.8.7',

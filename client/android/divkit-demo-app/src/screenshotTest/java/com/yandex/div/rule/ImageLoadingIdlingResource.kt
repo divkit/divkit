@@ -1,11 +1,11 @@
 package com.yandex.div.rule
 
-import com.yandex.divkit.demo.div.DemoDivImageLoader
+import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.test.idling.SimpleIdlingResource
 import javax.inject.Provider
 
 class ImageLoadingIdlingResource(
-    private val imageLoaderProvider: Provider<DemoDivImageLoader>,
+    private val imageLoaderProvider: Provider<PicassoDivImageLoader>,
     private val waitForNextFrame: Boolean = true
 ) : SimpleIdlingResource(description = "ImageLoadingIdlingResource") {
 
@@ -13,7 +13,7 @@ class ImageLoadingIdlingResource(
     private var frameSkipped = false
 
     constructor(
-        imageLoader: DemoDivImageLoader,
+        imageLoader: PicassoDivImageLoader,
         waitForNextFrame: Boolean = true
     ) : this(Provider { imageLoader }, waitForNextFrame)
 

@@ -97,6 +97,8 @@ dependencies {
     implementation project(path: ':video-custom')
     implementation project(path: ':div-storage')
     implementation project(path: ':div-video')
+    implementation project(path: ':picasso')
+    implementation project(path: ':glide')
 
     implementation "androidx.browser:browser:$versions.androidx.browser"
     implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"
@@ -109,7 +111,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
 
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
-    implementation "com.squareup.picasso:picasso:$versions.picasso"
 
     implementation "com.yandex.android:mobmetricalib:$versions.metrica"
 

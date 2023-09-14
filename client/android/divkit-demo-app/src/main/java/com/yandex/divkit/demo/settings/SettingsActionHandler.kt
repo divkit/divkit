@@ -15,6 +15,7 @@ const val DIV2_VIEW_POOL = "div2_view_pool"
 const val DIV2_VIEW_POOL_PROFILING = "div2_view_pool_profiling"
 const val DIV2_MULTIPLE_STATE_CHANGE = "multiple_state_change"
 const val DIV2_DEMO_SHOW_RENDERING_TIME = "demo_activity_rendering_time"
+const val IMAGE_LOADER = "image_loader"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"
@@ -36,6 +37,7 @@ internal object SettingsActionHandler {
                 DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueBool)
                 DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueBool)
                 DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueBool)
+                IMAGE_LOADER -> Container.preferences.imageLoader = valueBool
                 else -> return false
             }
         } else {

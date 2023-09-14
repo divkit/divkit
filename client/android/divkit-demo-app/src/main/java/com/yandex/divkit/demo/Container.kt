@@ -6,12 +6,13 @@ import android.os.Build
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.neovisionaries.ws.client.WebSocketFactory
 import com.yandex.div.core.DivKit
+import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
+import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.div.video.custom.VideoCache
 import com.yandex.div.video.custom.VideoCustomViewController
-import com.yandex.divkit.demo.div.DemoDivImageLoader
 import com.yandex.divkit.demo.div.editor.NaiveSSLContext
 import com.yandex.divkit.demo.div.histogram.DemoHistogramConfiguration
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
@@ -79,7 +80,13 @@ internal object Container {
             }
     }
 
-    val imageLoader by lazy { DemoDivImageLoader(context) }
+    val imageLoader by lazy {
+        if (preferences.imageLoader) {
+            PicassoDivImageLoader(context)
+        } else {
+            GlideDivImageLoader(context)
+        }
+    }
 
     val uriHandler by lazy { DivkitDemoUriHandler(context) }
 
