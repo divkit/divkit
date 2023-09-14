@@ -14,10 +14,10 @@
 * Array variable mutations.
 
 # iOS Client:
-* Improved DivSlider performance.
-* Fixed memory leaks in ExpressionResolver.
-* Fixed DivContainer with constrained children height.
-* Fixed phone mask in DivInput.
+* Improved `DivSlider` performance.
+* Fixed memory leaks in `ExpressionResolver`.
+* Fixed `DivContainer` with constrained children height.
+* Fixed phone mask in `DivInput`.
 
 # Kotlin JSON Builder:
 * Fixed missing * symbol in Url validating regex.
