@@ -1,3 +1,28 @@
+## 28.2.0
+
+# Android Client:
+* Typed actions moved to singleton scope.
+* Removed asserts in `DivDataRepository`.
+* Locally collect `ViewPool` statistic for optimization.
+* Implemented `StoredValuesController`.
+* Added ability to patch inside gallery/pager items.
+* Fixed shadows overlap container's children.
+* Added ability to request focus action.
+* Support for gif images in `playground` and `sample-app`.
+* `text_shadow` implementation.
+* Support alignments with spaces.
+* Array variable mutations.
+
+# iOS Client:
+* Improved DivSlider performance.
+* Fixed memory leaks in ExpressionResolver.
+* Fixed DivContainer with constrained children height.
+* Fixed phone mask in DivInput.
+
+# Kotlin JSON Builder:
+* Fixed missing * symbol in Url validating regex.
+
+
 ## 28.1.0
 
 # Android Client:
