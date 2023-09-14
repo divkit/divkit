@@ -533,7 +533,7 @@ open class SliderView @JvmOverloads constructor(
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), false)
+                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animated = false, forced = true)
                 this.parent.requestDisallowInterceptTouchEvent(true)
                 return true
             }
@@ -559,10 +559,10 @@ open class SliderView @JvmOverloads constructor(
         }
     }
 
-    private fun setValueToThumb(thumb: Thumb, value: Float, animated: Boolean) =
+    private fun setValueToThumb(thumb: Thumb, value: Float, animated: Boolean, forced: Boolean = false) =
         when (thumb) {
-            Thumb.THUMB -> trySetThumbValue(value, animated, forced = false)
-            Thumb.THUMB_SECONDARY -> trySetThumbSecondaryValue(value, animated, forced = false)
+            Thumb.THUMB -> trySetThumbValue(value, animated, forced)
+            Thumb.THUMB_SECONDARY -> trySetThumbSecondaryValue(value, animated, forced)
         }
 
     private fun getTouchValue(position: Int): Float {
