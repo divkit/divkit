@@ -18,6 +18,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import androidx.core.text.getSpans
+import androidx.core.view.ViewCompat
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
@@ -695,6 +696,7 @@ internal class DivTextBinder @Inject constructor(
             range.actions?.let {
                 textView.movementMethod = LinkMovementMethod.getInstance()
                 setSpan(DivClickableSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                ViewCompat.enableAccessibleClickableSpanSupport(textView)
             }
             if (range.border != null || range.background != null) {
                 val span = DivBackgroundSpan(range.border, range.background)
