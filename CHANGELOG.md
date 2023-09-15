@@ -12,6 +12,7 @@
 * `text_shadow` implementation.
 * Support alignments with spaces.
 * Array variable mutations.
+* Fixed the inability to patch an item inside the gallery that inside the other gallery.
 
 # iOS Client:
 * Improved `DivSlider` performance.
