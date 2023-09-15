@@ -558,24 +558,6 @@ extension ContainerBlock.CrossAlignment {
   }
 }
 
-extension ContainerBlock.AxialAlignment {
-  public func offset(
-    forAvailableSpace availableSpace: CGFloat,
-    contentSize: CGFloat = 0
-  ) -> CGFloat {
-    switch self {
-    case .leading:
-      return 0
-    case .center:
-      return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
-    case .trailing:
-      return availableSpace - contentSize
-    case .spaceEvenly, .spaceBetween, .spaceAround:
-      return 0
-    }
-  }
-}
-
 extension Sequence where Element == ContainerBlock.Child {
   fileprivate func applyingContents<S: Sequence>(_ contents: S) -> [ContainerBlock.Child]
     where S.Element == Block {

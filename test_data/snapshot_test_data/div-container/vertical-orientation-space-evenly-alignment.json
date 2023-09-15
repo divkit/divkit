@@ -2,6 +2,7 @@
   "description": "Vertical container with content_alignment_vertical = space-evenly",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "card": {

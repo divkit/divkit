@@ -34,10 +34,10 @@ struct ContainerBlockLayout {
   let blockLayoutDirection: UserInterfaceLayoutDirection
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
-  let axialAlignment: ContainerBlock.AxialAlignment
   let crossAlignment: ContainerBlock.CrossAlignment
   let size: CGSize
   let needCompressConstrainedBlocks: Bool
+  let axialAlignmentManager: AxialAlignmentManager
 
   public init(
     children: [ContainerBlock.Child],
@@ -57,9 +57,12 @@ struct ContainerBlockLayout {
     self.gaps = gaps
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
-    self.axialAlignment = axialAlignment
     self.crossAlignment = crossAlignment
     self.size = size
+    self.axialAlignmentManager = AxialAlignmentManager(
+      layoutDirection: layoutDirection,
+      axialAlignment: axialAlignment
+    )
     self.needCompressConstrainedBlocks = needCompressConstrainedBlocks
     (self.childrenWithSeparators, self.blockFrames, self.ascent) = calculateBlockFrames(
       children: children,
@@ -93,8 +96,9 @@ struct ContainerBlockLayout {
     var children = children
     var frames = [CGRect]()
     var containerAscent: CGFloat?
+    var contentSize: CGFloat = 0
     let gapsSize = gaps.reduce(0, +)
-    var shift = CGPoint(x: 0, y: 0)
+
     switch layoutDirection {
     case .horizontal:
       if blockLayoutDirection == .rightToLeft {
@@ -148,8 +152,8 @@ struct ContainerBlockLayout {
         frames.append(CGRect(origin: CGPoint(x: x, y: y), size: blockSize))
         x += blockSize.width + gapAfterBlock
       }
+      contentSize = x
       frames.addBaselineOffset(children: children, ascent: containerAscent)
-      shift.x = axialAlignment.offset(forAvailableSpace: size.width, contentSize: x)
     case .vertical:
       let blocks = children.map { $0.content }
 
@@ -214,14 +218,18 @@ struct ContainerBlockLayout {
         frames.append(CGRect(x: x, y: y, width: width, height: height))
         y += height + gapAfterBlock
       }
-      shift.y = axialAlignment.offset(forAvailableSpace: size.height, contentSize: y)
+      contentSize = y
     }
 
-    return (children, frames.map {
-      let frame = $0.offset(by: shift).roundedToScreenScale
-      precondition(frame.isValidAndFinite)
-      return frame
-    }, containerAscent)
+    return (
+      children,
+      axialAlignmentManager.applyOffset(
+        to: frames,
+        forAvailableSpace: layoutDirection == .horizontal ? size.width : size.height,
+        contentSize: contentSize
+      ),
+      containerAscent
+    )
   }
 
   private func calculateWrapLayoutFrames(
@@ -277,14 +285,11 @@ struct ContainerBlockLayout {
 
       let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
 
+      var groupFrames: [CGRect] = []
       $0.forEach {
         let alignmentSpace = groupHeight - $0.childSize[keyPath: transferDirectionKeyPath]
         let alignedLineOffset = currentLineOffset + $0.child.crossAlignment
           .offset(forAvailableSpace: alignmentSpace)
-        let alignedElementOffset = $0.lineOffset.advanced(by: axialAlignment.offset(
-          forAvailableSpace: size[keyPath: buildingDirectionKeyPath],
-          contentSize: contentLength
-        ).roundedToScreenScale)
 
         switch layoutDirection {
         case .horizontal:
@@ -292,20 +297,25 @@ struct ContainerBlockLayout {
             ascent: lineAscent,
             width: $0.childSize.width
           )
-          frames
-            .append(CGRect(origin: CGPoint(
-              x: alignedElementOffset,
-              y: alignedLineOffset + baselineOffset
-            ), size: $0.childSize))
+          let origin = CGPoint(
+            x: $0.lineOffset,
+            y: alignedLineOffset + baselineOffset
+          )
+          groupFrames.append(CGRect(origin: origin, size: $0.childSize))
         case .vertical:
-          frames
-            .append(CGRect(origin: CGPoint(
-              x: alignedLineOffset,
-              y: alignedElementOffset
-            ), size: $0.childSize))
+          let origin = CGPoint(
+            x: alignedLineOffset,
+            y: $0.lineOffset
+          )
+          groupFrames.append(CGRect(origin: origin, size: $0.childSize))
         }
       }
 
+      frames += axialAlignmentManager.applyOffset(
+        to: groupFrames,
+        forAvailableSpace: size[keyPath: buildingDirectionKeyPath],
+        contentSize: contentLength
+      )
       currentLineOffset += groupHeight
     }
     return (wrapLayoutGroups.childrenWithSeparators, frames, containerAscent)
