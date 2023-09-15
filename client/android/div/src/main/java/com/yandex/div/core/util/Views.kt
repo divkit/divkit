@@ -14,6 +14,9 @@ internal val View.isHierarchyLaidOut: Boolean
 internal fun View.isLayoutRtl() =
     ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
 
+internal fun View.getIndices(start: Int, count: Int) =
+    if (isLayoutRtl()) start + count - 1 downTo start else start until start + count
+
 inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     if (isActuallyLaidOut && !isLayoutRequested) {
         action(this)

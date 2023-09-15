@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
-import com.yandex.div.core.widget.dimensionAffecting
+import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
 import com.yandex.div.core.widget.forEach
 import com.yandex.div.core.widget.isExact
 import com.yandex.div.core.widget.isUnspecified
@@ -48,7 +48,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
     private var maxHeight = 0
     private var childState = 0
 
-    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
+    override var aspectRatio by aspectRatioProperty()
 
     override fun setForegroundGravity(gravity: Int) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || foregroundGravity == gravity) return

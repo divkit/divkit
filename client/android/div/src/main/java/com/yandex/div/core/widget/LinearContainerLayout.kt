@@ -16,9 +16,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.isGone
 import com.yandex.div.core.util.getIndices
-import com.yandex.div.core.util.getOffsets
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
+import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
@@ -49,7 +49,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var totalMatchParentLength = 0
     private var childMeasuredState = 0
 
-    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
+    override var aspectRatio by aspectRatioProperty()
 
     private var dividerWidth = 0
     private var dividerHeight = 0
@@ -59,8 +59,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private var dividerMarginLeft = 0
     private var dividerMarginRight = 0
 
-    private var edgeDividerOffset = 0
-    private var spaceBetweenChildren = 0f
+    private val offsetsHolder = OffsetsHolder()
+
+    private var firstVisibleChildIndex = -1
+    private var lastVisibleChildIndex = -1
 
     var dividerDrawable: Drawable? = null
         set(value) {
@@ -119,8 +121,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         if (hasDividerBeforeChildAt(childCount)) {
             val bottom = getChildAt(childCount - 1)?.let {
-                it.bottom + it.lp.bottomMargin + dividerMarginTop + edgeDividerOffset
-            } ?: (height - paddingBottom - dividerHeight - dividerMarginBottom - edgeDividerOffset)
+                it.bottom + it.lp.bottomMargin + dividerMarginTop + offsetsHolder.edgeDividerOffset
+            } ?: (height - paddingBottom - dividerHeight - dividerMarginBottom - offsetsHolder.edgeDividerOffset)
             drawHorizontalDivider(canvas, bottom)
         }
     }
@@ -142,10 +144,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (hasDividerBeforeChildAt(childCount)) {
             val child = getChildAt(childCount - 1)
             val position = when {
-                child == null && isLayoutRtl -> paddingLeft + dividerMarginLeft + edgeDividerOffset
-                child == null -> width - paddingRight - dividerWidth - dividerMarginRight - edgeDividerOffset
-                isLayoutRtl -> child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight - edgeDividerOffset
-                else -> child.right + child.lp.rightMargin + dividerMarginLeft + edgeDividerOffset
+                child == null && isLayoutRtl -> paddingLeft + dividerMarginLeft + offsetsHolder.edgeDividerOffset
+                child == null ->
+                    width - paddingRight - dividerWidth - dividerMarginRight - offsetsHolder.edgeDividerOffset
+                isLayoutRtl -> {
+                    child.left - child.lp.leftMargin - dividerWidth - dividerMarginRight -
+                        offsetsHolder.edgeDividerOffset
+                }
+                else -> child.right + child.lp.rightMargin + dividerMarginLeft + offsetsHolder.edgeDividerOffset
             }
             drawVerticalDivider(canvas, position)
         }
@@ -199,6 +205,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         totalWeight = 0f
         childMeasuredState = 0
 
+        firstVisibleChildIndex = children.indexOfFirst { !it.isGone }
+        lastVisibleChildIndex = children.indexOfLast { !it.isGone }
+
         if (isVertical) {
             measureVertical(widthMeasureSpec, heightMeasureSpec)
         } else {
@@ -224,12 +233,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
     }
 
-    private val firstVisibleChildIndex get() = children.indexOfFirst { !it.isGone }
-
-    private val lastVisibleChildIndex get() = children.indexOfLast { !it.isGone }
-
-    private fun getDividerOffsetBeforeChildAt(index: Int) =
-        if (index == firstVisibleChildIndex) edgeDividerOffset else (spaceBetweenChildren / 2).roundToInt()
+    private fun getDividerOffsetBeforeChildAt(index: Int) = if (index == firstVisibleChildIndex) {
+        offsetsHolder.edgeDividerOffset
+    } else {
+        (offsetsHolder.spaceBetweenChildren / 2).toInt()
+    }
 
     /**
      * Measures the children when the orientation of this LinearLayout is set
@@ -794,9 +802,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         maxBaselineDescent = max(maxBaselineDescent, child.measuredHeight - childBaseline - lp.topMargin)
     }
 
-    private fun forEachSignificant(action: (View) -> Unit) = forEach(true, action)
+    private inline fun forEachSignificant(action: (View) -> Unit) = forEach(true, action)
 
-    private fun forEachSignificantIndexed(action: (View, Int) -> Unit) = forEachIndexed(true, action)
+    private inline fun forEachSignificantIndexed(action: (View, Int) -> Unit) = forEachIndexed(true, action)
 
     private val View.maxHeight get() = lp.maxHeight
 
@@ -814,11 +822,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val childSpace = right - left - paddingLeft - paddingRight
         val freeSpace = (bottom - top - totalLength).toFloat()
         var childTop = paddingTop.toFloat()
-        getOffsets(freeSpace, verticalGravity, visibleChildCount).let {
-            childTop += it.firstChildOffset
-            spaceBetweenChildren = it.spaceBetweenChildren
-            edgeDividerOffset = it.edgeDividerOffset
-        }
+        offsetsHolder.update(freeSpace, verticalGravity, visibleChildCount)
+        childTop += offsetsHolder.firstChildOffset
         forEachSignificantIndexed { child, i ->
             val childWidth = child.measuredWidth
             val childHeight = child.measuredHeight
@@ -839,7 +844,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             }
             childTop += lp.topMargin
             setChildFrame(child, childLeft, childTop.roundToInt(), childWidth, childHeight)
-            childTop += childHeight + lp.bottomMargin + spaceBetweenChildren
+            childTop += childHeight + lp.bottomMargin + offsetsHolder.spaceBetweenChildren
         }
     }
 
@@ -851,11 +856,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val freeSpace = (right - left - totalLength).toFloat()
         var childLeft = paddingLeft.toFloat()
         val absoluteGravity = GravityCompat.getAbsoluteGravity(horizontalGravity, layoutDirection)
-        getOffsets(freeSpace, absoluteGravity, visibleChildCount).let {
-            childLeft += it.firstChildOffset
-            spaceBetweenChildren = it.spaceBetweenChildren
-            edgeDividerOffset = it.edgeDividerOffset
-        }
+        offsetsHolder.update(freeSpace, absoluteGravity, visibleChildCount)
+        childLeft += offsetsHolder.firstChildOffset
         for (childIndex in getIndices(0, childCount)) {
             val child = getChildAt(childIndex)
             if (child == null || child.isGone) continue
@@ -881,7 +883,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             }
             childLeft += lp.leftMargin
             setChildFrame(child, childLeft.roundToInt(), childTop, childWidth, childHeight)
-            childLeft += childWidth + lp.rightMargin + spaceBetweenChildren
+            childLeft += childWidth + lp.rightMargin + offsetsHolder.spaceBetweenChildren
         }
     }
 

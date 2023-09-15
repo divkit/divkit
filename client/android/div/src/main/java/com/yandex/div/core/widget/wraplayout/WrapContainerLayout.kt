@@ -11,13 +11,10 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import com.yandex.div.core.util.getIndices
-import com.yandex.div.core.util.getOffsets
-import com.yandex.div.core.util.getSpaceAroundPart
-import com.yandex.div.core.util.getSpaceBetweenPart
-import com.yandex.div.core.util.getSpaceEvenlyPart
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
+import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.dimensionAffecting
 import com.yandex.div.internal.widget.DivGravity
@@ -109,10 +106,11 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
 
     private var middleLineSeparatorOffset = 0
     private var edgeLineSeparatorOffset = 0
+    private val offsetsHolder = OffsetsHolder()
 
     private var tempSumCrossSize = 0
 
-    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { it.coerceAtLeast(DEFAULT_ASPECT_RATIO) }
+    override var aspectRatio by aspectRatioProperty()
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()
@@ -448,7 +446,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
             val leftSeparatorLength = if (isLayoutRtl()) endSeparatorLength else startSeparatorLength
             var childLeft = paddingLeft + leftSeparatorLength.toFloat()
             val freeSpace = (right - left - line.mainSize).toFloat()
-            getOffsets(freeSpace, absoluteGravity, line.itemCountNotGone).let {
+            offsetsHolder.let {
+                it.update(freeSpace, absoluteGravity, line.itemCountNotGone)
                 childLeft += it.firstChildOffset
                 line.spaceBetweenChildren = it.spaceBetweenChildren
                 line.edgeSeparatorOffset = it.edgeDividerOffset
@@ -504,7 +503,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
             val line = lines[lineIndex]
             val freeSpace = (bottom - top - line.mainSize).toFloat()
             var childTop = paddingTop + startSeparatorLength.toFloat()
-            getOffsets(freeSpace, verticalGravity, line.itemCountNotGone).let {
+            offsetsHolder.let {
+                it.update(freeSpace, verticalGravity, line.itemCountNotGone)
                 childTop += it.firstChildOffset
                 line.spaceBetweenChildren = it.spaceBetweenChildren
                 line.edgeSeparatorOffset = it.edgeDividerOffset
@@ -570,8 +570,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private fun drawSeparatorsHorizontal(canvas: Canvas) {
         var lineTop: Int
         var lineBottom = 0
-        val drawLineSeparator = { separatorBottom: Int -> drawLineSeparator(canvas,
-            paddingLeft, separatorBottom - lineSeparatorLength, width - paddingRight, separatorBottom) }
+        fun drawLineSeparator(separatorBottom: Int) = drawLineSeparator(canvas,
+            paddingLeft, separatorBottom - lineSeparatorLength, width - paddingRight, separatorBottom)
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
             lineTop = firstVisibleLine?.let { it.bottom - it.crossSize } ?: 0
             drawLineSeparator(lineTop - edgeLineSeparatorOffset)
@@ -584,8 +584,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
 
             lineBottom = line.bottom
             lineTop = lineBottom - line.crossSize
-            val drawSeparator = { separatorRight: Int -> drawSeparator(canvas,
-                separatorRight - separatorLength, lineTop, separatorRight, lineBottom) }
+            fun drawSeparator(separatorRight: Int) = drawSeparator(canvas,
+                separatorRight - separatorLength, lineTop, separatorRight, lineBottom)
             if (needLineSeparator && showSeparatorBetween(showLineSeparators)) {
                 drawLineSeparator(lineTop - middleLineSeparatorOffset)
             }
@@ -609,7 +609,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
                     }
                     needLeftSeparator = false
                 } else if (showSeparatorBetween(showSeparators)) {
-                    drawSeparator(childLeft - (line.spaceBetweenChildren / 2).roundToInt())
+                    drawSeparator(childLeft - (line.spaceBetweenChildren / 2).toInt())
                 }
             }
             if (childRight > 0 && showRightSeparator(showSeparators)) {
@@ -624,9 +624,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private fun drawSeparatorsVertical(canvas: Canvas) {
         var lineLeft: Int
         var lineRight = 0
-        val drawLineSeparator = { separatorRight: Int -> drawLineSeparator(canvas,
+        fun drawLineSeparator(separatorRight: Int) = drawLineSeparator(canvas,
             separatorRight - lineSeparatorLength, paddingTop, separatorRight, height - paddingBottom)
-        }
         if (lines.size > 0 && showLeftSeparator(showLineSeparators)) {
             lineLeft = firstVisibleLine?.let { it.right - it.crossSize } ?: 0
             drawLineSeparator(lineLeft - edgeLineSeparatorOffset)
@@ -640,8 +639,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
 
             lineRight = line.right
             lineLeft = lineRight - line.crossSize
-            val drawSeparator = { separatorBottom: Int -> drawSeparator(canvas,
-                lineLeft, separatorBottom - separatorLength, lineRight, separatorBottom) }
+            fun drawSeparator(separatorBottom: Int) = drawSeparator(canvas,
+                lineLeft, separatorBottom - separatorLength, lineRight, separatorBottom)
             if (needLineSeparator && showSeparatorBetween(showLineSeparators)) {
                 drawLineSeparator(lineLeft - middleLineSeparatorOffset)
             }
@@ -666,7 +665,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
                     }
                     needStartSeparator = false
                 } else if (showSeparatorBetween(showSeparators)) {
-                    drawSeparator(childTop - (line.spaceBetweenChildren / 2).roundToInt())
+                    drawSeparator(childTop - (line.spaceBetweenChildren / 2).toInt())
                 }
             }
             if (childBottom > 0 && showSeparatorAtEnd(showSeparators)) {
@@ -713,10 +712,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private fun showRightSeparator(@ShowSeparatorsMode mode: Int) =
         if (isLayoutRtl()) showSeparatorAtStart(mode) else showSeparatorAtEnd(mode)
 
-    private val firstVisibleLine: WrapLine? get() {
-        val predicate = { line: WrapLine -> line.itemCountNotGone > 0 }
-        return if (isRowDirection || !isLayoutRtl()) lines.find(predicate) else lines.findLast(predicate)
-    }
+    private val firstVisibleLine: WrapLine? get() =
+        if (isRowDirection || !isLayoutRtl()) lines.find { it.isVisible } else lines.findLast { it.isVisible }
 
     override fun getBaseline() = firstVisibleLine?.maxBaseline?.plus(paddingTop) ?: super.getBaseline()
 
@@ -738,5 +735,6 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
         var spaceBetweenChildren = 0f
 
         val itemCountNotGone get() = itemCount - goneItemCount
+        val isVisible get() = itemCountNotGone > 0
     }
 }

@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import com.yandex.div.R
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
+import com.yandex.div.core.widget.AspectView.Companion.aspectRatioProperty
 import com.yandex.div.core.widget.appearanceAffecting
 import com.yandex.div.core.widget.dimensionAffecting
 import kotlin.math.max
@@ -25,9 +26,7 @@ open class AspectImageView @JvmOverloads constructor(
 
     var gravity by appearanceAffecting(Gravity.NO_GRAVITY)
 
-    final override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { value ->
-        value.coerceAtLeast(DEFAULT_ASPECT_RATIO)
-    }
+    final override var aspectRatio by aspectRatioProperty()
 
     var imageScale by dimensionAffecting(Scale.NO_SCALE)
 

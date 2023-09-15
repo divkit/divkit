@@ -200,5 +200,49 @@ abstract class DivViewGroup @JvmOverloads constructor(
 
         @SuppressLint("WrongConstant")
         fun Int.toVerticalGravity() = this and DivGravity.VERTICAL_GRAVITY_MASK
+
+        internal fun getSpaceAroundPart(freeSpace: Float, childCount: Int) = freeSpace / (childCount * 2)
+
+        internal fun getSpaceBetweenPart(freeSpace: Float, childCount: Int) =
+            if (childCount == 1) 0f else freeSpace / (childCount - 1)
+
+        internal fun getSpaceEvenlyPart(freeSpace: Float, childCount: Int) = freeSpace / (childCount + 1)
+    }
+
+    internal inner class OffsetsHolder(
+        var firstChildOffset: Float = 0f,
+        var spaceBetweenChildren: Float = 0f,
+        var edgeDividerOffset: Int = 0
+    ) {
+        fun update(freeSpace: Float, gravity: Int, childCount: Int) {
+            firstChildOffset = 0f
+            spaceBetweenChildren = 0f
+            edgeDividerOffset = 0
+            when (gravity) {
+                Gravity.LEFT, Gravity.TOP -> Unit
+                Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL -> firstChildOffset = freeSpace / 2
+                Gravity.RIGHT, Gravity.BOTTOM -> firstChildOffset = freeSpace
+                DivGravity.SPACE_AROUND_HORIZONTAL, DivGravity.SPACE_AROUND_VERTICAL -> {
+                    getSpaceAroundPart(freeSpace, childCount).let {
+                        firstChildOffset = it
+                        spaceBetweenChildren = it * 2
+                        edgeDividerOffset = (it / 2).toInt()
+                    }
+                }
+
+                DivGravity.SPACE_BETWEEN_HORIZONTAL, DivGravity.SPACE_BETWEEN_VERTICAL ->
+                    spaceBetweenChildren = getSpaceBetweenPart(freeSpace, childCount)
+
+                DivGravity.SPACE_EVENLY_HORIZONTAL, DivGravity.SPACE_EVENLY_VERTICAL -> {
+                    getSpaceEvenlyPart(freeSpace, childCount).let {
+                        firstChildOffset = it
+                        spaceBetweenChildren = it
+                        edgeDividerOffset = (it / 2).toInt()
+                    }
+                }
+
+                else -> throw java.lang.IllegalStateException("Invalid gravity is set: $gravity")
+            }
+        }
     }
 }
