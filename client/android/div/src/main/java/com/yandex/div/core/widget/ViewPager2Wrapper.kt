@@ -32,9 +32,12 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
         }
     }
 
+    fun getRecyclerView(): RecyclerView? {
+        return viewPager.getChildAt(0) as? RecyclerView // never returns as recyclerView created in ViewPager2 constructor.
+    }
+
     private fun withRecyclerView(block: RecyclerView.() -> Unit) {
-        val recyclerView: RecyclerView = viewPager.getChildAt(0) as? RecyclerView?
-            ?: return // never returns as recyclerView created in ViewPager2 constructor.
+        val recyclerView = getRecyclerView() ?: return
         block.invoke(recyclerView)
     }
 

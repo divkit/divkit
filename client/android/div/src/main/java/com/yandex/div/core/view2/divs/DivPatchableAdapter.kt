@@ -69,7 +69,11 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
         activityMap[value] = isActive
     }
 
-    fun applyPatch(divPatchCache: DivPatchCache, divView: Div2View): Boolean {
+    fun applyPatch(
+        recyclerView: RecyclerView?,
+        divPatchCache: DivPatchCache,
+        divView: Div2View
+    ): Boolean {
         val patch = divPatchCache.getPatch(div2View.dataTag) ?: return false
         val divPatchApply = DivPatchApply(patch)
 
@@ -113,8 +117,13 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
         patch.patches.keys.filter { it !in appliedToListPatchIds }.forEach { idToFind ->
             for (i in 0 until _items.size) {
                 val childDiv = _items[i]
-                divPatchApply.patchDivChild(childDiv, idToFind, divView.expressionResolver)?.let {
-                    _items[i] = it
+                divPatchApply.patchDivChild(
+                    parentView = recyclerView ?: divView,
+                    childDiv,
+                    idToFind,
+                    divView.expressionResolver
+                )?.let { newDiv ->
+                    _items[i] = newDiv
                     return@forEach
                 }
             }

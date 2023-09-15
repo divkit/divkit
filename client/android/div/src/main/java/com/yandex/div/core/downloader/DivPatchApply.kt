@@ -1,8 +1,16 @@
 package com.yandex.div.core.downloader
 
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.children
+import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
+import com.yandex.div.core.view2.divs.widgets.DivPagerView
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
 import com.yandex.div2.DivGallery
@@ -156,6 +164,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
      * Returns div with patched child if has such, otherwise null.
      */
     fun patchDivChild(
+        parentView: View,
         parentDiv: Div,
         idToPatch: String,
         resolver: ExpressionResolver
@@ -164,6 +173,14 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         val iterator = pathToChild.iterator()
         return if (pathToChild.isNotEmpty()) {
             iterator.next()
+
+            // Notify internal recycler about changes if needed.
+            pathToChild.findLast {
+                it.value() is DivGallery || it.value() is DivPager
+            }?.value()?.let {
+                findPatchedRecyclerViewAndNotifyChange(parentView, it, idToPatch)
+            }
+
             return getPatchedTreeByPath(parentDiv, iterator, resolver)
         } else {
             null
@@ -183,7 +200,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -195,7 +212,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -207,7 +224,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -219,7 +236,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -231,7 +248,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.items.forEach {
                         val newPath = pathToChildWithId(it.div, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -243,7 +260,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 } else {
                     currentDivValue.states.mapNotNull { it.div }.forEach {
                         val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath
+                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
                     return emptyList()
                 }
@@ -377,6 +394,47 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 return currentDiv
             }
         }
+    }
+
+    private fun findPatchedRecyclerViewAndNotifyChange(
+        currentView: View,
+        divWithPatchedChild: DivBase,
+        patchedChildId: String
+    ): View? {
+        when(currentView) {
+            is DivRecyclerView -> {
+                if (currentView.div == divWithPatchedChild) {
+                    val adapter = (currentView.adapter as? DivGalleryBinder.GalleryAdapter) ?: return currentView
+                    currentView.div?.items?.forEachIndexed { i, child ->
+                        if (child.value().id == patchedChildId) {
+                            adapter.notifyItemChanged(i)
+                            return currentView
+                        }
+                    }
+                    return currentView
+                }
+            }
+            is DivPagerView -> {
+                if (currentView.div == divWithPatchedChild) {
+                    val adapter = (currentView.viewPager.getChildAt(0) as? RecyclerView)?.adapter ?: return currentView
+                    currentView.div?.items?.forEachIndexed { i, child ->
+                        if (child.value().id == patchedChildId) {
+                            adapter.notifyItemChanged(i)
+                            return currentView
+                        }
+                    }
+                    return currentView
+                }
+            }
+        }
+        if (currentView is ViewGroup) {
+            currentView.children.forEach { child ->
+                findPatchedRecyclerViewAndNotifyChange(child, divWithPatchedChild, patchedChildId)?.let {
+                    return it
+                }
+            }
+        }
+        return null
     }
 
     companion object {

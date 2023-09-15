@@ -58,7 +58,7 @@ internal class DivGalleryBinder @Inject constructor(
         val oldDiv = (view as? DivRecyclerView)?.div
         if (div == oldDiv) {
             val adapter = view.adapter as GalleryAdapter
-            adapter.applyPatch(divPatchCache, divView)
+            adapter.applyPatch(view, divPatchCache, divView)
             adapter.closeAllSubscription()
             adapter.subscribeOnElements()
             bindStates(view, div.items, divView)
