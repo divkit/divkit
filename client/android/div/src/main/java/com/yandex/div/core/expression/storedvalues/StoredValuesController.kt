@@ -17,6 +17,7 @@ import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryException
 import com.yandex.div.storage.rawjson.RawJson
+import dagger.Lazy
 import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
@@ -29,9 +30,9 @@ private const val KEY_VALUE = "value"
 @Mockable
 @DivScope
 internal class StoredValuesController @Inject constructor(
-    divStorageComponent: DivStorageComponent,
+    divStorageComponentLazy: Lazy<DivStorageComponent>,
 ) {
-    private val rawJsonRepository = divStorageComponent.rawJsonRepository
+    private val rawJsonRepository by lazy { divStorageComponentLazy.get().rawJsonRepository }
 
     private val currentTime: Long
         get() = System.currentTimeMillis()

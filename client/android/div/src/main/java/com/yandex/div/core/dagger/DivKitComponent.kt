@@ -7,6 +7,7 @@ import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.HistogramRecordConfiguration
 import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
+import com.yandex.div.storage.DivStorageComponent
 import dagger.BindsInstance
 import dagger.Component
 import java.util.concurrent.ExecutorService
@@ -18,7 +19,8 @@ import javax.inject.Singleton
     DivKitConfiguration::class,
     DivKitModule::class,
     DivKitHistogramsModule::class,
-    DivActionTypedModule::class
+    DivActionTypedModule::class,
+    DivStorageModule::class
 ])
 interface DivKitComponent {
 
@@ -43,6 +45,11 @@ interface DivKitComponent {
         fun applicationContext(@Named(Names.APP_CONTEXT) context: Context): Builder
 
         fun configuration(configuration: DivKitConfiguration): Builder
+
+        @BindsInstance
+        fun divStorageComponent(
+            @Named(Names.HAS_DEFAULTS) divStorageComponent: DivStorageComponent?
+        ): Builder
 
         fun build(): DivKitComponent
     }

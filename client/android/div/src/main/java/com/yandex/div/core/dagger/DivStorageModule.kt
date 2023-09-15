@@ -7,15 +7,16 @@ import com.yandex.div.storage.DivStorageComponent
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 internal object DivStorageModule {
 
     @Provides
-    @DivScope
+    @Singleton
     fun provideDivStorageComponent(
         @Named(Names.HAS_DEFAULTS) divStorageComponent: DivStorageComponent?,
-        @Named(Names.CONTEXT) context: Context,
+        @Named(Names.APP_CONTEXT) context: Context,
         histogramReporterDelegate: HistogramReporterDelegate,
         parsingHistogramReporter: DivParsingHistogramReporter,
     ): DivStorageComponent {
