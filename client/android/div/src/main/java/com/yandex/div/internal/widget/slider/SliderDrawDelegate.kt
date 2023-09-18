@@ -28,7 +28,7 @@ internal class SliderDrawDelegate {
         drawable.draw(canvas)
     }
 
-    fun drawActiveTrack(
+    fun drawTrackPart(
         canvas: Canvas,
         drawable: Drawable?,
         @Px from: Int,

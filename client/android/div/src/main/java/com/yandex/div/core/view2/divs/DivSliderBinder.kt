@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
@@ -17,6 +18,8 @@ import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivDrawable
+import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
 import kotlin.math.max
@@ -66,6 +69,8 @@ internal class DivSliderBinder @Inject constructor(
 
         view.setupTrack(div, expressionResolver)
         view.setupTickMarks(div, expressionResolver)
+
+        view.setupRanges(div, expressionResolver)
     }
 
     private fun DivSliderView.setupThumb(
@@ -281,18 +286,84 @@ internal class DivSliderBinder @Inject constructor(
             }
         }
     }
-}
 
-private fun DivSlider.TextStyle.toSliderTextStyle(
-        metrics: DisplayMetrics,
-        typefaceProvider: DivTypefaceProvider,
-        resolver: ExpressionResolver
-): SliderTextStyle {
-    return SliderTextStyle(
-        fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
-        fontWeight = getTypeface(fontWeight.evaluate(resolver), typefaceProvider),
-        offsetX = offset?.x?.toPx(metrics, resolver)?.toFloat() ?: 0f,
-        offsetY = offset?.y?.toPx(metrics, resolver)?.toFloat() ?: 0f,
-        textColor = textColor.evaluate(resolver)
-    )
+    private fun DivSliderView.setupRanges(div: DivSlider, resolver: ExpressionResolver) {
+        ranges.clear()
+        val divRanges = div.ranges ?: return
+
+        val metrics = resources.displayMetrics
+        divRanges.forEach { divRange ->
+            val range = SliderView.Range()
+            ranges.add(range)
+
+            addSubscription((divRange.start ?: div.minValue).observeAndGet(resolver) {
+                updateAfter { range.startValue = it.toFloat() }
+            })
+            addSubscription((divRange.end ?: div.maxValue).observeAndGet(resolver) {
+                updateAfter { range.endValue = it.toFloat() }
+            })
+
+            with (divRange.margins) {
+                val useRelativeMargins = start != null || end != null
+                val marginStart = if (useRelativeMargins) start else left
+                val marginEnd = if (useRelativeMargins) end else right
+
+                marginStart?.let { expr ->
+                    addSubscription(expr.observe(resolver) {
+                        updateAfter { range.marginStart = applyUnit(it, resolver, metrics) }
+                    })
+                }
+                marginEnd?.let { expr ->
+                    addSubscription(expr.observe(resolver) {
+                        updateAfter { range.marginEnd = applyUnit(it, resolver, metrics) }
+                    })
+                }
+
+                unit.observeAndGet(resolver) { unit ->
+                    updateAfter {
+                        marginStart?.let { range.marginStart = it.evaluate(resolver).castToUnit(unit, metrics) }
+                        marginEnd?.let { range.marginEnd = it.evaluate(resolver).castToUnit(unit, metrics) }
+                    }
+                }
+            }
+
+            observeDrawable(resolver, divRange.trackActiveStyle ?: div.trackActiveStyle) {
+                updateAfter { range.activeTrackDrawable = it.toDrawable(metrics, resolver) }
+            }
+            observeDrawable(resolver, divRange.trackInactiveStyle ?: div.trackInactiveStyle) {
+                updateAfter { range.inactiveTrackDrawable = it.toDrawable(metrics, resolver) }
+            }
+        }
+    }
+
+    private companion object {
+        fun DivSlider.TextStyle.toSliderTextStyle(
+            metrics: DisplayMetrics,
+            typefaceProvider: DivTypefaceProvider,
+            resolver: ExpressionResolver
+        ): SliderTextStyle {
+            return SliderTextStyle(
+                fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
+                fontWeight = getTypeface(fontWeight.evaluate(resolver), typefaceProvider),
+                offsetX = offset?.x?.toPx(metrics, resolver)?.toFloat() ?: 0f,
+                offsetY = offset?.y?.toPx(metrics, resolver)?.toFloat() ?: 0f,
+                textColor = textColor.evaluate(resolver)
+            )
+        }
+
+        inline fun SliderView.updateAfter(block: () -> Unit) {
+            block()
+            requestLayout()
+            invalidate()
+        }
+
+        fun DivEdgeInsets.applyUnit(margin: Long, resolver: ExpressionResolver, metrics: DisplayMetrics) =
+            margin.castToUnit(unit.evaluate(resolver), metrics)
+
+        fun Long.castToUnit(unit: DivSizeUnit, metrics: DisplayMetrics) = when (unit) {
+            DivSizeUnit.DP -> dpToPx(metrics)
+            DivSizeUnit.SP -> spToPx(metrics)
+            DivSizeUnit.PX -> toIntSafely()
+        }
+    }
 }

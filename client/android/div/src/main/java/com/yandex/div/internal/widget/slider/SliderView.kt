@@ -2,8 +2,10 @@ package com.yandex.div.internal.widget.slider
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Region
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -103,6 +105,8 @@ open class SliderView @JvmOverloads constructor(
 
         override fun onAnimationRepeat(animation: Animator) = Unit
     }
+
+    val ranges = mutableListOf<Range>()
 
     /**
      * The length of the animation. The default duration is 300 milliseconds.
@@ -353,51 +357,14 @@ open class SliderView @JvmOverloads constructor(
     private var maxTickmarkOrThumbWidth: Int = UNSET_VALUE
         get() {
             if (field == UNSET_VALUE) {
-                val tickmarkWidth = max(
-                    activeTickMarkDrawable?.bounds?.width() ?: 0,
-                    inactiveTickMarkDrawable?.bounds?.width() ?: 0
-                )
-                val thumbWidth = max(
-                    thumbDrawable?.bounds?.width() ?: 0,
-                    thumbSecondaryDrawable?.bounds?.width() ?: 0,
-                )
+                val tickmarkWidth = max(activeTickMarkDrawable.boundsWidth, inactiveTickMarkDrawable.boundsWidth)
+                val thumbWidth = max(thumbDrawable.boundsWidth, thumbSecondaryDrawable.boundsWidth)
                 field = max(tickmarkWidth, thumbWidth)
             }
             return field
         }
 
     private val activeRange = ActiveRange()
-
-    /**
-     * Calculates slider active range presented by two values, where start <= end.
-     * If there is only one thumb then its value will be considered as the end of the range.
-     */
-    private inner class ActiveRange {
-        val start: Float
-            get() {
-                if (!isThumbSecondaryEnabled()) {
-                    return minValue
-                }
-                return min(thumbValue, thumbSecondaryValue)
-            }
-        val end: Float
-            get() {
-                if (!isThumbSecondaryEnabled()) {
-                    return thumbValue
-                }
-                return max(thumbValue, thumbSecondaryValue)
-            }
-
-        private fun min(one: Float, another: Float?): Float {
-            another ?: return one
-            return kotlin.math.min(one, another)
-        }
-
-        private fun max(one: Float, another: Float?): Float {
-            another ?: return one
-            return kotlin.math.max(one, another)
-        }
-    }
 
     fun addOnThumbChangedListener(listener: ChangedListener) {
         listeners.addObserver(listener)
@@ -419,9 +386,16 @@ open class SliderView @JvmOverloads constructor(
         setMeasuredDimension(measuredWidth, measuredHeight)
 
         sliderDrawDelegate.onMeasure(
-            measuredWidth - paddingLeft - paddingRight - maxTickmarkOrThumbWidth,
+            getTrackLength(measuredWidth),
             measuredHeight - paddingTop - paddingBottom
         )
+
+        ranges.forEach {
+            with(it) {
+                startPosition = max(startValue, minValue).toPosition(measuredWidth) + marginStart
+                endPosition = min(endValue, maxValue).toPosition(measuredWidth) - marginEnd
+            }
+        }
     }
 
     private fun measureDimension(desiredSize: Int, measureSpec: Int): Int {
@@ -436,28 +410,23 @@ open class SliderView @JvmOverloads constructor(
     }
 
     override fun getSuggestedMinimumHeight(): Int {
-        val trackHeight = max(
-            activeTrackDrawable?.bounds?.height() ?: 0,
-            inactiveTrackDrawable?.bounds?.height() ?: 0
-        )
-        val thumbHeight = max(
-            thumbDrawable?.bounds?.height() ?: 0,
-            thumbSecondaryDrawable?.bounds?.height() ?: 0
-        )
-        return max(thumbHeight, trackHeight)
+        val trackHeight = max(activeTrackDrawable.boundsHeight, inactiveTrackDrawable.boundsHeight)
+        val rangesHeight = ranges.maxOfOrNull {
+            max(it.activeTrackDrawable.boundsHeight, it.inactiveTrackDrawable.boundsHeight)
+        } ?: 0
+        val thumbHeight = max(thumbDrawable.boundsHeight, thumbSecondaryDrawable.boundsHeight)
+        return maxOf(thumbHeight, trackHeight, rangesHeight)
     }
+
+    private val Drawable?.boundsWidth get() = this?.bounds?.width() ?: 0
+
+    private val Drawable?.boundsHeight get() = this?.bounds?.height() ?: 0
 
     override fun getSuggestedMinimumWidth(): Int {
         val tickCount = (maxValue - minValue + 1).toInt()
 
-        val trackWidth = max(
-            (activeTrackDrawable?.bounds?.width() ?: 0) * tickCount,
-            (inactiveTrackDrawable?.bounds?.width() ?: 0) * tickCount
-        )
-        val thumbWidth = max(
-            thumbDrawable?.bounds?.width() ?: 0,
-            thumbSecondaryDrawable?.bounds?.width() ?: 0
-        )
+        val trackWidth = max(activeTrackDrawable.boundsWidth, inactiveTrackDrawable.boundsWidth) * tickCount
+        val thumbWidth = max(thumbDrawable.boundsWidth, thumbSecondaryDrawable.boundsWidth)
         val maxThumbTrack = max(thumbWidth, trackWidth)
 
         val textWidth = thumbTextDrawable?.intrinsicWidth ?: 0
@@ -470,19 +439,51 @@ open class SliderView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.save()
-        canvas.translate(paddingLeft.toFloat() + maxTickmarkOrThumbWidth / 2,
-            paddingTop.toFloat())
+        canvas.translate(paddingLeft.toFloat() + maxTickmarkOrThumbWidth / 2, paddingTop.toFloat())
+        val count = canvas.save()
+        ranges.forEach {
+            @Suppress("DEPRECATION")
+            canvas.clipRect(
+                (it.startPosition - it.marginStart).toFloat(),
+                0f,
+                (it.endPosition + it.marginEnd).toFloat(),
+                height.toFloat(),
+                Region.Op.DIFFERENCE
+            )
+        }
         sliderDrawDelegate.drawInactiveTrack(canvas, inactiveTrackDrawable)
         val start = activeRange.start
         val end = activeRange.end
         val startPosition = start.toPosition()
         val endPosition = end.toPosition()
-        sliderDrawDelegate.drawActiveTrack(
+        sliderDrawDelegate.drawTrackPart(
             canvas,
             activeTrackDrawable,
             startPosition.coerceAtMost(endPosition),
             endPosition.coerceAtLeast(startPosition)
         )
+        canvas.restoreToCount(count)
+        ranges.forEach {
+            fun drawTrackPart(drawable: Drawable?, start: Int = it.startPosition, end: Int = it.endPosition) {
+                sliderDrawDelegate.drawTrackPart(canvas, drawable, start, end)
+            }
+            when {
+                it.endPosition < startPosition || it.startPosition > endPosition -> drawTrackPart(it.inactiveTrackDrawable)
+                it.startPosition >= startPosition && it.endPosition <= endPosition -> drawTrackPart(it.activeTrackDrawable)
+                it.startPosition < startPosition && it.endPosition <= endPosition -> {
+                    drawTrackPart(it.inactiveTrackDrawable, end = (startPosition - 1).coerceAtLeast(it.startPosition))
+                    drawTrackPart(it.activeTrackDrawable, start = startPosition)
+                }
+                it.startPosition >= startPosition && it.endPosition > endPosition -> {
+                    drawTrackPart(it.activeTrackDrawable, end = endPosition)
+                    drawTrackPart(it.inactiveTrackDrawable, start = (endPosition + 1).coerceAtMost(it.endPosition))
+                }
+                else -> {
+                    drawTrackPart(it.inactiveTrackDrawable)
+                    drawTrackPart(it.activeTrackDrawable, startPosition, endPosition)
+                }
+            }
+        }
         for (i in minValue.toInt()..maxValue.toInt()) {
             val tickmarkDrawable = if (i in start.toInt()..end.toInt()) {
                 activeTickMarkDrawable
@@ -513,12 +514,9 @@ open class SliderView @JvmOverloads constructor(
 
     private var thumbOnTouch = Thumb.THUMB
 
-    private enum class Thumb {
-        THUMB, THUMB_SECONDARY
-    }
-
     var interactive = true
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         if (!interactive) {
             return false
@@ -597,13 +595,13 @@ open class SliderView @JvmOverloads constructor(
      * Calculates horizontal position of the point related to the specified value.
      */
     @Px
-    private fun Float.toPosition(): Int {
-        return if (isLayoutRtl()) {
-            ((maxValue - this) * (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) / (maxValue - minValue)).toInt()
-        } else {
-            ((this - minValue) * (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) / (maxValue - minValue)).toInt()
-        }
+    private fun Float.toPosition(viewWidth: Int = width): Int {
+        return (getTrackLength(viewWidth) / (maxValue - minValue) *
+            if (isLayoutRtl()) maxValue - this else this - minValue).roundToInt()
     }
+
+    private fun getTrackLength(viewWidth: Int = width) =
+        viewWidth - paddingLeft - paddingRight - maxTickmarkOrThumbWidth
 
     @Px
     private fun Int.toPosition(): Int = this.toFloat().toPosition()
@@ -612,19 +610,64 @@ open class SliderView @JvmOverloads constructor(
      * Calculates slider value on given horizontal position of the point.
      */
     private fun Int.toValue(): Float {
-        return if (isLayoutRtl()) {
-            maxValue - this * (maxValue - minValue) / (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) + minValue - 1
-        } else {
-            this * (maxValue - minValue) / (width - paddingLeft - paddingRight - maxTickmarkOrThumbWidth) + minValue
+        return minValue + (this * (maxValue - minValue) / getTrackLength()).let {
+            if (isLayoutRtl()) maxValue - it - 1 else it
         }
     }
 
-    private fun Float.inBoarders(): Float {
-        return min(max(this, minValue), maxValue)
-    }
+    private fun Float.inBoarders() = min(max(this, minValue), maxValue)
 
     private fun ValueAnimator.setBaseParams() {
         duration = animationDuration
         interpolator = animationInterpolator
+    }
+
+    /**
+     * Calculates slider active range presented by two values, where start <= end.
+     * If there is only one thumb then its value will be considered as the end of the range.
+     */
+    private inner class ActiveRange {
+        val start: Float
+            get() {
+                if (!isThumbSecondaryEnabled()) {
+                    return minValue
+                }
+                return min(thumbValue, thumbSecondaryValue)
+            }
+        val end: Float
+            get() {
+                if (!isThumbSecondaryEnabled()) {
+                    return thumbValue
+                }
+                return max(thumbValue, thumbSecondaryValue)
+            }
+
+        private fun min(one: Float, another: Float?): Float {
+            another ?: return one
+            return kotlin.math.min(one, another)
+        }
+
+        private fun max(one: Float, another: Float?): Float {
+            another ?: return one
+            return kotlin.math.max(one, another)
+        }
+    }
+
+    private enum class Thumb {
+        THUMB, THUMB_SECONDARY
+    }
+
+    class Range {
+        var startValue = 0f
+        var endValue = 0f
+
+        @Px var marginStart = 0
+        @Px var marginEnd = 0
+
+        var activeTrackDrawable: Drawable? = null
+        var inactiveTrackDrawable: Drawable? = null
+
+        @Px var startPosition = 0
+        @Px var endPosition = 0
     }
 }
