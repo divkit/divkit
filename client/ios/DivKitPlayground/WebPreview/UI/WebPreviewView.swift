@@ -17,7 +17,7 @@ struct WebPreviewView: View {
       presentationMode: presentationMode
     ) {
       WebPreviewViewRepresentable(
-        jsonProvider: model.socket.response,
+        jsonProvider: model.response,
         divKitComponents: model.divKitComponents,
         debugParams: model.debugParams,
         onScreenshotTaken: model.sendScreenshot(_:)
@@ -33,23 +33,40 @@ struct WebPreviewView: View {
 }
 
 private final class WebPreviewModel {
-  let socket = WebPreviewSocket()
   let divKitComponents: DivKitComponents
-  var debugParams: DebugParams!
+  private let socket = WebPreviewSocket()
+  private(set) var debugParams: DebugParams!
   private let payloadFactory: UIStatePayloadFactory
   private var renderingTime: UIStatePayload.RenderingTime?
   private let disposePool = AutodisposePool()
 
+  private let responsePipe: SignalPipe<[String: Any]>
+  var response: Signal<[String: Any]> { responsePipe.signal }
+
   init() {
-    divKitComponents = AppComponents.makeDivKitComponents()
-    payloadFactory = UIStatePayloadFactory(
+    let payloadFactory = UIStatePayloadFactory(
       deviceInfo: DeviceInfo()
     )
+    self.payloadFactory = payloadFactory
+
+    let responsePipe = SignalPipe<[String: Any]>()
+    self.responsePipe = responsePipe
+
+    divKitComponents = AppComponents.makeDivKitComponents(
+      reporter: DivReporterDelegate {
+        payloadFactory.addError($0)
+      }
+    )
+
+    socket.response
+      .addObserver {
+        payloadFactory.resetErrors()
+        responsePipe.send($0)
+      }
+      .dispose(in: disposePool)
+
     debugParams = DebugParams(
       isDebugInfoEnabled: true,
-      processDivKitError: { _, errors in
-        self.payloadFactory.updateErrors(errors: errors)
-      },
       processMeasurements: { [weak self] _, measurement in
         self?.renderingTime = measurement.renderingTime
       }

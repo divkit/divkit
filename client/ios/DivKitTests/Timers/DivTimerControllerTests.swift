@@ -339,6 +339,7 @@ final class DivTimerControllerTests: XCTestCase {
     timerDuration = duration
     timerTickInterval = tickInterval
     return DivTimerController(
+      cardId: "test_card",
       divTimer: divTimer,
       timerScheduler: timerScheduler,
       timeMeasuring: timeMeasuring,
@@ -355,7 +356,8 @@ final class DivTimerControllerTests: XCTestCase {
         }
       },
       updateCard: {},
-      persistentValuesStorage: DivPersistentValuesStorage()
+      persistentValuesStorage: DivPersistentValuesStorage(),
+      reporter: DefaultDivReporter()
     )
   }
 }

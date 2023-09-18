@@ -11,8 +11,9 @@ enum AppComponents {
 
   static func makeDivKitComponents(
     layoutDirection: UserInterfaceLayoutDirection = .system,
-    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in }
+    reporter: DivReporter? = nil,
+    urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
+    variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)
@@ -33,7 +34,8 @@ enum AppComponents {
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,
       layoutDirection: layoutDirection,
-      patchProvider: DemoPatchProvider(),
+      patchProvider: PlaygroundPatchProvider(),
+      reporter: reporter,
       trackVisibility: { logId, cardId in
         AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")
       },

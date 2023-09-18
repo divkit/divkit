@@ -20,7 +20,8 @@ final class DivTriggerTests: XCTestCase {
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
     actionHandler: actionHandler,
-    persistentValuesStorage: DivPersistentValuesStorage()
+    persistentValuesStorage: DivPersistentValuesStorage(),
+    reporter: DefaultDivReporter()
   )
 
   private var triggersCount = 0

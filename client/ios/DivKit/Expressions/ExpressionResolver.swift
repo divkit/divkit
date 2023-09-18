@@ -24,10 +24,7 @@ public final class ExpressionResolver {
   ) {
     self.variables = variables
     self.persistentValuesStorage = persistentValuesStorage
-    self.errorTracker = {
-      DivKitLogger.error($0.description)
-      errorTracker?($0)
-    }
+    self.errorTracker = { errorTracker?($0) }
     self.variableTracker = variableTracker
   }
 

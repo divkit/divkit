@@ -19,8 +19,8 @@ final class DivViewProvider {
     )
     divKitComponents = AppComponents.makeDivKitComponents(
       layoutDirection: layoutDirection,
-      variablesStorage: variablesStorage,
-      urlHandler: urlHandler
+      urlHandler: urlHandler,
+      variablesStorage: variablesStorage
     )
     self.jsonProvider = jsonProvider
   }

@@ -10,18 +10,20 @@ public final class DivTriggersStorage {
   private let variablesStorage: DivVariablesStorage
   private let actionHandler: DivActionHandler?
   private let persistentValuesStorage: DivPersistentValuesStorage
-
+  private let reporter: DivReporter
   private let cardsTriggersLock = RWLock()
-  private let autodisposePool = AutodisposePool()
+  private let disposePool = AutodisposePool()
 
   public init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
+    self.reporter = reporter
 
     variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
@@ -29,12 +31,12 @@ public final class DivTriggersStorage {
         tryRunTriggerActions(
           triggers: triggers,
           cardId: cardId,
-          changesVariablesNames: event.kind.names,
+          changedVariablesNames: event.kind.names,
           newVariables: event.newValues.makeVariables(for: cardId),
           oldVariables: event.oldValues.makeVariables(for: cardId)
         )
       }
-    }.dispose(in: autodisposePool)
+    }.dispose(in: disposePool)
   }
 
   private func makeCardIdTriggersPairsForEvent(
@@ -63,7 +65,7 @@ public final class DivTriggersStorage {
     tryRunTriggerActions(
       triggers: triggers,
       cardId: cardId,
-      changesVariablesNames: Set(variables.keys),
+      changedVariablesNames: Set(variables.keys),
       newVariables: variables,
       oldVariables: [:]
     )
@@ -72,16 +74,18 @@ public final class DivTriggersStorage {
   private func tryRunTriggerActions(
     triggers: [DivTrigger],
     cardId: DivCardID,
-    changesVariablesNames: Set<DivVariableName>,
+    changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
     oldVariables: DivVariables
   ) {
     triggers.forEach { trigger in
       if trigger.shouldPerformActions(
-        for: changesVariablesNames,
+        cardId: cardId,
+        changedVariablesNames: changedVariablesNames,
         newVariables: newVariables,
         oldVariables: oldVariables,
-        persistentValuesStorage: persistentValuesStorage
+        persistentValuesStorage: persistentValuesStorage,
+        reporter: reporter
       ) {
         trigger.actions.forEach {
           actionHandler?.handle(
@@ -120,23 +124,36 @@ private func makeChangedCardIds(
 }
 
 extension DivTrigger {
-  func shouldPerformActions(
-    for changedVariablesNames: Set<DivVariableName>,
+  fileprivate func shouldPerformActions(
+    cardId: DivCardID,
+    changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
     oldVariables: DivVariables,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
   ) -> Bool {
-    let resolverWithNewVariables = ExpressionResolver(variables: newVariables, persistentValuesStorage: persistentValuesStorage)
-    guard
-      !condition.variablesNames.intersection(changedVariablesNames).isEmpty,
-      resolveCondition(resolverWithNewVariables) ?? false
-    else { return false }
+    if condition.variablesNames.intersection(changedVariablesNames).isEmpty {
+      return false
+    }
+
+    let resolverWithNewVariables = ExpressionResolver(
+      variables: newVariables,
+      persistentValuesStorage: persistentValuesStorage,
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+    )
+    guard resolveCondition(resolverWithNewVariables) ?? false else {
+      return false
+    }
 
     switch resolveMode(resolverWithNewVariables) {
     case .onVariable:
       return true
     case .onCondition:
-      let resolverWithOldVariables = ExpressionResolver(variables: oldVariables, persistentValuesStorage: persistentValuesStorage)
+      let resolverWithOldVariables = ExpressionResolver(
+        variables: oldVariables,
+        persistentValuesStorage: persistentValuesStorage,
+        errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+      )
       return !(resolveCondition(resolverWithOldVariables) ?? false)
     }
   }

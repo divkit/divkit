@@ -13,6 +13,7 @@ final class DivTimerController {
     case paused
   }
 
+  private let cardId: DivCardID
   private let divTimer: DivTimer
   private let timerScheduler: Scheduling
   private let timeMeasuring: TimeMeasuring
@@ -20,6 +21,8 @@ final class DivTimerController {
   private let updateVariable: UpdateVariable
   private let updateCard: UpdateCard
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let reporter: DivReporter
+
   private(set) var state: State = .stopped
 
   private var savedDuration: TimeInterval?
@@ -31,14 +34,17 @@ final class DivTimerController {
   private var tickBeforeEndIsNeeded = false
 
   init(
+    cardId: DivCardID,
     divTimer: DivTimer,
     timerScheduler: Scheduling,
     timeMeasuring: TimeMeasuring,
     runActions: @escaping RunActions,
     updateVariable: @escaping UpdateVariable,
     updateCard: @escaping UpdateCard,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
   ) {
+    self.cardId = cardId
     self.divTimer = divTimer
     self.timerScheduler = timerScheduler
     self.timeMeasuring = timeMeasuring
@@ -46,6 +52,7 @@ final class DivTimerController {
     self.updateVariable = updateVariable
     self.updateCard = updateCard
     self.persistentValuesStorage = persistentValuesStorage
+    self.reporter = reporter
   }
 
   public func start(variables: DivVariables = [:]) {
@@ -53,7 +60,11 @@ final class DivTimerController {
       DivKitLogger.error("Timer '\(divTimer.id)' can't start because it has state '\(state)'.")
       return
     }
-    let expressionResolver = ExpressionResolver(variables: variables, persistentValuesStorage: persistentValuesStorage)
+    let expressionResolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: persistentValuesStorage,
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+    )
     guard divTimer.parametersAreValid(expressionResolver) else {
       DivKitLogger.failure("Timer '\(divTimer.id)' is not valid.")
       return

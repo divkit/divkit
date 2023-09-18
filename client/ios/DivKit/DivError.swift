@@ -48,7 +48,6 @@ extension DivError {
 extension DivError {
   public var prettyMessage: String {
     return "\(message)" +
-    "\nKind: \(kind)" +
     "\nLevel: \(level)" +
     "\nPath: \(path)" +
     (

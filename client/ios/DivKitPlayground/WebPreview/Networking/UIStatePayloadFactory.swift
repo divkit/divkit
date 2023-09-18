@@ -21,8 +21,12 @@ final class UIStatePayloadFactory {
     self.deviceInfo = deviceInfo
   }
 
-  func updateErrors(errors: [DivError]) {
-    self.errors = errors.map(UIStatePayload.Error.init)
+  func addError(_ error: DivError) {
+    errors.append(UIStatePayload.Error(error))
+  }
+
+  func resetErrors() {
+    errors = []
   }
 
   func makePayload(
@@ -56,7 +60,7 @@ extension UIStatePayload.Error {
   }
 
   init(_ error: DivError) {
-    message = error.prettyMessage
+    message = error.description
     level = .init(error.level)
   }
 }

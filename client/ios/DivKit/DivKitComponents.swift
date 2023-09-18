@@ -25,6 +25,7 @@ public final class DivKitComponents {
   public let layoutDirection: UserInterfaceLayoutDirection
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
+  public let reporter: DivReporter
   public let safeAreaManager: DivSafeAreaManager
   public let stateManagement: DivStateManagement
   public let showToolip: DivActionURLHandler.ShowTooltipAction?
@@ -93,6 +94,7 @@ public final class DivKitComponents {
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
+    reporter: DivReporter? = nil,
     showTooltip: DivActionURLHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     tooltipManager: TooltipManager? = nil,
@@ -110,6 +112,8 @@ public final class DivKitComponents {
     self.fontProvider = fontProvider ?? DefaultFontProvider()
     self.layoutDirection = layoutDirection
     self.playerFactory = playerFactory ?? defaultPlayerFactory
+    let reporter = reporter ?? DefaultDivReporter()
+    self.reporter = reporter
     self.showToolip = showTooltip
     self.stateManagement = stateManagement
     let urlHandler = urlHandler ?? DivUrlHandlerDelegate(urlOpener)
@@ -171,20 +175,23 @@ public final class DivKitComponents {
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
       urlHandler: urlHandler,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter
     )
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
       actionHandler: actionHandler,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter
     )
 
     timerStorage = DivTimerStorage(
       variablesStorage: variablesStorage,
       actionHandler: actionHandler,
       updateCard: updateCard,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter
     )
 
     weakActionHandler = actionHandler

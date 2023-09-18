@@ -25,14 +25,12 @@ public struct DebugParams {
   }
 
   public let isDebugInfoEnabled: Bool
-  public let processErrors: ResultAction<(cardId: DivCardID, errors: [DivError])>
   public let processMeasurements: ResultAction<(cardId: DivCardID, measurements: Measurements)>
   public let showDebugInfo: (ViewType) -> Void
   public let errorCounterInsets: EdgeInsets
 
   public init(
     isDebugInfoEnabled: Bool = false,
-    processDivKitError: @escaping ResultAction<(cardId: DivCardID, errors: [DivError])> = { _ in },
     processMeasurements: @escaping ResultAction<(cardId: DivCardID, measurements: Measurements)> =
       { _ in },
     showDebugInfo: @escaping (ViewType) -> Void = DebugParams.showDebugInfo(_:),
@@ -42,7 +40,6 @@ public struct DebugParams {
     self.showDebugInfo = showDebugInfo
     self.errorCounterInsets = errorCounterInsets
     self.processMeasurements = processMeasurements
-    self.processErrors = processDivKitError
   }
 }
 

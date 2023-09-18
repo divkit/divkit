@@ -14,6 +14,7 @@ public final class DivActionHandler {
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let reporter: DivReporter
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -22,7 +23,8 @@ public final class DivActionHandler {
     trackVisibility: @escaping TrackVisibility,
     trackDisappear: @escaping TrackVisibility,
     variablesStorage: DivVariablesStorage,
-    persistentValuesStorage: DivPersistentValuesStorage
+    persistentValuesStorage: DivPersistentValuesStorage,
+    reporter: DivReporter
   ) {
     self.divActionURLHandler = divActionURLHandler
     self.urlHandler = urlHandler
@@ -31,6 +33,7 @@ public final class DivActionHandler {
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
     self.persistentValuesStorage = persistentValuesStorage
+    self.reporter = reporter
   }
 
   public convenience init(
@@ -46,7 +49,8 @@ public final class DivActionHandler {
     trackDisappear: @escaping TrackVisibility = { _, _ in },
     performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _, _, _ in },
     urlHandler: DivUrlHandler,
-    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage()
+    persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
+    reporter: DivReporter? = nil
   ) {
     self.init(
       divActionURLHandler: DivActionURLHandler(
@@ -65,7 +69,8 @@ public final class DivActionHandler {
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       variablesStorage: variablesStorage,
-      persistentValuesStorage: persistentValuesStorage
+      persistentValuesStorage: persistentValuesStorage,
+      reporter: reporter ?? DefaultDivReporter()
     )
   }
 
@@ -101,7 +106,11 @@ public final class DivActionHandler {
     sender: AnyObject?
   ) {
     let variables = variablesStorage.makeVariables(for: cardId)
-    let expressionResolver = ExpressionResolver(variables: variables, persistentValuesStorage: persistentValuesStorage)
+    let expressionResolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: persistentValuesStorage,
+      errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
+    )
     if let url = action.resolveUrl(expressionResolver) {
       let isDivActionURLHandled = divActionURLHandler.handleURL(
         url,
