@@ -1944,6 +1944,24 @@
       "file": "state/default_state_id.json"
     },
     {
+      "title": "state_id_variable",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Open example",
+        "Click buttons to change between 2nd and 3rd states"
+      ],
+      "expected_results": [
+        "Second state should be shown",
+        "All buttons should change variable value, also buttons with the 'by variable' text should perform the same as `by action` buttons"
+      ],
+      "file": "state/state_variable.json"
+    },
+    {
       "title": "Tooltips",
       "tags": [
         "Tooltips",

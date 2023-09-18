@@ -9,6 +9,8 @@ export interface State {
 export interface DivStateData extends DivBaseData, DivActionableData {
     type: 'state';
     states: State[];
+    state_id_variable?: string;
+    /** @deprecated */
     div_id?: string;
     default_state_id?: string;
     // transition_animation_selector

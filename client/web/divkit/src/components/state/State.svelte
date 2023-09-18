@@ -14,6 +14,7 @@
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
+    import { createVariable } from '../../expressions/variable';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import TooltipView from '../tooltip/Tooltip.svelte';
@@ -139,120 +140,123 @@
 
     const stateId = json.div_id || json.id;
 
+    async function setState(stateId: string) {
+        if (selectedId === stateId) {
+            return;
+        }
+
+        rootCtx.setRunning('stateChange', true);
+
+        const wasIds = new Set(childrenIds);
+
+        animationList.forEach(it => {
+            if (it.resolvePromise) {
+                it.resolvePromise();
+            }
+        });
+        animationList = [];
+        let transitionsOutToRun: AnimationItem[] = [];
+        if (animationRoot) {
+            const rootBbox = animationRoot.getBoundingClientRect();
+            transitionsOutToRun = childrenWithTransitionOut
+                .map(it => getItemAnimation(rootBbox, it, 'out'));
+        }
+        childrenWithTransitionChange.forEach(child => {
+            transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
+        });
+        childrenWithTransitionIn = [];
+        childrenWithTransitionOut = [];
+        childrenWithTransitionChange = [];
+
+        const newState = items.find(it => it.state_id === stateId) || null;
+        if (newState) {
+            selectedId = stateId;
+            stateVariable?.setValue(selectedId);
+            selectedState = newState;
+        } else {
+            rootCtx.logError(wrapError(new Error('Cannot find state with id'), {
+                additional: {
+                    stateId
+                }
+            }));
+        }
+
+        await tick();
+
+        if (!animationRoot) {
+            return;
+        }
+        const rootBbox = animationRoot.getBoundingClientRect();
+
+        let transitionsInToRun: AnimationItem[] =
+            childrenWithTransitionIn.filter(it => {
+                if (it.json.id && !wasIds.has(it.json.id)) {
+                    return true;
+                }
+                it.resolvePromise?.();
+                return false;
+            })
+                .map(it => getItemAnimation(rootBbox, it, 'in'));
+
+        transitionsOutToRun = transitionsOutToRun.filter(it => {
+            if (it.json.id && !childrenIds.has(it.json.id)) {
+                return true;
+            }
+            it.resolvePromise?.();
+            return false;
+        });
+
+        const inOutList: AnimationItem[] = transitionsOutToRun.concat(transitionsInToRun);
+        const maxDuration = inOutList.reduce((acc: number, item: AnimationItem) => {
+            return Math.max(
+                acc,
+                calcMaxDuration(item.transitions)
+            );
+        }, 0);
+
+        const changeList: ChangeBoundsItem[] = childrenWithTransitionChange
+            .filter(child => transitionChangeBoxes.has(child.id))
+            .map(child => {
+                const res: ChangeBoundsItem = {
+                    json: {
+                        ...child.json,
+                        margins: undefined,
+                        width: { type: 'match_parent' },
+                        height: { type: 'match_parent' },
+                    },
+                    templateContext: child.templateContext,
+                    rootBbox,
+                    beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
+                    afterBbox: child.node.getBoundingClientRect(),
+                    node: child.node,
+                    transition: getTransitionChange(child.transitions) as ChangeBoundsTransition,
+                    resolvePromise: child.resolvePromise
+                };
+
+                return res;
+            });
+
+        animationList = [
+            ...inOutList.map(it => {
+                return {
+                    ...it,
+                    maxDuration
+                };
+            }),
+            ...changeList
+        ];
+
+        transitionChangeBoxes.clear();
+
+        rootCtx.setRunning('stateChange', false);
+    }
+
     if (!stateId) {
         hasError = true;
         rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
     } else if (!layoutParams?.fakeElement) {
         stateCtx.registerInstance(stateId, {
-            async setState(stateId: string) {
-                if (selectedId === stateId) {
-                    return;
-                }
-
-                rootCtx.setRunning('stateChange', true);
-
-                const wasIds = new Set(childrenIds);
-
-                animationList.forEach(it => {
-                    if (it.resolvePromise) {
-                        it.resolvePromise();
-                    }
-                });
-                animationList = [];
-                let transitionsOutToRun: AnimationItem[] = [];
-                if (animationRoot) {
-                    const rootBbox = animationRoot.getBoundingClientRect();
-                    transitionsOutToRun = childrenWithTransitionOut
-                        .map(it => getItemAnimation(rootBbox, it, 'out'));
-                }
-                childrenWithTransitionChange.forEach(child => {
-                    transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
-                });
-                childrenWithTransitionIn = [];
-                childrenWithTransitionOut = [];
-                childrenWithTransitionChange = [];
-
-                const newState = items.find(it => it.state_id === stateId) || null;
-                if (newState) {
-                    selectedId = stateId;
-                    selectedState = newState;
-                } else {
-                    rootCtx.logError(wrapError(new Error('Cannot find state with id'), {
-                        additional: {
-                            stateId
-                        }
-                    }));
-                }
-
-                await tick();
-
-                if (!animationRoot) {
-                    return;
-                }
-                const rootBbox = animationRoot.getBoundingClientRect();
-
-                let transitionsInToRun: AnimationItem[] =
-                    childrenWithTransitionIn.filter(it => {
-                        if (it.json.id && !wasIds.has(it.json.id)) {
-                            return true;
-                        }
-                        it.resolvePromise?.();
-                        return false;
-                    })
-                        .map(it => getItemAnimation(rootBbox, it, 'in'));
-
-                transitionsOutToRun = transitionsOutToRun.filter(it => {
-                    if (it.json.id && !childrenIds.has(it.json.id)) {
-                        return true;
-                    }
-                    it.resolvePromise?.();
-                    return false;
-                });
-
-                const inOutList: AnimationItem[] = transitionsOutToRun.concat(transitionsInToRun);
-                const maxDuration = inOutList.reduce((acc: number, item: AnimationItem) => {
-                    return Math.max(
-                        acc,
-                        calcMaxDuration(item.transitions)
-                    );
-                }, 0);
-
-                const changeList: ChangeBoundsItem[] = childrenWithTransitionChange
-                    .filter(child => transitionChangeBoxes.has(child.id))
-                    .map(child => {
-                        const res: ChangeBoundsItem = {
-                            json: {
-                                ...child.json,
-                                margins: undefined,
-                                width: { type: 'match_parent' },
-                                height: { type: 'match_parent' },
-                            },
-                            templateContext: child.templateContext,
-                            rootBbox,
-                            beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
-                            afterBbox: child.node.getBoundingClientRect(),
-                            node: child.node,
-                            transition: getTransitionChange(child.transitions) as ChangeBoundsTransition,
-                            resolvePromise: child.resolvePromise
-                        };
-
-                        return res;
-                    });
-
-                animationList = [
-                    ...inOutList.map(it => {
-                        return {
-                            ...it,
-                            maxDuration
-                        };
-                    }),
-                    ...changeList
-                ];
-
-                transitionChangeBoxes.clear();
-
-                rootCtx.setRunning('stateChange', false);
-            },
+            setState,
             getChild(id: string): StateInterface | undefined {
                 if (childStateMap && childStateMap.has(id)) {
                     return childStateMap.get(id);
@@ -403,6 +407,10 @@
     let selectedId: string | undefined;
     let selectedState: State | null = null;
     const jsonDefaultStateId = rootCtx.getJsonWithVars(json.default_state_id);
+    const stateVariableName = json.state_id_variable;
+    const stateVariable = stateVariableName ?
+        rootCtx.getVariable(stateVariableName, 'string') :
+        null;
     let inited = false;
     function initDefaultState(items: State[]): void {
         if (inited) {
@@ -411,8 +419,9 @@
         inited = true;
 
         if (items.length) {
-            if (jsonDefaultStateId) {
-                selectedId = jsonDefaultStateId;
+            const defaultVal = stateVariable?.getValue() || jsonDefaultStateId;
+            if (defaultVal) {
+                selectedId = defaultVal;
                 selectedState = items.find(it => it.state_id === selectedId) || null;
                 if (!selectedState) {
                     rootCtx.logError(wrapError(new Error('Cannot find state for default_state_id'), {
@@ -424,6 +433,13 @@
             } else {
                 selectedState = items[0];
                 selectedId = selectedState.state_id;
+            }
+
+            if (stateVariable) {
+                stateVariable.setValue(selectedId);
+                stateVariable.subscribe(val => {
+                    setState(val);
+                });
             }
         }
     }

@@ -84,7 +84,10 @@
         "state_id_variable": {
           "$ref": "div-variable-name.json",
           "$description": "translations.json#/div_state_state_id_variable",
-          "platforms": []
+          "platforms": [
+            "web",
+            "android"
+          ]
         },
         "div_id": {
           "type": "string",
