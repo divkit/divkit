@@ -9,7 +9,7 @@ def publicationType = PublicationType.fromString(project.findProperty("publicati
 ext {
     minSdkVersion = 21
     compileSdkVersion = 34
-    targetSdkVersion = 31
+    targetSdkVersion = 34
     buildToolsVersion = "34.0.0"
 
     divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix()}"
