@@ -2,7 +2,9 @@
 
 package com.yandex.div.core.view2.divs.widgets
 
+import android.R.attr.src
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.ScriptIntrinsicBlur
@@ -10,6 +12,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -41,8 +44,10 @@ internal fun Bitmap.applyFilters(
         )
         for (filter in filters) {
             when (filter) {
-                is DivFilter.Blur -> bitmap =
-                    bitmap.getBlurredBitmap(filter.value, component, resolver, it.resources.displayMetrics)
+                is DivFilter.Blur -> bitmap = bitmap.getBlurredBitmap(filter.value, component, resolver, it.resources.displayMetrics)
+                is DivFilter.RtlMirror -> if (target.isLayoutRtl()) {
+                    bitmap = bitmap.getMirroredBitmap()
+                }
             }
         }
         actionAfterFilters(bitmap)
@@ -83,4 +88,13 @@ internal fun Bitmap.getBlurredBitmap(
     }
     output.copyTo(bitmap)
     return bitmap
+}
+
+internal fun Bitmap.getMirroredBitmap(): Bitmap {
+    val mirrorMatrix = Matrix()
+    mirrorMatrix.preScale(-1f, 1f)
+
+    val output: Bitmap = Bitmap.createBitmap(this, 0, 0, getWidth(), getHeight(), mirrorMatrix, false)
+    output.density = DisplayMetrics.DENSITY_DEFAULT
+    return output
 }

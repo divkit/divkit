@@ -274,7 +274,7 @@ internal class DivBackgroundBinder @Inject constructor(
 
     private fun DivFilter.toBackgroundState(resolver: ExpressionResolver) = when (this) {
         is DivFilter.Blur -> DivBackgroundState.Image.Filter.Blur(value.radius.evaluate(resolver).toIntSafely(), this)
-        is DivFilter.RtlMirror -> DivBackgroundState.Image.Filter.RTLMirror(this)
+        is DivFilter.RtlMirror -> DivBackgroundState.Image.Filter.RtlMirror(this)
     }
 
     private sealed class DivBackgroundState {
@@ -332,11 +332,11 @@ internal class DivBackgroundBinder @Inject constructor(
         ): DivBackgroundState() {
             sealed class Filter {
                 data class Blur(val radius: Int, val div: DivFilter.Blur) : Filter()
-                data class RTLMirror(val div: DivFilter.RtlMirror) : Filter()
+                data class RtlMirror(val div: DivFilter.RtlMirror) : Filter()
 
                 fun toDiv(): DivFilter = when (this) {
                     is Blur -> div
-                    is RTLMirror -> div
+                    is RtlMirror -> div
                 }
             }
 

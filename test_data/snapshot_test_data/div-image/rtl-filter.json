@@ -1,0 +1,34 @@
+{
+    "description": "Image with RTL mirror filter",
+    "platforms": [
+        "android"
+    ],
+    "configuration": {
+        "layout_direction": "rtl"
+    },
+    "templates": {},
+    "card": {
+        "log_id": "snapshot_test_card",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "image",
+                    "image_url": "https://yastatic.net/s3/home/divkit/gradient.png",
+                    "height": {
+                        "type": "fixed",
+                        "value": 50
+                    },
+                    "width": {
+                        "type": "fixed",
+                        "value": 300
+                    },
+                    "scale": "fill",
+                    "filters": [{
+                        "type": "rtl_mirror"
+                    }]
+                }
+            }
+        ]
+    }
+}
