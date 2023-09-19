@@ -262,6 +262,7 @@ class Entity(Declarable):
 
     def __init__(self,
                  name: str,
+                 original_name: str,
                  dictionary: Dict[str, any],
                  location: ElementLocation,
                  mode: GenerationMode,
@@ -273,7 +274,7 @@ class Entity(Declarable):
         self._root_entity: bool = dictionary.get('root_entity', False)
         self._description: str = dictionary.get('description', '')
         self._description_object: Dict[str, str] = dictionary.get('description_translations', {})
-        self._original_name: str = name
+        self._original_name: str = original_name
         self._generation_mode: GenerationMode = mode
         self._errors_collector_enabled: bool = not mode.is_template and name in config.errors_collectors
 
@@ -616,7 +617,15 @@ class EntityEnumeration(Declarable):
         for name, obj in self._entities:
             new_obj = obj or next((d for d in global_objects if name in [d.name, d.resolved_name, d.original_name]),
                                   None)
+
             new_name = name
+
+            # fixing name with alias for templates
+            if self.mode == GenerationMode.TEMPLATE and new_obj is None:
+                common_entity = next((d for d in global_objects if name == d.original_name + TEMPLATE_SUFFIX), None)
+                if common_entity is not None:
+                    new_obj = next((d for d in global_objects if d.name == common_entity.name + TEMPLATE_SUFFIX), None)
+
             if new_obj is not None:
                 new_name = new_obj.name
             new_entities.append((new_name, new_obj))

@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_copy_to_clipboard",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "copy_to_clipboard"
+      ]
+    },
+    "content": {
+      "$ref": "div-action-copy-to-clipboard-content.json"
+    }
+  },
+  "required": [
+    "type",
+    "content"
+  ]
+}

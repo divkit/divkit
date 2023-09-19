@@ -196,6 +196,7 @@ def entity_build(name: str,
                  config: Config.GenerationConfig) -> List[Entity]:
     def make_result(mode: GenerationMode) -> Entity:
         return Entity(name=name,
+                      original_name=name,
                       dictionary=dictionary,
                       location=location,
                       mode=mode,
@@ -227,6 +228,7 @@ def type_property_build(dictionary: Dict[str, any],
         if documentation_properties is not None:
             include_in_documentation_toc = documentation_properties.include_in_toc
         entity_enum: List[Declarable] = _entity_enumeration_build(
+            generated_entities=[],
             entities=any_of_entities,
             name=name,
             original_name=outer_name,
@@ -270,6 +272,7 @@ def type_property_build(dictionary: Dict[str, any],
         if dictionary.get('additionalProperties', False) and 'properties' not in dictionary:
             return Dictionary(), []
         entity: Entity = Entity(name=name,
+                                original_name=outer_name,
                                 dictionary=dictionary,
                                 location=location,
                                 mode=mode,

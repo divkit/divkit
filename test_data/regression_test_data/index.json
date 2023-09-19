@@ -1,6 +1,24 @@
 {
   "tests": [
     {
+      "title": "Copy to clipboard",
+      "tags": [
+        "DivAction"
+      ],
+      "platforms": [
+        "android"
+      ],
+      "steps": [
+        "Tap to copy url button and paste clipboard to input",
+        "Tap to copy string button and paste clipboard to input"
+      ],
+      "expected_results": [
+        "At input pasted url - 'https://yandex.ru'",
+        "At input pasted string - 'Copied string'"
+      ],
+      "file": "actions/copy-to-clipboard.json"
+    },
+    {
       "title": "Simple tap",
       "tags": [
         "DivAction"

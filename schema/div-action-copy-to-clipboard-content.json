@@ -1,0 +1,48 @@
+{
+  "definitions": {
+    "content_text": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text"
+          ]
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "content_url": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "url"
+          ]
+        },
+        "value": {
+          "$ref": "common.json#/url"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#definitions/content_text"
+    },
+    {
+      "$ref": "#definitions/content_url"
+    }
+  ]
+}

@@ -2194,5 +2194,9 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+  },
+  "div_action_copy_to_clipboard": {
+    "en": "Copy data to clipboard",
+    "ru": "Копирует данные в буфер обмена"
   }
 }

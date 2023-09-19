@@ -11,6 +11,9 @@
     },
     {
       "$ref": "div-action-focus-element.json"
+    },
+    {
+      "$ref": "div-action-copy-to-clipboard.json"
     }
   ]
 }
