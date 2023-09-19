@@ -69,13 +69,17 @@ public final class DivKitComponents {
   /// patches.
   ///   - requestPerformer: An optional `URLRequestPerforming` object that performs URL requests for
   /// data retrieval.
+  ///   - reporter: An optional `DivReporter` object that allows you to learn about actions and
+  /// errors that occur in the layout.
   ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
   ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
   /// states.
   ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
   /// display of tooltips.
-  ///   - trackVisibility: A closure that tracks the visibility of elements.
-  ///   - trackDisappear: A closure that tracks the disappearance of elements.
+  ///   - trackVisibility: A closure that tracks the visibility of elements. Deprecated. Use
+  /// ``reporter`` instead.
+  ///   - trackDisappear: A closure that tracks the disappearance of elements. Deprecated. Use
+  /// ``reporter`` instead.
   ///   - updateCardAction: Deprecated. This parameter is deprecated, use ``updateCardSignal``
   /// instead.
   ///   - playerFactory: An optional `PlayerFactory` object responsible for creating custom video
@@ -99,7 +103,9 @@ public final class DivKitComponents {
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
+    // remove in next major release
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
+    // remove in next major release
     updateCardAction: UpdateCardAction? = nil, // remove in next major release
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler? = nil,

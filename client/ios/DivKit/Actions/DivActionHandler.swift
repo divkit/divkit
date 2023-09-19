@@ -145,6 +145,8 @@ public final class DivActionHandler {
       logger.log(url: logUrl, referer: referer, payload: action.payload)
     }
 
+    reporter.reportAction(cardId: cardId, info: DivActionInfo(logId: action.logId, source: source))
+
     if source == .visibility {
       trackVisibility(action.logId, cardId)
     } else if source == .disappear {

@@ -11,7 +11,7 @@ final class DivReporterDelegate: DivReporter {
     self.reportError = reportError
   }
 
-  func reportError(cardId: DivCardID, error: DivError) {
+  func reportError(cardId _: DivCardID, error: DivError) {
     reportError(error)
   }
 }
