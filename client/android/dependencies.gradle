@@ -27,7 +27,7 @@ ext.versions = [
         picasso                         : '2.8',
         protobuf                        : '3.21.12',
         pulse                           : '1.0.10',
-        robolectric                     : '4.4',
+        robolectric                     : '4.8.2',
         stetho                          : '1.6.0',
         strikt                          : '0.28.2',
         tinkoffAllure                   : '2.5.1'

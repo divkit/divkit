@@ -17,6 +17,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
+import java.lang.IllegalStateException
 
 @Mockable
 internal class TriggersController(
@@ -27,18 +28,21 @@ internal class TriggersController(
     private val errorCollector: ErrorCollector,
     private val logger: Div2Logger
 ) {
-    private val executors = mutableListOf<TriggerExecutor>()
+    private val executors = mutableMapOf<List<DivTrigger>, MutableList<TriggerExecutor>>()
     private var currentView: DivViewFacade? = null
-    private var activeTriggers: List<DivTrigger> = emptyList()
+    private var activeTriggers: List<DivTrigger>? = null
 
     fun ensureTriggersSynced(divTriggers: List<DivTrigger>) {
         if (activeTriggers === divTriggers) {
             return
         }
 
+        activeTriggers = divTriggers
+
         val activeView = currentView
+
+        val activeExecutors = executors.getOrPut(divTriggers) { mutableListOf() }
         clearBinding()
-        executors.clear()
 
         divTriggers.forEach { trigger ->
             val rawExpression = trigger.condition.rawValue.toString()
@@ -49,11 +53,13 @@ internal class TriggersController(
             }
 
             findErrors(evaluable.variables)?.let {
-                Assert.fail("Invalid condition: '${trigger.condition}'", it)
+                errorCollector.logError(
+                    IllegalStateException("Invalid condition: '${trigger.condition}'", it)
+                )
                 return@forEach
             }
 
-            executors.add(TriggerExecutor(
+            activeExecutors.add(TriggerExecutor(
                 rawExpression,
                 evaluable,
                 evaluator,
@@ -79,12 +85,14 @@ internal class TriggersController(
 
     fun clearBinding() {
         currentView = null
-        executors.forEach { it.view = null }
+        executors.forEach { (_, value) -> value.forEach { it.view = null } }
     }
 
     fun onAttachedToWindow(view: DivViewFacade) {
         currentView = view
-        executors.forEach { it.view = view }
+        activeTriggers?.let {
+            executors[it]?.forEach { executor -> executor.view = view }
+        }
     }
 }
 
@@ -143,7 +151,9 @@ private class TriggerExecutor(
         }
 
         actions.forEach {
-            logger.logTrigger(viewFacade as Div2View, it)
+            (viewFacade as? Div2View)?.let { div2View ->
+                logger.logTrigger(div2View, it)
+            }
             divActionHandler.handleAction(it, viewFacade)
         }
     }
@@ -153,7 +163,6 @@ private class TriggerExecutor(
             evaluator.eval(condition)
         } catch (e: EvaluableException) {
             val exception = RuntimeException("Condition evaluation failed: '$rawExpression'!", e)
-            Assert.fail(null, exception)
             errorCollector.logError(exception)
             return false
         }

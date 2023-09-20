@@ -1,5 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: "kotlin-allopen"
 apply from: "${project.projectDir}/../publish-java.gradle"
 apply from: "${project.projectDir}/../div-tests-coverage.gradle"
 
@@ -23,6 +24,10 @@ task replJar(type: Jar, dependsOn: "testClasses") {
         attributes 'Main-Class': 'com.yandex.div.evaluable.repl.EvaluableRepl'
     }
     classifier "repl"
+}
+
+allOpen {
+    annotation("com.yandex.div.evaluable.internal.Mockable")
 }
 
 dependencies {
