@@ -79,13 +79,14 @@ internal class DivViewWrapper @JvmOverloads constructor(
         child?.layout(0, 0, right - left, bottom - top)
     }
 
-    override val border: DivBorder?
-        get() = (child as? DivBorderSupports)?.border
+    override var isDrawing: Boolean
+        get() = (child as? DivBorderSupports)?.isDrawing == true
+        set(value) {(child as? DivBorderSupports)?.isDrawing = value}
 
     override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
 
-    override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        (child as? DivBorderSupports)?.setBorder(border, resolver)
+    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
+        (child as? DivBorderSupports)?.setBorder(border, view, resolver)
     }
 }
 

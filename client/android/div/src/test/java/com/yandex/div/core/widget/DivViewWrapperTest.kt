@@ -20,26 +20,27 @@ class DivViewWrapperTest {
     private val divBorder = DivBorder()
     private val divBorderDrawer = DivBorderDrawer(context.resources.displayMetrics, mock(), mock(), divBorder)
     private val viewWithBorder = object : DivBorderSupports, View(context) {
-        override val border: DivBorder
-            get() = divBorder
+        override var isDrawing: Boolean
+            get() = false
+            set(value) {}
 
         override fun getDivBorderDrawer(): DivBorderDrawer = divBorderDrawer
 
-        override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) { }
+        override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) { }
     }
 
     @Test
     fun `test DivViewWrapper has child's border`() {
         val divViewWrapper = DivViewWrapper(context)
         divViewWrapper.addView(viewWithBorder)
-        assertSame(divBorder, divViewWrapper.border)
+        assertSame(divBorder, divViewWrapper.getDivBorderDrawer()?.border)
         assertSame(divBorderDrawer, divViewWrapper.getDivBorderDrawer())
     }
 
     @Test
     fun `test DivViewWrapper has no border when no child`() {
         val divViewWrapper = DivViewWrapper(context)
-        assertNull(divViewWrapper.border)
+        assertNull(divViewWrapper.getDivBorderDrawer()?.border)
         assertNull(divViewWrapper.getDivBorderDrawer())
     }
 }

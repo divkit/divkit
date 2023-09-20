@@ -717,40 +717,6 @@ internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     }
 }
 
-// This code is pretty hot since it's executed during binding for most of divs, so avoid creating
-// DivBorderDrawer or reuse it if possible.
-internal fun <T> T.updateBorderDrawer(
-        border: DivBorder?,
-        resolver: ExpressionResolver
-): DivBorderDrawer? where T : DivBorderSupports, T : View {
-    val currentDrawer = getDivBorderDrawer()
-    if (border == currentDrawer?.border) {
-        return currentDrawer
-    }
-
-    var newDrawer: DivBorderDrawer? = null
-    if (border == null) {
-        currentDrawer?.release()
-
-        elevation = DivBorderDrawer.NO_ELEVATION
-        clipToOutline = false
-        outlineProvider = ViewOutlineProvider.BACKGROUND
-    } else if (currentDrawer == null) {
-        if (border.isConstantlyEmpty()) {
-            elevation = DivBorderDrawer.NO_ELEVATION
-            clipToOutline = true
-            outlineProvider = ViewOutlineProvider.BOUNDS
-        } else {
-            newDrawer = DivBorderDrawer(resources.displayMetrics, this, resolver, border)
-        }
-    } else {
-        currentDrawer.setBorder(resolver, border)
-        newDrawer = currentDrawer
-    }
-    invalidate()
-    return newDrawer
-}
-
 internal fun DivBorder?.isConstantlyEmpty(): Boolean {
     this ?: return true
     if (cornerRadius != null) return false

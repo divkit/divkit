@@ -54,7 +54,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
 
     private fun View.applyBorder(border: DivBorder, resolver: ExpressionResolver) {
         if (this is DivBorderSupports) {
-            setBorder(border, resolver)
+            setBorder(border, this, resolver)
             return
         }
 

@@ -7,15 +7,12 @@ import android.view.MotionEvent
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
-import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivBorder
 import com.yandex.div2.DivPager
 
 @Mockable
@@ -23,10 +20,8 @@ internal class DivPagerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewPager2Wrapper(context, attrs, defStyleAttr), DivBorderSupports,
-        OnInterceptTouchEventListenerHost,
-    TransientView by TransientViewMixin(),
-    ExpressionSubscriber {
+) : ViewPager2Wrapper(context, attrs, defStyleAttr), DivBorderSupports by DivBorderSupportsMixin(),
+        OnInterceptTouchEventListenerHost, TransientView by TransientViewMixin(), ExpressionSubscriber {
 
     internal var div: DivPager? = null
 
@@ -35,39 +30,20 @@ internal class DivPagerView @JvmOverloads constructor(
         get() = viewPager.currentItem
         set(value) = viewPager.setCurrentItem(value, false)
 
-    private var borderDrawer: DivBorderDrawer? = null
-    override val border: DivBorder?
-        get() = borderDrawer?.border
-
-    override fun getDivBorderDrawer() = borderDrawer
-
     override val subscriptions = mutableListOf<Disposable>()
-
-    private var isDrawing = false
-
-    override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        borderDrawer = updateBorderDrawer(border, resolver)
-    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        borderDrawer?.onBoundsChanged(w, h)
+        onBoundsChanged(w, h)
     }
 
     override fun draw(canvas: Canvas) {
-        isDrawing = true
-        borderDrawer.drawClipped(canvas) { super.draw(canvas) }
-        isDrawing = false
+        drawBorderClipped(canvas) { super.draw(it) }
     }
 
     override fun dispatchDraw(canvas: Canvas) {
         drawChildrenShadows(canvas)
-
-        if (isDrawing) {
-            super.dispatchDraw(canvas)
-        } else {
-            borderDrawer.drawClipped(canvas) { super.dispatchDraw(canvas) }
-        }
+        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
@@ -77,6 +53,6 @@ internal class DivPagerView @JvmOverloads constructor(
 
     override fun release() {
         super.release()
-        borderDrawer?.release()
+        releaseBorderDrawer()
     }
 }

@@ -14,20 +14,18 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.tabs.DivTabsAdapter
-import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
-import com.yandex.div.core.view2.divs.widgets.drawClipped
+import com.yandex.div.core.view2.divs.widgets.DivBorderSupportsMixin
+import com.yandex.div.core.view2.divs.widgets.dispatchDrawBorderClipped
+import com.yandex.div.core.view2.divs.widgets.drawBorderClipped
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivBorder
 import com.yandex.div2.DivTabs
 
 @Mockable
 internal class TabsLayout
 @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : LinearLayout(context, attrs), DivBorderSupports, ExpressionSubscriber {
+) : LinearLayout(context, attrs), DivBorderSupports by DivBorderSupportsMixin(), ExpressionSubscriber {
     val titleLayout: TabTitlesLayoutView<*>
     val divider: View
     val pagerLayout: ViewPagerFixedSizeLayout
@@ -35,15 +33,7 @@ internal class TabsLayout
     var divTabsAdapter: DivTabsAdapter? = null
     var div: DivTabs? = null
 
-    private var borderDrawer: DivBorderDrawer? = null
-    override val border: DivBorder?
-        get() = borderDrawer?.border
-
-    override fun getDivBorderDrawer() = borderDrawer
-
     override val subscriptions = mutableListOf<Disposable>()
-
-    private var isDrawing = false
 
     init {
         id = R.id.div_tabs_block
@@ -106,34 +96,24 @@ internal class TabsLayout
         }
     }
 
-    override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        borderDrawer = updateBorderDrawer(border, resolver)
-    }
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        borderDrawer?.onBoundsChanged(w, h)
+        onBoundsChanged(w, h)
     }
 
     override fun draw(canvas: Canvas) {
-        isDrawing = true
-        borderDrawer.drawClipped(canvas) { super.draw(canvas) }
-        isDrawing = false
+        drawBorderClipped(canvas) { super.draw(canvas) }
     }
 
     override fun dispatchDraw(canvas: Canvas) {
         children.forEach { child ->
             (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
         }
-        if (isDrawing) {
-            super.dispatchDraw(canvas)
-        } else {
-            borderDrawer.drawClipped(canvas) { super.dispatchDraw(canvas) }
-        }
+        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(canvas) }
     }
 
     override fun release() {
         super.release()
-        borderDrawer?.release()
+        releaseBorderDrawer()
     }
 }
