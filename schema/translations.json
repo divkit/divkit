@@ -63,6 +63,10 @@
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).",
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
   },
+  "div_action_copy_to_clipboard": {
+    "en": "Copy data to clipboard",
+    "ru": "Копирует данные в буфер обмена"
+  },
   "div_action_focus_element": {
     "en": "Requests focus for element. On the web may work unstable.",
     "ru": "Запрашивает фокус для элемента. В вебе может нестабильно работать."
@@ -336,7 +340,7 @@
     "ru": "Добавление тени."
   },
   "div_border_shadow": {
-    "en": "Shadow parameters applied to the stroke of the element.",
+    "en": "Parameters of the shadow applied to the element stroke.",
     "ru": "Параметры тени, применяемой к рамке элемента."
   },
   "div_border_stroke": {
@@ -599,6 +603,10 @@
     "en": "Image filters.",
     "ru": "Фильтры для изображений."
   },
+  "div_filter_rtl_mirror": {
+    "en": "The image is mirrored if the RTL (Right-to-Left) direction is specified in the system.",
+    "ru": "Изображение зеркально отображается, в случае если в системе указан RTL (Right-to-Left)."
+  },
   "div_fixed_count": {
     "en": "Fixed number of repetitions.",
     "ru": "Фиксированное число повторов."
@@ -858,10 +866,6 @@
   "div_image_tint_mode": {
     "en": "Blend mode of the color specified in `tint_color`.",
     "ru": "Метод наложения цвета, указанного в `tint_color`."
-  },
-  "div_filter_rtl_mirror": {
-    "en": "The image is mirrored if the RTL (Right-to-Left) direction is specified in the system.",
-    "ru": "Изображение зеркально отображается, в случае если в системе указан RTL (Right-to-Left)."
   },
   "div_indicator": {
     "en": "Progress indicator for [pager](div-pager.md).",
@@ -1449,18 +1453,18 @@
   },
   "div_slider_range_end": {
     "en": "End of section.",
-    "ru": "Конец отрезка."
+    "ru": "Конец отрезка шкалы."
   },
   "div_slider_range_margins": {
-    "en": "Margins of section. Used only horizontal margins.",
-    "ru": "Отступы от отрезка. Используются только горизонтальные отступы."
+    "en": "Section margins. Only uses horizontal margins.",
+    "ru": "Отступы от отрезка шкалы. Используются только горизонтальные отступы."
   },
   "div_slider_range_start": {
     "en": "Start of section.",
-    "ru": "Начало отрезка."
+    "ru": "Начало отрезка шкалы."
   },
   "div_slider_ranges": {
-    "en": "Style of sections of a scale.",
+    "en": "Section style.",
     "ru": "Стиль для отрезков шкалы."
   },
   "div_slider_secondary_value_accessibility": {
@@ -1828,7 +1832,7 @@
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_text_range_shadow": {
-    "en": "Shadow parameters applied to a range of characters.",
+    "en": "Parameters of the shadow applied to the character range.",
     "ru": "Параметры тени, применяемой к диапазону символов."
   },
   "div_text_range_start": {
@@ -1856,7 +1860,7 @@
     "ru": "Возможность выделения и копирования текста."
   },
   "div_text_shadow": {
-    "en": "Shadow parameters applied to the text.",
+    "en": "Parameters of the shadow applied to the text.",
     "ru": "Параметры тени, применяемой к тексту."
   },
   "div_text_short": {
@@ -2194,9 +2198,5 @@
   "div_wrap_content_size_constrained": {
     "en": "The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On Android always `true`.",
     "ru": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
-  },
-  "div_action_copy_to_clipboard": {
-    "en": "Copy data to clipboard",
-    "ru": "Копирует данные в буфер обмена"
   }
 }
