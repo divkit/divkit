@@ -19,7 +19,7 @@ import org.junit.Test
     description = "Div2 recycling performance test",
     owners = ["gulevsky"],
     defaultRepeat = 31,
-    timeoutSeconds = 1200
+    timeoutSeconds = 3000
 )
 class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
     private var assets = arrayOf("div2-perf/benchmark-with-templates.json")
@@ -65,6 +65,27 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
                 )
             }
             pressBack()
+
+            waitAllMetrics(
+                "Div.Parsing.Data.Cold",
+                "Div.Parsing.Data.Warm",
+                "Div.Parsing.Templates.Cold",
+                "Div.Context.Create.Cold",
+                "Div.View.Create.Cold",
+                "Div.View.Create.Warm",
+                "Div.Binding.Cold",
+                "Div.Binding.Warm",
+                "Div.Rebinding.Cold",
+                "Div.Rebinding.Warm",
+                "Div.Render.Measure.Cold",
+                "Div.Render.Measure.Warm",
+                "Div.Render.Layout.Cold",
+                "Div.Render.Layout.Warm",
+                "Div.Render.Draw.Cold",
+                "Div.Render.Draw.Warm",
+                "Div.Render.Total.Cold",
+                "Div.Render.Total.Warm",
+            )
         }
     }
 

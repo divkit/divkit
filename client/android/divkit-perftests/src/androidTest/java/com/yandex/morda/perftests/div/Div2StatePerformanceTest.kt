@@ -16,7 +16,7 @@ import org.junit.Test
     description = "Div2 state performance test",
     owners = ["gulevsky"],
     defaultRepeat = 31,
-    timeoutSeconds = 1200
+    timeoutSeconds = 3000
 )
 class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
@@ -49,6 +49,21 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
             }
+
+            waitAllMetrics(
+                "Div.Parsing.JSON.Cold",
+                "Div.Parsing.Total",
+                "Div.View.StateSwitching",
+                "Div.Parsing.Data.Cold",
+                "Div.Parsing.Templates.Cold",
+                "Div.Context.Create.Cold",
+                "Div.View.Create.Cold",
+                "Div.Binding.Cold",
+                "Div.Render.Measure.Cold",
+                "Div.Render.Layout.Cold",
+                "Div.Render.Draw.Cold",
+                "Div.Render.Total.Cold",
+            )
         }
     }
 
@@ -91,6 +106,21 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
             }
+
+            waitAllMetrics(
+                "Div.Parsing.JSON.Cold",
+                "Div.Parsing.Total",
+                "Div.View.StateSwitching",
+                "Div.Parsing.Data.Cold",
+                "Div.Parsing.Templates.Cold",
+                "Div.Context.Create.Cold",
+                "Div.View.Create.Cold",
+                "Div.Binding.Cold",
+                "Div.Render.Measure.Cold",
+                "Div.Render.Layout.Cold",
+                "Div.Render.Draw.Cold",
+                "Div.Render.Total.Cold",
+            )
         }
     }
 }

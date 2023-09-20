@@ -17,7 +17,7 @@ import org.junit.Test
     description = "Div storage loading test",
     owners = ["edubinskaya", "i-ts", "bgubanov"],
     defaultRepeat = 31,
-    timeoutSeconds = 1200
+    timeoutSeconds = 3000
 )
 class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
     @Before
@@ -28,7 +28,7 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
     @PerfTestParameter(
         requiredMetrics = [
             "Storage.Data.Load.Cold",
-            "Storage.Templates.Parsing.Cold"
+            "Storage.Templates.Parsing.Cold",
         ]
     )
     @Test
@@ -49,12 +49,17 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
             }
+
+            waitAllMetrics(
+                "Storage.Data.Load.Cold",
+                "Storage.Templates.Parsing.Cold",
+            )
         }
     }
 
     @PerfTestParameter(
         requiredMetrics = [
-            "Storage.Data.Load.Cold"
+            "Storage.Data.Load.Cold",
         ]
     )
     @Test
@@ -77,6 +82,10 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
             }
+
+            waitAllMetrics(
+                "Storage.Data.Load.Cold",
+            )
         }
     }
 }
