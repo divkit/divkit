@@ -7,10 +7,13 @@ import Serialization
 @frozen
 public enum DivFilter {
   case divBlur(DivBlur)
+  case divFilterRtlMirror(DivFilterRtlMirror)
 
   public var value: Serializable {
     switch self {
     case let .divBlur(value):
+      return value
+    case let .divFilterRtlMirror(value):
       return value
     }
   }
@@ -22,6 +25,10 @@ extension DivFilter: Equatable {
     switch (lhs, rhs) {
     case let (.divBlur(l), .divBlur(r)):
       return l == r
+    case let (.divFilterRtlMirror(l), .divFilterRtlMirror(r)):
+      return l == r
+    default:
+      return false
     }
   }
 }

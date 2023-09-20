@@ -10,6 +10,7 @@ public final class DivVisibilityAction: DivSightAction {
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
+  public let typed: DivActionTyped?
   public let url: Expression<URL>?
   public let visibilityDuration: Expression<Int> // constraint: number >= 0; default value: 800
   public let visibilityPercentage: Expression<Int> // constraint: number > 0 && number <= 100; default value: 50
@@ -49,6 +50,9 @@ public final class DivVisibilityAction: DivSightAction {
   static let refererValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
 
+  static let typedValidator: AnyValueValidator<DivActionTyped> =
+    makeNoOpValueValidator()
+
   static let urlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
 
@@ -64,6 +68,7 @@ public final class DivVisibilityAction: DivSightAction {
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
+    typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil,
     visibilityDuration: Expression<Int>? = nil,
     visibilityPercentage: Expression<Int>? = nil
@@ -73,6 +78,7 @@ public final class DivVisibilityAction: DivSightAction {
     self.logLimit = logLimit ?? .value(1)
     self.payload = payload
     self.referer = referer
+    self.typed = typed
     self.url = url
     self.visibilityDuration = visibilityDuration ?? .value(800)
     self.visibilityPercentage = visibilityPercentage ?? .value(50)
@@ -92,12 +98,13 @@ extension DivVisibilityAction: Equatable {
     }
     guard
       lhs.referer == rhs.referer,
-      lhs.url == rhs.url,
-      lhs.visibilityDuration == rhs.visibilityDuration
+      lhs.typed == rhs.typed,
+      lhs.url == rhs.url
     else {
       return false
     }
     guard
+      lhs.visibilityDuration == rhs.visibilityDuration,
       lhs.visibilityPercentage == rhs.visibilityPercentage
     else {
       return false
@@ -115,6 +122,7 @@ extension DivVisibilityAction: Serializable {
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
+    result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     result["visibility_duration"] = visibilityDuration.toValidSerializationValue()
     result["visibility_percentage"] = visibilityPercentage.toValidSerializationValue()

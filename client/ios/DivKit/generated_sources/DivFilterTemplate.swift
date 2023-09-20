@@ -7,10 +7,13 @@ import Serialization
 @frozen
 public enum DivFilterTemplate: TemplateValue {
   case divBlurTemplate(DivBlurTemplate)
+  case divFilterRtlMirrorTemplate(DivFilterRtlMirrorTemplate)
 
   public var value: Any {
     switch self {
     case let .divBlurTemplate(value):
+      return value
+    case let .divFilterRtlMirrorTemplate(value):
       return value
     }
   }
@@ -19,6 +22,8 @@ public enum DivFilterTemplate: TemplateValue {
     switch self {
     case let .divBlurTemplate(value):
       return .divBlurTemplate(try value.resolveParent(templates: templates))
+    case let .divFilterRtlMirrorTemplate(value):
+      return .divFilterRtlMirrorTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -40,6 +45,14 @@ public enum DivFilterTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divFilterRtlMirrorTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divFilterRtlMirror(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFilterRtlMirror(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -57,6 +70,14 @@ public enum DivFilterTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivFilterRtlMirror.type:
+      let result = DivFilterRtlMirrorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divFilterRtlMirror(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFilterRtlMirror(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
@@ -70,6 +91,8 @@ extension DivFilterTemplate {
     switch blockType {
     case DivBlurTemplate.type:
       self = .divBlurTemplate(try DivBlurTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivFilterRtlMirrorTemplate.type:
+      self = .divFilterRtlMirrorTemplate(try DivFilterRtlMirrorTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-filter_template", representation: dictionary)
     }

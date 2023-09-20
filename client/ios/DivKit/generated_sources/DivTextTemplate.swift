@@ -320,6 +320,7 @@ public final class DivTextTemplate: TemplateValue {
     public let start: Field<Expression<Int>>? // constraint: number >= 0
     public let strike: Field<Expression<DivLineStyle>>?
     public let textColor: Field<Expression<Color>>?
+    public let textShadow: Field<DivShadowTemplate>?
     public let topOffset: Field<Expression<Int>>? // constraint: number >= 0
     public let underline: Field<Expression<DivLineStyle>>?
 
@@ -339,6 +340,7 @@ public final class DivTextTemplate: TemplateValue {
           start: try dictionary.getOptionalExpressionField("start"),
           strike: try dictionary.getOptionalExpressionField("strike"),
           textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
+          textShadow: try dictionary.getOptionalField("text_shadow", templateToType: templateToType),
           topOffset: try dictionary.getOptionalExpressionField("top_offset"),
           underline: try dictionary.getOptionalExpressionField("underline")
         )
@@ -361,6 +363,7 @@ public final class DivTextTemplate: TemplateValue {
       start: Field<Expression<Int>>? = nil,
       strike: Field<Expression<DivLineStyle>>? = nil,
       textColor: Field<Expression<Color>>? = nil,
+      textShadow: Field<DivShadowTemplate>? = nil,
       topOffset: Field<Expression<Int>>? = nil,
       underline: Field<Expression<DivLineStyle>>? = nil
     ) {
@@ -377,6 +380,7 @@ public final class DivTextTemplate: TemplateValue {
       self.start = start
       self.strike = strike
       self.textColor = textColor
+      self.textShadow = textShadow
       self.topOffset = topOffset
       self.underline = underline
     }
@@ -395,6 +399,7 @@ public final class DivTextTemplate: TemplateValue {
       let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
       let strikeValue = parent?.strike?.resolveOptionalValue(context: context, validator: ResolvedValue.strikeValidator) ?? .noValue
       let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
+      let textShadowValue = parent?.textShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.textShadowValidator, useOnlyLinks: true) ?? .noValue
       let topOffsetValue = parent?.topOffset?.resolveOptionalValue(context: context, validator: ResolvedValue.topOffsetValidator) ?? .noValue
       let underlineValue = parent?.underline?.resolveOptionalValue(context: context, validator: ResolvedValue.underlineValidator) ?? .noValue
       var errors = mergeErrors(
@@ -411,6 +416,7 @@ public final class DivTextTemplate: TemplateValue {
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+        textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
         topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
         underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
@@ -440,6 +446,7 @@ public final class DivTextTemplate: TemplateValue {
         start: startNonNil,
         strike: strikeValue.value,
         textColor: textColorValue.value,
+        textShadow: textShadowValue.value,
         topOffset: topOffsetValue.value,
         underline: underlineValue.value
       )
@@ -463,6 +470,7 @@ public final class DivTextTemplate: TemplateValue {
       var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
       var strikeValue: DeserializationResult<Expression<DivLineStyle>> = parent?.strike?.value() ?? .noValue
       var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
+      var textShadowValue: DeserializationResult<DivShadow> = .noValue
       var topOffsetValue: DeserializationResult<Expression<Int>> = parent?.topOffset?.value() ?? .noValue
       var underlineValue: DeserializationResult<Expression<DivLineStyle>> = parent?.underline?.value() ?? .noValue
       context.templateData.forEach { key, __dictValue in
@@ -493,6 +501,8 @@ public final class DivTextTemplate: TemplateValue {
           strikeValue = deserialize(__dictValue, validator: ResolvedValue.strikeValidator).merged(with: strikeValue)
         case "text_color":
           textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
+        case "text_shadow":
+          textShadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textShadowValidator, type: DivShadowTemplate.self).merged(with: textShadowValue)
         case "top_offset":
           topOffsetValue = deserialize(__dictValue, validator: ResolvedValue.topOffsetValidator).merged(with: topOffsetValue)
         case "underline":
@@ -523,6 +533,8 @@ public final class DivTextTemplate: TemplateValue {
           strikeValue = strikeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.strikeValidator))
         case parent?.textColor?.link:
           textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
+        case parent?.textShadow?.link:
+          textShadowValue = textShadowValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textShadowValidator, type: DivShadowTemplate.self))
         case parent?.topOffset?.link:
           topOffsetValue = topOffsetValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topOffsetValidator))
         case parent?.underline?.link:
@@ -534,6 +546,7 @@ public final class DivTextTemplate: TemplateValue {
         actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
         backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
         borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+        textShadowValue = textShadowValue.merged(with: parent.textShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.textShadowValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
@@ -549,6 +562,7 @@ public final class DivTextTemplate: TemplateValue {
         startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
         strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
         textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+        textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
         topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
         underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
@@ -578,6 +592,7 @@ public final class DivTextTemplate: TemplateValue {
         start: startNonNil,
         strike: strikeValue.value,
         textColor: textColorValue.value,
+        textShadow: textShadowValue.value,
         topOffset: topOffsetValue.value,
         underline: underlineValue.value
       )
@@ -605,6 +620,7 @@ public final class DivTextTemplate: TemplateValue {
         start: merged.start,
         strike: merged.strike,
         textColor: merged.textColor,
+        textShadow: merged.textShadow?.tryResolveParent(templates: templates),
         topOffset: merged.topOffset,
         underline: merged.underline
       )
@@ -654,6 +670,7 @@ public final class DivTextTemplate: TemplateValue {
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
   public let textGradient: Field<DivTextGradientTemplate>?
+  public let textShadow: Field<DivShadowTemplate>?
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -714,6 +731,7 @@ public final class DivTextTemplate: TemplateValue {
         textAlignmentVertical: try dictionary.getOptionalExpressionField("text_alignment_vertical"),
         textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:)),
         textGradient: try dictionary.getOptionalField("text_gradient", templateToType: templateToType),
+        textShadow: try dictionary.getOptionalField("text_shadow", templateToType: templateToType),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
         transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
@@ -774,6 +792,7 @@ public final class DivTextTemplate: TemplateValue {
     textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     textColor: Field<Expression<Color>>? = nil,
     textGradient: Field<DivTextGradientTemplate>? = nil,
+    textShadow: Field<DivShadowTemplate>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
@@ -828,6 +847,7 @@ public final class DivTextTemplate: TemplateValue {
     self.textAlignmentVertical = textAlignmentVertical
     self.textColor = textColor
     self.textGradient = textGradient
+    self.textShadow = textShadow
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -883,6 +903,7 @@ public final class DivTextTemplate: TemplateValue {
     let textAlignmentVerticalValue = parent?.textAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentVerticalValidator) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
     let textGradientValue = parent?.textGradient?.resolveOptionalValue(context: context, validator: ResolvedValue.textGradientValidator, useOnlyLinks: true) ?? .noValue
+    let textShadowValue = parent?.textShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.textShadowValidator, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
     let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true) ?? .noValue
@@ -936,6 +957,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
+      textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
@@ -998,6 +1020,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textGradient: textGradientValue.value,
+      textShadow: textShadowValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -1058,6 +1081,7 @@ public final class DivTextTemplate: TemplateValue {
     var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
     var textGradientValue: DeserializationResult<DivTextGradient> = .noValue
+    var textShadowValue: DeserializationResult<DivShadow> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -1153,6 +1177,8 @@ public final class DivTextTemplate: TemplateValue {
         textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
       case "text_gradient":
         textGradientValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivTextGradientTemplate.self).merged(with: textGradientValue)
+      case "text_shadow":
+        textShadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textShadowValidator, type: DivShadowTemplate.self).merged(with: textShadowValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -1257,6 +1283,8 @@ public final class DivTextTemplate: TemplateValue {
         textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
       case parent?.textGradient?.link:
         textGradientValue = textGradientValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivTextGradientTemplate.self))
+      case parent?.textShadow?.link:
+        textShadowValue = textShadowValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textShadowValidator, type: DivShadowTemplate.self))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
       case parent?.transform?.link:
@@ -1302,6 +1330,7 @@ public final class DivTextTemplate: TemplateValue {
       rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
       textGradientValue = textGradientValue.merged(with: parent.textGradient?.resolveOptionalValue(context: context, validator: ResolvedValue.textGradientValidator, useOnlyLinks: true))
+      textShadowValue = textShadowValue.merged(with: parent.textShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.textShadowValidator, useOnlyLinks: true))
       tooltipsValue = tooltipsValue.merged(with: parent.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true))
       transformValue = transformValue.merged(with: parent.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true))
       transitionChangeValue = transitionChangeValue.merged(with: parent.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true))
@@ -1353,6 +1382,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
       textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
       textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
+      textShadowValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_shadow", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
       transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
@@ -1415,6 +1445,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVertical: textAlignmentVerticalValue.value,
       textColor: textColorValue.value,
       textGradient: textGradientValue.value,
+      textShadow: textShadowValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -1480,6 +1511,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVertical: textAlignmentVertical ?? mergedParent.textAlignmentVertical,
       textColor: textColor ?? mergedParent.textColor,
       textGradient: textGradient ?? mergedParent.textGradient,
+      textShadow: textShadow ?? mergedParent.textShadow,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
@@ -1540,6 +1572,7 @@ public final class DivTextTemplate: TemplateValue {
       textAlignmentVertical: merged.textAlignmentVertical,
       textColor: merged.textColor,
       textGradient: merged.textGradient?.tryResolveParent(templates: templates),
+      textShadow: merged.textShadow?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),

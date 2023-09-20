@@ -10,6 +10,7 @@ public protocol DivSightAction {
   var logLimit: Expression<Int> { get } // constraint: number >= 0; default value: 1
   var payload: [String: Any]? { get }
   var referer: Expression<URL>? { get }
+  var typed: DivActionTyped? { get }
   var url: Expression<URL>? { get }
   func resolveLogLimit(_ resolver: ExpressionResolver) -> Int
   func resolveReferer(_ resolver: ExpressionResolver) -> URL?

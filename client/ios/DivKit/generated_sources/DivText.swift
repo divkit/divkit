@@ -110,6 +110,7 @@ public final class DivText: DivBase {
     public let start: Expression<Int> // constraint: number >= 0
     public let strike: Expression<DivLineStyle>?
     public let textColor: Expression<Color>?
+    public let textShadow: DivShadow?
     public let topOffset: Expression<Int>? // constraint: number >= 0
     public let underline: Expression<DivLineStyle>?
 
@@ -197,6 +198,9 @@ public final class DivText: DivBase {
     static let textColorValidator: AnyValueValidator<Color> =
       makeNoOpValueValidator()
 
+    static let textShadowValidator: AnyValueValidator<DivShadow> =
+      makeNoOpValueValidator()
+
     static let topOffsetValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -217,6 +221,7 @@ public final class DivText: DivBase {
       start: Expression<Int>,
       strike: Expression<DivLineStyle>? = nil,
       textColor: Expression<Color>? = nil,
+      textShadow: DivShadow? = nil,
       topOffset: Expression<Int>? = nil,
       underline: Expression<DivLineStyle>? = nil
     ) {
@@ -233,6 +238,7 @@ public final class DivText: DivBase {
       self.start = start
       self.strike = strike
       self.textColor = textColor
+      self.textShadow = textShadow
       self.topOffset = topOffset
       self.underline = underline
     }
@@ -280,6 +286,7 @@ public final class DivText: DivBase {
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
+  public let textShadow: DivShadow?
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
@@ -504,6 +511,9 @@ public final class DivText: DivBase {
   static let textGradientValidator: AnyValueValidator<DivTextGradient> =
     makeNoOpValueValidator()
 
+  static let textShadowValidator: AnyValueValidator<DivShadow> =
+    makeNoOpValueValidator()
+
   static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
     makeArrayValidator(minItems: 1)
 
@@ -579,6 +589,7 @@ public final class DivText: DivBase {
     textAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     textColor: Expression<Color>? = nil,
     textGradient: DivTextGradient? = nil,
+    textShadow: DivShadow? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
     transitionChange: DivChangeTransition? = nil,
@@ -632,6 +643,7 @@ public final class DivText: DivBase {
     self.textAlignmentVertical = textAlignmentVertical ?? .value(.top)
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient
+    self.textShadow = textShadow
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
     self.transitionChange = transitionChange
@@ -743,32 +755,33 @@ extension DivText: Equatable {
     guard
       lhs.textColor == rhs.textColor,
       lhs.textGradient == rhs.textGradient,
-      lhs.tooltips == rhs.tooltips
+      lhs.textShadow == rhs.textShadow
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.underline == rhs.underline
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.underline == rhs.underline,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -823,6 +836,7 @@ extension DivText: Serializable {
     result["text_alignment_vertical"] = textAlignmentVertical.toValidSerializationValue()
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_gradient"] = textGradient?.toDictionary()
+    result["text_shadow"] = textShadow?.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
@@ -913,7 +927,12 @@ extension DivText.Range: Equatable {
     }
     guard
       lhs.textColor == rhs.textColor,
-      lhs.topOffset == rhs.topOffset,
+      lhs.textShadow == rhs.textShadow,
+      lhs.topOffset == rhs.topOffset
+    else {
+      return false
+    }
+    guard
       lhs.underline == rhs.underline
     else {
       return false
@@ -963,6 +982,7 @@ extension DivText.Range: Serializable {
     result["start"] = start.toValidSerializationValue()
     result["strike"] = strike?.toValidSerializationValue()
     result["text_color"] = textColor?.toValidSerializationValue()
+    result["text_shadow"] = textShadow?.toDictionary()
     result["top_offset"] = topOffset?.toValidSerializationValue()
     result["underline"] = underline?.toValidSerializationValue()
     return result

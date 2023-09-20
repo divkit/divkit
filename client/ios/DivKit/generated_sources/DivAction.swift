@@ -40,6 +40,7 @@ public final class DivAction {
   public let menuItems: [MenuItem]? // at least 1 elements
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
+  public let typed: DivActionTyped?
   public let url: Expression<URL>?
 
   public func resolveLogUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -72,6 +73,9 @@ public final class DivAction {
   static let refererValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
 
+  static let typedValidator: AnyValueValidator<DivActionTyped> =
+    makeNoOpValueValidator()
+
   static let urlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
 
@@ -82,6 +86,7 @@ public final class DivAction {
     menuItems: [MenuItem]? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
+    typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil
   ) {
     self.downloadCallbacks = downloadCallbacks
@@ -90,6 +95,7 @@ public final class DivAction {
     self.menuItems = menuItems
     self.payload = payload
     self.referer = referer
+    self.typed = typed
     self.url = url
   }
 }
@@ -108,6 +114,11 @@ extension DivAction: Equatable {
     guard
       lhs.menuItems == rhs.menuItems,
       lhs.referer == rhs.referer,
+      lhs.typed == rhs.typed
+    else {
+      return false
+    }
+    guard
       lhs.url == rhs.url
     else {
       return false
@@ -126,6 +137,7 @@ extension DivAction: Serializable {
     result["menu_items"] = menuItems?.map { $0.toDictionary() }
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
+    result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     return result
   }

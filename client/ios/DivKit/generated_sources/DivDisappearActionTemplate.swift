@@ -11,6 +11,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
   public let logLimit: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
+  public let typed: Field<DivActionTypedTemplate>?
   public let url: Field<Expression<URL>>?
   public let visibilityPercentage: Field<Expression<Int>>? // constraint: number >= 0 && number < 100; default value: 0
 
@@ -23,6 +24,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
         logLimit: try dictionary.getOptionalExpressionField("log_limit"),
         payload: try dictionary.getOptionalField("payload"),
         referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+        typed: try dictionary.getOptionalField("typed", templateToType: templateToType),
         url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
         visibilityPercentage: try dictionary.getOptionalExpressionField("visibility_percentage")
       )
@@ -38,6 +40,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     logLimit: Field<Expression<Int>>? = nil,
     payload: Field<[String: Any]>? = nil,
     referer: Field<Expression<URL>>? = nil,
+    typed: Field<DivActionTypedTemplate>? = nil,
     url: Field<Expression<URL>>? = nil,
     visibilityPercentage: Field<Expression<Int>>? = nil
   ) {
@@ -47,6 +50,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     self.logLimit = logLimit
     self.payload = payload
     self.referer = referer
+    self.typed = typed
     self.url = url
     self.visibilityPercentage = visibilityPercentage
   }
@@ -58,6 +62,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     let logLimitValue = parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue
     let payloadValue = parent?.payload?.resolveOptionalValue(context: context, validator: ResolvedValue.payloadValidator) ?? .noValue
     let refererValue = parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.refererValidator) ?? .noValue
+    let typedValue = parent?.typed?.resolveOptionalValue(context: context, validator: ResolvedValue.typedValidator, useOnlyLinks: true) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     let visibilityPercentageValue = parent?.visibilityPercentage?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityPercentageValidator) ?? .noValue
     var errors = mergeErrors(
@@ -67,6 +72,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       logLimitValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_limit", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
       refererValue.errorsOrWarnings?.map { .nestedObjectError(field: "referer", error: $0) },
+      typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) },
       visibilityPercentageValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_percentage", error: $0) }
     )
@@ -85,6 +91,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       logLimit: logLimitValue.value,
       payload: payloadValue.value,
       referer: refererValue.value,
+      typed: typedValue.value,
       url: urlValue.value,
       visibilityPercentage: visibilityPercentageValue.value
     )
@@ -101,6 +108,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     var logLimitValue: DeserializationResult<Expression<Int>> = parent?.logLimit?.value() ?? .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value(validatedBy: ResolvedValue.payloadValidator) ?? .noValue
     var refererValue: DeserializationResult<Expression<URL>> = parent?.referer?.value() ?? .noValue
+    var typedValue: DeserializationResult<DivActionTyped> = .noValue
     var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
     var visibilityPercentageValue: DeserializationResult<Expression<Int>> = parent?.visibilityPercentage?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
@@ -117,6 +125,8 @@ public final class DivDisappearActionTemplate: TemplateValue {
         payloadValue = deserialize(__dictValue, validator: ResolvedValue.payloadValidator).merged(with: payloadValue)
       case "referer":
         refererValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.refererValidator).merged(with: refererValue)
+      case "typed":
+        typedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.typedValidator, type: DivActionTypedTemplate.self).merged(with: typedValue)
       case "url":
         urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
       case "visibility_percentage":
@@ -133,6 +143,8 @@ public final class DivDisappearActionTemplate: TemplateValue {
         payloadValue = payloadValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.payloadValidator))
       case parent?.referer?.link:
         refererValue = refererValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.refererValidator))
+      case parent?.typed?.link:
+        typedValue = typedValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.typedValidator, type: DivActionTypedTemplate.self))
       case parent?.url?.link:
         urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator))
       case parent?.visibilityPercentage?.link:
@@ -142,6 +154,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
     }
     if let parent = parent {
       downloadCallbacksValue = downloadCallbacksValue.merged(with: parent.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true))
+      typedValue = typedValue.merged(with: parent.typed?.resolveOptionalValue(context: context, validator: ResolvedValue.typedValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       disappearDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "disappear_duration", error: $0) },
@@ -150,6 +163,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       logLimitValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_limit", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
       refererValue.errorsOrWarnings?.map { .nestedObjectError(field: "referer", error: $0) },
+      typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) },
       visibilityPercentageValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_percentage", error: $0) }
     )
@@ -168,6 +182,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       logLimit: logLimitValue.value,
       payload: payloadValue.value,
       referer: refererValue.value,
+      typed: typedValue.value,
       url: urlValue.value,
       visibilityPercentage: visibilityPercentageValue.value
     )
@@ -188,6 +203,7 @@ public final class DivDisappearActionTemplate: TemplateValue {
       logLimit: merged.logLimit,
       payload: merged.payload,
       referer: merged.referer,
+      typed: merged.typed?.tryResolveParent(templates: templates),
       url: merged.url,
       visibilityPercentage: merged.visibilityPercentage
     )
