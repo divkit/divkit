@@ -15,10 +15,10 @@ import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
+import com.yandex.div.internal.viewpool.optimization.OptimizedViewPreCreationProfileRepository;
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.internal.viewpool.AdvanceViewPool;
-import com.yandex.div.internal.viewpool.ConstrainedPreCreationProfile;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionRepository;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
 import com.yandex.div.internal.viewpool.ViewCreator;
@@ -101,30 +101,35 @@ abstract class Div2Module {
     @Provides
     @DivScope
     @Nullable
-    static ConstrainedPreCreationProfile provideOptimizableViewPreCreationProfile(
-            @NonNull ViewPreCreationProfile profile
+    static PerformanceDependentSessionRepository providePerformanceDependentSessionRepository(
+            @NonNull @Named(Names.APP_CONTEXT) Context context,
+            @NonNull ViewPreCreationProfile profile,
+            @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED) boolean optimizationEnabled
     ) {
-        return profile instanceof ConstrainedPreCreationProfile ? (ConstrainedPreCreationProfile) profile : null;
+        return (optimizationEnabled && profile.getId() != null) ? new PerformanceDependentSessionRepository(context, profile) : null;
     }
 
     @Provides
     @DivScope
     @Nullable
-    static PerformanceDependentSessionRepository providePerformanceDependentSessionRepository(
+    static OptimizedViewPreCreationProfileRepository provideOptimizedPreCreationProfileRepository(
             @NonNull @Named(Names.APP_CONTEXT) Context context,
-            @Nullable ConstrainedPreCreationProfile profile
+            @NonNull ViewPreCreationProfile profile,
+            @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED) boolean optimizationEnabled
     ) {
-        return profile != null ? new PerformanceDependentSessionRepository(context, profile) : null;
+        return (optimizationEnabled && profile.getId() != null) ? new OptimizedViewPreCreationProfileRepository(context, profile) : null;
     }
 
     @Provides
     @DivScope
     @Nullable
     static ViewPreCreationProfileOptimizer provideViewPreCreationProfileOptimizer(
-            @Nullable PerformanceDependentSessionRepository repository,
+            @Nullable PerformanceDependentSessionRepository sessionRepository,
+            @Nullable OptimizedViewPreCreationProfileRepository profileRepository,
+            @NonNull ViewPreCreationProfile profile,
             @NonNull ExecutorService executorService
     ) {
-        return repository != null ? new ViewPreCreationProfileOptimizer(repository, executorService) : null;
+        return (sessionRepository != null && profileRepository != null) ? new ViewPreCreationProfileOptimizer(sessionRepository, profileRepository, profile, executorService) : null;
     }
 
     @Provides

@@ -13,8 +13,8 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.viewpool.FixedPreCreationProfile
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.templates.CachingTemplateProvider
@@ -50,7 +50,8 @@ fun divConfiguration(
         .enableViewPool(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)
         )
-        .viewPreCreationProfile(FixedPreCreationProfile())
+        .viewPreCreationProfile(ViewPreCreationProfile())
+        .enableViewPoolOptimization(true)
         .enableViewPoolProfiling(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_PROFILING_ENABLED)
         )

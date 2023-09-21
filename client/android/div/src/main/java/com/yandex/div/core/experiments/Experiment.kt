@@ -30,6 +30,9 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     VIEW_POOL_PROFILING_ENABLED(
         "view_pool_profiling_enabled"
     ),
+    VIEW_POOL_OPTIMIZATION_ENABLED(
+        "view_pool_optimization_enabled"
+    ),
     RESOURCE_CACHE_ENABLED(
         "resource_cache_enabled",
         defaultValue = true

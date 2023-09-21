@@ -14,8 +14,8 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.internal.viewpool.FixedPreCreationProfile
 import com.yandex.div.internal.viewpool.PseudoViewPool
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
@@ -61,7 +61,7 @@ internal fun viewCreator(): DivViewCreator {
         on { validate(any(), any()) } doReturn true
     }
 
-    return spy(DivViewCreator(context(), PseudoViewPool(), validator, FixedPreCreationProfile()))
+    return spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), null))
 }
 
 internal fun rootPath() = DivStatePath.parse("0")

@@ -3,6 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
 
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
 
@@ -39,6 +40,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
     implementation "androidx.transition:transition:$versions.androidx.appcompat"
     implementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
+
+    implementation "androidx.datastore:datastore:$versions.dataStore"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinSerialization"
 
     testImplementation "androidx.test:core-ktx:$versions.androidx.test"
     testImplementation "org.json:json:$versions.json"

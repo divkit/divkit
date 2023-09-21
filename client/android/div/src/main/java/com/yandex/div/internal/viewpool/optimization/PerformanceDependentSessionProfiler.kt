@@ -44,11 +44,11 @@ class PerformanceDependentSessionProfiler internal constructor(
             }
         }
     } ?: run {
-        KLog.e(TAG) { "PerformanceDependentSessionRecorder.end() needs to be called after PerformanceDependentSessionRecorder.start()" }
+        KLog.e(TAG) { "PerformanceDependentSessionProfiler.end() needs to be called after PerformanceDependentSessionProfiler.start()" }
         null
     }
 
     private companion object {
-        const val TAG = "ViewPreCreationProfileOptimizer"
+        const val TAG = "PerformanceDependentSessionProfiler"
     }
 }
