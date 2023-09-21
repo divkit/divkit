@@ -1,7 +1,8 @@
 {
   "description": "Set variable",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "div_data": {
     "templates": {

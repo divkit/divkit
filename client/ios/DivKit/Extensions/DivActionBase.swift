@@ -10,6 +10,7 @@ public protocol DivActionBase: Serializable {
   var logUrl: Expression<URL>? { get }
   var payload: [String: Any]? { get }
   var referer: Expression<URL>? { get }
+  var typed: DivActionTyped? { get }
   var url: Expression<URL>? { get }
 
   func resolveLogUrl(_ resolver: ExpressionResolver) -> URL?
