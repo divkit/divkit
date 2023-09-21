@@ -1,3 +1,9 @@
+## 28.3.0 (September 25, 2023)
+
+Additions:
+* Added `state_id_variable` support in the `state` component
+
+
 ## 27.4.0 (August 28, 2023)
 
 Additions:

@@ -1,3 +1,27 @@
+## 28.3.0
+
+# Android Client:
+Additions:
+* Added RTL-mirror filter for `DivImage`
+* Added support of ranges in `DivSlider`.
+* Added `copy_to_clipboard` typed action.
+* Added accessibility support for text ranges
+* Added android implementation of `DivImageLoader`: `PicassoDivImageLoader`/`GlideDivImageLoader` using Picasso and Glide accordingly
+
+Fixes:
+* Fixed drawing corners during transition
+* Fixed slider sticking in the beginning of moving.
+
+# iOS Client:
+Additions:
+* Implemented `space-between`, `space-around`, `space-evenly` alignments
+* Added `DivReporter` protocol.
+
+# Web Client:
+Additions:
+* Added `state_id_variable` support in the `state` component
+
+
 ## 28.2.0
 
 # Android Client:
