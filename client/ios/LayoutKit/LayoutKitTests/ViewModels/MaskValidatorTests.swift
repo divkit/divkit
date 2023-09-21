@@ -6,11 +6,13 @@ final class MaskValidatorTests: XCTestCase {
   func test_removingSymbol() {
     let validator = makeMaskValidator(alwaysVisible: false)
     let inputData = validator.formatted(rawText: "")
-
+    // "0123456789012345678"
     // "   ab cde f g hi j "
 
     XCTAssertEqual(validator.removeSymbols(at: 0, data: inputData).0, "abcdefghij")
     XCTAssertEqual(validator.removeSymbols(at: 5, data: inputData).0, "acdefghij")
+    XCTAssertEqual(validator.removeSymbols(at: 6, data: inputData).0, "abdefghij")
+    XCTAssertEqual(validator.removeSymbols(at: 8, data: inputData).0, "abcdfghij")
     XCTAssertEqual(validator.removeSymbols(at: 10, data: inputData).0, "abcdeghij")
     XCTAssertEqual(validator.removeSymbols(at: 1, data: inputData).0, "abcdefghij")
     XCTAssertEqual(validator.removeSymbols(at: 18, data: inputData).0, "abcdefghi")
@@ -19,20 +21,53 @@ final class MaskValidatorTests: XCTestCase {
   func test_removingSymbolRange() {
     let validator = makeMaskValidator(alwaysVisible: false)
     let inputData = validator.formatted(rawText: "")
-
+    // "0123456789012345678"
     // "   ab cde f g hi j "
 
-    XCTAssertEqual(validator.removeSymbols(at: 0..<3, data: inputData).0, "bcdefghij")
+    XCTAssertEqual(validator.removeSymbols(at: 7..<11, data: inputData).0, "abcghij")
+    XCTAssertEqual(validator.removeSymbols(at: 7..<10, data: inputData).0, "abcfghij")
+    XCTAssertEqual(validator.removeSymbols(at: 8..<10, data: inputData).0, "abcdfghij")
+    XCTAssertEqual(validator.removeSymbols(at: 0..<3, data: inputData).0, "abcdefghij")
     XCTAssertEqual(validator.removeSymbols(at: 0..<5, data: inputData).0, "cdefghij")
-    XCTAssertEqual(validator.removeSymbols(at: 2..<7, data: inputData).0, "efghij")
+    XCTAssertEqual(validator.removeSymbols(at: 2..<7, data: inputData).0, "defghij")
     XCTAssertEqual(validator.removeSymbols(at: 0..<18, data: inputData).0, "")
-    XCTAssertEqual(validator.removeSymbols(at: 15..<16, data: inputData).0, "abcdefghij")
+    XCTAssertEqual(validator.removeSymbols(at: 15..<16, data: inputData).0, "abcdefghj")
   }
 
-  func test_addSymbolsAtPosition() {
+  func test_cursorAfterRemovingSymbol() {
     let validator = makeMaskValidator(alwaysVisible: false)
     let inputData = validator.formatted(rawText: "")
+    // "0123456789012345678"
+    // "   ab cde f g hi j "
+    // "   01 234 5 6 78 9 "
 
+    XCTAssertEqual(validator.removeSymbols(at: 2, data: inputData).1?.cursorPosition.rawValue, 0)
+    XCTAssertEqual(validator.removeSymbols(at: 3, data: inputData).1?.cursorPosition.rawValue, 0)
+    XCTAssertEqual(validator.removeSymbols(at: 4, data: inputData).1?.cursorPosition.rawValue, 1)
+    XCTAssertEqual(validator.removeSymbols(at: 5, data: inputData).1?.cursorPosition.rawValue, 1)
+    XCTAssertEqual(validator.removeSymbols(at: 7, data: inputData).1?.cursorPosition.rawValue, 3)
+    XCTAssertEqual(validator.removeSymbols(at: 14, data: inputData).1?.cursorPosition.rawValue, 7)
+    XCTAssertEqual(validator.removeSymbols(at: 18, data: inputData).1?.cursorPosition.rawValue, 9)
+  }
+
+  func test_cursorAfterRemovingSymbolRange() {
+    let validator = makeMaskValidator(alwaysVisible: false)
+    let inputData = validator.formatted(rawText: "")
+    // "0123456789012345678"
+    // "   ab cde f g hi j "
+    // "   01 234 5 6 78 9 "
+
+    XCTAssertEqual(validator.removeSymbols(at: 7..<11, data: inputData).1?.cursorPosition.rawValue, 3)
+    XCTAssertEqual(validator.removeSymbols(at: 8..<10, data: inputData).1?.cursorPosition.rawValue, 4)
+    XCTAssertEqual(validator.removeSymbols(at: 0..<3, data: inputData).1?.cursorPosition.rawValue, 0)
+    XCTAssertEqual(validator.removeSymbols(at: 2..<7, data: inputData).1?.cursorPosition.rawValue, 0)
+    XCTAssertEqual(validator.removeSymbols(at: 15..<16, data: inputData).1?.cursorPosition.rawValue, 8)
+  }
+
+  func test_addSymbols() {
+    let validator = makeMaskValidator(alwaysVisible: false)
+    let inputData = validator.formatted(rawText: "")
+    // "0123456789012345678"
     // "   ab cde f g hi j "
 
     XCTAssertEqual(
@@ -45,11 +80,11 @@ final class MaskValidatorTests: XCTestCase {
     )
     XCTAssertEqual(
       validator.addSymbols(at: 0..<3, data: inputData, string: "123").0,
-      "123bcdefghij"
+      "123abcdefghij"
     )
     XCTAssertEqual(
       validator.addSymbols(at: 3..<5, data: inputData, string: "12").0,
-      "a12cdefghij"
+      "12cdefghij"
     )
     XCTAssertEqual(
       validator.addSymbols(at: 18..<19, data: inputData, string: "1").0,
@@ -59,6 +94,21 @@ final class MaskValidatorTests: XCTestCase {
       validator.addSymbols(at: 19..<20, data: inputData, string: "1").0,
       "abcdefghij1"
     )
+  }
+
+  func test_cursorAfterAddSymbols() {
+    let validator = makeMaskValidator(alwaysVisible: false)
+    let inputData = validator.formatted(rawText: "")
+
+    // "0123456789012345678"
+    // "   ab cde f g hi j "
+    // "   01 234 5 6 78 9 "
+
+    XCTAssertEqual(validator.addSymbols(at: 0..<1, data: inputData, string: "1").1?.cursorPosition.rawValue, 1)
+    XCTAssertEqual(validator.addSymbols(at: 5..<5, data: inputData, string: "1").1?.cursorPosition.rawValue, 3)
+    XCTAssertEqual(validator.addSymbols(at: 3..<5, data: inputData, string: "12").1?.cursorPosition.rawValue, 2)
+    XCTAssertEqual(validator.addSymbols(at: 3..<5, data: inputData, string: "123").1?.cursorPosition.rawValue, 3)
+    XCTAssertEqual(validator.addSymbols(at: 3..<5, data: inputData, string: "12345").1?.cursorPosition.rawValue, 5)
   }
 }
 

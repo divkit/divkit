@@ -291,14 +291,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
       guard let self, let position else { return }
       self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
-      if let textFieldPosition = self.singleLineInput.position(
-        from: self.singleLineInput.beginningOfDocument,
-        offset: position.rawValue
-      ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
-        self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
-          from: textFieldPosition,
-          to: textFieldPosition
-        )
+      DispatchQueue.main.async {
+        if let textFieldPosition = self.singleLineInput.position(
+          from: self.singleLineInput.beginningOfDocument,
+          offset: position.rawValue
+        ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
+          self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
+            from: textFieldPosition,
+            to: textFieldPosition
+          )
+        }
       }
     }.dispose(in: disposePool)
     maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
@@ -455,7 +457,9 @@ extension TextInputBlockView {
     if maskedViewModel != nil {
       if text == "" {
         if range.length == 0 {
-          userInputPipe.send(.clear(pos: range.upperBound))
+          if range.lowerBound > 0 {
+            userInputPipe.send(.clear(pos: range.lowerBound - 1))
+          }
         } else {
           userInputPipe
             .send(.clearRange(range: range.lowerBound..<range.upperBound))

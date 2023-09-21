@@ -19,10 +19,6 @@ public final class PhoneMaskFormatter: MaskFormatter {
     maskLoop: for element in mask {
       if element.isPlaceHolder {
         guard stringIndex < rawText.endIndex else {
-          if let rawCursorPosition, rawData.count == rawCursorPosition.cursorPosition.rawValue,
-                    rawCursorPosition.afterNonDecodingSymbols {
-            newCursorPosition = .init(rawValue: text.count)
-          }
           break
         }
         while !rawText[stringIndex].isNumber {
@@ -32,23 +28,27 @@ public final class PhoneMaskFormatter: MaskFormatter {
           }
         }
         text.append(rawText[stringIndex])
-        rawData.append(.init(char: rawText[stringIndex], index: String(text).endIndex))
+        let textString = String(text)
+        rawData.append(.init(char: rawText[stringIndex], index: textString.index(before: textString.endIndex)))
         stringIndex = rawText.index(after: stringIndex)
-        if let rawCursorPosition, rawData.count <= rawCursorPosition.cursorPosition.rawValue {
-          newCursorPosition = .init(rawValue: text.count)
-        }
       } else {
         text.append(element)
-        if let rawCursorPosition, rawData.count < rawCursorPosition.cursorPosition.rawValue {
-          newCursorPosition = .init(rawValue: text.count)
-        } else if let rawCursorPosition, rawData.count == rawCursorPosition.cursorPosition.rawValue,
-                  rawCursorPosition.afterNonDecodingSymbols {
-          newCursorPosition = .init(rawValue: text.count)
-        }
       }
     }
-
-    return InputData(text: String(text), cursorPosition: newCursorPosition, rawData: rawData)
+    let textString = String(text)
+    if let rawCursorPosition {
+      if rawData.count > rawCursorPosition.cursorPosition.rawValue {
+        let pos = rawCursorPosition.cursorPosition.rawValue
+        if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
+          newCursorPosition = .init(rawValue: textString.distance(from: textString.startIndex, to: rawData[pos].index))
+        } else {
+          newCursorPosition = .init(rawValue: textString.distance(from: textString.startIndex, to: rawData[pos - 1].index) + 1)
+        }
+      } else {
+        newCursorPosition = .init(rawValue: text.count)
+      }
+    }
+    return InputData(text: textString, cursorPosition: newCursorPosition, rawData: rawData)
   }
 
   private func findMask(for rawText: String) -> String {

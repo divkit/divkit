@@ -28,7 +28,6 @@ public class MaskedInputViewModel {
     self._rawText = rawText
     self._maskValidator = maskValidator
     self._rawCursorPosition = rawCursorData
-
     let resultSignal = Signal.combineLatest(
       rawText.currentAndNewValues.skipRepeats(),
       maskValidator.currentAndNewValues.skipRepeats(),

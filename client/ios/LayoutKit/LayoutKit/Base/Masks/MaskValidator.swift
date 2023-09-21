@@ -30,8 +30,7 @@ public final class MaskValidator: Equatable {
     }
     return (
       data.rawText,
-      removeIndex
-        .flatMap { CursorData(cursorPosition: .init(rawValue: $0), afterNonDecodingSymbols: false) }
+      CursorData(cursorPosition: .init(rawValue: removeIndex ?? 0), afterNonDecodingSymbols: false)
     )
   }
 
@@ -44,17 +43,17 @@ public final class MaskValidator: Equatable {
     let index = data.rawData.firstIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
       to: $0.index
-    ) > 0 }
+    ) >= 0 }
     return (
       String(data.rawData.filter {
         data.text.distance(
           from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
           to: $0.index
-        ) <= 0 ||
+        ) < 0 ||
           data.text.distance(
             from: data.text.index(data.text.startIndex, offsetBy: range.upperBound),
             to: $0.index
-          ) > 0
+          ) >= 0
       }.map(\.char)),
       index
         .flatMap { CursorData(cursorPosition: .init(rawValue: $0), afterNonDecodingSymbols: false) }
@@ -74,12 +73,12 @@ public final class MaskValidator: Equatable {
     let leftIndex = data.rawData.firstIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
       to: $0.index
-    ) > 0 } ?? data.rawData.count
+    ) >= 0 } ?? data.rawData.count
 
     let rightIndex = data.rawData.firstIndex { data.text.distance(
       from: data.text.index(data.text.startIndex, offsetBy: range.upperBound),
       to: $0.index
-    ) > 0 } ?? data.rawData.count
+    ) >= 0 } ?? data.rawData.count
 
     let prefix = String(data.rawData[0..<leftIndex].map(\.char))
     let suffix = String(data.rawData[rightIndex..<data.rawData.count].map(\.char))
@@ -106,7 +105,7 @@ public struct CursorData: Equatable {
 }
 
 public struct InputData {
-  public struct RawCharacter {
+  public struct RawCharacter: Equatable {
     let char: Character
     let index: String.Index
   }
