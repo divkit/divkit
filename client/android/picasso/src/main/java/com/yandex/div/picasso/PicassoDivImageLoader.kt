@@ -5,8 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageView
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
@@ -30,7 +28,6 @@ class PicassoDivImageLoader(
 ) : DivImageLoader {
 
     private val appContext = context.applicationContext
-    private val mainHandler = Handler(Looper.getMainLooper())
     private val picasso by lazy { createPicasso() }
     private val targets = TargetList()
     private val okHttp3 = OkHttpClient.Builder().cache(Cache(context.cacheDir, DISK_CACHE_SIZE)).build()
@@ -49,8 +46,7 @@ class PicassoDivImageLoader(
         val target = DownloadCallbackAdapter(imageUri, callback)
         targets.addTarget(target)
 
-        // Picasso requires starting download on the main thread
-        mainHandler.post { picasso.load(imageUri).into(target) }
+        picasso.load(imageUri).into(target)
 
         return LoadReference {
             picasso.cancelRequest(target)

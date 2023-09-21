@@ -1,6 +1,8 @@
 package com.yandex.div.core.images;
 
 import android.widget.ImageView;
+
+import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 
 /**
@@ -17,6 +19,7 @@ public interface DivImageLoader {
      * @param callback callback to invoke after image is loaded.
      * @return reference to cancel loading
      */
+    @MainThread
     @NonNull
     LoadReference loadImage(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback);
 
@@ -29,6 +32,7 @@ public interface DivImageLoader {
      * @param callback callback to invoke after image is loaded.
      * @return reference to cancel loading
      */
+    @MainThread
     @NonNull
     LoadReference loadImageBytes(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback);
 
@@ -40,6 +44,7 @@ public interface DivImageLoader {
      * @param imageView image view to set image bitmap to.
      * @return reference to cancel loading
      */
+    @MainThread
     @NonNull
     LoadReference loadImage(@NonNull String imageUrl, @NonNull ImageView imageView);
 
@@ -53,6 +58,7 @@ public interface DivImageLoader {
      * @param loadPriority loading priority.
      * @return reference to cancel loading
      */
+    @MainThread
     @NonNull
     default LoadReference loadImage(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback, @DivImagePriority int loadPriority) {
         return loadImage(imageUrl, callback);
@@ -68,6 +74,7 @@ public interface DivImageLoader {
      * @param loadPriority loading priority.
      * @return reference to cancel loading
      */
+    @MainThread
     @NonNull
     default LoadReference loadImageBytes(@NonNull String imageUrl, @NonNull DivImageDownloadCallback callback, @DivImagePriority int loadPriority) {
         return loadImageBytes(imageUrl, callback);
