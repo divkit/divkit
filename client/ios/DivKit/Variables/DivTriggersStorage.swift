@@ -18,16 +18,16 @@ public final class DivTriggersStorage {
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,
     persistentValuesStorage: DivPersistentValuesStorage,
-    reporter: DivReporter
+    reporter: DivReporter? = nil
   ) {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
     self.persistentValuesStorage = persistentValuesStorage
-    self.reporter = reporter
+    self.reporter = reporter ?? DefaultDivReporter()
 
     variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
-      cardIdTriggersPairs.forEach { (cardId, triggers) in
+      cardIdTriggersPairs.forEach { cardId, triggers in
         tryRunTriggerActions(
           triggers: triggers,
           cardId: cardId,

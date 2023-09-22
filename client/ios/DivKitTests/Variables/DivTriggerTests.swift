@@ -20,8 +20,7 @@ final class DivTriggerTests: XCTestCase {
   private lazy var triggerStorage = DivTriggersStorage(
     variablesStorage: variablesStorage,
     actionHandler: actionHandler,
-    persistentValuesStorage: DivPersistentValuesStorage(),
-    reporter: DefaultDivReporter()
+    persistentValuesStorage: DivPersistentValuesStorage()
   )
 
   private var triggersCount = 0
@@ -150,7 +149,10 @@ final class DivTriggerTests: XCTestCase {
   }
 
   func test_Triggers_WhenVariableInNestedExpressionIsChanged() throws {
-    try XCTSkipIf(true, "Test is broken. Numeric/Bool properties does not support nested expressions.")
+    try XCTSkipIf(
+      true,
+      "Test is broken. Numeric/Bool properties does not support nested expressions."
+    )
 
     let trigger = DivTrigger(
       actions: [action],
