@@ -16,6 +16,7 @@ Fixes:
 Additions:
 * Implemented `space-between`, `space-around`, `space-evenly` alignments
 * Added `DivReporter` protocol.
+* Added `set_variable` action handler.
 
 # Web Client:
 Additions:
