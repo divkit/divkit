@@ -6,6 +6,7 @@ import LayoutKit
 public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
   private var statesById: [IdAndCardId: ElementState] = [:]
+  private let lock = RWLock()
 
   public init(states: BlocksState = [:]) {
     self.states = states
@@ -17,7 +18,9 @@ public final class DivBlockStateStorage {
   }
 
   public func getStateUntyped(_ path: UIElementPath) -> ElementState? {
-    statesById[IdAndCardId(path: path)] ?? states[path]
+    lock.read {
+      statesById[IdAndCardId(path: path)] ?? states[path]
+    }
   }
 
   @inlinable
@@ -27,26 +30,36 @@ public final class DivBlockStateStorage {
 
   public func getStateUntyped(_ id: String, cardId: DivCardID) -> ElementState? {
     let idKey = IdAndCardId(id: id, cardId: cardId)
-    return statesById[idKey] ?? states.first { IdAndCardId(path: $0.key) == idKey }?.value
+    return lock.read {
+      statesById[idKey] ?? states.first { IdAndCardId(path: $0.key) == idKey }?.value
+    }
   }
 
   public func setState(path: UIElementPath, state: ElementState) {
-    statesById[IdAndCardId(path: path)] = nil
-    states[path] = state
+    lock.write {
+      statesById[IdAndCardId(path: path)] = nil
+      states[path] = state
+    }
   }
 
   public func setState(id: String, cardId: DivCardID, state: ElementState) {
-    statesById[IdAndCardId(id: id, cardId: cardId)] = state
+    lock.write {
+      statesById[IdAndCardId(id: id, cardId: cardId)] = state
+    }
   }
 
   public func reset() {
-    states = [:]
-    statesById = [:]
+    lock.write {
+      states = [:]
+      statesById = [:]
+    }
   }
 
   public func reset(cardId: DivCardID) {
-    states = states.filter { $0.key.root != cardId.rawValue }
-    statesById = statesById.filter { $0.key.cardId != cardId }
+    lock.write {
+      states = states.filter { $0.key.root != cardId.rawValue }
+      statesById = statesById.filter { $0.key.cardId != cardId }
+    }
   }
 }
 
