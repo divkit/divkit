@@ -2115,6 +2115,22 @@
         "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space"
       ],
       "file": "patch/inside_pager.json"
+    },
+    {
+      "title": "State with variable binding",
+      "tags": [
+        "DivState"
+      ],
+      "platforms": [
+        "web"
+      ],
+      "steps": [
+        "Press buttons with div-actions."
+      ],
+      "expected_results": [
+        "DivState change state."
+      ],
+      "file": "state_binding.json"
     }
   ]
 }

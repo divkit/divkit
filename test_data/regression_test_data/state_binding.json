@@ -1,0 +1,127 @@
+{
+  "templates": {
+    "element": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "type": "string",
+        "name": "state_variable",
+        "value": "some_state"
+      }
+    ],
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "state",
+              "content_alignment_vertical": "center",
+              "div_id": "state_container",
+              "state_id_variable": "state_variable",
+              "states": [
+                {
+                  "animation_in": {
+                    "name": "fade",
+                    "interpolator": "ease",
+                    "duration": 200
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "interpolator": "ease_in_out",
+                    "duration": 200
+                  },
+                  "state_id": "some_state",
+                  "div": {
+                    "type": "element",
+                    "text": "Some state"
+                  }
+                },
+                {
+                  "animation_in": {
+                    "name": "fade",
+                    "interpolator": "ease",
+                    "duration": 200
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "interpolator": "ease_in_out",
+                    "duration": 200
+                  },
+                  "state_id": "another_state",
+                  "div": {
+                    "type": "element",
+                    "text": "Another state"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "element",
+              "text": "Set state by set_state action",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_state?state_id=0/state_container/@{state_variable == 'some_state' ? 'another_state' : 'some_state'}"
+                }
+              ]
+            },
+            {
+              "type": "element",
+              "text": "Set state by set_variable action",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_variable?name=state_variable&value=@{state_variable == 'some_state' ? 'another_state' : 'some_state'}"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
