@@ -28,20 +28,20 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     }
     self.sliderModel = sliderModel
 
-    inactiveTrack = sliderModel.inactiveTrack.reuse(
-      inactiveTrack,
+    inactiveRangeTracks = inactiveRangeTracks.reused(
+      with: sliderModel.ranges.map { $0.inactiveTrack },
+      attachTo: inactiveTrackView,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      superview: sliderBackgroundView
+      renderingDelegate: renderingDelegate
     )
 
-    activeTrack = sliderModel.activeTrack.reuse(
-      activeTrack,
+    activeRangeTracks = activeRangeTracks.reused(
+      with: sliderModel.ranges.map { $0.activeTrack },
+      attachTo: activeTrackView,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate,
-      superview: sliderBackgroundView
+      renderingDelegate: renderingDelegate
     )
 
     firstThumb = sliderModel.firstThumb.block.reuse(
@@ -113,33 +113,24 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   private var pointWidth: CGFloat {
-    let stripeCount = sliderModel.maxValue - sliderModel.minValue
     let width = bounds.width - sliderModel.horizontalInset - max(
       abs(sliderModel.firstThumb.offsetX),
       abs(sliderModel.secondThumb?.offsetX ?? 0)
     )
-    if stripeCount == 0 {
+    if sliderModel.valueRange == 0 {
       return width
     } else {
-      return CGFloat(width) / CGFloat(stripeCount)
+      return CGFloat(width) / CGFloat(sliderModel.valueRange)
     }
   }
 
   private var firstThumb: BlockView?
   private var secondThumb: BlockView?
-  private var activeTrack: BlockView?
-  private var inactiveTrack: BlockView?
-  private lazy var marksView: MarksView = {
-    let view = MarksView()
-    self.insertSubview(view, at: 1)
-    return view
-  }()
-
-  private lazy var sliderBackgroundView: UIView = {
-    let view = UIView()
-    self.insertSubview(view, at: 0)
-    return view
-  }()
+  private var activeRangeTracks: [BlockView] = []
+  private var inactiveRangeTracks: [BlockView] = []
+  private lazy var inactiveTrackView = makeAndInsertView(UIView(), at: 0)
+  private lazy var activeTrackView = makeAndInsertView(UIView(), at: 1)
+  private lazy var marksView = makeAndInsertView(MarksView(), at: 2)
 
   private let recognizer = UILongPressGestureRecognizer()
   private var activeThumb: SliderThumbNumber = .first
@@ -157,6 +148,12 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     fatalError("init(coder:) has not been implemented")
   }
 
+  private func makeAndInsertView<T: UIView>(_ view: T, at position: Int) -> T {
+    view.clipsToBounds = true
+    self.insertSubview(view, at: position)
+    return view
+  }
+
   @objc private func handleTap(_ recognizer: UILongPressGestureRecognizer) {
     let location = recognizer.location(in: self)
 
@@ -166,13 +163,13 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       currentValue = clamp(
         (location.x - sliderModel.horizontalInset / 2) / pointWidth,
         min: 0.0,
-        max: CGFloat(sliderModel.maxValue - sliderModel.minValue)
+        max: CGFloat(sliderModel.valueRange)
       ) + CGFloat(sliderModel.minValue)
     case .rightToLeft:
       currentValue = CGFloat(sliderModel.maxValue) - clamp(
         (location.x - sliderModel.horizontalInset / 2) / pointWidth,
         min: 0.0,
-        max: CGFloat(sliderModel.maxValue - sliderModel.minValue)
+        max: CGFloat(sliderModel.valueRange)
       )
     @unknown default:
       assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
@@ -285,28 +282,66 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     )
 
     marksView.configuration.horizontalInset = sliderModel.horizontalInset
-    marksView.frame = CGRect(
-      x: 0,
-      y: 0,
-      width: bounds
-        .width - max(
-          abs(sliderModel.firstThumb.offsetX),
-          abs(sliderModel.secondThumb?.offsetX ?? 0)
-        ),
-      height: bounds.height
+    configureSliderView(marksView)
+
+    configureSliderView(inactiveTrackView, with: sliderModel.horizontalInset)
+    configureSliderView(activeTrackView, with: sliderModel.horizontalInset)
+
+    configureRangeViews(
+      inactiveRangeTracks,
+      with: sliderModel.ranges,
+      in: inactiveTrackView,
+      isActive: false
+    )
+    configureRangeViews(
+      activeRangeTracks,
+      with: sliderModel.ranges,
+      in: activeTrackView,
+      isActive: true
     )
 
-    sliderBackgroundView.frame = CGRect(
-      x: 0,
+    configureTracks(
+      progressFirstThumb: firstThumbProgress,
+      progressSecondThumb: sliderModel
+        .secondThumb != nil ? secondThumbProgress : CGFloat(sliderModel.minValue)
+    )
+  }
+
+  private func configureRangeViews(
+    _ rangeViews: [UIView],
+    with models: [SliderModel.RangeModel],
+    in parentView: UIView,
+    isActive: Bool
+  ) {
+    zip(rangeViews, models).forEach { view, model in
+      let rangeOfValues = CGFloat(model.end - model.start) / CGFloat(sliderModel.valueRange)
+      let rangeWidth = parentView.frame
+        .width * rangeOfValues - (model.margins.left + model.margins.right)
+      let rangeHeight = isActive ? model.activeTrack
+        .intrinsicContentHeight(forWidth: rangeWidth) : model.inactiveTrack
+        .intrinsicContentHeight(forWidth: rangeWidth)
+      view.frame = CGRect(
+        x: CGFloat(model.start - sliderModel.minValue) / CGFloat(sliderModel.valueRange) *
+          inactiveTrackView.frame.width + model.margins.left,
+        y: (sliderModel.sliderHeight - rangeHeight) / 2,
+        width: rangeWidth,
+        height: rangeHeight
+      )
+    }
+  }
+
+  private func configureSliderView(_ view: UIView, with horizontalInset: CGFloat = 0) {
+    view.frame = CGRect(
+      x: horizontalInset / 2,
       y: 0,
       width: bounds
         .width - max(
           abs(sliderModel.firstThumb.offsetX),
           abs(sliderModel.secondThumb?.offsetX ?? 0)
-        ),
+        ) - horizontalInset,
       height: sliderModel.sliderHeight
     )
-    sliderBackgroundView.center = bounds.center
+    view.center = bounds.center
       .movingX(
         by:
         (
@@ -319,55 +354,39 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
           -(sliderModel.secondThumb?.offsetX ?? 0) / 2
           : (sliderModel.secondThumb?.offsetX ?? 0) / 2
       )
-
-    configureTracks(
-      progressFirstThumb: firstThumbProgress,
-      progressSecondThumb: sliderModel
-        .secondThumb != nil ? secondThumbProgress : CGFloat(sliderModel.minValue)
-    )
   }
 
   private func configureTracks(
     progressFirstThumb: CGFloat,
     progressSecondThumb: CGFloat
   ) {
-    let makeModifiedSliderViewBounds: (CGFloat) -> CGRect = { [self] trackHeight in
-      sliderBackgroundView.bounds.insetBy(
-        dx: sliderModel.horizontalInset / 2,
-        dy: (
-          sliderModel.sliderHeight - trackHeight
-        ) / 2
-      )
-    }
-
-    inactiveTrack?.frame = makeModifiedSliderViewBounds(
-      sliderModel.inactiveTrack
-        .intrinsicContentHeight(
-          forWidth: .infinity
-        )
-    )
-
-    activeTrack?.frame = modified(makeModifiedSliderViewBounds(
-      sliderModel.activeTrack
-        .intrinsicContentHeight(
-          forWidth: .infinity
-        )
-    )) {
+    let progressFirstThumbWidth =
+      (min(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) * pointWidth
+    let progressSecondThumbWidth =
+      (max(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) * pointWidth
+    let (originX, progressWidth) = {
       switch sliderModel.layoutDirection {
       case .leftToRight:
-        $0.origin
-          .x += (min(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.minValue)) *
-          pointWidth
-        $0.size.width = abs(progressFirstThumb - progressSecondThumb) * pointWidth
+        return (progressFirstThumbWidth, progressSecondThumbWidth)
       case .rightToLeft:
-        $0.origin
-          .x -= (max(progressFirstThumb, progressSecondThumb) - CGFloat(sliderModel.maxValue)) *
-          pointWidth
-        $0.size.width = abs(progressFirstThumb - progressSecondThumb) * pointWidth
+        return (
+          inactiveTrackView.frame.width - progressSecondThumbWidth,
+          inactiveTrackView.frame.width - progressFirstThumbWidth
+        )
       @unknown default:
         assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
+        return (0, 0)
       }
-    }
+    }()
+
+    activeTrackView.cutView(originX: originX)
+
+    activeTrackView.frame = CGRect(
+      x: inactiveTrackView.frame.minX,
+      y: inactiveTrackView.frame.minY,
+      width: progressWidth,
+      height: sliderModel.sliderHeight
+    )
 
     marksView.firstThumbProgress = firstThumbProgress
     marksView.secondThumbProgress = secondThumbProgress
@@ -431,3 +450,21 @@ private enum ThumbPosition {
 }
 
 private let animationDuration = 0.3
+
+extension UIView {
+  fileprivate func cutView(originX: CGFloat) {
+    let shapeLayer = CAShapeLayer()
+    let path = CGMutablePath()
+    let rect = CGRect(
+      x: self.bounds.origin.x,
+      y: self.bounds.origin.y,
+      width: originX,
+      height: self.bounds.height
+    )
+    path.addRect(rect)
+    path.addRect(bounds)
+    shapeLayer.path = path
+    shapeLayer.fillRule = CAShapeLayerFillRule.evenOdd
+    layer.mask = shapeLayer
+  }
+}

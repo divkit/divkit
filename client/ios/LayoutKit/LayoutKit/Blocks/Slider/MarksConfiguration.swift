@@ -1,7 +1,7 @@
 import BaseTinyPublic
 import Foundation
 
-public struct MarksConfiguration {
+public struct MarksConfiguration: Equatable {
   let minValue: CGFloat
   let maxValue: CGFloat
   var horizontalInset: CGFloat = 0
@@ -33,7 +33,7 @@ public struct MarksConfiguration {
 }
 
 extension MarksConfiguration {
-  public struct RoundedRectangle {
+  public struct RoundedRectangle: Equatable {
     var size: CGSize
     let cornerRadius: CGFloat
     let color: Color
@@ -61,5 +61,14 @@ extension MarksConfiguration {
       borderWidth: 0,
       borderColor: .clear
     )
+  }
+
+  public static func ==(lhs: MarksConfiguration, rhs: MarksConfiguration) -> Bool {
+    lhs.minValue == rhs.minValue &&
+      lhs.maxValue == rhs.maxValue &&
+      lhs.horizontalInset == rhs.horizontalInset &&
+      lhs.inactiveMark == rhs.inactiveMark &&
+      lhs.activeMark == rhs.activeMark &&
+      lhs.layoutDirection == rhs.layoutDirection
   }
 }

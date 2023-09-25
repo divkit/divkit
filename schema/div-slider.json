@@ -131,7 +131,10 @@
           },
           "minItems": 1,
           "$description": "translations.json#/div_slider_ranges",
-          "platforms": []
+          "platforms": [
+            "android",
+            "ios"
+          ]
         },
         "secondary_value_accessibility": {
           "$ref": "div-accessibility.json",

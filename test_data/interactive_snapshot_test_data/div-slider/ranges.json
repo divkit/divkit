@@ -1,7 +1,8 @@
 {
   "description": "Slider with ranges",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "div_data": {
     "templates": {},

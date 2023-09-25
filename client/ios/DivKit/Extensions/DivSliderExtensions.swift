@@ -19,16 +19,42 @@ extension DivSlider: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let expressionResolver = context.expressionResolver
+
+    let firstThumbValue: Binding<Int> = thumbValueVariable.flatMap {
+      context.makeBinding(variableName: $0, defaultValue: 0)
+    } ?? .zero
+    let firstThumb = SliderModel.ThumbModel(
+      block: makeThumbBlock(
+        thumb: thumbStyle
+          .makeBlock(context: context, corners: .all),
+        textBlock: thumbTextStyle?.makeThumbTextBlock(
+          context: context,
+          value: firstThumbValue.value
+        ),
+        textOffset: thumbTextStyle.flatMap {
+          CGPoint(
+            x: $0.offset?.x.resolveValue(expressionResolver) ?? 0,
+            y: $0.offset?.y.resolveValue(expressionResolver) ?? 0
+          )
+        } ?? .zero
+      ),
+      value: firstThumbValue,
+      size: CGSize(
+        width: thumbStyle.getWidth(context: context),
+        height: thumbStyle.getHeight(context: context)
+      ),
+      offsetX: thumbTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
+      offsetY: thumbTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
+    )
     let secondThumb: SliderModel.ThumbModel?
-    if let thumbSecondaryStyle = thumbSecondaryStyle,
-       let thumbSecondaryValueVariable = thumbSecondaryValueVariable {
+    if let thumbSecondaryValueVariable = thumbSecondaryValueVariable {
       let secondThumbValue = context.makeBinding(
         variableName: thumbSecondaryValueVariable,
         defaultValue: 0
       )
       secondThumb = SliderModel.ThumbModel(
         block: makeThumbBlock(
-          thumb: thumbSecondaryStyle
+          thumb: thumbSecondaryStyle?.makeBlock(context: context, corners: .all) ?? thumbStyle
             .makeBlock(context: context, corners: .all),
           textBlock: (thumbSecondaryTextStyle ?? thumbTextStyle)?.makeThumbTextBlock(
             context: context,
@@ -43,8 +69,10 @@ extension DivSlider: DivBlockModeling {
         ),
         value: secondThumbValue,
         size: CGSize(
-          width: thumbSecondaryStyle.getWidth(context: context),
-          height: thumbSecondaryStyle.getHeight(context: context)
+          width: thumbSecondaryStyle?.getWidth(context: context) ?? thumbStyle
+            .getWidth(context: context),
+          height: thumbSecondaryStyle?.getHeight(context: context) ?? thumbStyle
+            .getHeight(context: context)
         ),
         offsetX: thumbSecondaryTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
         offsetY: thumbSecondaryTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
@@ -53,89 +81,116 @@ extension DivSlider: DivBlockModeling {
       secondThumb = nil
     }
 
-    let firstThumbValue: Binding<Int> = thumbValueVariable.flatMap {
-      context.makeBinding(variableName: $0, defaultValue: 0)
-    } ?? .zero
-
     let activeMark = makeRoundedRectangle(with: tickMarkActiveStyle, resolver: expressionResolver)
     let inactiveMark = makeRoundedRectangle(
       with: tickMarkInactiveStyle,
       resolver: expressionResolver
     )
 
+    let minValue = resolveMinValue(expressionResolver)
+    let maxValue = resolveMaxValue(expressionResolver)
+
     let marksConfiguration = MarksConfiguration(
-      minValue: CGFloat(resolveMinValue(expressionResolver)),
-      maxValue: CGFloat(resolveMaxValue(expressionResolver)),
+      minValue: CGFloat(minValue),
+      maxValue: CGFloat(maxValue),
       activeMark: activeMark ?? .empty,
       inactiveMark: inactiveMark ?? .empty,
       layoutDirection: context.layoutDirection
     )
 
+    let sliderRanges = makeRanges(ranges, with: context)
+
     let sliderModel = SliderModel(
-      firstThumb: SliderModel.ThumbModel(
-        block: makeThumbBlock(
-          thumb: thumbStyle
-            .makeBlock(context: context, corners: .all),
-          textBlock: thumbTextStyle?.makeThumbTextBlock(
-            context: context,
-            value: firstThumbValue.value
-          ),
-          textOffset: thumbTextStyle.flatMap {
-            CGPoint(
-              x: $0.offset?.x.resolveValue(expressionResolver) ?? 0,
-              y: $0.offset?.y.resolveValue(expressionResolver) ?? 0
-            )
-          } ?? .zero
-        ),
-        value: firstThumbValue,
-        size: CGSize(
-          width: thumbStyle.getWidth(context: context),
-          height: thumbStyle.getHeight(context: context)
-        ),
-        offsetX: thumbTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
-        offsetY: thumbTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
-      ),
+      firstThumb: firstThumb,
       secondThumb: secondThumb,
-      activeMarkModel: tickMarkActiveStyle.flatMap {
-        SliderModel.MarkModel(
-          block: $0.makeBlock(context: context, corners: .all),
-          size: CGSize(
-            width: $0.getWidth(context: context),
-            height: $0.getHeight(context: context)
-          )
-        )
-      },
-      inactiveMarkModel: tickMarkInactiveStyle.flatMap {
-        SliderModel.MarkModel(
-          block: $0.makeBlock(context: context, corners: .all),
-          size: CGSize(
-            width: $0.getWidth(context: context),
-            height: $0.getHeight(context: context)
-          )
-        )
-      },
-      minValue: resolveMinValue(expressionResolver),
-      maxValue: resolveMaxValue(expressionResolver),
-      activeTrack: self.trackActiveStyle.makeBlock(
-        context: context,
-        widthTrait: .resizable,
-        corners: .all
-      ),
-      inactiveTrack: self.trackInactiveStyle.makeBlock(
-        context: context,
-        widthTrait: .resizable,
-        corners: .all
-      ),
+      minValue: minValue,
+      maxValue: maxValue,
       marksConfiguration: marksConfiguration,
+      ranges: sliderRanges,
       layoutDirection: context.layoutDirection
     )
+
     let width = context.override(width: width)
     let height = context.override(height: height)
+
     return SliderBlock(
       sliderModel: sliderModel,
       widthTrait: width.makeLayoutTrait(with: expressionResolver),
       heightTrait: height.makeLayoutTrait(with: expressionResolver)
     )
+  }
+
+  private func makeRanges(
+    _ ranges: [DivSlider.Range]?,
+    with context: DivBlockModelingContext
+  ) -> [SliderModel.RangeModel] {
+    let expressionResolver = context.expressionResolver
+
+    let minValue = resolveMinValue(expressionResolver)
+    let maxValue = resolveMaxValue(expressionResolver)
+
+    var sliderRanges: [SliderModel.RangeModel] = (ranges ?? []).map { range in
+      SliderModel.RangeModel(
+        start: range.resolveStart(expressionResolver) ?? minValue,
+        end: range.resolveEnd(expressionResolver) ?? maxValue,
+        margins: range.margins.makeEdgeInsets(context: context),
+        activeTrack: range.trackActiveStyle?.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: .all
+        ) ?? trackActiveStyle.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: .all
+        ),
+        inactiveTrack: range.trackInactiveStyle?.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: .all
+        ) ?? trackInactiveStyle.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: .all
+        )
+      )
+    }
+
+    let makeBasicRange: (Int, Int, CGRect.Corners) -> SliderModel.RangeModel = { [self] in
+      SliderModel.RangeModel(
+        start: $0,
+        end: $1,
+        margins: EdgeInsets.zero,
+        activeTrack: trackActiveStyle.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: $2
+        ),
+        inactiveTrack: trackInactiveStyle.makeBlock(
+          context: context,
+          widthTrait: .resizable,
+          corners: $2
+        )
+      )
+    }
+
+    sliderRanges.sort { $0.start < $1.start }
+
+    var lastRangeEnd = minValue
+    for (index, range) in sliderRanges.enumerated() {
+      if range.start != lastRangeEnd {
+        let corner: CGRect.Corners = index == 0 ? .left : .all
+        sliderRanges.append(makeBasicRange(lastRangeEnd, range.start, corner))
+      }
+      lastRangeEnd = range.end
+    }
+    if lastRangeEnd != maxValue {
+      let corner: CGRect.Corners = sliderRanges.count == 0 ? .all : .right
+      sliderRanges.append(makeBasicRange(lastRangeEnd, maxValue, corner))
+    }
+
+    sliderRanges.sort { $0.start < $1.start }
+
+    return sliderRanges
   }
 }
 

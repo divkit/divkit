@@ -64,33 +64,63 @@ public struct SliderModel: Equatable {
     }
   }
 
+  public struct RangeModel: Equatable {
+    public let start: Int
+    public let end: Int
+    public let margins: EdgeInsets
+    public let activeTrack: Block
+    public let inactiveTrack: Block
+
+    public init(
+      start: Int,
+      end: Int,
+      margins: EdgeInsets,
+      activeTrack: Block,
+      inactiveTrack: Block
+    ) {
+      self.start = start
+      self.end = end
+      self.margins = margins
+      self.activeTrack = activeTrack
+      self.inactiveTrack = inactiveTrack
+    }
+
+    public static func ==(lhs: SliderModel.RangeModel, rhs: SliderModel.RangeModel) -> Bool {
+      lhs.start == rhs.start && lhs.end == rhs.end && lhs.activeTrack == rhs.activeTrack && lhs
+        .inactiveTrack == rhs.inactiveTrack && lhs.margins == rhs.margins
+    }
+  }
+
   public var firstThumb: ThumbModel
   public var secondThumb: ThumbModel?
 
   public let minValue: Int
   public let maxValue: Int
-  public let activeMarkModel: MarkModel?
-  public let inactiveMarkModel: MarkModel?
-  public let activeTrack: Block
-  public let inactiveTrack: Block
   public let marksConfiguration: MarksConfiguration
+  public let ranges: [RangeModel]
   public let layoutDirection: UserInterfaceLayoutDirection
+
+  public var valueRange: Int {
+    maxValue - minValue
+  }
 
   public var sliderHeight: CGFloat {
     max(
-      activeMarkModel?.size.height ?? 0,
-      inactiveMarkModel?.size.height ?? 0,
+      marksConfiguration.activeMark.size.height,
+      marksConfiguration.inactiveMark.size.height,
       firstThumb.size.height,
       secondThumb?.size.height ?? 0,
-      activeTrack.intrinsicContentHeight(forWidth: .infinity),
-      inactiveTrack.intrinsicContentHeight(forWidth: .infinity)
+      ranges.map { max(
+        $0.activeTrack.intrinsicContentHeight(forWidth: .infinity),
+        $0.inactiveTrack.intrinsicContentHeight(forWidth: .infinity)
+      ) }.max() ?? 0
     )
   }
 
   public var sliderIntrinsicWidth: CGFloat {
     let maxMarkWidth = max(
-      activeMarkModel?.size.width ?? 0,
-      inactiveMarkModel?.size.width ?? 0
+      marksConfiguration.activeMark.size.width,
+      marksConfiguration.inactiveMark.size.width
     )
     let maxThumbWidth = max(firstThumb.size.width, secondThumb?.size.width ?? 0)
     return CGFloat(maxValue - minValue + 1) * maxMarkWidth + max(0, maxThumbWidth - maxMarkWidth)
@@ -106,8 +136,8 @@ public struct SliderModel: Equatable {
 
   public var horizontalInset: CGFloat {
     max(
-      activeMarkModel?.size.width ?? 0,
-      inactiveMarkModel?.size.width ?? 0,
+      marksConfiguration.activeMark.size.width,
+      marksConfiguration.inactiveMark.size.width,
       firstThumb.size.width,
       secondThumb?.size.width ?? 0
     )
@@ -116,24 +146,18 @@ public struct SliderModel: Equatable {
   public init(
     firstThumb: ThumbModel,
     secondThumb: ThumbModel? = nil,
-    activeMarkModel: MarkModel?,
-    inactiveMarkModel: MarkModel?,
     minValue: Int,
     maxValue: Int,
-    activeTrack: Block,
-    inactiveTrack: Block,
     marksConfiguration: MarksConfiguration,
+    ranges: [RangeModel],
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   ) {
     self.firstThumb = firstThumb
     self.secondThumb = secondThumb
     self.minValue = minValue
     self.maxValue = maxValue
-    self.activeMarkModel = activeMarkModel
-    self.inactiveMarkModel = inactiveMarkModel
-    self.activeTrack = activeTrack
-    self.inactiveTrack = inactiveTrack
     self.marksConfiguration = marksConfiguration
+    self.ranges = ranges
     self.layoutDirection = layoutDirection
   }
 
@@ -141,13 +165,10 @@ public struct SliderModel: Equatable {
     SliderModel(
       firstThumb: .empty,
       secondThumb: nil,
-      activeMarkModel: nil,
-      inactiveMarkModel: nil,
       minValue: 0,
       maxValue: 0,
-      activeTrack: EmptyBlock.zeroSized,
-      inactiveTrack: EmptyBlock.zeroSized,
       marksConfiguration: .empty,
+      ranges: [],
       layoutDirection: .leftToRight
     )
   }
@@ -157,7 +178,7 @@ public struct SliderModel: Equatable {
       lhs.secondThumb == rhs.secondThumb &&
       lhs.maxValue == rhs.maxValue &&
       lhs.minValue == rhs.minValue &&
-      lhs.inactiveMarkModel == rhs.inactiveMarkModel &&
-      lhs.activeMarkModel == rhs.activeMarkModel
+      lhs.marksConfiguration == rhs.marksConfiguration &&
+      lhs.ranges == rhs.ranges
   }
 }
