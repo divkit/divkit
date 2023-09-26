@@ -370,7 +370,8 @@
         multiline,
         halign,
         valign,
-        truncate
+        truncate,
+        'has-focus-color': Boolean(focusTextColor)
     };
 
     $: innerMods = {

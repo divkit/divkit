@@ -76,6 +76,7 @@
     display: none;
 }
 
-*:focus-visible .text__inner .text-range {
+*:focus-visible .text_has-focus-color .text__inner .text-range,
+.text_has-focus-color:focus-visible .text__inner .text-range {
     color: var(--divkit-text-focus-color) !important;
 }
