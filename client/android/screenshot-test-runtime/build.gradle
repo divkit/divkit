@@ -1,5 +1,9 @@
 apply from: "${project.projectDir}/../div-library.gradle"
 
+android {
+    namespace 'com.yandex.test.screenshot'
+}
+
 dependencies {
     implementation project(path: ':ui-test-common')
 

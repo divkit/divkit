@@ -8,6 +8,8 @@ apply plugin: 'kotlinx-serialization'
 def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
 
 android {
+    namespace 'com.yandex.div'
+
     buildFeatures { buildConfig = true }
 
     defaultConfig {

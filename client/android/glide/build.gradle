@@ -2,6 +2,10 @@ apply from: "../div-library.gradle"
 apply from: "../div-tests.gradle"
 apply from: "../publish-android.gradle"
 
+android {
+    namespace "com.yandex.divkit.glide"
+}
+
 dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')

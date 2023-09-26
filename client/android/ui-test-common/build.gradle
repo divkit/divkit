@@ -1,5 +1,9 @@
 apply from: "${project.projectDir}/../div-library.gradle"
 
+android {
+    namespace 'com.yandex.test'
+}
+
 dependencies {
     api "androidx.core:core:$versions.androidx.core"
     api "androidx.core:core-ktx:$versions.androidx.core_ktx"

@@ -1,5 +1,9 @@
 apply from: "${project.projectDir}/../div-library.gradle"
 
+android {
+    namespace 'com.yandex.unittest'
+}
+
 dependencies {
     kapt "com.google.auto.service:auto-service:$versions.googleAutoService"
 

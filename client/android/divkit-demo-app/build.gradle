@@ -13,6 +13,8 @@ repositories {
 }
 
 android {
+    namespace 'com.yandex.divkit.demo'
+
     buildFeatures {
         buildConfig = true
         viewBinding = true

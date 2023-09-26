@@ -2,6 +2,8 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 
 android {
+    namespace 'com.yandex.divkit.regression'
+
     sourceSets {
         main {
             assets.srcDirs += '../../test_data/regression_test_data'

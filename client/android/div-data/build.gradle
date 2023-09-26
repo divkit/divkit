@@ -10,6 +10,7 @@ allOpen {
 }
 
 android {
+    namespace 'com.yandex.div.data'
 
     sourceSets {
         main {

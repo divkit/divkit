@@ -3,6 +3,8 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 android {
+    namespace 'com.yandex.div.logging'
+
     buildFeatures { buildConfig = true }
 
     defaultConfig {

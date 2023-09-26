@@ -22,6 +22,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 android {
+    namespace = "com.yandex.generator"
+
     buildFeatures { buildConfig = true }
 
     sourceSets.getByName("main") {

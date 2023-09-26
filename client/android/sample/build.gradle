@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'tech.divkit.sample'
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
