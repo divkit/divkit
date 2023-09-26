@@ -21,7 +21,6 @@ android {
     defaultConfig {
         versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
-        buildConfigField "String", "ADS_BLOCK_ID", JSONObject.quote(property('mobileAds.blockId'))
         buildConfigField "String", "METRICA_API_KEY", JSONObject.quote(project.findProperty("metricaApiKey") ?: "")
         buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
         buildConfigField "String", "HTTP_HEADERS", JSONObject.quote(project.findProperty("httpHeaders") ?: "{}")
@@ -112,7 +111,9 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
 
-    implementation "com.yandex.android:mobmetricalib:$versions.metrica"
+    implementation("com.yandex.android:mobmetricalib:$versions.metrica") {
+        exclude group: 'com.yandex.android', module: 'mobmetricalib-identifiers'
+    }
 
     implementation "com.facebook.stetho:stetho:$versions.stetho"
     implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
