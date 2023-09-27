@@ -30,7 +30,7 @@ public struct DivViewSize: Equatable {
     }
   }
 
-  init(block: Block) {
+  public init(block: Block) {
     let width: DivDimension = block
       .isHorizontallyResizable ? .matchParent : .desired(block.widthOfHorizontallyNonResizableBlock)
     let height = makeHeightDimensionSize(block: block, width: width)
