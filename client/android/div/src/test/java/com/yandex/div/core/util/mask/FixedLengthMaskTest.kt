@@ -152,6 +152,50 @@ class FixedLengthMaskTest {
     }
 
     @Test
+    fun `insert valid character to single pattern mask`() {
+        val maskData = buildSinglePatternMask(true)
+
+        val fixedInputMask = createFixedLengthMask(maskData)
+
+        fixedInputMask.applyChangeFrom("a", 1)
+
+        fixedInputMask.assertMask("a", 1)
+    }
+
+    @Test
+    fun `insert invalid character to single pattern mask`() {
+        val maskData = buildSinglePatternMask(true)
+
+        val fixedInputMask = createFixedLengthMask(maskData)
+
+        fixedInputMask.applyChangeFrom("1", 1)
+
+        fixedInputMask.assertMask("_", 0)
+    }
+
+    @Test
+    fun `insert valid character to multikey single pattern mask`() {
+        val maskData = buildMultikeySinglePatternMask(true)
+
+        val fixedInputMask = createFixedLengthMask(maskData)
+
+        fixedInputMask.applyChangeFrom("a", 1)
+
+        fixedInputMask.assertMask("a", 1)
+    }
+
+    @Test
+    fun `insert invalid character to multikey single pattern mask`() {
+        val maskData = buildMultikeySinglePatternMask(true)
+
+        val fixedInputMask = createFixedLengthMask(maskData)
+
+        fixedInputMask.applyChangeFrom("1", 1)
+
+        fixedInputMask.assertMask("_", 0)
+    }
+
+    @Test
     fun `replace valid character before valid position`() {
         val maskData = buildPhoneMask(true)
 
@@ -358,6 +402,39 @@ class FixedLengthMaskTest {
 
     private fun createFixedLengthMask(maskData: BaseInputMask.MaskData): TestFixedLengthInputMask {
         return TestFixedLengthInputMask(maskData)
+    }
+
+    private fun buildSinglePatternMask(alwaysVisible: Boolean): BaseInputMask.MaskData {
+        return BaseInputMask.MaskData(
+            pattern = "#",
+            decoding = listOf(
+                BaseInputMask.MaskKey(
+                    key = '#',
+                    filter = "[a-z]",
+                    placeholder = '_'
+                )
+            ),
+            alwaysVisible = alwaysVisible
+        )
+    }
+
+    private fun buildMultikeySinglePatternMask(alwaysVisible: Boolean): BaseInputMask.MaskData {
+        return BaseInputMask.MaskData(
+            pattern = "#",
+            decoding = listOf(
+                BaseInputMask.MaskKey(
+                    key = '#',
+                    filter = "[a-z]",
+                    placeholder = '_'
+                ),
+                BaseInputMask.MaskKey(
+                    key = '$',
+                    filter = "[a-z]",
+                    placeholder = '*'
+                )
+            ),
+            alwaysVisible = alwaysVisible
+        )
     }
 
     private fun buildPhoneMask(alwaysVisible: Boolean): BaseInputMask.MaskData {

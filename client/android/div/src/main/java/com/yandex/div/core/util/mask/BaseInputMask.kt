@@ -122,7 +122,7 @@ internal abstract class BaseInputMask(
 
         val fehi = firstEmptyHolderIndex
 
-        val maxShift = calculateMaxShift(tail, fehi)
+        val maxShift = if (tail.isEmpty()) null else calculateMaxShift(tail, fehi)
 
         replaceChars(body, fehi, maxShift)
 
