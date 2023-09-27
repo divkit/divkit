@@ -27,13 +27,23 @@ extension DivState: DivBlockModeling {
 
     let stateInterceptor = context.getStateInterceptor(for: self)
     let divStatePath = context.parentDivStatePath + id
+    let defaultStateId = resolveDefaultStateId(context.expressionResolver)
     let stateManager = context.stateManager
+    if let stateIdVariable {
+      let stateBinding = context.makeBinding(
+        variableName: stateIdVariable,
+        defaultValue: defaultStateId ?? states[0].stateId
+      )
+      stateManager.setState(stateBlockPath: divStatePath, stateBinding: stateBinding)
+    } else {
+      stateManager.resetBinding(for: divStatePath)
+    }
     let stateManagerItem = stateManager.get(stateBlockPath: divStatePath)
 
     let expressionResolver = context.expressionResolver
     let activeState = stateInterceptor?.getAppropriateState(divState: self, context: context)
       ?? states.first { $0.stateId == stateManagerItem?.currentStateID.rawValue }
-      ?? states.first { $0.stateId == resolveDefaultStateId(expressionResolver) }
+      ?? states.first { $0.stateId == defaultStateId }
       ?? states[0]
     let activeStateID = DivStateID(rawValue: activeState.stateId)
     let activeStatePath = divStatePath + activeStateID

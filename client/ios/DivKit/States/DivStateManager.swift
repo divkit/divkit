@@ -1,4 +1,5 @@
 import CommonCorePublic
+import LayoutKit
 
 public class DivStateManager {
   public struct Item: Equatable {
@@ -7,7 +8,10 @@ public class DivStateManager {
     // It becomes .empty when transition is over.
     public let previousState: PreviousState
 
-    public init(currentStateID: DivStateID, previousState: PreviousState) {
+    public init(
+      currentStateID: DivStateID,
+      previousState: PreviousState
+    ) {
       self.currentStateID = currentStateID
       self.previousState = previousState
     }
@@ -24,6 +28,7 @@ public class DivStateManager {
   private let rwLock = RWLock()
 
   public private(set) var items: [DivStatePath: Item]
+  private var stateBindings: [DivStatePath: Binding<String>] = [:]
   public private(set) var blockIds: [DivStatePath: Set<String>] = [:]
   public private(set) var blockVisibility: [DivBlockPath: Bool] = [:]
 
@@ -41,22 +46,50 @@ public class DivStateManager {
     }
   }
 
+  func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
+    rwLock.write {
+      stateBindings[stateBlockPath] = stateBinding
+      guard stateBinding.value != items[stateBlockPath]?.currentStateID.rawValue else { return }
+      updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
+    }
+  }
+
+  func resetBinding(for stateBlockPath: DivStatePath) {
+    rwLock.write {
+      _ = stateBindings.removeValue(forKey: stateBlockPath)
+    }
+  }
+
   public func setState(stateBlockPath: DivStatePath, stateID: DivStateID) {
     rwLock.write {
-      items[stateBlockPath] = Item(currentStateID: stateID, previousState: .empty)
+      stateBindings[stateBlockPath]?.value = stateID.rawValue
+      items[stateBlockPath] = Item(
+        currentStateID: stateID,
+        previousState: .empty
+      )
     }
   }
 
   public func setStateWithHistory(path: DivStatePath, stateID: DivStateID) {
+    rwLock.write {
+      updateState(path: path, stateID: stateID)
+    }
+  }
+
+  private func updateState(path: DivStatePath, stateID: DivStateID) {
+    // need to take a write lock before
+    let previousItem = items[path]
     let previousState: PreviousState
-    if let previousStateID = get(stateBlockPath: path)?.currentStateID {
+    if let previousStateID = previousItem?.currentStateID {
       previousState = .withID(previousStateID)
     } else {
       previousState = .initial
     }
-    rwLock.write {
-      items[path] = Item(currentStateID: stateID, previousState: previousState)
-    }
+    stateBindings[path]?.value = stateID.rawValue
+    items[path] = Item(
+      currentStateID: stateID,
+      previousState: previousState
+    )
   }
 
   public func removeState(path: DivStatePath) {

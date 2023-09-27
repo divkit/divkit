@@ -3,6 +3,7 @@
 import XCTest
 
 import CommonCorePublic
+import LayoutKit
 
 final class DivStateManagerTests: XCTestCase {
   private let stateManager = DivStateManager()
@@ -114,4 +115,30 @@ final class DivStateManagerTests: XCTestCase {
       )
     )
   }
+
+  func test_settingStateToDivStateManager() {
+    stateManager.setState(stateBlockPath: statePath, stateID: "first")
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.currentStateID, "first")
+  }
+
+  func test_settingStateToDivStateManagerByBinding() {
+    let stateBinding = Binding<String>(
+      name: "binding",
+      value: Property<String>(initialValue: "second")
+    )
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.currentStateID, "second")
+  }
+
+  func test_checkBindingChangedAfterSettingStateManually() {
+    let stateBinding = Binding<String>(
+      name: "binding",
+      value: Property<String>(initialValue: "second")
+    )
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+    stateManager.setState(stateBlockPath: statePath, stateID: "first")
+    XCTAssertEqual(stateBinding.value, "first")
+  }
 }
+
+private let statePath: DivStatePath = "0/state"

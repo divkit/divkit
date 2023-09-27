@@ -26,7 +26,7 @@ extension Binding where T: AdditiveArithmetic {
 }
 
 extension Binding where T == String {
-  static var zero: Binding<T> {
+  public static var zero: Binding<T> {
     Binding(name: "", value: "")
   }
 }
