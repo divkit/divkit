@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.mask.BaseInputMask
@@ -498,7 +497,8 @@ internal class DivInputBinder @Inject constructor(
                             BaseInputMask.MaskKey(
                                 key = it.key.evaluate(resolver).first(),
                                 filter = it.regex?.evaluate(resolver),
-                                placeholder = it.placeholder.evaluate(resolver).first()
+                                // Empty char if placeholder string is empty
+                                placeholder = it.placeholder.evaluate(resolver).firstOrNull() ?: Char.MIN_VALUE
                             )
                         },
                         divInputMask.alwaysVisible.evaluate(resolver)
