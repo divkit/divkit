@@ -679,7 +679,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             totalLength = 0
             remeasureConstrainedWidthChildren(widthMeasureSpec, heightMeasureSpec, delta)
             remeasureMatchParentWidthChildren(widthMeasureSpec, heightMeasureSpec, initialMaxHeight, delta)
-            totalLength += paddingTop + paddingBottom
+            totalLength += paddingLeft + paddingRight
         }
     }
 
