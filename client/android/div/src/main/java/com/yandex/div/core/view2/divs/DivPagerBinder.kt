@@ -394,6 +394,14 @@ internal class DivPagerBinder @Inject constructor(
         private val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
         private var totalDelta = 0
 
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+
+            when (state) {
+                ViewPager2.SCROLL_STATE_IDLE -> trackVisibleViews()
+            }
+        }
+
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
             trackVisibleViews()
