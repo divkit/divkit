@@ -1,3 +1,9 @@
+## 28.4.0 (October 2, 2023)
+
+Fixes:
+* Fixed custom `text` color with focus (without explicit `focused_text_color` property)
+
+
 ## 28.3.0 (September 25, 2023)
 
 Additions:

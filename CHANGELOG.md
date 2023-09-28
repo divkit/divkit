@@ -1,3 +1,22 @@
+## 28.4.0
+
+# JSON Schema:
+* Added support of ranges in `DivSlider` for Android and iOS
+
+# Android Client:
+* Added automatic `ViewPool` optimization flag
+* Fixed crash on empty `DivInput` placeholder
+* `DivImageLoader` methods should be called on main thread now
+
+# iOS Client:
+* Added support of ranges in `DivSlider`
+* Fix cursor position in phone input mask
+* Supported variable in `DivState`
+
+# Web Client:
+* Fixed custom `text` color with focus (without explicit `focused_text_color` property)
+
+
 ## 28.3.0
 
 # Android Client:
