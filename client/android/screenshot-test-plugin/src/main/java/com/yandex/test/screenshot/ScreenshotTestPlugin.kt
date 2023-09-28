@@ -30,9 +30,10 @@ class ScreenshotTestPlugin : Plugin<Project> {
     }
 
     private fun register(project: Project) {
-        project.tasks.register(GenerateScreenshotConfigTask.NAME, GenerateScreenshotConfigTask::class.java) { task ->
+        project.tasks.register(GenerateScreenshotConfigTask.NAME, GenerateScreenshotConfigTask::class.java).let {
+            val outputDir = it.get().outputDir
             project.android.variants.all { variant ->
-                variant.registerJavaGeneratingTask(task, task.outputDir)
+                variant.registerJavaGeneratingTask(it, outputDir)
             }
         }
         project.tasks.register(ValidateTestResultsTask.NAME, ValidateTestResultsTask::class.java)
@@ -41,14 +42,14 @@ class ScreenshotTestPlugin : Plugin<Project> {
             it.mustRunAfter(PullScreenshotsTask.NAME)
         }
 
-        project.tasks.whenTaskAdded { task ->
+        project.tasks.configureEach { task ->
             val isDependentTask = task.name.run {
                 startsWith("compile") && (endsWith("JavaWithJavac") || endsWith("Kotlin"))
             }
             if (enabled && isDependentTask) task.dependsOn(GenerateScreenshotConfigTask.NAME)
         }
 
-        project.tasks.whenTaskAdded { task ->
+        project.tasks.configureEach { task ->
             val isDependentTask = task.name.run {
                 startsWith("connected") && endsWith("AndroidTest")
             }

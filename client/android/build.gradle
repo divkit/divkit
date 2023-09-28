@@ -67,27 +67,6 @@ allprojects {
             jvmTarget = "1.8"
         }
     }
-
-    tasks.whenTaskAdded { task ->
-        if (task.name == "apiDump") {
-            afterEvaluate {
-                task.configure {
-                    into "$rootProject.projectDir/../../../internal/android/api-dump"
-                    preserve {
-                        include "*.api"
-                    }
-                }
-            }
-        }
-
-        if (task.name == "apiCheck") {
-            afterEvaluate {
-                task.configure {
-                    projectApiDir = file("$rootProject.projectDir/../../../internal/android/api-dump")
-                }
-            }
-        }
-    }
 }
 
 subprojects {
