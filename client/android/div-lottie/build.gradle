@@ -11,8 +11,12 @@ dependencies {
     implementation project(path: ':div-data')
     implementation project(path: ':div')
     implementation project(path: ':div-json')
+    implementation "com.squareup.okio:okio:$versions.okio"
 
-    implementation 'com.airbnb.android:lottie:6.1.0'
+    implementation('com.airbnb.android:lottie:6.1.0') {
+        // lottie depends on old okio with CVE
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
     implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
