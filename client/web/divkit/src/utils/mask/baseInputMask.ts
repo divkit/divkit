@@ -146,7 +146,7 @@ export abstract class BaseInputMask {
 
         const fehi = this.firstEmptyHolderIndex();
 
-        const maxShift = this.calculateMaxShift(tail, fehi);
+        const maxShift = tail ? this.calculateMaxShift(tail, fehi) : undefined;
 
         this.replaceChars(body, fehi, maxShift);
 

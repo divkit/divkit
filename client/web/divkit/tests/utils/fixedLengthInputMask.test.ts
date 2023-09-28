@@ -54,6 +54,38 @@ describe('FixedLengthInputMask', () => {
         fixedInputMask = new FixedLengthInputMask(maskData, logError);
     }
 
+    function buildSinglePatternMask(alwaysVisible: boolean): void {
+        const maskData: MaskData = {
+            pattern: '#',
+            decoding: [{
+                key: '#',
+                filter: '[a-z]',
+                placeholder: '_'
+            }],
+            alwaysVisible
+        };
+
+        fixedInputMask = new FixedLengthInputMask(maskData, logError);
+    }
+
+    function buildMultikeySinglePatternMask(alwaysVisible: boolean): void {
+        const maskData: MaskData = {
+            pattern: '#',
+            decoding: [{
+                key: '#',
+                filter: '[a-z]',
+                placeholder: '_'
+            }, {
+                key: '$',
+                filter: '[a-z]',
+                placeholder: '_'
+            }],
+            alwaysVisible
+        };
+
+        fixedInputMask = new FixedLengthInputMask(maskData, logError);
+    }
+
     beforeEach(() => {
         logError = jest.fn();
     });
@@ -168,6 +200,46 @@ describe('FixedLengthInputMask', () => {
 
         expect(fixedInputMask.value).toEqual('+7 (120) 345-__-__');
         expect(fixedInputMask.cursorPosition).toEqual(9);
+        expect(logError.mock.calls).toEqual([]);
+    });
+
+    test('insert valid character to single pattern mask', () => {
+        buildSinglePatternMask(true);
+
+        fixedInputMask.applyChangeFrom('a', 1);
+
+        expect(fixedInputMask.value).toEqual('a');
+        expect(fixedInputMask.cursorPosition).toEqual(1);
+        expect(logError.mock.calls).toEqual([]);
+    });
+
+    test('insert invalid character to single pattern mask', () => {
+        buildSinglePatternMask(true);
+
+        fixedInputMask.applyChangeFrom('1', 1);
+
+        expect(fixedInputMask.value).toEqual('_');
+        expect(fixedInputMask.cursorPosition).toEqual(0);
+        expect(logError.mock.calls).toEqual([]);
+    });
+
+    test('insert valid character to multikey single pattern mask', () => {
+        buildMultikeySinglePatternMask(true);
+
+        fixedInputMask.applyChangeFrom('a', 1);
+
+        expect(fixedInputMask.value).toEqual('a');
+        expect(fixedInputMask.cursorPosition).toEqual(1);
+        expect(logError.mock.calls).toEqual([]);
+    });
+
+    test('insert invalid character to multikey single pattern mask', () => {
+        buildMultikeySinglePatternMask(true);
+
+        fixedInputMask.applyChangeFrom('1', 1);
+
+        expect(fixedInputMask.value).toEqual('_');
+        expect(fixedInputMask.cursorPosition).toEqual(0);
         expect(logError.mock.calls).toEqual([]);
     });
 
