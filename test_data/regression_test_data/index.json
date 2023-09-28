@@ -6,7 +6,8 @@
         "DivAction"
       ],
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "steps": [
         "Tap to copy url button and paste clipboard to input",

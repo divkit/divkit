@@ -17,6 +17,7 @@ public final class DivActionHandler {
   private let setVariableActionHandler: SetVariableActionHandler
   private let arrayInsertValueActionHandler: ArrayInsertValueActionHandler
   private let arrayRemoveValueActionHandler: ArrayRemoveValueActionHandler
+  private let copyToClipboardActionHandler: CopyToClipboardActionHandler
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -40,6 +41,7 @@ public final class DivActionHandler {
     setVariableActionHandler = SetVariableActionHandler()
     arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
     arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
+    copyToClipboardActionHandler = CopyToClipboardActionHandler()
   }
 
   public convenience init(
@@ -126,6 +128,8 @@ public final class DivActionHandler {
       arrayInsertValueActionHandler.handle(action, context: context)
     case let .divActionArrayRemoveValue(action):
       arrayRemoveValueActionHandler.handle(action, context: context)
+    case let .divActionCopyToClipboard(action):
+      copyToClipboardActionHandler.handle(action)
     case .none:
       isHandled = false
     default:
