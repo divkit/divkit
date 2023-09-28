@@ -4,7 +4,7 @@ const {transform} = require('@babel/core');
 const {VM} = require('vm2');
 
 const tsBuilderSource = fs.readFileSync(
-    path.resolve(__dirname, '../node_modules/@divkitframework/jsonbuilder/dist/jsonbuilder.js'),
+    path.resolve(__dirname, '../artifacts/jsonbuilder.js'),
     'utf-8'
 );
 

@@ -1,9 +1,9 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
     import { get } from 'svelte/store';
-    import type { DivkitInstance } from '@divkitframework/divkit/typings/common';
-    import { render, SizeProvider, lottieExtensionBuilder } from '@divkitframework/divkit/client-devtool';
-    import '@divkitframework/divkit/dist/client.css';
+    import type { DivkitInstance, DivExtensionClass } from '../../../../client/web/divkit/typings/common';
+    import { render as divkitRender, SizeProvider, lottieExtensionBuilder } from '../../artifacts/client-devtool.mjs';
+    import '../../artifacts/client.css';
     import ViewportSelect from './ViewportSelect.svelte';
     import PlatformSelect from './PlatformSelect.svelte';
     import {
@@ -111,7 +111,7 @@
         let count = 0;
         let renderStart = performance.now();
 
-        divBlock = render({
+        divBlock = divkitRender({
             target: rootPreview,
             json,
             id: 'test',

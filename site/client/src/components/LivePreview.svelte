@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import type { Platform, DivkitInstance } from '@divkitframework/divkit/typings/common';
+    import type { Platform, DivkitInstance, DivExtensionClass } from '../../../../client/web/divkit/typings/common';
     import { jsonStore } from '../data/jsonStore';
-    import { render, SizeProvider, lottieExtensionBuilder } from '@divkitframework/divkit/client-devtool';
-    import '@divkitframework/divkit/dist/client.css';
+    import { render as divkitRender, SizeProvider, lottieExtensionBuilder } from '../../artifacts/client-devtool.mjs';
+    import '../../artifacts/client.css';
     import Lottie from 'lottie-web/build/player/lottie_light';
 
     export let platform: Platform = 'auto';
@@ -20,7 +20,7 @@
             divBlock.$destroy();
         }
 
-        divBlock = render({
+        divBlock = divkitRender({
             target: rootPreview,
             json,
             id: 'test',
