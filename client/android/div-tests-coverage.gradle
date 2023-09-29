@@ -57,9 +57,15 @@ jacocoTestReport {
     group = "reporting"
     description = "Generate Jacoco coverage reports after running tests."
     reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-        csv.enabled = true
+        xml {
+            enabled true // coveralls plugin depends on xml format report
+        }
+        html {
+            enabled true
+        }
+        csv {
+            enabled true
+        }
     }
     sourceDirectories.from {
         files(coverageSourceDirs)

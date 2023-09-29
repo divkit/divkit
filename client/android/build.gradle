@@ -98,7 +98,7 @@ subprojects {
 }
 
 wrapper {
-    gradleVersion "7.6.1"
+    gradleVersion "8.3"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }

@@ -1,5 +1,5 @@
 import com.yandex.div.gradle.FileExtensions
-import org.json.JSONObject
+import groovy.json.JsonOutput
 
 apply from: "${project.projectDir}/../div-application.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
@@ -23,9 +23,9 @@ android {
     defaultConfig {
         versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
-        buildConfigField "String", "METRICA_API_KEY", JSONObject.quote(project.findProperty("metricaApiKey") ?: "")
+        buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(project.findProperty("metricaApiKey") ?: "")
         buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
-        buildConfigField "String", "HTTP_HEADERS", JSONObject.quote(project.findProperty("httpHeaders") ?: "{}")
+        buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(project.findProperty("httpHeaders") ?: "{}")
 
         testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
         if (!project.hasProperty("include-regression-tests")) {
