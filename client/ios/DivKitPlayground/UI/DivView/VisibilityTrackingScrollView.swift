@@ -9,7 +9,7 @@ final class VisibilityTrackingScrollView: UIScrollView {
   var divView: DivView? {
     didSet {
       oldValue?.removeFromSuperview()
-      sizeChangedSubscription = divView?.addObserver { _ in self.setNeedsLayout() }
+      sizeChangedSubscription = divView?.addObserver { [weak self] _ in self?.setNeedsLayout() }
       divView.map { addSubview($0) }
       setNeedsLayout()
     }

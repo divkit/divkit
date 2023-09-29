@@ -26,6 +26,7 @@ open class DivViewController: UIViewController {
     view.addSubview(divView)
 
     jsonProvider.addObserver { [weak self] in
+      self?.divKitComponents.reset(cardId: cardId)
       self?.setData($0)
     }.dispose(in: disposePool)
   }
@@ -61,7 +62,7 @@ open class DivViewController: UIViewController {
     divView.setSource(
       DivViewSource(
         kind: .json(data),
-        cardId: "DivViewCard"
+        cardId: cardId
       ),
       debugParams: debugParams,
       shouldResetPreviousCardData: true
@@ -69,3 +70,5 @@ open class DivViewController: UIViewController {
     divView.setParentScrollView(scrollView)
   }
 }
+
+private let cardId: DivCardID = "DivViewCard"
