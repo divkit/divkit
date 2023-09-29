@@ -93,13 +93,16 @@ extension DivBase {
     )
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
-      .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        alpha: CGFloat(resolveAlpha(expressionResolver)),
         actions: actions,
         actionAnimation: actionAnimation,
         doubleTapActions: doubleTapActions,
-        longTapActions: longTapActions.map(LongTapActions.actions),
+        longTapActions: longTapActions.map(LongTapActions.actions)
+
+      )
+      .addingEdgeInsets(externalInsets, clipsToBounds: false)
+      .addingDecorations(
+        alpha: CGFloat(resolveAlpha(expressionResolver)),
         accessibilityElement: customA11yElement ?? makeAccessibilityElement(
           accessibility,
           expressionResolver: expressionResolver,
