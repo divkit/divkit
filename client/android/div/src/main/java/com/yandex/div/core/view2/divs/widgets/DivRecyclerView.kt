@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs.widgets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
@@ -16,6 +17,7 @@ import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivGallery.ScrollMode
 import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.ceil
@@ -46,9 +48,18 @@ internal class DivRecyclerView @JvmOverloads constructor(
     var div: DivGallery? = null
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
+    var scrollMode = ScrollMode.DEFAULT
     var pagerSnapStartHelper: PagerSnapStartHelper? = null
+    private var needFling = false
 
     override val subscriptions = mutableListOf<Disposable>()
+
+    override fun fling(velocityX: Int, velocityY: Int): Boolean {
+        val flingPerformed = super.fling(velocityX, velocityY)
+
+        if (scrollMode == ScrollMode.PAGING) needFling = !flingPerformed
+        return flingPerformed
+    }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         val intercepted = onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event) ?: false
@@ -110,6 +121,35 @@ internal class DivRecyclerView @JvmOverloads constructor(
                 return super.onInterceptTouchEvent(event)
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(e: MotionEvent?): Boolean {
+        if (scrollMode == ScrollMode.PAGING) needFling = true
+
+        val eventResult = super.onTouchEvent(e)
+        val action = e?.actionMasked ?: return eventResult
+
+        when(action) {
+            MotionEvent.ACTION_UP -> {
+                if (scrollMode == ScrollMode.PAGING && needFling) {
+                    val layoutManager = this.layoutManager ?: return eventResult
+                    val pagerSnapStartHelper = this.pagerSnapStartHelper ?: return eventResult
+
+                    val snapView =
+                        pagerSnapStartHelper.findSnapView(layoutManager) ?: return eventResult
+                    val position = pagerSnapStartHelper.calculateDistanceToFinalSnap(
+                        layoutManager,
+                        snapView
+                    )
+
+                    if (position.size < 2 || (position[0] == 0 && position[1] == 0)) return eventResult
+                    smoothScrollBy(position[0], position[1])
+                }
+            }
+        }
+
+        return eventResult
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

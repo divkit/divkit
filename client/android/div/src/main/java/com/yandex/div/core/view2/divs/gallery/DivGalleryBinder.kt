@@ -175,7 +175,7 @@ internal class DivGalleryBinder @Inject constructor(
                 )
         )
 
-        val scrollMode = div.scrollMode.evaluate(resolver)
+        val scrollMode = div.scrollMode.evaluate(resolver).also { view.scrollMode = it }
         when (scrollMode) {
             DivGallery.ScrollMode.DEFAULT -> {
                 view.pagerSnapStartHelper?.attachToRecyclerView(null)
