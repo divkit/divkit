@@ -88,6 +88,14 @@ internal class DivViewWrapper @JvmOverloads constructor(
     override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
         (child as? DivBorderSupports)?.setBorder(border, view, resolver)
     }
+
+    override fun addView(child: View?) {
+        super.addView(child)
+
+        if (layoutParams == null && child?.layoutParams != null) {
+            setLayoutParams(child.layoutParams)
+        }
+    }
 }
 
 private fun LayoutParams.setBy(other: LayoutParams?): LayoutParams {
