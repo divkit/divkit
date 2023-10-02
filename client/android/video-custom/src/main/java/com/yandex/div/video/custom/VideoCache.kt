@@ -142,7 +142,7 @@ class VideoCache @JvmOverloads constructor(
      */
     suspend fun cacheStubImage(
         stubImageUrl: String
-    ): Bitmap = withContext(Dispatchers.IO) {
+    ): Bitmap = withContext(Dispatchers.Main) {
         suspendCoroutine { continuation ->
             imageLoader.loadImage(stubImageUrl, object : DivImageDownloadCallback() {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
