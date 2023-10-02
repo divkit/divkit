@@ -89,7 +89,7 @@ export interface DivJson {
         variable_triggers?: VariableTrigger[];
         timers?: DivTimer[];
     }
-    /** EXPERIMENTAL SUPPORT */
+    /** @deprecated */
     palette?: Palette;
 }
 

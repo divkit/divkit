@@ -342,7 +342,9 @@ Also be aware of new releases (even minor and patch versions). Built-in extensio
 The default value is `system`. Affects variables in `palette`.
 
 
-### Palette support (EXPERIMENTAL)
+### Palette support (DEPRECATED)
+
+This feature will be removed in the future.
 
 Divjson along with the `card` and `templates` can contain a `palette` property with colors for light and dark themes:
 

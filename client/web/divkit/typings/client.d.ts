@@ -27,7 +27,7 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     extensions?: Map<string, DivExtensionClass>;
-    /** EXPERIMENTAL SUPPORT */
+    /** @deprecated */
     theme?: Theme;
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
