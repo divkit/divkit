@@ -15,6 +15,23 @@ enum ArrayFunctions: String, CaseIterable {
   case getArrayOptBoolean
   case getArrayOptUrl
 
+  case getStringFromArray
+  case getOptStringFromArray
+  case getIntegerFromArray
+  case getOptIntegerFromArray
+  case getNumberFromArray
+  case getOptNumberFromArray
+  case getBooleanFromArray
+  case getOptBooleanFromArray
+  case getColorFromArray
+  case getOptColorFromArray
+  case getUrlFromArray
+  case getOptUrlFromArray
+  case getArrayFromArray
+  case getOptArrayFromArray
+  case getDictFromArray
+  case getOptDictFromArray
+
   var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     [.function(rawValue, arity: function.arity): function.symbolEvaluator]
   }
@@ -55,6 +72,49 @@ enum ArrayFunctions: String, CaseIterable {
           FunctionTernary(impl: _getArrayOptUrlWithStringFallback),
         ]
       )
+
+    case .getStringFromArray:
+      return FunctionBinary(impl: _getStringFromArray)
+    case .getOptStringFromArray:
+      return FunctionTernary(impl: _getOptStringFromArray)
+    case .getIntegerFromArray:
+      return FunctionBinary(impl: _getIntegerFromArray)
+    case .getOptIntegerFromArray:
+      return FunctionTernary(impl: _getOptIntegerFromArray)
+    case .getNumberFromArray:
+      return FunctionBinary(impl: _getNumberFromArray)
+    case .getOptNumberFromArray:
+      return FunctionTernary(impl: _getOptNumberFromArray)
+    case .getBooleanFromArray:
+      return FunctionBinary(impl: _getBooleanFromArray)
+    case .getOptBooleanFromArray:
+      return FunctionTernary(impl: _getOptBooleanFromArray)
+    case .getColorFromArray:
+      return FunctionBinary(impl: _getColorFromArray)
+    case .getOptColorFromArray:
+      return OverloadedFunction(
+        functions: [
+          FunctionTernary(impl: _getOptColorFromArrayWithColorFallback),
+          FunctionTernary(impl: _getOptColorFromArrayWithStringFallback),
+        ]
+      )
+    case .getUrlFromArray:
+      return FunctionBinary(impl: _getUrlFromArray)
+    case .getOptUrlFromArray:
+      return OverloadedFunction(
+        functions: [
+          FunctionTernary(impl: _getOptUrlFromArrayWithURLFallback),
+          FunctionTernary(impl: _getOptUrlFromArrayWithStringFallback),
+        ]
+      )
+    case .getArrayFromArray:
+      return FunctionBinary(impl: _getArrayFromArray)
+    case .getOptArrayFromArray:
+      return FunctionBinary(impl: _getOptArrayFromArray)
+    case .getDictFromArray:
+      return FunctionBinary(impl: _getDictFromArray)
+    case .getOptDictFromArray:
+      return FunctionBinary(impl: _getOptDictFromArray)
     }
   }
 
@@ -67,8 +127,32 @@ enum ArrayFunctions: String, CaseIterable {
     return stringValue
   }
 
+  private func _getStringFromArray(array: [AnyHashable], index: Int) throws -> String {
+    let expression = makeExpression("getStringFromArray", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard let stringValue = result as? String else {
+      throw Error.incorrectValueType(expression, "string", result.actualType).message
+    }
+    return stringValue
+  }
+
   private func _getArrayNumber(array: [AnyHashable], index: Int) throws -> Double {
     let expression = makeExpression("getArrayNumber", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    if result.isBool {
+      throw Error.incorrectValueType(expression, "number", result.actualType).message
+    }
+    if let numberValue = result as? Double {
+      return numberValue
+    }
+    if let intValue = result as? Int {
+      return Double(intValue)
+    }
+    throw Error.incorrectValueType(expression, "number", result.actualType).message
+  }
+
+  private func _getNumberFromArray(array: [AnyHashable], index: Int) throws -> Double {
+    let expression = makeExpression("getNumberFromArray", index)
     let result = try getValue(array: array, index: index, expression: expression)
     if result.isBool {
       throw Error.incorrectValueType(expression, "number", result.actualType).message
@@ -100,8 +184,38 @@ enum ArrayFunctions: String, CaseIterable {
     return intValue
   }
 
+  private func _getIntegerFromArray(array: [AnyHashable], index: Int) throws -> Int {
+    let expression = makeExpression("getIntegerFromArray", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    if result.isBool {
+      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+    }
+    guard let intValue = result as? Int else {
+      if let doubleValue = result as? Double {
+        if doubleValue < Double(Int.min) || doubleValue > Double(Int.max) {
+          throw Error.integerOverflow(expression).message
+        }
+        throw Error.cannotConvertToInteger(expression).message
+      }
+      throw Error.incorrectValueType(expression, "integer", result.actualType).message
+    }
+    return intValue
+  }
+
   private func _getArrayBoolean(array: [AnyHashable], index: Int) throws -> Bool {
     let expression = makeExpression("getArrayBoolean", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard result.isBool else {
+      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+    }
+    guard let boolValue = result as? Bool else {
+      throw Error.incorrectValueType(expression, "boolean", result.actualType).message
+    }
+    return boolValue
+  }
+
+  private func _getBooleanFromArray(array: [AnyHashable], index: Int) throws -> Bool {
+    let expression = makeExpression("getBooleanFromArray", index)
     let result = try getValue(array: array, index: index, expression: expression)
     guard result.isBool else {
       throw Error.incorrectValueType(expression, "boolean", result.actualType).message
@@ -124,8 +238,32 @@ enum ArrayFunctions: String, CaseIterable {
     return color
   }
 
+  private func _getColorFromArray(array: [AnyHashable], index: Int) throws -> Color {
+    let expression = makeExpression("getColorFromArray", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard let stringValue = result as? String else {
+      throw Error.incorrectValueType(expression, "color", result.actualType).message
+    }
+    guard let color = Color.color(withHexString: stringValue) else {
+      throw Error.incorrectColorFormat(expression).message
+    }
+    return color
+  }
+
   private func _getArrayUrl(array: [AnyHashable], index: Int) throws -> URL {
     let expression = makeExpression("getArrayUrl", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard let stringValue = result as? String else {
+      throw Error.incorrectValueType(expression, "url", result.actualType).message
+    }
+    guard let url = URL(string: stringValue) else {
+      throw Error.incorrectValueType(expression, "url", result.actualType).message
+    }
+    return url
+  }
+
+  private func _getUrlFromArray(array: [AnyHashable], index: Int) throws -> URL {
+    let expression = makeExpression("getUrlFromArray", index)
     let result = try getValue(array: array, index: index, expression: expression)
     guard let stringValue = result as? String else {
       throw Error.incorrectValueType(expression, "url", result.actualType).message
@@ -147,6 +285,17 @@ enum ArrayFunctions: String, CaseIterable {
     return value
   }
 
+  private func _getOptStringFromArray(
+    array: [AnyHashable],
+    index: Int,
+    fallback: String
+  ) throws -> String {
+    guard let value = try? _getStringFromArray(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
   private func _getArrayOptNumber(
     array: [AnyHashable],
     index: Int,
@@ -158,8 +307,30 @@ enum ArrayFunctions: String, CaseIterable {
     return value
   }
 
+  private func _getOptNumberFromArray(
+    array: [AnyHashable],
+    index: Int,
+    fallback: Double
+  ) throws -> Double {
+    guard let value = try? _getNumberFromArray(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
   private func _getArrayOptInteger(array: [AnyHashable], index: Int, fallback: Int) throws -> Int {
     guard let value = try? _getArrayInteger(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
+  private func _getOptIntegerFromArray(
+    array: [AnyHashable],
+    index: Int,
+    fallback: Int
+  ) throws -> Int {
+    guard let value = try? _getIntegerFromArray(array: array, index: index) else {
       return fallback
     }
     return value
@@ -176,12 +347,34 @@ enum ArrayFunctions: String, CaseIterable {
     return value
   }
 
+  private func _getOptBooleanFromArray(
+    array: [AnyHashable],
+    index: Int,
+    fallback: Bool
+  ) throws -> Bool {
+    guard let value = try? _getBooleanFromArray(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
   private func _getArrayOptColorWithColorFallback(
     array: [AnyHashable],
     index: Int,
     fallback: Color
   ) throws -> Color {
     guard let value = try? _getArrayColor(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
+  private func _getOptColorFromArrayWithColorFallback(
+    array: [AnyHashable],
+    index: Int,
+    fallback: Color
+  ) throws -> Color {
+    guard let value = try? _getColorFromArray(array: array, index: index) else {
       return fallback
     }
     return value
@@ -198,12 +391,34 @@ enum ArrayFunctions: String, CaseIterable {
     return value
   }
 
+  private func _getOptColorFromArrayWithStringFallback(
+    array: [AnyHashable],
+    index: Int,
+    fallback: String
+  ) throws -> Color {
+    guard let value = try? _getColorFromArray(array: array, index: index) else {
+      return Color.color(withHexString: fallback)!
+    }
+    return value
+  }
+
   private func _getArrayOptUrlWithURLFallback(
     array: [AnyHashable],
     index: Int,
     fallback: URL
   ) throws -> URL {
     guard let value = try? _getArrayUrl(array: array, index: index) else {
+      return fallback
+    }
+    return value
+  }
+
+  private func _getOptUrlFromArrayWithURLFallback(
+    array: [AnyHashable],
+    index: Int,
+    fallback: URL
+  ) throws -> URL {
+    guard let value = try? _getUrlFromArray(array: array, index: index) else {
       return fallback
     }
     return value
@@ -216,6 +431,61 @@ enum ArrayFunctions: String, CaseIterable {
   ) throws -> URL {
     guard let value = try? _getArrayUrl(array: array, index: index) else {
       return URL(string: fallback)!
+    }
+    return value
+  }
+
+  private func _getOptUrlFromArrayWithStringFallback(
+    array: [AnyHashable],
+    index: Int,
+    fallback: String
+  ) throws -> URL {
+    guard let value = try? _getUrlFromArray(array: array, index: index) else {
+      return URL(string: fallback)!
+    }
+    return value
+  }
+
+  private func _getArrayFromArray(
+    array: [AnyHashable],
+    index: Int
+  ) throws -> [AnyHashable] {
+    let expression = makeExpression("getArrayFromArray", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard let arrayValue = result as? [AnyHashable] else {
+      throw Error.incorrectValueType(expression, "array", result.actualType).message
+    }
+    return arrayValue
+  }
+
+  private func _getOptArrayFromArray(
+    array: [AnyHashable],
+    index: Int
+  ) throws -> [AnyHashable] {
+    guard let value = try? _getArrayFromArray(array: array, index: index) else {
+      return []
+    }
+    return value
+  }
+
+  private func _getDictFromArray(
+    array: [AnyHashable],
+    index: Int
+  ) throws -> [String: AnyHashable] {
+    let expression = makeExpression("getDictFromArray", index)
+    let result = try getValue(array: array, index: index, expression: expression)
+    guard let dictValue = result as? [String: AnyHashable] else {
+      throw Error.incorrectValueType(expression, "dict", result.actualType).message
+    }
+    return dictValue
+  }
+
+  private func _getOptDictFromArray(
+    array: [AnyHashable],
+    index: Int
+  ) throws -> [String: AnyHashable] {
+    guard let value = try? _getDictFromArray(array: array, index: index) else {
+      return [:]
     }
     return value
   }
