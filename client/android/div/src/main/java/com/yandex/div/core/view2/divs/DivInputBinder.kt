@@ -60,7 +60,7 @@ internal class DivInputBinder @Inject constructor(
         view.div = div
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
-        val nativeBackground = view.background
+        val nativeBackground = view.context.getDrawable(androidx.appcompat.R.drawable.abc_edit_text_material)
 
         baseBinder.bindView(view, div, oldDiv, divView)
 
