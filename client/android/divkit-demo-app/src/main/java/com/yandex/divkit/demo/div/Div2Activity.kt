@@ -118,7 +118,7 @@ class Div2Activity : AppCompatActivity() {
         val prevValue = preferences.getString(DIV2_KEY_URL, "")?.takeIf { it.isNotBlank() } ?: ""
         variable = Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, prevValue)
         globalVariableController.bindWith(context)
-        globalVariableController.putOrUpdate(variable)
+        globalVariableController.declare(variable)
 
         div2Adapter = DivEditorAdapter(context)
         val divJson = DivAssetReader(context).read("application/demo.json")

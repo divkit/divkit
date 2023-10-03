@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
+import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -75,8 +76,11 @@ public class DivConfiguration {
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
 
     @NonNull
+    @Deprecated
     private final GlobalVariableController mGlobalVariableController;
 
+    @NonNull
+    private final DivVariableController mDivVariableController;
 
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
@@ -115,6 +119,7 @@ public class DivConfiguration {
             @NonNull ViewPreCreationProfile viewPreCreationProfile,
             @NonNull ViewPoolProfiler.Reporter reporter,
             @Nullable GlobalVariableController globalVariableController,
+            @Nullable DivVariableController divVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
             boolean longtapActionsPassToChild,
@@ -163,6 +168,7 @@ public class DivConfiguration {
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mGlobalVariableController = globalVariableController;
+        mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
     }
 
@@ -368,8 +374,14 @@ public class DivConfiguration {
     }
 
     @NonNull
+    @Deprecated
     public GlobalVariableController getGlobalVariableController() {
         return mGlobalVariableController;
+    }
+
+    @NonNull
+    public DivVariableController getDivVariableController() {
+        return mDivVariableController;
     }
 
     public static class Builder {
@@ -414,7 +426,8 @@ public class DivConfiguration {
         private ViewPoolProfiler.Reporter mViewPoolReporter;
         @Nullable
         private GlobalVariableController mGlobalVariableController;
-
+        @Nullable
+        private DivVariableController mDivVariableController;
         private boolean mTapBeaconsEnabled = Experiment.TAP_BEACONS_ENABLED.getDefaultValue();
         private boolean mVisibilityBeaconsEnabled = Experiment.VISIBILITY_BEACONS_ENABLED.getDefaultValue();
         private boolean mLongtapActionsPassToChild = Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED.getDefaultValue();
@@ -658,8 +671,15 @@ public class DivConfiguration {
         }
 
         @NonNull
+        @Deprecated
         public Builder globalVariableController(GlobalVariableController globalVariableController) {
             mGlobalVariableController = globalVariableController;
+            return this;
+        }
+
+        @NonNull
+        public Builder divVariableController(DivVariableController divVariableController) {
+            mDivVariableController = divVariableController;
             return this;
         }
 
@@ -694,6 +714,7 @@ public class DivConfiguration {
                     mViewPreCreationProfile == null ? new ViewPreCreationProfile() : mViewPreCreationProfile,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
                     mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
+                    mDivVariableController == null ? new DivVariableController() : mDivVariableController,
                     mTapBeaconsEnabled,
                     mVisibilityBeaconsEnabled,
                     mLongtapActionsPassToChild,

@@ -2,8 +2,8 @@ package com.yandex.divkit.demo.div
 
 import androidx.annotation.MainThread
 import com.yandex.div.core.Div2Context
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.DivVariablesParser
-import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.json.ParsingErrorLogger
@@ -12,22 +12,26 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 class DemoGlobalVariablesController {
-    private var lastGlobalVariableController: GlobalVariableController? = null
+    private var lastDivVariableController: DivVariableController? = null
     private val globalVariables = mutableListOf<Variable>()
 
     fun bindWith(context: Div2Context) {
-        lastGlobalVariableController = context.globalVariableController
+        lastDivVariableController = context.divVariableController
         dispatchVariableChanged()
     }
 
     private fun dispatchVariableChanged() {
-        lastGlobalVariableController?.putOrUpdate(*gatherGlobalVariables())
+        gatherGlobalVariables().iterator().forEach {
+            if (lastDivVariableController?.isDeclared(it.name) == false) {
+                lastDivVariableController?.declare(it)
+            }
+        }
     }
 
     @MainThread
     @Throws(VariableMutationException::class)
-    fun putOrUpdate(variable: Variable) {
-        lastGlobalVariableController?.putOrUpdate(variable)
+    fun declare(variable: Variable) {
+        lastDivVariableController?.declare(variable)
     }
 
     private fun gatherGlobalVariables(): Array<Variable> = globalVariables

@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
 import com.yandex.div.core.expression.triggers.TriggersController
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.toVariable
@@ -27,6 +28,7 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class ExpressionsRuntimeProvider @Inject constructor(
+    private val divVariableController: DivVariableController,
     private val globalVariableController: GlobalVariableController,
     private val divActionHandler: DivActionHandler,
     private val errorCollectors: ErrorCollectors,
@@ -95,6 +97,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                 }
             }
 
+            addSource(divVariableController.variableSource)
             addSource(globalVariableController.variableSource)
         }
 

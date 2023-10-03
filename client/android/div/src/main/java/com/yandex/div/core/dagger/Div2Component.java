@@ -21,6 +21,7 @@ import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider;
 import com.yandex.div.core.expression.storedvalues.StoredValuesController;
+import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.player.DivPlayerFactory;
@@ -140,7 +141,11 @@ public interface Div2Component {
     DivDownloader getDivDownloader();
 
     @NonNull
+    @Deprecated
     GlobalVariableController getGlobalVariableController();
+
+    @NonNull
+    DivVariableController getDivVariableController();
 
     @Nullable
     PerformanceDependentSessionProfiler getPerformanceDependentSessionProfiler();
@@ -194,6 +199,10 @@ public interface Div2Component {
         @NonNull
         @BindsInstance
         Builder globalVariableController(@NonNull GlobalVariableController globalVariableController);
+
+        @NonNull
+        @BindsInstance
+        Builder divVariableController(@NonNull DivVariableController divVariableController);
 
         @NonNull
         Div2Component build();

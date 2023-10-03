@@ -28,17 +28,17 @@ class VariableControllerTest {
     )
 
     private val errorCollector = mock<ErrorCollector>()
-    private lateinit var globalVariableController : GlobalVariableController
+    private lateinit var divVariableController : DivVariableController
     private lateinit var variableController : VariableController
 
     @Before
     fun initVariableController() {
-        globalVariableController = GlobalVariableController()
+        divVariableController = DivVariableController()
         variableController = VariableController().apply {
             localVariables.forEach {
                 declare(it)
             }
-            addSource(globalVariableController.variableSource)
+            addSource(divVariableController.variableSource)
         }
     }
 
@@ -113,6 +113,6 @@ class VariableControllerTest {
     }
 
     private fun declareVariable(variable: Variable) {
-        globalVariableController.declare(variable)
+        divVariableController.declare(variable)
     }
 }

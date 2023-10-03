@@ -15,6 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
+import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
@@ -43,8 +44,13 @@ class Div2Context @MainThread private constructor(
     internal val lifecycleOwner: LifecycleOwner? = null
 ) : ContextWrapper(baseContext) {
 
+    @Deprecated("GlobalVariableController is deprecated and will be deleted",
+        ReplaceWith("div2Component#divVariableController"))
     val globalVariableController: GlobalVariableController
         get() = div2Component.globalVariableController
+
+    val divVariableController: DivVariableController
+        get() = div2Component.divVariableController
 
     val performanceDependentSessionProfiler: PerformanceDependentSessionProfiler?
         get() = div2Component.performanceDependentSessionProfiler
@@ -73,6 +79,7 @@ class Div2Context @MainThread private constructor(
             .themeId(themeId)
             .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
             .globalVariableController(configuration.globalVariableController)
+            .divVariableController(configuration.divVariableController)
             .build(),
         lifecycleOwner
     )
