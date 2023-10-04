@@ -164,15 +164,9 @@ internal class DivLinearLayoutManager(
         DivRecyclerViewLayoutParams(c, attrs)
 
     override fun generateLayoutParams(lp: ViewGroup.LayoutParams?): RecyclerView.LayoutParams = when (lp) {
-        is DivRecyclerViewLayoutParams -> DivRecyclerViewLayoutParams(lp).apply {
-            maxHeight = lp.maxHeight
-            maxWidth = lp.maxWidth
-        }
+        is DivRecyclerViewLayoutParams -> DivRecyclerViewLayoutParams(lp)
         is RecyclerView.LayoutParams -> DivRecyclerViewLayoutParams(lp)
-        is DivLayoutParams -> DivRecyclerViewLayoutParams(lp).apply {
-            maxHeight = lp.maxHeight
-            maxWidth = lp.maxWidth
-        }
+        is DivLayoutParams -> DivRecyclerViewLayoutParams(lp)
         is MarginLayoutParams -> DivRecyclerViewLayoutParams(lp)
         else -> DivRecyclerViewLayoutParams(lp)
     }
@@ -196,6 +190,11 @@ internal class DivLinearLayoutManager(
         constructor(source: RecyclerView.LayoutParams?) : super(source)
 
         constructor(source: DivRecyclerViewLayoutParams) : super(source) {
+            maxHeight = source.maxHeight
+            maxWidth = source.maxWidth
+        }
+
+        constructor(source: DivLayoutParams) : super(source) {
             maxHeight = source.maxHeight
             maxWidth = source.maxWidth
         }
