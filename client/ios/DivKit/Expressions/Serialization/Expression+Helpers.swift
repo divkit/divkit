@@ -11,6 +11,7 @@ func expressionTransform<T, U>(
 ) -> Expression<T>? {
   do {
     if let rawValue = value as? String,
+       !rawValue.isEmpty,
        let resolver = try ExpressionLink<T>(
          rawValue: rawValue,
          validator: validator,
