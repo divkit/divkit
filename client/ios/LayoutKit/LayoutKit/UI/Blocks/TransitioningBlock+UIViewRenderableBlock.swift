@@ -98,26 +98,27 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
       completion: { self.fromView = nil }
     )
 
-    let item = DispatchWorkItem { [weak self] in
-      guard let self = self else { return }
-      self.toView = model.block.to.reuse(
-        self.toView,
-        observer: observer,
-        overscrollDelegate: overscrollDelegate,
-        renderingDelegate: renderingDelegate,
-        superview: self
-      )
+    let item =
+      DispatchWorkItem { [weak self, weak observer, weak overscrollDelegate, weak renderingDelegate] in
+        guard let self = self else { return }
+        self.toView = model.block.to.reuse(
+          self.toView,
+          observer: observer,
+          overscrollDelegate: overscrollDelegate,
+          renderingDelegate: renderingDelegate,
+          superview: self
+        )
 
-      self.addAnimationsToView(self.toView, animations: animationIn) {
-        if UIAccessibility.isVoiceOverRunning {
-          self.forRecursiveSubviews {
-            if $0.accessibilityElementIsFocused() {
-              UIAccessibility.post(notification: .layoutChanged, argument: $0)
+        self.addAnimationsToView(self.toView, animations: animationIn) {
+          if UIAccessibility.isVoiceOverRunning {
+            self.forRecursiveSubviews {
+              if $0.accessibilityElementIsFocused() {
+                UIAccessibility.post(notification: .layoutChanged, argument: $0)
+              }
             }
           }
         }
       }
-    }
 
     toViewAnimationWorkItem?.cancel()
     toViewAnimationWorkItem = item
