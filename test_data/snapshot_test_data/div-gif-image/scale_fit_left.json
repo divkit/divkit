@@ -13,7 +13,7 @@
         "state_id": 0,
         "div": {
           "type": "gif",
-          "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
           "height": {
             "type": "fixed",
             "value": 100

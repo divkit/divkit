@@ -22,7 +22,7 @@
           "images": [
             {
               "start": 0,
-              "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
               "width": {
                 "type": "fixed",
                 "value": 24
@@ -34,7 +34,7 @@
             },
             {
               "start": 0,
-              "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "url": "https://yastatic.net/s3/home/divkit/chess.png",
               "width": {
                 "type": "fixed",
                 "value": 10

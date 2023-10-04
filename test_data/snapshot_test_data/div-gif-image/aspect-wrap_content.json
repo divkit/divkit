@@ -28,7 +28,7 @@
           "items": [
             {
               "type": "gif",
-              "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "gif_url": "https://yastatic.net/s3/home/divkit/chess.png",
               "width": {
                 "type": "wrap_content"
               },

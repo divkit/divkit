@@ -28,7 +28,7 @@
               "type": "solid"
             },
             {
-              "image_url": "https://alicekit.s3.yandex.net/images_for_divs/nature.jpg",
+              "image_url": "https://yastatic.net/s3/home/divkit/nature.jpg",
               "alpha": 0.5,
               "type": "image"
             },

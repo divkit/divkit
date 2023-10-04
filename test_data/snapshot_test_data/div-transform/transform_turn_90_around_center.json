@@ -12,7 +12,7 @@
         "state_id": 0,
         "div": {
           "type": "image",
-          "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+          "image_url": "https://yastatic.net/s3/home/divkit/lenna.png",
           "width": {
             "type": "fixed",
             "value": 256

@@ -1,6 +1,6 @@
 {
   "type": "image",
-  "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
   "width": {
     "type": "wrap_content"
   }

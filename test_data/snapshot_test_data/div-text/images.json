@@ -58,7 +58,7 @@
               "images": [
                 {
                   "start": 3,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 24
@@ -70,7 +70,7 @@
                 },
                 {
                   "start": 9,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 40
@@ -82,7 +82,7 @@
                 },
                 {
                   "start": 7,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 24
@@ -95,7 +95,7 @@
                 {
                   "description": "Image that is out of text length",
                   "start": 100,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 24
@@ -120,7 +120,7 @@
               "images": [
                 {
                   "start": 0,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 24
@@ -145,7 +145,7 @@
               "images": [
                 {
                   "start": 1,
-                  "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
                   "width": {
                     "type": "fixed",
                     "value": 24
@@ -294,7 +294,7 @@
       "images": [
         {
           "$start": "image_position",
-          "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "url": "https://yastatic.net/s3/home/divkit/chess.png",
           "width": {
             "type": "fixed",
             "value": 24
@@ -315,7 +315,7 @@
       "images": [
         {
           "start": 1,
-          "url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "url": "https://yastatic.net/s3/home/divkit/chess.png",
           "width": {
             "type": "fixed",
             "value": 24
