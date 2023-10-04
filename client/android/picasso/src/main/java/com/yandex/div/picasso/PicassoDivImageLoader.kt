@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -14,23 +16,28 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-
 class PicassoDivImageLoader(
-    context: Context
+    context: Context,
+    httpClientBuilder: OkHttpClient.Builder?,
 ) : DivImageLoader {
+
+    constructor(context: Context) : this(context, null)
 
     private val appContext = context.applicationContext
     private val picasso by lazy { createPicasso() }
     private val targets = TargetList()
-    private val okHttp3 = OkHttpClient.Builder().cache(Cache(context.cacheDir, DISK_CACHE_SIZE)).build()
+    private val httpClient = (httpClientBuilder ?: OkHttpClient.Builder())
+        .cache(Cache(context.cacheDir, DISK_CACHE_SIZE))
+        .build()
+    private val coroutineScope = (context as? LifecycleOwner)?.lifecycleScope ?: MainScope()
 
     val isIdle: Boolean
         get() = targets.size == 0
@@ -66,10 +73,12 @@ class PicassoDivImageLoader(
 
     override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val request = Request.Builder().url(imageUrl).build()
-        val call = okHttp3.newCall(request)
-        CoroutineScope(Dispatchers.Main).launch {
+        val call = httpClient.newCall(request)
+        coroutineScope.launch {
             withContext(Dispatchers.IO) {
-                val response = call.execute()
+                val response = runCatching {
+                    call.execute()
+                }.getOrNull() ?: return@withContext null
                 val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
                 val bytes = response.body?.bytes() ?: return@withContext null
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.let {

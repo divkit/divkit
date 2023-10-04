@@ -44,7 +44,7 @@ internal object Container {
         JSONObject(BuildConfig.HTTP_HEADERS).asHostToHeadersMap()
     }
 
-    val httpClient = OkHttpClient.Builder()
+    private val httpClientBuilder = OkHttpClient.Builder()
         .sslSocketFactory(
             NaiveSSLContext.getInstance("TLS").socketFactory,
             NaiveSSLContext.NaiveTrustManager()
@@ -62,7 +62,8 @@ internal object Container {
             )
         }
         .addNetworkInterceptor(StethoInterceptor())
-        .build()
+
+    val httpClient = httpClientBuilder.build()
 
     val applicationCoroutineScope = MainScope()
 
@@ -82,7 +83,7 @@ internal object Container {
 
     val imageLoader by lazy {
         if (preferences.imageLoader) {
-            PicassoDivImageLoader(context)
+            PicassoDivImageLoader(context, httpClientBuilder)
         } else {
             GlideDivImageLoader(context)
         }
