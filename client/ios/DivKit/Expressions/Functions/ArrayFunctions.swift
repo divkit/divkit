@@ -514,9 +514,9 @@ enum ArrayFunctions: String, CaseIterable {
     private var description: String {
       switch self {
       case let .indexOutOfBounds(expression, requstedIndex, arraySize):
-        return "Failed to evaluate [\(expression)]. Requested index (\(requstedIndex)) out of bounds array size (\(arraySize))"
+        return "Failed to evaluate [\(expression)]. Requested index (\(requstedIndex)) out of bounds array size (\(arraySize))."
       case let .incorrectValueType(expression, expectedType, actualType):
-        return "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\""
+        return "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
       case let .cannotConvertToInteger(expression):
         return "Failed to evaluate [\(expression)]. Cannot convert value to integer."
       case let .integerOverflow(expression):

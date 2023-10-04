@@ -448,7 +448,7 @@ private fun checkIndexOfBoundException(functionName: String, args: List<Any>) {
         throwException(
             functionName = functionName,
             args = args,
-            message = "Requested index (${index}) out of bounds array size ($arraySize)"
+            message = "Requested index (${index}) out of bounds array size ($arraySize)."
         )
     }
 }
@@ -466,7 +466,7 @@ private fun throwWrongTypeException(
         else -> actual.javaClass.simpleName.lowercase()
     }
     throwException(functionName, args,
-        "Incorrect value type: expected \"${expected.typeName.lowercase()}\", got \"$actualType\"")
+        "Incorrect value type: expected \"${expected.typeName.lowercase()}\", got \"$actualType\".")
 }
 
 private fun throwException(functionName: String, args: List<Any>, message: String): Nothing {

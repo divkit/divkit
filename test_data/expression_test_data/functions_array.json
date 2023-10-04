@@ -25,7 +25,7 @@
       "expression": "@{getStringFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Requested index (0) out of bounds array size (0)"
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Requested index (0) out of bounds array size (0)."
       },
       "variables": [
         {
@@ -63,7 +63,7 @@
       "expression": "@{getIntegerFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getIntegerFromArray(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\""
+        "value": "Failed to evaluate [getIntegerFromArray(<array>, 0)]. Incorrect value type: expected \"integer\", got \"string\"."
       },
       "variables": [
         {
@@ -145,7 +145,7 @@
       "expression": "@{getNumberFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getNumberFromArray(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\""
+        "value": "Failed to evaluate [getNumberFromArray(<array>, 0)]. Incorrect value type: expected \"number\", got \"string\"."
       },
       "variables": [
         {
@@ -227,7 +227,7 @@
       "expression": "@{getStringFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\""
+        "value": "Failed to evaluate [getStringFromArray(<array>, 0)]. Incorrect value type: expected \"string\", got \"number\"."
       },
       "variables": [
         {
@@ -309,7 +309,7 @@
       "expression": "@{getBooleanFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getBooleanFromArray(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\""
+        "value": "Failed to evaluate [getBooleanFromArray(<array>, 0)]. Incorrect value type: expected \"boolean\", got \"number\"."
       },
       "variables": [
         {
@@ -389,7 +389,7 @@
       "expression": "@{getColorFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getColorFromArray(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\""
+        "value": "Failed to evaluate [getColorFromArray(<array>, 0)]. Incorrect value type: expected \"color\", got \"number\"."
       },
       "variables": [
         {
@@ -495,7 +495,7 @@
       "expression": "@{getUrlFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getUrlFromArray(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\""
+        "value": "Failed to evaluate [getUrlFromArray(<array>, 0)]. Incorrect value type: expected \"url\", got \"number\"."
       },
       "variables": [
         {
@@ -616,7 +616,7 @@
       "expression": "@{getArrayFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getArrayFromArray(<array>, 0)]. Incorrect value type: expected \"array\", got \"number\""
+        "value": "Failed to evaluate [getArrayFromArray(<array>, 0)]. Incorrect value type: expected \"array\", got \"number\"."
       },
       "variables": [
         {
@@ -707,7 +707,7 @@
       "expression": "@{getDictFromArray(array, 0)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected \"dict\", got \"number\""
+        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected \"dict\", got \"number\"."
       },
       "variables": [
         {
