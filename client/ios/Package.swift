@@ -19,7 +19,7 @@ let package = Package(
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
   ],
   dependencies: [
-    .package(url: vgsl.url, from: "2.2.0")
+    .package(url: vgsl.url, from: "2.3.0")
   ],
   targets: [
     .target(
