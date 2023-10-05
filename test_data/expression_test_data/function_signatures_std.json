@@ -755,7 +755,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -775,7 +776,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -795,7 +797,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -815,7 +818,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -835,7 +839,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -854,7 +859,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getOptStringFromDict(string, dict, vararg string) string",
@@ -877,7 +884,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -901,7 +909,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -925,7 +934,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -949,7 +959,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -973,7 +984,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -997,7 +1009,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1020,7 +1033,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getOptUrlFromDict(string, dict, vararg string) url",
@@ -1042,7 +1057,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getArrayString(array, integer) string",
@@ -1061,7 +1078,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1081,7 +1099,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1101,7 +1120,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1121,7 +1141,8 @@
       "result_type": "boolean",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1141,7 +1162,8 @@
       "result_type": "color",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1165,7 +1187,8 @@
       "result_type": "string",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1189,7 +1212,8 @@
       "result_type": "number",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1213,7 +1237,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1237,7 +1262,8 @@
       "result_type": "boolean",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1261,7 +1287,8 @@
       "result_type": "color",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1285,7 +1312,8 @@
       "result_type": "color",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1303,7 +1331,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getArrayOptUrl(array, integer, url) url",
@@ -1325,7 +1355,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1348,7 +1379,8 @@
       ],
       "result_type": "url",
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -1367,7 +1399,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1386,7 +1419,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1405,7 +1439,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1424,7 +1459,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1443,7 +1479,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1466,7 +1503,8 @@
       ],
       "result_type": "string",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1489,7 +1527,8 @@
       ],
       "result_type": "number",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1512,7 +1551,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1535,7 +1575,8 @@
       ],
       "result_type": "boolean",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1558,7 +1599,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1581,7 +1623,8 @@
       ],
       "result_type": "color",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1599,7 +1642,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getOptUrlFromArray(array, integer, url) url",
@@ -1620,7 +1665,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getOptUrlFromArray(array, integer, string) url",
@@ -1641,7 +1688,9 @@
         }
       ],
       "result_type": "url",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     {
       "name": "getArrayFromArray(array, integer) array",
@@ -1659,7 +1708,8 @@
       ],
       "result_type": "array",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1678,7 +1728,8 @@
       ],
       "result_type": "array",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1697,7 +1748,8 @@
       ],
       "result_type": "dict",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1716,7 +1768,8 @@
       ],
       "result_type": "dict",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {

@@ -4,8 +4,8 @@ import type { EvalValue } from './eval';
 import { parseColor } from '../utils/correctColor';
 import { bigIntZero, toBigInt, MAX_INT, MIN_INT } from './bigint';
 
-export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict';
-export type VariableValue = string | number | bigint | boolean | null | undefined | object;
+export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
+export type VariableValue = string | number | bigint | boolean | null | undefined | object | unknown[];
 
 export abstract class Variable<ValueType = any, TypeName = VariableType> {
     protected name: string;
@@ -207,6 +207,24 @@ export class DictVariable extends Variable<object, 'dict'> {
     }
 }
 
+export class ArrayVariable extends Variable<unknown[], 'array'> {
+    protected convertValue(value: unknown[]) {
+        if (!Array.isArray(value)) {
+            throw new Error('Incorrect variable value');
+        }
+
+        return value;
+    }
+
+    protected fromString(_val: string): unknown[] {
+        throw new Error('Array variable does not support setter from string');
+    }
+
+    getType(): 'array' {
+        return 'array';
+    }
+}
+
 export const TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableValue, VariableType>> = {
     string: StringVariable,
     number: NumberVariable,
@@ -214,7 +232,8 @@ export const TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableValue, 
     boolean: BooleanVariable,
     color: ColorVariable,
     url: UrlVariable,
-    dict: DictVariable
+    dict: DictVariable,
+    array: ArrayVariable
 };
 
 export function createVariable(
@@ -238,6 +257,9 @@ export function defaultValueByType(type: keyof typeof TYPE_TO_CLASS): VariableVa
     }
     if (type === 'dict') {
         return {};
+    }
+    if (type === 'array') {
+        return [];
     }
 
     return '';

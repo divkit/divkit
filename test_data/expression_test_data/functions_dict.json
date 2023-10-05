@@ -5,7 +5,7 @@
       "expression": "@{unknownDictFuncFromDict(dict)}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [unknownDictFunc(<dict>)]. Unknown function name: unknownDictFunc."
+        "value": "Failed to evaluate [unknownDictFuncFromDict(<dict>)]. Unknown function name: unknownDictFuncFromDict."
       },
       "variables": [
         {
@@ -17,6 +17,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -36,7 +37,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -56,7 +58,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -78,7 +81,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -102,7 +106,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -124,7 +129,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -144,7 +150,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -166,7 +173,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -186,7 +194,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -206,7 +215,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -226,7 +236,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -246,7 +257,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -266,7 +278,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -286,7 +299,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -306,7 +320,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -326,7 +341,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -346,7 +362,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -366,7 +383,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -386,7 +404,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -406,7 +425,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -426,7 +446,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -446,7 +467,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -466,7 +488,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -486,7 +509,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -506,7 +530,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -526,7 +551,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -546,7 +572,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -566,7 +593,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -586,6 +614,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -605,6 +634,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -624,7 +654,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -644,7 +675,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -666,7 +698,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -686,7 +719,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -708,7 +742,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -728,7 +763,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -748,7 +784,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -768,7 +805,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -788,7 +826,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -808,7 +847,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -828,7 +868,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -848,7 +889,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -868,7 +910,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -888,7 +931,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -908,7 +952,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -928,7 +973,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -948,7 +994,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -968,7 +1015,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -988,7 +1036,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1008,7 +1057,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1028,7 +1078,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1048,7 +1099,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -1068,11 +1120,12 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
-      "name": "getOptColor(toColor('#000'), dict, 'prop') => '#FF000000'",
-      "expression": "@{getOptColor(toColor('#000'), dict, 'prop')}",
+      "name": "getOptColorFromDict(toColor('#000'), dict, 'prop') => '#FF000000'",
+      "expression": "@{getOptColorFromDict(toColor('#000'), dict, 'prop')}",
       "expected": {
         "type": "color",
         "value": "#FF000000"
@@ -1087,6 +1140,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -1106,6 +1160,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -1125,6 +1180,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -1144,6 +1200,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -1163,6 +1220,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     }
   ]

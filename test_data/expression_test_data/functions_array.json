@@ -17,7 +17,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -35,7 +36,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -55,7 +57,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -75,7 +78,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -96,7 +100,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -117,7 +122,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -137,7 +143,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -157,7 +164,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -178,7 +186,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -199,7 +208,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -219,7 +229,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -239,7 +250,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -260,7 +272,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -281,7 +294,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -301,7 +315,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -321,7 +336,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -341,7 +357,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -361,7 +378,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -381,7 +399,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -401,7 +420,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -421,7 +441,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -447,7 +468,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -468,7 +490,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -488,6 +511,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -507,6 +531,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -526,6 +551,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -545,6 +571,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -564,6 +591,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -583,6 +611,7 @@
         }
       ],
       "platforms": [
+        "web"
       ]
     },
     {
@@ -608,7 +637,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -628,7 +658,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -654,7 +685,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -675,7 +707,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -699,7 +732,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -719,7 +753,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -743,7 +778,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -764,7 +800,8 @@
         }
       ],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   ]

@@ -61,6 +61,14 @@ class ExpressionBinding {
                 }
                 return Number(value);
             }
+            if (result.type === 'array' || result.type === 'dict') {
+                try {
+                    return JSON.stringify(value);
+                } catch (err) {
+                    logError(wrapError(new Error(`Failed to stringify ${result.type}`)));
+                    return `<${result.type}>`;
+                }
+            }
             return value;
         } catch (err) {
             logError(wrapError(new Error('Expression execution error')));

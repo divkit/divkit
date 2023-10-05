@@ -19,11 +19,12 @@ export interface BooleanVariable extends Variable<number> {}
 export interface ColorVariable extends Variable<string> {}
 export interface UrlVariable extends Variable<string> {}
 export interface DictVariable extends Variable<object> {}
+export interface ArrayVariable extends Variable<unknown[]> {}
 
 export type AnyVariable = StringVariable | NumberVariable | IntegerVariable |
-    BooleanVariable | ColorVariable | UrlVariable | DictVariable;
+    BooleanVariable | ColorVariable | UrlVariable | DictVariable | ArrayVariable;
 
-export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict';
+export type VariableType = 'string' | 'number' | 'integer' | 'boolean' | 'color' | 'url' | 'dict' | 'array';
 
 export interface GlobalVariablesController {
     setVariable(variable: AnyVariable): void;

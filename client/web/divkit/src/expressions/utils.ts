@@ -54,6 +54,8 @@ export function valToString(val: EvalValue): string {
         return val.value;
     } else if (val.type === 'dict') {
         return '<dict>';
+    } else if (val.type === 'array') {
+        return '<array>';
     }
 
     // For purpose when new eval value types will be added

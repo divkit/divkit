@@ -659,8 +659,9 @@
                         if (name && value !== null) {
                             const variableInstance = variables.get(name);
                             if (variableInstance) {
-                                if (variableInstance.getType() === 'dict') {
-                                    logError(wrapError(new Error('Setting dict variables is not supported'), {
+                                const type = variableInstance.getType();
+                                if (type === 'dict' || type === 'array') {
+                                    logError(wrapError(new Error(`Setting ${type} variables is not supported`), {
                                         additional: {
                                             name
                                         }
