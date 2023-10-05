@@ -1,3 +1,39 @@
+## 28.5.0
+
+# Android Client:
+
+Additions:
+* Updated divkit-demo-app and divkit-lottie okhttp and okio dependencies due to CVE.
+* Updated Kotlin to 1.8.22.
+* Updated Gradle to 8.3.
+* Updated AGP to 8.1.1.
+* Implemented `DivVariableController` and since now it should be used instead of `GlobalVariableController`. `GlobalVariableController` was deprecated. 
+
+Fixes:
+* Fixed `div-input` multikey mask with single pattern element.
+* Fixed applying `maxWidth` and `maxHeight` to gallery children.
+* Fixed incorrect background color on `div-input` rebind.
+* Fixed snapping in `div-gallery` with `paging` `scroll_mode`.
+* Fixed `div-pager` visibility action with 100% visibility percentage not called for last item.
+
+# iOS Client:
+
+Additions:
+* Added `copy_to_clipboard` action handler.
+* Added `array_insert_value` and `array_remove_value` action handlers.
+* Added `getArray`/`getDict` functions.
+
+Fixes:
+* Fixed clickability of a margin area.
+
+# Web Client:
+
+Additions:
+* `palette` and `theme` marked as deprecated.
+
+Fixes:
+* Fixed `input` multikey mask with the single pattern element.
+
 ## 28.4.0
 
 # JSON Schema:

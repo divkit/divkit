@@ -1,3 +1,12 @@
+## 28.5.0 (October 9, 2023)
+
+Additions:
+* `palette` and `theme` marked as deprecated
+
+Fixes:
+* Fixed `input` multikey mask with the single pattern element
+
+
 ## 28.4.0 (October 2, 2023)
 
 Fixes:
