@@ -1,6 +1,6 @@
 ## 28.5.0 (October 9, 2023)
 
-Additions:
+Deprecation:
 * `palette` and `theme` marked as deprecated
 
 Fixes:

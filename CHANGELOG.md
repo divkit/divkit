@@ -28,7 +28,7 @@ Fixes:
 
 # Web Client:
 
-Additions:
+Deprecation:
 * `palette` and `theme` marked as deprecated.
 
 Fixes:
