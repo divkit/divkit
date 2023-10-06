@@ -7,11 +7,11 @@ import { savedStore } from './savedStore';
 import { editorMode } from './editorMode';
 import { jsonStore } from './jsonStore';
 // import { viewModeStore } from './viewModeStore';
-import { addListener, wsPromise } from './ws';
+// import { addListener, wsPromise } from './ws';
 // import { listenToDevices } from './externalViewers';
 import { getLs, setLs } from '../utils/localStorage';
 
-function listenJsonForPreview(uuid: string): void {
+/* function listenJsonForPreview(uuid: string): void {
     wsPromise.then(ws => {
         ws.send(JSON.stringify({
             type: 'listen',
@@ -25,15 +25,15 @@ function listenJsonForPreview(uuid: string): void {
             jsonStore.set(msg.message.json);
         }
     });
-}
+} */
 
-let mode = '';
+// let mode = '';
 
 async function init() {
     const params = new URLSearchParams(location.search);
 
     const uuid = params.get('uuid');
-    mode = params.get('mode') || '';
+    // mode = params.get('mode') || '';
 
     const samples = params.get('samples') === '1';
 
@@ -80,7 +80,7 @@ async function init() {
                 editorMode.set(res.language);
 
                 isInitialLoading.set(false);
-            }).catch(_err => {
+            }).catch(() => {
                 isLoadError.set(true);
             });
     }

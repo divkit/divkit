@@ -2,6 +2,8 @@
     import { getContext, onDestroy, onMount } from 'svelte';
     import { get } from 'svelte/store';
     import type { DivkitInstance, DivExtensionClass } from '../../../../client/web/divkit/typings/common';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     import { render as divkitRender, SizeProvider, lottieExtensionBuilder } from '../../artifacts/client-devtool.mjs';
     import '../../artifacts/client.css';
     import ViewportSelect from './ViewportSelect.svelte';
@@ -24,10 +26,10 @@
     import { sampleWarningStore } from '../data/sampleWarningStore';
     import { templatesCheck } from '../utils/templatesCheck';
     import Lottie from 'lottie-web/build/player/lottie_light';
+    import type { ComponentProps } from '../data/webStructure';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
-    let json;
     let viewport = '';
     let platform: 'desktop' | 'touch' | 'auto' = 'auto';
     $: splitted = viewport.split('x');
@@ -98,6 +100,7 @@
         }
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function rerender(json: any, platform: 'desktop' | 'touch' | 'auto'): void {
         if (!rootPreview) {
             return;
@@ -120,7 +123,12 @@
                 ['size_provider', SizeProvider],
                 ['lottie', lottieExtensionBuilder(Lottie.loadAnimation)],
             ]),
-            onError(event) {
+            onError(event: {
+                error: Error & {
+                    level: 'error' | 'warn';
+                    additional?: Record<string, unknown>;
+                };
+            }) {
                 const additional = event.error.additional || {};
 
                 let args = Object.keys(additional).reduce((acc: string[], item: string) => {
@@ -137,7 +145,10 @@
                     }
                 ];
             },
-            onComponent(event) {
+            onComponent(event: ComponentProps & {
+                type: 'mount' | 'destroy';
+                node: HTMLElement;
+            }) {
                 ++count;
                 if (event.type === 'mount') {
                     components.set(event.node, event);
@@ -236,6 +247,7 @@
         {#if $highlightMode}
             <div class="web-viewer__content-highlight-overlay-wrapper">
                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div
                     class="web-viewer__content-highlight-overlay"
                     on:mousemove={onHighlightOverlayMove}

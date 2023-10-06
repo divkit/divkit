@@ -5,6 +5,7 @@ function getTemplateProps(part: unknown): string[] {
 
     if (part && typeof part === 'object') {
         for (const key in part) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const val = (part as any)[key];
             if (key.startsWith('$')) {
                 if (typeof val === 'string') {
@@ -21,6 +22,7 @@ function getTemplateProps(part: unknown): string[] {
     return res;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function templatesCheck(json: any): ViewerError[] {
     if (!(json.templates && typeof json.templates === 'object')) {
         return [];
@@ -33,6 +35,7 @@ export function templatesCheck(json: any): ViewerError[] {
             const template = json.templates[key];
             const props = getTemplateProps((template));
             templateProps.set(key, props);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return [{
                 message: err.message,
@@ -46,6 +49,7 @@ export function templatesCheck(json: any): ViewerError[] {
 
     const templateDeps = new Map<string, string[]>();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const procTemplate = (name: string, template: any): string[] => {
         if (!template || !('type' in template)) {
             throw new Error('Cannot process template without "type"');
@@ -64,6 +68,7 @@ export function templatesCheck(json: any): ViewerError[] {
         try {
             const template = json.templates[key];
             templateDeps.set(key, procTemplate(key, template));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return [{
                 message: err.message,
@@ -73,6 +78,7 @@ export function templatesCheck(json: any): ViewerError[] {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const checkTemplate = (name: string, template: any) => {
         const parent = template.type;
         const deps = templateDeps.get(parent);

@@ -4,6 +4,7 @@
     import Viewer from './Viewer.svelte';
     import { isSamples } from '../data/session';
     import Samples from './Samples.svelte';
+    import { Truthy } from '../utils/truthy';
 
     $: components = [$isSamples && {
         component: Samples,
@@ -15,7 +16,7 @@
         component: Viewer,
         weight: 3,
         minWidth: 450
-    }].filter(Boolean);
+    }].filter(Truthy);
 </script>
 
 <main class="main">

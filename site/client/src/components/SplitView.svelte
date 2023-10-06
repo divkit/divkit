@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { SvelteComponent } from 'svelte';
+    import type { ComponentType } from 'svelte';
 
     export let components: {
-        component: typeof SvelteComponent;
+        component: ComponentType;
         weight: number;
         minWidth?: number;
     }[];

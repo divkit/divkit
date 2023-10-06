@@ -51,6 +51,7 @@
     }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class="tree-leaf"
     class:tree-leaf_alternate-hovered={alternateHover}

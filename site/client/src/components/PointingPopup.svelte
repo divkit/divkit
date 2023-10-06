@@ -62,6 +62,7 @@
         <div class="pointing-popup__content">
             {msg}
         </div>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="pointing-popup__close" on:click={onCloseClick}></div>
     </div>
 {/if}

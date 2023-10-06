@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
     import * as monaco from 'monaco-editor';
-    //@ts-ignore
     import tsBuilderTypes from '../../artifacts/jsonbuilder.d.ts?inline';
 
     const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
@@ -76,14 +75,18 @@
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
-    const LANGUAGE_NAMES = {
+    type Language = 'json' | 'ts';
+
+    const LANGUAGE_NAMES: Record<Language, string> = {
         json: 'JSON',
         ts: 'TypeScript'
     };
 
+    const LANGUAGE_KEYS: Language[] = ['json', 'ts'];
+
     let editor: monaco.editor.IStandaloneCodeEditor | null = null;
     let node: HTMLElement;
-    let currentLanguage = '';
+    let currentLanguage: Language = 'json';
     let isRunning = false;
     let runButton: HTMLElement;
 
@@ -215,7 +218,7 @@
     <PanelHeader>
         <Select
             bind:value={currentLanguage}
-            items={['json', 'ts'].map(value => ({value, name: LANGUAGE_NAMES[value]}))}
+            items={LANGUAGE_KEYS.map(value => ({value, name: LANGUAGE_NAMES[value]}))}
             toggledClass="editor__toggled-select" slot="left"
             on:change={onLanguageChange}
         >

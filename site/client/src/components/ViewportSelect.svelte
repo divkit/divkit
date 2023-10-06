@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import Select from './Select.svelte';
 
     // const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
@@ -38,8 +36,8 @@
 
     export let value = '';
     let selectVal = '';
-    let customWidth = '200';
-    let customHeight = '200';
+    // let customWidth = '200';
+    // let customHeight = '200';
 
     $: {
         if (!value) {
@@ -48,21 +46,21 @@
                 throw Error('No default variant');
             }
             value = selectVal = def.value;
-            const parts = value.split('x');
+            /* const parts = value.split('x');
             if (parts.length === 2) {
                 customWidth = parts[0];
                 customHeight = parts[1];
-            }
+            } */
         }
     }
 
     function onChange(): void {
         if (selectVal !== 'custom') {
-            const parts = selectVal.split('x');
+            /* const parts = selectVal.split('x');
             if (parts.length === 2) {
                 customWidth = parts[0];
                 customHeight = parts[1];
-            }
+            } */
             value = selectVal;
         }
     }

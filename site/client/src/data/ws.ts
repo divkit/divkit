@@ -2,19 +2,21 @@ import { serverHostPath, isProd } from '../utils/const';
 
 // todo reconnect
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Listener = (msg: any) => void;
 const listeners: Listener[] = [];
 
 export const wsPromise = new Promise<WebSocket>(resolve => {
     const ws = new WebSocket((isProd ? 'wss://' : 'ws://') + serverHostPath);
-    let connected = false;
+    // let connected = false;
 
     ws.onopen = () => {
-        connected = true;
+        // connected = true;
         resolve(ws);
     };
 
     ws.onmessage = msg => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let json: any;
         try {
             json = JSON.parse(msg.data);

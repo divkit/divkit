@@ -13,9 +13,11 @@
     $: origJson = $selectedLeaf?.props.origJson;
     let jsonList: {
         title: string;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         json: any;
     }[] = [];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function updateJsonList(origJson: any) {
         jsonList = [];
 
@@ -52,6 +54,7 @@
 </script>
 
 <div class="structure-templates">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="structure-templates__title" on:click={toggle}>
         {$l10n('appliedTemplates')}
     </div>

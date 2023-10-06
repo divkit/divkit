@@ -4,6 +4,7 @@ import { valueStore } from './valueStore';
 import { editorMode } from './editorMode';
 
 export const convertToJsonErrorsStore = writable<ViewerError[]>([]);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const jsonStore = writable<any>({});
 
 function updateJson(): void {

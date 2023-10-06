@@ -17,25 +17,21 @@
     let alreadySaved = Boolean($session.uuid);
     let promise: Promise<void>;
     let linkToEdit = '';
-    let linkToPreview = '';
+    // let linkToPreview = '';
     let linkToJSON = '';
     let qr = '';
 
-    function setUuid(res: {
+    async function setUuid(res: {
         uuid: string;
         linkToEdit: string;
         linkToPreview: string;
         linkToJSON: string;
     }) {
-        return Promise.resolve().then(() => {
-            linkToEdit = res.linkToEdit;
-            linkToPreview = res.linkToPreview;
-            linkToJSON = res.linkToJSON;
+        linkToEdit = res.linkToEdit;
+        // linkToPreview = res.linkToPreview;
+        linkToJSON = res.linkToJSON;
 
-            return QRCode.toDataURL(linkToJSON);
-        }).then(url => {
-            qr = url;
-        });
+        qr = await QRCode.toDataURL(linkToJSON);
     }
 
     function onCancel(): void {
@@ -59,7 +55,7 @@
     {#if alreadySaved}
         {#await promise}
             <div class="links-popup__loading"></div>
-        {:then res}
+        {:then _res}
             <div class="links-popup__content">
                 <div class="links-popup__row">
                     <label class="links-popup__label">
@@ -108,7 +104,7 @@
                 </div>
                 <img class="links-popup__qr" src={qr} alt={$l10n('qrCode')}>
             </div>
-        {:catch err}
+        {:catch _err}
             <div class="links-popup__content">
                 {$l10n('loadError')}
             </div>

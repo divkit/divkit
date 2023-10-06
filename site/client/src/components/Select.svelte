@@ -32,9 +32,10 @@
     }
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
     class={'select' + (popupShown && toggledClass ? ' ' + toggledClass : '')}
-    on:сдшсл={onMouseEnterOrClick}
+    on:click={onMouseEnterOrClick}
     on:mouseenter={onMouseEnterOrClick}
     on:mouseleave={onMouseLeave}
 >

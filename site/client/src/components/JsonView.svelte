@@ -4,6 +4,7 @@
 
     export let name = '';
     export let comma = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     export let json: any;
     export let level = 0;
     export let expanded = false;
@@ -26,10 +27,12 @@
             {#if Array.isArray(json)}
                 {#if expanded}
                     <div class="json-view__row">
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'['}
                     </div>
                 {:else}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="json-view__toggler" on:click={() => expanded = true} title={$l10n('expand')}>
                         {`[ ${json.length} item${json.length > 1 ? 's' : ''} ]`}
                     </div>
@@ -37,10 +40,12 @@
             {:else if json && typeof json === 'object'}
                 {#if expanded}
                     <div class="json-view__row">
+                        <!-- svelte-ignore a11y-click-events-have-key-events -->
                         <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'{'}
                     </div>
                 {:else}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <div class="json-view__toggler" on:click={() => expanded = true}>
                         {'{...}'}
                     </div>

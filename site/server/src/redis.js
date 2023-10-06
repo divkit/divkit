@@ -1,4 +1,4 @@
-const Redis = require("ioredis");
+const Redis = require('ioredis');
 
 module.exports = {
     publishJsonUpdate,
@@ -19,7 +19,7 @@ const hostsDesc = hosts.map(host => ({host, port}));
 if (process.env.NODE_ENV === 'production') {
     connectOptions = [{
         sentinels: hostsDesc,
-        name: "divview-message-queue",
+        name: 'divview-message-queue',
         password,
         family: 6
     }];
@@ -84,7 +84,7 @@ async function subscribeJsonUpdate(uuid, fn) {
     subscribers[uuid] = fn;
     clusterForSubscribe.subscribe(updateJsonChannel + ':' + uuid, (err, count) => {
         if (err) {
-            console.error("Failed to subscribe: %s", err.message);
+            console.error('Failed to subscribe: %s', err.message);
         } else {
             console.log(
                 `Redis subscribed to ${uuid} successfully! This client is currently subscribed to ${count} channels.`

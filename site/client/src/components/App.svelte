@@ -2,7 +2,7 @@
     import Header from './Header.svelte';
     import Main from './Main.svelte';
     import { setContext } from 'svelte';
-    import { derived, get, Writable, writable } from 'svelte/store';
+    import { derived, get, writable } from 'svelte/store';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import translations from '../auto/lang.json';
     import PointingPopup from './PointingPopup.svelte';
@@ -11,6 +11,7 @@
     import { isInitialLoading, isLoadError } from '../data/session';
     import Loader from './Loader.svelte';
     import ErrorPage from './ErrorPage.svelte';
+    import type langObj from '../auto/lang.json';
 
     let langVal = (location.pathname.match(/(\w+)\/playground/) || [])[1] || 'en';
     if (langVal !== 'ru' && langVal !== 'en') {
@@ -18,7 +19,8 @@
     }
     let lang = writable(langVal);
     const l10n = derived(lang, lang => {
-        return (key: string, overrideLang?: string) =>
+        return (key: keyof typeof langObj['en'], overrideLang?: string) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (translations as any)[overrideLang || lang]?.[key] || '';
     });
 

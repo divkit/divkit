@@ -2,6 +2,7 @@ import type { Writable } from 'svelte/store';
 
 export interface TreeLeaf {
     id: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     props: any;
     parent?: TreeLeaf;
     childs: TreeLeaf[];

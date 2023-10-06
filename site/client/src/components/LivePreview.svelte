@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import type { Platform, DivkitInstance, DivExtensionClass } from '../../../../client/web/divkit/typings/common';
     import { jsonStore } from '../data/jsonStore';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     import { render as divkitRender, SizeProvider, lottieExtensionBuilder } from '../../artifacts/client-devtool.mjs';
     import '../../artifacts/client.css';
     import Lottie from 'lottie-web/build/player/lottie_light';
@@ -11,6 +13,7 @@
     let rootPreview: HTMLElement;
     let divBlock: DivkitInstance | null = null;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function rerender(json: any): void {
         if (!rootPreview) {
             return;

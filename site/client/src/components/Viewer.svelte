@@ -78,7 +78,7 @@
 
     <ViewerPanels
         type={isWebViewer(currentViewerObj) ? 'web' : 'external'}
-        errors={isWebViewer(currentViewerObj) ? $webViewerErrors : currentViewerObj.lastState?.errors}
+        errors={isWebViewer(currentViewerObj) ? $webViewerErrors : currentViewerObj.lastState?.errors || []}
     />
 <!--    <ErrorView errors={$convertToJsonStore.length ? $convertToJsonStore : currentViewerObj.lastState?.errors} />-->
 </div>

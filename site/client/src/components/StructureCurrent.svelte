@@ -18,6 +18,7 @@
 </script>
 
 <div class="structure-current">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="structure-current__title" on:click={toggle}>
         {$l10n('currentComponent')}
     </div>

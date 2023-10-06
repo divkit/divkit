@@ -1,6 +1,6 @@
-import { get, writable } from 'svelte/store';
-import { session } from './session';
-import { addListener, wsPromise } from './ws';
+import { /* get, */ writable } from 'svelte/store';
+/* import { session } from './session';
+import { addListener, wsPromise } from './ws'; */
 
 export interface Device {
     /** @deprecated -> os_name */
@@ -47,7 +47,7 @@ export interface ViewerError {
     level?: 'error' | 'warn';
 }
 
-let currentViewers: ExternalViewer[] = [];
+const currentViewers: ExternalViewer[] = [];
 export const externalViewers = writable(currentViewers);
 
 /*let prevListen: string | null = null;

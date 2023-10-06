@@ -3,6 +3,7 @@
     import WebViewer from './WebViewer.svelte';
     import WebViewerSidebar from './WebViewerSidebar.svelte';
     import { panelStructure } from '../data/panels';
+    import { Truthy } from '../utils/truthy';
 
     $: components = [{
         component: WebViewer,
@@ -12,7 +13,7 @@
         component: WebViewerSidebar,
         weight: 3,
         minWidth: 50
-    }].filter(Boolean);
+    }].filter(Truthy);
 </script>
 
 <main class="web-viewer-wrapper">
