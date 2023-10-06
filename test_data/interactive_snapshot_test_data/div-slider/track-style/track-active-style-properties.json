@@ -27,7 +27,7 @@
         {
           "name": "track_active_style_shape_height",
           "type": "integer",
-          "value": 6
+          "value": 10
         },
         {
           "name": "track_active_style_shape_width",
@@ -140,7 +140,7 @@
           "log_id": "track_active_style_stroke_color"
         },
         {
-          "url": "div-action://set_variable?name=track_active_style_stroke_width&value=5",
+          "url": "div-action://set_variable?name=track_active_style_stroke_width&value=4",
           "log_id": "track_active_style_stroke_width"
         }
       ]
@@ -152,7 +152,7 @@
           "log_id": "track_active_style_shape_height"
         },
         {
-          "url": "div-action://set_variable?name=track_active_style_shape_width&value=10",
+          "url": "div-action://set_variable?name=track_active_style_shape_width&value=15",
           "log_id": "track_active_style_shape_width"
         },
         {
@@ -176,7 +176,7 @@
           "log_id": "restore: track_active_style_stroke_width"
         },
         {
-          "url": "div-action://set_variable?name=track_active_style_shape_height&value=6",
+          "url": "div-action://set_variable?name=track_active_style_shape_height&value=10",
           "log_id": "restore: track_active_style_shape_height"
         },
         {

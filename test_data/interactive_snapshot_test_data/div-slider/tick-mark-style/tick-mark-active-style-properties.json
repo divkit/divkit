@@ -27,12 +27,12 @@
         {
           "name": "tick_mark_active_style_shape_height",
           "type": "integer",
-          "value": 8
+          "value": 10
         },
         {
           "name": "tick_mark_active_style_shape_width",
           "type": "integer",
-          "value": 8
+          "value": 10
         },
         {
           "name": "tick_mark_active_style_shape_radius",
@@ -152,7 +152,7 @@
           "log_id": "tick_mark_active_style_stroke_color"
         },
         {
-          "url": "div-action://set_variable?name=tick_mark_active_style_stroke_width&value=5",
+          "url": "div-action://set_variable?name=tick_mark_active_style_stroke_width&value=4",
           "log_id": "tick_mark_active_style_stroke_width"
         }
       ]
@@ -160,11 +160,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=tick_mark_active_style_shape_height&value=15",
+          "url": "div-action://set_variable?name=tick_mark_active_style_shape_height&value=16",
           "log_id": "tick_mark_active_style_shape_height"
         },
         {
-          "url": "div-action://set_variable?name=tick_mark_active_style_shape_width&value=10",
+          "url": "div-action://set_variable?name=tick_mark_active_style_shape_width&value=12",
           "log_id": "tick_mark_active_style_shape_width"
         },
         {
@@ -188,11 +188,11 @@
           "log_id": "restore: tick_mark_active_style_stroke_width"
         },
         {
-          "url": "div-action://set_variable?name=tick_mark_active_style_shape_height&value=8",
+          "url": "div-action://set_variable?name=tick_mark_active_style_shape_height&value=10",
           "log_id": "restore: tick_mark_active_style_shape_height"
         },
         {
-          "url": "div-action://set_variable?name=tick_mark_active_style_shape_width&value=8",
+          "url": "div-action://set_variable?name=tick_mark_active_style_shape_width&value=10",
           "log_id": "restore: tick_mark_active_style_shape_width"
         },
         {

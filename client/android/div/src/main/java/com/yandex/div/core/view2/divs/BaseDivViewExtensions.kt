@@ -11,7 +11,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withTranslation
@@ -26,7 +25,6 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.animations.asTouchListener
-import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.Log
@@ -813,7 +811,7 @@ internal fun DivShapeDrawable.toDrawable(
                     color = (shape.value.backgroundColor ?: color).evaluate(resolver),
                     radius = shape.value.cornerRadius.toPxF(metrics, resolver),
                     strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
-                    strokeWidth = (shape.value.stroke ?: stroke)?.width?.evaluate(resolver)?.toFloat()
+                    strokeWidth = (shape.value.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
                 )
             )
         }
@@ -823,12 +821,15 @@ internal fun DivShapeDrawable.toDrawable(
                     radius = shape.value.radius.toPxF(metrics, resolver),
                     color = (shape.value.backgroundColor ?: color).evaluate(resolver),
                     strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
-                    strokeWidth = (shape.value.stroke ?: stroke)?.width?.evaluate(resolver)?.toFloat()
+                    strokeWidth = (shape.value.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
                 )
             )
         else -> null
     }
 }
+
+private fun DivStroke.getWidthPxF(metrics: DisplayMetrics, resolver: ExpressionResolver) =
+    width.evaluate(resolver).unitToPxF(metrics, unit.evaluate(resolver))
 
 internal val DivIndicator.itemsPlacementCompat : DivIndicatorItemPlacement get() {
     return itemsPlacement ?: DivIndicatorItemPlacement.Default(

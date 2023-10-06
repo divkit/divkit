@@ -78,7 +78,7 @@
                 "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
-                  "width": 2
+                  "width": 1
                 },
                 "shape": {
                   "type": "rounded_rectangle",
@@ -101,7 +101,7 @@
                 "color": "#20000000",
                 "stroke": {
                   "color": "#ffffff",
-                  "width": 2
+                  "width": 1
                 },
                 "shape": {
                   "type": "rounded_rectangle",
