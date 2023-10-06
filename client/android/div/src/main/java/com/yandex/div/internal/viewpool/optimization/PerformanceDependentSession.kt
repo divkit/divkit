@@ -2,71 +2,128 @@ package com.yandex.div.internal.viewpool.optimization
 
 import androidx.annotation.AnyThread
 import androidx.collection.ArrayMap
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.view2.DivViewCreator
 import kotlinx.serialization.Serializable
 
-@PublicApi
-@Serializable
-data class PerformanceDependentSession(
-    private val viewObtainments: MutableMap<String, MutableList<ViewObtainment>> = prepareArrayMap()
-) {
-    @Serializable
-    data class ViewObtainment(
-        val obtainmentTime: Long,
-        val obtainmentDuration: Long,
-        val availableViews: Int,
-        val isObtainedWithBlock: Boolean
-    )
+sealed class PerformanceDependentSession {
+    sealed class ViewObtainmentStatistics {
+        abstract val maxSuccessiveBlocked: Int
+        abstract val minUnused: Int?
 
-    @AnyThread
-    fun getViewObtainments(): Map<String, List<ViewObtainment>> = synchronized(viewObtainments) {
-        viewObtainments.toMap()
+        override fun toString(): String =
+            "ViewObtainmentStatistics(maxSuccessiveBlocked=$maxSuccessiveBlocked, minUnused=$minUnused)"
     }
 
+    abstract val viewObtainmentStatistics: Map<String, ViewObtainmentStatistics>
+
     @AnyThread
-    internal fun viewObtained(
+    internal abstract fun viewObtained(
         viewType: String,
         obtainmentDuration: Long,
         availableViews: Int,
         isObtainedWithBlock: Boolean
-    ): Unit = synchronized(viewObtainments) {
-        viewObtainments.getOrPut(viewType) { mutableListOf() }.add(
-            ViewObtainment(
-                System.currentTimeMillis(),
-                obtainmentDuration,
-                availableViews,
-                isObtainedWithBlock
-            )
-        )
-    }
+    )
 
     @AnyThread
-    internal fun clear(): Unit = synchronized(viewObtainments) {
-        viewObtainments.clear()
+    internal abstract fun clear()
+
+    class Lightweight : PerformanceDependentSession() {
+        override val viewObtainmentStatistics: Map<String, ViewObtainmentStatistics>
+            get() = mutableViewObtainmentStatistics
+
+        private val mutableViewObtainmentStatistics =
+            ArrayMap<String, MutableViewObtainmentStatistics>().prepare { MutableViewObtainmentStatistics() }
+
+        override fun viewObtained(
+            viewType: String,
+            obtainmentDuration: Long,
+            availableViews: Int,
+            isObtainedWithBlock: Boolean
+        ) {
+            mutableViewObtainmentStatistics[viewType]?.report(availableViews, isObtainedWithBlock)
+        }
+
+        override fun clear() = mutableViewObtainmentStatistics.values.forEach { it.clear() }
+    }
+
+    class Detailed : PerformanceDependentSession() {
+        @Serializable
+        data class ViewObtainment(
+            val obtainmentTime: Long,
+            val obtainmentDuration: Long,
+            val availableViews: Int,
+            val isObtainedWithBlock: Boolean
+        )
+
+        override val viewObtainmentStatistics: Map<String, ViewObtainmentStatistics>
+            get() = viewObtainments.mapValues { (_, value) ->
+                MutableViewObtainmentStatistics().apply {
+                    value.forEach { report(it.availableViews, it.isObtainedWithBlock) }
+                }
+            }
+
+        private val viewObtainments =
+            ArrayMap<String, MutableList<ViewObtainment>>().prepare { mutableListOf() }
+
+        fun getViewObtainments(): Map<String, List<ViewObtainment>> = viewObtainments.mapValues { (_, value) ->
+            value.toList()
+        }
+
+        override fun viewObtained(
+            viewType: String,
+            obtainmentDuration: Long,
+            availableViews: Int,
+            isObtainedWithBlock: Boolean
+        ) {
+            val obtainmentList = viewObtainments[viewType] ?: return
+
+            val obtainment = ViewObtainment(
+                obtainmentTime = System.currentTimeMillis(),
+                obtainmentDuration = obtainmentDuration,
+                availableViews = availableViews,
+                isObtainedWithBlock = isObtainedWithBlock
+            )
+
+            synchronized(obtainmentList) { obtainmentList.add(obtainment) }
+        }
+
+        override fun clear() = viewObtainments.values.forEach { synchronized(it) { it.clear() } }
     }
 
     private companion object {
-        fun prepareArrayMap() = ArrayMap<String, MutableList<ViewObtainment>>().apply {
-            arrayOf(
-                DivViewCreator.TAG_TEXT,
-                DivViewCreator.TAG_IMAGE,
-                DivViewCreator.TAG_GIF_IMAGE,
-                DivViewCreator.TAG_OVERLAP_CONTAINER,
-                DivViewCreator.TAG_LINEAR_CONTAINER,
-                DivViewCreator.TAG_WRAP_CONTAINER,
-                DivViewCreator.TAG_GRID,
-                DivViewCreator.TAG_GALLERY,
-                DivViewCreator.TAG_PAGER,
-                DivViewCreator.TAG_TABS,
-                DivViewCreator.TAG_STATE,
-                DivViewCreator.TAG_CUSTOM,
-                DivViewCreator.TAG_INDICATOR,
-                DivViewCreator.TAG_SLIDER,
-                DivViewCreator.TAG_INPUT,
-                DivViewCreator.TAG_SELECT,
-                DivViewCreator.TAG_VIDEO
-            ).forEach { this[it] = mutableListOf() }
+        inline fun <T : Any> ArrayMap<String, T>.prepare(defaultValue: () -> T): ArrayMap<String, T> =
+            DivViewCreator.TAGS.associateWithTo(this) { defaultValue() }
+    }
+}
+
+private class MutableViewObtainmentStatistics : PerformanceDependentSession.ViewObtainmentStatistics() {
+    override var maxSuccessiveBlocked: Int = 0
+    private var currentSuccessiveBlocked: Int = 0
+
+    override var minUnused: Int? = null
+
+    fun report(availableViews: Int, isObtainedWithBlock: Boolean) {
+        synchronized(this) {
+            if (isObtainedWithBlock) {
+                ++currentSuccessiveBlocked
+                if (currentSuccessiveBlocked > maxSuccessiveBlocked) {
+                    maxSuccessiveBlocked = currentSuccessiveBlocked
+                }
+            } else {
+                currentSuccessiveBlocked = 0
+
+                if (minUnused == null || availableViews < minUnused!!) {
+                    minUnused = availableViews
+                }
+            }
+        }
+    }
+
+    fun clear() {
+        synchronized(this) {
+            maxSuccessiveBlocked = 0
+            currentSuccessiveBlocked = 0
+            minUnused = 0
         }
     }
 }

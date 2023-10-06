@@ -71,7 +71,7 @@ open class DivBinderTest {
         whenever(divView.viewComponent).doReturn(this)
     }
 
-    internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), null))
+    internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
     internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
 
     companion object {

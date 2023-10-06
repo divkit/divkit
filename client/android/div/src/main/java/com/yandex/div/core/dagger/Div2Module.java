@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
@@ -15,23 +16,18 @@ import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
-import com.yandex.div.internal.viewpool.optimization.OptimizedViewPreCreationProfileRepository;
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.internal.viewpool.AdvanceViewPool;
-import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionRepository;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
 import com.yandex.div.internal.viewpool.ViewCreator;
 import com.yandex.div.internal.viewpool.ViewPool;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.Profiler;
-import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
-import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileOptimizer;
 import com.yandex.div.internal.viewpool.FrameProfiler;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 import kotlin.collections.ArraysKt;
 
@@ -89,58 +85,13 @@ abstract class Div2Module {
 
     @Provides
     @DivScope
-    @Nullable
+    @NonNull
     static ViewPoolProfiler provideViewPoolProfiler(
             @Nullable FrameProfiler frameProfiler,
-            @Nullable PerformanceDependentSessionProfiler sessionProfiler
+            @NonNull PerformanceDependentSessionProfiler sessionProfiler
     ) {
         List<Profiler> profilers = ArraysKt.filterNotNull(new Profiler[]{frameProfiler, sessionProfiler});
-        return profilers.isEmpty() ? null : new ViewPoolProfiler(profilers);
-    }
-
-    @Provides
-    @DivScope
-    @Nullable
-    static PerformanceDependentSessionRepository providePerformanceDependentSessionRepository(
-            @NonNull @Named(Names.APP_CONTEXT) Context context,
-            @NonNull ViewPreCreationProfile profile,
-            @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED) boolean optimizationEnabled
-    ) {
-        return (optimizationEnabled && profile.getId() != null) ? new PerformanceDependentSessionRepository(context, profile) : null;
-    }
-
-    @Provides
-    @DivScope
-    @Nullable
-    static OptimizedViewPreCreationProfileRepository provideOptimizedPreCreationProfileRepository(
-            @NonNull @Named(Names.APP_CONTEXT) Context context,
-            @NonNull ViewPreCreationProfile profile,
-            @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED) boolean optimizationEnabled
-    ) {
-        return (optimizationEnabled && profile.getId() != null) ? new OptimizedViewPreCreationProfileRepository(context, profile) : null;
-    }
-
-    @Provides
-    @DivScope
-    @Nullable
-    static ViewPreCreationProfileOptimizer provideViewPreCreationProfileOptimizer(
-            @Nullable PerformanceDependentSessionRepository sessionRepository,
-            @Nullable OptimizedViewPreCreationProfileRepository profileRepository,
-            @NonNull ViewPreCreationProfile profile,
-            @NonNull ExecutorService executorService
-    ) {
-        return (sessionRepository != null && profileRepository != null) ? new ViewPreCreationProfileOptimizer(sessionRepository, profileRepository, profile, executorService) : null;
-    }
-
-    @Provides
-    @DivScope
-    @Nullable
-    static PerformanceDependentSessionProfiler providePerformanceDependentSessionProfiler(
-            @Nullable PerformanceDependentSessionRepository repository,
-            @Nullable ViewPreCreationProfileOptimizer optimizer,
-            @NonNull ExecutorService executorService
-    ) {
-        return (repository != null && optimizer != null) ? new PerformanceDependentSessionProfiler(repository, optimizer, executorService) : null;
+        return new ViewPoolProfiler(profilers);
     }
 
     @Provides

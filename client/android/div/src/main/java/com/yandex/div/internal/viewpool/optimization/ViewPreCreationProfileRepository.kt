@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
+import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.Names.APP_CONTEXT
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -16,26 +20,26 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.WeakHashMap
+import javax.inject.Inject
+import javax.inject.Named
 
-internal class OptimizedViewPreCreationProfileRepository(
-    context: Context,
-    private val constraints: ViewPreCreationProfile
+@DivScope
+@Mockable
+class ViewPreCreationProfileRepository @Inject constructor(
+    @Named(APP_CONTEXT) private val context: Context,
+    private val defaultProfile: ViewPreCreationProfile
 ) {
-    private val store = context.getStoreForId(constraints.id)
-
-    fun get(): ViewPreCreationProfile = runCatching {
-        runBlocking { store.data.first() }
+    suspend fun get(id: String): ViewPreCreationProfile = withContext(Dispatchers.IO) {
+        runCatching { context.getStoreForId(id).data.first() }
+            .onFailure { KLog.e(TAG, it) }
+            .getOrNull() ?: defaultProfile.copy(id = id)
     }
-        .onFailure { KLog.e(TAG, it) }
-        .getOrNull() ?: constraints
 
-
-    fun save(optimizedProfile: ViewPreCreationProfile): Boolean = runCatching {
-        runBlocking { store.updateData { optimizedProfile } }
+    suspend fun save(profile: ViewPreCreationProfile): Boolean = withContext(Dispatchers.IO) {
+        runCatching { context.getStoreForId(profile.id!!).updateData { profile } }
+            .onFailure { KLog.e(TAG, it) }
+            .isSuccess
     }
-        .onFailure { KLog.e(TAG, it) }
-        .isSuccess
-
 
     @OptIn(ExperimentalSerializationApi::class)
     private object ViewPreCreationProfileSerializer : Serializer<ViewPreCreationProfile?> {
@@ -58,13 +62,13 @@ internal class OptimizedViewPreCreationProfileRepository(
         const val TAG = "OptimizedViewPreCreationProfileRepository"
         const val STORE_PATH = "divkit_optimized_viewpool_profile_%s.json"
 
-        val stores = WeakHashMap<String?, DataStore<ViewPreCreationProfile?>>()
+        val stores = WeakHashMap<String, DataStore<ViewPreCreationProfile?>>()
 
-        fun Context.getStoreForId(id: String?): DataStore<ViewPreCreationProfile?> =
+        fun Context.getStoreForId(id: String): DataStore<ViewPreCreationProfile?> =
             stores.getOrPut(id) {
                 DataStoreFactory.create(
                     serializer = ViewPreCreationProfileSerializer,
-                    produceFile = { File(cacheDir, STORE_PATH.format(id)) },
+                    produceFile = { File(filesDir, STORE_PATH.format(id)) }
                 )
             }
     }

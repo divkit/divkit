@@ -91,7 +91,7 @@ public class DivConfiguration {
     private final boolean mAccessibilityEnabled;
     private boolean mViewPoolEnabled;
     private boolean mViewPoolProfilingEnabled;
-    private boolean mViewPoolOptimizationEnabled;
+    private boolean mViewPoolOptimizationDebug;
     private boolean mResourceCacheEnabled;
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
@@ -129,7 +129,7 @@ public class DivConfiguration {
             boolean accessibilityEnabled,
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
-            boolean viewPoolOptimizationEnabled,
+            boolean viewPoolOptimizationDebug,
             boolean resourceCacheEnabled,
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
@@ -163,7 +163,7 @@ public class DivConfiguration {
         mViewPoolEnabled = viewPoolEnabled;
         mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
-        mViewPoolOptimizationEnabled = viewPoolOptimizationEnabled;
+        mViewPoolOptimizationDebug = viewPoolOptimizationDebug;
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
@@ -302,9 +302,9 @@ public class DivConfiguration {
     }
 
     @Provides
-    @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED)
-    public boolean isViewPoolOptimizationEnabled() {
-        return mViewPoolOptimizationEnabled;
+    @ExperimentFlag(experiment = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG)
+    public boolean isDebuggingViewPoolOptimization() {
+        return mViewPoolOptimizationDebug;
     }
 
     @Provides
@@ -437,7 +437,7 @@ public class DivConfiguration {
         private boolean mAcccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
-        private boolean mViewPoolOptimizationEnabled = Experiment.VIEW_POOL_OPTIMIZATION_ENABLED.getDefaultValue();
+        private boolean mViewPoolOptimizationDebug = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG.getDefaultValue();
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
@@ -647,8 +647,8 @@ public class DivConfiguration {
         }
 
         @NonNull
-        public Builder enableViewPoolOptimization(boolean enable) {
-            mViewPoolOptimizationEnabled = enable;
+        public Builder debugViewPoolOptimization(boolean enable) {
+            mViewPoolOptimizationDebug = enable;
             return this;
         }
 
@@ -724,7 +724,7 @@ public class DivConfiguration {
                     mAcccessibilityEnabled,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
-                    mViewPoolOptimizationEnabled,
+                    mViewPoolOptimizationDebug,
                     mResourceCacheEnabled,
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,

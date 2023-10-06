@@ -27,11 +27,12 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
-import com.yandex.div.internal.viewpool.optimization.OptimizedViewPreCreationProfileRepository
+import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer.Orientation
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -42,12 +43,14 @@ internal class DivViewCreator @Inject constructor(
     private val viewPool: ViewPool,
     private val validator: DivValidator,
     viewPreCreationProfile: ViewPreCreationProfile,
-    repository: OptimizedViewPreCreationProfileRepository?
+    repository: ViewPreCreationProfileRepository
 ) : DivVisitor<View>() {
 
     init {
+        val optimizedProfile = viewPreCreationProfile.id?.let { runBlocking { repository.get(it) } }
+
         with(viewPool) {
-            with(repository?.get() ?: viewPreCreationProfile) {
+            with(optimizedProfile ?: viewPreCreationProfile) {
                 register(TAG_TEXT, { DivLineHeightTextView(context) }, text.capacity)
                 register(TAG_IMAGE, { DivImageView(context) }, image.capacity)
                 register(TAG_GIF_IMAGE, { DivGifImageView(context) }, gifImage.capacity)
@@ -117,6 +120,26 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_INPUT = "DIV2.INPUT"
         const val TAG_SELECT = "DIV2.SELECT"
         const val TAG_VIDEO = "DIV2.VIDEO"
+
+        val TAGS = arrayOf(
+            TAG_TEXT,
+            TAG_IMAGE,
+            TAG_GIF_IMAGE,
+            TAG_OVERLAP_CONTAINER,
+            TAG_LINEAR_CONTAINER,
+            TAG_WRAP_CONTAINER,
+            TAG_GRID,
+            TAG_GALLERY,
+            TAG_PAGER,
+            TAG_TABS,
+            TAG_STATE,
+            TAG_CUSTOM,
+            TAG_INDICATOR,
+            TAG_SLIDER,
+            TAG_INPUT,
+            TAG_SELECT,
+            TAG_VIDEO
+        )
 
         private fun Div.getTag(resolver: ExpressionResolver) =
             when (this) {

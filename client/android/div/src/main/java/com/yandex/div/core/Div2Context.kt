@@ -19,6 +19,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
+import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
 
 /**
  * Context to be used to create instance of [Div2View]
@@ -52,8 +53,11 @@ class Div2Context @MainThread private constructor(
     val divVariableController: DivVariableController
         get() = div2Component.divVariableController
 
-    val performanceDependentSessionProfiler: PerformanceDependentSessionProfiler?
+    val performanceDependentSessionProfiler: PerformanceDependentSessionProfiler
         get() = div2Component.performanceDependentSessionProfiler
+
+    val viewPreCreationProfileRepository: ViewPreCreationProfileRepository
+        get() = div2Component.viewPreCreationProfileRepository
 
     private var inflater: LayoutInflater? = null
 

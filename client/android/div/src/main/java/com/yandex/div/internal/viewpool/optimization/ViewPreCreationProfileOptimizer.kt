@@ -1,106 +1,114 @@
 package com.yandex.div.internal.viewpool.optimization
 
+import androidx.annotation.FloatRange
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.Log
 import com.yandex.div.internal.viewpool.PreCreationModel
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Future
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.math.absoluteValue
+import kotlin.math.pow
+import kotlin.math.roundToInt
+import kotlin.math.sign
 
-private typealias ViewObtainments = List<PerformanceDependentSession.ViewObtainment>
+private const val DEFAULT_CONVERGENCE_RATE = 0.6
+private const val TAG = "ViewPreCreationProfileOptimizer"
 
-internal class ViewPreCreationProfileOptimizer(
-    private val sessionRepository: PerformanceDependentSessionRepository,
-    private val profileRepository: OptimizedViewPreCreationProfileRepository,
-    private val constraints: ViewPreCreationProfile,
-    private val executorService: ExecutorService
-) {
-    private var future: Future<*>? = null
+object ViewPreCreationProfileOptimizer {
+    @JvmStatic
+    suspend fun optimize(
+        profile: ViewPreCreationProfile,
+        session: PerformanceDependentSession,
+        @FloatRange(from = 0.0, to = 1.0, fromInclusive = false)
+        convergenceRate: Double = DEFAULT_CONVERGENCE_RATE
+    ): ViewPreCreationProfile = withContext(Dispatchers.Default) {
+        val newProfile = profile.optimize(session.viewObtainmentStatistics, convergenceRate)
 
-    fun optimize() {
-        future?.cancel(true)
-
-        future = executorService.submit {
-            val data = sessionRepository.get()
-                .flatMap { it.getViewObtainments().entries }
-                .groupBy(keySelector = { it.key }, valueTransform = { it.value })
-
-            val currentProfile = profileRepository.get()
-
-            val newProfile = runCatching { data.createNewProfile(currentProfile) }
-                .onFailure { KLog.e(TAG, it) }
-                .getOrNull()
-
-            KLog.d(TAG) { currentProfile.toString() }
-            KLog.d(TAG) { newProfile.toString() }
-            KLog.d(TAG) { (currentProfile == newProfile).toString() }
-
-            newProfile?.let {
-                profileRepository.save(it)
-            }
+        if (Log.isEnabled()) {
+            session.log(oldProfile = profile, newProfile = newProfile)
         }
+
+        newProfile
     }
 
-    private fun Map<String, List<ViewObtainments>>.createNewProfile(old: ViewPreCreationProfile) =
-        constraints.let {
-            ViewPreCreationProfile(
-                text = get(DivViewCreator.TAG_TEXT).optimizeForItem(old.text, it.text),
-                image = get(DivViewCreator.TAG_IMAGE).optimizeForItem(old.image, it.image),
-                gifImage = get(DivViewCreator.TAG_GIF_IMAGE).optimizeForItem(old.gifImage, it.gifImage),
-                overlapContainer = get(DivViewCreator.TAG_OVERLAP_CONTAINER).optimizeForItem(old.overlapContainer, it.overlapContainer),
-                linearContainer = get(DivViewCreator.TAG_LINEAR_CONTAINER).optimizeForItem(old.linearContainer, it.linearContainer),
-                wrapContainer = get(DivViewCreator.TAG_WRAP_CONTAINER).optimizeForItem(old.wrapContainer, it.wrapContainer),
-                grid = get(DivViewCreator.TAG_GRID).optimizeForItem(old.grid, it.grid),
-                gallery = get(DivViewCreator.TAG_GALLERY).optimizeForItem(old.gallery, it.gallery),
-                pager = get(DivViewCreator.TAG_PAGER).optimizeForItem(old.pager, it.pager),
-                tab = get(DivViewCreator.TAG_TABS).optimizeForItem(old.tab, it.tab),
-                state = get(DivViewCreator.TAG_STATE).optimizeForItem(old.state, it.state),
-                custom = get(DivViewCreator.TAG_CUSTOM).optimizeForItem(old.custom, it.custom),
-                indicator = get(DivViewCreator.TAG_INDICATOR).optimizeForItem(old.indicator, it.indicator),
-                slider = get(DivViewCreator.TAG_SLIDER).optimizeForItem(old.slider, it.slider),
-                input = get(DivViewCreator.TAG_INPUT).optimizeForItem(old.input, it.input),
-                select = get(DivViewCreator.TAG_SELECT).optimizeForItem(old.select, it.select),
-                video = get(DivViewCreator.TAG_VIDEO).optimizeForItem(old.video, it.video)
-            )
+    private fun ViewPreCreationProfile.optimize(
+        statistics: Map<String, PerformanceDependentSession.ViewObtainmentStatistics>,
+        rate: Double
+    ) = with(statistics) {
+        ViewPreCreationProfile(
+            id = id,
+            text = text.optimizeForItem(get(DivViewCreator.TAG_TEXT), rate),
+            image = image.optimizeForItem(get(DivViewCreator.TAG_IMAGE), rate),
+            gifImage = gifImage.optimizeForItem(get(DivViewCreator.TAG_GIF_IMAGE), rate),
+            overlapContainer = overlapContainer.optimizeForItem(get(DivViewCreator.TAG_OVERLAP_CONTAINER), rate),
+            linearContainer = linearContainer.optimizeForItem(get(DivViewCreator.TAG_LINEAR_CONTAINER), rate),
+            wrapContainer = wrapContainer.optimizeForItem(get(DivViewCreator.TAG_WRAP_CONTAINER), rate),
+            grid = grid.optimizeForItem(get(DivViewCreator.TAG_GRID), rate),
+            gallery = gallery.optimizeForItem(get(DivViewCreator.TAG_GALLERY), rate),
+            pager = pager.optimizeForItem(get(DivViewCreator.TAG_PAGER), rate),
+            tab = tab.optimizeForItem(get(DivViewCreator.TAG_TABS), rate),
+            state = state.optimizeForItem(get(DivViewCreator.TAG_STATE), rate),
+            custom = custom.optimizeForItem(get(DivViewCreator.TAG_CUSTOM), rate),
+            indicator = indicator.optimizeForItem(get(DivViewCreator.TAG_INDICATOR), rate),
+            slider = slider.optimizeForItem(get(DivViewCreator.TAG_SLIDER), rate),
+            input = input.optimizeForItem(get(DivViewCreator.TAG_INPUT), rate),
+            select = select.optimizeForItem(get(DivViewCreator.TAG_SELECT), rate),
+            video = video.optimizeForItem(get(DivViewCreator.TAG_VIDEO), rate)
+        )
+    }
+
+    private fun PreCreationModel.optimizeForItem(
+        statistics: PerformanceDependentSession.ViewObtainmentStatistics?,
+        convergenceRate: Double
+    ): PreCreationModel {
+        statistics ?: return this
+
+        val delta = statistics.findOptimalDelta(capacity).run {
+            sign * absoluteValue.toDouble().pow(convergenceRate)
         }
 
-    private fun List<ViewObtainments>?.optimizeForItem(
-        old: PreCreationModel,
-        constraints: PreCreationModel
-    ) = constraints.copy(capacity = run {
-        if (this == null || size < 3) {
-            return@run old.capacity
-        }
+        return copy(capacity = (capacity + delta).roundToInt().coerceIn(min, max))
+    }
 
-        val recent = takeLast(3).filterNot { it.isEmpty() }
+    private fun PerformanceDependentSession.ViewObtainmentStatistics.findOptimalDelta(capacity: Int): Int =
+        maxSuccessiveBlocked.takeUnless { it == 0 } ?: minUnused?.let { -it } ?: -capacity
 
-        val starvationTimes = recent.count { obtainments ->
-            val obtainedWithBlock = obtainments.count { it.isObtainedWithBlock }
-
-            STARVATION_THRESHOLD * obtainedWithBlock >= obtainments.size
-        }
-
-        val usedFully = recent.count { obtainments ->
-            val usedFully = obtainments.count { it.availableViews == 0 }
-
-            REDUNDANCY_THRESHOLD * usedFully >= obtainments.size
-        }
-
-        old.capacity + when (starvationTimes) {
-            0 -> when (usedFully) {
-                0, 1 -> -1
-                else -> 0
+    private fun PerformanceDependentSession.log(
+        oldProfile: ViewPreCreationProfile,
+        newProfile: ViewPreCreationProfile
+    ) {
+        when (this) {
+            is PerformanceDependentSession.Lightweight -> {
+                viewObtainmentStatistics.forEach { (key, value) ->
+                    KLog.d(TAG) { "$key: $value" }
+                }
             }
 
-            3 -> +1
-            else -> 0
+            is PerformanceDependentSession.Detailed -> {
+                getViewObtainments().forEach { (key, value) ->
+                    KLog.d(TAG) { key }
+                    KLog.d(TAG) {
+                        value.joinToString(separator = " ", prefix = "Obtained with block: ") {
+                            if (it.isObtainedWithBlock) {
+                                "1"
+                            } else {
+                                "0"
+                            }
+                        }
+                    }
+                    KLog.d(TAG) {
+                        value.joinToString(separator = " ", prefix = "Available views left: ") {
+                            it.availableViews.toString()
+                        }
+                    }
+                }
+            }
         }
-    }.coerceIn(constraints.min, constraints.max))
 
-    private companion object {
-        const val STARVATION_THRESHOLD = 10
-        const val REDUNDANCY_THRESHOLD = 5
-
-        const val TAG = "ViewPreCreationProfileOptimizer"
+        KLog.d(TAG) { oldProfile.toString() }
+        KLog.d(TAG) { newProfile.toString() }
+        KLog.d(TAG) { "Is profile changed: ${oldProfile != newProfile}" }
     }
 }

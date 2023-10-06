@@ -41,6 +41,7 @@ import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
+import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository;
 
 import dagger.BindsInstance;
 import dagger.Subcomponent;
@@ -147,8 +148,11 @@ public interface Div2Component {
     @NonNull
     DivVariableController getDivVariableController();
 
-    @Nullable
+    @NonNull
     PerformanceDependentSessionProfiler getPerformanceDependentSessionProfiler();
+
+    @NonNull
+    ViewPreCreationProfileRepository getViewPreCreationProfileRepository();
 
     @NonNull
     HistogramReporter getHistogramReporter();

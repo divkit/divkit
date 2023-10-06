@@ -61,7 +61,7 @@ internal fun viewCreator(): DivViewCreator {
         on { validate(any(), any()) } doReturn true
     }
 
-    return spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), null))
+    return spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
 }
 
 internal fun rootPath() = DivStatePath.parse("0")

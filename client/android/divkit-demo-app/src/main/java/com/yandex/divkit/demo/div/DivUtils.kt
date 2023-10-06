@@ -51,7 +51,6 @@ fun divConfiguration(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)
         )
         .viewPreCreationProfile(ViewPreCreationProfile())
-        .enableViewPoolOptimization(true)
         .enableViewPoolProfiling(
             flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_PROFILING_ENABLED)
         )
