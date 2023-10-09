@@ -7,7 +7,6 @@ export interface Variable<T = any> {
     subscribe(cb: Subscriber<T>): Unsubscriber;
     set(val: string): void;
     setValue(value: T): void;
-    setValue(value: T): void;
     getValue(): T;
     getType(): string;
 }
