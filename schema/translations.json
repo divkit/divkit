@@ -68,8 +68,8 @@
     "ru": "Копирует данные в буфер обмена"
   },
   "div_action_focus_element": {
-    "en": "Requests focus for element. On the web may work unstable.",
-    "ru": "Запрашивает фокус для элемента. В вебе может нестабильно работать."
+    "en": "Requests focus for element. On the web may require user gesture.",
+    "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
   },
   "div_action_log_url": {
     "en": "URL for logging.",
