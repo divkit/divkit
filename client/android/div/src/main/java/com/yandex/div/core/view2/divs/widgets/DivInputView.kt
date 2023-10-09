@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.core.widget.doAfterTextChanged
@@ -18,6 +19,8 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
     DivAnimator, DivBorderSupports by DivBorderSupportsMixin(), TransientView by TransientViewMixin(), ExpressionSubscriber {
 
     internal var div: DivInput? = null
+
+    internal val nativeBackground: Drawable? = background
 
     override val subscriptions = mutableListOf<Disposable>()
 
