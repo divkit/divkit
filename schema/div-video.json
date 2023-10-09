@@ -97,6 +97,12 @@
           "$ref": "div-aspect.json",
           "$description": "translations.json#/div_aspect",
           "platforms": []
+        },
+        "scale": {
+          "$ref": "div-video-scale.json",
+          "default_value": "fill",
+          "$description": "translations.json#/div_video_scale",
+          "platforms": []
         }
       }
     }

@@ -847,6 +847,10 @@
     "en": "Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>",
     "ru": "Масштабирование изображения:<li>`fit` помещает картинку в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует картинку по размеру элемента и обрезает лишнее.</li>"
   },
+  "div_video_scale": {
+    "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off the excess.</li>",
+    "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
+  },
   "div_image_high_priority_preview_show": {
     "en": "It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.",
     "ru": "Устанавливает приоритет показа превью — превью декодируется в главном потоке и показывается первым кадром. Используйте параметр с осторожностью — он ухудшит время показа превью и может ухудшить время запуска приложения."
