@@ -50,7 +50,7 @@ extension DivContainer: DivBlockModeling {
     orientation: Orientation,
     context: DivBlockModelingContext
   ) -> DivOverridenSize? {
-    if width.isIntrinsic {
+    if context.override(width: width).isIntrinsic {
       switch orientation {
       case .horizontal:
         if items.hasHorizontallyMatchParent {
@@ -76,7 +76,7 @@ extension DivContainer: DivBlockModeling {
     orientation: Orientation,
     context: DivBlockModelingContext
   ) -> DivOverridenSize? {
-    if height.isIntrinsic {
+    if context.override(height: height).isIntrinsic {
       switch orientation {
       case .horizontal, .overlap:
         if items.allVerticallyMatchParent {
