@@ -121,17 +121,14 @@
         },
         "mask": {
           "$ref": "div-input-mask.json",
-          "$description": "translations.json#/div_input_mask",
-          "platforms": [
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_mask"
         },
         "validators": {
           "type": "array",
           "$description": "translations.json#/div_input_validators",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ],
           "items": {
             "$ref": "div-input-validator.json"
