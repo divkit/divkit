@@ -1950,6 +1950,16 @@
       "file": "video/video_callbacks.json"
     },
     {
+      "title": "Video scale",
+      "tags": [
+        "DivVideo"
+      ],
+      "platforms": [
+        "web"
+      ],
+      "file": "video/video_scale.json"
+    },
+    {
       "title": "Variables in default state id",
       "tags": [
         "DivState"

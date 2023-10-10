@@ -14,6 +14,8 @@ export interface VideoSource {
     // bitrate?: number;
 }
 
+export type VideoScale = 'fill' | 'no_scale' | 'fit';
+
 export interface DivVideoData extends DivBaseData {
     type: 'video';
 
@@ -29,6 +31,8 @@ export interface DivVideoData extends DivBaseData {
     buffering_actions?: Action[];
     fatal_actions?: Action[];
     // player_settings_payload?: Record<string, unknown>;
+    // aspect
+    scale?: VideoScale;
 }
 
 export interface VideoElements {

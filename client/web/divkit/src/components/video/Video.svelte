@@ -13,6 +13,8 @@
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Outer from '../utilities/Outer.svelte';
     import { prepareBase64 } from '../../utils/prepareBase64';
+    import { videoSize } from '../../utils/video';
+    import { makeStyle } from '../../utils/makeStyle';
 
     export let json: Partial<DivVideoData> = {};
     export let templateContext: TemplateContext;
@@ -54,6 +56,12 @@
     let poster: string | undefined = undefined;
     $: poster = typeof $jsonPreview === 'string' ? prepareBase64($jsonPreview) : poster;
 
+    $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
+    let scale = 'fit';
+    $: {
+        scale = videoSize($jsonScale) || scale;
+    }
+
     const elapsedVariableName = json.elapsed_time_variable;
     let elapsedVariable = elapsedVariableName && rootCtx.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
 
@@ -87,6 +95,10 @@
             }
         });
     }
+
+    $: style = {
+        'object-fit': scale
+    };
 
     function onTimeUpdate(): void {
         if (videoElem) {
@@ -139,6 +151,7 @@
         <video
             bind:this={videoElem}
             class={css.video__video}
+            style={makeStyle(style)}
             playsinline
             {loop}
             {autoplay}
