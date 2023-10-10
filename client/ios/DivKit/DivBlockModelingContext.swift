@@ -35,9 +35,9 @@ public struct DivBlockModelingContext {
   public internal(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
-  private let variablesStorage: DivVariablesStorage
+  public let variablesStorage: DivVariablesStorage
   private let variableTracker: DivVariableTracker?
-  public private (set) var expressionResolver: ExpressionResolver
+  public private(set) var expressionResolver: ExpressionResolver
 
   public internal(set) var parentPath: UIElementPath {
     didSet {
