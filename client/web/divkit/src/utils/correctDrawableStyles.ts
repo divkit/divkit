@@ -5,6 +5,7 @@ import type { Circle, RoundedRectangle } from '../types/shape';
 import type { Stroke } from '../types/border';
 import { correctColor } from './correctColor';
 import { pxToEm } from './pxToEm';
+import { correctNonNegativeNumber } from './correctNonNegativeNumber';
 
 export interface DrawableStyle extends Style {
     width: number;
@@ -22,14 +23,14 @@ interface DrawableSize {
 
 function calcRoundedRectangleSize(shape: MaybeMissing<RoundedRectangle>): DrawableSize {
     return {
-        width: Number(shape.item_width?.value || 10),
-        height: Number(shape.item_height?.value || 10),
-        radius: Number(shape.corner_radius?.value ?? 5)
+        width: correctNonNegativeNumber(shape.item_width?.value, 10),
+        height: correctNonNegativeNumber(shape.item_height?.value, 10),
+        radius: correctNonNegativeNumber(shape.corner_radius?.value, 5)
     };
 }
 
 function calcCircleSize(shape: MaybeMissing<Circle>): DrawableSize {
-    const size = Number(shape.radius?.value || 10) * 2;
+    const size = correctNonNegativeNumber(shape.radius?.value, 10) * 2;
 
     return {
         width: size,
