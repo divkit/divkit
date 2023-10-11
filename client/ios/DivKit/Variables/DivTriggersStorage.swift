@@ -91,7 +91,7 @@ public final class DivTriggersStorage {
           actionHandler?.handle(
             $0,
             cardId: cardId,
-            source: .custom,
+            source: .trigger,
             sender: nil
           )
         }

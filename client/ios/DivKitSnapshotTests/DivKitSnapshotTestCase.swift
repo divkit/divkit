@@ -136,7 +136,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
           divKitComponents.actionHandler.handle(
             divAction,
             cardId: testDivCardId,
-            source: .custom,
+            source: .tap,
             sender: nil
           )
         }

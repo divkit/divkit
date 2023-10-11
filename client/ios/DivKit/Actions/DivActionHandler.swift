@@ -88,12 +88,12 @@ public final class DivActionHandler {
   ) {
     let action: DivActionBase?
     switch params.source {
-    case .tap, .custom:
-      action = parseAction(type: DivActionTemplate.self, json: params.action)
     case .visibility:
       action = parseAction(type: DivVisibilityActionTemplate.self, json: params.action)
     case .disappear:
       action = parseAction(type: DivDisappearActionTemplate.self, json: params.action)
+    default:
+      action = parseAction(type: DivActionTemplate.self, json: params.action)
     }
     guard let action = action else {
       return
@@ -188,12 +188,12 @@ public final class DivActionHandler {
 
     if !isDivActionURLHandled {
       switch source {
-      case .tap, .custom:
-        urlHandler.handle(url, sender: sender)
       case .visibility, .disappear:
         // For visibility actions url is treated as logUrl.
         let referer = action.resolveReferer(expressionResolver)
         logger.log(url: url, referer: referer, payload: action.payload)
+      default:
+        urlHandler.handle(url, sender: sender)
       }
     }
   }

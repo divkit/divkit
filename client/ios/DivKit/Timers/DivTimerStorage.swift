@@ -153,7 +153,7 @@ final class DivTimerStorage {
       actionHandler.handle(
         $0,
         cardId: cardId,
-        source: .custom,
+        source: .timer,
         sender: nil
       )
     }

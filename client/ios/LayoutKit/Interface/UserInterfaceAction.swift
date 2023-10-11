@@ -37,8 +37,9 @@ public struct UserInterfaceAction: Equatable, Codable {
   public enum DivActionSource: String {
     case tap
     case visibility
-    case custom
     case disappear
+    case timer
+    case trigger
   }
 
   public let payload: Payload
