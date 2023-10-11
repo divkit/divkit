@@ -15,4 +15,10 @@ internal class ErrorCollectors @Inject constructor() {
             attachParsingErrors(divData)
         }
     }
+
+    fun getOrNull(tag: DivDataTag, divData: DivData?): ErrorCollector? = synchronized(collectors) {
+        return collectors[tag.id]?.apply {
+            attachParsingErrors(divData)
+        }
+    }
 }

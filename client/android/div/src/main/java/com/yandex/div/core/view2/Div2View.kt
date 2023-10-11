@@ -441,6 +441,7 @@ class Div2View private constructor(
         if (removeChildren) {
             releaseAndRemoveChildren(this)
         }
+        viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         divData = null
         dataTag = DivDataTag.INVALID
         cancelImageLoads()
@@ -895,7 +896,7 @@ class Div2View private constructor(
                 return
             }
             histogramReporter?.onRebindingStarted()
-            viewComponent.errorCollectors.getOrCreate(dataTag, divData).cleanRuntimeWarningsAndErrors()
+            viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
             val state = newData.stateToBind
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
