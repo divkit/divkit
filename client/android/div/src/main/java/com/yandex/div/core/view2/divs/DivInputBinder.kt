@@ -60,8 +60,6 @@ internal class DivInputBinder @Inject constructor(
         view.div = div
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
-        val nativeBackground = view.context.getDrawable(androidx.appcompat.R.drawable.abc_edit_text_material)
-
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.apply {
@@ -69,7 +67,7 @@ internal class DivInputBinder @Inject constructor(
             isFocusableInTouchMode = true
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
 
-            observeBackground(div, divView, expressionResolver, nativeBackground)
+            observeBackground(div, divView, expressionResolver)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -121,14 +119,13 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeBackground(
         div: DivInput,
         divView: Div2View,
-        resolver: ExpressionResolver,
-        nativeBackground: Drawable?
+        resolver: ExpressionResolver
     ) {
-        nativeBackground ?: return
         val nativeBackgroundColorVariable = div.nativeInterface?.color ?: return
+        val drawable = nativeBackground ?: return
 
         val callback = { color: Int ->
-            applyNativeBackgroundColor(color, div, divView, resolver, nativeBackground)
+            applyNativeBackgroundColor(color, div, divView, resolver, drawable)
         }
         addSubscription(nativeBackgroundColorVariable.observeAndGet(resolver, callback))
     }
