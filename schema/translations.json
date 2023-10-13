@@ -1167,6 +1167,10 @@
     "en": "Pager.",
     "ru": "Пейджер."
   },
+  "div_pager_infinite_scroll": {
+    "en": "Enables infinite scroll.",
+    "ru": "Включает бесконечный скролл."
+  },
   "div_patch": {
     "en": "Edits the element.",
     "ru": "Редактирует элемент."
