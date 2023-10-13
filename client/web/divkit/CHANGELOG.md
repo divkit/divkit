@@ -1,3 +1,15 @@
+## 28.6.0 (October 16, 2023)
+
+Additions:
+* Added `array` variable type, alongside with the couple of functions `getStringFromArray`, `getOptDictFromArray` and others.
+* Added aliases for the existing `dict` fucntions: `getStringFromDict` (alias for the `getDictString`) with many others.
+* `dict` variables are now shown in markup as json instead of old `<dict>` (new `array`s works the same).
+* Added `scale` property support in the `video` component.
+
+Fixes:
+* Fixed zero size support in `shape`s.
+
+
 ## 28.5.0 (October 9, 2023)
 
 Deprecation:

@@ -1,3 +1,30 @@
+## 28.6.0
+
+# Android Client:
+
+* Fixed width of drawables stroke.
+* Fixed runtime warnings and errors clearing when reusing `Div2View` after calling `cleanup`.
+
+# iOS Client:
+
+* Replaced `DivActionSource.custom` with `.timer` and `.trigger`.
+
+# Web Client:
+
+* Added `scale` property support in the `video` component.
+* Added `array` variable type, alongside with the couple of functions `getStringFromArray`, `getOptDictFromArray` and others.
+* Added aliases for the existing `dict` fucntions: `getStringFromDict` (alias for the `getDictString`) with many others.
+* `dict` variables are now shown in markup as json instead of old `<dict>` (new `array`s works the same).
+* Fixed zero size support in `shape`s.
+
+
+## 28.5.1
+
+# iOS Client:
+
+* Changed `variablesStorage` visibility to public.
+
+
 ## 28.5.0
 
 # Android Client:
