@@ -1,4 +1,4 @@
-# DivKit <img alt="Playground app" src="client/android/app_screen.png" width="30%" align="right" style="margin:20px;">
+# DivKit <img alt="Playground app" src="client/android/readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
 
 [![GitHub Stars](https://img.shields.io/github/stars/divkit/divkit)](https://github.com/divkit/divkit/stargazers)
 [![License](https://img.shields.io/badge/license-Apache-blue)](LICENSE)
@@ -14,6 +14,20 @@ Also, we’ve made a [sandbox](https://divkit.tech/playground) for you to experi
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru)
 
 [Twitter](https://twitter.com/DivKitFramework)
+
+### Our clients
+
+<img src="client/android/readme_pictures/ya_browser.png" width="40" height="40"> [Yandex Browser](https://browser.yandex.com/) |
+<img src="client/android/readme_pictures/search.png" width="40" height="40"> [Yandex Search](https://ya.ru/?utm_referrer=https%3A%2F%2Fyandex.ru%2F) |
+<img src="client/android/readme_pictures/music.png" width="40" height="40"> [Yandex Music](https://music.yandex.ru) |
+<img src="client/android/readme_pictures/alice.png" width="40" height="40"> [Alice Voice Assistant](https://yandex.ru/alice) |
+<img src="client/android/readme_pictures/market.png" width="40" height="40"> [Yandex Market](https://market.yandex.ru/) |
+<img src="client/android/readme_pictures/zen.png" width="40" height="40"> [Zen](https://dzen.ru/) |
+<img src="client/android/readme_pictures/smart_cam.png" width="40" height="40"> Smart Camera |
+[Yandex TV](https://tv.yandex.ru/) |
+<img src="client/android/readme_pictures/realty.png" width="40" height="40"> [Yandex Realty](https://realty.ya.ru/) |
+<img src="client/android/readme_pictures/edadeal.png" width="40" height="40">[Edadeal](https://edadeal.ru/) |
+[Mobile Ads SDK](https://yandex.ru/dev/mobile-ads/)
 
 ### Demo App
 
