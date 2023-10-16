@@ -208,7 +208,9 @@
 		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
+		8CCA63D02ADD3B37002616A1 /* DivVariableStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */; };
 		8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */; };
+		8CD234922AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */; };
 		8CD907BB2A4C8AF3001C4B7B /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */; };
 		8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296028B0018E00351F65 /* UrlInputView.swift */; };
 		8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296228B0021F00351F65 /* UserPreferences.swift */; };
@@ -462,7 +464,9 @@
 		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
+		8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivVariableStorageTest.swift; sourceTree = "<group>"; };
 		8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverTests.swift; sourceTree = "<group>"; };
+		8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivVariableStorageWithOuterStorageTests.swift; sourceTree = "<group>"; };
 		8CD907BA2A4C8AF3001C4B7B /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		8CF1296028B0018E00351F65 /* UrlInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlInputView.swift; sourceTree = "<group>"; };
 		8CF1296228B0021F00351F65 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
@@ -907,6 +911,8 @@
 			children = (
 				8CB960E328883B8300D16E47 /* DivTriggerTests.swift */,
 				8C7B1BE52865C01C0036EF4C /* DivVariablesStorageTest.swift */,
+				8CCA63CF2ADD3B37002616A1 /* DivVariableStorageTest.swift */,
+				8CD234912AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift */,
 				8C64FEE42A5D7373008B1909 /* DivVariableTrackerTests.swift */,
 			);
 			path = Variables;
@@ -1531,6 +1537,7 @@
 				8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
 				8C23F44829DDB3810069F3F7 /* StringEnumPropertyTests.swift in Sources */,
+				8CD234922AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift in Sources */,
 				52CD806B2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift in Sources */,
 				8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */,
 				8C23F44729DDB3810069F3F7 /* StrictArrayTests.swift in Sources */,
@@ -1614,6 +1621,7 @@
 				8C23F42329DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift in Sources */,
 				8C23F42C29DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift in Sources */,
 				8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */,
+				8CCA63D02ADD3B37002616A1 /* DivVariableStorageTest.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

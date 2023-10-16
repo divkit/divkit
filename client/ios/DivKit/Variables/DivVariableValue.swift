@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCorePublic
+import BasePublic
 
 @frozen
 public enum DivVariableValue: Hashable {

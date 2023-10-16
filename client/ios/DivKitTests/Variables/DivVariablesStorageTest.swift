@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCorePublic
+import BasePublic
 
 final class DivVariablesStorageTest: XCTestCase {
   private let storage = DivVariablesStorage()
@@ -302,10 +302,30 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(storage.getVariableValue(cardId: cardId, name: "unknown_var"))
   }
 
-  func test_reset_resettingVariablesByCardId() {
+  func test_reset_ResetsVariables() {
     storage.set(cardId: cardId, variables: variables)
+
+    let globalVariables: DivVariables = [
+      "global_var": .string("global value"),
+    ]
+    storage.set(variables: globalVariables, triggerUpdate: false)
+
+    storage.reset()
+
+    XCTAssertTrue(storage.makeVariables(for: cardId).isEmpty)
+  }
+
+  func test_reset_ResetsVariablesByCardId() {
+    storage.set(cardId: cardId, variables: variables)
+
+    let globalVariables: DivVariables = [
+      "global_var": .string("global value"),
+    ]
+    storage.set(variables: globalVariables, triggerUpdate: false)
+
     storage.reset(cardId: cardId)
-    variables.forEach { XCTAssertNil(storage.getVariableValue(cardId: cardId, name: $0.key)) }
+
+    XCTAssertEqual(globalVariables, storage.makeVariables(for: cardId))
   }
 
   private func makeVariables(cardId: DivCardID = cardId) -> DivVariables {
