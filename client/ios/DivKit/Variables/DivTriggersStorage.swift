@@ -67,7 +67,7 @@ public final class DivTriggersStorage {
       cardId: cardId,
       changedVariablesNames: Set(variables.keys),
       newVariables: variables,
-      oldVariables: [:]
+      oldVariables: nil
     )
   }
 
@@ -76,7 +76,7 @@ public final class DivTriggersStorage {
     cardId: DivCardID,
     changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
-    oldVariables: DivVariables
+    oldVariables: DivVariables?
   ) {
     triggers.forEach { trigger in
       if trigger.shouldPerformActions(
@@ -128,7 +128,7 @@ extension DivTrigger {
     cardId: DivCardID,
     changedVariablesNames: Set<DivVariableName>,
     newVariables: DivVariables,
-    oldVariables: DivVariables,
+    oldVariables: DivVariables?,
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter
   ) -> Bool {
@@ -143,6 +143,11 @@ extension DivTrigger {
     )
     guard resolveCondition(resolverWithNewVariables) ?? false else {
       return false
+    }
+
+    // oldVariables is nil for initial trigger resolving
+    guard let oldVariables = oldVariables else {
+      return true
     }
 
     switch resolveMode(resolverWithNewVariables) {
