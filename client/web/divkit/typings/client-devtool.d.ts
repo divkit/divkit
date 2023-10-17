@@ -14,6 +14,7 @@ import type {
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 import type { WrappedError } from './common';
+import type { CustomComponentDescription } from './custom';
 
 export interface DivkitDebugInstance extends DivkitInstance {
     getDebugVariables(): Map<string, Variable>;
@@ -39,6 +40,7 @@ export function render(opts: {
     theme?: Theme;
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
+    customComponents?: Map<string, CustomComponentDescription> | undefined;
 }): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';

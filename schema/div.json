@@ -44,11 +44,7 @@
     },
     {
       "$ref": "div-custom.json",
-      "$description": "translations.json#/div_custom_short",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_custom_short"
     },
     {
       "$ref": "div-indicator.json",

@@ -1,10 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_custom",
-  "platforms": [
-    "android",
-    "ios"
-  ],
   "allOf": [
     {
       "$ref": "div-base.json"

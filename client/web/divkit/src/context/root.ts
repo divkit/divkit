@@ -6,6 +6,7 @@ import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { TintMode } from '../types/image';
 import type { Customization } from '../../typings/common';
+import type { CustomComponentDescription } from '../../typings/custom';
 
 export const ROOT_CTX = Symbol('root');
 
@@ -51,6 +52,7 @@ export interface RootCtxValue {
     isPointerFocus: Readable<boolean>;
     typefaceProvider: TypefaceProvider;
     isDesktop: Readable<boolean>;
+    customComponents: Map<string, CustomComponentDescription> | undefined;
 
     // Devtool
     registerComponent?({

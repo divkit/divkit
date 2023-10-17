@@ -13,6 +13,7 @@ import type {
     TypefaceProvider
 } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
+import type { CustomComponentDescription } from '../typings/custom';
 
 export function render(opts: {
     target: HTMLElement;
@@ -33,28 +34,14 @@ export function render(opts: {
     theme?: Theme;
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
+    customComponents?: Map<string, CustomComponentDescription> | undefined;
 }) {
+    const { target, hydrate, ...rest } = opts;
+
     return new Root({
-        target: opts.target,
-        props: {
-            id: opts.id,
-            json: opts.json,
-            globalVariablesController: opts.globalVariablesController,
-            mix: opts.mix,
-            customization: opts.customization,
-            builtinProtocols: opts.builtinProtocols,
-            extensions: opts.extensions,
-            onStat: opts.onStat,
-            onCustomAction: opts.onCustomAction,
-            onError: opts.onError,
-            onComponent: opts.onComponent,
-            typefaceProvider: opts.typefaceProvider,
-            platform: opts.platform,
-            theme: opts.theme,
-            fetchInit: opts.fetchInit,
-            tooltipRoot: opts.tooltipRoot
-        },
-        hydrate: opts.hydrate
+        target: target,
+        props: rest,
+        hydrate: hydrate
     });
 }
 

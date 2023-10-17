@@ -13,5 +13,6 @@ module.exports.COMPONENTS = [
     'slider',
     'input',
     'select',
-    'video'
+    'video',
+    'custom'
 ];

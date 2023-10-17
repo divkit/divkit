@@ -1,0 +1,15 @@
+{
+  "name": "custom-ssr",
+  "version": "1.0.0",
+  "private": "true",
+  "keywords": [],
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@divkitframework/divkit": "28.6.0-canary-f1eee8005aa682b1f02f9f9caec744f889bc1fdb",
+    "express": "4.18.2"
+  }
+}

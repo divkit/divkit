@@ -39,6 +39,7 @@
         DisappearAction,
         FetchInit
     } from '../../typings/common';
+    import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
@@ -70,7 +71,6 @@
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
-    import TooltipView from './tooltip/Tooltip.svelte';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -88,6 +88,7 @@
     export let typefaceProvider: TypefaceProvider = _fontFamily => '';
     export let fetchInit: FetchInit = {};
     export let tooltipRoot: HTMLElement | undefined = undefined;
+    export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -972,6 +973,7 @@
         typefaceProvider,
         isDesktop,
         isPointerFocus,
+        customComponents,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
     });

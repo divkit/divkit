@@ -335,6 +335,22 @@ Also be aware of new releases (even minor and patch versions). Built-in extensio
 
 [Building of a new extension](../divkit-examples/extensions-handmade/)
 
+### customComponents
+
+`Map<string, CustomComponentDescription>`, optional.
+
+Custom components can be provided using the `customComponents` map. This structure maps names from json markup to html custom elements (or web components).
+
+These components can provide any additional features that your application needs, such as map widgets, integration into social networks, YouTube videos, and so on.
+
+Custom components is supported not only on the client side, but also on the server side. See the examples below for more detailed information:
+
+[Simple custom component](../divkit-examples/custom-simple/)
+
+[Custom component with the DivKit items](../divkit-examples/custom-container/)
+
+[Custom component and SSR](../divkit-examples/custom-ssr/)
+
 #### theme (EXPERIMENTAL)
 
 `system` | `light` | `dark`
