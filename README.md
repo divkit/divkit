@@ -1,4 +1,4 @@
-# DivKit <img alt="Playground app" src="client/android/readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
+# DivKit <img alt="Playground app" src="readme_pictures/app_screen.png" width="30%" align="right" style="margin:20px;">
 
 [![GitHub Stars](https://img.shields.io/github/stars/divkit/divkit)](https://github.com/divkit/divkit/stargazers)
 [![License](https://img.shields.io/badge/license-Apache-blue)](LICENSE)
@@ -17,17 +17,18 @@ Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.m
 
 ### Our clients
 
-<img src="client/android/readme_pictures/ya_browser.png" width="40" height="40"> [Yandex Browser](https://browser.yandex.com/) |
-<img src="client/android/readme_pictures/search.png" width="40" height="40"> [Yandex Search](https://ya.ru/?utm_referrer=https%3A%2F%2Fyandex.ru%2F) |
-<img src="client/android/readme_pictures/music.png" width="40" height="40"> [Yandex Music](https://music.yandex.ru) |
-<img src="client/android/readme_pictures/alice.png" width="40" height="40"> [Alice Voice Assistant](https://yandex.ru/alice) |
-<img src="client/android/readme_pictures/market.png" width="40" height="40"> [Yandex Market](https://market.yandex.ru/) |
-<img src="client/android/readme_pictures/zen.png" width="40" height="40"> [Zen](https://dzen.ru/) |
-<img src="client/android/readme_pictures/smart_cam.png" width="40" height="40"> Smart Camera |
-[Yandex TV](https://tv.yandex.ru/) |
-<img src="client/android/readme_pictures/realty.png" width="40" height="40"> [Yandex Realty](https://realty.ya.ru/) |
-<img src="client/android/readme_pictures/edadeal.png" width="40" height="40">[Edadeal](https://edadeal.ru/) |
-[Mobile Ads SDK](https://yandex.ru/dev/mobile-ads/)
+<img alt="Yandex Browser" src="readme_pictures/ya_browser.png" width="60" height="60">    
+<img alt="Yandex Search" src="readme_pictures/search.png" width="60" height="60">    
+<img alt="Yandex Music" src="readme_pictures/music.png" width="60" height="60">    
+<img alt="Alice Voice Assistant" src="readme_pictures/alice.png" width="60" height="60">    
+<img alt="Yandex Market" src="readme_pictures/market.png" width="60" height="60">    
+<img alt="Zen" src="readme_pictures/dzen.png" width="60" height="60">    
+<img alt="Smart Camera" src="readme_pictures/smart_cam.png" width="60" height="60">    
+<img alt="Yandex Realty" src="readme_pictures/realty.png" width="60" height="60">    
+<img alt="Edadeal" src="readme_pictures/edadeal.png" width="60" height="60">    
+<img alt="Mobile Ads SDK" src="readme_pictures/ads-sdk.png" width="60" height="60">    
+<img alt="YANGO Joy" src="readme_pictures/yango.png" width="60" height="60">    
+<img alt="Yandex bank" src="readme_pictures/bank.png" width="60" height="60">   
 
 ### Demo App
 
