@@ -2,6 +2,10 @@
     "templates": {
         "video_item": {
             "type": "container",
+            "width": {
+                "type": "match_parent",
+                "weight": 1
+            },
             "items": [{
                 "type": "text",
                 "$text": "text",

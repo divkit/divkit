@@ -34,6 +34,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let repeatable: Field<Expression<Bool>>? // default value: false
   public let resumeActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
+  public let scale: Field<Expression<DivVideoScale>>? // default value: fit
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
@@ -81,6 +82,7 @@ public final class DivVideoTemplate: TemplateValue {
         repeatable: try dictionary.getOptionalExpressionField("repeatable"),
         resumeActions: try dictionary.getOptionalArray("resume_actions", templateToType: templateToType),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
+        scale: try dictionary.getOptionalExpressionField("scale"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
@@ -128,6 +130,7 @@ public final class DivVideoTemplate: TemplateValue {
     repeatable: Field<Expression<Bool>>? = nil,
     resumeActions: Field<[DivActionTemplate]>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
+    scale: Field<Expression<DivVideoScale>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
@@ -169,6 +172,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.repeatable = repeatable
     self.resumeActions = resumeActions
     self.rowSpan = rowSpan
+    self.scale = scale
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
@@ -211,6 +215,7 @@ public final class DivVideoTemplate: TemplateValue {
     let repeatableValue = parent?.repeatable?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatableValidator) ?? .noValue
     let resumeActionsValue = parent?.resumeActions?.resolveOptionalValue(context: context, validator: ResolvedValue.resumeActionsValidator, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
+    let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
@@ -251,6 +256,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatableValue.errorsOrWarnings?.map { .nestedObjectError(field: "repeatable", error: $0) },
       resumeActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "resume_actions", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -300,6 +306,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatable: repeatableValue.value,
       resumeActions: resumeActionsValue.value,
       rowSpan: rowSpanValue.value,
+      scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -347,6 +354,7 @@ public final class DivVideoTemplate: TemplateValue {
     var repeatableValue: DeserializationResult<Expression<Bool>> = parent?.repeatable?.value() ?? .noValue
     var resumeActionsValue: DeserializationResult<[DivAction]> = .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
+    var scaleValue: DeserializationResult<Expression<DivVideoScale>> = parent?.scale?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
@@ -415,6 +423,8 @@ public final class DivVideoTemplate: TemplateValue {
         resumeActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.resumeActionsValidator, type: DivActionTemplate.self).merged(with: resumeActionsValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
+      case "scale":
+        scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator).merged(with: scaleValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
       case "tooltips":
@@ -493,6 +503,8 @@ public final class DivVideoTemplate: TemplateValue {
         resumeActionsValue = resumeActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.resumeActionsValidator, type: DivActionTemplate.self))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
+      case parent?.scale?.link:
+        scaleValue = scaleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.scaleValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
       case parent?.tooltips?.link:
@@ -575,6 +587,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatableValue.errorsOrWarnings?.map { .nestedObjectError(field: "repeatable", error: $0) },
       resumeActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "resume_actions", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -624,6 +637,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatable: repeatableValue.value,
       resumeActions: resumeActionsValue.value,
       rowSpan: rowSpanValue.value,
+      scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -676,6 +690,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatable: repeatable ?? mergedParent.repeatable,
       resumeActions: resumeActions ?? mergedParent.resumeActions,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
+      scale: scale ?? mergedParent.scale,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
@@ -723,6 +738,7 @@ public final class DivVideoTemplate: TemplateValue {
       repeatable: merged.repeatable,
       resumeActions: merged.resumeActions?.tryResolveParent(templates: templates),
       rowSpan: merged.rowSpan,
+      scale: merged.scale,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),

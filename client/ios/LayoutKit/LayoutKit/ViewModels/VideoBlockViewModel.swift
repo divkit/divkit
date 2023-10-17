@@ -11,6 +11,7 @@ public struct VideoBlockViewModel: Equatable {
   public let endActions: [UserInterfaceAction]
   public let fatalActions: [UserInterfaceAction]
   public let path: UIElementPath
+  public let scale: VideoScale
 
   public init(
     videoData: VideoData,
@@ -22,7 +23,8 @@ public struct VideoBlockViewModel: Equatable {
     bufferingActions: [UserInterfaceAction] = [],
     endActions: [UserInterfaceAction] = [],
     fatalActions: [UserInterfaceAction] = [],
-    path: UIElementPath
+    path: UIElementPath,
+    scale: VideoScale = .fit
   ) {
     self.videoData = videoData
     self.playbackConfig = playbackConfig
@@ -34,6 +36,7 @@ public struct VideoBlockViewModel: Equatable {
     self.endActions = endActions
     self.fatalActions = fatalActions
     self.path = path
+    self.scale = scale
   }
 
   public static func ==(lhs: VideoBlockViewModel, rhs: VideoBlockViewModel) -> Bool {

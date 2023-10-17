@@ -105,6 +105,10 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     let oldValue = self.model
     self.model = model
 
+    if model.scale != oldValue.scale {
+      videoView?.set(scale: model.scale)
+    }
+
     if model.videoData != oldValue.videoData {
       player?.set(data: model.videoData, config: model.playbackConfig)
     }

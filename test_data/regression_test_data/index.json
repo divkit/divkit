@@ -1955,6 +1955,7 @@
         "DivVideo"
       ],
       "platforms": [
+        "ios",
         "web"
       ],
       "file": "video/video_scale.json"

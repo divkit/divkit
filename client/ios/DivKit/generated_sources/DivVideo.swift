@@ -33,6 +33,7 @@ public final class DivVideo: DivBase {
   public let repeatable: Expression<Bool> // default value: false
   public let resumeActions: [DivAction]? // at least 1 elements
   public let rowSpan: Expression<Int>? // constraint: number >= 0
+  public let scale: Expression<DivVideoScale> // default value: fit
   public let selectedActions: [DivAction]? // at least 1 elements
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
@@ -80,6 +81,10 @@ public final class DivVideo: DivBase {
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumericValue(expression: rowSpan)
+  }
+
+  public func resolveScale(_ resolver: ExpressionResolver) -> DivVideoScale {
+    resolver.resolveStringBasedValue(expression: scale, initializer: DivVideoScale.init(rawValue:)) ?? DivVideoScale.fit
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
@@ -167,6 +172,9 @@ public final class DivVideo: DivBase {
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
+  static let scaleValidator: AnyValueValidator<DivVideoScale> =
+    makeNoOpValueValidator()
+
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -231,6 +239,7 @@ public final class DivVideo: DivBase {
     repeatable: Expression<Bool>? = nil,
     resumeActions: [DivAction]? = nil,
     rowSpan: Expression<Int>? = nil,
+    scale: Expression<DivVideoScale>? = nil,
     selectedActions: [DivAction]? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
@@ -271,6 +280,7 @@ public final class DivVideo: DivBase {
     self.repeatable = repeatable ?? .value(false)
     self.resumeActions = resumeActions
     self.rowSpan = rowSpan
+    self.scale = scale ?? .value(.fit)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
@@ -349,32 +359,33 @@ extension DivVideo: Equatable {
     guard
       lhs.resumeActions == rhs.resumeActions,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.videoSources == rhs.videoSources,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -416,6 +427,7 @@ extension DivVideo: Serializable {
     result["repeatable"] = repeatable.toValidSerializationValue()
     result["resume_actions"] = resumeActions?.map { $0.toDictionary() }
     result["row_span"] = rowSpan?.toValidSerializationValue()
+    result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()

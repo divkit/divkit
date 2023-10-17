@@ -16,6 +16,12 @@ public final class DefaultPlayerView: UIView, PlayerView {
     }
   }
 
+  public func set(scale: VideoScale) {
+    if let videoGravity = scale.videoGravity {
+      playerLayer.videoGravity = videoGravity
+    }
+  }
+
   private var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
 
   public override static var layerClass: AnyClass { AVPlayerLayer.self }
@@ -27,5 +33,18 @@ extension AVPlayer {
     rate = 0
     layer.player = self
     rate = tmpRate
+  }
+}
+
+extension VideoScale {
+  fileprivate var videoGravity: AVLayerVideoGravity? {
+    switch self {
+    case .fill:
+      return .resizeAspectFill
+    case .noScale:
+      return nil
+    case .fit:
+      return .resizeAspect
+    }
   }
 }

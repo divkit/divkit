@@ -55,7 +55,8 @@ extension DivVideo: DivBlockModeling {
       bufferingActions: bufferingActions,
       endActions: endActions,
       fatalActions: fatalActions,
-      path: context.parentPath
+      path: context.parentPath,
+      scale: resolveScale(resolver).scale
     )
 
     let videoPath = context.parentPath + (id ?? DivVideo.type)
@@ -96,6 +97,19 @@ extension DivVideoSource {
       bitrate: resolveBitrate(resolver).flatMap { Double($0) },
       mimeType: resolveMimeType(resolver)
     )
+  }
+}
+
+extension DivVideoScale {
+  fileprivate var scale: VideoScale {
+    switch self {
+    case .fill:
+      return .fill
+    case .noScale:
+      return .noScale
+    case .fit:
+      return .fit
+    }
   }
 }
 
