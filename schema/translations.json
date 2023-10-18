@@ -36,11 +36,11 @@
     "ru": "Определяет действие при нажатии на элемент."
   },
   "div_action_array_insert_value": {
-    "en": "Insert value to array",
+    "en": "Adds a value to the array",
     "ru": "Добавляет значение в массив"
   },
   "div_action_array_remove_value": {
-    "en": "Remove value from array",
+    "en": "Deletes a value from the array",
     "ru": "Удаляет значение из массива"
   },
   "div_action_base_download_callbacks": {
@@ -64,11 +64,11 @@
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
   },
   "div_action_copy_to_clipboard": {
-    "en": "Copy data to clipboard",
+    "en": "Copies data to the clipboard.",
     "ru": "Копирует данные в буфер обмена"
   },
   "div_action_focus_element": {
-    "en": "Requests focus for element. On the web may require user gesture.",
+    "en": "Requests focus for an element. May require a user action on the web.",
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
   },
   "div_action_log_url": {
@@ -92,7 +92,7 @@
     "ru": "Контекстное меню."
   },
   "div_action_set_variable": {
-    "en": "Sets variable value",
+    "en": "Assigns a value to the variable",
     "ru": "Присваивает переменной значение"
   },
   "div_action_target": {
@@ -604,8 +604,8 @@
     "ru": "Фильтры для изображений."
   },
   "div_filter_rtl_mirror": {
-    "en": "The image is mirrored if the RTL (Right-to-Left) direction is specified in the system.",
-    "ru": "Изображение зеркально отображается, в случае если в системе указан RTL (Right-to-Left)."
+    "en": "Mirrors an image if the system uses RTL (Right-to-Left) text direction.",
+    "ru": "Зеркальное изображение, если в системе указано направление текста RTL (справа налево)."
   },
   "div_fixed_count": {
     "en": "Fixed number of repetitions.",
@@ -846,10 +846,6 @@
   "div_image_base_scale": {
     "en": "Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>",
     "ru": "Масштабирование изображения:<li>`fit` помещает картинку в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует картинку по размеру элемента и обрезает лишнее.</li>"
-  },
-  "div_video_scale": {
-    "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off the excess.</li>",
-    "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
   },
   "div_image_high_priority_preview_show": {
     "en": "It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.",
@@ -1135,6 +1131,10 @@
     "en": "Ordinal number of the pager element that will be opened by default.",
     "ru": "Порядковый номер элемента пейджера, который будет открываться по умолчанию."
   },
+  "div_pager_infinite_scroll": {
+    "en": "Enables infinite scroll.",
+    "ru": "Включает бесконечный скролл."
+  },
   "div_pager_item_spacing": {
     "en": "Spacing between elements.",
     "ru": "Расстояние между элементами."
@@ -1166,10 +1166,6 @@
   "div_pager_short": {
     "en": "Pager.",
     "ru": "Пейджер."
-  },
-  "div_pager_infinite_scroll": {
-    "en": "Enables infinite scroll.",
-    "ru": "Включает бесконечный скролл."
   },
   "div_patch": {
     "en": "Edits the element.",
@@ -2106,6 +2102,10 @@
   "div_video_resume_actions": {
     "en": "Actions performed when video playback resumes.",
     "ru": "Действия, которые выполняются при возобновлении воспроизведения видео."
+  },
+  "div_video_scale": {
+    "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off the excess.</li>",
+    "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
   },
   "div_video_source": {
     "en": "Description of one media file. Contains a link to the source, MIME type, bitrate, and resolution.",
