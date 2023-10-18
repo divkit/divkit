@@ -5,7 +5,6 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.viewpool.Profiler
 import javax.inject.Inject
 
 @AnyThread
@@ -13,23 +12,17 @@ import javax.inject.Inject
 class PerformanceDependentSessionProfiler @Inject constructor(
     @ExperimentFlag(Experiment.VIEW_POOL_OPTIMIZATION_DEBUG)
     private val isDebuggingViewPoolOptimization: Boolean
-) : Profiler() {
-    @Volatile
+) {
     private var session: PerformanceDependentSession? = null
 
-    override fun onViewObtainedWithoutBlock(
+    internal inline fun onViewObtained(
         viewName: String,
         durationNs: Long,
-        viewsLeft: Int
+        viewsLeft: Int,
+        isObtainedWithBlock: Boolean
     ) {
-        session?.viewObtained(viewName, durationNs, viewsLeft, false)
+        session?.viewObtained(viewName, durationNs, viewsLeft, isObtainedWithBlock)
     }
-
-    override fun onViewObtainedWithBlock(viewName: String, durationNs: Long, viewsLeft: Int) {
-        session?.viewObtained(viewName, durationNs, viewsLeft, true)
-    }
-
-    override fun onViewRequested(viewName: String, durationNs: Long, viewsLeft: Int) = Unit
 
     fun start() {
         session?.run {

@@ -1,21 +1,61 @@
 package com.yandex.div.internal.viewpool
 
+import android.os.Handler
+import android.os.Looper
 import androidx.annotation.AnyThread
 
-class ViewPoolProfiler(private val profilers: List<Profiler>) : Profiler() {
+class ViewPoolProfiler(private val reporter: Reporter) {
+    private val session = ProfilingSession()
+    private val frameWatcher = FrameWatcher()
+    private val handler = Handler(Looper.getMainLooper())
+
     @AnyThread
-    override fun onViewObtainedWithoutBlock(viewName: String, durationNs: Long, viewsLeft: Int) {
-        profilers.forEach { it.onViewObtainedWithoutBlock(viewName, durationNs, viewsLeft) }
+    internal fun onViewObtainedWithoutBlock(durationNs: Long) {
+        synchronized(session) {
+            session.viewObtainedWithoutBlock(durationNs)
+            frameWatcher.watch(handler)
+        }
     }
 
     @AnyThread
-    override fun onViewObtainedWithBlock(viewName: String, durationNs: Long, viewsLeft: Int) {
-        profilers.forEach { it.onViewObtainedWithBlock(viewName, durationNs, viewsLeft) }
+    internal fun onViewObtainedWithBlock(viewName: String, durationNs: Long) {
+        synchronized(session) {
+            session.viewObtainedWithBlock(viewName, durationNs)
+            frameWatcher.watch(handler)
+        }
     }
 
     @AnyThread
-    override fun onViewRequested(viewName: String, durationNs: Long, viewsLeft: Int) {
-        profilers.forEach { it.onViewRequested(viewName, durationNs, viewsLeft) }
+    internal fun onViewRequested(durationNs: Long) {
+        session.viewRequested(durationNs)
+        frameWatcher.watch(handler)
+    }
+
+    private inner class FrameWatcher : Runnable {
+
+        private var watching: Boolean = false
+
+        override fun run() {
+            onFrameReady()
+            watching = false
+        }
+
+        fun watch(handler: Handler) {
+            if (!watching) {
+                handler.post(this)
+                watching = true
+            }
+        }
+    }
+
+    internal fun onFrameReady() {
+        synchronized(session) {
+            if (session.hasLongEvents()) {
+                val result = session.flush()
+                reporter.reportEvent("view pool profiling", result)
+            }
+            session.clear()
+        }
     }
 
     interface Reporter {
@@ -29,23 +69,4 @@ class ViewPoolProfiler(private val profilers: List<Profiler>) : Profiler() {
             }
         }
     }
-}
-
-abstract class Profiler {
-    @AnyThread
-    internal abstract fun onViewObtainedWithoutBlock(
-        viewName: String,
-        durationNs: Long,
-        viewsLeft: Int
-    )
-
-    @AnyThread
-    internal abstract fun onViewObtainedWithBlock(
-        viewName: String,
-        durationNs: Long,
-        viewsLeft: Int
-    )
-
-    @AnyThread
-    internal abstract fun onViewRequested(viewName: String, durationNs: Long, viewsLeft: Int)
 }

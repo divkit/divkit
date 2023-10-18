@@ -7,6 +7,7 @@ import androidx.collection.ArrayMap
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.getOrThrow
 import com.yandex.div.internal.util.removeOrThrow
+import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit
@@ -14,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 internal class AdvanceViewPool(
     private val profiler: ViewPoolProfiler?,
+    private val sessionProfiler: PerformanceDependentSessionProfiler,
     private val viewCreator: ViewCreator
 ) : ViewPool {
 
@@ -27,9 +29,9 @@ internal class AdvanceViewPool(
                 return
             }
             viewFactories[tag] = if (capacity == 0) {
-                factory.attachProfiler(tag, profiler)
+                factory.attachProfiler(tag, profiler, sessionProfiler)
             } else {
-                Channel(tag, profiler, factory, viewCreator, capacity)
+                Channel(tag, profiler, sessionProfiler, factory, viewCreator, capacity)
             }
         }
     }
@@ -62,6 +64,7 @@ internal class AdvanceViewPool(
     internal class Channel<T : View>(
         val viewName: String,
         private val profiler: ViewPoolProfiler?,
+        private val sessionProfiler: PerformanceDependentSessionProfiler,
         private val viewFactory: ViewFactory<T>,
         private val viewCreator: ViewCreator,
         capacity: Int
@@ -86,9 +89,11 @@ internal class AdvanceViewPool(
 
             if (view == null) {
                 duration = profile { view = extractViewBlocked() }
-                profiler?.onViewObtainedWithBlock(viewName, duration, viewQueue.size)
+                profiler?.onViewObtainedWithBlock(viewName, duration)
+                sessionProfiler.onViewObtained(viewName, duration, viewQueue.size, true)
             } else {
-                profiler?.onViewObtainedWithoutBlock(viewName, duration, viewQueue.size)
+                profiler?.onViewObtainedWithoutBlock(duration)
+                sessionProfiler.onViewObtained(viewName, duration, viewQueue.size, false)
             }
             requestViewCreation()
             return view!!  // there is no any chance for null
@@ -110,7 +115,7 @@ internal class AdvanceViewPool(
                 val priority = viewQueue.size
                 viewCreator.request(this, priority)
             }
-            profiler?.onViewRequested(viewName, duration, viewQueue.size)
+            profiler?.onViewRequested(duration)
         }
 
         @WorkerThread
@@ -142,12 +147,13 @@ internal class AdvanceViewPool(
         }
 
         private fun <T : View> ViewFactory<T>.attachProfiler(
-            viewName: String, profiler: ViewPoolProfiler?
+            viewName: String, profiler: ViewPoolProfiler?, sessionProfiler: PerformanceDependentSessionProfiler
         ): ViewFactory<T> {
             return ViewFactory {
                 var view: T? = null
                 val duration = profile { view = createView() }
-                profiler?.onViewObtainedWithBlock(viewName, duration, 0)
+                profiler?.onViewObtainedWithBlock(viewName, duration)
+                sessionProfiler.onViewObtained(viewName, duration, 0, true)
                 view!!
             }
         }

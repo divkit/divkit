@@ -16,20 +16,14 @@ import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
+import com.yandex.div.internal.viewpool.AdvanceViewPool;
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.div.core.view2.DivImagePreloader;
-import com.yandex.div.internal.viewpool.AdvanceViewPool;
 import com.yandex.div.internal.viewpool.PseudoViewPool;
 import com.yandex.div.internal.viewpool.ViewCreator;
 import com.yandex.div.internal.viewpool.ViewPool;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
-import com.yandex.div.internal.viewpool.Profiler;
-import com.yandex.div.internal.viewpool.FrameProfiler;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
-
-import java.util.List;
-
-import kotlin.collections.ArraysKt;
 
 import dagger.Binds;
 import dagger.Module;
@@ -62,8 +56,10 @@ abstract class Div2Module {
     @NonNull
     static ViewPool provideViewPool(@ExperimentFlag(experiment = Experiment.VIEW_POOL_ENABLED) boolean viewPoolEnabled,
                                     @Nullable ViewPoolProfiler profiler,
-                                    @NonNull ViewCreator viewCreator) {
-        return viewPoolEnabled ? new AdvanceViewPool(profiler, viewCreator) : new PseudoViewPool();
+                                    @NonNull PerformanceDependentSessionProfiler sessionProfiler,
+                                    @NonNull ViewCreator viewCreator
+    ) {
+        return viewPoolEnabled ? new AdvanceViewPool(profiler, sessionProfiler, viewCreator) : new PseudoViewPool();
     }
 
     @Provides
@@ -76,22 +72,11 @@ abstract class Div2Module {
     @Provides
     @DivScope
     @Nullable
-    static FrameProfiler provideFrameProfiler(
+    static ViewPoolProfiler provideViewPoolProfiler(
             @ExperimentFlag(experiment = Experiment.VIEW_POOL_PROFILING_ENABLED) boolean profilingEnabled,
             @NonNull ViewPoolProfiler.Reporter reporter
     ) {
-        return profilingEnabled ? new FrameProfiler(reporter) : null;
-    }
-
-    @Provides
-    @DivScope
-    @NonNull
-    static ViewPoolProfiler provideViewPoolProfiler(
-            @Nullable FrameProfiler frameProfiler,
-            @NonNull PerformanceDependentSessionProfiler sessionProfiler
-    ) {
-        List<Profiler> profilers = ArraysKt.filterNotNull(new Profiler[]{frameProfiler, sessionProfiler});
-        return new ViewPoolProfiler(profilers);
+        return profilingEnabled ? new ViewPoolProfiler(reporter) : null;
     }
 
     @Provides
