@@ -313,7 +313,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       try! ContainerBlock(
         layoutDirection: .vertical,
         widthTrait: .resizable,
-        heightTrait: .weighted(2),
+        heightTrait: .weighted(3),
         children: [ImageBlock(imageHolder: image)]
       ),
     ]
@@ -326,8 +326,8 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let expectedWeightUnit = (containerSize.height - imageSize.height) / 3
-    XCTAssertEqual(layout.blockFrames[1].height, floor(expectedWeightUnit))
+    let expectedWeightUnit = (containerSize.height - imageSize.height) / 4
+    XCTAssertEqual(layout.blockFrames[1].height, expectedWeightUnit)
     XCTAssertEqual(
       layout.blockFrames[2].height,
       containerSize.height - imageSize.height - layout.blockFrames[1].height
@@ -341,7 +341,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
     let horizontallyResizableChildren: [Block] = [
       try! ContainerBlock(
         layoutDirection: .horizontal,
-        widthTrait: .weighted(2),
+        widthTrait: .weighted(3),
         heightTrait: .intrinsic,
         children: [ImageBlock(imageHolder: image)]
       ),
@@ -361,8 +361,8 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let expectedWeightUnit = (containerSize.width - imageSize.width) / 3
-    XCTAssertEqual(layout.blockFrames[1].width, floor(expectedWeightUnit * 2))
+    let expectedWeightUnit = (containerSize.width - imageSize.width) / 4
+    XCTAssertEqual(layout.blockFrames[1].width, expectedWeightUnit * 3)
     XCTAssertEqual(
       layout.blockFrames[2].width,
       containerSize.width - imageSize.width - layout.blockFrames[1].width

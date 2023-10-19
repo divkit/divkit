@@ -142,8 +142,8 @@ private enum SnapshotTestError: LocalizedError {
 }
 
 private let allowedDevices: Set<String> = [
-  "iPhone10,4",
-  "iPhone10,5",
+  "iPhone12,8",
+  "iPhone14,7",
 ]
 
 extension XCTAttachment {

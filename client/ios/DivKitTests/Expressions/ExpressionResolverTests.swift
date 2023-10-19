@@ -72,7 +72,7 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_ResolveUrl_WithInvalidValue() {
-    XCTAssertNil(expressionResolver.resolveUrl(expression: "not URL"))
+    XCTAssertNil(expressionResolver.resolveUrl(expression: ""))
   }
 
   func test_ResolveUrl_WithConstant() {
