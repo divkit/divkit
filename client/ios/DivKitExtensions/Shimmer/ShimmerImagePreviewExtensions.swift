@@ -26,11 +26,11 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
     }
 
     let expressionResolver = context.expressionResolver
-    let imageURL = div.resolveImageUrl(expressionResolver)
-    let view = viewFactory(div.getShimmerStyle(expressionResolver: expressionResolver) ?? .default)
-    let placeholder: ImagePlaceholder = .view(view)
-
-    let imageHolder = context.imageHolderFactory.make(imageURL, placeholder)
+    let placeholderView = viewFactory(div.getShimmerStyle(expressionResolver: expressionResolver) ?? .default)
+    let imageHolder = context.imageHolderFactory.make(
+      div.resolveImageUrl(expressionResolver),
+      .view(placeholderView)
+    )
     return block.makeCopy(with: imageHolder)
   }
 }

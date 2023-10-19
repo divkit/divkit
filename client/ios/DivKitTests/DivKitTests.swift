@@ -56,14 +56,20 @@ extension DivBlockModelingContext {
       cardLogId: DivKitTests.cardLogId,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
-      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
+      imageHolderFactory: FakeImageHolderFactory(),
       scheduler: scheduler,
       persistentValuesStorage: DivPersistentValuesStorage()
     )
   }
 }
 
-final class FakeImageHolder: ImageHolder {
+final class FakeImageHolderFactory: DivImageHolderFactory {
+  func make(_: URL?, _: ImagePlaceholder?) -> ImageHolder {
+    FakeImageHolder()
+  }
+}
+
+private final class FakeImageHolder: ImageHolder {
   var image: Image? {
     nil
   }

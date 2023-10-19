@@ -25,10 +25,10 @@ public final class CustomImagePreviewExtensionHandler: DivExtensionHandler {
       return block
     }
 
-    let imageURL = div.resolveImageUrl(context.expressionResolver) ?? defaultImageURL
-    let placeholder: ImagePlaceholder = .view(viewFactory())
-
-    let imageHolder = context.imageHolderFactory.make(imageURL, placeholder)
+    let imageHolder = context.imageHolderFactory.make(
+      div.resolveImageUrl(context.expressionResolver) ?? defaultImageURL,
+      .view(viewFactory())
+    )
     return block.makeCopy(with: imageHolder)
   }
 }

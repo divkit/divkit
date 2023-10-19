@@ -21,7 +21,7 @@ public final class DivKitComponents {
   public var extensionHandlers: [DivExtensionHandler]
   public let flagsInfo: DivFlagsInfo
   public let fontProvider: DivFontProvider
-  public let imageHolderFactory: ImageHolderFactory
+  public let imageHolderFactory: DivImageHolderFactory
   public let layoutDirection: UserInterfaceLayoutDirection
   public let patchProvider: DivPatchProvider
   public let playerFactory: PlayerFactory?
@@ -94,7 +94,7 @@ public final class DivKitComponents {
     extensionHandlers: [DivExtensionHandler] = [],
     flagsInfo: DivFlagsInfo = .default,
     fontProvider: DivFontProvider? = nil,
-    imageHolderFactory: ImageHolderFactory? = nil,
+    imageHolderFactory: DivImageHolderFactory? = nil,
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,
@@ -140,7 +140,7 @@ public final class DivKitComponents {
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
     self.imageHolderFactory = imageHolderFactory
-      ?? makeImageHolderFactory(
+      ?? DefaultImageHolderFactory(
         requestPerformer: requestPerformer,
         imageLoadingOptimizationEnabled: flagsInfo.imageLoadingOptimizationEnabled
       )
@@ -285,8 +285,7 @@ public final class DivKitComponents {
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       lastVisibleBoundsCache: lastVisibleBoundsCache,
-      imageHolderFactory: imageHolderFactory
-        .withInMemoryCache(cachedImageHolders: cachedImageHolders),
+      imageHolderFactory: imageHolderFactory.withCache(cachedImageHolders),
       divCustomBlockFactory: divCustomBlockFactory,
       fontProvider: fontProvider,
       flagsInfo: flagsInfo,
@@ -333,22 +332,6 @@ public final class DivKitComponents {
       updateCard(.variable(.specific([cardId])))
     }
   }
-}
-
-func makeImageHolderFactory(
-  requestPerformer: URLRequestPerforming,
-  imageLoadingOptimizationEnabled: Bool = false
-) -> ImageHolderFactory {
-  ImageHolderFactory(
-    requester: NetworkURLResourceRequester(
-      performer: requestPerformer
-    ),
-    imageProcessingQueue: OperationQueue(
-      name: "tech.divkit.image-processing",
-      qos: .userInitiated
-    ),
-    imageLoadingOptimizationEnabled: imageLoadingOptimizationEnabled
-  )
 }
 
 #if os(iOS)

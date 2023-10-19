@@ -19,8 +19,8 @@ public struct DivBlockModelingContext {
   public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounting
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
-  public let imageHolderFactory: ImageHolderFactory
-  let highPriorityImageHolderFactory: ImageHolderFactory?
+  public let imageHolderFactory: DivImageHolderFactory
+  let highPriorityImageHolderFactory: DivImageHolderFactory?
   let divCustomBlockFactory: DivCustomBlockFactory
   let fontProvider: DivFontProvider
   let flagsInfo: DivFlagsInfo
@@ -64,8 +64,8 @@ public struct DivBlockModelingContext {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     visibilityCounter: DivVisibilityCounting? = nil,
     lastVisibleBoundsCache: DivLastVisibleBoundsCache? = nil,
-    imageHolderFactory: ImageHolderFactory,
-    highPriorityImageHolderFactory: ImageHolderFactory? = nil,
+    imageHolderFactory: DivImageHolderFactory,
+    highPriorityImageHolderFactory: DivImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory? = nil,
     fontProvider: DivFontProvider? = nil,
     flagsInfo: DivFlagsInfo = .default,

@@ -42,7 +42,7 @@ final class DivBaseExtensionsTests: XCTestCase {
       context: DivBlockModelingContext(
         cardId: "another_cardId",
         stateManager: DivStateManager(),
-        imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() })
+        imageHolderFactory: FakeImageHolderFactory()
       )
     )
     let view2 = secondBlock.reuse(view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil, superview: nil)

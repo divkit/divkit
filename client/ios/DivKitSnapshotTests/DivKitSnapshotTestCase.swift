@@ -53,7 +53,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     _ fileName: String,
     testName: String = #function,
     customCaseName: String? = nil,
-    imageHolderFactory: ImageHolderFactory? = nil,
+    imageHolderFactory: DivImageHolderFactory? = nil,
     blocksState: BlocksState = [:],
     extensions: [DivExtensionHandler] = []
   ) {
@@ -67,7 +67,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
-      imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
+      imageHolderFactory: imageHolderFactory ?? TestImageHolderFactory(),
       layoutDirection: getLayoutDirection(from: jsonDict),
       updateCardAction: nil,
       urlHandler: DivUrlHandlerDelegate { _, _ in }
@@ -322,40 +322,30 @@ extension DivData {
   }
 }
 
-extension ImageHolderFactory {
-  static let placeholderOnly = ImageHolderFactory(
-    make: { _, placeholder in
-      placeholder?.toImageHolder() ?? NilImageHolder()
-    }
-  )
-}
+private final class TestImageHolderFactory: DivImageHolderFactory {
+  private var reportedUrls = Set<String>()
 
-private var reportedURLStrings = Set<String>()
-
-private func makeImageHolderFactory() -> ImageHolderFactory {
-  ImageHolderFactory(
-    make: { url, _ in
-      guard let url = url else {
-        XCTFail("Predefined images not supported in tests")
-        return UIImage()
-      }
-
-      if let image = UIImage(named: url.lastPathComponent, in: testBundle, compatibleWith: nil) {
-        return image
-      }
-
-      let absoluteString = url.absoluteString
-      if !reportedURLStrings.contains(absoluteString) {
-        XCTFail(
-          "Loading images from network is prohibited in tests. You need to load image from "
-            + absoluteString + " and add it to Images.xcassets in testing bundle"
-        )
-        reportedURLStrings.insert(absoluteString)
-      }
-
+  func make(_ url: URL?, _: ImagePlaceholder?) -> ImageHolder {
+    guard let url = url else {
+      XCTFail("Predefined images not supported in tests")
       return UIImage()
     }
-  )
+
+    if let image = UIImage(named: url.lastPathComponent, in: testBundle, compatibleWith: nil) {
+      return image
+    }
+
+    let urlString = url.absoluteString
+    if !reportedUrls.contains(urlString) {
+      XCTFail(
+        "Loading images from network is prohibited in tests. You need to load image from "
+          + urlString + " and add it to Images.xcassets in testing bundle"
+      )
+      reportedUrls.insert(urlString)
+    }
+
+    return UIImage()
+  }
 }
 
 private struct TestStep {

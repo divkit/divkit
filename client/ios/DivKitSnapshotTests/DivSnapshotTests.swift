@@ -1,9 +1,10 @@
 import XCTest
 import UIKit
 
-import LayoutKit
+import BasePublic
 import DivKit
 import DivKitExtensions
+import LayoutKit
 
 private let exclusions = [
   // tested in DivIndicatorTests
@@ -55,10 +56,16 @@ private func doTest(_ file: JsonFile) {
   test.testDivs(
     file.name,
     customCaseName: file.name.removingFileExtension,
-    imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? .placeholderOnly : nil,
+    imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? PlaceholderFactory() : nil,
     blocksState: file.subdirectory == indicatorSubdirectory ? defaultPagerViewState : [:],
     extensions: divExtensions[file.path] ?? []
   )
+}
+
+private final class PlaceholderFactory: DivImageHolderFactory {
+  func make(_: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
+    placeholder?.toImageHolder() ?? NilImageHolder()
+  }
 }
 
 private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(

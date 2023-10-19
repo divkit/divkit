@@ -63,7 +63,7 @@ private func makeContext(
   DivBlockModelingContext(
     cardId: DivKitTests.cardId,
     stateManager: DivStateManager(),
-    imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() }),
+    imageHolderFactory: FakeImageHolderFactory(),
     extensionHandlers: extensionHandlers,
     stateInterceptors: stateInterceptors,
     persistentValuesStorage: DivPersistentValuesStorage()

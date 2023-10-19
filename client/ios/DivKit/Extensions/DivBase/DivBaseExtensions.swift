@@ -66,7 +66,6 @@ extension DivBase {
     block = applyBackground(
       background,
       to: block,
-      imageHolderFactory: context.imageHolderFactory,
       context: context
     )
     .addingDecorations(
@@ -237,7 +236,6 @@ extension DivBase {
   private func applyBackground(
     _ backgrounds: [DivBackground]?,
     to block: Block,
-    imageHolderFactory: ImageHolderFactory,
     context: DivBlockModelingContext
   ) -> Block {
     guard let backgrounds = backgrounds else {
@@ -246,10 +244,7 @@ extension DivBase {
 
     // optimization for the most common case: saves Array alloc/dealloc
     if backgrounds.count == 1 {
-      guard let background = backgrounds[0].makeBlockBackground(
-        with: imageHolderFactory,
-        context: context
-      ) else {
+      guard let background = backgrounds[0].makeBlockBackground(context: context) else {
         return block
       }
       if case let .solidColor(color) = background {
@@ -259,10 +254,7 @@ extension DivBase {
     }
 
     let blockBackgrounds = backgrounds.compactMap {
-      $0.makeBlockBackground(
-        with: imageHolderFactory,
-        context: context
-      )
+      $0.makeBlockBackground(context: context)
     }
     guard let background = blockBackgrounds.composite() else {
       return block

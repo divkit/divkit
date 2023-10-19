@@ -8,7 +8,6 @@ import NetworkingPublic
 
 extension DivBackground {
   func makeBlockBackground(
-    with imageHolderFactory: ImageHolderFactory,
     context: DivBlockModelingContext
   ) -> LayoutKit.Background? {
     let expressionResolver = context.expressionResolver
@@ -27,7 +26,7 @@ extension DivBackground {
       ).map { .gradient(.radial($0)) }
     case let .divImageBackground(imageBackground):
       let image = BackgroundImage(
-        imageHolder: imageHolderFactory.make(
+        imageHolder: context.imageHolderFactory.make(
           imageBackground.resolveImageUrl(expressionResolver)
         ),
         contentMode: imageBackground.contentMode(context: context),
@@ -39,7 +38,7 @@ extension DivBackground {
       return solidBackground.resolveColor(expressionResolver).map { .solidColor($0) }
     case let .divNinePatchBackground(ninePatchBackground):
       let image = NinePatchImage(
-        imageHolder: imageHolderFactory.make(
+        imageHolder: context.imageHolderFactory.make(
           ninePatchBackground.resolveImageUrl(expressionResolver)
         ),
         insets: ninePatchBackground.insets.makeEdgeInsets(with: expressionResolver)

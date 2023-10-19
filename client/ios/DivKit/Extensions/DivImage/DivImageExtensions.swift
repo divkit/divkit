@@ -22,19 +22,18 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
 
     let expressionResolver = context.expressionResolver
     let highPriority = resolveHighPriorityPreviewShow(expressionResolver)
-    let imageHolderFactory: ImageHolderFactory
+    let imageHolderFactory: DivImageHolderFactory
     if highPriority, let highPriorityImageHolderFactory = context.highPriorityImageHolderFactory {
       imageHolderFactory = highPriorityImageHolderFactory
     } else {
       imageHolderFactory = context.imageHolderFactory
     }
 
-    let imageHolder = imageHolderFactory.make(
-      resolveImageUrl(expressionResolver),
-      resolvePlaceholder(expressionResolver, highPriority: highPriority)
-    )
     return ImageBlock(
-      imageHolder: imageHolder,
+      imageHolder: imageHolderFactory.make(
+        resolveImageUrl(expressionResolver),
+        resolvePlaceholder(expressionResolver, highPriority: highPriority)
+      ),
       widthTrait: makeContentWidthTrait(with: context),
       height: resolveHeight(context),
       contentMode: contentMode(context: context),
