@@ -1,3 +1,13 @@
+## 28.7.0
+
+# iOS Client:
+* Added `DivVariableStorage`.
+* Added `scale` property support in the `video` component.
+
+# Web Client:
+Added `custom` component support.
+
+
 ## 28.6.0
 
 # Android Client:

@@ -1,3 +1,8 @@
+## 28.7.0 (October 23, 2023)
+
+Added `custom` component support.
+
+
 ## 28.6.0 (October 16, 2023)
 
 Additions:
