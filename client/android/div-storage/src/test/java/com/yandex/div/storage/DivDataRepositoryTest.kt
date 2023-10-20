@@ -120,6 +120,15 @@ class DivDataRepositoryTest {
     }
 
     @Test
+    fun `getAll() returns correct number of cards`() {
+        underTest.remove { true }
+        underTest.put(Payload(divs = listOf(
+            RawDataAndMetadata(ID_0, rawDivData)), templates))
+        val cards = underTest.getAll().resultData
+        Assert.assertEquals(1, cards.size)
+    }
+
+    @Test
     fun `repository saves data to persistent storage`() {
         createSUT().put(Payload(divs = listOf(
                 RawDataAndMetadata(ID_0, rawDivData)), templates))

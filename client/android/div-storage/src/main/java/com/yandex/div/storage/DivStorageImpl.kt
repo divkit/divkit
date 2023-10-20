@@ -147,14 +147,16 @@ internal class DivStorageImpl(
         dataSaveUseCase.saveRawJsons(rawJsons, actionOnError)
 
     @AnyThread
-    override fun loadData(ids: List<String>): LoadDataResult<DivStorage.RestoredRawData> {
+    override fun loadData(ids: List<String>, idsToExclude: List<String>): LoadDataResult<DivStorage.RestoredRawData> {
         val usedGroups = mutableSetOf<String>()
         val cards = ArrayList<DivStorage.RestoredRawData>(ids.size)
         val exceptions = mutableListOf<StorageException>()
 
         val selection = when {
-            ids.isEmpty() -> null
-            else -> "$COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
+            ids.isEmpty() && idsToExclude.isEmpty() -> null
+            ids.isEmpty() -> "$COLUMN_LAYOUT_ID NOT IN ${idsToExclude.asSqlList()}"
+            idsToExclude.isEmpty() -> "$COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
+            else -> "$COLUMN_LAYOUT_ID NOT IN ${idsToExclude.asSqlList()} AND $COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
         }
 
         try {

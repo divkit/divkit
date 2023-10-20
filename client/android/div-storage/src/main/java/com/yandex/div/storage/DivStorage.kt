@@ -31,7 +31,7 @@ internal interface DivStorage {
     fun removeRawJsons(predicate: (RawJson) -> Boolean): RemoveResult
 
     @AnyThread
-    fun loadData(ids: List<String>): LoadDataResult<RestoredRawData>
+    fun loadData(ids: List<String>, idsToExclude: List<String>): LoadDataResult<RestoredRawData>
 
     @AnyThread
     fun remove(predicate: (RawDataAndMetadata) -> Boolean): RemoveResult

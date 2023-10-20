@@ -44,7 +44,7 @@ class DivDataRepositoryImplTest {
     private val executionResult = mock<ExecutionResult>()
     private val divStorage = mock<DivStorage> {
         on { saveData(any(), any(), any(), any()) } doReturn executionResult
-        on { loadData(any()) } doAnswer {
+        on { loadData(any(), any()) } doAnswer {
             LoadDataResult(listOf(
                     RestoredRawData(INVALID_CARD_ID, invalidRawDivData, groupId = "fake_group_id")))
         }
@@ -133,13 +133,13 @@ class DivDataRepositoryImplTest {
     @Test
     fun `getAll() request storage once if result without error`() {
         val underTest = underTest
-        whenever(divStorage.loadData(any())) doReturn
+        whenever(divStorage.loadData(any(), any())) doReturn
                 DivStorage.LoadDataResult(emptyList(), emptyList())
 
         underTest.getAll()
         underTest.getAll()
         underTest.getAll()
-        verify(divStorage, times(1)).loadData(any())
+        verify(divStorage, times(1)).loadData(any(), any())
     }
 
     @Test
@@ -147,7 +147,7 @@ class DivDataRepositoryImplTest {
         val underTest = underTest
         val errors = argumentCaptor<List<String>>()
         val listOfErrors = mutableListOf(getStorageException("1"), getStorageException("2"))
-        whenever(divStorage.loadData(errors.capture())) doReturn
+        whenever(divStorage.loadData(errors.capture(), any())) doReturn
                 DivStorage.LoadDataResult(emptyList(), listOfErrors)
 
         underTest.getAll()
@@ -179,7 +179,7 @@ class DivDataRepositoryImplTest {
         val ids = List(2) { it.toString() }
         val listOfCards = mutableListOf<DivStorage.RestoredRawData>()
         val errors = argumentCaptor<List<String>>()
-        whenever(divStorage.loadData(errors.capture())) doReturn
+        whenever(divStorage.loadData(errors.capture(), any())) doReturn
                 DivStorage.LoadDataResult(listOfCards, emptyList())
 
         // check that in case of error we request this data again

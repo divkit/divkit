@@ -116,13 +116,14 @@ internal class DivDataRepositoryImpl(
         if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty()) {
             return DivDataRepositoryResult(inMemoryData.values.toList(), emptyList())
         }
-        val cardsToRequest = if (areCardsSynchronizedWithInMemory) {
-            cardsWithErrors.keys
+
+        val (cardsToRequest, cardsToExclude) = if (areCardsSynchronizedWithInMemory) {
+            cardsWithErrors.keys to emptySet<String>()
         } else {
-            emptySet()
+            emptySet<String>() to inMemoryData.keys.minus(cardsWithErrors.keys)
         }
 
-        val storageResults = loadFromStorage(cardsToRequest)
+        val storageResults = loadFromStorage(cardsToRequest, cardsToExclude)
         val resultsWithInMemory = storageResults.addData(inMemoryData.values)
 
         storageResults.resultData.forEach { inMemoryData[it.id] = it }
@@ -159,16 +160,16 @@ internal class DivDataRepositoryImpl(
         }
 
         if (idsToLoad.isNotEmpty()) {
-            val storageResults = loadFromStorage(idsToLoad)
+            val storageResults = loadFromStorage(idsToLoad, emptySet())
             storageResults.resultData.forEach { inMemoryData[it.id] = it }
             return storageResults.addData(inMemoryResults)
         }
         return DivDataRepositoryResult(inMemoryResults, emptyList())
     }
 
-    private fun loadFromStorage(ids: Set<String>): DivDataRepositoryResult {
+    private fun loadFromStorage(ids: Set<String>, idsToExclude: Set<String>): DivDataRepositoryResult {
         val exceptions = mutableListOf<DivDataRepositoryException>()
-        val (rawData, errors) = divStorage.loadData(ids.toList())
+        val (rawData, errors) = divStorage.loadData(ids.toList(), idsToExclude.toList())
         exceptions.addAll(errors.toDivDataRepositoryExceptions())
         val dataByGroups = rawData.associateBy { it.groupId }
 

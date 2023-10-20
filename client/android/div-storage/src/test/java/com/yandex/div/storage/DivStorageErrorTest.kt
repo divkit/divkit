@@ -145,5 +145,5 @@ class DivStorageErrorTest {
     private fun validByteArray() = JSONObject().toString().toByteArray()
     private fun invalidByteArray() = byteArrayOf(1.toByte(), 2.toByte())
 
-    private fun DivStorage.loadData(vararg ids: String) = loadData(ids.toList())
+    private fun DivStorage.loadData(vararg ids: String) = loadData(ids.toList(), emptyList())
 }

@@ -176,5 +176,5 @@ class DivStorageTest {
         return ids
     }
 
-    private fun DivStorage.loadData(vararg ids: String) = loadData(ids.toList())
+    private fun DivStorage.loadData(vararg ids: String) = loadData(ids.toList(), emptyList())
 }
