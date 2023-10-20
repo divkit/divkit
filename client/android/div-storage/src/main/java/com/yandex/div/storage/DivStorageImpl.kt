@@ -38,7 +38,6 @@ import com.yandex.div.storage.database.ReadState
 import com.yandex.div.storage.database.SELECT_RAW_JSONS_BY_IDS
 import com.yandex.div.storage.database.SELECT_TEMPLATES_BY_HASHES
 import com.yandex.div.storage.database.SingleTransactionDataSavePerformer
-import com.yandex.div.storage.database.StorageStatement
 import com.yandex.div.storage.database.StorageStatementExecutor
 import com.yandex.div.storage.database.StorageStatements
 import com.yandex.div.storage.database.TABLE_CARDS
@@ -57,12 +56,15 @@ private const val DB_NAME = "div-storage.db"
 
 @Mockable
 internal class DivStorageImpl(
-        context: Context,
-        openHelperProvider: DatabaseOpenHelperProvider,
+    context: Context,
+    openHelperProvider: DatabaseOpenHelperProvider,
+    databaseNamePrefix: String = "",
 ) : DivStorage {
 
+    private val dbName = if (databaseNamePrefix.isEmpty()) DB_NAME else "$databaseNamePrefix-$DB_NAME"
+
     private val openHelper = openHelperProvider.provide(
-            context, DB_NAME, DB_VERSION, this::onCreate, this::onUpgrade
+            context, dbName, DB_VERSION, this::onCreate, this::onUpgrade
     )
     @VisibleForTesting  // TODO: ticket for make a private pls
     val statementExecutor = StorageStatementExecutor { openHelper.writableDatabase }

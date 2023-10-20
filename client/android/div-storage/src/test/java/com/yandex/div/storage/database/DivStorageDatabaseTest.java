@@ -1,5 +1,7 @@
 package com.yandex.div.storage.database;
 
+import static com.yandex.div.storage.database.StorageSchema.DB_VERSION;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -8,11 +10,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import kotlin.ExceptionsKt;
-import kotlin.collections.CollectionsKt;
-
 import android.content.Context;
-import android.database.Cursor;
 import android.database.CursorWindow;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +18,6 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.yandex.div.internal.util.IOUtils;
 import com.yandex.div.storage.DivStorageImpl;
 import com.yandex.div.storage.templates.RawTemplateData;
 
@@ -34,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.ExceptionsKt;
+import kotlin.collections.CollectionsKt;
+
 @SuppressWarnings("KotlinInternalInJava")
 @RunWith(RobolectricTestRunner.class)
 public class DivStorageDatabaseTest {
@@ -43,7 +43,7 @@ public class DivStorageDatabaseTest {
 
     private DivStorageImpl mStorage;
     private AndroidDatabaseOpenHelper mHelper;
-    private DatabaseOpenHelperProvider mProvider = new DatabaseOpenHelperProvider() {
+    private DatabaseOpenHelperProvider mProvider = spy(new DatabaseOpenHelperProvider() {
         @Override
         @NonNull
         public DatabaseOpenHelper provide(@NonNull Context context,
@@ -61,27 +61,15 @@ public class DivStorageDatabaseTest {
             }
             return mHelper;
         }
-    };
+    });
 
     @Before
     public void setUp() {
         mStorage = spy(new DivStorageImpl(
                 ApplicationProvider.getApplicationContext(),
-                mProvider
+                mProvider, "test-db"
         ));
         mHelper.getWritableDatabase().execSQL("PRAGMA foreign_keys = ON");
-    }
-
-    private void createTablesAndVerifyEmptiness() {
-        mStorage.createTables(mHelper.getWritableDatabase());
-        Cursor cursor = null;
-        try {
-            cursor = mHelper.getReadableDatabase().query(
-                    StorageSchema.TABLE_CARDS, null, null, null, null, null, null, null);
-            Assert.assertEquals(0, cursor.getCount());
-        } finally {
-            IOUtils.closeCursorSilently(cursor);
-        }
     }
 
     @Test
@@ -106,7 +94,7 @@ public class DivStorageDatabaseTest {
         DatabaseOpenHelper.Database database = mock(DatabaseOpenHelper.Database.class);
 
         // Do
-        mStorage.onUpgrade(database, StorageSchema.DB_VERSION, StorageSchema.DB_VERSION);
+        mStorage.onUpgrade(database, DB_VERSION, DB_VERSION);
 
         // Verify
         verify(mStorage, times(0)).dropTables(database);
@@ -123,6 +111,14 @@ public class DivStorageDatabaseTest {
         StorageException exception = exceptions.get(0);
         Assert.assertEquals(SQLException.class, exception.getCause().getClass());
     }
+
+    @Test
+    public void storageCreateDatabaseWithGivenPrefix() {
+        verify(mProvider, times(1)).provide(
+          any(), eq("test-db-div-storage.db"), eq(DB_VERSION), any(), any()
+        );
+    }
+
 
     @NonNull
     private Map<String, byte[]> toMap(@NonNull List<RawTemplateData> templates) {

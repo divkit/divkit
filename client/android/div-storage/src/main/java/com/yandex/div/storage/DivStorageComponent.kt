@@ -30,6 +30,7 @@ interface DivStorageComponent {
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
                     LazyProvider { DivParsingHistogramReporter.DEFAULT },
                 experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride: Boolean = true,
+                databaseNamePrefix: String = "",
         ): DivStorageComponent = createInternal(
                 context,
                 histogramReporter,
@@ -38,6 +39,7 @@ interface DivStorageComponent {
                 cardErrorTransformer,
                 parsingHistogramReporter,
                 experimentalUseNewDatabaseManagerToPreventConcurrencyIssuesDoNotOverride,
+                databaseNamePrefix,
         )
 
         internal fun createInternal(
@@ -49,6 +51,7 @@ interface DivStorageComponent {
                 parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
                     LazyProvider { DivParsingHistogramReporter.DEFAULT },
                 useDatabaseManager: Boolean = true,
+                databaseNamePrefix: String = "",
         ): InternalStorageComponent {
             val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
                 AndroidDatabaseOpenHelper(c, name, version, ccb, ucb, useDatabaseManager)
@@ -56,6 +59,7 @@ interface DivStorageComponent {
             val divStorage = DivStorageImpl(
                     context,
                     openHelperProvider,
+                    databaseNamePrefix,
             )
             val parsingHistogramProxy =
                 LazyProvider { DivParsingHistogramProxy { parsingHistogramReporter.get() } }
