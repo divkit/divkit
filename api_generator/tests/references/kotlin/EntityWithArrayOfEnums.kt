@@ -28,7 +28,7 @@ class EntityWithArrayOfEnums(
         return json
     }
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         items: List<EntityWithArrayOfEnums.Item>,
     ) = EntityWithArrayOfEnums(
         items,

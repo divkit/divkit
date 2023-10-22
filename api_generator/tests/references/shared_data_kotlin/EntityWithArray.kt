@@ -8,7 +8,7 @@ class EntityWithArray(
     @JvmField final val array: List<Entity>, // at least 1 elements
 ) {
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         array: List<Entity>,
     ) = EntityWithArray(
         array,

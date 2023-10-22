@@ -8,7 +8,7 @@ class EntityWithStrictArray(
     @JvmField final val array: List<Entity>, // at least 1 elements; all received elements must be valid
 ) {
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         array: List<Entity>,
     ) = EntityWithStrictArray(
         array,

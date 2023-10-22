@@ -260,6 +260,7 @@ class DivanGenerator(Generator):
             declaration = str(enum_values_declaration)
             file_content = f'{head_for_file}{declaration}'
             file.write(file_content)
+            file.close()
 
     def __generate_enum_value_obj(self, value_name: str, enum_names: List[str]) -> Text:
         obj_declaration = Text()

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from functools import reduce
 import dataclasses
-from typing import List, Optional, cast
+from typing import List, Optional, cast, Dict
 
 from ..base import declaration_comment
 from ...schema.modeling.entities import (
@@ -201,7 +201,7 @@ class KotlinEntity(Entity):
                 validators += validator_or_empty
 
             if isinstance(p.property_type, Array):
-                validator_or_empty = cast(KotlinPropertyType, p.property_type.property_type)\
+                validator_or_empty = cast(KotlinPropertyType, p.property_type.property_type) \
                     .static_validator_expression(
                     property_name=p.name + '_item',
                     supports_expressions=p.supports_expressions,
@@ -253,12 +253,25 @@ class KotlinEntity(Entity):
         return static_decl
 
     @property
-    def copy_with_new_array_declaration(self) -> Optional[Text]:
-        if not self.__contains_array_of_objects:
+    def copy_with_new_properties_declaration(self) -> Optional[Text]:
+        generator_properties = self.generator_properties
+        if not generator_properties:
+            return None
+
+        general_properties = generator_properties.general_properties
+        if not general_properties:
+            return None
+
+        kotlin_generator_properties = general_properties.get('kotlin')
+        if not isinstance(kotlin_generator_properties, Dict):
+            return None
+
+        new_properties = kotlin_generator_properties.get('properties_to_patch')
+        if not isinstance(new_properties, list):
             return None
 
         result = EMPTY
-        result += '    fun copyWithNewArray('
+        result += '    fun copyWithNewProperties('
 
         method_params: List[str] = []
         constructor_params: List[str] = []
@@ -269,15 +282,7 @@ class KotlinEntity(Entity):
         for p in sorted(filter(lambda prop: not isinstance(prop.property_type, StaticString),
                                self.properties), key=lambda prop: prop.name):
             property_name = utils.lower_camel_case(p.name)
-            if p.optional:
-                append_arg(property_name)
-                continue
-
-            if not isinstance(p.property_type, Array):
-                append_arg(property_name)
-                continue
-
-            if not isinstance(p.property_type.property_type, Object):
+            if p.name not in new_properties:
                 append_arg(property_name)
                 continue
 
@@ -291,15 +296,6 @@ class KotlinEntity(Entity):
         result += '\n'.join(constructor_params)
         result += '    )'
         return result
-
-    @property
-    def __contains_array_of_objects(self) -> bool:
-        for p in self.properties:
-            if not p.optional and \
-                    isinstance(p.property_type, Array) and \
-                    isinstance(p.property_type.property_type, Object):
-                return True
-        return False
 
 
 class KotlinProperty(Property):
@@ -542,7 +538,7 @@ class KotlinProperty(Property):
                     cast(KotlinPropertyType, self.property_type).is_array_of_expressions:
                 expression_prefix_or_empty = EXPRESSION_LIST_TYPE_NAME
             expression_suffix_or_empty = ''
-        serialization_transform = cast(KotlinPropertyType, self.property_type)\
+        serialization_transform = cast(KotlinPropertyType, self.property_type) \
             .serialization_transform(string_enum_prefixed=self.mode.is_template)
         args = f'key = "{self.dict_field}", {value_arg} = {self.declaration_name}{serialization_transform}'
         return Text(f'json.write{expression_prefix_or_empty}{suffix}{expression_suffix_or_empty}({args})')

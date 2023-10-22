@@ -28,7 +28,7 @@ class EntityWithStrictArray(
         return json
     }
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         array: List<Entity>,
     ) = EntityWithStrictArray(
         array,

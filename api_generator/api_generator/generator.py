@@ -61,6 +61,7 @@ def generate_api(config: Config, check_hash_files: bool = False, save_hash_files
         def save_hash_file(filename: str, hash: str) -> None:
             with open(os.path.join(config.output_path, filename), 'w') as f:
                 f.write(hash)
+                f.close()
         save_hash_file('input_hash', root_directory.hash)
         save_hash_file('output_hash', expected_output_hash)
         save_hash_file('config_hash', config.config_hash)

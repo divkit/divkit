@@ -92,6 +92,7 @@ def sha256_update_from_file(filename: str, hash: Hash) -> Hash:
     with open(filename, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash.update(chunk)
+        f.close()
     return hash
 
 

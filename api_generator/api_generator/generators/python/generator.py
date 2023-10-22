@@ -69,6 +69,7 @@ class PythonGenerator(Generator):
 
         with open(f'{self._config.output_path}/__init__.py', 'w') as file:
             file.write(str(file_content))
+            file.close()
 
     def __inner_types_classes(self, entity: PythonEntity) -> List[str]:
         def declaration_of(decl_type, method) -> List[str]:

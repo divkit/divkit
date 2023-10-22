@@ -8,7 +8,7 @@ class EntityWithArrayOfNestedItems(
     @JvmField final val items: List<Item>, // at least 1 elements
 ) {
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         items: List<EntityWithArrayOfNestedItems.Item>,
     ) = EntityWithArrayOfNestedItems(
         items,

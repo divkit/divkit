@@ -30,6 +30,7 @@ except ModuleNotFoundError:
 def assert_as_json_test(file_expected: str, content_actual: Dict) -> None:
     with open(file_expected, 'r') as expected:
         content_expected = json.loads(expected.read())
+        expected.close()
         diff = DeepDiff(content_expected, content_actual, ignore_order=False)
         assert len(diff) == 0
 
@@ -37,6 +38,7 @@ def assert_as_json_test(file_expected: str, content_actual: Dict) -> None:
 def update_reference(filename: str, content: Any):
     with open(filename, 'w') as updated_reference:
         updated_reference.write(str(content))
+        updated_reference.close()
 
 
 def update_json_reference(filename: str, json_content: Dict[str, Any]):
@@ -91,6 +93,8 @@ def compare_files(filename: str, ref_file_path: str, generated_file_path: str):
     with open(ref_file_path, 'r') as ref_file:
         with open(generated_file_path, 'r') as gen_file:
             ref_lines, gen_lines = ref_file.readlines(), gen_file.readlines()
+            ref_file.close()
+            gen_file.close()
             lines_count = min(len(ref_lines), len(gen_lines))
             for line_ind in range(lines_count):
                 ref_line, gen_line = ref_lines[line_ind], gen_lines[line_ind]

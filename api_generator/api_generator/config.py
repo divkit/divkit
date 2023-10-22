@@ -87,6 +87,7 @@ class Config:
         self.output_path: str = output_path
         with open(config_path) as f:
             dictionary = json.loads(f.read())
+            f.close()
             self.generation: Config.GenerationConfig = Config.GenerationConfig(dictionary)
 
         if generator_path:
@@ -109,5 +110,6 @@ def _stored_sha256(path: str) -> Optional[str]:
     if os.path.exists(path):
         with open(path, "r") as f:
             data = f.read()
+            f.close()
             return str(data)
     return None

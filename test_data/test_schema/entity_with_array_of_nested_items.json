@@ -1,5 +1,12 @@
 {
   "type": "object",
+  "codegen": {
+    "kotlin": {
+      "properties_to_patch": [
+        "items"
+      ]
+    }
+  },
   "definitions": {
     "item": {
       "type": "object",

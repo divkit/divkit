@@ -45,6 +45,7 @@ class DocumentationGenerator(Generator):
         filename = os.path.join(self._config.output_path, 'toc.yaml')
         with open(filename, 'w') as file:
             file.write(self.__menu_content(objects))
+            file.close()
 
     def __menu_content(self, objects: List[DocumentationDeclarable]) -> str:
         items = '\n'.join(map(

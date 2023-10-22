@@ -35,6 +35,7 @@ class DartGenerator(Generator):
         filename = os.path.join(self._output_path, 'generated_sources.dart')
         with open(filename, 'w') as file:
             file.write(file_content.__str__())
+            file.close()
 
     def _entity_declaration(self, entity: DartEntity) -> Text:
         result = Text()

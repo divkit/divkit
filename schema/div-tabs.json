@@ -4,6 +4,11 @@
   "codegen": {
     "swift": {
       "generate_optional_arguments": false
+    },
+    "kotlin": {
+      "properties_to_patch": [
+        "items"
+      ]
     }
   },
   "definitions": {

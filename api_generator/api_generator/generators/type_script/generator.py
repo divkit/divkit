@@ -32,6 +32,7 @@ class TypeScriptGenerator(Generator):
             file_content += f"export * from './{obj_name}';"
         with open(f'{self._config.output_path}/index.ts', 'w') as file:
             file.write(str(file_content))
+            file.close()
 
     def _entity_declaration(self, entity: Entity) -> Text:
         result = Text()

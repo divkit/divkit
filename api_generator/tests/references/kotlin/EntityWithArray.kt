@@ -28,7 +28,7 @@ class EntityWithArray(
         return json
     }
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         array: List<Entity>,
     ) = EntityWithArray(
         array,

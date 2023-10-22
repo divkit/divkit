@@ -1,5 +1,12 @@
 {
   "type": "object",
+  "codegen": {
+    "kotlin": {
+      "properties_to_patch": [
+        "array"
+      ]
+    }
+  },
   "properties": {
     "type": {
       "type": "string",

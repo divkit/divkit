@@ -81,6 +81,7 @@ class Generator(ABC):
             filename = os.path.join(self._output_path, self.filename(obj.name))
             with open(filename, 'w') as file:
                 file.write(file_content)
+                file.close()
 
     @property
     def _head_for_file(self) -> str:

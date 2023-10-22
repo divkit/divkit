@@ -194,7 +194,10 @@ def internal_resolve_structure(
     if os.path.isdir(path):
         return entities.SchemaDirectory(path, parent_dir, lang)
 
-    json_data = json.loads(open(path).read())
+    with open(path, 'r') as file:
+        json_data = json.loads(file.read())
+        file.close()
+
     if not isinstance(json_data, Dict):
         raise errors.NonDictionaryContentError(path)
 

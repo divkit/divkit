@@ -28,7 +28,7 @@ class EntityWithArrayOfNestedItems(
         return json
     }
 
-    fun copyWithNewArray(
+    fun copyWithNewProperties(
         items: List<EntityWithArrayOfNestedItems.Item>,
     ) = EntityWithArrayOfNestedItems(
         items,
