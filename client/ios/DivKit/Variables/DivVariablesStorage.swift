@@ -106,7 +106,7 @@ public final class DivVariablesStorage {
   public func append(
     variables newVariables: DivVariables,
     for cardId: DivCardID,
-    replaceExisting: Bool
+    replaceExisting: Bool = true
   ) {
     let oldVariables = lock.read {
       cardVariables[cardId] ?? [:]
