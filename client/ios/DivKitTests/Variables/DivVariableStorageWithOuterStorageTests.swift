@@ -1,8 +1,7 @@
-@testable import DivKit
-
 import XCTest
 
 import BasePublic
+import DivKit
 
 final class DivVariableStorageWithOuterStorageTest: XCTestCase {
   private let outerStorage = DivVariableStorage()
@@ -13,8 +12,7 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
 
   override func setUp() {
     storage = DivVariableStorage(outerStorage: outerStorage)
-    storage.changeEvents
-      .addObserver { [unowned self] in self.event = $0 }
+    storage.addObserver { [unowned self] in self.event = $0 }
       .dispose(in: disposePool)
   }
   

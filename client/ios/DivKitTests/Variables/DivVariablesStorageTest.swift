@@ -11,8 +11,7 @@ final class DivVariablesStorageTest: XCTestCase {
   private var event: DivVariablesStorage.ChangeEvent?
 
   override func setUp() {
-    storage.changeEvents
-      .addObserver { [unowned self] in self.event = $0 }
+    storage.addObserver { [unowned self] in self.event = $0 }
       .dispose(in: disposePool)
   }
 

@@ -16,7 +16,8 @@ public final class DivVariableStorage {
   private var values = DivVariables()
   private let lock = RWLock()
 
-  var allValues: DivVariables {
+  /// Gets all available variables including variables from outer storage.
+  public var allValues: DivVariables {
     (outerStorage?.allValues ?? [:]) + values
   }
 
@@ -148,6 +149,10 @@ public final class DivVariableStorage {
     } else {
       DivKitLogger.error("Variable is not declared: \(name)")
     }
+  }
+
+  public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
+    changeEvents.addObserver(action)
   }
 
   private func notify(_ event: ChangeEvent) {
