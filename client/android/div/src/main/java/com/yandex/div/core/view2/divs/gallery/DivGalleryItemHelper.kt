@@ -107,6 +107,7 @@ internal interface DivGalleryItemHelper {
         }
     }
 
+    fun firstCompletelyVisibleItemPosition(): Int
     fun firstVisibleItemPosition(): Int
     fun lastVisibleItemPosition(): Int
     fun width(): Int

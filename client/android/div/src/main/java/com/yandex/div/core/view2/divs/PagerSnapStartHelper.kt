@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 
 internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     private var _verticalHelper: OrientationHelper? = null
@@ -23,18 +24,18 @@ internal class PagerSnapStartHelper(var itemSpacing: Int) : PagerSnapHelper() {
     }
 
     override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int): Int {
-        (manager as LinearLayoutManager).run {
-            val firstCompletelyVisibleItemPosition = findFirstCompletelyVisibleItemPosition()
+        (manager as DivGalleryItemHelper).run {
+            val firstCompletelyVisibleItemPosition = firstCompletelyVisibleItemPosition()
             if (firstCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
                 return firstCompletelyVisibleItemPosition
             }
-            val lastVisibleItemPosition = findLastVisibleItemPosition()
+            val lastVisibleItemPosition = lastVisibleItemPosition()
             // workaround for first/last position
-            if (lastVisibleItemPosition == findFirstVisibleItemPosition()) {
+            if (lastVisibleItemPosition == firstVisibleItemPosition()) {
                 return if (lastVisibleItemPosition != RecyclerView.NO_POSITION) lastVisibleItemPosition else 0
             }
             val velocity =
-                if (orientation == LinearLayoutManager.HORIZONTAL) velocityX else velocityY
+                if (getLayoutManagerOrientation() == LinearLayoutManager.HORIZONTAL) velocityX else velocityY
             val isRtl = manager.layoutDirection == ViewCompat.LAYOUT_DIRECTION_RTL
             // have 2 items on screen and choose by direction
             return if ((velocity >= 0 && !isRtl) || (isRtl && velocity < 0)) {

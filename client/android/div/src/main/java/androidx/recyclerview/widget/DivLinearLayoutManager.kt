@@ -131,6 +131,8 @@ internal class DivLinearLayoutManager(
         super.layoutDecoratedWithMargins(child, left, top, right, bottom)
     }
 
+    override fun firstCompletelyVisibleItemPosition(): Int = findFirstCompletelyVisibleItemPosition()
+
     override fun firstVisibleItemPosition(): Int = findFirstVisibleItemPosition()
 
     override fun lastVisibleItemPosition(): Int = findLastVisibleItemPosition()

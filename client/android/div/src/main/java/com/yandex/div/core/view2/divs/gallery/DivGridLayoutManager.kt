@@ -93,6 +93,12 @@ internal class DivGridLayoutManager(
         super.layoutDecoratedWithMargins(child, left, top, right, bottom)
     }
 
+    override fun firstCompletelyVisibleItemPosition(): Int {
+        val indexes = IntArray(itemCount)
+        findFirstCompletelyVisibleItemPositions(indexes)
+        return indexes.first()
+    }
+
     override fun firstVisibleItemPosition(): Int {
         val indexes = IntArray(itemCount)
         findFirstVisibleItemPositions(indexes)
