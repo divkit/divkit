@@ -14,7 +14,7 @@ extension DivImageHolderFactory {
     make(url, nil)
   }
 
-  func withCache(_ cachedImageHolders: [ImageHolder]) -> DivImageHolderFactory {
+  public func withCache(_ cachedImageHolders: [ImageHolder]) -> DivImageHolderFactory {
     if cachedImageHolders.isEmpty {
       return self
     }
