@@ -18,7 +18,7 @@ public final class VisibilityActionPerformers {
     }
   }
 
-  func onVisibleBoundsChanged(from _: CGRect, to: CGRect, bounds: CGRect) {
+  func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
     let beforeVisibleBounds = lastVisibleBounds.value
     lastVisibleBounds.value = to
 

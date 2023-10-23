@@ -416,7 +416,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     passVisibleBoundsChanged(from: from, to: to)
 
     if !model.visibilityActions.isEmpty {
-      visibilityActionPerformers?.onVisibleBoundsChanged(from: from, to: to, bounds: bounds)
+      visibilityActionPerformers?.onVisibleBoundsChanged(to: to, bounds: bounds)
     }
   }
 
