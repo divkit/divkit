@@ -71,12 +71,14 @@
             hasJSAction = true;
         } else if (!href && Array.isArray(actions) && actions?.length) {
             hasJSAction = true;
-            rootCtx.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
-                level: 'warn',
-                additional: {
-                    actions
-                }
-            }));
+            if (!actions.some(action => action.url || action.typed)) {
+                rootCtx.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
+                    level: 'warn',
+                    additional: {
+                        actions
+                    }
+                }));
+            }
         }
     }
 
@@ -129,6 +131,10 @@
             event.preventDefault();
         } else if (actions) {
             const hasCustomAction = actions.some(action => {
+                if (action?.typed) {
+                    return true;
+                }
+
                 const url = action?.url;
                 if (!url) {
                     return false;

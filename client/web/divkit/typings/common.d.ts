@@ -98,6 +98,57 @@ export interface DownloadCallbacks {
     on_success_actions?: Action[];
 }
 
+export interface StringValue {
+    type: 'string';
+    value: string;
+}
+
+export interface IntegerValue {
+    type: 'integer';
+    value: number;
+}
+
+export interface NumberValue {
+    type: 'number';
+    value: number;
+}
+
+export interface ColorValue {
+    type: 'color';
+    value: string;
+}
+
+export interface BooleanValue {
+    type: 'boolean';
+    value: boolean;
+}
+
+export interface UrlValue {
+    type: 'url';
+    value: string;
+}
+
+export interface DictValue {
+    type: 'dict';
+    value: Record<string, unknown>;
+}
+
+export interface ArrayValue {
+    type: 'array';
+    value: unknown[];
+}
+
+export type TypedValue = StringValue | IntegerValue | NumberValue | ColorValue |
+    BooleanValue | UrlValue | DictValue | ArrayValue;
+
+export interface ActionSetVariable {
+    type: 'set_variable';
+    variable_name: string;
+    value: TypedValue;
+}
+
+export type TypedAction = ActionSetVariable;
+
 export interface Action {
     log_id: string;
     url?: string;
@@ -106,6 +157,7 @@ export interface Action {
     download_callbacks?: DownloadCallbacks;
     log_url?: string;
     target?: string;
+    typed?: TypedAction;
 }
 
 export interface VisibilityAction {
@@ -117,6 +169,7 @@ export interface VisibilityAction {
     visibility_percentage?: number;
     visibility_duration?: number;
     log_limit?: number;
+    typed?: TypedAction;
 }
 
 export interface DisappearAction {
@@ -128,6 +181,7 @@ export interface DisappearAction {
     visibility_percentage?: number;
     disappear_duration?: number;
     log_limit?: number;
+    typed?: TypedAction;
 }
 
 export type StatCallback = (details: {

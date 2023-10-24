@@ -118,6 +118,7 @@ export function visibilityAction(node: HTMLElement, {
 
                             const calcedAction = rootCtx.getJsonWithVars(status.action);
                             const actionUrl = calcedAction.url;
+                            const actionTyped = calcedAction.typed;
                             if (actionUrl) {
                                 const schema = getUrlSchema(actionUrl);
                                 if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
@@ -127,6 +128,8 @@ export function visibilityAction(node: HTMLElement, {
                                         rootCtx.execCustomAction(calcedAction as VisibilityAction & { url: string });
                                     }
                                 }
+                            } else if (actionTyped) {
+                                rootCtx.execAction(calcedAction);
                             }
 
                             rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);

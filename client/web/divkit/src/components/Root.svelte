@@ -630,6 +630,7 @@
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
         const actionUrl = action.url ? String(action.url) : '';
+        const actionTyped = action.typed;
 
         if (actionUrl) {
             try {
@@ -726,6 +727,48 @@
                     }
                 }));
             }
+        } else if (actionTyped) {
+            switch (actionTyped.type) {
+                case 'set_variable': {
+                    const { variable_name: name, value } = actionTyped;
+                    if (name && value) {
+                        const variableInstance = variables.get(name);
+                        if (variableInstance) {
+                            const type = variableInstance.getType();
+                            if (type === value.type) {
+                                variableInstance.setValue(value.value);
+                            } else {
+                                logError(wrapError(new Error('Trying to set value with invalid type'), {
+                                    additional: {
+                                        name,
+                                        type: value.type
+                                    }
+                                }));
+                            }
+                        } else {
+                            logError(wrapError(new Error('Cannot find variable'), {
+                                additional: {
+                                    name
+                                }
+                            }));
+                        }
+                    } else {
+                        logError(wrapError(new Error('Incorrect set_variable action'), {
+                            additional: {
+                                name
+                            }
+                        }));
+                    }
+                    break;
+                }
+                default: {
+                    logError(wrapError(new Error('Unknown type of action'), {
+                        additional: {
+                            type: actionTyped.type
+                        }
+                    }));
+                }
+            }
         }
     }
 
@@ -738,6 +781,7 @@
             let action = actions[i];
 
             const actionUrl = action.url;
+            const actionTyped = action.typed;
             if (actionUrl) {
                 const schema = getUrlSchema(actionUrl);
                 if (schema) {
@@ -761,6 +805,8 @@
                         await tick();
                     }
                 }
+            } else if (actionTyped) {
+                execAction(action);
             }
         }
         actions.forEach(action => {
