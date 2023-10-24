@@ -42,7 +42,11 @@ internal class DivPatchManager @Inject constructor(
             removePatch(divDataTag)
             return null
         }
-        return DivData(oldDivData.logId, states)
+        return DivData(
+            logId = oldDivData.logId,
+            states = states,
+            variableTriggers = oldDivData.variableTriggers
+        )
     }
 
     fun removePatch(tag: DivDataTag) {
