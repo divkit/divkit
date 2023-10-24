@@ -163,7 +163,7 @@
     };
     let keyboardType = 'multi_line_text';
     let inputType = 'text';
-    const isSupportInputMode = document && 'inputMode' in document.createElement('input');
+    const isSupportInputMode = typeof document !== 'undefined' && 'inputMode' in document.createElement('input');
     let inputMode: HTMLAttributes<HTMLInputElement>['inputmode'] = undefined;
     $: {
         if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
