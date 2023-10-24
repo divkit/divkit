@@ -103,6 +103,7 @@
           "default_value": "fit",
           "$description": "translations.json#/div_video_scale",
           "platforms": [
+            "ios",
             "web"
           ]
         }
