@@ -30,9 +30,9 @@ class EntityWithArrayOfEnumsTemplate : JSONSerializable, JsonTemplate<EntityWith
         items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, EntityWithArrayOfEnums.Item.Converter.FROM_STRING, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfEnums {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfEnums {
         return EntityWithArrayOfEnums(
-            items = items.resolveList(env = env, key = "items", data = data, ITEMS_VALIDATOR, reader = ITEMS_READER)
+            items = items.resolveList(env = env, key = "items", data = rawData, ITEMS_VALIDATOR, reader = ITEMS_READER)
         )
     }
 

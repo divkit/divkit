@@ -30,9 +30,9 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems {
         return EntityWithArrayOfNestedItems(
-            items = items.resolveTemplateList(env = env, key = "items", data = data, ITEMS_VALIDATOR, reader = ITEMS_READER)
+            items = items.resolveTemplateList(env = env, key = "items", data = rawData, ITEMS_VALIDATOR, reader = ITEMS_READER)
         )
     }
 
@@ -72,10 +72,10 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
             property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
         }
 
-        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems.Item {
+        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems.Item {
             return EntityWithArrayOfNestedItems.Item(
-                entity = entity.resolveTemplate(env = env, key = "entity", data = data, reader = ENTITY_READER),
-                property = property.resolve(env = env, key = "property", data = data, reader = PROPERTY_READER)
+                entity = entity.resolveTemplate(env = env, key = "entity", data = rawData, reader = ENTITY_READER),
+                property = property.resolve(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
             )
         }
 

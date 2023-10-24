@@ -30,9 +30,9 @@ class EntityWithStringEnumPropertyWithDefaultValueTemplate : JSONSerializable, J
         value = JsonTemplateParser.readOptionalFieldWithExpression(json, "value", topLevel, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.Converter.FROM_STRING, logger, env, TYPE_HELPER_VALUE)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
         return EntityWithStringEnumPropertyWithDefaultValue(
-            value = value.resolveOptional(env = env, key = "value", data = data, reader = VALUE_READER) ?: VALUE_DEFAULT_VALUE
+            value = value.resolveOptional(env = env, key = "value", data = rawData, reader = VALUE_READER) ?: VALUE_DEFAULT_VALUE
         )
     }
 

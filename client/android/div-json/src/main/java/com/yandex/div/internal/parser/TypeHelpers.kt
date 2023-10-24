@@ -2,6 +2,7 @@ package com.yandex.div.internal.parser
 
 import android.graphics.Color
 import android.net.Uri
+import org.json.JSONArray
 
 interface TypeHelper<T> {
 
@@ -55,4 +56,10 @@ val TYPE_HELPER_URI = object : TypeHelper<Uri> {
 val TYPE_HELPER_COLOR = object : TypeHelper<Int> {
     override val typeDefault = Color.BLACK
     override fun isTypeValid(value: Any) = value is Int
+}
+
+@JvmField
+val TYPE_HELPER_JSON_ARRAY = object : TypeHelper<JSONArray> {
+    override val typeDefault = JSONArray()
+    override fun isTypeValid(value: Any) = value is JSONArray
 }

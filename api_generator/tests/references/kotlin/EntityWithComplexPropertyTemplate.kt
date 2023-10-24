@@ -30,9 +30,9 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
         property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty {
         return EntityWithComplexProperty(
-            property = property.resolveTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER)
+            property = property.resolveTemplate(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
         )
     }
 
@@ -67,9 +67,9 @@ class EntityWithComplexPropertyTemplate : JSONSerializable, JsonTemplate<EntityW
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
         }
 
-        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty.Property {
+        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithComplexProperty.Property {
             return EntityWithComplexProperty.Property(
-                value = value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)
+                value = value.resolve(env = env, key = "value", data = rawData, reader = VALUE_READER)
             )
         }
 

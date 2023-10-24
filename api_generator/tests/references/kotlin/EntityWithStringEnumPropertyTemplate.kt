@@ -30,9 +30,9 @@ class EntityWithStringEnumPropertyTemplate : JSONSerializable, JsonTemplate<Enti
         property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, EntityWithStringEnumProperty.Property.Converter.FROM_STRING, logger, env, TYPE_HELPER_PROPERTY)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringEnumProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStringEnumProperty {
         return EntityWithStringEnumProperty(
-            property = property.resolve(env = env, key = "property", data = data, reader = PROPERTY_READER)
+            property = property.resolve(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
         )
     }
 

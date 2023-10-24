@@ -30,9 +30,9 @@ class EntityWithJsonPropertyTemplate : JSONSerializable, JsonTemplate<EntityWith
         jsonProperty = JsonTemplateParser.readOptionalField(json, "json_property", topLevel, parent?.jsonProperty, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithJsonProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithJsonProperty {
         return EntityWithJsonProperty(
-            jsonProperty = jsonProperty.resolveOptional(env = env, key = "json_property", data = data, reader = JSON_PROPERTY_READER) ?: JSON_PROPERTY_DEFAULT_VALUE
+            jsonProperty = jsonProperty.resolveOptional(env = env, key = "json_property", data = rawData, reader = JSON_PROPERTY_READER) ?: JSON_PROPERTY_DEFAULT_VALUE
         )
     }
 

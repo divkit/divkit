@@ -109,7 +109,7 @@ class KotlinEntity(Entity):
 
     @property
     def value_resolving_declaration(self) -> Text:
-        args = 'env: ParsingEnvironment, data: JSONObject'
+        args = 'env: ParsingEnvironment, rawData: JSONObject'
         result = Text(f'override fun resolve({args}): {self.resolved_prefixed_declaration} {{')
         if not self.instance_properties:
             result += f'    return {self.resolved_prefixed_declaration}()'
@@ -512,7 +512,7 @@ class KotlinProperty(Property):
             validator = ''
             expression_or_empty = ''
         method_name = f'.resolve{optionality}{plain_or_empty}{expression_or_empty}{list_or_empty}'
-        method_args = f'env = env, key = "{dict_field}", data = data{validator}{value_override}, reader = {reader}'
+        method_args = f'env = env, key = "{dict_field}", data = rawData{validator}{value_override}, reader = {reader}'
         def_val = self.default_value_coalescing(mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES)
         return f'{self.declaration_name} = {self.declaration_name}{method_name}({method_args}){def_val}'
 

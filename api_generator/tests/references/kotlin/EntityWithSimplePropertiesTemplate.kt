@@ -46,17 +46,17 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithSimpleProperties {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithSimpleProperties {
         return EntityWithSimpleProperties(
-            boolean = boolean.resolveOptional(env = env, key = "boolean", data = data, reader = BOOLEAN_READER),
-            booleanInt = booleanInt.resolveOptional(env = env, key = "boolean_int", data = data, reader = BOOLEAN_INT_READER),
-            color = color.resolveOptional(env = env, key = "color", data = data, reader = COLOR_READER),
-            double = double.resolveOptional(env = env, key = "double", data = data, reader = DOUBLE_READER),
-            id = id.resolveOptional(env = env, key = "id", data = data, reader = ID_READER),
-            integer = integer.resolveOptional(env = env, key = "integer", data = data, reader = INTEGER_READER),
-            positiveInteger = positiveInteger.resolveOptional(env = env, key = "positive_integer", data = data, reader = POSITIVE_INTEGER_READER),
-            string = string.resolveOptional(env = env, key = "string", data = data, reader = STRING_READER),
-            url = url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER)
+            boolean = boolean.resolveOptional(env = env, key = "boolean", data = rawData, reader = BOOLEAN_READER),
+            booleanInt = booleanInt.resolveOptional(env = env, key = "boolean_int", data = rawData, reader = BOOLEAN_INT_READER),
+            color = color.resolveOptional(env = env, key = "color", data = rawData, reader = COLOR_READER),
+            double = double.resolveOptional(env = env, key = "double", data = rawData, reader = DOUBLE_READER),
+            id = id.resolveOptional(env = env, key = "id", data = rawData, reader = ID_READER),
+            integer = integer.resolveOptional(env = env, key = "integer", data = rawData, reader = INTEGER_READER),
+            positiveInteger = positiveInteger.resolveOptional(env = env, key = "positive_integer", data = rawData, reader = POSITIVE_INTEGER_READER),
+            string = string.resolveOptional(env = env, key = "string", data = rawData, reader = STRING_READER),
+            url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER)
         )
     }
 

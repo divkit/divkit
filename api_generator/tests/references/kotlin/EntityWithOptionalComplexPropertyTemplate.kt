@@ -30,9 +30,9 @@ class EntityWithOptionalComplexPropertyTemplate : JSONSerializable, JsonTemplate
         property = JsonTemplateParser.readOptionalField(json, "property", topLevel, parent?.property, PropertyTemplate.CREATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithOptionalComplexProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalComplexProperty {
         return EntityWithOptionalComplexProperty(
-            property = property.resolveOptionalTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER)
+            property = property.resolveOptionalTemplate(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
         )
     }
 
@@ -67,9 +67,9 @@ class EntityWithOptionalComplexPropertyTemplate : JSONSerializable, JsonTemplate
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
         }
 
-        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithOptionalComplexProperty.Property {
+        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalComplexProperty.Property {
             return EntityWithOptionalComplexProperty.Property(
-                value = value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)
+                value = value.resolve(env = env, key = "value", data = rawData, reader = VALUE_READER)
             )
         }
 

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.div.internal.parser.TypeHelpersKt.TYPE_HELPER_JSON_ARRAY;
 import static com.yandex.div.internal.parser.TypeHelpersKt.TYPE_HELPER_STRING;
 import static com.yandex.div.json.ParsingExceptionKt.dependencyFailed;
 import static com.yandex.div.json.ParsingExceptionKt.invalidValue;
@@ -86,6 +87,15 @@ public class JsonParser {
             @NonNull final ParsingEnvironment env,
             @NonNull final TypeHelper<T> typeHelper) {
         return readOptionalExpression(jsonObject, key, converter, alwaysValid(), logger, env, typeHelper);
+    }
+
+    @NonNull
+    public static Expression<JSONArray> readExpression(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env) {
+        return readExpression(jsonObject, key, doNotConvert(), logger, env, TYPE_HELPER_JSON_ARRAY);
     }
 
     @NonNull

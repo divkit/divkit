@@ -12,6 +12,8 @@ import com.yandex.div.json.ParsingException;
 import kotlin.PublishedApi;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import static com.yandex.div.internal.parser.JsonParser.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParser.alwaysValidList;
 import static com.yandex.div.internal.parser.JsonParser.doNotConvert;
 import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissingValueOrThrow;
+import static com.yandex.div.internal.parser.TypeHelpersKt.TYPE_HELPER_JSON_ARRAY;
 
 /**
  * A Java-version of JsonTemplateParser.kt that is faster because it generates less garbage during parsing
@@ -697,6 +700,17 @@ public class JsonTemplateParser {
                                                                    @NonNull ParsingEnvironment env,
                                                                    @NonNull final TypeHelper<T> typeHelper) {
         return readFieldWithExpression(jsonObject, key, overridable, fallback, doNotConvert(), validator, logger, env, typeHelper);
+    }
+
+    @NonNull
+    public static Field<Expression<JSONArray>> readFieldWithExpression(@NonNull JSONObject jsonObject,
+                                                                       @NonNull String key,
+                                                                       boolean overridable,
+                                                                       @Nullable Field<Expression<JSONArray>> fallback,
+                                                                       @NonNull ParsingErrorLogger logger,
+                                                                       @NonNull ParsingEnvironment env) {
+        return readFieldWithExpression(jsonObject, key, overridable, fallback, doNotConvert(), alwaysValid(), logger,
+                env, TYPE_HELPER_JSON_ARRAY);
     }
 
     @NonNull

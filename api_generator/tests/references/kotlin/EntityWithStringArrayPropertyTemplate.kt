@@ -30,9 +30,9 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
         array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringArrayProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStringArrayProperty {
         return EntityWithStringArrayProperty(
-            array = array.resolveExpressionList(env = env, key = "array", data = data, reader = ARRAY_READER)
+            array = array.resolveExpressionList(env = env, key = "array", data = rawData, reader = ARRAY_READER)
         )
     }
 

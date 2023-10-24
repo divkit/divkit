@@ -28,7 +28,7 @@ class WithoutDefaultTemplate : JSONSerializable, JsonTemplate<WithoutDefault> {
         val logger = env.logger
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): WithoutDefault {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): WithoutDefault {
         return WithoutDefault()
     }
 

@@ -30,9 +30,9 @@ class EntityWithRequiredPropertyTemplate : JSONSerializable, JsonTemplate<Entity
         property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRequiredProperty {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithRequiredProperty {
         return EntityWithRequiredProperty(
-            property = property.resolve(env = env, key = "property", data = data, reader = PROPERTY_READER)
+            property = property.resolve(env = env, key = "property", data = rawData, reader = PROPERTY_READER)
         )
     }
 

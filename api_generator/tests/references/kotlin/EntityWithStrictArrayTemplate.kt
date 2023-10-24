@@ -30,9 +30,9 @@ class EntityWithStrictArrayTemplate : JSONSerializable, JsonTemplate<EntityWithS
         array = JsonTemplateParser.readStrictListField(json, "array", topLevel, parent?.array, EntityTemplate.CREATOR, ARRAY_TEMPLATE_VALIDATOR, logger, env)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStrictArray {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithStrictArray {
         return EntityWithStrictArray(
-            array = array.resolveTemplateList(env = env, key = "array", data = data, ARRAY_VALIDATOR, reader = ARRAY_READER)
+            array = array.resolveTemplateList(env = env, key = "array", data = rawData, ARRAY_VALIDATOR, reader = ARRAY_READER)
         )
     }
 

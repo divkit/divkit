@@ -34,11 +34,11 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
     }
 
-    override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
+    override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue {
         return EntityWithPropertyWithDefaultValue(
-            int = int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,
-            nested = nested.resolveOptionalTemplate(env = env, key = "nested", data = data, reader = NESTED_READER),
-            url = url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER) ?: URL_DEFAULT_VALUE
+            int = int.resolveOptional(env = env, key = "int", data = rawData, reader = INT_READER) ?: INT_DEFAULT_VALUE,
+            nested = nested.resolveOptionalTemplate(env = env, key = "nested", data = rawData, reader = NESTED_READER),
+            url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER) ?: URL_DEFAULT_VALUE
         )
     }
 
@@ -89,11 +89,11 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
             url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, URL_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_URI)
         }
 
-        override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
+        override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
             return EntityWithPropertyWithDefaultValue.Nested(
-                int = int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,
-                nonOptional = nonOptional.resolve(env = env, key = "non_optional", data = data, reader = NON_OPTIONAL_READER),
-                url = url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER) ?: URL_DEFAULT_VALUE
+                int = int.resolveOptional(env = env, key = "int", data = rawData, reader = INT_READER) ?: INT_DEFAULT_VALUE,
+                nonOptional = nonOptional.resolve(env = env, key = "non_optional", data = rawData, reader = NON_OPTIONAL_READER),
+                url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER) ?: URL_DEFAULT_VALUE
             )
         }
 
