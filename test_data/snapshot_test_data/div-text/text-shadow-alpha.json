@@ -1,7 +1,8 @@
 {
   "description": "Text that has shadow and alpha of block and font",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_block": {

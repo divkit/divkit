@@ -1,7 +1,8 @@
 {
   "description": "Text with shadow",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "templates": {
     "text_block": {

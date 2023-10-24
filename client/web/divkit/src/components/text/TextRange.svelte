@@ -16,10 +16,11 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { getBackground } from '../../utils/background';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { shadowToCssFilter } from '../../utils/shadow';
 
     export let text: string;
     export let rootFontSize: number;
-    export let textStyles: Partial<TextRange> = {};
+    export let textStyles: MaybeMissing<Partial<TextRange>> = {};
     export let singleline = false;
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
 
@@ -87,7 +88,12 @@
         color: string;
         width: number;
     } | null = null;
-    $: if (textStyles.border?.stroke && correctColor(textStyles.border.stroke.color) !== 'transparent' && isPositiveNumber(textStyles.border.stroke.width)) {
+    $: if (
+        textStyles.border?.stroke &&
+        textStyles.border.stroke.color &&
+        correctColor(textStyles.border.stroke.color) !== 'transparent' &&
+        isPositiveNumber(textStyles.border.stroke.width)
+    ) {
         border = {
             color: textStyles.border.stroke.color,
             width: textStyles.border.stroke.width
@@ -97,6 +103,8 @@
     }
 
     $: borderRadius = correctPositiveNumber(textStyles.border?.corner_radius, 0);
+
+    $: shadow = textStyles.text_shadow ? shadowToCssFilter(textStyles.text_shadow, fontSize) : undefined;
 
     $: mods = {
         singleline,
@@ -109,6 +117,7 @@
         'letter-spacing': letterSpacing,
         'font-weight': fontWeight,
         'font-family': fontFamily,
+        filter: shadow,
         color,
         background: bg?.color || undefined,
         /**

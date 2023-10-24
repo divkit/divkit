@@ -58,7 +58,8 @@
         text_color: json.text_color,
         underline: json.underline,
         strike: json.strike,
-        line_height: json.line_height
+        line_height: json.line_height,
+        text_shadow: json.text_shadow
     });
 
     $: jsonTextSize = rootCtx.getDerivedFromVars(json.font_size);
@@ -94,12 +95,8 @@
             let lines = Number($jsonMaxLines);
 
             newMaxHeight = lines * lineHeight + 'em';
-
-            // multiline overflow enabled only if there is no images and ranges
-            if (!$jsonRanges && !$jsonImages) {
-                newLineClamp = lines;
-                newMultiline = true;
-            }
+            newLineClamp = lines;
+            newMultiline = true;
         }
 
         maxHeight = newMaxHeight;
@@ -221,7 +218,7 @@
         ];
         let images = textImages || [];
         let prevIndex = 0;
-        let activeRanges: TextStyles[] = [];
+        let activeRanges: MaybeMissing<TextStyles>[] = [];
         let list: ({
             index: number;
             range: MaybeMissing<TextRange> & {

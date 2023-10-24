@@ -44,7 +44,20 @@
 }
 
 .text__inner {
+    min-width: 0;
+    min-height: 0;
+}
+
+.text_singleline .text__inner,
+.text_multiline .text__inner {
     overflow: hidden;
+}
+
+@supports (overflow: clip) {
+    .text_singleline .text__inner,
+    .text_multiline .text__inner {
+        overflow: clip;
+    }
 }
 
 .text_singleline .text__inner {

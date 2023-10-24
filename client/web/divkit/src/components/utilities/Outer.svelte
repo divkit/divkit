@@ -40,9 +40,10 @@
     import { correctBorderRadiusObject } from '../../utils/correctBorderRadiusObject';
     import { borderRadius } from '../../utils/borderRadius';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { Truthy } from '../../utils/truthy';
+    import { shadowToCssBoxShadow } from '../../utils/shadow';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
-    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -137,11 +138,7 @@
             if (border.has_shadow) {
                 const shadow = border.shadow;
                 if (shadow) {
-                    newBorderStyle['box-shadow'] =
-                        pxToEm(shadow.offset?.x?.value || 0) + ' ' +
-                        pxToEm(shadow.offset?.y?.value || 0) + ' ' +
-                        pxToEm(shadow.blur ?? 2) + ' ' +
-                        correctColor(shadow.color || '#000000', shadow.alpha ?? 0.19);
+                    newBorderStyle['box-shadow'] = shadowToCssBoxShadow(shadow);
                 } else {
                     newBorderStyle['box-shadow'] = '0 1px 2px 0 rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.07)';
                 }

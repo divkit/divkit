@@ -6,7 +6,7 @@ import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { GradientBackground, SolidBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
-import type { Stroke } from './border';
+import type { Shadow, Stroke } from './border';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -24,6 +24,7 @@ export interface TextStyles {
     underline?: LineStyle;
     strike?: LineStyle;
     line_height?: number;
+    text_shadow?: Shadow;
 }
 
 export interface TextRangeBorder {
