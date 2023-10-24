@@ -1,12 +1,10 @@
 package com.yandex.div.core.view2.state
 
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.core.state.DivPathUtils.findDivState
-import com.yandex.div.core.state.DivPathUtils.findStateLayout
+import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
-import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import javax.inject.Inject
 
@@ -29,9 +27,10 @@ internal class DivJoinedStateSwitcher @Inject constructor(
         // trying to bind exact DivState, not whole view.
         val commonPath = findCommonPath(paths, path)
         if (!commonPath.isRootPath()) {
-            val viewByPath = rootView.findStateLayout(commonPath)
-            val divByPath = rootDiv.findDivState(commonPath) as? Div.State
-            if (viewByPath != null && divByPath != null) {
+            val (viewByPath, divByPath) =
+                rootView.tryFindStateDivAndLayout(state, commonPath) ?: return
+
+            if (viewByPath != null) {
                 view = viewByPath
                 div = divByPath
                 path = commonPath

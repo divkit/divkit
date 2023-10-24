@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div2.Div
+import com.yandex.div2.DivData
 import com.yandex.div2.DivState
 
 internal object DivPathUtils {
@@ -45,6 +46,39 @@ internal object DivPathUtils {
             foundDiv = foundDiv?.findByPath(divId) ?: return null
         }
         return foundDiv
+    }
+
+    /**
+     * Returns [DivStateLayout] and [Div.State] found inside the [receiver view][View] by provided
+     * path.
+     *
+     * @receiver the root view of [Div2View][com.yandex.div.core.view2.Div2View]
+     *
+     * @return
+     * - null - if state cannot be switched by passed [path] (if no bound view or div state
+     * was found along the provided path)
+     * - null and [Div.State] - if cannot find [DivStateLayout] and full
+     * [root view][com.yandex.div.core.view2.Div2View] rebind needed
+     */
+    internal fun View.tryFindStateDivAndLayout(
+        state: DivData.State,
+        path: DivStatePath
+    ): Pair<DivStateLayout?, Div.State>? {
+        val viewByPath = findStateLayout(path)
+
+        if (viewByPath == null) {
+            val parentState = path.parentState()
+
+            // Ignore if the view isn't bound yet
+            val isParentUnchangedRoot = parentState.isRootPath() && state.stateId == path.topLevelStateId
+            if (isParentUnchangedRoot || findStateLayout(parentState) == null) {
+                return null
+            }
+        }
+
+        val divByPath = state.div.findDivState(path) as? Div.State ?: return null // Ignore if no such state
+
+        return Pair(viewByPath, divByPath)
     }
 
     /**
