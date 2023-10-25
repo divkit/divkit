@@ -1132,8 +1132,8 @@
     "ru": "Порядковый номер элемента пейджера, который будет открываться по умолчанию."
   },
   "div_pager_infinite_scroll": {
-    "en": "Enables infinite scroll.",
-    "ru": "Включает бесконечный скролл."
+    "en": "Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.",
+    "ru": "Включает бесконечный скролл карточек. После последней карточки прокрутка начинается сначала, т.е. скролл зацикливается."
   },
   "div_pager_item_spacing": {
     "en": "Spacing between elements.",
@@ -2104,7 +2104,7 @@
     "ru": "Действия, которые выполняются при возобновлении воспроизведения видео."
   },
   "div_video_scale": {
-    "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off the excess.</li>",
+    "en": "Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>",
     "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
   },
   "div_video_source": {
