@@ -351,6 +351,8 @@ Custom components is supported not only on the client side, but also on the serv
 
 [Custom component and SSR](../divkit-examples/custom-ssr/)
 
+[Custom component extended api](../divkit-examples/custom-extended-api/)
+
 #### theme (EXPERIMENTAL)
 
 `system` | `light` | `dark`

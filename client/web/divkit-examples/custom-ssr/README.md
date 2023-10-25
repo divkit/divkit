@@ -129,3 +129,7 @@ Declarative Shadow DOM is currently supported only in Chromium-based browsers an
 ### What about old browsers that will receive markup using that feature?
 
 This will create a `<template>` element, but this template will not create shadow root automatically, so your component should do it the classic way. In conclusion, your Custom Component will work, but SSR will be "incomplete" in this browser, and the layout will be changed after JS execution.
+
+### Next example
+
+[Extended api usage](../custom-extended-api).

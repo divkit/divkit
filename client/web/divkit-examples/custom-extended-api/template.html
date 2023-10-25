@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="node_modules/@divkitframework/divkit/dist/client.css">
+</head>
+<body>
+
+<div id="root">[% html %]</div>
+
+<script type="text/json" id="json">
+    [% json %]
+</script>
+<script type="module">
+    import { render } from './node_modules/@divkitframework/divkit/dist/esm/client-hydratable.mjs';
+    import './customElement.js';
+
+    const json = JSON.parse(document.querySelector('#json').textContent);
+    render({
+        id: 'test',
+        target: document.querySelector('#root'),
+        hydrate: true,
+        json,
+        customComponents: new Map([
+            ['custom_container', {
+                element: 'custom-container'
+            }]
+        ])
+    });
+</script>
+</body>
+</html>

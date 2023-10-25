@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onMount } from 'svelte';
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
@@ -18,13 +18,29 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    let customElem: HTMLElement;
     let desc: CustomComponentDescription | null = null;
     let templateContent = '';
     // shadowrootmode is an unknown attribute in TS :(
     let templateAttrs: any = {};
     $: if (typeof json.custom_type === 'string' && json.custom_type && rootCtx.customComponents?.has(json.custom_type)) {
         desc = rootCtx.customComponents.get(json.custom_type)!;
-        templateContent = desc.template || '';
+        if (typeof desc.template === 'function') {
+            const ctx = rootCtx.getExtensionContext();
+            const variables: Map<string, string | number | boolean | unknown[] | object> = new Map();
+            for (const [key, varaible] of ctx.variables) {
+                variables.set(key, varaible.getValue());
+            }
+
+            templateContent = desc.template({
+                props: json.custom_props,
+                variables
+            });
+        } else if (desc.template && typeof desc.template === 'string') {
+            templateContent = desc.template;
+        } else {
+            templateContent = '';
+        }
         templateAttrs = {
             shadowrootmode: desc.shadowRootMode || 'open'
         };
@@ -64,6 +80,13 @@
     $: childLayoutParams = {
         fakeElement: layoutParams?.fakeElement
     };
+
+    onMount(() => {
+        if (customElem && 'divKitApiCallback' in customElem && typeof customElem.divKitApiCallback === 'function') {
+            const ctx = rootCtx.getExtensionContext();
+            customElem.divKitApiCallback(ctx);
+        }
+    });
 </script>
 
 {#if desc}
@@ -73,7 +96,11 @@
         {templateContext}
         {layoutParams}
     >
-        <svelte:element this={desc.element} {...(json.custom_props || {})}>
+        <svelte:element
+            bind:this={customElem}
+            this={desc.element}
+            {...(json.custom_props || {})}
+        >
             {#if templateContent}
                 <template {...templateAttrs}>
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
