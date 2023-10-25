@@ -1,10 +1,6 @@
 {
   "type": "object",
   "$description": "translations.json#/div_download_callbacks",
-  "platforms": [
-    "android",
-    "ios"
-  ],
   "properties": {
     "on_fail_actions": {
       "type": "array",

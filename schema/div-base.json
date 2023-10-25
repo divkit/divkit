@@ -138,11 +138,7 @@
     },
     "focus": {
       "$ref": "div-focus.json",
-      "$description": "translations.json#/div_base_focus",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_base_focus"
     },
     "visibility": {
       "$ref": "div-visibility.json",
