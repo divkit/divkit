@@ -6,23 +6,16 @@ import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.core.widget.doAfterTextChanged
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.SuperLineHeightEditText
-import com.yandex.div.internal.widget.TransientView
-import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div2.DivInput
 
 @Mockable
 internal class DivInputView constructor(context: Context) : SuperLineHeightEditText(context),
-    DivAnimator, DivBorderSupports by DivBorderSupportsMixin(), TransientView by TransientViewMixin(), ExpressionSubscriber {
-
-    internal var div: DivInput? = null
+    DivHolderView<DivInput> by DivHolderViewMixin(),
+    DivAnimator {
 
     internal val nativeBackground: Drawable? = background
-
-    override val subscriptions = mutableListOf<Disposable>()
 
     private val onTextChangedActions = mutableListOf<(Editable?) -> Unit>()
 
@@ -39,11 +32,6 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
 
     override fun dispatchDraw(canvas: Canvas) {
         dispatchDrawBorderClippedAndTranslated(canvas, scrollX, scrollY) { super.dispatchDraw(it) }
-    }
-
-    override fun release() {
-        super.release()
-        releaseBorderDrawer()
     }
 
     fun addAfterTextChangeAction(action: (Editable?) -> Unit) {

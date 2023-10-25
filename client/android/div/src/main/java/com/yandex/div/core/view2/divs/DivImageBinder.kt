@@ -7,7 +7,6 @@ import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.androidInterpolator
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -41,11 +40,7 @@ internal class DivImageBinder @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val expressionResolver = divView.expressionResolver
-        val subscriber = view.expressionSubscriber
-        view.closeAllSubscription()
 
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
@@ -60,7 +55,7 @@ internal class DivImageBinder @Inject constructor(
         )
         view.observePreview(divView, expressionResolver, errorCollector, div)
         view.observeTint(expressionResolver, div.tintColor, div.tintMode)
-        view.observeFilters(div.filters, divView, subscriber, expressionResolver)
+        view.observeFilters(div.filters, divView, view, expressionResolver)
     }
 
     private fun DivImageView.observeContentAlignment(

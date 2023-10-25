@@ -35,7 +35,6 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
-import com.yandex.div.internal.Log
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
@@ -78,10 +77,8 @@ internal class DivStateBinder @Inject constructor(
         divView: Div2View,
         divStatePath: DivStatePath
     ) {
-        val oldDivState = layout.divState
+        val oldDivState = layout.div
         val oldDiv = layout.activeStateDiv
-        layout.divState = div
-        if (oldDivState != null) baseBinder.unbindExtensions(layout, oldDivState, divView)
         baseBinder.bindView(layout, div, oldDivState, divView)
 
         val resolver = divView.expressionResolver

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
-import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewFactory
@@ -13,9 +12,8 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
-import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
+import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
-import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
 
@@ -25,67 +23,51 @@ internal class DivCustomBinder @Inject constructor(
     private val divCustomViewAdapter: DivCustomViewAdapter? = null,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter? = null,
     private val extensionController: DivExtensionController,
-) : DivViewBinder<DivCustom, View> {
+) : DivViewBinder<DivCustom, DivCustomWrapper> {
 
-    override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) {
-        if (view !is DivFrameLayout) {
-            KAssert.fail { "Wrong view type: custom view should be wrapped inside of DivFrameLayout" }
-            return
-        }
-        val customView = if (view.isNotEmpty()) view[0] else null
-        val oldDiv = customView?.getTag(R.id.div_custom_tag) as? DivCustom
+    override fun bindView(view: DivCustomWrapper, div: DivCustom, divView: Div2View, path: DivStatePath) {
+        val customView = view.customView
+        val oldDiv = view.div
 
         if (oldDiv == div) return
 
-        if (oldDiv != null) baseBinder.unbindExtensions(customView, oldDiv, divView)
+        if (customView != null && oldDiv != null) {
+            extensionController.unbindView(divView, customView, oldDiv)
+        }
 
         baseBinder.bindView(view, div, null, divView)
         baseBinder.bindId(view, divView, null)
 
         if (divCustomContainerViewAdapter?.isCustomTypeSupported(div.customType) == true) {
-            divCustomContainerViewAdapter.bind(view, customView, div, divView, path)
+            bind(view, customView, div, divView,
+                { divCustomContainerViewAdapter.createView(div, divView, path) },
+                { divCustomContainerViewAdapter.bindView(it, div, divView, path) }
+            )
         } else if (divCustomViewAdapter?.isCustomTypeSupported(div.customType) == true) {
-            divCustomViewAdapter.bind(view, customView, div, divView)
+            bind(view, customView, div, divView,
+                { divCustomViewAdapter.createView(div, divView) },
+                { divCustomViewAdapter.bindView(it, div, divView) }
+            )
         } else {
             oldBind(div, divView, view, customView)
         }
     }
 
-    private fun DivCustomContainerViewAdapter.bind(
-            previousViewGroup: ViewGroup,
-            oldCustomView: View?,
-            div: DivCustom,
-            divView: Div2View,
-            path: DivStatePath
-    ) {
-        val customView = if (oldCustomView?.isSameType(div) == true)
-            oldCustomView
-        else
-            createView(div, divView, path).apply {
-                setTag(R.id.div_custom_tag, div)
-            }
-        bindView(customView, div, divView, path)
-        if (oldCustomView != customView) {
-            replaceInParent(previousViewGroup, customView, div, divView)
-        }
-        extensionController.bindView(divView, customView, div)
-    }
-
-    private fun DivCustomViewAdapter.bind(
-        previousViewGroup: ViewGroup,
+    private fun bind(
+        previousWrapper: DivCustomWrapper,
         oldCustomView: View?,
         div: DivCustom,
-        divView: Div2View
+        divView: Div2View,
+        createView: () -> View,
+        bindView: (View) -> Unit
     ) {
-        val customView = if (oldCustomView?.isSameType(div) == true)
+        val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType)
             oldCustomView
         else
-            createView(div, divView).apply {
-                setTag(R.id.div_custom_tag, div)
-            }
-        bindView(customView, div, divView)
+            createView()
+        bindView(customView)
         if (oldCustomView != customView) {
-            replaceInParent(previousViewGroup, customView, div, divView)
+            replaceInParent(previousWrapper, customView, div, divView)
         }
         extensionController.bindView(divView, customView, div)
     }
@@ -123,16 +105,5 @@ internal class DivCustomBinder @Inject constructor(
                 MATCH_PARENT
             )
         )
-    }
-
-    private fun View?.isSameType(div: DivCustom): Boolean {
-        val prevDiv: DivCustom = this?.getTag(R.id.div_custom_tag) as? DivCustom ?: return false
-        return prevDiv.customType == div.customType
-    }
-
-    fun setDataWithoutBinding(view: View, div: DivCustom) {
-        val container = view as? ViewGroup ?: return
-        val customView = if (container.isNotEmpty()) container[0] else return
-        customView.setTag(R.id.div_custom_tag, div)
     }
 }

@@ -10,7 +10,6 @@ import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
@@ -18,6 +17,7 @@ import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.DivAccessibilityVisitor
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.KAssert
@@ -40,11 +40,16 @@ import javax.inject.Inject
 internal class DivBaseBinder @Inject constructor(
     private val divBackgroundBinder: DivBackgroundBinder,
     private val tooltipController: DivTooltipController,
-    private val extensionController: DivExtensionController,
     private val divFocusBinder: DivFocusBinder,
     private val divAccessibilityBinder: DivAccessibilityBinder,
 ) {
     fun bindView(view: View, div: DivBase, oldDiv: DivBase?, divView: Div2View) {
+        @Suppress("UNCHECKED_CAST")
+        (view as DivHolderView<DivBase>).let {
+            it.closeAllSubscription()
+            it.div = div
+        }
+
         val resolver = divView.expressionResolver
         val subscriber = view.expressionSubscriber
 
@@ -126,10 +131,6 @@ internal class DivBaseBinder @Inject constructor(
             additionalLayer
         )
         view.applyPaddings(div.paddings, resolver)
-    }
-
-    fun unbindExtensions(view: View, oldDiv: DivBase, divView: Div2View) {
-        extensionController.unbindView(divView, view, oldDiv)
     }
 
     fun observeWidthAndHeightSubscription(

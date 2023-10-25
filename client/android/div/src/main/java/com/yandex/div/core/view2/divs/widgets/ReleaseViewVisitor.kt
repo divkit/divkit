@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.view.View
 import androidx.annotation.VisibleForTesting
-import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.annotations.Mockable
@@ -11,9 +10,7 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.Releasable
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivCustom
 import javax.inject.Inject
 
 @DivViewScope
@@ -25,46 +22,17 @@ internal class ReleaseViewVisitor @Inject constructor(
     private val divExtensionController: DivExtensionController,
 ) : DivViewVisitor() {
 
-    override fun visit(view: DivWrapLayout) = releaseInternal(view, view.div)
+    override fun defaultVisit(view: DivHolderView<*>) = releaseInternal(view as View, view.div)
 
-    override fun visit(view: DivFrameLayout) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivGifImageView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivGridLayout) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivImageView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivLinearLayout) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivLineHeightTextView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivPagerIndicatorView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivPagerView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivRecyclerView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivSeparatorView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivStateLayout) = releaseInternal(view, view.divState)
-
-    override fun visit(view: TabsLayout) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivSliderView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivSelectView) = releaseInternal(view, view.div)
-
-    override fun visit(view: DivVideoView) = releaseInternal(view, view.div)
-
-    override fun visit(view: View) {
-        val divCustom: DivCustom? = view.getTag(R.id.div_custom_tag) as? DivCustom
-        if (divCustom != null) {
-            releaseInternal(view, divCustom)
-            divCustomViewAdapter?.release(view, divCustom)
-            divCustomContainerViewAdapter?.release(view, divCustom)
-        }
+    override fun visit(view: DivCustomWrapper) {
+        val divCustom = view.div ?: return
+        view.customView?.let { divExtensionController.unbindView(divView, it, divCustom) }
+        release(view)
+        divCustomViewAdapter?.release(view, divCustom)
+        divCustomContainerViewAdapter?.release(view, divCustom)
     }
+
+    override fun visit(view: View) = release(view)
 
     private fun releaseInternal(view: View, div: DivBase?) {
         if (div != null) {

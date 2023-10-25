@@ -33,7 +33,7 @@ class DivBaseBinderTest {
     private val paddingsBottom2 = DivEdgeInsets(bottom = 1L.asExpression())
     private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
-    private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
+    private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock())
     private val expressionResolver = mock<ExpressionResolver>()
     private val viewComponent = mock<Div2ViewComponent>()
     private val divView = mock<Div2View> {

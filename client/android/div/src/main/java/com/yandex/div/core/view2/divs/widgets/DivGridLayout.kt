@@ -4,26 +4,19 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.GridContainer
-import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.widget.TransientView
-import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div2.DivGrid
 
 internal class DivGridLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : GridContainer(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports by DivBorderSupportsMixin(),
-    TransientView by TransientViewMixin(), ExpressionSubscriber {
-
-    internal var div: DivGrid? = null
+) : GridContainer(context, attrs, defStyleAttr),
+    DivHolderView<DivGrid> by DivHolderViewMixin(),
+    DivAnimator {
 
     internal var releaseViewVisitor: ReleaseViewVisitor? = null
-
-    override val subscriptions = mutableListOf<Disposable>()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -42,10 +35,5 @@ internal class DivGridLayout @JvmOverloads constructor(
     override fun dispatchDraw(canvas: Canvas) {
         drawChildrenShadows(canvas)
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
-
-    override fun release() {
-        super.release()
-        releaseBorderDrawer()
     }
 }

@@ -44,10 +44,7 @@ internal class DivSliderBinder @Inject constructor(
         if (div == oldDiv) return
 
         val expressionResolver = divView.expressionResolver
-        view.closeAllSubscription()
 
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.addSubscription(

@@ -3,26 +3,27 @@ package com.yandex.div.core.view2.divs.widgets
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import com.yandex.div.internal.widget.tabs.TabsLayout
 
 internal abstract class DivViewVisitor {
-    open fun visit(view: DivWrapLayout) {}
-    open fun visit(view: DivFrameLayout) {}
-    open fun visit(view: DivGifImageView) {}
-    open fun visit(view: DivGridLayout) {}
-    open fun visit(view: DivImageView) {}
-    open fun visit(view: DivLinearLayout) {}
-    open fun visit(view: DivLineHeightTextView) {}
-    open fun visit(view: DivPagerIndicatorView) {}
-    open fun visit(view: DivPagerView) {}
-    open fun visit(view: DivRecyclerView) {}
-    open fun visit(view: DivSeparatorView) {}
-    open fun visit(view: DivStateLayout) {}
-    open fun visit(view: TabsLayout) {}
-    open fun visit(view: DivSliderView) {}
-    open fun visit(view: DivSelectView) {}
-    open fun visit(view: DivVideoView) {}
-    open fun visit(view: View) {}
+    open fun defaultVisit(view: DivHolderView<*>) = Unit
+    open fun visit(view: DivWrapLayout) = defaultVisit(view)
+    open fun visit(view: DivFrameLayout) = defaultVisit(view)
+    open fun visit(view: DivGifImageView) = defaultVisit(view)
+    open fun visit(view: DivGridLayout) = defaultVisit(view)
+    open fun visit(view: DivImageView) = defaultVisit(view)
+    open fun visit(view: DivLinearLayout) = defaultVisit(view)
+    open fun visit(view: DivLineHeightTextView) = defaultVisit(view)
+    open fun visit(view: DivPagerIndicatorView) = defaultVisit(view)
+    open fun visit(view: DivPagerView) = defaultVisit(view)
+    open fun visit(view: DivRecyclerView) = defaultVisit(view)
+    open fun visit(view: DivSeparatorView) = defaultVisit(view)
+    open fun visit(view: DivStateLayout) = defaultVisit(view)
+    open fun visit(view: DivTabsLayout) = defaultVisit(view)
+    open fun visit(view: DivSliderView) = defaultVisit(view)
+    open fun visit(view: DivSelectView) = defaultVisit(view)
+    open fun visit(view: DivVideoView) = defaultVisit(view)
+    open fun visit(view: DivCustomWrapper) = defaultVisit(view)
+    open fun visit(view: View) = Unit
 }
 
 internal fun DivViewVisitor.visitViewTree(view: View) {
@@ -55,7 +56,11 @@ internal fun DivViewVisitor.visitViewTree(view: View) {
             visit(view)
             view.visitChild(this::visitViewTree)
         }
-        is TabsLayout -> {
+        is DivTabsLayout -> {
+            visit(view)
+            view.visitChild(this::visitViewTree)
+        }
+        is DivCustomWrapper -> {
             visit(view)
             view.visitChild(this::visitViewTree)
         }

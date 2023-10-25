@@ -47,10 +47,7 @@ internal class DivGifImageBinder @Inject constructor(
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val expressionResolver = divView.expressionResolver
-        view.closeAllSubscription()
 
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)

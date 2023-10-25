@@ -1,7 +1,6 @@
 package com.yandex.div.internal.widget.tabs
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -9,31 +8,21 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.ViewCompat
-import androidx.core.view.children
 import com.yandex.div.R
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.tabs.DivTabsAdapter
-import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
-import com.yandex.div.core.view2.divs.widgets.DivBorderSupportsMixin
-import com.yandex.div.core.view2.divs.widgets.dispatchDrawBorderClipped
-import com.yandex.div.core.view2.divs.widgets.drawBorderClipped
-import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div2.DivTabs
 
 @Mockable
-internal class TabsLayout
-@JvmOverloads constructor(
+@Suppress("LeakingThis")
+internal open class TabsLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
-) : LinearLayout(context, attrs), DivBorderSupports by DivBorderSupportsMixin(), ExpressionSubscriber {
+) : LinearLayout(context, attrs) {
+
     val titleLayout: TabTitlesLayoutView<*>
     val divider: View
     val pagerLayout: ViewPagerFixedSizeLayout
     val viewPager: ScrollableViewPager
     var divTabsAdapter: DivTabsAdapter? = null
-    var div: DivTabs? = null
-
-    override val subscriptions = mutableListOf<Disposable>()
 
     init {
         id = R.id.div_tabs_block
@@ -81,39 +70,18 @@ internal class TabsLayout
         addView(pagerLayout)
     }
 
-    private fun createTitleLayoutParams(): LinearLayout.LayoutParams {
+    private fun createTitleLayoutParams(): LayoutParams {
         return LayoutParams(LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.title_tab_title_height)).apply {
             gravity = Gravity.START
         }
     }
 
-    private fun createDividerLayoutParams(): LinearLayout.LayoutParams {
+    private fun createDividerLayoutParams(): LayoutParams {
         return LayoutParams(LayoutParams.MATCH_PARENT, resources.getDimensionPixelSize(R.dimen.div_separator_delimiter_height)).apply {
             leftMargin = resources.getDimensionPixelSize(R.dimen.div_horizontal_padding)
             rightMargin = leftMargin
             topMargin = resources.getDimensionPixelSize(R.dimen.title_tab_title_separator_margin_top)
             bottomMargin = resources.getDimensionPixelSize(R.dimen.title_tab_title_margin_vertical)
         }
-    }
-
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        onBoundsChanged(w, h)
-    }
-
-    override fun draw(canvas: Canvas) {
-        drawBorderClipped(canvas) { super.draw(canvas) }
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        children.forEach { child ->
-            (child as? DivBorderSupports)?.getDivBorderDrawer()?.drawShadow(canvas)
-        }
-        dispatchDrawBorderClipped(canvas) { super.dispatchDraw(canvas) }
-    }
-
-    override fun release() {
-        super.release()
-        releaseBorderDrawer()
     }
 }

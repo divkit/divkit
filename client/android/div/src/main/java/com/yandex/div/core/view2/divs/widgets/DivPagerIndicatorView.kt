@@ -3,10 +3,6 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import com.yandex.div.core.Disposable
-import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.widget.TransientView
-import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div.internal.widget.indicator.PagerIndicatorView
 import com.yandex.div2.DivIndicator
 
@@ -14,12 +10,8 @@ internal class DivPagerIndicatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : PagerIndicatorView(context, attrs, defStyleAttr), DivBorderSupports by DivBorderSupportsMixin(),
-    TransientView by TransientViewMixin(), ExpressionSubscriber {
-
-    internal var div: DivIndicator? = null
-
-    override val subscriptions = mutableListOf<Disposable>()
+) : PagerIndicatorView(context, attrs, defStyleAttr),
+    DivHolderView<DivIndicator> by DivHolderViewMixin() {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -32,10 +24,5 @@ internal class DivPagerIndicatorView @JvmOverloads constructor(
 
     override fun dispatchDraw(canvas: Canvas) {
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
-    }
-
-    override fun release() {
-        super.release()
-        releaseBorderDrawer()
     }
 }

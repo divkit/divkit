@@ -39,11 +39,8 @@ internal class DivGridBinder @Inject constructor(
         }
 
         val resolver = divView.expressionResolver
-        view.closeAllSubscription()
 
-        view.div = div
         view.releaseViewVisitor = divView.releaseViewVisitor
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)

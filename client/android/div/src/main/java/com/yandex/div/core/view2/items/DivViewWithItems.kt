@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.KAssert
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivGallery
 
@@ -83,7 +83,7 @@ internal sealed class DivViewWithItems {
     /**
      * Implementation of [DivViewWithItems] specific for div tabs.
      */
-    internal class Tabs(private val view: TabsLayout) : DivViewWithItems() {
+    internal class Tabs(private val view: DivTabsLayout) : DivViewWithItems() {
         override var currentItem: Int
             get() = view.viewPager.currentItem
             set(value) = checkItem(value, itemCount) { view.viewPager.setCurrentItem(value, true) }
@@ -105,7 +105,7 @@ internal sealed class DivViewWithItems {
                     }
                 }
                 is DivPagerView -> Pager(view)
-                is TabsLayout -> Tabs(view)
+                is DivTabsLayout -> Tabs(view)
                 else -> null
             }
         }

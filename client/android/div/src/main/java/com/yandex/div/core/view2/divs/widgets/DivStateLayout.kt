@@ -17,10 +17,7 @@ import androidx.core.view.GestureDetectorCompat
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.drawChildrenShadows
-import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div.internal.widget.TransientView
-import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import kotlin.math.abs
@@ -32,8 +29,8 @@ internal class DivStateLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameContainerLayout(context, attrs, defStyleAttr), DivBorderSupports by DivBorderSupportsMixin(),
-    ExpressionSubscriber, TransientView by TransientViewMixin() {
+) : FrameContainerLayout(context, attrs, defStyleAttr),
+    DivHolderView<DivState> by DivHolderViewMixin() {
 
     var path: DivStatePath? = null
     val stateId: String?
@@ -41,11 +38,8 @@ internal class DivStateLayout @JvmOverloads constructor(
     private val swipeListener = SwipeListener()
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null
-    internal var divState: DivState? = null
     internal var activeStateDiv: Div? = null
     var valueUpdater: ((String) -> Unit)? = null
-
-    override val subscriptions = mutableListOf<Disposable>()
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (swipeOutCallback == null) {
@@ -176,10 +170,5 @@ internal class DivStateLayout @JvmOverloads constructor(
             }
             return v.canScrollHorizontally(dir)
         }
-    }
-
-    override fun release() {
-        super.release()
-        releaseBorderDrawer()
     }
 }

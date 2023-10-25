@@ -19,7 +19,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -78,10 +77,6 @@ internal class DivPagerBinder @Inject constructor(
             return
         }
 
-        val expressionSubscriber = view.expressionSubscriber
-        expressionSubscriber.closeAllSubscription()
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
 
         val pageTranslations = SparseArray<Float>()
@@ -108,25 +103,25 @@ internal class DivPagerBinder @Inject constructor(
             updatePageTransformer(view, div, resolver, pageTranslations)
         }
 
-        expressionSubscriber.addSubscription(div.paddings.left.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.paddings.right.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.paddings.top.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.paddings.bottom.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
+        view.addSubscription(div.paddings.left.observe(resolver, reusableObserver))
+        view.addSubscription(div.paddings.right.observe(resolver, reusableObserver))
+        view.addSubscription(div.paddings.top.observe(resolver, reusableObserver))
+        view.addSubscription(div.paddings.bottom.observe(resolver, reusableObserver))
+        view.addSubscription(div.itemSpacing.value.observe(resolver, reusableObserver))
+        view.addSubscription(div.itemSpacing.unit.observe(resolver, reusableObserver))
 
         when (val mode = div.layoutMode) {
             is DivPagerLayoutMode.NeighbourPageSize -> {
-                expressionSubscriber.addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
-                expressionSubscriber.addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
+                view.addSubscription(mode.value.neighbourPageWidth.value.observe(resolver, reusableObserver))
+                view.addSubscription(mode.value.neighbourPageWidth.unit.observe(resolver, reusableObserver))
             }
             is DivPagerLayoutMode.PageSize -> {
-                expressionSubscriber.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
-                expressionSubscriber.addSubscription(observeWidthChange(view.viewPager, reusableObserver))
+                view.addSubscription(mode.value.pageWidth.value.observe(resolver, reusableObserver))
+                view.addSubscription(observeWidthChange(view.viewPager, reusableObserver))
             }
         }.apply { /*exhaustive*/ }
 
-        expressionSubscriber.addSubscription(div.orientation.observeAndGet(resolver) {
+        view.addSubscription(div.orientation.observeAndGet(resolver) {
             view.orientation = if (it == DivPager.Orientation.HORIZONTAL) {
                 ViewPager2.ORIENTATION_HORIZONTAL
             } else {
@@ -163,7 +158,7 @@ internal class DivPagerBinder @Inject constructor(
             view.currentItem = pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
         }
 
-        expressionSubscriber.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
+        view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
             view.onInterceptTouchEventListener = if (restrictParentScroll) {
                 ParentScrollRestrictor(ParentScrollRestrictor.DIRECTION_HORIZONTAL)
             } else {

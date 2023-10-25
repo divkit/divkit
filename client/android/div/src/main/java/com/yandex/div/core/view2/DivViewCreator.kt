@@ -8,6 +8,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.view2.divs.isWrapContainer
+import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -22,13 +23,13 @@ import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer.Orientation
@@ -60,9 +61,9 @@ internal class DivViewCreator @Inject constructor(
                 register(TAG_GRID, { DivGridLayout(context) }, grid.capacity)
                 register(TAG_GALLERY, { DivRecyclerView(context) }, gallery.capacity)
                 register(TAG_PAGER, { DivPagerView(context) }, pager.capacity)
-                register(TAG_TABS, { TabsLayout(context) }, tab.capacity)
+                register(TAG_TABS, { DivTabsLayout(context) }, tab.capacity)
                 register(TAG_STATE, { DivStateLayout(context) }, state.capacity)
-                register(TAG_CUSTOM, { DivFrameLayout(context) }, custom.capacity)
+                register(TAG_CUSTOM, { DivCustomWrapper(context) }, custom.capacity)
                 register(TAG_INDICATOR, { DivPagerIndicatorView(context) }, indicator.capacity)
                 register(TAG_SLIDER, { DivSliderView(context) }, slider.capacity)
                 register(TAG_INPUT, { DivInputView(context) }, input.capacity)

@@ -118,14 +118,8 @@ internal class DivVideoBinder @Inject constructor(
             return
         }
 
-        view.closeAllSubscription()
-
-        view.div = div
-
         view.observeElapsedTime(div, divView, player)
         view.observeMuted(div, divView, player)
-
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             view.removeAllViews()

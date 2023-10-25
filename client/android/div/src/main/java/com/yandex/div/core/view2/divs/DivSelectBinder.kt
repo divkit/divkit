@@ -8,12 +8,10 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
-import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
 import javax.inject.Inject
 
@@ -29,12 +27,8 @@ internal class DivSelectBinder @Inject constructor(
         if (div == oldDiv) return
 
         val expressionResolver = divView.expressionResolver
-        view.closeAllSubscription()
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
-        view.div = div
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
 
         baseBinder.bindView(view, div, oldDiv, divView)
 

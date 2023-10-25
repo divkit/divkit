@@ -2,9 +2,9 @@ package com.yandex.div.core.view2.items
 
 import androidx.viewpager.widget.PagerAdapter
 import com.yandex.div.core.view2.disableAssertions
+import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.tabs.ScrollableViewPager
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
@@ -21,7 +21,7 @@ class TabsItemsViewTest {
     private val viewPager = mock<ScrollableViewPager> {
         on { adapter } doReturn adapter
     }
-    private val tabsLayout = mock<TabsLayout> {
+    private val tabsLayout = mock<DivTabsLayout> {
         on { viewPager } doReturn viewPager
     }
     private val underTest = DivViewWithItems.Tabs(tabsLayout)

@@ -2,9 +2,9 @@ package com.yandex.div.core.view2.items
 
 import android.widget.FrameLayout
 import com.yandex.div.core.asExpression
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div2.DivGallery
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Assert
@@ -47,7 +47,7 @@ class DivViewWithItemsTest {
     @Test
     fun `create tabs`() {
         Assert.assertThat(
-            DivViewWithItems.create(mock<TabsLayout>(), mock()) { Direction.NEXT },
+            DivViewWithItems.create(mock<DivTabsLayout>(), mock()) { Direction.NEXT },
             instanceOf(DivViewWithItems.Tabs::class.java)
         )
     }

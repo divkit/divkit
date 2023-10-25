@@ -16,7 +16,6 @@ import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -65,24 +64,19 @@ internal class DivGalleryBinder @Inject constructor(
             return
         }
 
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
-        val expressionSubscriber = view.expressionSubscriber
-        expressionSubscriber.closeAllSubscription()
-
         baseBinder.bindView(view, div, oldDiv, divView)
 
         val resolver = divView.expressionResolver
 
-
         val reusableObserver = { _: Any ->
             updateDecorations(view, div, divView, resolver)
         }
-        expressionSubscriber.addSubscription(div.orientation.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.scrollMode.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
-        expressionSubscriber.addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
+        view.addSubscription(div.orientation.observe(resolver, reusableObserver))
+        view.addSubscription(div.scrollMode.observe(resolver, reusableObserver))
+        view.addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
+        view.addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
         div.columnCount?.let {
-            expressionSubscriber.addSubscription(it.observe(resolver, reusableObserver))
+            view.addSubscription(it.observe(resolver, reusableObserver))
         }
 
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
@@ -95,7 +89,6 @@ internal class DivGalleryBinder @Inject constructor(
             { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView) }
         view.adapter =
             GalleryAdapter(div.items, divView, divBinder.get(), viewCreator, itemStateBinder, path)
-        view.div = div
 
         updateDecorations(view, div, divView, resolver)
     }

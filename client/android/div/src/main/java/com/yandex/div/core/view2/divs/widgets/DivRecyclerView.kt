@@ -5,17 +5,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.drawChildrenShadows
-import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
-import com.yandex.div.internal.widget.TransientView
-import com.yandex.div.internal.widget.TransientViewMixin
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGallery.ScrollMode
 import kotlin.math.abs
@@ -28,10 +24,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : BackHandlingRecyclerView(context, attrs, defStyleAttr),
-    DivBorderSupports by DivBorderSupportsMixin(),
-    OnInterceptTouchEventListenerHost,
-    TransientView by TransientViewMixin(),
-    ExpressionSubscriber {
+    DivHolderView<DivGallery> by DivHolderViewMixin(),
+    OnInterceptTouchEventListenerHost {
 
     private var scrollPointerId = -1
     private var pointTouchX = 0
@@ -45,14 +39,11 @@ internal class DivRecyclerView @JvmOverloads constructor(
             }
         }
 
-    var div: DivGallery? = null
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
     var scrollMode = ScrollMode.DEFAULT
     var pagerSnapStartHelper: PagerSnapStartHelper? = null
     private var needFling = false
-
-    override val subscriptions = mutableListOf<Disposable>()
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
         val flingPerformed = super.fling(velocityX, velocityY)

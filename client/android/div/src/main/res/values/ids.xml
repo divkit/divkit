@@ -23,7 +23,6 @@
     <item name="div_focused_background_list_tag" type="id"/>
     <item name="div_additional_background_layer_tag" type="id"/>
     <item name="div_tooltips_tag" type="id"/>
-    <item name="div_custom_tag" type="id"/>
     <item name="div_penetrating_longtap_tag" type="id"/>
 
     <item name="div_non_transition_alpha" type="id"/>

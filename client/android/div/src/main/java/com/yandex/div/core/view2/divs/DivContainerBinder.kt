@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -12,7 +11,6 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isBranch
 import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.Div2View
@@ -21,6 +19,7 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
@@ -56,12 +55,9 @@ internal class DivContainerBinder @Inject constructor(
 ) : DivViewBinder<DivContainer, ViewGroup> {
 
     override fun bindView(view: ViewGroup, div: DivContainer, divView: Div2View, path: DivStatePath) {
-        var oldDiv = when (view) {
-            is DivWrapLayout -> view.div
-            is DivLinearLayout -> view.div
-            is DivFrameLayout -> view.div
-            else -> null
-        }
+        @Suppress("UNCHECKED_CAST")
+        val divHolderView = view as DivHolderView<DivContainer>
+        var oldDiv = divHolderView.div
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
@@ -72,9 +68,6 @@ internal class DivContainerBinder @Inject constructor(
 
         val resolver = divView.expressionResolver
 
-        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
-        val expressionSubscriber = view.expressionSubscriber
-        expressionSubscriber.closeAllSubscription()
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.observeAspectRatio(resolver, div.aspect)
@@ -85,7 +78,6 @@ internal class DivContainerBinder @Inject constructor(
         when (view) {
             is DivLinearLayout -> view.bindProperties(div, resolver)
             is DivWrapLayout -> view.bindProperties(div, resolver)
-            is DivFrameLayout -> view.div = div
         }
 
         for (childView in view.children) {
@@ -127,7 +119,7 @@ internal class DivContainerBinder @Inject constructor(
                         val patchDivValue = patchDivs[patchIndex].value()
                         val patchView = patchViewsToAdd[patchIndex]
                         view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
-                        observeChildViewAlignment(div, patchDivValue, patchView, resolver, expressionSubscriber)
+                        observeChildViewAlignment(div, patchDivValue, patchView, resolver, divHolderView)
                         if (patchDivValue.hasSightActions) {
                             divView.bindViewToDiv(patchView, patchDivs[patchIndex])
                         }
@@ -138,7 +130,7 @@ internal class DivContainerBinder @Inject constructor(
             }
 
             divBinder.get().bind(childView, div.items[containerIndex], divView, path)
-            observeChildViewAlignment(div, childDivValue, childView, resolver, expressionSubscriber)
+            observeChildViewAlignment(div, childDivValue, childView, resolver, divHolderView)
         }
 
         view.trackVisibilityActions(div.items, oldDiv?.items, divView)
@@ -218,8 +210,6 @@ internal class DivContainerBinder @Inject constructor(
         })
         observeContentAlignment(div, resolver) { gravity = it }
         div.separator?.let { observeSeparator(it, resolver) }
-
-        this.div = div
     }
 
     private fun ExpressionSubscriber.observeContentAlignment(
@@ -267,8 +257,6 @@ internal class DivContainerBinder @Inject constructor(
                 left, top, right, bottom -> setLineSeparatorMargins(left, top, right, bottom)
             }
         }
-
-        this.div = div
     }
 
     private fun ExpressionSubscriber.observeSeparatorShowMode(
