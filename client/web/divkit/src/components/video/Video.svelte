@@ -15,6 +15,8 @@
     import { prepareBase64 } from '../../utils/prepareBase64';
     import { videoSize } from '../../utils/video';
     import { makeStyle } from '../../utils/makeStyle';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { genClassName } from '../../utils/genClassName';
 
     export let json: Partial<DivVideoData> = {};
     export let templateContext: TemplateContext;
@@ -62,6 +64,17 @@
         scale = videoSize($jsonScale) || scale;
     }
 
+    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
+    let aspectPaddingBottom = '0';
+    $: {
+        const newRatio = $jsonAspect?.ratio;
+        if (newRatio && isPositiveNumber(newRatio)) {
+            aspectPaddingBottom = (100 / Number(newRatio)).toFixed(2);
+        } else {
+            aspectPaddingBottom = '0';
+        }
+    }
+
     const elapsedVariableName = json.elapsed_time_variable;
     let elapsedVariable = elapsedVariableName && rootCtx.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
 
@@ -95,6 +108,10 @@
             }
         });
     }
+
+    $: mods = {
+        aspect: aspectPaddingBottom !== '0'
+    };
 
     $: style = {
         'object-fit': scale
@@ -141,32 +158,57 @@
 
 {#if !hasError}
     <Outer
-        cls={css.video}
+        cls={genClassName('video', css, mods)}
         customActions={'video'}
         {json}
         {origJson}
         {templateContext}
         {layoutParams}
     >
-        <video
-            bind:this={videoElem}
-            class={css.video__video}
-            style={makeStyle(style)}
-            playsinline
-            {loop}
-            {autoplay}
-            {muted}
-            {poster}
-            on:timeupdate={onTimeUpdate}
-            on:ended={onEnd}
-            on:playing={onPlaying}
-            on:pause={onPause}
-            on:waiting={onWaiting}
-            on:error={onError}
-        >
-            {#each sources as source}
-                <source src={source.src} type={source.type} on:error={onError}>
-            {/each}
-        </video>
+        {#if mods.aspect}
+            <div class={css['video__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
+                <video
+                    bind:this={videoElem}
+                    class={css.video__video}
+                    style={makeStyle(style)}
+                    playsinline
+                    {loop}
+                    {autoplay}
+                    {muted}
+                    {poster}
+                    on:timeupdate={onTimeUpdate}
+                    on:ended={onEnd}
+                    on:playing={onPlaying}
+                    on:pause={onPause}
+                    on:waiting={onWaiting}
+                    on:error={onError}
+                >
+                    {#each sources as source}
+                        <source src={source.src} type={source.type} on:error={onError}>
+                    {/each}
+                </video>
+            </div>
+        {:else}
+            <video
+                bind:this={videoElem}
+                class={css.video__video}
+                style={makeStyle(style)}
+                playsinline
+                {loop}
+                {autoplay}
+                {muted}
+                {poster}
+                on:timeupdate={onTimeUpdate}
+                on:ended={onEnd}
+                on:playing={onPlaying}
+                on:pause={onPause}
+                on:waiting={onWaiting}
+                on:error={onError}
+            >
+                {#each sources as source}
+                    <source src={source.src} type={source.type} on:error={onError}>
+                {/each}
+            </video>
+        {/if}
     </Outer>
 {/if}

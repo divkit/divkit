@@ -1,5 +1,6 @@
 import type { Action, BooleanInt } from '../../typings/common';
 import type { DivBaseData } from './base';
+import type { DivAspect } from './image';
 
 export interface VideoSource {
     type: 'video_source';
@@ -31,7 +32,7 @@ export interface DivVideoData extends DivBaseData {
     buffering_actions?: Action[];
     fatal_actions?: Action[];
     // player_settings_payload?: Record<string, unknown>;
-    // aspect
+    aspect?: DivAspect;
     scale?: VideoScale;
 }
 

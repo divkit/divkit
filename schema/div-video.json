@@ -95,8 +95,7 @@
         },
         "aspect": {
           "$ref": "div-aspect.json",
-          "$description": "translations.json#/div_aspect",
-          "platforms": []
+          "$description": "translations.json#/div_aspect"
         },
         "scale": {
           "$ref": "div-video-scale.json",

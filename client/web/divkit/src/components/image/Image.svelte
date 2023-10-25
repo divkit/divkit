@@ -12,7 +12,6 @@
     import { genClassName } from '../../utils/genClassName';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
-    import { htmlFilter } from '../../utils/htmlFilter';
     import { imageSize } from '../../utils/background';
     import { correctImagePosition } from '../../utils/correctImagePosition';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
