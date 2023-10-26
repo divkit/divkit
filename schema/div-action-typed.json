@@ -13,11 +13,7 @@
       ]
     },
     {
-      "$ref": "div-action-set-variable.json",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$ref": "div-action-set-variable.json"
     },
     {
       "$ref": "div-action-focus-element.json",
