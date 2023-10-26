@@ -643,7 +643,16 @@ public class JsonParser {
                 continue;
             }
 
-            T item = creator.invoke(env, (R) intermediate);
+            T item;
+            try {
+                item = creator.invoke(env, (R) intermediate);
+            } catch (ClassCastException castException) {
+                logger.logError(typeMismatch(optJSONArray, key, i, intermediate));
+                continue;
+            } catch (Exception e) {
+                logger.logError(invalidValue(optJSONArray, key, i, intermediate, e));
+                continue;
+            }
 
             if (item == null) {
                 continue;
