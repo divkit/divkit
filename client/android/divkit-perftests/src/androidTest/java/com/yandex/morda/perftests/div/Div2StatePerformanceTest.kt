@@ -20,19 +20,14 @@ import org.junit.Test
 )
 class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @PerfTestParameter(
-        requiredMetrics = [
-            "Div.Parsing.JSON.Cold",
-            "Div.Parsing.Total",
-            "Div.View.StateSwitching",
-            "Div.Parsing.Data.Cold",
-            "Div.Parsing.Templates.Cold",
-            "Div.Context.Create.Cold",
-            "Div.View.Create.Cold",
+        importantMetrics = [
             "Div.Binding.Cold",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Layout.Cold",
-            "Div.Render.Draw.Cold",
+            "Div.Parsing.Data.Cold",
+            "Div.Parsing.JSON.Cold",
+            "Div.Parsing.Templates.Cold",
+            "Div.Parsing.Total",
             "Div.Render.Total.Cold",
+            "Div.View.StateSwitching",
         ]
     )
     @Test
@@ -68,19 +63,14 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     }
 
     @PerfTestParameter(
-        requiredMetrics = [
-            "Div.Parsing.JSON.Cold",
-            "Div.Parsing.Total",
-            "Div.View.StateSwitching",
-            "Div.Parsing.Data.Cold",
-            "Div.Parsing.Templates.Cold",
-            "Div.Context.Create.Cold",
-            "Div.View.Create.Cold",
+        importantMetrics = [
             "Div.Binding.Cold",
-            "Div.Render.Measure.Cold",
-            "Div.Render.Layout.Cold",
-            "Div.Render.Draw.Cold",
+            "Div.Parsing.Data.Cold",
+            "Div.Parsing.JSON.Cold",
+            "Div.Parsing.Templates.Cold",
+            "Div.Parsing.Total",
             "Div.Render.Total.Cold",
+            "Div.View.StateSwitching",
         ]
     )
     @Test

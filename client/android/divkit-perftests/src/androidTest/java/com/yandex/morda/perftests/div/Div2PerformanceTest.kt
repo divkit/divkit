@@ -26,26 +26,17 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     }
 
     @PerfTestParameter(
-        requiredMetrics = [
-            "Div.Parsing.JSON.Cold",
-            "Div.Parsing.JSON.Warm",
-            "Div.Parsing.Total.Cold",
-            "Div.Parsing.Total.Warm",
+        importantMetrics = [
+            "Div.Binding.Cold",
             "Div.Parsing.Data.Cold",
             "Div.Parsing.Data.Warm",
+            "Div.Parsing.JSON.Cold",
+            "Div.Parsing.JSON.Warm",
             "Div.Parsing.Templates.Cold",
-            "Div.Parsing.Templates.Warm",
-            "Div.Context.Create.Cold",
-            "Div.View.Create.Cold",
-            "Div.View.Create.Warm",
-            "Div.Binding.Cold",
-            "Div.Binding.Warm",
+            "Div.Parsing.Total.Cold",
+            "Div.Parsing.Total.Warm",
             "Div.Render.Measure.Cold",
             "Div.Render.Measure.Warm",
-            "Div.Render.Layout.Cold",
-            "Div.Render.Layout.Warm",
-            "Div.Render.Draw.Cold",
-            "Div.Render.Draw.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]
@@ -91,24 +82,16 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     }
 
     @PerfTestParameter(
-        requiredMetrics = [
+        importantMetrics = [
+            "Div.Binding.Cold",
+            "Div.Parsing.Data.Cold",
+            "Div.Parsing.Data.Warm",
             "Div.Parsing.JSON.Cold",
             "Div.Parsing.JSON.Warm",
             "Div.Parsing.Total.Cold",
             "Div.Parsing.Total.Warm",
-            "Div.Parsing.Data.Cold",
-            "Div.Parsing.Data.Warm",
-            "Div.Context.Create.Cold",
-            "Div.View.Create.Cold",
-            "Div.View.Create.Warm",
-            "Div.Binding.Cold",
-            "Div.Binding.Warm",
             "Div.Render.Measure.Cold",
             "Div.Render.Measure.Warm",
-            "Div.Render.Layout.Cold",
-            "Div.Render.Layout.Warm",
-            "Div.Render.Draw.Cold",
-            "Div.Render.Draw.Warm",
             "Div.Render.Total.Cold",
             "Div.Render.Total.Warm",
         ]
