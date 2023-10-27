@@ -9,10 +9,13 @@
     import type { DrawableStyle } from '../../utils/correctDrawableStyles';
     import { simpleThrottle } from '../../utils/simpleThrottle';
     import { Box, getMarginBox } from '../../utils/getMarginBox';
+    import type { ContentAlignmentHorizontal, ContentAlignmentVertical } from '../../types/alignment';
 
     export let orientation: ContainerOrientation;
     export let separator: SeparatorStyle | null;
     export let lineSeparator: SeparatorStyle | null;
+    export let contentHAlign: ContentAlignmentHorizontal;
+    export let contentVAlign: ContentAlignmentVertical;
 
     const THROTTLE_TIMEOUT = 10;
     const throttledUpdated = simpleThrottle(updateSeparators, THROTTLE_TIMEOUT);
@@ -105,11 +108,19 @@
         }
     }
 
+    // eslint-disable-next-line max-params
     function appendSeparators(
         separators: SeparatorItem[],
         separator: SeparatorStyle,
         boxes: Box[],
-        crossAxis: boolean
+        crossAxis: boolean,
+        align: ContentAlignmentHorizontal | ContentAlignmentVertical,
+        contentBox: {
+            top: number;
+            right: number;
+            bottom: number;
+            left: number;
+        }
     ): void {
         const containingBox = {
             top: Math.min(...boxes.map(it => it.top)),
@@ -119,14 +130,23 @@
         };
 
         if (separator?.show_at_start) {
+            let right: number;
+            let bottom: number;
+            if (align === 'space-around' || align === 'space-evenly') {
+                right = contentBox.left - separator.style.width;
+                bottom = contentBox.top - separator.style.height;
+            } else {
+                right = boxes[0].left - separator.style.width - separator.margins.left - separator.margins.right;
+                bottom = boxes[0].top - separator.style.height - separator.margins.top - separator.margins.bottom;
+            }
             appendSeparator(
                 separators,
                 separator,
                 // only right and bottom is used
                 {
                     top: 0,
-                    right: boxes[0].left - separator.style.width - separator.margins.left - separator.margins.right,
-                    bottom: boxes[0].top - separator.style.height - separator.margins.top - separator.margins.bottom,
+                    right,
+                    bottom,
                     left: 0
                 },
                 boxes[0],
@@ -148,6 +168,15 @@
         }
         if (separator?.show_at_end) {
             const lastBox = boxes[boxes.length - 1];
+            let top: number;
+            let left: number;
+            if (align === 'space-around' || align === 'space-evenly') {
+                top = contentBox.bottom + separator.style.height;
+                left = contentBox.right + separator.style.width;
+            } else {
+                top = lastBox.bottom + separator.style.height + separator.margins.top + separator.margins.bottom;
+                left = lastBox.right + separator.style.width + separator.margins.left + separator.margins.right;
+            }
 
             appendSeparator(
                 separators,
@@ -155,10 +184,10 @@
                 lastBox,
                 // only top and left is used
                 {
-                    top: lastBox.bottom + separator.style.height + separator.margins.top + separator.margins.bottom,
+                    top,
                     right: 0,
                     bottom: 0,
-                    left: lastBox.right + separator.style.width + separator.margins.left + separator.margins.right
+                    left
                 },
                 containingBox,
                 crossAxis
@@ -172,6 +201,13 @@
         }
 
         const parentBbox = parentElement.getBoundingClientRect();
+        const computedStyle = window.getComputedStyle(parentElement);
+        const contentBox = {
+            top: parentBbox.top + parseFloat(computedStyle.paddingTop),
+            right: parentBbox.right - parseFloat(computedStyle.paddingRight),
+            bottom: parentBbox.bottom - parseFloat(computedStyle.paddingBottom),
+            left: parentBbox.left + parseFloat(computedStyle.paddingLeft)
+        };
 
         separators = [];
 
@@ -214,7 +250,14 @@
             const boxes = row.map(it => getMarginBox(it));
 
             if (separator) {
-                appendSeparators(separators, separator as SeparatorStyle, boxes, orientation === 'vertical');
+                appendSeparators(
+                    separators,
+                    separator as SeparatorStyle,
+                    boxes,
+                    orientation === 'vertical',
+                    orientation === 'vertical' ? contentVAlign : contentHAlign,
+                    contentBox
+                );
             }
 
             const rowBox = {
@@ -226,7 +269,14 @@
             rowBoxes.push(rowBox);
         });
         if (lineSeparator) {
-            appendSeparators(separators, lineSeparator, rowBoxes, orientation === 'horizontal');
+            appendSeparators(
+                separators,
+                lineSeparator,
+                rowBoxes,
+                orientation === 'horizontal',
+                orientation === 'vertical' ? contentHAlign : contentVAlign,
+                contentBox
+            );
         }
 
         separators.forEach(separator => {

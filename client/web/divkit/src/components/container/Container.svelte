@@ -271,6 +271,8 @@
                 {separator}
                 {lineSeparator}
                 {orientation}
+                {contentHAlign}
+                {contentVAlign}
             />
         {/if}
     </Outer>
