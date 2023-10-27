@@ -1,3 +1,23 @@
+## 28.8.0
+
+# Android Client:
+* Added optional param `databasePrefix` to `DivStorageComponent#create` method.
+* Fixed crash in `DivGallery` with `scroll_mode` set to `paging`.
+* Fixed unnecessary bindings after triggers changing DivGallery state before its elements are bound.
+* Fixed `DivDataRepositoryImpl.getAll()` card duplicates.
+* Fixed variable triggers cleared after patch.
+
+# iOS Client:
+* Added `DivImageHolderFactory` protocol.
+
+# Web Client:
+* Added `aspect` support for the `video` component.
+* Added `text_shadow` support for the `text` component.
+* Supported `set_variable` typed action.
+* Fixed text cropping in several cases, especially with the `max_lines` property.
+* Fixed an issue with the `input` server-side rendering (SSR).
+
+
 ## 28.7.0
 
 # iOS Client:

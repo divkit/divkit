@@ -1,3 +1,15 @@
+## 28.8.0 (October 30, 2023)
+
+Additions:
+* Added `aspect` support for the `video` component.
+* Added `text_shadow` support for the `text` component.
+* Supported `set_variable` typed action.
+
+Fixes:
+* Fixed text cropping in several cases, especially with the `max_lines` property.
+* Fixed an issue with the `input` server-side rendering (SSR).
+
+
 ## 28.7.0 (October 23, 2023)
 
 * Added `custom` component support.
