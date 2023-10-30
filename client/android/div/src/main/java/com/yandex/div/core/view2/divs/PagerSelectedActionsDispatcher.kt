@@ -16,6 +16,7 @@ private const val TAG = "Ya:PagerSelectedActionsTracker"
 internal class PagerSelectedActionsDispatcher(
     private val divView: Div2View,
     private val div: DivPager,
+    private val divs: List<Div>,
     private val divActionBinder: DivActionBinder
 ) {
 
@@ -59,7 +60,7 @@ internal class PagerSelectedActionsDispatcher(
             while (selectedPages.isNotEmpty()) {
                 val page = selectedPages.removeFirst()
                 KLog.d(TAG) { "dispatch selected actions for page $page" }
-                dispatchSelectedActions(div.items[page])
+                dispatchSelectedActions(divs[page])
             }
         }
     }

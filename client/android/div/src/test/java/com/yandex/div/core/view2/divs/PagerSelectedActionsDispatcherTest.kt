@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivPager
 import org.junit.Before
@@ -32,7 +33,7 @@ class PagerSelectedActionsDispatcherTest {
     private val div = UnitTestData(PAGER_DIR, "pager_selected_actions.json").div
     private val divPager = div.value() as DivPager
 
-    private val underTest = PagerSelectedActionsDispatcher(divView, divPager, divActionBinder)
+    private val underTest = PagerSelectedActionsDispatcher(divView, divPager, ArrayList(divPager.items), divActionBinder)
 
     @Before
     fun setUp() {
@@ -43,7 +44,7 @@ class PagerSelectedActionsDispatcherTest {
     fun `no actions dispatched when selected item has no selected actions`() {
         val divPager = UnitTestData(PAGER_DIR, "pager_default_item.json").div.value() as DivPager
 
-        val underTest = PagerSelectedActionsDispatcher(divView, divPager, divActionBinder)
+        val underTest = PagerSelectedActionsDispatcher(divView, divPager, ArrayList(divPager.items), divActionBinder)
         underTest.whenAttached()
         underTest.whenPageSelected(0)
 

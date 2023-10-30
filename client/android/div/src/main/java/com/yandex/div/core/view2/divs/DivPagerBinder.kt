@@ -9,6 +9,7 @@ import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.Disposable
@@ -81,8 +82,15 @@ internal class DivPagerBinder @Inject constructor(
 
         val pageTranslations = SparseArray<Float>()
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
+        val divItems = ArrayList(div.items)
+        if (div.infiniteScroll.evaluate(resolver)) {
+            val firstItem = divItems.first()
+            val lastItem = divItems.last()
+            divItems.add(0, lastItem)
+            divItems.add(firstItem)
+        }
         view.viewPager.adapter = PagerAdapter(
-            divs = div.items,
+            divs = divItems,
             div2View = divView,
             divBinder = divBinder.get(),
             translationBinder = { holder: PagerViewHolder, position: Int ->
@@ -135,14 +143,14 @@ internal class DivPagerBinder @Inject constructor(
 
         pagerSelectedActionsDispatcher?.detach(view.viewPager)
         pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
-            divView, div, divActionBinder
+            divView, div, divItems, divActionBinder
         ).apply { attach(view.viewPager) }
 
         if (changePageCallbackForLogger != null) {
             view.viewPager.unregisterOnPageChangeCallback(changePageCallbackForLogger!!)
         }
         changePageCallbackForLogger = PageChangeCallback(
-            div, divView,
+            div, divItems, divView,
             view.viewPager.getChildAt(0) as RecyclerView
         )
         view.viewPager.registerOnPageChangeCallback(changePageCallbackForLogger!!)
@@ -155,7 +163,9 @@ internal class DivPagerBinder @Inject constructor(
             }
             changePageCallbackForState = UpdateStateChangePageCallback(id, state)
             view.viewPager.registerOnPageChangeCallback(changePageCallbackForState!!)
-            view.currentItem = pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver).toIntSafely()
+            val correctPosition = if (div.infiniteScroll.evaluate(resolver)) 1 else 0
+            view.currentItem = (pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver)
+                .toIntSafely()) + correctPosition
         }
 
         view.addSubscription(div.restrictParentScroll.observeAndGet(resolver) { restrictParentScroll ->
@@ -163,6 +173,28 @@ internal class DivPagerBinder @Inject constructor(
                 ParentScrollRestrictor(ParentScrollRestrictor.DIRECTION_HORIZONTAL)
             } else {
                 null
+            }
+        })
+        if (div.infiniteScroll.evaluate(resolver)) {
+            setInfiniteScroll(view)
+        }
+    }
+
+    private fun setInfiniteScroll(view: DivPagerView) {
+        val recyclerView = view.viewPager.getChildAt(0) as RecyclerView
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        val itemCount = view.viewPager.adapter?.itemCount ?: 0
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
+                val lastItemVisible = layoutManager.findLastVisibleItemPosition()
+                if (firstItemVisible == (itemCount - 1) && dx > 0) {
+                    recyclerView.scrollToPosition(1)
+                } else if (lastItemVisible == 0 && dx < 0) {
+                    recyclerView.scrollToPosition(itemCount - 2)
+                }
             }
         })
     }
@@ -381,6 +413,7 @@ internal class DivPagerBinder @Inject constructor(
 
     class PageChangeCallback(
         private val divPager: DivPager,
+        private val divs: List<Div>,
         private val divView: Div2View,
         private val recyclerView: RecyclerView
     ) : ViewPager2.OnPageChangeCallback() {
@@ -414,7 +447,7 @@ internal class DivPagerBinder @Inject constructor(
                     direction
                 )
             }
-            val selectedPage = divPager.items[position]
+            val selectedPage = divs[position]
             if (selectedPage.value().hasSightActions) {
                 divView.bindViewToDiv(recyclerView, selectedPage)
             }
@@ -451,7 +484,7 @@ internal class DivPagerBinder @Inject constructor(
                     KAssert.fail { "Requesting child position during layout" }
                     return
                 }
-                val childDiv = divPager.items[childPosition]
+                val childDiv = divs[childPosition]
 
                 divView.div2Component.visibilityActionTracker.trackVisibilityActionsOf(divView, child, childDiv)
             }
