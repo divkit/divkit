@@ -10,8 +10,8 @@ public protocol PlayerView: VisibleBoundsTrackingView {
   func set(scale: VideoScale)
 }
 
-public extension PlayerView {
-  func set(scale: VideoScale) { }
+extension PlayerView {
+  public func set(scale _: VideoScale) {}
 }
 
 #else

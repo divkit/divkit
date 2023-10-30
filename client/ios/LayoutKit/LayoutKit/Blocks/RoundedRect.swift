@@ -30,8 +30,9 @@ extension CGPath {
     let left = r0 + r3
     let right = r1 + r2
 
-    if let f = [rect.width / top, rect.width / bottom, rect.height / left, rect.height / right].min(),
-        f > 0, f < 1 {
+    if let f = [rect.width / top, rect.width / bottom, rect.height / left, rect.height / right]
+      .min(),
+      f > 0, f < 1 {
       r0 *= f
       r1 *= f
       r2 *= f

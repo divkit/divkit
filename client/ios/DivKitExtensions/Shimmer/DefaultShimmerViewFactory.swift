@@ -8,6 +8,6 @@ public class DefaultShimmerViewFactory {
   }
 
   public func makeView(style: ShimmerStyle) -> UIView {
-    return ShimmerView(style: style, effectBeginTime: effectBeginTime)
+    ShimmerView(style: style, effectBeginTime: effectBeginTime)
   }
 }

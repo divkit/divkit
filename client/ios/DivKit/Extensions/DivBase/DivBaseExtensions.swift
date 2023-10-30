@@ -63,7 +63,7 @@ extension DivBase {
     let border = getBorder(focusState)
     let anchorPoint = transform.makeAnchorPoint(expressionResolver: expressionResolver)
 
-    block = applyBackground(
+    block = try applyBackground(
       background,
       to: block,
       context: context
@@ -83,7 +83,7 @@ extension DivBase {
         }
       ),
       scheduler: context.scheduler,
-      tooltips: try tooltips.makeTooltips(context: context)
+      tooltips: tooltips.makeTooltips(context: context)
     )
     .addingTransform(
       transform: transform.resolveRotation(expressionResolver)
@@ -97,7 +97,6 @@ extension DivBase {
         actionAnimation: actionAnimation,
         doubleTapActions: doubleTapActions,
         longTapActions: longTapActions.map(LongTapActions.actions)
-
       )
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
@@ -137,7 +136,8 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> BlockAlignment2D {
     BlockAlignment2D(
-      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?.makeContentAlignment(uiLayoutDirection: context.layoutDirection)
+      horizontal: resolveAlignmentHorizontal(context.expressionResolver)?
+        .makeContentAlignment(uiLayoutDirection: context.layoutDirection)
         ?? defaultAlignment.horizontal,
       vertical: resolveAlignmentVertical(context.expressionResolver)?.alignment
         ?? defaultAlignment.vertical

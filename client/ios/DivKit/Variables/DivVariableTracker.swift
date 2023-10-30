@@ -16,7 +16,7 @@ public final class DivVariableTracker {
   func getAffectedCards(variables: Set<DivVariableName>) -> Set<DivCardID> {
     var cardIds = Set<DivCardID>()
     usedVariables.forEach { cardId, usedVariables in
-      if (!usedVariables.isDisjoint(with: variables)) {
+      if !usedVariables.isDisjoint(with: variables) {
         cardIds.insert(cardId)
       }
     }

@@ -157,7 +157,7 @@ extension Field {
       result.reserveCapacity(value.count)
       for index in value.indices {
         do {
-          result.append(try value[index].resolveParent(templates: templates))
+          try result.append(value[index].resolveParent(templates: templates))
         } catch {
           if validator?.isPartialDeserializationAllowed == false {
             throw error

@@ -188,11 +188,11 @@ extension UserInterfaceAction.Payload: Codable {
       self = .composite(first, second)
     case .divAction?:
       let source = try container.decodeIfPresent(String.self, forKey: .divActionSource)
-      let params = UserInterfaceAction.DivActionParams(
-        action: try container.decode(JSONObject.self, forKey: .json),
-        cardId: try container.decode(String.self, forKey: .cardId),
+      let params = try UserInterfaceAction.DivActionParams(
+        action: container.decode(JSONObject.self, forKey: .json),
+        cardId: container.decode(String.self, forKey: .cardId),
         source: UserInterfaceAction.DivActionSource(rawValue: source ?? "") ?? .tap,
-        url: try container.decodeIfPresent(URL.self, forKey: .url)
+        url: container.decodeIfPresent(URL.self, forKey: .url)
       )
       self = .divAction(params: params)
     }

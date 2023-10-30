@@ -20,8 +20,12 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     }
 
     func validate() throws {
-      if rows < 1 { throw BlockError("Grid block error: " + "invalid rows span \(rows) < 1") }
-      if columns < 1 { throw BlockError("Grid block error: " + "invalid columns span \(columns) < 1") }
+      if rows < 1 {
+        throw BlockError("Grid block error: invalid rows span \(rows) < 1")
+      }
+      if columns < 1 {
+        throw BlockError("Grid block error: invalid columns span \(columns) < 1")
+      }
     }
   }
 
@@ -97,13 +101,13 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     items: [Item],
     columnCount: Int
   ) throws {
-    self.init(
+    try self.init(
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       contentAlignment: contentAlignment,
       items: items,
       columnCount: columnCount,
-      grid: try Grid(spans: items.map { $0.span }, columnCount: columnCount)
+      grid: Grid(spans: items.map { $0.span }, columnCount: columnCount)
     )
     try validateLayoutTraits()
   }
@@ -118,7 +122,9 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       with: items,
       resizableAtDirection: .horizontal
     ) {
-      throw BlockError("Grid block error: cannot create horizontally resizable grid with intrinsic width trait")
+      throw BlockError(
+        "Grid block error: cannot create horizontally resizable grid with intrinsic width trait"
+      )
     }
 
     if case .intrinsic = heightTrait, Layout.isGrid(
@@ -126,7 +132,9 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       with: items,
       resizableAtDirection: .vertical
     ) {
-      throw BlockError("Grid block error: cannot create vertically resizable grid with intrinsic height trait")
+      throw BlockError(
+        "Grid block error: cannot create vertically resizable grid with intrinsic height trait"
+      )
     }
   }
 
@@ -212,9 +220,9 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 extension GridBlock {
   public func updated(withStates states: BlocksState) throws -> GridBlock {
     let newItems = try items.map {
-      GridBlock.Item(
+      try GridBlock.Item(
         span: $0.span,
-        contents: try $0.contents.updated(withStates: states),
+        contents: $0.contents.updated(withStates: states),
         alignment: $0.alignment
       )
     }

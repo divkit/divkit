@@ -3,7 +3,7 @@ import Foundation
 final class AxialAlignmentManager {
   fileprivate enum Shift {
     case single(CGFloat)
-    case array(Array<CGFloat>)
+    case array([CGFloat])
   }
 
   private let layoutDirection: ContainerBlock.LayoutDirection

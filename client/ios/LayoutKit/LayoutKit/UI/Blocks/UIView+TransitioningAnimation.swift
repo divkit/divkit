@@ -18,7 +18,7 @@ extension UIView {
     let accumulator = CompletionAccumulator()
     for animationParam in animationsParams {
       let partialCompletion = accumulator.getPartialCompletion()
-      if animated && window != nil {
+      if animated, window != nil {
         UIView.animate(
           withDuration: animationParam.duration,
           delay: animationParam.delay,

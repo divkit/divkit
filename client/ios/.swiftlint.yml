@@ -17,6 +17,7 @@ only_rules:
 excluded:
   - "Core"
   - "DivKit/generated_sources"
+  - "DivKit/shared_data_generated_sources"
 
 custom_rules:
   dictionary_colon:

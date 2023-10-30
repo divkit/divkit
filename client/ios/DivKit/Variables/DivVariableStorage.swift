@@ -27,8 +27,9 @@ public final class DivVariableStorage {
   /// Initializes a new instance of ``DivVariableStorage``.
   ///
   /// - Parameters:
-  ///   - outerStorage: Storage that provides outer scope variables. Outer scope variables are accessible via
-  /// current storage (see `getValue` and `update` methods). Outer scope variables can be shadowed.
+  ///   - outerStorage: Storage that provides outer scope variables. Outer scope variables are
+  /// accessible via current storage (see `getValue` and `update` methods). Outer scope variables
+  /// can be shadowed.
   public init(outerStorage: DivVariableStorage? = nil) {
     self.outerStorage = outerStorage
 

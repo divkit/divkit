@@ -24,7 +24,7 @@ enum BlockTestsModels {
     static let threeGapsSize = threeGaps.reduce(0, +)
   }
 
-  struct Gallery {
+  enum Gallery {
     static let path = UIElementPath("gallery")
 
     static let base = make(blocks: [TextBlockTestModels.base, TextBlockTestModels.base])
@@ -46,7 +46,7 @@ enum BlockTestsModels {
     }
   }
 
-  struct Tabs {
+  enum Tabs {
     static let path = UIElementPath("tabs")
 
     static let base = try! make(
@@ -61,7 +61,7 @@ enum BlockTestsModels {
 
     private static func make(titles: [String], blocks: [Block]) throws -> TabsBlock {
       try TabsBlock(
-        model: try TabViewModel(
+        model: TabViewModel(
           listModel: TabListViewModel(
             tabTitleLinks: titles.enumerated().map { UILink(text: $1, path: path + "title.\($0)") }
           ),

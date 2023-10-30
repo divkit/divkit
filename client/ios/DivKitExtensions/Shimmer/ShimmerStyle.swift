@@ -1,7 +1,7 @@
-import Foundation
-import UIKit
 import BaseTinyPublic
 import DivKit
+import Foundation
+import UIKit
 
 import Serialization
 
@@ -19,13 +19,23 @@ public struct ShimmerStyle {
 
 extension ShimmerStyle {
   init(dictionary: [String: Any], expressionResolver: ExpressionResolver) throws {
-    self.angle = try dictionary.getOptionalFloatAsExpression("angle", expressionResolver: expressionResolver) ?? defaultAngle
-    self.duration = try dictionary.getOptionalFloatAsExpression("duration", expressionResolver: expressionResolver) ?? defaultDuration
+    self.angle = try dictionary.getOptionalFloatAsExpression(
+      "angle",
+      expressionResolver: expressionResolver
+    ) ?? defaultAngle
+    self.duration = try dictionary.getOptionalFloatAsExpression(
+      "duration",
+      expressionResolver: expressionResolver
+    ) ?? defaultDuration
     let colors: [Color] = try dictionary.getOptionalArray(
       "colors",
-      transform: { RGBAColor.color(withHexString: expressionResolver.resolveString(expression: $0)) }
+      transform: { RGBAColor.color(withHexString: expressionResolver.resolveString(expression: $0))
+      }
     ) ?? defaultColors
-    let locations: [CGFloat] = try dictionary.getOptionalFloatArrayElementsAsExpression("locations", expressionResolver: expressionResolver)
+    let locations: [CGFloat] = try dictionary.getOptionalFloatArrayElementsAsExpression(
+      "locations",
+      expressionResolver: expressionResolver
+    )
       ?? defaultLocations
 
     if colors.count != locations.count {
@@ -49,8 +59,8 @@ private let defaultLocations: [CGFloat] = [0, 0.5, 1]
 private let defaultAngle: CGFloat = 0
 private let defaultDuration: CGFloat = 1
 
-private let fromColor: Color = RGBAColor.colorWithHexCode(0xE9E9E9FF)
-private let toColor: Color = RGBAColor.colorWithHexCode(0xFBFBFBFF)
+private let fromColor: Color = RGBAColor.colorWithHexCode(0xE9_E9_E9_FF)
+private let toColor: Color = RGBAColor.colorWithHexCode(0xFB_FB_FB_FF)
 
 private enum ShimmerSerializationError: Error {
   case error
@@ -61,12 +71,12 @@ extension Dictionary where Key == String {
     _ key: Key,
     expressionResolver: ExpressionResolver
   ) throws -> CGFloat? {
-      let result: Double? = try getOptionalFieldAsExpression(
-        key,
-        fromExpression: { Double(expressionResolver.resolveString(expression: $0)) }
-      )
+    let result: Double? = try getOptionalFieldAsExpression(
+      key,
+      fromExpression: { Double(expressionResolver.resolveString(expression: $0)) }
+    )
 
-      return result.map { CGFloat($0) }
+    return result.map { CGFloat($0) }
   }
 
   fileprivate func getOptionalFloatArrayElementsAsExpression(

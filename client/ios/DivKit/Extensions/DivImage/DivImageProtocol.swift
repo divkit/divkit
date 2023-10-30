@@ -39,7 +39,7 @@ extension DivImageProtocol {
     }
 
     if case let .trait(heightTrait) = resolveHeight(context),
-        case .intrinsic = heightTrait {
+       case .intrinsic = heightTrait {
       throw DivBlockModelingError(
         "\(typeName) without aspect has wrap_content height",
         path: context.parentPath

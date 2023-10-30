@@ -1,6 +1,6 @@
-import Foundation
-import BaseTinyPublic
 import BasePublic
+import BaseTinyPublic
+import Foundation
 
 final class RunLoopCardUpdateAggregator {
   private var enabled: Bool = true
@@ -63,6 +63,6 @@ extension Array where Element == DivActionURLHandler.UpdateReason {
       }
     }
 
-    return reasons + (variables == .specific([]) ? [] :  [.variable(variables)])
+    return reasons + (variables == .specific([]) ? [] : [.variable(variables)])
   }
 }

@@ -131,7 +131,7 @@ public final class ContainerBlock: BlockWithLayout {
     if gaps.count != children.count + 1 {
       throw BlockError(
         "Container block error: gaps count is not equal to children count plus 1 " +
-        "(\(gaps.count) != \(children.count) + 1)"
+          "(\(gaps.count) != \(children.count) + 1)"
       )
     }
 
@@ -187,11 +187,15 @@ public final class ContainerBlock: BlockWithLayout {
       switch layoutDirection {
       case .horizontal:
         guard (children.map { $0.content }.allVerticallyNonResizable) else {
-          throw BlockError("Container block error: horizontal wrap container has children with resizable height")
+          throw BlockError(
+            "Container block error: horizontal wrap container has children with resizable height"
+          )
         }
       case .vertical:
         guard (children.map { $0.content }.allHorizontallyNonResizable) else {
-          throw BlockError("Container block error: vertical wrap container has children with resizable width")
+          throw BlockError(
+            "Container block error: vertical wrap container has children with resizable width"
+          )
         }
       }
     }
@@ -200,11 +204,15 @@ public final class ContainerBlock: BlockWithLayout {
       switch layoutDirection {
       case .horizontal:
         guard (children.map { $0.content }.allHorizontallyNonResizable) else {
-          throw BlockError("Container block error: horizontal intrinsic-width container has children with resizable width")
+          throw BlockError(
+            "Container block error: horizontal intrinsic-width container has children with resizable width"
+          )
         }
       case .vertical:
         guard (children.map { $0.content }.hasHorizontallyNonResizable) else {
-          throw BlockError("Container block error: in vertical intrinsic-width container all children have resizable width")
+          throw BlockError(
+            "Container block error: in vertical intrinsic-width container all children have resizable width"
+          )
         }
       }
     }
@@ -215,7 +223,9 @@ public final class ContainerBlock: BlockWithLayout {
         break // this is currently a valid case, see `.max() ?? 0` on line 163
       case .vertical:
         guard (children.map { $0.content }.allVerticallyNonResizable) else {
-          throw BlockError("Container block error: vertical intrinsic-height container has children with resizable height")
+          throw BlockError(
+            "Container block error: vertical intrinsic-height container has children with resizable height"
+          )
         }
       }
     }
@@ -525,8 +535,8 @@ extension ContainerBlock: ImageContaining {
 extension ContainerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> ContainerBlock {
     let newChildren = try children.map {
-      ContainerBlock.Child(
-        content: try $0.content.updated(withStates: states),
+      try ContainerBlock.Child(
+        content: $0.content.updated(withStates: states),
         crossAlignment: $0.crossAlignment
       )
     }

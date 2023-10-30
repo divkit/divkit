@@ -8,11 +8,11 @@ import CommonCorePublic
 extension DeserializationResult {
   fileprivate func toThrows() throws -> T {
     switch self {
-    case .success(let value):
+    case let .success(value):
       return value
-    case .partialSuccess(let value, _):
+    case let .partialSuccess(value, _):
       return value
-    case .failure(let errors):
+    case let .failure(errors):
       throw errors.last
     case .noValue:
       throw DeserializationError.noData
@@ -114,7 +114,7 @@ extension Dictionary where Key == String {
     var errors: [DeserializationError] = []
 
     let dictResult = getResult { try enclosedDictForKeySequence(key) }
-    if case .failure(let dictErrors) = dictResult {
+    if case let .failure(dictErrors) = dictResult {
       return .failure(dictErrors)
     }
 
@@ -166,8 +166,8 @@ extension Dictionary where Key == String {
     }
 
     return errors.isEmpty
-    ? .success(result)
-    : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      ? .success(result)
+      : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 }
 

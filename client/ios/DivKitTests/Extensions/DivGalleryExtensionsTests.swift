@@ -132,7 +132,7 @@ private let noItemsCausedByItemHeightError = DivBlockModelingError(
     DivBlockModelingError(
       "DivImage without aspect has wrap_content height",
       path: .root + "gallery" + "0"
-    )
+    ),
   ]
 )
 
@@ -143,6 +143,6 @@ private let noItemsCausedByItemWidthError = DivBlockModelingError(
     DivBlockModelingError(
       "DivImage has wrap_content width",
       path: .root + "gallery" + "0"
-    )
+    ),
   ]
 )

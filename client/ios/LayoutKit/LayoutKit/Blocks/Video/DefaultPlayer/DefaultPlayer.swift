@@ -69,36 +69,36 @@ final class DefaultPlayer: Player {
   }
 
   private func configureObservers(for player: CorePlayer) {
-    weak var `self` = self
+    weak var weakSelf = self
 
     player
       .playbackStatusDidChange
       .map { playbackStatus -> PlayerEvent in
         switch playbackStatus {
-          case .playing:
-            return .play
-          case .paused:
-            return .pause
-          case .buffering:
-            return .buffering
+        case .playing:
+          return .play
+        case .paused:
+          return .pause
+        case .buffering:
+          return .buffering
         }
       }
-      .addObserver { self?.eventPipe.send($0) }
+      .addObserver { weakSelf?.eventPipe.send($0) }
       .dispose(in: playerObservers)
 
     player
       .playbackDidFinish
-      .addObserver { self?.eventPipe.send(.end) }
+      .addObserver { weakSelf?.eventPipe.send(.end) }
       .dispose(in: playerObservers)
 
     player
       .playbackDidFail
-      .addObserver { _ in self?.eventPipe.send(.fatal) }
+      .addObserver { _ in weakSelf?.eventPipe.send(.fatal) }
       .dispose(in: playerObservers)
 
     player
       .periodicCurrentTimeSignal(interval: 1)
-      .addObserver { self?.eventPipe.send(.currentTimeUpdate(Int($0 * 1000))) }
+      .addObserver { weakSelf?.eventPipe.send(.currentTimeUpdate(Int($0 * 1000))) }
       .dispose(in: playerObservers)
   }
 }
@@ -109,15 +109,15 @@ extension DefaultPlayer: VideoEngineProvider {
   }
 }
 
-private extension DefaultPlayer {
-  struct SourceContext {
+extension DefaultPlayer {
+  fileprivate struct SourceContext {
     var videoData: VideoData
     var playbackConfig: PlaybackConfig
   }
 }
 
-private extension VideoData {
-  func getSupportedVideo(_ mimeTypeChecker: (String) -> Bool) -> Video? {
+extension VideoData {
+  fileprivate func getSupportedVideo(_ mimeTypeChecker: (String) -> Bool) -> Video? {
     videos.first { mimeTypeChecker($0.mimeType) }
   }
 }

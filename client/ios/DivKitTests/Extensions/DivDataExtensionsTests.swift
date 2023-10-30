@@ -67,7 +67,10 @@ final class DivDataExtensionsTests: XCTestCase {
 
     for rootStateId in [nil, "1", "0", "1"] {
       if let rootStateId {
-        context.stateManager.setStateWithHistory(path: DivData.rootPath, stateID: DivStateID(rawValue: rootStateId))
+        context.stateManager.setStateWithHistory(
+          path: DivData.rootPath,
+          stateID: DivStateID(rawValue: rootStateId)
+        )
       }
 
       let block = try makeBlock(fromFile: "root_states_visibility", context: context)
@@ -77,7 +80,10 @@ final class DivDataExtensionsTests: XCTestCase {
         size: CGSize(width: 100, height: block.intrinsicContentHeight(forWidth: 100))
       )
       let view = block.makeBlockView()
-      XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timerScheduler), 1)
+      XCTAssertEqual(
+        getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timerScheduler),
+        1
+      )
     }
   }
 }

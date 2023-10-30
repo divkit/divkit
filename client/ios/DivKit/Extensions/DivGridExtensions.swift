@@ -35,7 +35,11 @@ extension DivGrid: DivBlockModeling {
       }
     }
     if items.count != gridItems.count {
-      throw DivBlockModelingError("Unable to form grid", path: gridPath, causes: gridItemsContext.errorsStorage.errors)
+      throw DivBlockModelingError(
+        "Unable to form grid",
+        path: gridPath,
+        causes: gridItemsContext.errorsStorage.errors
+      )
     }
 
     let expressionResolver = gridContext.expressionResolver

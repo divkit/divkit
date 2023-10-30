@@ -1,6 +1,6 @@
 import BasePublic
-import Foundation
 import CoreMedia
+import Foundation
 
 protocol CorePlayer: VideoEngineProvider {
   static func isMIMETypeSupported(_ mimeType: String) -> Bool

@@ -7,7 +7,6 @@ extension NotificationCenter {
     queue: OperationQueue? = nil,
     block: @escaping (Notification) -> Void
   ) -> Disposable {
-
     let observer = addObserver(
       forName: name,
       object: nil,
@@ -28,7 +27,6 @@ extension NotificationCenter {
     queue: OperationQueue? = nil,
     block: @escaping (Target, Notification) -> Void
   ) -> Disposable {
-
     let observer = addObserver(
       forName: name,
       object: target,

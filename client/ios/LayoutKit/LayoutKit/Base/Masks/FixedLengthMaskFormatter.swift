@@ -51,7 +51,11 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
         if regexp.numberOfMatches(in: String(rawText[stringIndex]), range: NSRange(0..<1)) != 0 {
           text.append(rawText[stringIndex])
           let textString = String(text)
-          rawData.append(.init(char: rawText[stringIndex], index: textString.index(before: textString.endIndex)))
+          rawData
+            .append(.init(
+              char: rawText[stringIndex],
+              index: textString.index(before: textString.endIndex)
+            ))
           stringIndex = rawText.index(after: stringIndex)
         } else {
           text.append(placeholder)

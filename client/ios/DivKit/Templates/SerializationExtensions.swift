@@ -224,7 +224,7 @@ func makeTemplateDeserializer<T: TemplateValue>(
   templateToType: [TemplateName: String],
   type _: T.Type
 ) -> (([String: Any]) -> DeserializationResult<T.ResolvedValue>) {
-  return { dict in
+  { dict in
     let context = TemplatesContext(
       templates: templates,
       templateToType: templateToType,

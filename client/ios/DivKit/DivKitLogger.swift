@@ -1,6 +1,6 @@
 import Foundation
 
-private var externalLogger: (DivErrorLevel, String) -> Void = { _, _  in }
+private var externalLogger: (DivErrorLevel, String) -> Void = { _, _ in }
 
 public enum DivKitLogger {
   public static var isEnabled: Bool = false
@@ -32,6 +32,6 @@ public enum DivKitLogger {
   }
 
   public static func setLogger(_ logger: @escaping (String) -> Void) {
-    setLogger({ logger($1) })
+    setLogger { logger($1) }
   }
 }

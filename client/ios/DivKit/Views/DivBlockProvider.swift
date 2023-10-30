@@ -79,7 +79,7 @@ final class DivBlockProvider {
       dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
       divData = result.value
     } catch {
-      block = handleError(error: error, message: "Failed to parse DivData")
+      block = handleError(error: error)
     }
   }
 
@@ -90,7 +90,7 @@ final class DivBlockProvider {
       dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
       divData = result.value
     } catch {
-      block = handleError(error: error, message: "Failed to parse DivData")
+      block = handleError(error: error)
     }
   }
 
@@ -130,7 +130,7 @@ final class DivBlockProvider {
         cardId: cardId,
         error: DivUnknownError(error, path: UIElementPath(cardId.rawValue))
       )
-      block = handleError(error: error, message: "Failed to build block", context: context)
+      block = handleError(error: error, context: context)
     }
     cardSize = DivViewSize(block: block)
   }
@@ -164,7 +164,7 @@ final class DivBlockProvider {
     do {
       block = try block.updated(withStates: blockStates)
     } catch {
-      block = handleError(error: error, message: "Failed to update block")
+      block = handleError(error: error)
     }
   }
 
@@ -190,7 +190,6 @@ final class DivBlockProvider {
 
   private func handleError(
     error: Error,
-    message: String,
     context: DivBlockModelingContext? = nil
   ) -> Block {
     var errors: [DivError] = []
@@ -229,7 +228,7 @@ final class DivBlockProvider {
       )
     }
     return try! GalleryBlock(
-      gaps: [0] + Array.init(repeating: 10, count: errorBlocks.count + 1),
+      gaps: [0] + Array(repeating: 10, count: errorBlocks.count + 1),
       children: [errorsHeader] + errorBlocks,
       path: UIElementPath(cardId.rawValue),
       direction: .vertical,

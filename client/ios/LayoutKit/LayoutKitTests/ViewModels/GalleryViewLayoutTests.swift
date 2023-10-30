@@ -302,7 +302,7 @@ final class GalleryViewLayoutTests: XCTestCase {
             widthTrait: .intrinsic,
             heightTrait: .resizable,
             text: NSAttributedString(string: "Item 1")
-          )
+          ),
         ],
         metrics: GalleryViewMetrics(gaps: [10, 10]),
         path: UIElementPath("model"),
@@ -321,7 +321,7 @@ final class GalleryViewLayoutTests: XCTestCase {
           TextBlock(
             widthTrait: .resizable,
             text: NSAttributedString(string: "Item 1")
-          )
+          ),
         ],
         metrics: GalleryViewMetrics(gaps: [10, 10]),
         path: UIElementPath("model"),

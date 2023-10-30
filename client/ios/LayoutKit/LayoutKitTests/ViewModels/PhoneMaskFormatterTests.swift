@@ -36,7 +36,7 @@ final class PhoneMaskFormatterTests: XCTestCase {
       .init(char: "2", index: text.index(text.startIndex, offsetBy: 2)),
       .init(char: "3", index: text.index(text.startIndex, offsetBy: 5)),
       .init(char: "4", index: text.index(text.startIndex, offsetBy: 6)),
-      .init(char: "5", index: text.index(text.startIndex, offsetBy: 7))
+      .init(char: "5", index: text.index(text.startIndex, offsetBy: 7)),
     ]
     XCTAssertEqual(data, rawData)
   }
@@ -47,18 +47,39 @@ final class PhoneMaskFormatterTests: XCTestCase {
     // "01234567890"
     // "+12 (345) 6"
     // " 01  234  5"
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(0, false)).cursorPosition, 1)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(1, false)).cursorPosition, 2)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, false)).cursorPosition, 3)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(4, false)).cursorPosition, 7)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(5, false)).cursorPosition, 8)
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(0, false)).cursorPosition,
+      1
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(1, false)).cursorPosition,
+      2
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, false)).cursorPosition,
+      3
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(4, false)).cursorPosition,
+      7
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(5, false)).cursorPosition,
+      8
+    )
 
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, true)).cursorPosition, 5)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(6, true)).cursorPosition, 11)
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, true)).cursorPosition,
+      5
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(6, true)).cursorPosition,
+      11
+    )
   }
 }
 
-private func makeFormatter(alwaysVisible: Bool) -> PhoneMaskFormatter {
+private func makeFormatter(alwaysVisible _: Bool) -> PhoneMaskFormatter {
   PhoneMaskFormatter(
     masksByCountryCode: masksByCountryCode,
     extraSymbols: "00"
@@ -67,14 +88,14 @@ private func makeFormatter(alwaysVisible: Bool) -> PhoneMaskFormatter {
 
 private let masksByCountryCode: JSONDictionary = [
   "1": .object([
-    "0": .object([ "value": .string("+00 (000) 0000000") ]),
+    "0": .object(["value": .string("+00 (000) 0000000")]),
     "1": .object([
-      "0": .object([ "value": .string("+000 000 000-000") ]),
-      "*": .object([ "value": .string("+000 (00) 000-00-00") ]),
+      "0": .object(["value": .string("+000 000 000-000")]),
+      "*": .object(["value": .string("+000 (00) 000-00-00")]),
     ]),
-    "*": .object([ "value": .string("+00 (000) 000-00-00") ]),
+    "*": .object(["value": .string("+00 (000) 000-00-00")]),
   ]),
-  "*": .object([ "value": .string("+0 (000) 000-00-00") ]),
+  "*": .object(["value": .string("+0 (000) 000-00-00")]),
 ]
 
 extension InputData {
@@ -86,6 +107,9 @@ extension InputData {
 
 extension CursorData {
   init(_ pos: Int, _ afterNonDecodingSymbols: Bool) {
-    self.init(cursorPosition: .init(rawValue: pos), afterNonDecodingSymbols: afterNonDecodingSymbols)
+    self.init(
+      cursorPosition: .init(rawValue: pos),
+      afterNonDecodingSymbols: afterNonDecodingSymbols
+    )
   }
 }

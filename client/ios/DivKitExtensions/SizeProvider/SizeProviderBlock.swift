@@ -19,7 +19,7 @@ final class SizeProviderBlock: WrapperBlock, LayoutCachingDefaultImpl {
   }
 
   public func makeCopy(wrapping: Block) -> SizeProviderBlock {
-    return SizeProviderBlock(
+    SizeProviderBlock(
       child: wrapping,
       widthUpdater: widthUpdater,
       heightUpdater: heightUpdater

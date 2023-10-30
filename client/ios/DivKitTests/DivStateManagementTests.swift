@@ -47,7 +47,7 @@ final class DivStateManagementTests: XCTestCase {
           DivStateManager.Item(
             currentStateID: DivStateID(rawValue: "State1"),
             previousState: .initial
-          )
+          ),
       ]
     )
   }
@@ -68,7 +68,7 @@ final class DivStateManagementTests: XCTestCase {
           DivStateManager.Item(
             currentStateID: DivStateID(rawValue: "State1"),
             previousState: .initial
-          )
+          ),
       ]
     )
   }
@@ -97,7 +97,7 @@ final class DivStateManagementTests: XCTestCase {
           DivStateManager.Item(
             currentStateID: DivStateID(rawValue: "State1"),
             previousState: .initial
-          )
+          ),
       ]
     )
   }
@@ -109,7 +109,7 @@ final class DivStateManagementTests: XCTestCase {
   }
 
   private func shiftTime(days: Float) {
-    currentTimestamp += Milliseconds(days * 86400000)
+    currentTimestamp += Milliseconds(days * 86_400_000)
   }
 }
 

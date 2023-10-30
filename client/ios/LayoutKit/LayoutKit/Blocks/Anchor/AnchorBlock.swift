@@ -167,14 +167,14 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
   }
 
   public func updated(withStates states: BlocksState) throws -> Self {
-    Self(
+    try Self(
       direction: direction,
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       crossAlignment: crossAlignment,
-      leading: try leading?.updated(withStates: states),
-      center: try center.updated(withStates: states),
-      trailing: try trailing?.updated(withStates: states)
+      leading: leading?.updated(withStates: states),
+      center: center.updated(withStates: states),
+      trailing: trailing?.updated(withStates: states)
     )
   }
 }

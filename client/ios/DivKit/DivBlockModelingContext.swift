@@ -148,7 +148,7 @@ public struct DivBlockModelingContext {
     }
     return extensions.compactMap {
       let id = $0.id
-      if !extensionHandlers.keys.contains(id) && !stateInterceptors.keys.contains(id) {
+      if !extensionHandlers.keys.contains(id), !stateInterceptors.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
       }
       return extensionHandlers[id]

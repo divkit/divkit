@@ -1,5 +1,5 @@
-import XCTest
 import UIKit
+import XCTest
 
 import BasePublic
 import DivKit
@@ -22,7 +22,7 @@ private let casesWithPlaceholerOnly = [
 ]
 
 private let divExtensions: [String: [DivExtensionHandler]] = [
-  "div-image/custom-preview.json": [labelImagePreviewExtension]
+  "div-image/custom-preview.json": [labelImagePreviewExtension],
 ]
 
 private let testDirectory = "snapshot_test_data"

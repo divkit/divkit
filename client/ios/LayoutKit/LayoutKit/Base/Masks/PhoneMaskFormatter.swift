@@ -29,7 +29,11 @@ public final class PhoneMaskFormatter: MaskFormatter {
         }
         text.append(rawText[stringIndex])
         let textString = String(text)
-        rawData.append(.init(char: rawText[stringIndex], index: textString.index(before: textString.endIndex)))
+        rawData
+          .append(.init(
+            char: rawText[stringIndex],
+            index: textString.index(before: textString.endIndex)
+          ))
         stringIndex = rawText.index(after: stringIndex)
       } else {
         text.append(element)
@@ -40,9 +44,15 @@ public final class PhoneMaskFormatter: MaskFormatter {
       if rawData.count > rawCursorPosition.cursorPosition.rawValue {
         let pos = rawCursorPosition.cursorPosition.rawValue
         if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
-          newCursorPosition = .init(rawValue: textString.distance(from: textString.startIndex, to: rawData[pos].index))
+          newCursorPosition = .init(
+            rawValue: textString
+              .distance(from: textString.startIndex, to: rawData[pos].index)
+          )
         } else {
-          newCursorPosition = .init(rawValue: textString.distance(from: textString.startIndex, to: rawData[pos - 1].index) + 1)
+          newCursorPosition = .init(
+            rawValue: textString
+              .distance(from: textString.startIndex, to: rawData[pos - 1].index) + 1
+          )
         }
       } else {
         newCursorPosition = .init(rawValue: text.count)
@@ -94,7 +104,7 @@ public final class PhoneMaskFormatter: MaskFormatter {
 
 extension Character {
   fileprivate var isPlaceHolder: Bool {
-    return self == "0"
+    self == "0"
   }
 }
 

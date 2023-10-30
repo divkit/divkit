@@ -12,7 +12,9 @@ extension DivData: DivBlockModeling {
     }
 
     if let previousRootState = getPreviousRootState(stateManager: stateManager) {
-      context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath + previousRootState.rawValue)
+      context.lastVisibleBoundsCache.dropVisibleBounds(
+        forMatchingPrefix: context.parentPath + previousRootState.rawValue
+      )
     }
 
     let stateId = String(state.stateId)

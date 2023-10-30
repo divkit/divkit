@@ -15,7 +15,7 @@ final class DivVariableStorageWithOuterStorageTest: XCTestCase {
     storage.addObserver { [unowned self] in self.event = $0 }
       .dispose(in: disposePool)
   }
-  
+
   func test_getValue_ReturnsValueFromOuterStorage() {
     storage.put(variables)
     outerStorage.put(outerVariables)

@@ -27,9 +27,9 @@ struct FunctionNullary<R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -48,11 +48,11 @@ struct FunctionUnary<T1, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
+          try .init(type: .from(type: T1.self)),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -74,12 +74,12 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
-          .init(type: try .from(type: T2.self)),
+          try .init(type: .from(type: T1.self)),
+          try .init(type: .from(type: T2.self)),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -101,13 +101,13 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
-          .init(type: try .from(type: T2.self)),
-          .init(type: try .from(type: T3.self)),
+          try .init(type: .from(type: T1.self)),
+          try .init(type: .from(type: T2.self)),
+          try .init(type: .from(type: T3.self)),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -129,14 +129,14 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
-          .init(type: try .from(type: T2.self)),
-          .init(type: try .from(type: T3.self)),
-          .init(type: try .from(type: T4.self)),
+          try .init(type: .from(type: T1.self)),
+          try .init(type: .from(type: T2.self)),
+          try .init(type: .from(type: T3.self)),
+          try .init(type: .from(type: T4.self)),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -159,11 +159,11 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self), vararg: true),
+          try .init(type: .from(type: T1.self), vararg: true),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -185,12 +185,12 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
-          .init(type: try .from(type: T2.self), vararg: true),
+          try .init(type: .from(type: T1.self)),
+          try .init(type: .from(type: T2.self), vararg: true),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -213,13 +213,13 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 
   var signature: FunctionSignature {
     get throws {
-      .init(
+      try .init(
         arguments: [
-          .init(type: try .from(type: T1.self)),
-          .init(type: try .from(type: T2.self)),
-          .init(type: try .from(type: T3.self), vararg: true),
+          try .init(type: .from(type: T1.self)),
+          try .init(type: .from(type: T2.self)),
+          try .init(type: .from(type: T3.self), vararg: true),
         ],
-        resultType: try .from(type: R.self)
+        resultType: .from(type: R.self)
       )
     }
   }
@@ -256,7 +256,7 @@ struct OverloadedFunction: Function {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    let arguments = try args.map { FunctionSignature.Argument(type: try .from(type: type(of: $0))) }
+    let arguments = try args.map { try FunctionSignature.Argument(type: .from(type: type(of: $0))) }
     guard let function = try functions
       .first(where: { try $0.signature.allArguments(arguments.count) == arguments })
     else {

@@ -1,5 +1,5 @@
-@testable import DivKit
 import CommonCorePublic
+@testable import DivKit
 
 import XCTest
 
@@ -119,7 +119,8 @@ private let invalidFieldErrors: [DeserializationError] = [
             "type": "container",
             "items": [] as [Any],
           ] as [String: Any],
-        ] as [String: Any]),
+        ] as [String: Any]
+      ),
       causes: NonEmptyArray(
         .nestedObjectError(
           field: "0",
@@ -131,7 +132,8 @@ private let invalidFieldErrors: [DeserializationError] = [
                 from: [
                   "type": "container",
                   "items": [] as [Any],
-                ] as [String: Any]),
+                ] as [String: Any]
+              ),
               causes: NonEmptyArray(
                 .nestedObjectError(
                   field: itemsKey,
@@ -146,7 +148,7 @@ private let invalidFieldErrors: [DeserializationError] = [
         )
       )
     )
-  )
+  ),
 ]
 
 private let typeMismatchErrors: [DeserializationError] = [
@@ -192,7 +194,7 @@ private let missingTypeErrors: [DeserializationError] = [
         )
       )
     )
-  )
+  ),
 ]
 
 extension DeserializationError: Equatable {
@@ -244,7 +246,10 @@ extension DeserializationError: Equatable {
 }
 
 extension DeserializationError.DerivedError: Equatable {
-  public static func == (lhs: Serialization.DeserializationError.DerivedError, rhs: Serialization.DeserializationError.DerivedError) -> Bool {
+  public static func ==(
+    lhs: Serialization.DeserializationError.DerivedError,
+    rhs: Serialization.DeserializationError.DerivedError
+  ) -> Bool {
     switch (lhs, rhs) {
     case (.invalidValue, .invalidValue):
       return true

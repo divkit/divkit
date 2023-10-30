@@ -7,8 +7,8 @@ import LayoutKit
 
 extension DivState: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    addSwipeHandling(
-      to: try applyBaseProperties(
+    try addSwipeHandling(
+      to: applyBaseProperties(
         to: { try makeBaseBlock(context: context) },
         context: context,
         actions: nil,

@@ -37,7 +37,7 @@ final class ArrayOfEnumsTests: XCTestCase {
     XCTAssertEqual(
       entity,
       EntityWithArrayOfEnums(
-        items: [ .first, .second, .first ]
+        items: [.first, .second, .first]
       )
     )
   }
@@ -51,5 +51,5 @@ private func readEntity(_ fileName: String) throws -> EntityWithArrayOfEnums? {
 }
 
 private let entityWithTwoItems = EntityWithArrayOfEnums(
-  items: [ .first, .second ]
+  items: [.first, .second]
 )

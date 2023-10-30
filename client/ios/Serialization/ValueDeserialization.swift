@@ -112,14 +112,19 @@ public func deserialize<T: ValidSerializationValue, U>(
     if let resultValue = transformResult.value {
       result.append(resultValue)
     }
-    errors.append(contentsOf: (transformResult.errorsOrWarnings?.asArray() ?? [])
-      .map { .nestedObjectError(field: "\(index)", error: $0)})
+    errors.append(
+      contentsOf: (transformResult.errorsOrWarnings?.asArray() ?? [])
+        .map { .nestedObjectError(field: "\(index)", error: $0) }
+    )
   }
 
   if result.count != resultBeforeTransform.count,
      validator?.isPartialDeserializationAllowed == false {
     if let errors = NonEmptyArray(errors) {
-      return  .failure(NonEmptyArray(.composite(error: .invalidValue(result: result, from: value), causes: errors)))
+      return .failure(NonEmptyArray(.composite(
+        error: .invalidValue(result: result, from: value),
+        causes: errors
+      )))
     } else {
       return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
     }
@@ -127,7 +132,10 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   guard validator?.isValid(result) != false else {
     if let errors = NonEmptyArray(errors) {
-      return .failure(NonEmptyArray(.composite(error: .invalidValue(result: result, from: value), causes: errors)))
+      return .failure(NonEmptyArray(.composite(
+        error: .invalidValue(result: result, from: value),
+        causes: errors
+      )))
     } else {
       return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
     }

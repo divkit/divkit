@@ -20,6 +20,6 @@ public final class TextInputValidator {
   }
 
   public func validate(_ text: String) -> Bool {
-    return (allowEmpty && text.isEmpty) || validator(text)
+    (allowEmpty && text.isEmpty) || validator(text)
   }
 }

@@ -1,8 +1,8 @@
 import XCTest
 
-@testable import DivKitExtensions
-import DivKit
 import BasePublic
+import DivKit
+@testable import DivKitExtensions
 
 final class ShimmerStyleTests: XCTestCase {
   private let expressionResolver = ExpressionResolver(
@@ -27,7 +27,10 @@ final class ShimmerStyleTests: XCTestCase {
   func test_WhenDecodingShimmerStyleWithExpressionValues_DecodesCorrectly() throws {
     XCTAssertEqual(
       expectedShimmerStyle,
-      try ShimmerStyle(dictionary: expressionValuesShimmerStyle, expressionResolver: expressionResolver)
+      try ShimmerStyle(
+        dictionary: expressionValuesShimmerStyle,
+        expressionResolver: expressionResolver
+      )
     )
   }
 }
@@ -37,7 +40,7 @@ private let exactValuesShimmerStyle: [String: Any] = [
   "angle": 15.0,
   "duration": 1.6,
   "colors": ["#ffffff", "#ffffff00", "#ffffff"],
-  "locations": [0.1, 0.5, 0.9]
+  "locations": [0.1, 0.5, 0.9],
 ]
 
 private let expressionValuesShimmerStyle: [String: Any] = [
@@ -45,25 +48,28 @@ private let expressionValuesShimmerStyle: [String: Any] = [
   "colors": [
     "@{'#ffffff'}",
     "@{'#ffffff00'}",
-    "@{'#ffffff'}"
+    "@{'#ffffff'}",
   ],
   "duration": "@{1.6}",
-  "locations": ["@{0.1}", "@{0.5}", "@{0.9}"]
+  "locations": ["@{0.1}", "@{0.5}", "@{0.9}"],
 ]
-
 
 private let expectedShimmerStyle = ShimmerStyle(
   colorsAndLocations: [
     (Color.color(withHexString: "#ffffff")!, 0.1),
     (Color.color(withHexString: "#ffffff00")!, 0.5),
-    (Color.color(withHexString: "#ffffff")!, 0.9)
+    (Color.color(withHexString: "#ffffff")!, 0.9),
   ],
   angle: 15,
   duration: 1.6
 )
 
 extension ShimmerStyle: Equatable {
-  public static func == (lhs: DivKitExtensions.ShimmerStyle, rhs: DivKitExtensions.ShimmerStyle) -> Bool {
-    lhs.angle == rhs.angle && lhs.duration == rhs.duration && lhs.colorsAndLocations == rhs.colorsAndLocations
+  public static func ==(
+    lhs: DivKitExtensions.ShimmerStyle,
+    rhs: DivKitExtensions.ShimmerStyle
+  ) -> Bool {
+    lhs.angle == rhs.angle && lhs.duration == rhs.duration && lhs.colorsAndLocations == rhs
+      .colorsAndLocations
   }
 }

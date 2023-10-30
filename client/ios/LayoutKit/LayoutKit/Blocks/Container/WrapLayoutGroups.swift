@@ -86,7 +86,7 @@ struct WrapLayoutGroups {
       addEndLineSeparator()
     }
 
-    if layoutDirection == .vertical && blockLayoutDirection == .rightToLeft {
+    if layoutDirection == .vertical, blockLayoutDirection == .rightToLeft {
       groups.reverse()
     }
 

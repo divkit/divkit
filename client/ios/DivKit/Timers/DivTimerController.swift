@@ -199,7 +199,7 @@ final class DivTimerController {
       return
     }
     setVariable(duration)
-    if tickBeforeEndIsNeeded && actualTickCount < expectedTickCount {
+    if tickBeforeEndIsNeeded, actualTickCount < expectedTickCount {
       if let tickActions = divTimer.tickActions {
         runActions(tickActions)
       }

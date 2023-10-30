@@ -102,7 +102,9 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_TracksVariable_InGetValueFunction() {
-    let _ = expressionResolver.resolveString(expression: "@{getStringValue('string_var', 'default')}")
+    let _ = expressionResolver.resolveString(
+      expression: "@{getStringValue('string_var', 'default')}"
+    )
 
     XCTAssertTrue(usedVariables.contains("string_var"))
   }

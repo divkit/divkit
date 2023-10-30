@@ -74,9 +74,9 @@ extension DivGalleryProtocol {
     direction: GalleryViewModel.Direction,
     with expressionResolver: ExpressionResolver
   ) throws -> GalleryViewMetrics {
-    let spacings = [CGFloat](
+    let spacings = try [CGFloat](
       repeating: spacing,
-      times: try UInt(value: childrenCount - 1)
+      times: UInt(value: childrenCount - 1)
     )
 
     let axialInsets: SideInsets

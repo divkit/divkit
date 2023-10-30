@@ -1,17 +1,15 @@
-import XCTest
-@testable import DivKit
 import BasePublic
+@testable import DivKit
+import XCTest
 
 final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   private var mainThreadBlock: Action?
   private var updateReasons: [DivActionURLHandler.UpdateReason]?
 
-  private lazy var aggregator: RunLoopCardUpdateAggregator = {
-    RunLoopCardUpdateAggregator(
-      updateCardAction: { self.updateReasons = $0.asArray() },
-      mainThreadAsyncRunner: { self.mainThreadBlock = $0 }
-    )
-  }()
+  private lazy var aggregator: RunLoopCardUpdateAggregator = .init(
+    updateCardAction: { self.updateReasons = $0.asArray() },
+    mainThreadAsyncRunner: { self.mainThreadBlock = $0 }
+  )
 
   func test_WhenHasLocalAndGlobalVariablesChanges_ReturnsAllAffectedCards() {
     aggregator.aggregate(.variable(.specific(["cardId"])))
@@ -43,7 +41,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   func test_WhenAggregateInMultipleRunLoops_SeparatesUpdateReasons() {
     let reasonBatches: [[DivActionURLHandler.UpdateReason]] = [
       [.state("cardId")],
-      [.variable(.specific(["cardId"]))]
+      [.variable(.specific(["cardId"]))],
     ]
 
     reasonBatches.forEach { reasons in
@@ -57,7 +55,10 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
 }
 
 extension DivActionURLHandler.UpdateReason: Equatable {
-  public static func == (lhs: DivActionURLHandler.UpdateReason, rhs: DivActionURLHandler.UpdateReason) -> Bool {
+  public static func ==(
+    lhs: DivActionURLHandler.UpdateReason,
+    rhs: DivActionURLHandler.UpdateReason
+  ) -> Bool {
     switch (lhs, rhs) {
     case let (.timer(lhsCardId), .timer(rhsCardId)):
       return lhsCardId == rhsCardId

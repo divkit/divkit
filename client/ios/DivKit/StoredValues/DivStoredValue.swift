@@ -9,6 +9,7 @@ struct DivStoredValue {
     case color
     case url
   }
+
   let name: String
   let value: String
   let type: ValueType

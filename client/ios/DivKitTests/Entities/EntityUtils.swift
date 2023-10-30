@@ -48,8 +48,8 @@ private func mapTemplatesByType(
   templatesDict: [String: Any],
   templateToType: [TemplateName: String]
 ) throws -> [TemplateName: EntityTemplate] {
-  Dictionary(
-    try templatesDict.keys.compactMap { [templateToType] key in
+  try Dictionary(
+    templatesDict.keys.compactMap { [templateToType] key in
       let template: EntityTemplate = try templatesDict
         .getField(key, templateToType: templateToType)
       return (key, template)

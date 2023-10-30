@@ -104,7 +104,7 @@ extension StringProtocol {
           return i
         }
       }
-      if char == "'" && notEscaped(at: i) {
+      if char == "'", notEscaped(at: i) {
         stringStarted[nestedExpressionCounter] = !stringStarted[nestedExpressionCounter]!
       }
     }

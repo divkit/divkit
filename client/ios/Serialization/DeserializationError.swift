@@ -19,16 +19,16 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   case unexpectedError(message: String)
 
   public var description: String {
-    return getDescription(path: [])
+    getDescription(path: [])
   }
 
   private func getDescription(path: [String]) -> String {
     switch self {
-    case .composite(let error, let causes):
+    case let .composite(error, causes):
       return "[\(path.joined(separator: "/"))]: \(error)," +
-      "    caused by    " +
-      "\(causes.map { $0.getDescription(path: path) }.joined(separator: ";    "))"
-    case .nestedObjectError(let field, let error):
+        "    caused by    " +
+        "\(causes.map { $0.getDescription(path: path) }.joined(separator: ";    "))"
+    case let .nestedObjectError(field, error):
       return error.getDescription(path: path + [field])
     default:
       return "[\(path.joined(separator: "/"))]: \(errorMessage)"
@@ -69,6 +69,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   public var userInfo: [String: String] {
     getUserInfo([])
   }
+
   private func getUserInfo(_ path: [String]) -> [String: String] {
     var userInfo: [String: String] = [:]
 
@@ -76,7 +77,8 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     case let .nestedObjectError(field, error):
       return error.getUserInfo(path + [field])
     case .composite:
-      userInfo["root_causes"] = "\(rootCauses.map {$0.getDescription(path: path)}.joined(separator: ";   "))"
+      userInfo["root_causes"] =
+        "\(rootCauses.map { $0.getDescription(path: path) }.joined(separator: ";   "))"
     default:
       break
     }
@@ -84,17 +86,17 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     return userInfo + [
       "subkind": subkind,
       "path": path.joined(separator: "/"),
-      "description": errorMessage
+      "description": errorMessage,
     ]
   }
 
   public var rootCauses: [DeserializationError] {
     switch self {
-    case .composite(_, let causes):
+    case let .composite(_, causes):
       return causes.flatMap {
         $0.rootCauses
       }
-    case .nestedObjectError(let field, let error):
+    case let .nestedObjectError(field, error):
       return error.rootCauses.map { .nestedObjectError(field: field, error: $0) }
     default:
       return [self]
@@ -108,7 +110,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     case .invalidJSONData: return "invalidJSONData"
     case .invalidValue: return "invalidValue"
     case .missingType: return "missingType"
-    case .nestedObjectError(_, let error): return error.subkind
+    case let .nestedObjectError(_, error): return error.subkind
     case .noData: return "noData"
     case .nonUTF8String: return "nonUTF8String"
     case .requiredFieldIsMissing: return "requiredFieldIsMissing"

@@ -39,7 +39,11 @@ extension DivTabs: DivBlockModeling {
       }
     }
     if tabs.isEmpty {
-      throw DivBlockModelingError("Tabs error: missing children", path: tabsPath, causes: tabsItemContext.errorsStorage.errors)
+      throw DivBlockModelingError(
+        "Tabs error: missing children",
+        path: tabsPath,
+        causes: tabsItemContext.errorsStorage.errors
+      )
     } else {
       tabsContext.errorsStorage.add(contentsOf: tabsItemContext.errorsStorage)
     }
@@ -67,7 +71,7 @@ extension DivTabs: DivBlockModeling {
     )
 
     return try TabsBlock(
-      model: try TabViewModel(
+      model: TabViewModel(
         listModel: listModel,
         contentsModel: contentsModel,
         separatorStyle: makeSeparatorStyle(with: expressionResolver, context: context)

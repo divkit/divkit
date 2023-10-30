@@ -24,7 +24,8 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
       case let .local(_, names):
         variableNames = names
       }
-      if let updatedVariables = self?.updatedVariables, !variableNames.isSubset(of: updatedVariables) {
+      if let updatedVariables = self?.updatedVariables,
+         !variableNames.isSubset(of: updatedVariables) {
         // If any variables are updated externally (not by SizeProviderExtensionHandler) it must be
         // considered as new layout cycle.
         self?.updatedVariables = []
@@ -38,8 +39,10 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     context: DivBlockModelingContext
   ) -> Block {
     let extensionParams = getExtensionParams(div)
-    let widthVariableName: DivVariableName? = try? extensionParams.getOptionalField("width_variable_name")
-    let heightVariableName: DivVariableName? = try? extensionParams.getOptionalField("height_variable_name")
+    let widthVariableName: DivVariableName? = try? extensionParams
+      .getOptionalField("width_variable_name")
+    let heightVariableName: DivVariableName? = try? extensionParams
+      .getOptionalField("height_variable_name")
     if widthVariableName == nil && heightVariableName == nil {
       DivKitLogger.error("No valid params for SizeProviderExtensionHandler")
       return block
@@ -61,7 +64,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
         return true
       }
     }
-    if (hasNotVariableReason) {
+    if hasNotVariableReason {
       updatedVariables = []
     }
   }
@@ -72,12 +75,14 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     value: Int
   ) {
     let previousValue: Int? = variablesStorage.getVariableValue(cardId: cardId, name: variableName)
-    if (value == previousValue) {
+    if value == previousValue {
       return
     }
 
     if updatedVariables.contains(variableName) {
-      DivKitLogger.warning("[SizeProviderExtensionHandler] Variable '\(variableName)' was already updated during the layout cycle.")
+      DivKitLogger.warning(
+        "[SizeProviderExtensionHandler] Variable '\(variableName)' was already updated during the layout cycle."
+      )
       return
     }
 

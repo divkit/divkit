@@ -41,9 +41,10 @@ struct UIStatePayload: Encodable {
 
   struct Error: Encodable {
     enum Level: String, Encodable {
-      case error = "error"
+      case error
       case warning = "warn"
     }
+
     let message: String
     let level: Level
   }

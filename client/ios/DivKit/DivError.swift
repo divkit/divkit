@@ -11,10 +11,10 @@ public protocol DivError: CustomStringConvertible {
 }
 
 public enum DivErrorKind: String {
-  case deserialization = "deserialization"
+  case deserialization
   case blockModeling = "divModeling"
-  case expression = "expression"
-  case unknown = "unknown"
+  case expression
+  case unknown
 }
 
 extension DivError {
@@ -39,20 +39,20 @@ extension DivError {
   public var description: String {
     "[\(path)]: \(message)" + (
       causes.isEmpty
-      ? ""
-      : "    caused by    \(rootCauses.map { $0.description }.joined(separator: ";   "))"
+        ? ""
+        : "    caused by    \(rootCauses.map { $0.description }.joined(separator: ";   "))"
     )
   }
 }
 
 extension DivError {
   public var prettyMessage: String {
-    return "\(message)" +
-    "\nLevel: \(level)" +
-    "\nPath: \(path)" +
-    (
-      causes.isEmpty ? "" : "\nCauses:\n- " + rootCauses.map { "\($0)" }.joined(separator: "\n- ")
-    )
+    "\(message)" +
+      "\nLevel: \(level)" +
+      "\nPath: \(path)" +
+      (
+        causes.isEmpty ? "" : "\nCauses:\n- " + rootCauses.map { "\($0)" }.joined(separator: "\n- ")
+      )
   }
 }
 
@@ -64,8 +64,8 @@ public enum DivErrorLevel {
 extension DeserializationError: DivError {
   private func getPath(parent: UIElementPath?) -> UIElementPath? {
     switch self {
-    case .nestedObjectError(let field, let error):
-      return error.getPath(parent: parent.map {$0 + field} ?? UIElementPath(field))
+    case let .nestedObjectError(field, error):
+      return error.getPath(parent: parent.map { $0 + field } ?? UIElementPath(field))
     default:
       return parent
     }

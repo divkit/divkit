@@ -19,7 +19,7 @@ let package = Package(
     .library(name: "LayoutKitInterface", targets: ["LayoutKitInterface"]),
   ],
   dependencies: [
-    .package(url: vgsl.url, from: "2.3.0")
+    .package(url: vgsl.url, from: "2.3.0"),
   ],
   targets: [
     .target(
@@ -40,7 +40,7 @@ let package = Package(
           [
             "-warnings-as-errors",
           ]
-        )
+        ),
       ]
     ),
     .target(
@@ -54,7 +54,7 @@ let package = Package(
           [
             "-warnings-as-errors",
           ]
-        )
+        ),
       ]
     ),
     .target(
@@ -69,13 +69,13 @@ let package = Package(
           [
             "-warnings-as-errors",
           ]
-        )
+        ),
       ]
     ),
     .target(
       name: "LayoutKitInterface",
       dependencies: [
-        .product(name: "BasePublic", package: vgsl.packageName)
+        .product(name: "BasePublic", package: vgsl.packageName),
       ],
       path: "LayoutKit/Interface",
       swiftSettings: [
@@ -83,13 +83,13 @@ let package = Package(
           [
             "-warnings-as-errors",
           ]
-        )
+        ),
       ]
     ),
     .target(
       name: "Serialization",
       dependencies: [
-        .product(name: "CommonCorePublic", package: vgsl.packageName)
+        .product(name: "CommonCorePublic", package: vgsl.packageName),
       ],
       path: "Serialization",
       swiftSettings: [
@@ -97,7 +97,7 @@ let package = Package(
           [
             "-warnings-as-errors",
           ]
-        )
+        ),
       ]
     ),
   ]

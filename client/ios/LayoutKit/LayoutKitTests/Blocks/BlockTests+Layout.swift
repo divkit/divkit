@@ -464,7 +464,10 @@ final class BlockTests_Layout: XCTestCase {
         gaps: [12],
         children: [TextBlock(widthTrait: .resizable, text: text)]
       ),
-      BlockError("Container block error: " + "gaps count is not equal to children count plus 1 (1 != 1 + 1)")
+      BlockError(
+        "Container block error: " +
+          "gaps count is not equal to children count plus 1 (1 != 1 + 1)"
+      )
     )
   }
 
@@ -478,7 +481,9 @@ final class BlockTests_Layout: XCTestCase {
           TextBlock(widthTrait: .intrinsic, heightTrait: .resizable, text: text),
         ]
       ),
-      BlockError("Container block error: horizontal wrap container has children with resizable height")
+      BlockError(
+        "Container block error: horizontal wrap container has children with resizable height"
+      )
     )
   }
 

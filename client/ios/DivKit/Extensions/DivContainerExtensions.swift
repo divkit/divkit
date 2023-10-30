@@ -107,7 +107,9 @@ extension DivContainer: DivBlockModeling {
     let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
     let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)
 
-    let childrenContext = modified(context, { $0.errorsStorage = DivErrorsStorage(errors: [])})
+    let childrenContext = modified(context) {
+      $0.errorsStorage = DivErrorsStorage(errors: [])
+    }
     let children = items.makeBlocks(
       context: childrenContext,
       overridenWidth: fallbackWidth,

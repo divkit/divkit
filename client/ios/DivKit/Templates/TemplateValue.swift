@@ -97,8 +97,9 @@ extension Array where Element: TemplateValue {
       if let resultValue = itemResult.value {
         result.append(resultValue)
       }
-      errors.append(contentsOf: (itemResult.errorsOrWarnings?.asArray() ?? [])
-        .map { .nestedObjectError(field: "\(index)", error: $0) })
+      let itemErrors: [DeserializationError] = (itemResult.errorsOrWarnings?.asArray() ?? [])
+        .map { .nestedObjectError(field: "\(index)", error: $0) }
+      errors.append(contentsOf: itemErrors)
     }
     if result.count != count,
        validator?.isPartialDeserializationAllowed == false {

@@ -107,8 +107,8 @@ extension LayeredBlock: ImageContaining {
 extension LayeredBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> LayeredBlock {
     let newChildren = try children.map {
-      LayeredBlock.Child(
-        content: try $0.content.updated(withStates: states),
+      try LayeredBlock.Child(
+        content: $0.content.updated(withStates: states),
         alignment: $0.alignment
       )
     }

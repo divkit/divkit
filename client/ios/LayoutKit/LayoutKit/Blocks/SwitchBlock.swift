@@ -50,6 +50,7 @@ public final class SwitchBlock: Block {
     assertionFailure("try to get weight for non resizable block")
     return .default
   }
+
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
     assertionFailure("try to get weight for non resizable block")
     return .default

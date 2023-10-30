@@ -26,7 +26,10 @@ final class DivBaseExtensionsTests: XCTestCase {
   func test_WhenReusesBlockWithAnotherDivCardID_ExpectToCancelPreviousBlockTimers() throws {
     let context = DivBlockModelingContext(scheduler: timer)
 
-    let firstBlock = try makeBlock(fromFile: "div-text-visibility-actions-visible", context: context)
+    let firstBlock = try makeBlock(
+      fromFile: "div-text-visibility-actions-visible",
+      context: context
+    )
 
     // trigger visibility actions for first time
     let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
@@ -45,7 +48,13 @@ final class DivBaseExtensionsTests: XCTestCase {
         imageHolderFactory: FakeImageHolderFactory()
       )
     )
-    let view2 = secondBlock.reuse(view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil, superview: nil)
+    let view2 = secondBlock.reuse(
+      view,
+      observer: nil,
+      overscrollDelegate: nil,
+      renderingDelegate: nil,
+      superview: nil
+    )
     view2.frame = rect
     view2.layoutIfNeeded()
     view.onVisibleBoundsChanged(from: rect, to: rect)
@@ -56,14 +65,25 @@ final class DivBaseExtensionsTests: XCTestCase {
   func test_WhenBlockHasVisibilityAndDisappearAction_DoNotShareVisibilityCounter() throws {
     let context = DivBlockModelingContext(scheduler: timer)
 
-    let blockVisibleFirst = try makeBlock(fromFile: "div-text-visibility-and-disappear-action", context: context)
+    let blockVisibleFirst = try makeBlock(
+      fromFile: "div-text-visibility-and-disappear-action",
+      context: context
+    )
 
     let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
     let view = blockVisibleFirst.makeBlockView()
     XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, timerScheduler: timer), 1)
 
     let invisibleRect: CGRect = .zero
-    XCTAssertEqual(getViewVisibilityCallCount(view: view, rect: rect, visibilityRect: invisibleRect, timerScheduler: timer), 1)
+    XCTAssertEqual(
+      getViewVisibilityCallCount(
+        view: view,
+        rect: rect,
+        visibilityRect: invisibleRect,
+        timerScheduler: timer
+      ),
+      1
+    )
   }
 
   private func expectVisibilityActionsToRun(

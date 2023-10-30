@@ -38,7 +38,9 @@ public final class PagerBlock: BlockWithTraits {
 
     if case .intrinsic = widthTrait, case .vertical = gallery.direction {
       guard gallery.items.map({ $0.content }).hasHorizontallyNonResizable else {
-        throw BlockError( "Pager block error: in intrinsic-width vertical pager all children have resizable width")
+        throw BlockError(
+          "Pager block error: in intrinsic-width vertical pager all children have resizable width"
+        )
       }
     }
   }

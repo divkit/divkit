@@ -146,7 +146,7 @@ struct AnyCalcExpression: CustomStringConvertible {
           return $0
         case let .number(value):
           guard let doubleValue = loadNumber(value) else {
-            throw Error.typeMismatch(symbol, try args.map(box.load))
+            throw try Error.typeMismatch(symbol, args.map(box.load))
           }
           return .number(doubleValue)
         case .string:
@@ -175,9 +175,9 @@ struct AnyCalcExpression: CustomStringConvertible {
       }
     }
     func equalArgs(_ lhs: CalcExpression.Value, _ rhs: CalcExpression.Value) throws -> Bool {
-      switch (
-        AnyCalcExpression.unwrap(try box.load(lhs)),
-        AnyCalcExpression.unwrap(try box.load(rhs))
+      switch try (
+        AnyCalcExpression.unwrap(box.load(lhs)),
+        AnyCalcExpression.unwrap(box.load(rhs))
       ) {
       case (nil, nil):
         return true
@@ -274,7 +274,7 @@ struct AnyCalcExpression: CustomStringConvertible {
               throw Error.undefinedSymbol(symbol)
             }
             guard let doubleValue = loadNumber(args[0].value) else {
-              throw Error.typeMismatch(symbol, try args.map(box.load))
+              throw try Error.typeMismatch(symbol, args.map(box.load))
             }
             switch doubleValue {
             case 1:
@@ -282,7 +282,7 @@ struct AnyCalcExpression: CustomStringConvertible {
             case 0:
               return args[2]
             default:
-              throw Error.typeMismatch(symbol, try args.map(box.load))
+              throw try Error.typeMismatch(symbol, args.map(box.load))
             }
           }
         default:
@@ -336,7 +336,7 @@ struct AnyCalcExpression: CustomStringConvertible {
             case let fn as CalcExpression.SymbolEvaluator:
               return try fn(argsToDouble(Array(args.dropFirst()), for: symbol))
             default:
-              throw Error.typeMismatch(symbol, try args.map(box.load))
+              throw try Error.typeMismatch(symbol, args.map(box.load))
             }
           }
         } else if case let .function(name, _) = symbol {
@@ -354,7 +354,7 @@ struct AnyCalcExpression: CustomStringConvertible {
             }
           } else if let fn = pureSymbols(.variable(name)) {
             do {
-              if let fn = funcEvaluator(for: symbol, try fn([])) {
+              if let fn = try funcEvaluator(for: symbol, fn([])) {
                 return fn
               }
             } catch {

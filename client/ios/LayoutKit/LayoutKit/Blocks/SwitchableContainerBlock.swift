@@ -220,9 +220,9 @@ extension SwitchableContainerBlock: ImageContaining {
 extension SwitchableContainerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> SwitchableContainerBlock {
     let newItems = try map(items) {
-      SwitchableContainerBlock.Item(
+      try SwitchableContainerBlock.Item(
         title: $0.title,
-        content: try $0.content.updated(withStates: states)
+        content: $0.content.updated(withStates: states)
       )
     }
 
@@ -280,5 +280,5 @@ extension SwitchableContainerBlock: LayoutCaching {
 }
 
 private func map<T, U>(_ tuple: (T, T), using block: (T) throws -> U) rethrows -> (U, U) {
-  return (try block(tuple.0), try block(tuple.1))
+  try (block(tuple.0), block(tuple.1))
 }

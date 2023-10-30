@@ -14,8 +14,8 @@ public final class TabViewModel: Equatable {
   ) throws {
     if contentsModel.pages.count != listModel.tabTitles.count {
       throw BlockError(
-        "Tab error: " + "pages count \(contentsModel.pages.count) " +
-        "is not equal to tabs count \(listModel.tabTitles.count)"
+        "Tab error: pages count \(contentsModel.pages.count) " +
+          "is not equal to tabs count \(listModel.tabTitles.count)"
       )
     }
 

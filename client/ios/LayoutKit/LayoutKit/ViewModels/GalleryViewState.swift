@@ -39,7 +39,10 @@ public struct GalleryViewState: ElementState, Equatable {
     public static func ==(_ lhs: Position, _ rhs: Position) -> Bool {
       let accuracy = CGFloat(1e-4)
       switch (lhs, rhs) {
-      case let (.offset(lhsValue, lhsFirstVisibleItemIndex), .offset(rhsValue, rhsFirstVisibleItemIndex)):
+      case let (
+        .offset(lhsValue, lhsFirstVisibleItemIndex),
+        .offset(rhsValue, rhsFirstVisibleItemIndex)
+      ):
         return lhsFirstVisibleItemIndex == rhsFirstVisibleItemIndex
           && lhsValue.isApproximatelyEqualTo(rhsValue, withAccuracy: accuracy)
       case let (.paging(index: lhs), .paging(index: rhs)):

@@ -25,7 +25,9 @@ public final class GalleryBlock: BlockWithTraits {
 
     if case .intrinsic = widthTrait, case .vertical = model.direction {
       guard model.items.map({ $0.content }).hasHorizontallyNonResizable else {
-        throw BlockError("Gallery block error: in intrinsic-width vertical gallery all children have resizable width")
+        throw BlockError(
+          "Gallery block error: in intrinsic-width vertical gallery all children have resizable width"
+        )
       }
     }
   }

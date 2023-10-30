@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
+import BasePublic
 import DivKit
 import LayoutKit
-import BasePublic
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID
@@ -26,7 +26,10 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
     }
 
     let expressionResolver = context.expressionResolver
-    let placeholderView = viewFactory(div.getShimmerStyle(expressionResolver: expressionResolver) ?? .default)
+    let placeholderView = viewFactory(
+      div.getShimmerStyle(expressionResolver: expressionResolver)
+        ?? .default
+    )
     let imageHolder = context.imageHolderFactory.make(
       div.resolveImageUrl(expressionResolver),
       .view(placeholderView)
@@ -38,7 +41,10 @@ public final class ShimmerImagePreviewExtension: DivExtensionHandler {
 extension DivBase {
   func getShimmerStyle(expressionResolver: ExpressionResolver) -> ShimmerStyle? {
     guard let shimmerExtensionsParams = extensions?.first(where: { $0.id == extensionID })?.params,
-          let style = try? ShimmerStyle(dictionary: shimmerExtensionsParams, expressionResolver: expressionResolver) else {
+          let style = try? ShimmerStyle(
+            dictionary: shimmerExtensionsParams,
+            expressionResolver: expressionResolver
+          ) else {
       return nil
     }
     return style

@@ -37,7 +37,6 @@ final class DivPersistentValuesStorageTests: XCTestCase {
     )
   }
 
-
   func test_getSameValueInDay() {
     let value = DivStoredValue(name: "var", value: "value", type: .string, lifetimeInSec: 86400)
     storage.set(value: value)
@@ -77,6 +76,6 @@ final class DivPersistentValuesStorageTests: XCTestCase {
   }
 
   private func shiftTime(days: Float) {
-    currentTimestamp += Milliseconds(days * 86400000)
+    currentTimestamp += Milliseconds(days * 86_400_000)
   }
 }

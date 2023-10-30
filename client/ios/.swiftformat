@@ -1,4 +1,5 @@
---exclude **/generated_sources
+--exclude DivKit/generated_sources
+--exclude DivKit/shared_data_generated_sources
 --disable redundantSelf
 --disable redundantFileprivate
 --disable wrapMultilineStatementBraces

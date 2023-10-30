@@ -94,8 +94,8 @@ private func sort(blockSizes: [ConstrainedBlockSize])
   )
 }
 
-private extension CGFloat {
-  func safeDivide(_ divider: CGFloat) -> CGFloat {
+extension CGFloat {
+  fileprivate func safeDivide(_ divider: CGFloat) -> CGFloat {
     divider.isZero ? 0 : (self / divider)
   }
 }

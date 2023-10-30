@@ -136,7 +136,7 @@ private func makeErrorListBlock(errors: [String]) -> Block {
   }
 
   return try! GalleryBlock(
-    gaps: [0] + Array.init(repeating: 10, count: errorBlocks.count),
+    gaps: [0] + Array(repeating: 10, count: errorBlocks.count),
     children: errorBlocks,
     path: rootPath,
     direction: .vertical,

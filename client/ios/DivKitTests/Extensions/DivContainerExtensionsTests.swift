@@ -40,7 +40,7 @@ final class DivContainerExtensionsTests: XCTestCase {
           DivBlockModelingError(
             "DivImage without aspect has wrap_content height",
             path: .root + "container" + "0"
-          )
+          ),
         ]
       )
     )
@@ -173,9 +173,9 @@ private func makeBlock(fromFile filename: String) throws -> Block {
 }
 
 extension DivBlockModelingError: Equatable {
-  public static func == (lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
-    return lhs.message == rhs.message
-    && lhs.path == rhs.path
-    && lhs.causes.map { $0.description } == rhs.causes.map { $0.description }
+  public static func ==(lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
+    lhs.message == rhs.message
+      && lhs.path == rhs.path
+      && lhs.causes.map { $0.description } == rhs.causes.map { $0.description }
   }
 }

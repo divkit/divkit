@@ -35,7 +35,7 @@ final class FixedLengthMaskFormatterTests: XCTestCase {
       .init(char: "1", index: text.index(text.startIndex, offsetBy: 4)),
       .init(char: "2", index: text.index(text.startIndex, offsetBy: 5)),
       .init(char: "3", index: text.index(text.startIndex, offsetBy: 6)),
-      .init(char: "4", index: text.index(text.startIndex, offsetBy: 9))
+      .init(char: "4", index: text.index(text.startIndex, offsetBy: 9)),
     ]
     XCTAssertEqual(data, rawData)
   }
@@ -46,11 +46,23 @@ final class FixedLengthMaskFormatterTests: XCTestCase {
     // "0123456789"
     // "+7 (123) 4"
     // "    012  3"
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, false)).cursorPosition, 6)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(3, false)).cursorPosition, 7)
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(2, false)).cursorPosition,
+      6
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(3, false)).cursorPosition,
+      7
+    )
 
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(3, true)).cursorPosition, 9)
-    XCTAssertEqual(formatter.formatted(rawText: rawText, rawCursorPosition: .init(4, true)).cursorPosition, 10)
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(3, true)).cursorPosition,
+      9
+    )
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(4, true)).cursorPosition,
+      10
+    )
   }
 }
 

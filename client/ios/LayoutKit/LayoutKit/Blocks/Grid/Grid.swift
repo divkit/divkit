@@ -19,7 +19,8 @@ struct Grid {
   init(spans: [GridBlock.Span], columnCount: Int) throws {
     guard !spans.isEmpty else { throw BlockError("Grid block error: empty items") }
     try spans.forEach { try $0.validate() }
-    guard columnCount > 0 else { throw BlockError("Grid block error: invalid column count " + "\(columnCount)") }
+    guard columnCount > 0
+    else { throw BlockError("Grid block error: invalid column count " + "\(columnCount)") }
 
     let resultInitialRow = [Int?](repeating: nil, times: try! UInt(value: columnCount))
     var result = [resultInitialRow]

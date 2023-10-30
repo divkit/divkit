@@ -56,7 +56,7 @@ final class UIStatePayloadFactory {
 
 extension UIStatePayload.Error {
   var description: String {
-    return message
+    message
   }
 
   init(_ error: DivError) {
