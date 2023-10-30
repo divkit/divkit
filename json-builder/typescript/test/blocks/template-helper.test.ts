@@ -87,8 +87,45 @@ describe('templateHelper', () => {
             template5: new DivImage({
                 image_url: reference('imgUrl'),
             }),
+            template7: new DivContainer({
+                orientation: reference('orient'),
+                items: [
+                    new DivContainer({
+                        items: reference('title_items'),
+                    }),
+                ],
+            }),
+            template8: new DivContainer({
+                items: reference('title_items'),
+            }),
         };
+
         const helper = templateHelper(templates);
+
+        helper.template1({
+            //@ts-expect-error wrong type
+            vText1: 1,
+            vText2: 'test',
+            vMaxlines: 2,
+            vPaddings: { left: 4 },
+        });
+
+        // expected no error
+        helper.template7({
+            orient: 'horizontal',
+            title_items: [
+                new DivText({
+                    text: 'hello',
+                }),
+            ],
+        });
+
+        helper.template7({
+            orient: 'horizontal',
+            //@ts-expect-error wrong type
+            title_items: [1],
+        });
+
         const block = helper.template1({
             vText1: 'test',
             vText2: 'test',
