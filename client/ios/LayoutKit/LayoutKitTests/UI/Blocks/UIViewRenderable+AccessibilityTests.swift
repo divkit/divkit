@@ -182,11 +182,18 @@ private class ImageHolderStub: ImageHolder {
 
   func requestImageWithCompletion(
     _: @escaping ((Image?) -> Void)
-  ) -> Cancellable? { EmptyCancellable() }
+  ) -> Cancellable? {
+    EmptyCancellable()
+  }
 
   func reused(
-    with _: ImagePlaceholder?, remoteImageURL _: URL?
-  ) -> ImageHolder? { nil }
+    with _: ImagePlaceholder?,
+    remoteImageURL _: URL?
+  ) -> ImageHolder? {
+    nil
+  }
 
-  func equals(_: ImageHolder) -> Bool { false }
+  func equals(_: ImageHolder) -> Bool {
+    false
+  }
 }

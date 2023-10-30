@@ -14,7 +14,6 @@ public enum SnapshotTestKit {
   public static func testSnapshot(
     _ snapshot: UIImage,
     referenceURL: URL,
-    diffDirPath _: String,
     mode: TestMode
   ) {
     let deviceModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]

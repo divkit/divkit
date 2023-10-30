@@ -4,7 +4,7 @@ import XCTest
 
 final class MaskValidatorTests: XCTestCase {
   func test_removingSymbol() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
     // "0123456789012345678"
     // "   ab cde f g hi j "
@@ -19,7 +19,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 
   func test_removingSymbolRange() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
     // "0123456789012345678"
     // "   ab cde f g hi j "
@@ -35,7 +35,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 
   func test_cursorAfterRemovingSymbol() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
     // "0123456789012345678"
     // "   ab cde f g hi j "
@@ -51,7 +51,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 
   func test_cursorAfterRemovingSymbolRange() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
     // "0123456789012345678"
     // "   ab cde f g hi j "
@@ -80,7 +80,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 
   func test_addSymbols() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
     // "0123456789012345678"
     // "   ab cde f g hi j "
@@ -112,7 +112,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 
   func test_cursorAfterAddSymbols() {
-    let validator = makeMaskValidator(alwaysVisible: false)
+    let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")
 
     // "0123456789012345678"
@@ -142,7 +142,7 @@ final class MaskValidatorTests: XCTestCase {
   }
 }
 
-private func makeMaskValidator(alwaysVisible _: Bool) -> MaskValidator {
+private func makeMaskValidator() -> MaskValidator {
   MaskValidator(formatter: FakeMaskFormatter())
 }
 

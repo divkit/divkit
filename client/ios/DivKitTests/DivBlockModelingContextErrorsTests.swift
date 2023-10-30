@@ -50,8 +50,10 @@ private struct FakeExtensionHandler: DivExtensionHandler {
 private struct FakeStateInterceptor: DivStateInterceptor {
   var id: String
 
-  func getAppropriateState(divState _: DivState, context _: DivBlockModelingContext) -> DivState
-    .State? {
+  func getAppropriateState(
+    divState _: DivState,
+    context _: DivBlockModelingContext
+  ) -> DivState.State? {
     nil
   }
 }

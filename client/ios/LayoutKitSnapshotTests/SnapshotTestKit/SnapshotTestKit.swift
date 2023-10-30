@@ -38,7 +38,6 @@ public enum SnapshotTestKit {
     testSnapshot(
       snapshot,
       referenceURL: referenceURL,
-      diffDirPath: referencesURL.path,
       mode: mode
     )
   }
@@ -46,7 +45,6 @@ public enum SnapshotTestKit {
   public static func testSnapshot(
     _ snapshot: UIImage,
     referenceURL: URL,
-    diffDirPath: String,
     mode: TestMode
   ) {
     let deviceModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]
@@ -75,7 +73,6 @@ public enum SnapshotTestKit {
           testSnapshot(
             snapshot,
             referenceURL: referenceURL,
-            diffDirPath: diffDirPath,
             mode: .record
           )
         }

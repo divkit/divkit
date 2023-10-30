@@ -5,7 +5,7 @@ import BaseTinyPublic
 
 final class PhoneMaskFormatterTests: XCTestCase {
   func test_rawTextFormatting() {
-    let formatter = makeFormatter(alwaysVisible: false)
+    let formatter = makeFormatter()
 
     formatter.formatted(rawText: "").checkInputData(text: "", rawText: "")
     formatter.formatted(rawText: "101").checkInputData(text: "+10 (1", rawText: "101")
@@ -25,7 +25,7 @@ final class PhoneMaskFormatterTests: XCTestCase {
   }
 
   func test_inputData() {
-    let formatter = makeFormatter(alwaysVisible: false)
+    let formatter = makeFormatter()
     let rawText = "12345"
     let text = "+12 (345)"
     let data = formatter.formatted(rawText: rawText).rawData
@@ -42,7 +42,7 @@ final class PhoneMaskFormatterTests: XCTestCase {
   }
 
   func test_cursorPosition() {
-    let formatter = makeFormatter(alwaysVisible: false)
+    let formatter = makeFormatter()
     let rawText = "123456"
     // "01234567890"
     // "+12 (345) 6"
@@ -79,7 +79,7 @@ final class PhoneMaskFormatterTests: XCTestCase {
   }
 }
 
-private func makeFormatter(alwaysVisible _: Bool) -> PhoneMaskFormatter {
+private func makeFormatter() -> PhoneMaskFormatter {
   PhoneMaskFormatter(
     masksByCountryCode: masksByCountryCode,
     extraSymbols: "00"

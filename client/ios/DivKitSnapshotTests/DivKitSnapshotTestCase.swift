@@ -185,7 +185,6 @@ open class DivKitSnapshotTestCase: XCTestCase {
       SnapshotTestKit.testSnapshot(
         image,
         referenceURL: referenceUrl,
-        diffDirPath: referenceUrl.path,
         mode: mode
       )
       checkSnapshotsForAnotherScales(currentScale, caseName: caseName, stepName: stepName)
