@@ -147,7 +147,20 @@ export interface ActionSetVariable {
     value: TypedValue;
 }
 
-export type TypedAction = ActionSetVariable;
+export interface ActionArrayRemoveValue {
+    type: 'array_remove_value';
+    variable_name: string;
+    index: number;
+}
+
+export interface ActionArrayInsertValue {
+    type: 'array_insert_value';
+    variable_name: string;
+    index?: number;
+    value: TypedValue;
+}
+
+export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue;
 
 export interface Action {
     log_id: string;

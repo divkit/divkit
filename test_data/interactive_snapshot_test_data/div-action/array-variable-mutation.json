@@ -2,7 +2,8 @@
   "description": "Array variable mutation",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

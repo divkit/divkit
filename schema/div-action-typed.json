@@ -1,16 +1,10 @@
 {
   "anyOf": [
     {
-      "$ref": "div-action-array-insert-value.json",
-      "platforms": [
-        "ios"
-      ]
+      "$ref": "div-action-array-insert-value.json"
     },
     {
-      "$ref": "div-action-array-remove-value.json",
-      "platforms": [
-        "ios"
-      ]
+      "$ref": "div-action-array-remove-value.json"
     },
     {
       "$ref": "div-action-set-variable.json"

@@ -71,6 +71,7 @@
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
+    import { arrayInsert, arrayRemove } from '../actions/array';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -629,6 +630,10 @@
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
+        execActionInternal(getJsonWithVars(action));
+    }
+
+    function execActionInternal(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
@@ -761,6 +766,12 @@
                     }
                     break;
                 }
+                case 'array_insert_value':
+                    arrayInsert(variables, logError, actionTyped);
+                    break;
+                case 'array_remove_value':
+                    arrayRemove(variables, logError, actionTyped);
+                    break;
                 default: {
                     logError(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -798,7 +809,7 @@
                             }
                         }
                     } else if (schema === 'div-action') {
-                        execAction(action);
+                        execActionInternal(action);
                         await tick();
                     } else if (action.log_id) {
                         execCustomAction(action as Action & { url: string });
@@ -806,7 +817,7 @@
                     }
                 }
             } else if (actionTyped) {
-                execAction(action);
+                execActionInternal(action);
             }
         }
         actions.forEach(action => {
@@ -993,7 +1004,7 @@
         processTemplate,
         genId,
         genClass,
-        execAction,
+        execAction: execActionInternal,
         execAnyActions,
         execCustomAction,
         isRunning,
@@ -1294,7 +1305,7 @@
                                 trigger.actions.forEach(action => {
                                     const resultAction = getJsonWithVars(action);
                                     if (resultAction.log_id) {
-                                        execAction(resultAction as Action);
+                                        execActionInternal(resultAction as Action);
                                     }
                                 });
                             }
