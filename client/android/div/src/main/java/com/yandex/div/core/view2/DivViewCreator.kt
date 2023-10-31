@@ -27,6 +27,7 @@ import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
@@ -89,7 +90,7 @@ internal class DivViewCreator @Inject constructor(
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver): View {
         val view = defaultVisit(data, resolver) as ViewGroup
-        data.value.items.forEach { childData ->
+        data.value.buildItems().forEach { childData ->
             view.addView(create(childData, resolver))
         }
         return view

@@ -1,5 +1,6 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div2.Div
 
 /**
@@ -165,7 +166,7 @@ private val Div.items: List<Div>
             is Div.Custom -> emptyList()
             is Div.Select -> emptyList()
             is Div.Video -> emptyList()
-            is Div.Container -> value.items
+            is Div.Container -> value.buildItems()
             is Div.Grid -> value.items
             is Div.Gallery -> value.items
             is Div.Pager -> value.items

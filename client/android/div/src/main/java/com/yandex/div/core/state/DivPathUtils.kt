@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivState
@@ -105,7 +106,7 @@ internal object DivPathUtils {
                 }
             }
             is Div.Tabs -> value.items.map { it.div }.findRecursively(divId)
-            is Div.Container -> value.items.findRecursively(divId)
+            is Div.Container -> value.buildItems().findRecursively(divId)
             is Div.Grid -> value.items.findRecursively(divId)
             is Div.Gallery -> value.items.findRecursively(divId)
             is Div.Pager -> value.items.findRecursively(divId)

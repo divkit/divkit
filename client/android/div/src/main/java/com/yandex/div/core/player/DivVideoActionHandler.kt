@@ -3,6 +3,7 @@ package com.yandex.div.core.player
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
@@ -56,7 +57,7 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivContainer -> {
-                div.items.forEach { item ->
+                div.buildItems().forEach { item ->
                     findDivVideoWithId(item.value(), id)?.let {
                         return it
                     }

@@ -11,6 +11,7 @@ import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import java.util.concurrent.atomic.AtomicBoolean
@@ -74,7 +75,7 @@ class DivPreloader internal constructor(
         }
 
         override fun visit(data: Div.Container, resolver: ExpressionResolver) {
-            data.value.items.forEach { visit(it, resolver) }
+            data.value.buildItems().forEach { visit(it, resolver) }
             defaultVisit(data, resolver)
         }
 

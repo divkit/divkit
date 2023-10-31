@@ -18,7 +18,6 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
@@ -29,6 +28,7 @@ import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -57,7 +57,7 @@ internal class DivContainerBinder @Inject constructor(
     override fun bindView(view: ViewGroup, div: DivContainer, divView: Div2View, path: DivStatePath) {
         @Suppress("UNCHECKED_CAST")
         val divHolderView = view as DivHolderView<DivContainer>
-        var oldDiv = divHolderView.div
+        val oldDiv = divHolderView.div
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
@@ -74,7 +74,6 @@ internal class DivContainerBinder @Inject constructor(
 
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
-        val areDivsReplaceable = DivComparator.areDivsReplaceable(oldDiv, div, resolver)
         when (view) {
             is DivLinearLayout -> view.bindProperties(div, resolver)
             is DivWrapLayout -> view.bindProperties(div, resolver)
@@ -83,13 +82,23 @@ internal class DivContainerBinder @Inject constructor(
         for (childView in view.children) {
             divView.unbindViewFromDiv(childView)
         }
-        if (!areDivsReplaceable && oldDiv != null) {
-            view.replaceWithReuse(oldDiv, div, divView)
-            oldDiv = null
+
+        val items = div.buildItems()
+        val oldItems = oldDiv?.buildItems()?.let {
+            when {
+                div === oldDiv -> it
+                DivComparator.areValuesReplaceable(oldDiv, div, resolver) &&
+                    DivComparator.areChildrenReplaceable(it, items, resolver) -> it
+                else -> {
+                    view.replaceWithReuse(it, items, divView)
+                    null
+                }
+            }
         }
-        for (i in div.items.indices) {
-            if (div.items[i].value().hasSightActions) {
-                divView.bindViewToDiv(view.getChildAt(i), div.items[i])
+
+        items.forEachIndexed { i, item ->
+            if (item.value().hasSightActions) {
+                divView.bindViewToDiv(view.getChildAt(i), item)
             }
         }
 
@@ -97,10 +106,10 @@ internal class DivContainerBinder @Inject constructor(
         var childrenWithIncorrectHeight = 0
 
         var viewsPositionDiff = 0
-        for (containerIndex in div.items.indices) {
-            val childDivValue = div.items[containerIndex].value()
+        val binder = divBinder.get()
+        items.forEachIndexed { containerIndex, item ->
+            val childDivValue = item.value()
             val childView = view.getChildAt(containerIndex + viewsPositionDiff)
-            val childDivId = childDivValue.id
 
             if (view is DivWrapLayout) {
                 div.checkCrossAxisSize(childDivValue, resolver, errorCollector)
@@ -110,34 +119,31 @@ internal class DivContainerBinder @Inject constructor(
             }
 
             // applying div patch
-            if (childDivId != null) {
-                val patchViewsToAdd = divPatchManager.createViewsForId(divView, childDivId)
-                val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)
-                if (patchViewsToAdd != null && patchDivs != null) {
-                    view.removeViewAt(containerIndex + viewsPositionDiff)
-                    for (patchIndex in patchViewsToAdd.indices) {
-                        val patchDivValue = patchDivs[patchIndex].value()
-                        val patchView = patchViewsToAdd[patchIndex]
-                        view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
-                        observeChildViewAlignment(div, patchDivValue, patchView, resolver, divHolderView)
-                        if (patchDivValue.hasSightActions) {
-                            divView.bindViewToDiv(patchView, patchDivs[patchIndex])
-                        }
+            childDivValue.id?.let { id ->
+                val patchViewsToAdd = divPatchManager.createViewsForId(divView, id) ?: return@let
+                val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, id) ?: return@let
+                view.removeViewAt(containerIndex + viewsPositionDiff)
+                patchViewsToAdd.forEachIndexed { patchIndex, patchView ->
+                    val patchDivValue = patchDivs[patchIndex].value()
+                    view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
+                    observeChildViewAlignment(div, patchDivValue, patchView, resolver, divHolderView)
+                    if (patchDivValue.hasSightActions) {
+                        divView.bindViewToDiv(patchView, patchDivs[patchIndex])
                     }
-                    viewsPositionDiff += patchViewsToAdd.size - 1
-                    continue
                 }
+                viewsPositionDiff += patchViewsToAdd.size - 1
+                return@forEachIndexed
             }
 
-            divBinder.get().bind(childView, div.items[containerIndex], divView, path)
+            binder.bind(childView, item, divView, path)
             observeChildViewAlignment(div, childDivValue, childView, resolver, divHolderView)
         }
 
-        view.trackVisibilityActions(div.items, oldDiv?.items, divView)
+        view.trackVisibilityActions(items, oldItems, divView)
 
-        val widthAllChildrenAreIncorrect = childrenWithIncorrectWidth == div.items.size
+        val widthAllChildrenAreIncorrect = childrenWithIncorrectWidth == items.size
         val widthHasMatchParentChild = childrenWithIncorrectWidth > 0
-        val heightAllChildrenAreIncorrect = childrenWithIncorrectHeight == div.items.size
+        val heightAllChildrenAreIncorrect = childrenWithIncorrectHeight == items.size
         val heightHasMatchParentChild = childrenWithIncorrectHeight > 0
 
         val hasIncorrectSize = !div.isWrapContainer(resolver) && when {
@@ -151,11 +157,11 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
-    private fun ViewGroup.replaceWithReuse(oldDiv: DivContainer, newDiv: DivContainer, divView: Div2View) {
+    private fun ViewGroup.replaceWithReuse(oldItems: List<Div>, newItems: List<Div>, divView: Div2View) {
         val resolver = divView.expressionResolver
 
         val oldChildren = mutableMapOf<Div, View>()
-        oldDiv.items.zip(children.toList()) { childDiv, child ->
+        oldItems.zip(children.toList()) { childDiv, child ->
             oldChildren[childDiv] = child
         }
 
@@ -163,7 +169,7 @@ internal class DivContainerBinder @Inject constructor(
 
         val createViewIndices = mutableListOf<Int>()
 
-        newDiv.items.forEachIndexed { index, newChild ->
+        newItems.forEachIndexed { index, newChild ->
             val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
                 if (oldChildDiv.isBranch) {
                     newChild.type == oldChildDiv.type
@@ -182,7 +188,7 @@ internal class DivContainerBinder @Inject constructor(
         }
 
         createViewIndices.forEach { index ->
-            val newChildDiv = newDiv.items[index]
+            val newChildDiv = newItems[index]
 
             val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
                 oldChildDiv.type == newChildDiv.type
@@ -411,16 +417,11 @@ internal class DivContainerBinder @Inject constructor(
     }
 
     fun setDataWithoutBinding(view: ViewGroup, div: DivContainer) {
-        when (view) {
-            is DivWrapLayout -> view.div = div
-            is DivLinearLayout -> view.div = div
-            is DivFrameLayout -> view.div = div
-        }
-        for (containerIndex in div.items.indices) {
-            divBinder.get().setDataWithoutBinding(
-                view.getChildAt(containerIndex),
-                div.items[containerIndex]
-            )
+        @Suppress("UNCHECKED_CAST")
+        (view as DivHolderView<DivContainer>).div = div
+        val binder = divBinder.get()
+        div.buildItems().forEachIndexed { index, item ->
+            binder.setDataWithoutBinding(view.getChildAt(index), item)
         }
     }
 }

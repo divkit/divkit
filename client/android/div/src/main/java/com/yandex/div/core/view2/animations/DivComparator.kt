@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.animations
 
 import com.yandex.div.core.view2.divs.isWrapContainer
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -25,24 +26,6 @@ internal object DivComparator {
         return areDivsReplaceable(oldState.div, newState.div, resolver)
     }
 
-    fun areDivsReplaceable(
-        old: DivContainer?,
-        new: DivContainer?,
-        resolver: ExpressionResolver
-    ): Boolean {
-        if (old?.javaClass != new?.javaClass) {
-            return false
-        }
-        if (old == null || new == null || old === new) {
-            return true
-        }
-        return areValuesReplaceable(old, new, resolver) && areChildrenReplaceable(
-            old.items,
-            new.items,
-            resolver
-        )
-    }
-
     fun areDivsReplaceable(old: Div?, new: Div?, resolver: ExpressionResolver): Boolean {
         if (old?.javaClass != new?.javaClass) {
             return false
@@ -57,7 +40,7 @@ internal object DivComparator {
         )
     }
 
-    private fun areValuesReplaceable(
+    fun areValuesReplaceable(
         old: DivBase,
         new: DivBase,
         resolver: ExpressionResolver
@@ -79,7 +62,7 @@ internal object DivComparator {
         return true
     }
 
-    private fun areChildrenReplaceable(
+    fun areChildrenReplaceable(
         oldChildren: List<Div>,
         newChildren: List<Div>,
         resolver: ExpressionResolver
@@ -95,7 +78,7 @@ internal object DivComparator {
 
     private fun extractChildren(div: Div): List<Div> {
         return when (div) {
-            is Div.Container -> div.value.items
+            is Div.Container -> div.value.buildItems()
             is Div.Grid -> div.value.items
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()

@@ -3,6 +3,7 @@ package com.yandex.div.sizeprovider
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -26,7 +27,7 @@ class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber 
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.items.forEach { visit(it, resolver) }
+        data.value.buildItems().forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
