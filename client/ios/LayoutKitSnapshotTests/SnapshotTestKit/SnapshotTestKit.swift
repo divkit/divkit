@@ -30,11 +30,6 @@ public enum SnapshotTestKit {
       return
     }
 
-    let referencesURL = URL(
-      fileURLWithPath: ReferenceSet.path,
-      isDirectory: true
-    ).appendingPathComponent(directory)
-
     testSnapshot(
       snapshot,
       referenceURL: referenceURL,
