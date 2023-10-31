@@ -216,7 +216,7 @@ class Input internal constructor(
         val selectedActions: Property<List<Action>>?,
         /**
          * Horizontal text alignment.
-         * Default value: `left`.
+         * Default value: `start`.
          */
         val textAlignmentHorizontal: Property<AlignmentHorizontal>?,
         /**

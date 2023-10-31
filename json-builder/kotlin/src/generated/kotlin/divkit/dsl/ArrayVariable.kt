@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [arrayVariable].
  * 
- * Required parameters: `value, name`.
+ * Required parameters: `value, type, name`.
  */
 @Generated
 class ArrayVariable internal constructor(

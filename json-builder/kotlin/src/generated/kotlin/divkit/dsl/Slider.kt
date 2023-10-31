@@ -52,6 +52,7 @@ class Slider internal constructor(
             maxValue = additive.maxValue ?: properties.maxValue,
             minValue = additive.minValue ?: properties.minValue,
             paddings = additive.paddings ?: properties.paddings,
+            ranges = additive.ranges ?: properties.ranges,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             secondaryValueAccessibility = additive.secondaryValueAccessibility ?: properties.secondaryValueAccessibility,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -147,6 +148,10 @@ class Slider internal constructor(
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
+        /**
+         * Section style.
+         */
+        val ranges: Property<List<Range>>?,
         /**
          * Merges cells in a string of the [grid](div-grid.md) element.
          */
@@ -261,6 +266,7 @@ class Slider internal constructor(
             result.tryPutProperty("max_value", maxValue)
             result.tryPutProperty("min_value", minValue)
             result.tryPutProperty("paddings", paddings)
+            result.tryPutProperty("ranges", ranges)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("secondary_value_accessibility", secondaryValueAccessibility)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -287,6 +293,63 @@ class Slider internal constructor(
             return result
         }
     }
+
+    /**
+     * Can be created using the method [sliderRange].
+     */
+    @Generated
+    class Range internal constructor(
+        @JsonIgnore
+        val properties: Properties,
+    ) {
+        @JsonAnyGetter
+        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
+
+        operator fun plus(additive: Properties): Range = Range(
+            Properties(
+                end = additive.end ?: properties.end,
+                margins = additive.margins ?: properties.margins,
+                start = additive.start ?: properties.start,
+                trackActiveStyle = additive.trackActiveStyle ?: properties.trackActiveStyle,
+                trackInactiveStyle = additive.trackInactiveStyle ?: properties.trackInactiveStyle,
+            )
+        )
+
+        class Properties internal constructor(
+            /**
+             * End of section.
+             */
+            val end: Property<Int>?,
+            /**
+             * Section margins. Only uses horizontal margins.
+             */
+            val margins: Property<EdgeInsets>?,
+            /**
+             * Start of section.
+             */
+            val start: Property<Int>?,
+            /**
+             * Style of the active part of a scale.
+             */
+            val trackActiveStyle: Property<Drawable>?,
+            /**
+             * Style of the inactive part of a scale.
+             */
+            val trackInactiveStyle: Property<Drawable>?,
+        ) {
+            internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
+                val result = mutableMapOf<String, Any>()
+                result.putAll(properties)
+                result.tryPutProperty("end", end)
+                result.tryPutProperty("margins", margins)
+                result.tryPutProperty("start", start)
+                result.tryPutProperty("track_active_style", trackActiveStyle)
+                result.tryPutProperty("track_inactive_style", trackInactiveStyle)
+                return result
+            }
+        }
+    }
+
 
     /**
      * Can be created using the method [sliderTextStyle].
@@ -367,6 +430,7 @@ class Slider internal constructor(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -410,6 +474,7 @@ fun DivScope.slider(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    ranges: List<Slider.Range>? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -451,6 +516,7 @@ fun DivScope.slider(
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
+        ranges = valueOrNull(ranges),
         rowSpan = valueOrNull(rowSpan),
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
         selectedActions = valueOrNull(selectedActions),
@@ -494,6 +560,7 @@ fun DivScope.slider(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -537,6 +604,7 @@ fun DivScope.sliderProps(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    ranges: List<Slider.Range>? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -577,6 +645,7 @@ fun DivScope.sliderProps(
     maxValue = valueOrNull(maxValue),
     minValue = valueOrNull(minValue),
     paddings = valueOrNull(paddings),
+    ranges = valueOrNull(ranges),
     rowSpan = valueOrNull(rowSpan),
     secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
     selectedActions = valueOrNull(selectedActions),
@@ -619,6 +688,7 @@ fun DivScope.sliderProps(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -662,6 +732,7 @@ fun TemplateScope.sliderRefs(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    ranges: ReferenceProperty<List<Slider.Range>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -702,6 +773,7 @@ fun TemplateScope.sliderRefs(
     maxValue = maxValue,
     minValue = minValue,
     paddings = paddings,
+    ranges = ranges,
     rowSpan = rowSpan,
     secondaryValueAccessibility = secondaryValueAccessibility,
     selectedActions = selectedActions,
@@ -744,6 +816,7 @@ fun TemplateScope.sliderRefs(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -787,6 +860,7 @@ fun Slider.override(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    ranges: List<Slider.Range>? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -828,6 +902,7 @@ fun Slider.override(
         maxValue = valueOrNull(maxValue) ?: properties.maxValue,
         minValue = valueOrNull(minValue) ?: properties.minValue,
         paddings = valueOrNull(paddings) ?: properties.paddings,
+        ranges = valueOrNull(ranges) ?: properties.ranges,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility) ?: properties.secondaryValueAccessibility,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
@@ -871,6 +946,7 @@ fun Slider.override(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -914,6 +990,7 @@ fun Slider.defer(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    ranges: ReferenceProperty<List<Slider.Range>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -955,6 +1032,7 @@ fun Slider.defer(
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
         paddings = paddings ?: properties.paddings,
+        ranges = ranges ?: properties.ranges,
         rowSpan = rowSpan ?: properties.rowSpan,
         secondaryValueAccessibility = secondaryValueAccessibility ?: properties.secondaryValueAccessibility,
         selectedActions = selectedActions ?: properties.selectedActions,
@@ -1020,6 +1098,7 @@ fun Slider.evaluate(
         maxValue = maxValue ?: properties.maxValue,
         minValue = minValue ?: properties.minValue,
         paddings = properties.paddings,
+        ranges = properties.ranges,
         rowSpan = rowSpan ?: properties.rowSpan,
         secondaryValueAccessibility = properties.secondaryValueAccessibility,
         selectedActions = properties.selectedActions,
@@ -1063,6 +1142,7 @@ fun Slider.evaluate(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1106,6 +1186,7 @@ fun Component<Slider>.override(
     maxValue: Int? = null,
     minValue: Int? = null,
     paddings: EdgeInsets? = null,
+    ranges: List<Slider.Range>? = null,
     rowSpan: Int? = null,
     secondaryValueAccessibility: Accessibility? = null,
     selectedActions: List<Action>? = null,
@@ -1148,6 +1229,7 @@ fun Component<Slider>.override(
         maxValue = valueOrNull(maxValue),
         minValue = valueOrNull(minValue),
         paddings = valueOrNull(paddings),
+        ranges = valueOrNull(ranges),
         rowSpan = valueOrNull(rowSpan),
         secondaryValueAccessibility = valueOrNull(secondaryValueAccessibility),
         selectedActions = valueOrNull(selectedActions),
@@ -1191,6 +1273,7 @@ fun Component<Slider>.override(
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param paddings Internal margins from the element stroke.
+ * @param ranges Section style.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param secondaryValueAccessibility Accessibility settings for the second pointer.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1234,6 +1317,7 @@ fun Component<Slider>.defer(
     maxValue: ReferenceProperty<Int>? = null,
     minValue: ReferenceProperty<Int>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
+    ranges: ReferenceProperty<List<Slider.Range>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     secondaryValueAccessibility: ReferenceProperty<Accessibility>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1276,6 +1360,7 @@ fun Component<Slider>.defer(
         maxValue = maxValue,
         minValue = minValue,
         paddings = paddings,
+        ranges = ranges,
         rowSpan = rowSpan,
         secondaryValueAccessibility = secondaryValueAccessibility,
         selectedActions = selectedActions,
@@ -1342,6 +1427,7 @@ fun Component<Slider>.evaluate(
         maxValue = maxValue,
         minValue = minValue,
         paddings = null,
+        ranges = null,
         rowSpan = rowSpan,
         secondaryValueAccessibility = null,
         selectedActions = null,
@@ -1376,6 +1462,149 @@ operator fun Component<Slider>.plus(additive: Slider.Properties): Component<Slid
 
 @Generated
 fun Slider.asList() = listOf(this)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun DivScope.sliderRange(
+    `use named arguments`: Guard = Guard.instance,
+    end: Int? = null,
+    margins: EdgeInsets? = null,
+    start: Int? = null,
+    trackActiveStyle: Drawable? = null,
+    trackInactiveStyle: Drawable? = null,
+): Slider.Range = Slider.Range(
+    Slider.Range.Properties(
+        end = valueOrNull(end),
+        margins = valueOrNull(margins),
+        start = valueOrNull(start),
+        trackActiveStyle = valueOrNull(trackActiveStyle),
+        trackInactiveStyle = valueOrNull(trackInactiveStyle),
+    )
+)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun DivScope.sliderRangeProps(
+    `use named arguments`: Guard = Guard.instance,
+    end: Int? = null,
+    margins: EdgeInsets? = null,
+    start: Int? = null,
+    trackActiveStyle: Drawable? = null,
+    trackInactiveStyle: Drawable? = null,
+) = Slider.Range.Properties(
+    end = valueOrNull(end),
+    margins = valueOrNull(margins),
+    start = valueOrNull(start),
+    trackActiveStyle = valueOrNull(trackActiveStyle),
+    trackInactiveStyle = valueOrNull(trackInactiveStyle),
+)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun TemplateScope.sliderRangeRefs(
+    `use named arguments`: Guard = Guard.instance,
+    end: ReferenceProperty<Int>? = null,
+    margins: ReferenceProperty<EdgeInsets>? = null,
+    start: ReferenceProperty<Int>? = null,
+    trackActiveStyle: ReferenceProperty<Drawable>? = null,
+    trackInactiveStyle: ReferenceProperty<Drawable>? = null,
+) = Slider.Range.Properties(
+    end = end,
+    margins = margins,
+    start = start,
+    trackActiveStyle = trackActiveStyle,
+    trackInactiveStyle = trackInactiveStyle,
+)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun Slider.Range.override(
+    `use named arguments`: Guard = Guard.instance,
+    end: Int? = null,
+    margins: EdgeInsets? = null,
+    start: Int? = null,
+    trackActiveStyle: Drawable? = null,
+    trackInactiveStyle: Drawable? = null,
+): Slider.Range = Slider.Range(
+    Slider.Range.Properties(
+        end = valueOrNull(end) ?: properties.end,
+        margins = valueOrNull(margins) ?: properties.margins,
+        start = valueOrNull(start) ?: properties.start,
+        trackActiveStyle = valueOrNull(trackActiveStyle) ?: properties.trackActiveStyle,
+        trackInactiveStyle = valueOrNull(trackInactiveStyle) ?: properties.trackInactiveStyle,
+    )
+)
+
+/**
+ * @param end End of section.
+ * @param margins Section margins. Only uses horizontal margins.
+ * @param start Start of section.
+ * @param trackActiveStyle Style of the active part of a scale.
+ * @param trackInactiveStyle Style of the inactive part of a scale.
+ */
+@Generated
+fun Slider.Range.defer(
+    `use named arguments`: Guard = Guard.instance,
+    end: ReferenceProperty<Int>? = null,
+    margins: ReferenceProperty<EdgeInsets>? = null,
+    start: ReferenceProperty<Int>? = null,
+    trackActiveStyle: ReferenceProperty<Drawable>? = null,
+    trackInactiveStyle: ReferenceProperty<Drawable>? = null,
+): Slider.Range = Slider.Range(
+    Slider.Range.Properties(
+        end = end ?: properties.end,
+        margins = margins ?: properties.margins,
+        start = start ?: properties.start,
+        trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
+        trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
+    )
+)
+
+/**
+ * @param end End of section.
+ * @param start Start of section.
+ */
+@Generated
+fun Slider.Range.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    end: ExpressionProperty<Int>? = null,
+    start: ExpressionProperty<Int>? = null,
+): Slider.Range = Slider.Range(
+    Slider.Range.Properties(
+        end = end ?: properties.end,
+        margins = properties.margins,
+        start = start ?: properties.start,
+        trackActiveStyle = properties.trackActiveStyle,
+        trackInactiveStyle = properties.trackInactiveStyle,
+    )
+)
+
+@Generated
+fun Slider.Range.asList() = listOf(this)
 
 /**
  * @param fontSize Font size.

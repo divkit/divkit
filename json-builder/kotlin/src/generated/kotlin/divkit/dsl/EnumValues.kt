@@ -97,7 +97,8 @@ object CenterEnumValue : EnumValue("center"),
     AlignmentVertical,
     ContentAlignmentHorizontal,
     ContentAlignmentVertical,
-    Gallery.CrossContentAlignment
+    Gallery.CrossContentAlignment,
+    Tooltip.Position
 
 @Generated
 object RightEnumValue : EnumValue("right"),
@@ -276,15 +277,18 @@ object PagingEnumValue : EnumValue("paging"),
 
 @Generated
 object FillEnumValue : EnumValue("fill"),
-    ImageScale
+    ImageScale,
+    VideoScale
 
 @Generated
 object NoScaleEnumValue : EnumValue("no_scale"),
-    ImageScale
+    ImageScale,
+    VideoScale
 
 @Generated
 object FitEnumValue : EnumValue("fit"),
-    ImageScale
+    ImageScale,
+    VideoScale
 
 @Generated
 object StretchEnumValue : EnumValue("stretch"),

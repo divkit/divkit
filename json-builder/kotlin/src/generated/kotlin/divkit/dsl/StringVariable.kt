@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [stringVariable].
  * 
- * Required parameters: `value, name`.
+ * Required parameters: `value, type, name`.
  */
 @Generated
 class StringVariable internal constructor(

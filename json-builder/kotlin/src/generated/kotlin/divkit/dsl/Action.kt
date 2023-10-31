@@ -41,6 +41,7 @@ class Action internal constructor(
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
             target = additive.target ?: properties.target,
+            typed = additive.typed ?: properties.typed,
             url = additive.url ?: properties.url,
         )
     )
@@ -74,6 +75,7 @@ class Action internal constructor(
          * The tab in which the URL must be opened.
          */
         val target: Property<Target>?,
+        val typed: Property<ActionTyped>?,
         /**
          * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
          */
@@ -89,6 +91,7 @@ class Action internal constructor(
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
             result.tryPutProperty("target", target)
+            result.tryPutProperty("typed", typed)
             result.tryPutProperty("url", url)
             return result
         }
@@ -170,6 +173,7 @@ fun DivScope.action(
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     target: Action.Target? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
 ): Action = Action(
     Action.Properties(
@@ -180,6 +184,7 @@ fun DivScope.action(
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
         target = valueOrNull(target),
+        typed = valueOrNull(typed),
         url = valueOrNull(url),
     )
 )
@@ -204,6 +209,7 @@ fun DivScope.actionProps(
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     target: Action.Target? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
 ) = Action.Properties(
     downloadCallbacks = valueOrNull(downloadCallbacks),
@@ -213,6 +219,7 @@ fun DivScope.actionProps(
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
     target = valueOrNull(target),
+    typed = valueOrNull(typed),
     url = valueOrNull(url),
 )
 
@@ -236,6 +243,7 @@ fun TemplateScope.actionRefs(
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
     target: ReferenceProperty<Action.Target>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
 ) = Action.Properties(
     downloadCallbacks = downloadCallbacks,
@@ -245,6 +253,7 @@ fun TemplateScope.actionRefs(
     payload = payload,
     referer = referer,
     target = target,
+    typed = typed,
     url = url,
 )
 
@@ -268,6 +277,7 @@ fun Action.override(
     payload: Map<String, Any>? = null,
     referer: Url? = null,
     target: Action.Target? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
 ): Action = Action(
     Action.Properties(
@@ -278,6 +288,7 @@ fun Action.override(
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
         target = valueOrNull(target) ?: properties.target,
+        typed = valueOrNull(typed) ?: properties.typed,
         url = valueOrNull(url) ?: properties.url,
     )
 )
@@ -302,6 +313,7 @@ fun Action.defer(
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
     target: ReferenceProperty<Action.Target>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
 ): Action = Action(
     Action.Properties(
@@ -312,6 +324,7 @@ fun Action.defer(
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
         target = target ?: properties.target,
+        typed = typed ?: properties.typed,
         url = url ?: properties.url,
     )
 )
@@ -338,6 +351,7 @@ fun Action.evaluate(
         payload = properties.payload,
         referer = referer ?: properties.referer,
         target = target ?: properties.target,
+        typed = properties.typed,
         url = url ?: properties.url,
     )
 )

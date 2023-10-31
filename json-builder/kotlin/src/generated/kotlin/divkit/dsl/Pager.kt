@@ -49,6 +49,7 @@ class Pager internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            infiniteScroll = additive.infiniteScroll ?: properties.infiniteScroll,
             itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
@@ -127,6 +128,11 @@ class Pager internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+         * Default value: `false`.
+         */
+        val infiniteScroll: Property<Boolean>?,
         /**
          * Spacing between elements.
          * Default value: `{"type": "fixed","value":0}`.
@@ -225,6 +231,7 @@ class Pager internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("infinite_scroll", infiniteScroll)
             result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
@@ -271,6 +278,7 @@ class Pager internal constructor(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -307,6 +315,7 @@ fun DivScope.pager(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -341,6 +350,7 @@ fun DivScope.pager(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        infiniteScroll = valueOrNull(infiniteScroll),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
@@ -377,6 +387,7 @@ fun DivScope.pager(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -413,6 +424,7 @@ fun DivScope.pagerProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -446,6 +458,7 @@ fun DivScope.pagerProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    infiniteScroll = valueOrNull(infiniteScroll),
     itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
@@ -481,6 +494,7 @@ fun DivScope.pagerProps(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -517,6 +531,7 @@ fun TemplateScope.pagerRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -550,6 +565,7 @@ fun TemplateScope.pagerRefs(
     focus = focus,
     height = height,
     id = id,
+    infiniteScroll = infiniteScroll,
     itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
@@ -585,6 +601,7 @@ fun TemplateScope.pagerRefs(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -621,6 +638,7 @@ fun Pager.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -655,6 +673,7 @@ fun Pager.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        infiniteScroll = valueOrNull(infiniteScroll) ?: properties.infiniteScroll,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
@@ -691,6 +710,7 @@ fun Pager.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -727,6 +747,7 @@ fun Pager.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -761,6 +782,7 @@ fun Pager.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
@@ -789,6 +811,7 @@ fun Pager.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -802,6 +825,7 @@ fun Pager.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    infiniteScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -821,6 +845,7 @@ fun Pager.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemSpacing = properties.itemSpacing,
         items = properties.items,
         layoutMode = properties.layoutMode,
@@ -857,6 +882,7 @@ fun Pager.evaluate(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -893,6 +919,7 @@ fun Component<Pager>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -928,6 +955,7 @@ fun Component<Pager>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        infiniteScroll = valueOrNull(infiniteScroll),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
@@ -964,6 +992,7 @@ fun Component<Pager>.override(
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -1000,6 +1029,7 @@ fun Component<Pager>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -1035,6 +1065,7 @@ fun Component<Pager>.defer(
         focus = focus,
         height = height,
         id = id,
+        infiniteScroll = infiniteScroll,
         itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
@@ -1063,6 +1094,7 @@ fun Component<Pager>.defer(
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1076,6 +1108,7 @@ fun Component<Pager>.evaluate(
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    infiniteScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -1096,6 +1129,7 @@ fun Component<Pager>.evaluate(
         focus = null,
         height = null,
         id = null,
+        infiniteScroll = infiniteScroll,
         itemSpacing = null,
         items = null,
         layoutMode = null,

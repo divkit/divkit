@@ -55,7 +55,7 @@ class Border internal constructor(
          */
         val hasShadow: Property<Boolean>?,
         /**
-         * Shadow parameters.
+         * Parameters of the shadow applied to the element stroke.
          */
         val shadow: Property<Shadow>?,
         /**
@@ -80,7 +80,7 @@ class Border internal constructor(
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param cornersRadius Multiple radii of element and stroke corner rounding.
  * @param hasShadow Adding shadow.
- * @param shadow Shadow parameters.
+ * @param shadow Parameters of the shadow applied to the element stroke.
  * @param stroke Stroke style.
  */
 @Generated
@@ -105,7 +105,7 @@ fun DivScope.border(
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param cornersRadius Multiple radii of element and stroke corner rounding.
  * @param hasShadow Adding shadow.
- * @param shadow Shadow parameters.
+ * @param shadow Parameters of the shadow applied to the element stroke.
  * @param stroke Stroke style.
  */
 @Generated
@@ -128,7 +128,7 @@ fun DivScope.borderProps(
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param cornersRadius Multiple radii of element and stroke corner rounding.
  * @param hasShadow Adding shadow.
- * @param shadow Shadow parameters.
+ * @param shadow Parameters of the shadow applied to the element stroke.
  * @param stroke Stroke style.
  */
 @Generated
@@ -151,7 +151,7 @@ fun TemplateScope.borderRefs(
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param cornersRadius Multiple radii of element and stroke corner rounding.
  * @param hasShadow Adding shadow.
- * @param shadow Shadow parameters.
+ * @param shadow Parameters of the shadow applied to the element stroke.
  * @param stroke Stroke style.
  */
 @Generated
@@ -176,7 +176,7 @@ fun Border.override(
  * @param cornerRadius One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
  * @param cornersRadius Multiple radii of element and stroke corner rounding.
  * @param hasShadow Adding shadow.
- * @param shadow Shadow parameters.
+ * @param shadow Parameters of the shadow applied to the element stroke.
  * @param stroke Stroke style.
  */
 @Generated

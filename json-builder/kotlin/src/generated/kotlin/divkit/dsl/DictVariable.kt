@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [dictVariable].
  * 
- * Required parameters: `value, name`.
+ * Required parameters: `value, type, name`.
  */
 @Generated
 class DictVariable internal constructor(

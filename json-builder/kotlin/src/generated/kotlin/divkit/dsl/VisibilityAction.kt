@@ -39,6 +39,7 @@ class VisibilityAction internal constructor(
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
+            typed = additive.typed ?: properties.typed,
             url = additive.url ?: properties.url,
             visibilityDuration = additive.visibilityDuration ?: properties.visibilityDuration,
             visibilityPercentage = additive.visibilityPercentage ?: properties.visibilityPercentage,
@@ -67,6 +68,7 @@ class VisibilityAction internal constructor(
          * Referer URL for logging.
          */
         val referer: Property<Url>?,
+        val typed: Property<ActionTyped>?,
         /**
          * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
          */
@@ -90,6 +92,7 @@ class VisibilityAction internal constructor(
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
+            result.tryPutProperty("typed", typed)
             result.tryPutProperty("url", url)
             result.tryPutProperty("visibility_duration", visibilityDuration)
             result.tryPutProperty("visibility_percentage", visibilityPercentage)
@@ -116,6 +119,7 @@ fun DivScope.visibilityAction(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
@@ -126,6 +130,7 @@ fun DivScope.visibilityAction(
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
+        typed = valueOrNull(typed),
         url = valueOrNull(url),
         visibilityDuration = valueOrNull(visibilityDuration),
         visibilityPercentage = valueOrNull(visibilityPercentage),
@@ -150,6 +155,7 @@ fun DivScope.visibilityActionProps(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
@@ -159,6 +165,7 @@ fun DivScope.visibilityActionProps(
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
+    typed = valueOrNull(typed),
     url = valueOrNull(url),
     visibilityDuration = valueOrNull(visibilityDuration),
     visibilityPercentage = valueOrNull(visibilityPercentage),
@@ -182,6 +189,7 @@ fun TemplateScope.visibilityActionRefs(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityDuration: ReferenceProperty<Int>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
@@ -191,6 +199,7 @@ fun TemplateScope.visibilityActionRefs(
     logLimit = logLimit,
     payload = payload,
     referer = referer,
+    typed = typed,
     url = url,
     visibilityDuration = visibilityDuration,
     visibilityPercentage = visibilityPercentage,
@@ -214,6 +223,7 @@ fun VisibilityAction.override(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityDuration: Int? = null,
     visibilityPercentage: Int? = null,
@@ -224,6 +234,7 @@ fun VisibilityAction.override(
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
+        typed = valueOrNull(typed) ?: properties.typed,
         url = valueOrNull(url) ?: properties.url,
         visibilityDuration = valueOrNull(visibilityDuration) ?: properties.visibilityDuration,
         visibilityPercentage = valueOrNull(visibilityPercentage) ?: properties.visibilityPercentage,
@@ -248,6 +259,7 @@ fun VisibilityAction.defer(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityDuration: ReferenceProperty<Int>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
@@ -258,6 +270,7 @@ fun VisibilityAction.defer(
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
+        typed = typed ?: properties.typed,
         url = url ?: properties.url,
         visibilityDuration = visibilityDuration ?: properties.visibilityDuration,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
@@ -286,6 +299,7 @@ fun VisibilityAction.evaluate(
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,
+        typed = properties.typed,
         url = url ?: properties.url,
         visibilityDuration = visibilityDuration ?: properties.visibilityDuration,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,

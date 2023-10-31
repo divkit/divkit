@@ -123,7 +123,7 @@ class Grid internal constructor(
         val columnSpan: Property<Int>?,
         /**
          * Horizontal alignment of grid contents.
-         * Default value: `left`.
+         * Default value: `start`.
          */
         val contentAlignmentHorizontal: Property<AlignmentHorizontal>?,
         /**

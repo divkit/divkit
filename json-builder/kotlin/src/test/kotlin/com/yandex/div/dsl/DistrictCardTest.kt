@@ -45,7 +45,6 @@ import java.net.URI
 class DistrictCardTest {
     @Test
     fun renderDistrictCard() {
-
         val districtButtonActionLinkRef = reference<URI>("district_button_action_link")
         val titleItemsRef = reference<List<Div>>("title_items")
         val tabItemsLinkRef = reference<List<DivTabs.Item>>("tab_items_link")
@@ -354,7 +353,8 @@ class DistrictCardTest {
                             ),
                             resolve(districtButtonActionLinkRef, URI.create("http://ya.ru")),
                             resolve(
-                                tabItemsLinkRef, listOf(
+                                tabItemsLinkRef,
+                                listOf(
                                     item(
                                         title = "ПОПУЛЯРНОЕ",
                                         div = divGallery(
@@ -524,4 +524,3 @@ class DistrictCardTest {
         )
     }
 }
-

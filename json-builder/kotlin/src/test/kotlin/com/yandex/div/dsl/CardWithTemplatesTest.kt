@@ -20,10 +20,10 @@ import com.yandex.div.dsl.model.state
 import com.yandex.div.dsl.model.template
 import com.yandex.div.dsl.serializer.toJsonNode
 import divkit.dsl.readResource
-import java.net.URI
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode
+import java.net.URI
 
 class CardWithTemplatesTest {
 
@@ -31,7 +31,8 @@ class CardWithTemplatesTest {
     fun renderCard() {
         val titleRef = reference<String>("title")
         val templates = templates {
-            define ("title_text",
+            define(
+                "title_text",
                 divText(
                     width = divFixedSize(
                         value = int(120),

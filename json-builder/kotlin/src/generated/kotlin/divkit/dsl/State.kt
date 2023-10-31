@@ -54,6 +54,7 @@ class State internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
+            stateIdVariable = additive.stateIdVariable ?: properties.stateIdVariable,
             states = additive.states ?: properties.states,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
@@ -146,6 +147,10 @@ class State internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
+         * The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
+         */
+        val stateIdVariable: Property<String>?,
+        /**
          * States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
          */
         val states: Property<List<Item>>?,
@@ -219,6 +224,7 @@ class State internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
+            result.tryPutProperty("state_id_variable", stateIdVariable)
             result.tryPutProperty("states", states)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
@@ -317,6 +323,7 @@ class State internal constructor(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -351,6 +358,7 @@ fun DivScope.state(
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    stateIdVariable: String? = null,
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -383,6 +391,7 @@ fun DivScope.state(
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
+        stateIdVariable = valueOrNull(stateIdVariable),
         states = valueOrNull(states),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -417,6 +426,7 @@ fun DivScope.state(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -451,6 +461,7 @@ fun DivScope.stateProps(
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    stateIdVariable: String? = null,
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -482,6 +493,7 @@ fun DivScope.stateProps(
     paddings = valueOrNull(paddings),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
+    stateIdVariable = valueOrNull(stateIdVariable),
     states = valueOrNull(states),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
@@ -515,6 +527,7 @@ fun DivScope.stateProps(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -549,6 +562,7 @@ fun TemplateScope.stateRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -580,6 +594,7 @@ fun TemplateScope.stateRefs(
     paddings = paddings,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
+    stateIdVariable = stateIdVariable,
     states = states,
     tooltips = tooltips,
     transform = transform,
@@ -613,6 +628,7 @@ fun TemplateScope.stateRefs(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -647,6 +663,7 @@ fun State.override(
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    stateIdVariable: String? = null,
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -679,6 +696,7 @@ fun State.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        stateIdVariable = valueOrNull(stateIdVariable) ?: properties.stateIdVariable,
         states = valueOrNull(states) ?: properties.states,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
@@ -713,6 +731,7 @@ fun State.override(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -747,6 +766,7 @@ fun State.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -779,6 +799,7 @@ fun State.defer(
         paddings = paddings ?: properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
+        stateIdVariable = stateIdVariable ?: properties.stateIdVariable,
         states = states ?: properties.states,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -835,6 +856,7 @@ fun State.evaluate(
         paddings = properties.paddings,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
+        stateIdVariable = properties.stateIdVariable,
         states = properties.states,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -869,6 +891,7 @@ fun State.evaluate(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -903,6 +926,7 @@ fun Component<State>.override(
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
+    stateIdVariable: String? = null,
     states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -936,6 +960,7 @@ fun Component<State>.override(
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
+        stateIdVariable = valueOrNull(stateIdVariable),
         states = valueOrNull(states),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -970,6 +995,7 @@ fun Component<State>.override(
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction.dita) of the [action](div-action.md) element.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1004,6 +1030,7 @@ fun Component<State>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1037,6 +1064,7 @@ fun Component<State>.defer(
         paddings = paddings,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
+        stateIdVariable = stateIdVariable,
         states = states,
         tooltips = tooltips,
         transform = transform,
@@ -1094,6 +1122,7 @@ fun Component<State>.evaluate(
         paddings = null,
         rowSpan = rowSpan,
         selectedActions = null,
+        stateIdVariable = null,
         states = null,
         tooltips = null,
         transform = null,

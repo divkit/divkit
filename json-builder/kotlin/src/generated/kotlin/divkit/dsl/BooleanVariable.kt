@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [booleanVariable].
  * 
- * Required parameters: `value, name`.
+ * Required parameters: `value, type, name`.
  */
 @Generated
 class BooleanVariable internal constructor(

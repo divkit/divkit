@@ -133,7 +133,7 @@ class Container internal constructor(
         val columnSpan: Property<Int>?,
         /**
          * Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
-         * Default value: `left`.
+         * Default value: `start`.
          */
         val contentAlignmentHorizontal: Property<ContentAlignmentHorizontal>?,
         /**

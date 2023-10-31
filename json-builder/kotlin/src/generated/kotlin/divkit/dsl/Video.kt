@@ -40,6 +40,7 @@ class Video internal constructor(
             alignmentHorizontal = additive.alignmentHorizontal ?: properties.alignmentHorizontal,
             alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
             alpha = additive.alpha ?: properties.alpha,
+            aspect = additive.aspect ?: properties.aspect,
             autostart = additive.autostart ?: properties.autostart,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
@@ -62,6 +63,7 @@ class Video internal constructor(
             repeatable = additive.repeatable ?: properties.repeatable,
             resumeActions = additive.resumeActions ?: properties.resumeActions,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
+            scale = additive.scale ?: properties.scale,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
@@ -95,6 +97,10 @@ class Video internal constructor(
          * Default value: `1.0`.
          */
         val alpha: Property<Double>?,
+        /**
+         * Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
+         */
+        val aspect: Property<Aspect>?,
         /**
          * This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
          * Default value: `false`.
@@ -188,6 +194,11 @@ class Video internal constructor(
          */
         val rowSpan: Property<Int>?,
         /**
+         * Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
+         * Default value: `fit`.
+         */
+        val scale: Property<VideoScale>?,
+        /**
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
         val selectedActions: Property<List<Action>>?,
@@ -242,6 +253,7 @@ class Video internal constructor(
             result.tryPutProperty("alignment_horizontal", alignmentHorizontal)
             result.tryPutProperty("alignment_vertical", alignmentVertical)
             result.tryPutProperty("alpha", alpha)
+            result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("autostart", autostart)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
@@ -264,6 +276,7 @@ class Video internal constructor(
             result.tryPutProperty("repeatable", repeatable)
             result.tryPutProperty("resume_actions", resumeActions)
             result.tryPutProperty("row_span", rowSpan)
+            result.tryPutProperty("scale", scale)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
@@ -286,6 +299,7 @@ class Video internal constructor(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -308,6 +322,7 @@ class Video internal constructor(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -327,6 +342,7 @@ fun DivScope.video(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -349,6 +365,7 @@ fun DivScope.video(
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
+    scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -367,6 +384,7 @@ fun DivScope.video(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -389,6 +407,7 @@ fun DivScope.video(
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
         rowSpan = valueOrNull(rowSpan),
+        scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -409,6 +428,7 @@ fun DivScope.video(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -431,6 +451,7 @@ fun DivScope.video(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -450,6 +471,7 @@ fun DivScope.videoProps(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -472,6 +494,7 @@ fun DivScope.videoProps(
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
+    scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -489,6 +512,7 @@ fun DivScope.videoProps(
     alignmentHorizontal = valueOrNull(alignmentHorizontal),
     alignmentVertical = valueOrNull(alignmentVertical),
     alpha = valueOrNull(alpha),
+    aspect = valueOrNull(aspect),
     autostart = valueOrNull(autostart),
     background = valueOrNull(background),
     border = valueOrNull(border),
@@ -511,6 +535,7 @@ fun DivScope.videoProps(
     repeatable = valueOrNull(repeatable),
     resumeActions = valueOrNull(resumeActions),
     rowSpan = valueOrNull(rowSpan),
+    scale = valueOrNull(scale),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
@@ -530,6 +555,7 @@ fun DivScope.videoProps(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -552,6 +578,7 @@ fun DivScope.videoProps(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -571,6 +598,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -593,6 +621,7 @@ fun TemplateScope.videoRefs(
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -610,6 +639,7 @@ fun TemplateScope.videoRefs(
     alignmentHorizontal = alignmentHorizontal,
     alignmentVertical = alignmentVertical,
     alpha = alpha,
+    aspect = aspect,
     autostart = autostart,
     background = background,
     border = border,
@@ -632,6 +662,7 @@ fun TemplateScope.videoRefs(
     repeatable = repeatable,
     resumeActions = resumeActions,
     rowSpan = rowSpan,
+    scale = scale,
     selectedActions = selectedActions,
     tooltips = tooltips,
     transform = transform,
@@ -651,6 +682,7 @@ fun TemplateScope.videoRefs(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -673,6 +705,7 @@ fun TemplateScope.videoRefs(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -692,6 +725,7 @@ fun Video.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -714,6 +748,7 @@ fun Video.override(
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
+    scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -732,6 +767,7 @@ fun Video.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
         alpha = valueOrNull(alpha) ?: properties.alpha,
+        aspect = valueOrNull(aspect) ?: properties.aspect,
         autostart = valueOrNull(autostart) ?: properties.autostart,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
@@ -754,6 +790,7 @@ fun Video.override(
         repeatable = valueOrNull(repeatable) ?: properties.repeatable,
         resumeActions = valueOrNull(resumeActions) ?: properties.resumeActions,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
+        scale = valueOrNull(scale) ?: properties.scale,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
@@ -774,6 +811,7 @@ fun Video.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -796,6 +834,7 @@ fun Video.override(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -815,6 +854,7 @@ fun Video.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -837,6 +877,7 @@ fun Video.defer(
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -855,6 +896,7 @@ fun Video.defer(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        aspect = aspect ?: properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = background ?: properties.background,
         border = border ?: properties.border,
@@ -877,6 +919,7 @@ fun Video.defer(
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = resumeActions ?: properties.resumeActions,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -902,6 +945,7 @@ fun Video.defer(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -916,6 +960,7 @@ fun Video.evaluate(
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<VideoScale>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Video = Video(
     Video.Properties(
@@ -923,6 +968,7 @@ fun Video.evaluate(
         alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
+        aspect = properties.aspect,
         autostart = autostart ?: properties.autostart,
         background = properties.background,
         border = properties.border,
@@ -945,6 +991,7 @@ fun Video.evaluate(
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = properties.resumeActions,
         rowSpan = rowSpan ?: properties.rowSpan,
+        scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -965,6 +1012,7 @@ fun Video.evaluate(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -987,6 +1035,7 @@ fun Video.evaluate(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1006,6 +1055,7 @@ fun Component<Video>.override(
     alignmentHorizontal: AlignmentHorizontal? = null,
     alignmentVertical: AlignmentVertical? = null,
     alpha: Double? = null,
+    aspect: Aspect? = null,
     autostart: Boolean? = null,
     background: List<Background>? = null,
     border: Border? = null,
@@ -1028,6 +1078,7 @@ fun Component<Video>.override(
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
     rowSpan: Int? = null,
+    scale: VideoScale? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1047,6 +1098,7 @@ fun Component<Video>.override(
         alignmentHorizontal = valueOrNull(alignmentHorizontal),
         alignmentVertical = valueOrNull(alignmentVertical),
         alpha = valueOrNull(alpha),
+        aspect = valueOrNull(aspect),
         autostart = valueOrNull(autostart),
         background = valueOrNull(background),
         border = valueOrNull(border),
@@ -1069,6 +1121,7 @@ fun Component<Video>.override(
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
         rowSpan = valueOrNull(rowSpan),
+        scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -1089,6 +1142,7 @@ fun Component<Video>.override(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
@@ -1111,6 +1165,7 @@ fun Component<Video>.override(
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1130,6 +1185,7 @@ fun Component<Video>.defer(
     alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     alpha: ReferenceProperty<Double>? = null,
+    aspect: ReferenceProperty<Aspect>? = null,
     autostart: ReferenceProperty<Boolean>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
@@ -1152,6 +1208,7 @@ fun Component<Video>.defer(
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
+    scale: ReferenceProperty<VideoScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1171,6 +1228,7 @@ fun Component<Video>.defer(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        aspect = aspect,
         autostart = autostart,
         background = background,
         border = border,
@@ -1193,6 +1251,7 @@ fun Component<Video>.defer(
         repeatable = repeatable,
         resumeActions = resumeActions,
         rowSpan = rowSpan,
+        scale = scale,
         selectedActions = selectedActions,
         tooltips = tooltips,
         transform = transform,
@@ -1218,6 +1277,7 @@ fun Component<Video>.defer(
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Video scaling:<li>'fit' places the entire video into the element (free space is filled with background);</li><li>'fill` scales the video to the element size and cuts off anything that's extra.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -1232,6 +1292,7 @@ fun Component<Video>.evaluate(
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<VideoScale>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Video> = Component(
     template = template,
@@ -1240,6 +1301,7 @@ fun Component<Video>.evaluate(
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
         alpha = alpha,
+        aspect = null,
         autostart = autostart,
         background = null,
         border = null,
@@ -1262,6 +1324,7 @@ fun Component<Video>.evaluate(
         repeatable = repeatable,
         resumeActions = null,
         rowSpan = rowSpan,
+        scale = scale,
         selectedActions = null,
         tooltips = null,
         transform = null,

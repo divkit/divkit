@@ -40,6 +40,7 @@ class DisappearAction internal constructor(
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
             referer = additive.referer ?: properties.referer,
+            typed = additive.typed ?: properties.typed,
             url = additive.url ?: properties.url,
             visibilityPercentage = additive.visibilityPercentage ?: properties.visibilityPercentage,
         )
@@ -72,6 +73,7 @@ class DisappearAction internal constructor(
          * Referer URL for logging.
          */
         val referer: Property<Url>?,
+        val typed: Property<ActionTyped>?,
         /**
          * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
          */
@@ -91,6 +93,7 @@ class DisappearAction internal constructor(
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
             result.tryPutProperty("referer", referer)
+            result.tryPutProperty("typed", typed)
             result.tryPutProperty("url", url)
             result.tryPutProperty("visibility_percentage", visibilityPercentage)
             return result
@@ -117,6 +120,7 @@ fun DivScope.disappearAction(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
 ): DisappearAction = DisappearAction(
@@ -127,6 +131,7 @@ fun DivScope.disappearAction(
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
         referer = valueOrNull(referer),
+        typed = valueOrNull(typed),
         url = valueOrNull(url),
         visibilityPercentage = valueOrNull(visibilityPercentage),
     )
@@ -151,6 +156,7 @@ fun DivScope.disappearActionProps(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
 ) = DisappearAction.Properties(
@@ -160,6 +166,7 @@ fun DivScope.disappearActionProps(
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
     referer = valueOrNull(referer),
+    typed = valueOrNull(typed),
     url = valueOrNull(url),
     visibilityPercentage = valueOrNull(visibilityPercentage),
 )
@@ -183,6 +190,7 @@ fun TemplateScope.disappearActionRefs(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
 ) = DisappearAction.Properties(
@@ -192,6 +200,7 @@ fun TemplateScope.disappearActionRefs(
     logLimit = logLimit,
     payload = payload,
     referer = referer,
+    typed = typed,
     url = url,
     visibilityPercentage = visibilityPercentage,
 )
@@ -215,6 +224,7 @@ fun DisappearAction.override(
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,
+    typed: ActionTyped? = null,
     url: Url? = null,
     visibilityPercentage: Int? = null,
 ): DisappearAction = DisappearAction(
@@ -225,6 +235,7 @@ fun DisappearAction.override(
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
         referer = valueOrNull(referer) ?: properties.referer,
+        typed = valueOrNull(typed) ?: properties.typed,
         url = valueOrNull(url) ?: properties.url,
         visibilityPercentage = valueOrNull(visibilityPercentage) ?: properties.visibilityPercentage,
     )
@@ -249,6 +260,7 @@ fun DisappearAction.defer(
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
     referer: ReferenceProperty<Url>? = null,
+    typed: ReferenceProperty<ActionTyped>? = null,
     url: ReferenceProperty<Url>? = null,
     visibilityPercentage: ReferenceProperty<Int>? = null,
 ): DisappearAction = DisappearAction(
@@ -259,6 +271,7 @@ fun DisappearAction.defer(
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
         referer = referer ?: properties.referer,
+        typed = typed ?: properties.typed,
         url = url ?: properties.url,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
     )
@@ -287,6 +300,7 @@ fun DisappearAction.evaluate(
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,
+        typed = properties.typed,
         url = url ?: properties.url,
         visibilityPercentage = visibilityPercentage ?: properties.visibilityPercentage,
     )

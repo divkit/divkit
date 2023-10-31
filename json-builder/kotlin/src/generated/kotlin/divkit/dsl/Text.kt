@@ -77,6 +77,7 @@ class Text internal constructor(
             textAlignmentVertical = additive.textAlignmentVertical ?: properties.textAlignmentVertical,
             textColor = additive.textColor ?: properties.textColor,
             textGradient = additive.textGradient ?: properties.textGradient,
+            textShadow = additive.textShadow ?: properties.textShadow,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transitionChange = additive.transitionChange ?: properties.transitionChange,
@@ -251,7 +252,7 @@ class Text internal constructor(
         val strike: Property<LineStyle>?,
         /**
          * Horizontal text alignment.
-         * Default value: `left`.
+         * Default value: `start`.
          */
         val textAlignmentHorizontal: Property<AlignmentHorizontal>?,
         /**
@@ -268,6 +269,10 @@ class Text internal constructor(
          * Gradient text color.
          */
         val textGradient: Property<TextGradient>?,
+        /**
+         * Parameters of the shadow applied to the text.
+         */
+        val textShadow: Property<Shadow>?,
         /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
@@ -366,6 +371,7 @@ class Text internal constructor(
             result.tryPutProperty("text_alignment_vertical", textAlignmentVertical)
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_gradient", textGradient)
+            result.tryPutProperty("text_shadow", textShadow)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transition_change", transitionChange)
@@ -545,6 +551,7 @@ class Text internal constructor(
                 start = additive.start ?: properties.start,
                 strike = additive.strike ?: properties.strike,
                 textColor = additive.textColor ?: properties.textColor,
+                textShadow = additive.textShadow ?: properties.textShadow,
                 topOffset = additive.topOffset ?: properties.topOffset,
                 underline = additive.underline ?: properties.underline,
             )
@@ -605,6 +612,10 @@ class Text internal constructor(
              */
             val textColor: Property<Color>?,
             /**
+             * Parameters of the shadow applied to the character range.
+             */
+            val textShadow: Property<Shadow>?,
+            /**
              * Top margin of the character range. Units specified in `font_size_unit`.
              */
             val topOffset: Property<Int>?,
@@ -629,6 +640,7 @@ class Text internal constructor(
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("strike", strike)
                 result.tryPutProperty("text_color", textColor)
+                result.tryPutProperty("text_shadow", textShadow)
                 result.tryPutProperty("top_offset", topOffset)
                 result.tryPutProperty("underline", underline)
                 return result
@@ -679,6 +691,7 @@ class Text internal constructor(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -736,6 +749,7 @@ fun DivScope.text(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textGradient: TextGradient? = null,
+    textShadow: Shadow? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -791,6 +805,7 @@ fun DivScope.text(
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
+        textShadow = valueOrNull(textShadow),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -847,6 +862,7 @@ fun DivScope.text(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -904,6 +920,7 @@ fun DivScope.textProps(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textGradient: TextGradient? = null,
+    textShadow: Shadow? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -958,6 +975,7 @@ fun DivScope.textProps(
     textAlignmentVertical = valueOrNull(textAlignmentVertical),
     textColor = valueOrNull(textColor),
     textGradient = valueOrNull(textGradient),
+    textShadow = valueOrNull(textShadow),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transitionChange = valueOrNull(transitionChange),
@@ -1013,6 +1031,7 @@ fun DivScope.textProps(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1070,6 +1089,7 @@ fun TemplateScope.textRefs(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
+    textShadow: ReferenceProperty<Shadow>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1124,6 +1144,7 @@ fun TemplateScope.textRefs(
     textAlignmentVertical = textAlignmentVertical,
     textColor = textColor,
     textGradient = textGradient,
+    textShadow = textShadow,
     tooltips = tooltips,
     transform = transform,
     transitionChange = transitionChange,
@@ -1179,6 +1200,7 @@ fun TemplateScope.textRefs(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1236,6 +1258,7 @@ fun Text.override(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textGradient: TextGradient? = null,
+    textShadow: Shadow? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1291,6 +1314,7 @@ fun Text.override(
         textAlignmentVertical = valueOrNull(textAlignmentVertical) ?: properties.textAlignmentVertical,
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textGradient = valueOrNull(textGradient) ?: properties.textGradient,
+        textShadow = valueOrNull(textShadow) ?: properties.textShadow,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
@@ -1347,6 +1371,7 @@ fun Text.override(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1404,6 +1429,7 @@ fun Text.defer(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
+    textShadow: ReferenceProperty<Shadow>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1459,6 +1485,7 @@ fun Text.defer(
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textGradient = textGradient ?: properties.textGradient,
+        textShadow = textShadow ?: properties.textShadow,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transitionChange = transitionChange ?: properties.transitionChange,
@@ -1569,6 +1596,7 @@ fun Text.evaluate(
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textGradient = properties.textGradient,
+        textShadow = properties.textShadow,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transitionChange = properties.transitionChange,
@@ -1625,6 +1653,7 @@ fun Text.evaluate(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1682,6 +1711,7 @@ fun Component<Text>.override(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textGradient: TextGradient? = null,
+    textShadow: Shadow? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -1738,6 +1768,7 @@ fun Component<Text>.override(
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textGradient = valueOrNull(textGradient),
+        textShadow = valueOrNull(textShadow),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transitionChange = valueOrNull(transitionChange),
@@ -1794,6 +1825,7 @@ fun Component<Text>.override(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
  * @param textGradient Gradient text color.
+ * @param textShadow Parameters of the shadow applied to the text.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
@@ -1851,6 +1883,7 @@ fun Component<Text>.defer(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textGradient: ReferenceProperty<TextGradient>? = null,
+    textShadow: ReferenceProperty<Shadow>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transitionChange: ReferenceProperty<ChangeTransition>? = null,
@@ -1907,6 +1940,7 @@ fun Component<Text>.defer(
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textGradient = textGradient,
+        textShadow = textShadow,
         tooltips = tooltips,
         transform = transform,
         transitionChange = transitionChange,
@@ -2018,6 +2052,7 @@ fun Component<Text>.evaluate(
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textGradient = null,
+        textShadow = null,
         tooltips = null,
         transform = null,
         transitionChange = null,
@@ -2344,6 +2379,7 @@ fun Text.Image.asList() = listOf(this)
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */
@@ -2363,6 +2399,7 @@ fun DivScope.textRange(
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
+    textShadow: Shadow? = null,
     topOffset: Int? = null,
     underline: LineStyle? = null,
 ): Text.Range = Text.Range(
@@ -2380,6 +2417,7 @@ fun DivScope.textRange(
         start = valueOrNull(start),
         strike = valueOrNull(strike),
         textColor = valueOrNull(textColor),
+        textShadow = valueOrNull(textShadow),
         topOffset = valueOrNull(topOffset),
         underline = valueOrNull(underline),
     )
@@ -2399,6 +2437,7 @@ fun DivScope.textRange(
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */
@@ -2418,6 +2457,7 @@ fun DivScope.textRangeProps(
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
+    textShadow: Shadow? = null,
     topOffset: Int? = null,
     underline: LineStyle? = null,
 ) = Text.Range.Properties(
@@ -2434,6 +2474,7 @@ fun DivScope.textRangeProps(
     start = valueOrNull(start),
     strike = valueOrNull(strike),
     textColor = valueOrNull(textColor),
+    textShadow = valueOrNull(textShadow),
     topOffset = valueOrNull(topOffset),
     underline = valueOrNull(underline),
 )
@@ -2452,6 +2493,7 @@ fun DivScope.textRangeProps(
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */
@@ -2471,6 +2513,7 @@ fun TemplateScope.textRangeRefs(
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
+    textShadow: ReferenceProperty<Shadow>? = null,
     topOffset: ReferenceProperty<Int>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
 ) = Text.Range.Properties(
@@ -2487,6 +2530,7 @@ fun TemplateScope.textRangeRefs(
     start = start,
     strike = strike,
     textColor = textColor,
+    textShadow = textShadow,
     topOffset = topOffset,
     underline = underline,
 )
@@ -2505,6 +2549,7 @@ fun TemplateScope.textRangeRefs(
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */
@@ -2524,6 +2569,7 @@ fun Text.Range.override(
     start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
+    textShadow: Shadow? = null,
     topOffset: Int? = null,
     underline: LineStyle? = null,
 ): Text.Range = Text.Range(
@@ -2541,6 +2587,7 @@ fun Text.Range.override(
         start = valueOrNull(start) ?: properties.start,
         strike = valueOrNull(strike) ?: properties.strike,
         textColor = valueOrNull(textColor) ?: properties.textColor,
+        textShadow = valueOrNull(textShadow) ?: properties.textShadow,
         topOffset = valueOrNull(topOffset) ?: properties.topOffset,
         underline = valueOrNull(underline) ?: properties.underline,
     )
@@ -2560,6 +2607,7 @@ fun Text.Range.override(
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
  * @param textColor Text color.
+ * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */
@@ -2579,6 +2627,7 @@ fun Text.Range.defer(
     start: ReferenceProperty<Int>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
     textColor: ReferenceProperty<Color>? = null,
+    textShadow: ReferenceProperty<Shadow>? = null,
     topOffset: ReferenceProperty<Int>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
 ): Text.Range = Text.Range(
@@ -2596,6 +2645,7 @@ fun Text.Range.defer(
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,
+        textShadow = textShadow ?: properties.textShadow,
         topOffset = topOffset ?: properties.topOffset,
         underline = underline ?: properties.underline,
     )
@@ -2645,6 +2695,7 @@ fun Text.Range.evaluate(
         start = start ?: properties.start,
         strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,
+        textShadow = properties.textShadow,
         topOffset = topOffset ?: properties.topOffset,
         underline = underline ?: properties.underline,
     )
