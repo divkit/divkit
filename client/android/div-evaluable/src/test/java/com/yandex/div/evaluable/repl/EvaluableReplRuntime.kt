@@ -11,7 +11,6 @@ import com.yandex.div.evaluable.internal.Tokenizer
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.withEvaluator
 
-
 internal object EvaluableReplRuntime {
     private val variableProvider = VariableProvider { variableName -> variableList[variableName] }
     private val storedValueProvider = StoredValueProvider { null }
@@ -118,6 +117,7 @@ internal object EvaluableReplRuntime {
                 EvaluableType.STRING -> value
                 EvaluableType.COLOR -> value
                 EvaluableType.DATETIME -> DateTime.parseAsUTC(value)
+                EvaluableType.URL -> value
                 EvaluableType.DICT -> value
                 EvaluableType.ARRAY -> value
             }
