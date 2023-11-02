@@ -1,3 +1,16 @@
+## 28.9.0
+
+# Android Client:
+* Added infinite scrolling property to the pager.
+* Added common interface for all div views.
+
+# Web Client:
+* Fixed the first/last separator of the `container` with `space-evenly` and `space-around` alignment.
+* Added an additional api with `props` and `variables` for `custom` components.
+* Added `array_insert_value` and `array_remove_value` typed actions.
+* Added support for expressions in the `execAction` method.
+
+
 ## 28.8.0
 
 # Android Client:
@@ -64,7 +77,7 @@ Additions:
 * Updated Kotlin to 1.8.22.
 * Updated Gradle to 8.3.
 * Updated AGP to 8.1.1.
-* Implemented `DivVariableController` and since now it should be used instead of `GlobalVariableController`. `GlobalVariableController` was deprecated. 
+* Implemented `DivVariableController` and since now it should be used instead of `GlobalVariableController`. `GlobalVariableController` was deprecated.
 
 Fixes:
 * Fixed `div-input` multikey mask with single pattern element.

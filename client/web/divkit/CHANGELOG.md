@@ -1,3 +1,11 @@
+## 28.9.0 (November 7, 2023)
+
+* Fixed the first/last separator of the `container` with `space-evenly` and `space-around` alignment.
+* Added an additional api with `props` and `variables` for `custom` components.
+* Added `array_insert_value` and `array_remove_value` typed actions.
+* Added support for expressions in the `execAction` method.
+
+
 ## 28.8.0 (October 30, 2023)
 
 Additions:
