@@ -160,7 +160,25 @@ export interface ActionArrayInsertValue {
     value: TypedValue;
 }
 
-export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue;
+export interface CopyToClipboardContentText {
+    type: 'text';
+    value: string;
+}
+
+export interface CopyToClipboardContentUrl {
+    type: 'url';
+    value: string;
+}
+
+export type CopyToClipboardContent = CopyToClipboardContentText | CopyToClipboardContentUrl;
+
+export interface ActionCopyToClipboard {
+    type: 'copy_to_clipboard';
+    content: CopyToClipboardContent;
+}
+
+export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
+    ActionCopyToClipboard;
 
 export interface Action {
     log_id: string;

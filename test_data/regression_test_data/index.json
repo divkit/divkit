@@ -5,10 +5,6 @@
       "tags": [
         "DivAction"
       ],
-      "platforms": [
-        "android",
-        "ios"
-      ],
       "steps": [
         "Tap to copy url button and paste clipboard to input",
         "Tap to copy string button and paste clipboard to input"

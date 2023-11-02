@@ -72,6 +72,7 @@
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
     import { TimersController } from '../utils/timers';
     import { arrayInsert, arrayRemove } from '../actions/array';
+    import { copyToClipboard } from '../actions/copyToClipboard';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -771,6 +772,9 @@
                     break;
                 case 'array_remove_value':
                     arrayRemove(variables, logError, actionTyped);
+                    break;
+                case 'copy_to_clipboard':
+                    copyToClipboard(logError, actionTyped);
                     break;
                 default: {
                     logError(wrapError(new Error('Unknown type of action'), {

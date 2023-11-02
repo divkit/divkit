@@ -16,11 +16,7 @@
       ]
     },
     {
-      "$ref": "div-action-copy-to-clipboard.json",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$ref": "div-action-copy-to-clipboard.json"
     }
   ]
 }
