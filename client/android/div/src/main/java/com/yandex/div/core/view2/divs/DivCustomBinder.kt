@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
+import com.yandex.div.R
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewFactory
@@ -64,7 +65,9 @@ internal class DivCustomBinder @Inject constructor(
         val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType)
             oldCustomView
         else
-            createView()
+            createView().apply {
+                setTag(R.id.div_custom_tag, div)
+            }
         bindView(customView)
         if (oldCustomView != customView) {
             replaceInParent(previousWrapper, customView, div, divView)
