@@ -91,7 +91,7 @@ extension DivInput {
         return TextInputValidator(
           isValid: context.makeBinding(variableName: regexValidator.variable, defaultValue: false),
           allowEmpty: regexValidator.resolveAllowEmpty(expressionResolver),
-          validator: { $0.matchesRegex(regex) },
+          validator: { $0.fullMatchesRegex(regex) },
           message: makeMessage(
             from: regexValidator.resolveLabelId(expressionResolver),
             storage: context.blockStateStorage,
@@ -229,5 +229,13 @@ extension DivFixedLengthInputMask.PatternElement {
       regex: try! NSRegularExpression(pattern: resolveRegex(resolver) ?? "a"),
       placeholder: resolvePlaceholder(resolver).first ?? " ".first!
     )
+  }
+}
+
+extension String {
+  fileprivate func fullMatchesRegex(_ regex: NSRegularExpression) -> Bool {
+    let range = stringRangeAsNSRange(wholeStringRange, inString: self)
+    return regex.matches(in: self, options: [], range: range)
+      .contains { $0.range == range }
   }
 }
