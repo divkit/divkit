@@ -15,6 +15,10 @@ final class CorePlayerImpl: CorePlayer {
     playerStatusPipe.signal
   }
 
+  var playerDurationDidChange: Signal<CMTime> {
+    playerDurationPipe.signal
+  }
+
   var playbackStatusDidChange: Signal<PlaybackStatus> {
     playbackStatusPipe.signal
   }
@@ -33,6 +37,7 @@ final class CorePlayerImpl: CorePlayer {
   private let itemObservers = AutodisposePool()
 
   private let playerStatusPipe = SignalPipe<PlayerStatus>()
+  private let playerDurationPipe = SignalPipe<CMTime>()
   private let playbackStatusPipe = SignalPipe<PlaybackStatus>()
   private let playerErrorPipe = SignalPipe<PlayerError>()
   private let playbackFinishPipe = SignalPipe<Void>()
@@ -122,6 +127,11 @@ final class CorePlayerImpl: CorePlayer {
       self.playerStatusDidChange(status)
     }.dispose(in: itemObservers)
 
+    observe(item, path: \.duration) { item, duration in
+      guard let self = weakSelf, self.player.currentItem == item else { return }
+      self.playerDurationDidChange(duration)
+    }.dispose(in: itemObservers)
+
     NotificationCenter.default
       .observe(item, name: .AVPlayerItemDidPlayToEndTime) { item, _ in
         guard let self = weakSelf, self.player.currentItem == item else { return }
@@ -151,6 +161,10 @@ final class CorePlayerImpl: CorePlayer {
 
       playbackDidFail((playerError ?? itemError) ?? UnknownPlayerError())
     }
+  }
+
+  private func playerDurationDidChange(_ duration: CMTime) {
+    playerDurationPipe.send(duration)
   }
 
   private func playbackDidFail(_ error: PlayerError) {

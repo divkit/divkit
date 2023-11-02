@@ -100,6 +100,11 @@ final class DefaultPlayer: Player {
       .periodicCurrentTimeSignal(interval: 1)
       .addObserver { weakSelf?.eventPipe.send(.currentTimeUpdate(Int($0 * 1000))) }
       .dispose(in: playerObservers)
+
+    player
+      .playerDurationDidChange
+      .addObserver { weakSelf?.eventPipe.send(.durationUpdate($0)) }
+      .dispose(in: playerObservers)
   }
 }
 

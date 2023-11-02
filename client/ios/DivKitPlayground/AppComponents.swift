@@ -30,6 +30,7 @@ enum AppComponents {
         lottieExtensionHanlder,
         sizeProviderExtensionHandler,
         ShimmerImagePreviewExtension(),
+        VideoExtensionHandler()
       ],
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,

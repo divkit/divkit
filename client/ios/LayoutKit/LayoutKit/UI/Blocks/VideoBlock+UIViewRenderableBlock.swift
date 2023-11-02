@@ -72,6 +72,8 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
         case .play:
           self.observer?.elementStateChanged(VideoBlockViewState(state: .playing), forPath: self.model.path)
           self.model.resumeActions.perform(sendingFrom: self)
+        case let .durationUpdate(duration):
+          self.model.duration?.value = Int(duration.seconds)
         }
       }
     }
