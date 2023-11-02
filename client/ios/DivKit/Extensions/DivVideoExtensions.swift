@@ -45,6 +45,14 @@ extension DivVideo: DivBlockModeling {
       settingsPayload: playerSettingsPayload ?? [:]
     )
 
+    let videoPath = context.parentPath + (id ?? DivVideo.type)
+    let videoContext = modified(context) {
+      $0.parentPath = videoPath
+    }
+
+    let state: VideoBlockViewState = videoContext.blockStateStorage
+      .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
+
     let model = VideoBlockViewModel(
       videoData: videoData,
       playbackConfig: playbackConfig,
@@ -55,17 +63,9 @@ extension DivVideo: DivBlockModeling {
       bufferingActions: bufferingActions,
       endActions: endActions,
       fatalActions: fatalActions,
-      path: context.parentPath,
+      path: videoContext.parentPath,
       scale: resolveScale(resolver).scale
     )
-
-    let videoPath = context.parentPath + (id ?? DivVideo.type)
-    let videoContext = modified(context) {
-      $0.parentPath = videoPath
-    }
-
-    let state: VideoBlockViewState = videoContext.blockStateStorage
-      .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)
 
     let videoBlock = VideoBlock(
       widthTrait: width.makeLayoutTrait(with: resolver),
