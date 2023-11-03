@@ -31,6 +31,8 @@ internal interface DivGalleryItemHelper {
 
     val childrenToRelayout: MutableSet<View>
 
+    fun toLayoutManager(): RecyclerView.LayoutManager
+
     fun _layoutDecorated(child: View, left: Int, top: Int, right: Int, bottom: Int) {
         trackVisibilityAction(child)
     }

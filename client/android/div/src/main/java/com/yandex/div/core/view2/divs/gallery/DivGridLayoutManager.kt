@@ -27,6 +27,8 @@ internal class DivGridLayoutManager(
     private val midPadding
         get() = div.itemSpacing.evaluate(divView.expressionResolver).dpToPx(view.resources.displayMetrics)
 
+    override fun toLayoutManager() = this
+
     override fun getPaddingStart() = super.getPaddingStart() - midPadding / 2
     override fun getPaddingEnd() = super.getPaddingEnd() - midPadding / 2
     override fun getPaddingLeft() = super.getPaddingLeft() - midPadding / 2

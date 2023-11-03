@@ -183,12 +183,16 @@ internal class DivGalleryBinder @Inject constructor(
             }
         }
 
-        val layoutManager = if (columnCount == 1L) {
+        // Added as a workaround for a bug in R8 that leads to replacing the
+        // DivGalleryItemHelper type with DivGridLayoutManager, resulting in
+        // casting DivLinearLayoutManager to DivGridLayoutManager exception.
+        val itemHelper: DivGalleryItemHelper = if (columnCount == 1L) {
             DivLinearLayoutManager(divView, view, div, orientation)
         } else {
             DivGridLayoutManager(divView, view, div, orientation)
         }
-        view.layoutManager = layoutManager
+        view.layoutManager = itemHelper.toLayoutManager()
+
         view.scrollInterceptionAngle = scrollInterceptionAngle
         view.clearOnScrollListeners()
         divView.currentState?.let { state ->
@@ -198,9 +202,9 @@ internal class DivGalleryBinder @Inject constructor(
                 ?: div.defaultItem.evaluate(resolver).toIntSafely()
             val offset = galleryState?.scrollOffset
             view.scrollToPositionInternal(position, offset, scrollMode.toScrollPosition())
-            view.addOnScrollListener(UpdateStateScrollListener(id, state, layoutManager))
+            view.addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
-        view.addOnScrollListener(ScrollListener(divView, view, layoutManager, div))
+        view.addOnScrollListener(ScrollListener(divView, view, itemHelper, div))
         view.onInterceptTouchEventListener = if (div.restrictParentScroll.evaluate(resolver)) {
             ParentScrollRestrictor(
                 divOrientation.toRestrictorDirection()

@@ -24,6 +24,8 @@ internal class DivLinearLayoutManager(
     override val divItems
         get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.items
 
+    override fun toLayoutManager() = this
+
     override fun measureChild(child: View, widthUsed: Int, heightUsed: Int) {
         val lp = child.layoutParams as DivRecyclerViewLayoutParams
         val insets = view.getItemDecorInsetsForChild(child)
