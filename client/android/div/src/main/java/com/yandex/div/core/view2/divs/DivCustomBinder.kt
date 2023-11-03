@@ -62,15 +62,19 @@ internal class DivCustomBinder @Inject constructor(
         createView: () -> View,
         bindView: (View) -> Unit
     ) {
-        val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType)
+        val customView = if (oldCustomView != null && previousWrapper.div?.customType == div.customType) {
             oldCustomView
-        else
+        } else {
             createView().apply {
                 setTag(R.id.div_custom_tag, div)
             }
+        }
+
         bindView(customView)
+        baseBinder.bindId(customView, divView, div.id)
+
         if (oldCustomView != customView) {
-            replaceInParent(previousWrapper, customView, div, divView)
+            replaceInParent(previousWrapper, customView, divView)
         }
         extensionController.bindView(divView, customView, div)
     }
@@ -83,8 +87,9 @@ internal class DivCustomBinder @Inject constructor(
         previousCustomView: View?
     ) {
         divCustomViewFactory.create(div, divView) { newCustomView ->
+            baseBinder.bindId(newCustomView, divView, div.id)
             if (newCustomView != previousCustomView) {
-                replaceInParent(previousViewGroup, newCustomView, div, divView)
+                replaceInParent(previousViewGroup, newCustomView, divView)
                 extensionController.bindView(divView, newCustomView, div)
             }
         }
@@ -93,10 +98,8 @@ internal class DivCustomBinder @Inject constructor(
     private fun replaceInParent(
         parent: ViewGroup,
         newCustomView: View,
-        div: DivCustom,
         divView: Div2View
     ) {
-        baseBinder.bindId(newCustomView, divView, div.id)
         if (parent.isNotEmpty()) {
             divView.releaseViewVisitor.visitViewTree(parent[0])
             parent.removeViewAt(0)
