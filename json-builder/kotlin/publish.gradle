@@ -1,0 +1,71 @@
+import com.yandex.div.gradle.FileExtensions
+import com.yandex.div.gradle.PublicationType
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+
+group = 'com.yandex.div'
+
+task publishInternalRelease {
+}
+
+task publishPublicRelease {
+}
+
+task reportVersion {
+    doLast {
+        println "DivKit version ${rootProject.property('divkitVersionName')}"
+    }
+}
+
+task reportBuildNumber {
+    doLast {
+        println "buildNumber ${rootProject.property('divkitVersionName')}"
+    }
+}
+
+if (rootProject.ext.publishToMavenCentral) {
+    rootProject.ext {
+        signing {
+            keyId = rootProject.findProperty("signingKeyId")
+            password = rootProject.findProperty("signingPassword")
+            secretKeyRingFile = rootProject.findProperty("signingSecretKeyRingFile")
+        }
+    }
+}
+
+FileExtensions.ifExists("$projectDir/publish.internal.gradle") {
+    apply from: it
+}
+
+if (publishToMavenCentral) {
+    nexusPublishing {
+        repositories {
+            sonatype {
+                stagingProfileId = "14c2d9e18a30b"
+                nexusUrl = uri("https://oss.sonatype.org/service/local/")
+                snapshotRepositoryUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                username = ossUsername
+                password = ossPassword
+            }
+        }
+    }
+
+    allprojects {
+        afterEvaluate {
+            if (project.plugins.hasPlugin("maven-publish")) {
+                project.tasks.all { }
+                project.tasks.named("publishToSonatype") { task ->
+                    publishPublicRelease.dependsOn(task)
+                }
+            }
+        }
+    }
+    afterEvaluate {
+        tasks.all { }
+        tasks.named("closeAndReleaseSonatypeStagingRepository") { task ->
+            publishPublicRelease.dependsOn(task)
+        }
+    }
+}

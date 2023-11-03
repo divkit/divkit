@@ -1,0 +1,8 @@
+ext {
+    bucketUsername = project.findProperty("bucketUsername") ?: System.env["BUCKET_USERNAME"]
+    bucketPassword = project.findProperty("bucketPassword") ?: System.env["BUCKET_PASSWORD"]
+    publishToBucket = bucketUsername != null && bucketPassword != null
+    ossUsername = project.findProperty("ossUsername")
+    ossPassword = project.findProperty("ossPassword")
+    publishToMavenCentral = ossUsername != null && ossPassword != null
+}

@@ -1,11 +1,34 @@
 apply plugin: 'kotlin'
 
+apply from: "$projectDir/ext.gradle"
+apply from: "$projectDir/publish.gradle"
+
 buildscript {
     repositories {
+        gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+    }
+}
+
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            freeCompilerArgs = ['-Xjvm-default=all']
+            languageVersion = "1.5"
+            apiVersion = "1.5"
+        }
+    }
+
+    project.tasks.withType(PublishToMavenRepository) { task ->
+        task.finalizedBy(reportBuildNumber)
+    }
+
+    project.tasks.withType(PublishToMavenLocal) { task ->
+        task.finalizedBy(reportVersion)
     }
 }
 
