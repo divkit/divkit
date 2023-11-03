@@ -100,11 +100,7 @@
         "scale": {
           "$ref": "div-video-scale.json",
           "default_value": "fit",
-          "$description": "translations.json#/div_video_scale",
-          "platforms": [
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_video_scale"
         }
       }
     }

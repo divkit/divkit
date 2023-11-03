@@ -1943,6 +1943,7 @@
         "DivVideo"
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ],

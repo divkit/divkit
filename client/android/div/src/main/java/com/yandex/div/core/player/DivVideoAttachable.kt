@@ -1,5 +1,7 @@
 package com.yandex.div.core.player
 
+import com.yandex.div2.DivVideoScale
+
 interface DivVideoAttachable {
     fun attach(player: DivPlayer) = Unit
 
@@ -8,4 +10,6 @@ interface DivVideoAttachable {
     fun getAttachedPlayer(): DivPlayer? = null
 
     fun setVisibleOnScreen(visible: Boolean) = Unit
+
+    fun setScale(videoScale: DivVideoScale) = Unit
 }

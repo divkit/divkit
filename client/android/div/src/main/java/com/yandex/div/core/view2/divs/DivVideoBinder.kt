@@ -13,6 +13,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
+import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.player.DivVideoViewMapper
@@ -115,11 +116,13 @@ internal class DivVideoBinder @Inject constructor(
         if (div == oldDiv) {
             view.observeElapsedTime(div, divView, player)
             view.observeMuted(div, divView, player)
+            view.observeScale(div, divView, playerView)
             return
         }
 
         view.observeElapsedTime(div, divView, player)
         view.observeMuted(div, divView, player)
+        view.observeScale(div, divView, playerView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             view.removeAllViews()
@@ -170,6 +173,19 @@ internal class DivVideoBinder @Inject constructor(
             }
         )
     }
+
+    private fun DivVideoView.observeScale(
+        div: DivVideo,
+        divView: Div2View,
+        playerView: DivPlayerView
+    ) {
+        addSubscription(
+            div.scale.observeAndGet(divView.expressionResolver) {
+                playerView.setScale(it)
+            }
+        )
+    }
+
 }
 
 fun DivVideo.createSource(resolver: ExpressionResolver): List<DivVideoSource> {
