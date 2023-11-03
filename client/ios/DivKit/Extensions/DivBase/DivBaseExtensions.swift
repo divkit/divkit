@@ -100,6 +100,7 @@ extension DivBase {
       )
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
+        boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip },
         alpha: CGFloat(resolveAlpha(expressionResolver)),
         accessibilityElement: customA11yElement ?? makeAccessibilityElement(
           accessibility,

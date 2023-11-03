@@ -173,7 +173,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
         y: frame.origin.y + model.anchorPoint.y.value(for: frame.height) * frame.height
       )
       view.transform = model.childrenTransform
-      view.layer.anchorPoint = model.anchorPoint.calculateCGPoint(for: view.frame)
+      view.layer.anchorPoint = model.anchorPoint.calculateCGPoint(for: view.bounds)
     }
 
     modelAndLastLayoutSize = (model: model, lastLayoutSize: bounds.size)

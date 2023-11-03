@@ -244,7 +244,8 @@ extension Block {
       heightTrait: isVerticallyResizable ? .resizable : .intrinsic,
       children: [self],
       anchorPoint: anchorPoint,
-      childrenTransform: transform
+      childrenTransform: transform,
+      clipContent: false
     )
   }
 
