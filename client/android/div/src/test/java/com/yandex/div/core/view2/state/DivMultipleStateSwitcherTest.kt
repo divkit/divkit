@@ -4,7 +4,6 @@ import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
-import com.yandex.div.core.asExpression
 import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
@@ -47,15 +46,16 @@ class DivMultipleStateSwitcherTest {
     }
 
     private val viewBinder = mock<DivBinder>()
+    private val resolver = divView.expressionResolver
 
     private val stateSwitcher = DivMultipleStateSwitcher(divView, viewBinder)
 
     @Test
     fun `switch to single state binds its state layout`() {
         val activeState = "0/state_container/second".path
-        val div = rootDiv.findDivState(activeState)!!
+        val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, listOf(activeState))
+        stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
         verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
     }
@@ -63,9 +63,9 @@ class DivMultipleStateSwitcherTest {
     @Test
     fun `switch to single inner state binds its state layout`() {
         val activeState = "0/state_container/first/container_item_two/two".path
-        val div = rootDiv.findDivState(activeState)!!
+        val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, listOf(activeState))
+        stateSwitcher.switchStates(divDataState, listOf(activeState), resolver)
 
         verify(viewBinder).bind(any(), eq(div), any(), eq(activeState.parentState()))
     }
@@ -73,9 +73,9 @@ class DivMultipleStateSwitcherTest {
     @Test
     fun `switch to single state of missing state layout binds root div`() {
         val inactiveState = "0/state_container/second/second_state/hidden".path
-        val div = rootDiv.findDivState(inactiveState.parentState())!!
+        val div = rootDiv.findDivState(inactiveState.parentState(), resolver)!!
 
-        stateSwitcher.switchStates(divDataState, listOf(inactiveState))
+        stateSwitcher.switchStates(divDataState, listOf(inactiveState), resolver)
 
         verify(viewBinder).bind(any(), eq(rootDiv), any(), eq(DivStatePath.fromState(0)))
     }
@@ -85,10 +85,10 @@ class DivMultipleStateSwitcherTest {
         val firstPath = "0/state_container/first/container_item_one/two".path
         val secondPath = "0/state_container/first/container_item_two/two".path
         val paths = listOf(firstPath, secondPath)
-        val firstDiv = rootDiv.findDivState(firstPath)!!
-        val secondDiv = rootDiv.findDivState(secondPath)!!
+        val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
+        val secondDiv = rootDiv.findDivState(secondPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths)
+        stateSwitcher.switchStates(divDataState, paths, resolver)
 
         verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
         verify(viewBinder).bind(any(), eq(secondDiv), any(), eq(secondPath.parentState()))
@@ -99,9 +99,9 @@ class DivMultipleStateSwitcherTest {
         val firstPath = "0/state_container/first".path
         val secondPath = "0/state_container/first/container_item_one/two".path
         val paths = listOf(firstPath, secondPath)
-        val firstDiv = rootDiv.findDivState(firstPath)!!
+        val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths)
+        stateSwitcher.switchStates(divDataState, paths, resolver)
 
         verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
     }
@@ -111,9 +111,9 @@ class DivMultipleStateSwitcherTest {
         val firstPath = "0/state_container/first/container_item_one/two".path
         val secondPath = "0/state_container/first/container_item_one/three".path
         val paths = listOf(firstPath, secondPath)
-        val firstDiv = rootDiv.findDivState(firstPath)!!
+        val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths)
+        stateSwitcher.switchStates(divDataState, paths, resolver)
 
         verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
     }
@@ -123,10 +123,10 @@ class DivMultipleStateSwitcherTest {
         val firstPath = "0/state_container/first/container_item_one/two".path
         val secondPath = "0/state_container/second/second_state/hidden".path
         val paths = listOf(firstPath, secondPath)
-        val firstDiv = rootDiv.findDivState(firstPath)!!
-        val secondDiv = rootDiv.findDivState(secondPath)!!
+        val firstDiv = rootDiv.findDivState(firstPath, resolver)!!
+        val secondDiv = rootDiv.findDivState(secondPath, resolver)!!
 
-        stateSwitcher.switchStates(divDataState, paths)
+        stateSwitcher.switchStates(divDataState, paths, resolver)
 
         verify(viewBinder).bind(any(), eq(firstDiv), any(), eq(firstPath.parentState()))
         verify(viewBinder, never()).bind(any(), eq(secondDiv), any(), any())
@@ -138,7 +138,7 @@ class DivMultipleStateSwitcherTest {
         val secondPath = "0/state_container/second/second_state/clicked".path
         val paths = listOf(firstPath, secondPath)
 
-        stateSwitcher.switchStates(divDataState, paths)
+        stateSwitcher.switchStates(divDataState, paths, resolver)
 
         verify(viewBinder).bind(any(), eq(rootDiv), any(), eq(DivStatePath.fromState(0)))
     }

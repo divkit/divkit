@@ -83,8 +83,8 @@ internal class DivContainerBinder @Inject constructor(
             divView.unbindViewFromDiv(childView)
         }
 
-        val items = div.buildItems()
-        val oldItems = oldDiv?.buildItems()?.let {
+        val items = div.buildItems(resolver)
+        val oldItems = oldDiv?.buildItems(resolver)?.let {
             when {
                 div === oldDiv -> it
                 DivComparator.areValuesReplaceable(oldDiv, div, resolver) &&
@@ -416,12 +416,12 @@ internal class DivContainerBinder @Inject constructor(
             INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
     }
 
-    fun setDataWithoutBinding(view: ViewGroup, div: DivContainer) {
+    fun setDataWithoutBinding(view: ViewGroup, div: DivContainer, resolver: ExpressionResolver) {
         @Suppress("UNCHECKED_CAST")
         (view as DivHolderView<DivContainer>).div = div
         val binder = divBinder.get()
-        div.buildItems().forEachIndexed { index, item ->
-            binder.setDataWithoutBinding(view.getChildAt(index), item)
+        div.buildItems(resolver).forEachIndexed { index, item ->
+            binder.setDataWithoutBinding(view.getChildAt(index), item, resolver)
         }
     }
 }

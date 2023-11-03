@@ -4,12 +4,14 @@ import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.compactPathList
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.view2.divs.UnitTestData
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import junit.framework.AssertionFailedError
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -21,6 +23,7 @@ class DivStatePathUtilsTest {
     private val thrdLvlPath = DivStatePath(0, getStates(3))
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val div = testData.div
+    private val resolver = mock<ExpressionResolver>()
 
     @Test
     fun `find div state by path finds first container`() {
@@ -29,7 +32,7 @@ class DivStatePathUtilsTest {
         firstStateContainers.forEach { containerStateId: String ->
             val path = DivStatePath.parse("0/state_container/first/$containerStateId/two")
 
-            val div: Div? = div.findDivState(path)
+            val div: Div? = div.findDivState(path, resolver)
 
             Assert.assertNotNull(div)
             val divState: DivState = div?.value() as? DivState
@@ -43,7 +46,7 @@ class DivStatePathUtilsTest {
     fun `find div state by path finds second container`() {
         val path = DivStatePath.parse("0/state_container/second/second_state/hidden")
 
-        val div: Div? = div.findDivState(path)
+        val div: Div? = div.findDivState(path, resolver)
 
         Assert.assertNotNull(div)
         val divState: DivState = div?.value() as? DivState
@@ -59,7 +62,7 @@ class DivStatePathUtilsTest {
     fun `find div state by path finds root container`() {
         val path = DivStatePath.parse("0/state_container/second")
 
-        val div: Div? = div.findDivState(path)
+        val div: Div? = div.findDivState(path, resolver)
 
         Assert.assertNotNull(div)
         val divState: DivState = div?.value() as? DivState
@@ -74,7 +77,7 @@ class DivStatePathUtilsTest {
     fun `find div state by root path finds nothing`() {
         val path = DivStatePath.fromState(0)
 
-        val div: Div? = div.findDivState(path)
+        val div: Div? = div.findDivState(path, resolver)
 
         Assert.assertNull(div)
     }
@@ -83,7 +86,7 @@ class DivStatePathUtilsTest {
     fun `find div state by incorrect path fails`() {
         val path = scndLvlPath
 
-        val div: Div? = div.findDivState(path)
+        val div: Div? = div.findDivState(path, resolver)
 
         Assert.assertNull(div)
     }

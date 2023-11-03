@@ -87,7 +87,7 @@ class DivImagePreloader @Inject constructor(
         override fun visit(data: Div.Container, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.buildItems().forEach { visit(it, resolver) }
+                data.value.buildItems(resolver).forEach { visit(it, resolver) }
             }
         }
 

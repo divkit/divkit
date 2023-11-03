@@ -8,6 +8,7 @@ import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -169,107 +170,92 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         idToPatch: String,
         resolver: ExpressionResolver
     ): Div? {
-        val pathToChild = pathToChildWithId(parentDiv, idToPatch)
+        val pathToChild = pathToChildWithId(parentDiv, idToPatch, resolver)
         val iterator = pathToChild.iterator()
-        return if (pathToChild.isNotEmpty()) {
-            iterator.next()
+        if (pathToChild.isEmpty()) return null
 
-            // Notify internal recycler about changes if needed.
-            pathToChild.findLast {
-                it.value() is DivGallery || it.value() is DivPager
-            }?.value()?.let {
-                findPatchedRecyclerViewAndNotifyChange(parentView, it, idToPatch)
-            }
+        iterator.next()
 
-            return getPatchedTreeByPath(parentDiv, iterator, resolver)
-        } else {
-            null
+        // Notify internal recycler about changes if needed.
+        pathToChild.findLast {
+            it.value() is DivGallery || it.value() is DivPager
+        }?.value()?.let {
+            findPatchedRecyclerViewAndNotifyChange(parentView, it, idToPatch)
         }
+
+        return getPatchedTreeByPath(parentDiv, iterator, resolver)
     }
 
     private fun pathToChildWithId(
         currentDiv: Div,
         idToFind: String,
+        resolver: ExpressionResolver,
         currentPath: MutableList<Div> = mutableListOf()
     ): List<Div> {
         currentPath.add(currentDiv)
-        when (val currentDivValue = currentDiv.value()) {
-            is DivContainer -> {
-                if (currentDivValue.items.any { it.value().id == idToFind }) {
-                    return currentPath
-                } else {
-                    currentDivValue.items.forEach {
-                        val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
-                    }
-                    return emptyList()
-                }
-            }
+        return when (val currentDivValue = currentDiv.value()) {
+            is DivContainer -> currentDivValue.buildItems(resolver).pathToChildWithId(
+                    idToFind,
+                    resolver,
+                    currentPath,
+                    builtByBuilder = currentDivValue.items == null
+                )
 
-            is DivGrid -> {
-                if (currentDivValue.items.any { it.value().id == idToFind }) {
-                    return currentPath
-                } else {
-                    currentDivValue.items.forEach {
-                        val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
-                    }
-                    return emptyList()
-                }
-            }
+            is DivGrid ->
+                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
-            is DivGallery -> {
-                if (currentDivValue.items.any { it.value().id == idToFind }) {
-                    return currentPath
-                } else {
-                    currentDivValue.items.forEach {
-                        val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
-                    }
-                    return emptyList()
-                }
-            }
+            is DivGallery ->
+                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
-            is DivPager -> {
-                if (currentDivValue.items.any { it.value().id == idToFind }) {
-                    return currentPath
-                } else {
-                    currentDivValue.items.forEach {
-                        val newPath = pathToChildWithId(it, idToFind, currentPath)
-                        if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
-                    }
-                    return emptyList()
-                }
-            }
+            is DivPager ->
+                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivTabs -> {
                 if (currentDivValue.items.any { it.div.value().id == idToFind }) {
-                    return currentPath
+                    currentPath
                 } else {
                     currentDivValue.items.forEach {
-                        val newPath = pathToChildWithId(it.div, idToFind, currentPath)
+                        val newPath = pathToChildWithId(it.div, idToFind, resolver, currentPath)
                         if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
-                    return emptyList()
+                    emptyList()
                 }
             }
 
             is DivState -> {
                 if (currentDivValue.states.any { it.div?.value()?.id == idToFind }) {
-                    return currentPath
+                    currentPath
                 } else {
                     currentDivValue.states.mapNotNull { it.div }.forEach {
-                        val newPath = pathToChildWithId(it, idToFind, currentPath)
+                        val newPath = pathToChildWithId(it, idToFind, resolver, currentPath)
                         if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
                     }
-                    return emptyList()
+                    emptyList()
                 }
             }
 
-            else -> {
-                return emptyList()
-            }
+            else -> emptyList()
         }
+    }
+
+    private fun List<Div>.pathToChildWithId(
+        idToFind: String,
+        resolver: ExpressionResolver,
+        currentPath: MutableList<Div> = mutableListOf(),
+        builtByBuilder: Boolean
+    ): List<Div> {
+        if (any { it.value().id == idToFind }) {
+            if (!builtByBuilder) return currentPath
+
+            KAssert.fail { "Unable to patch container which has items built by items_builder." }
+            return emptyList()
+        }
+
+        forEach {
+            val newPath = pathToChildWithId(it, idToFind, resolver, currentPath)
+            if (newPath.isNotEmpty()) return newPath else currentPath.removeLast()
+        }
+        return emptyList()
     }
 
     private fun getPatchedTreeByPath(
@@ -277,74 +263,37 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         pathIterator: Iterator<Div>,
         resolver: ExpressionResolver
     ): Div {
-        when (val currentDivValue = currentDiv.value()) {
+        return when (val currentDivValue = currentDiv.value()) {
             is DivContainer -> {
-                return if (pathIterator.hasNext()) {
-                    val newItems = currentDivValue.items.toMutableList()
-                    val find = pathIterator.next()
-                    val replaceIndex = newItems.indexOf(find)
-                    if (replaceIndex == -1) {
-                        KAssert.fail { PATH_FOLLOWING_ERROR }
-                        return currentDiv
-                    }
-
-                    newItems[replaceIndex] = getPatchedTreeByPath(newItems[replaceIndex], pathIterator, resolver)
-                    Div.Container(currentDivValue.copyWithNewProperties(newItems))
-                } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
-                }
+                getPatchedDivCollection(currentDiv, currentDivValue.buildItems(resolver), pathIterator, resolver,
+                    { Div.Container(currentDivValue.copyWithNewProperties(it)) },
+                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                )
             }
 
             is DivGrid -> {
-                return if (pathIterator.hasNext()) {
-                    val newItems = currentDivValue.items.toMutableList()
-                    val replaceIndex = newItems.indexOf(pathIterator.next())
-                    if (replaceIndex == -1) {
-                        KAssert.fail { PATH_FOLLOWING_ERROR }
-                        return currentDiv
-                    }
-
-                    newItems[replaceIndex] = getPatchedTreeByPath(newItems[replaceIndex], pathIterator, resolver)
-                    Div.Grid(currentDivValue.copyWithNewProperties(newItems))
-                } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
-                }
+                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                    { Div.Grid(currentDivValue.copyWithNewProperties(it)) },
+                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                )
             }
 
             is DivGallery -> {
-                return if (pathIterator.hasNext()) {
-                    val newItems = currentDivValue.items.toMutableList()
-                    val replaceIndex = newItems.indexOf(pathIterator.next())
-                    if (replaceIndex == -1) {
-                        KAssert.fail { PATH_FOLLOWING_ERROR }
-                        return currentDiv
-                    }
-
-                    newItems[replaceIndex] = getPatchedTreeByPath(newItems[replaceIndex], pathIterator, resolver)
-                    Div.Gallery(currentDivValue.copyWithNewProperties(newItems))
-                } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
-                }
+                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                    { Div.Gallery(currentDivValue.copyWithNewProperties(it)) },
+                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                )
             }
 
             is DivPager -> {
-                return if (pathIterator.hasNext()) {
-                    val newItems = currentDivValue.items.toMutableList()
-                    val replaceIndex = newItems.indexOf(pathIterator.next())
-                    if (replaceIndex == -1) {
-                        KAssert.fail { PATH_FOLLOWING_ERROR }
-                        return currentDiv
-                    }
-
-                    newItems[replaceIndex] = getPatchedTreeByPath(newItems[replaceIndex], pathIterator, resolver)
-                    Div.Pager(currentDivValue.copyWithNewProperties(newItems))
-                } else {
-                    DivPatchApply(patch).applyPatch(currentDivValue, resolver)
-                }
+                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                    { Div.Pager(currentDivValue.copyWithNewProperties(it)) },
+                    { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
+                )
             }
 
             is DivTabs -> {
-                return if (pathIterator.hasNext()) {
+                if (pathIterator.hasNext()) {
                     val newItems = currentDivValue.items.toMutableList()
                     val replaceIndex = newItems.map { it.div }.indexOf(pathIterator.next())
                     if (replaceIndex == -1) {
@@ -365,7 +314,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             }
 
             is DivState -> {
-                return if (pathIterator.hasNext()) {
+                if (pathIterator.hasNext()) {
                     val newItems = currentDivValue.states.toMutableList()
                     val replaceIndex = newItems.map { it.div }.indexOf(pathIterator.next())
                     if (replaceIndex == -1) {
@@ -390,10 +339,30 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 }
             }
 
-            else -> {
-                return currentDiv
-            }
+            else -> currentDiv
         }
+    }
+
+    private fun getPatchedDivCollection(
+        currentDiv: Div,
+        items: List<Div>,
+        pathIterator: Iterator<Div>,
+        resolver: ExpressionResolver,
+        createPatchedDiv: (List<Div>) -> Div,
+        patchDiv: () -> Div
+    ): Div {
+        if (!pathIterator.hasNext()) return patchDiv()
+
+        val find = pathIterator.next()
+        val replaceIndex = items.indexOf(find)
+        if (replaceIndex == -1) {
+            KAssert.fail { PATH_FOLLOWING_ERROR }
+            return currentDiv
+        }
+
+        val newItems = items.toMutableList()
+        newItems[replaceIndex] = getPatchedTreeByPath(newItems[replaceIndex], pathIterator, resolver)
+        return createPatchedDiv(newItems)
     }
 
     private fun findPatchedRecyclerViewAndNotifyChange(

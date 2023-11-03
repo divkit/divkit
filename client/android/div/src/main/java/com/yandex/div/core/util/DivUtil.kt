@@ -125,15 +125,15 @@ internal fun DivBorder.getCornerRadii(
     )
 }
 
-internal fun Div.containsStateInnerTransitions(): Boolean {
+internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Boolean {
     with(value()) {
         if (transitionIn != null || transitionChange != null || transitionOut != null) {
             return true
         }
     }
     return when (this) {
-        is Div.Container -> value.buildItems().map(Div::containsStateInnerTransitions).contains(true)
-        is Div.Grid -> value.items.map(Div::containsStateInnerTransitions).contains(true)
+        is Div.Container -> value.buildItems(resolver).map { it.containsStateInnerTransitions(resolver) }.contains(true)
+        is Div.Grid -> value.items.map { it.containsStateInnerTransitions(resolver) }.contains(true)
         is Div.Text -> false
         is Div.Image -> false
         is Div.GifImage -> false

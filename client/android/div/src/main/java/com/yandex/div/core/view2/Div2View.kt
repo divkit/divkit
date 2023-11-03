@@ -300,7 +300,7 @@ class Div2View private constructor(
             rebind(oldData, false)
             divData = newDivData
             val state = newDivData.stateToBind
-            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div)
+            div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div, expressionResolver)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
             attachVariableTriggers()
@@ -708,7 +708,7 @@ class Div2View private constructor(
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
 
-        return div.walk()
+        return div.walk(resolver)
             .onEnter { div ->
                 if (div is Div.State) selectors.addLast(div.value.transitionAnimationSelector.evaluate(resolver))
                 true
@@ -974,7 +974,7 @@ class Div2View private constructor(
                 return
             }
             val currentState = pendingState ?: return
-            viewComponent.stateSwitcher.switchStates(currentState, pendingPaths.immutableCopy())
+            viewComponent.stateSwitcher.switchStates(currentState, pendingPaths.immutableCopy(), expressionResolver)
             pendingState = null
             pendingPaths.clear()
         }

@@ -40,7 +40,7 @@ internal class DivTransitionBuilder @Inject constructor(
         get() = context.resources.displayMetrics
 
     fun buildTransitions(fromDiv: Div?, toDiv: Div?, resolver: ExpressionResolver): TransitionSet {
-        return buildTransitions(from = fromDiv?.walk(), to = toDiv?.walk(), resolver)
+        return buildTransitions(from = fromDiv?.walk(resolver), to = toDiv?.walk(resolver), resolver)
     }
 
     fun buildTransitions(from: Sequence<Div>?, to: Sequence<Div>?,

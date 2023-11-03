@@ -1,25 +1,27 @@
 package com.yandex.div.core.util
 
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
 /**
  * Gets a sequence for visiting this [Div] and all its children.
  */
-internal fun Div.walk(): DivTreeWalk {
-    return DivTreeWalk(this)
+internal fun Div.walk(resolver: ExpressionResolver): DivTreeWalk {
+    return DivTreeWalk(this, resolver)
 }
 
 internal class DivTreeWalk private constructor(
     private val root: Div,
+    private val resolver: ExpressionResolver,
     private val onEnter: ((Div) -> Boolean)?,
     private val onLeave: ((Div) -> Unit)?,
     private val maxDepth: Int = Int.MAX_VALUE
 ) : Sequence<Div> {
 
-    internal constructor(root: Div) : this(root, null, null)
+    internal constructor(root: Div, resolver: ExpressionResolver) : this(root, resolver, null, null)
 
-    override fun iterator(): Iterator<Div> = DivTreeWalkIterator(root)
+    override fun iterator(): Iterator<Div> = DivTreeWalkIterator(root, resolver)
 
     /**
      * Sets a [predicate], that is called on any entered container div (div-container, div-gallery, etc.)
@@ -28,7 +30,7 @@ internal class DivTreeWalk private constructor(
      * If the [predicate] returns `false` the div is not entered and neither it nor its children are visited.
      */
     fun onEnter(predicate: (Div) -> Boolean): DivTreeWalk {
-        return DivTreeWalk(root, onEnter = predicate, onLeave = onLeave, maxDepth = maxDepth)
+        return DivTreeWalk(root, resolver, onEnter = predicate, onLeave = onLeave, maxDepth = maxDepth)
     }
 
     /**
@@ -36,7 +38,7 @@ internal class DivTreeWalk private constructor(
      * and after it is visited itself.
      */
     fun onLeave(function: (Div) -> Unit): DivTreeWalk {
-        return DivTreeWalk(root, onEnter = onEnter, onLeave = function, maxDepth = maxDepth)
+        return DivTreeWalk(root, resolver, onEnter = onEnter, onLeave = function, maxDepth = maxDepth)
     }
 
     /**
@@ -52,15 +54,16 @@ internal class DivTreeWalk private constructor(
             throw IllegalArgumentException("depth must be positive, but was $depth.")
         }
 
-        return DivTreeWalk(root, onEnter, onLeave, depth)
+        return DivTreeWalk(root, resolver, onEnter, onLeave, depth)
     }
 
     private inner class DivTreeWalkIterator(
-        private val root: Div
+        private val root: Div,
+        private val resolver: ExpressionResolver
     ) : AbstractIterator<Div>() {
 
         private val stack = ArrayDeque<Node>().apply {
-            addLast(node(root))
+            addLast(node(root, resolver))
         }
 
         override fun computeNext() {
@@ -81,16 +84,16 @@ internal class DivTreeWalk private constructor(
             } else if (div == node.div || div.isLeaf || stack.size >= maxDepth) {
                 div
             } else {
-                stack.addLast(node(div))
+                stack.addLast(node(div, resolver))
                 nextDiv()
             }
         }
 
-        private fun node(div: Div): Node {
+        private fun node(div: Div, resolver: ExpressionResolver): Node {
             return if (div.isBranch) {
-                BranchNode(div, onEnter, onLeave)
+                BranchNode(div, resolver, onEnter, onLeave)
             } else {
-                LeafNode(div)
+                LeafNode(div, resolver)
             }
         }
     }
@@ -98,12 +101,14 @@ internal class DivTreeWalk private constructor(
     private interface Node {
 
         val div: Div
+        val resolver: ExpressionResolver
 
         fun step(): Div?
     }
 
     private class LeafNode(
-        override val div: Div
+        override val div: Div,
+        override val resolver: ExpressionResolver
     ) : Node {
 
         private var visited = false
@@ -120,6 +125,7 @@ internal class DivTreeWalk private constructor(
 
     private class BranchNode(
         override val div: Div,
+        override val resolver: ExpressionResolver,
         private val onEnter: ((Div) -> Boolean)?,
         private val onLeave: ((Div) -> Unit)?
     ) : Node {
@@ -139,7 +145,7 @@ internal class DivTreeWalk private constructor(
 
             var children = this.children
             if (children == null) {
-                children = div.items
+                children = div.getItems(resolver)
                 this.children = children
             }
 
@@ -153,24 +159,23 @@ internal class DivTreeWalk private constructor(
     }
 }
 
-private val Div.items: List<Div>
-    get() {
-        return when (this) {
-            is Div.Text -> emptyList()
-            is Div.Image -> emptyList()
-            is Div.GifImage -> emptyList()
-            is Div.Separator -> emptyList()
-            is Div.Indicator -> emptyList()
-            is Div.Slider -> emptyList()
-            is Div.Input -> emptyList()
-            is Div.Custom -> emptyList()
-            is Div.Select -> emptyList()
-            is Div.Video -> emptyList()
-            is Div.Container -> value.buildItems()
-            is Div.Grid -> value.items
-            is Div.Gallery -> value.items
-            is Div.Pager -> value.items
-            is Div.Tabs -> value.items.map { tab -> tab.div }
-            is Div.State -> value.states.mapNotNull { state -> state.div }
-        }
+private fun Div.getItems(resolver: ExpressionResolver): List<Div> {
+    return when (this) {
+        is Div.Text -> emptyList()
+        is Div.Image -> emptyList()
+        is Div.GifImage -> emptyList()
+        is Div.Separator -> emptyList()
+        is Div.Indicator -> emptyList()
+        is Div.Slider -> emptyList()
+        is Div.Input -> emptyList()
+        is Div.Custom -> emptyList()
+        is Div.Select -> emptyList()
+        is Div.Video -> emptyList()
+        is Div.Container -> value.buildItems(resolver)
+        is Div.Grid -> value.items
+        is Div.Gallery -> value.items
+        is Div.Pager -> value.items
+        is Div.Tabs -> value.items.map { tab -> tab.div }
+        is Div.State -> value.states.mapNotNull { state -> state.div }
     }
+}

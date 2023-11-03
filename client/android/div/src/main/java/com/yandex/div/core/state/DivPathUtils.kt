@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivState
@@ -37,14 +38,14 @@ internal object DivPathUtils {
      * for [DivStatePath] equal to 0/first_state/first_div/second_state/second_div [Div] corresponding to
      * 0/first_state/first_div/second_state will be returned.
      */
-    internal fun Div.findDivState(path: DivStatePath): Div? {
+    internal fun Div.findDivState(path: DivStatePath, resolver: ExpressionResolver): Div? {
         val states = path.getStates()
         if (states.isEmpty()) {
             return null
         }
         var foundDiv: Div? = this
         states.forEach { (divId, _) ->
-            foundDiv = foundDiv?.findByPath(divId) ?: return null
+            foundDiv = foundDiv?.findByPath(divId, resolver) ?: return null
         }
         return foundDiv
     }
@@ -63,7 +64,8 @@ internal object DivPathUtils {
      */
     internal fun View.tryFindStateDivAndLayout(
         state: DivData.State,
-        path: DivStatePath
+        path: DivStatePath,
+        resolver: ExpressionResolver,
     ): Pair<DivStateLayout?, Div.State>? {
         val viewByPath = findStateLayout(path)
 
@@ -77,7 +79,7 @@ internal object DivPathUtils {
             }
         }
 
-        val divByPath = state.div.findDivState(path) as? Div.State ?: return null // Ignore if no such state
+        val divByPath = state.div.findDivState(path, resolver) as? Div.State ?: return null // Ignore if no such state
 
         return Pair(viewByPath, divByPath)
     }
@@ -96,21 +98,21 @@ internal object DivPathUtils {
         }.distinct()
     }
 
-    private fun Div.findByPath(divId: String): Div? {
+    private fun Div.findByPath(divId: String, resolver: ExpressionResolver): Div? {
         return when (this) {
             is Div.State -> {
                 if (value.getId() == divId) {
                     this
                 } else {
-                    value.states.mapNotNull { it.div }.findRecursively(divId)
+                    value.states.mapNotNull { it.div }.findRecursively(divId, resolver)
                 }
             }
-            is Div.Tabs -> value.items.map { it.div }.findRecursively(divId)
-            is Div.Container -> value.buildItems().findRecursively(divId)
-            is Div.Grid -> value.items.findRecursively(divId)
-            is Div.Gallery -> value.items.findRecursively(divId)
-            is Div.Pager -> value.items.findRecursively(divId)
-            is Div.Custom -> value.items?.findRecursively(divId)
+            is Div.Tabs -> value.items.map { it.div }.findRecursively(divId, resolver)
+            is Div.Container -> value.buildItems(resolver).findRecursively(divId, resolver)
+            is Div.Grid -> value.items.findRecursively(divId, resolver)
+            is Div.Gallery -> value.items.findRecursively(divId, resolver)
+            is Div.Pager -> value.items.findRecursively(divId, resolver)
+            is Div.Custom -> value.items?.findRecursively(divId, resolver)
             is Div.Text -> null
             is Div.Image -> null
             is Div.Slider -> null
@@ -123,9 +125,9 @@ internal object DivPathUtils {
         }
     }
 
-    private fun Iterable<Div>.findRecursively(divId: String): Div? {
+    private fun Iterable<Div>.findRecursively(divId: String, resolver: ExpressionResolver): Div? {
         forEach { div: Div ->
-            val state = div.findByPath(divId)
+            val state = div.findByPath(divId, resolver)
             if (state != null) {
                 return state
             }

@@ -2,6 +2,7 @@ package com.yandex.div.core.util
 
 import android.net.Uri
 import com.yandex.div.core.asExpression
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
@@ -10,16 +11,19 @@ import com.yandex.div2.DivText
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivWalkTreeTest {
 
+    private val resolver = mock<ExpressionResolver>()
+
     @Test
     fun `walking single node hierarchy`() {
         val rootDiv = divText("lorem ipsum")
 
-        val divWalk = rootDiv.walk()
+        val divWalk = rootDiv.walk(resolver)
             .map { div -> div.type }
 
         assertEquals(listOf("text"), divWalk.toList())
@@ -34,7 +38,7 @@ class DivWalkTreeTest {
             )
         )
 
-        val divWalk = rootDiv.walk()
+        val divWalk = rootDiv.walk(resolver)
             .map { div -> div.type }
 
         assertEquals(listOf("container", "text", "image"), divWalk.toList())
@@ -54,7 +58,7 @@ class DivWalkTreeTest {
             )
         )
 
-        val divWalk = rootDiv.walk()
+        val divWalk = rootDiv.walk(resolver)
             .map { div -> div.type }
 
         assertEquals(listOf("container", "container", "text", "image", "text"), divWalk.toList())
@@ -74,7 +78,7 @@ class DivWalkTreeTest {
             )
         )
 
-        val divWalk = rootDiv.walk()
+        val divWalk = rootDiv.walk(resolver)
             .onEnter { div -> div !is Div.Gallery }
             .map { div -> div.type }
 
@@ -95,7 +99,7 @@ class DivWalkTreeTest {
             )
         )
 
-        val divWalk = rootDiv.walk()
+        val divWalk = rootDiv.walk(resolver)
             .maxDepth(1)
             .map { div -> div.type }
 
@@ -117,7 +121,7 @@ class DivWalkTreeTest {
         )
 
         val enteredDivs = mutableListOf<String>()
-        rootDiv.walk()
+        rootDiv.walk(resolver)
             .onEnter { div ->
                 enteredDivs += div.type
                 true
@@ -142,7 +146,7 @@ class DivWalkTreeTest {
         )
 
         val leftDivs = mutableListOf<String>()
-        rootDiv.walk()
+        rootDiv.walk(resolver)
             .onLeave { div -> leftDivs += div.type }
             .toList()
 

@@ -54,19 +54,19 @@ internal class DivGalleryBinder @Inject constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun bindView(view: DivRecyclerView, div: DivGallery, divView: Div2View, path: DivStatePath) {
+        val resolver = divView.expressionResolver
+
         val oldDiv = (view as? DivRecyclerView)?.div
         if (div == oldDiv) {
             val adapter = view.adapter as GalleryAdapter
             adapter.applyPatch(view, divPatchCache, divView)
             adapter.closeAllSubscription()
             adapter.subscribeOnElements()
-            bindStates(view, div.items, divView)
+            bindStates(view, div.items, divView, resolver)
             return
         }
 
         baseBinder.bindView(view, div, oldDiv, divView)
-
-        val resolver = divView.expressionResolver
 
         val reusableObserver = { _: Any ->
             updateDecorations(view, div, divView, resolver)
@@ -86,7 +86,7 @@ internal class DivGalleryBinder @Inject constructor(
         view.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         val itemStateBinder =
-            { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView) }
+            { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView, resolver) }
         view.adapter =
             GalleryAdapter(div.items, divView, divBinder.get(), viewCreator, itemStateBinder, path)
 
@@ -99,7 +99,8 @@ internal class DivGalleryBinder @Inject constructor(
     private fun bindStates(
         view: View,
         divs: List<Div>,
-        divView: Div2View
+        divView: Div2View,
+        resolver: ExpressionResolver,
     ) {
         val viewsToBind = mutableListOf<DivStateLayout>()
         val divStateVisitor = object : DivViewVisitor() {
@@ -120,7 +121,7 @@ internal class DivGalleryBinder @Inject constructor(
 
         compactPaths.forEach { path ->
             val divByPath = divs.firstNotNullOfOrNull { item ->
-                item.findDivState(path)
+                item.findDivState(path, resolver)
             }
             val views = viewsByPath[path]
 

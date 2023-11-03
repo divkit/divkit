@@ -5,6 +5,7 @@ import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import javax.inject.Inject
 
@@ -17,7 +18,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
     private val divBinder: DivBinder,
 ) : DivStateSwitcher {
 
-    override fun switchStates(state: DivData.State, paths: List<DivStatePath>) {
+    override fun switchStates(state: DivData.State, paths: List<DivStatePath>, resolver: ExpressionResolver) {
         val rootView = divView.getChildAt(0)
         val rootDiv = state.div
         var view = rootView
@@ -28,7 +29,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
         val commonPath = findCommonPath(paths, path)
         if (!commonPath.isRootPath()) {
             val (viewByPath, divByPath) =
-                rootView.tryFindStateDivAndLayout(state, commonPath) ?: return
+                rootView.tryFindStateDivAndLayout(state, commonPath, resolver) ?: return
 
             if (viewByPath != null) {
                 view = viewByPath

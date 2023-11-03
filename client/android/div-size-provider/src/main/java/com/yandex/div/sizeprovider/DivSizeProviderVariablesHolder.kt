@@ -27,7 +27,7 @@ class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber 
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.buildItems().forEach { visit(it, resolver) }
+        data.value.buildItems(resolver).forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Grid, resolver: ExpressionResolver) {

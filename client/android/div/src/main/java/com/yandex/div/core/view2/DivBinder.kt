@@ -197,13 +197,13 @@ internal class DivBinder @Inject constructor(
         view.applyMargins(data.margins, resolver)
     }
 
-    fun setDataWithoutBinding(view: View, div: Div) = when (div) {
+    fun setDataWithoutBinding(view: View, div: Div, resolver: ExpressionResolver) = when (div) {
         is Div.Text -> (view as DivLineHeightTextView).div = div.value
         is Div.Image -> (view as DivImageView).div = div.value
         is Div.GifImage -> (view as DivGifImageView).div = div.value
         is Div.Separator -> (view as DivSeparatorView).div = div.value
-        is Div.Container -> setContainerData(view, div.value)
-        is Div.Grid -> setGridData(view, div.value)
+        is Div.Container -> setContainerData(view, div.value, resolver)
+        is Div.Grid -> setGridData(view, div.value, resolver)
         is Div.Gallery -> (view as DivRecyclerView).div = div.value
         is Div.Pager -> (view as DivPagerView).div = div.value
         is Div.Tabs -> (view as DivTabsLayout).div = div.value
@@ -216,11 +216,11 @@ internal class DivBinder @Inject constructor(
         is Div.Video -> (view as DivVideoView).div = div.value
     }
 
-    private fun setContainerData(view: View, data: DivContainer) {
-        containerBinder.setDataWithoutBinding(view as ViewGroup, data)
+    private fun setContainerData(view: View, data: DivContainer, resolver: ExpressionResolver) {
+        containerBinder.setDataWithoutBinding(view as ViewGroup, data, resolver)
     }
 
-    private fun setGridData(view: View, data: DivGrid) {
-        gridBinder.setDataWithoutBinding(view as DivGridLayout, data)
+    private fun setGridData(view: View, data: DivGrid, resolver: ExpressionResolver) {
+        gridBinder.setDataWithoutBinding(view as DivGridLayout, data, resolver)
     }
 }

@@ -34,8 +34,8 @@ internal object DivComparator {
             return true
         }
         return areValuesReplaceable(old.value(), new.value(), resolver) && areChildrenReplaceable(
-            extractChildren(old),
-            extractChildren(new),
+            extractChildren(old, resolver),
+            extractChildren(new, resolver),
             resolver
         )
     }
@@ -76,9 +76,9 @@ internal object DivComparator {
         }
     }
 
-    private fun extractChildren(div: Div): List<Div> {
+    private fun extractChildren(div: Div, resolver: ExpressionResolver): List<Div> {
         return when (div) {
-            is Div.Container -> div.value.buildItems()
+            is Div.Container -> div.value.buildItems(resolver)
             is Div.Grid -> div.value.items
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()
