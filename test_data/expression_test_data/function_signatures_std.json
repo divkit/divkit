@@ -199,6 +199,7 @@
       ],
       "result_type": "string",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

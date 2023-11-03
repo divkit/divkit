@@ -4,6 +4,7 @@ import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 
 private const val FUNCTION_NAME = "toString"
 
@@ -67,5 +68,20 @@ internal object ColorToString : Function() {
 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         return (args.first() as Color).toString()
+    }
+}
+
+internal object UrlToString : Function() {
+
+    override val name = FUNCTION_NAME
+
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.URL))
+
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        return (args.first() as Url).toString()
     }
 }

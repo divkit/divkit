@@ -10,6 +10,7 @@ import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatfo
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSONObject
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.evaluable.withEvaluator
 import org.json.JSONArray
 import org.json.JSONException
@@ -108,10 +109,6 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     data class TestVariable(val name: String, val value: Any)
-
-    data class TestUrl(val value: String) {
-        override fun toString() = value
-    }
 
     data class TestDate(val value: String) {
         private val dateTime = DateTime.parseAsUTC(value)
@@ -225,7 +222,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private fun parseValue(json: JSONObject): Any {
             val value: Any = when (val type = json.getString(TYPE_FIELD)) {
                 VALUE_TYPE_STRING -> json.getString(VALUE_FIELD)
-                VALUE_TYPE_URL -> TestUrl(json.getString(VALUE_FIELD))
+                VALUE_TYPE_URL -> Url(json.getString(VALUE_FIELD))
                 VALUE_TYPE_COLOR -> Color.parse(json.getString(VALUE_FIELD))
                 VALUE_TYPE_INTEGER -> json.getLong(VALUE_FIELD)
                 VALUE_TYPE_DECIMAL -> json.getDouble(VALUE_FIELD)
