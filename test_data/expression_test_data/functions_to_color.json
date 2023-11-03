@@ -9,6 +9,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -22,6 +23,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]

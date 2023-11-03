@@ -12,6 +12,7 @@ internal const val REASON_CONVERT_TO_INTEGER = "Unable to convert value to Integ
 internal const val REASON_CONVERT_TO_NUMBER = "Unable to convert value to Number."
 internal const val REASON_CONVERT_TO_BOOLEAN = "Unable to convert value to Boolean."
 internal const val REASON_CONVERT_TO_COLOR = "Unable to convert value to Color, expected format #AARRGGBB."
+internal const val REASON_CONVERT_TO_URL = "Unable to convert value to Url."
 internal const val REASON_OUT_OF_RANGE = "Value out of range 0..1."
 
 open class EvaluableException(

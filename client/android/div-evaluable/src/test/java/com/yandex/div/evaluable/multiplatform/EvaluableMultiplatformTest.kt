@@ -222,7 +222,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         private fun parseValue(json: JSONObject): Any {
             val value: Any = when (val type = json.getString(TYPE_FIELD)) {
                 VALUE_TYPE_STRING -> json.getString(VALUE_FIELD)
-                VALUE_TYPE_URL -> Url(json.getString(VALUE_FIELD))
+                VALUE_TYPE_URL -> Url.from(json.getString(VALUE_FIELD))
                 VALUE_TYPE_COLOR -> Color.parse(json.getString(VALUE_FIELD))
                 VALUE_TYPE_INTEGER -> json.getLong(VALUE_FIELD)
                 VALUE_TYPE_DECIMAL -> json.getDouble(VALUE_FIELD)

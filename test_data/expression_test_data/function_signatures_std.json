@@ -216,6 +216,7 @@
       ],
       "result_type": "color",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -232,6 +233,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]

@@ -142,6 +142,8 @@ class BuiltinFunctionProvider(
         registry.register(BooleanToString)
         registry.register(ColorToString)
         registry.register(UrlToString)
+        registry.register(StringToColor)
+        registry.register(StringToUrl)
 
         // Variable functions
         registry.register(GetIntegerValue(variableProvider))
