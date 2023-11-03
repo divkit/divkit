@@ -4,7 +4,7 @@ import BasePublic
 import DivKit
 import LayoutKit
 
-public final class VideoExtensionHandler: DivExtensionHandler {
+public final class VideoDurationExtensionHandler: DivExtensionHandler {
   public var id: String = extensionID
 
   public init() { }
@@ -20,7 +20,7 @@ public final class VideoExtensionHandler: DivExtensionHandler {
     let extensionParams = getExtensionParams(div)
     let durationVariableName: DivVariableName? = try? extensionParams.getOptionalField(durationKey)
     guard let durationVariableName else {
-      DivKitLogger.error("No valid params for VideoExtensionHandler")
+      DivKitLogger.error("No valid params for VideoDurationExtensionHandler")
       return block
     }
     return VideoBlock(
