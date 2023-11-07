@@ -1971,9 +1971,6 @@
     },
     {
       "title": "state_id_variable",
-      "platforms": [
-        "web"
-      ],
       "tags": [
         "DivState"
       ],

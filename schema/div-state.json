@@ -88,11 +88,7 @@
         },
         "state_id_variable": {
           "$ref": "div-variable-name.json",
-          "$description": "translations.json#/div_state_state_id_variable",
-          "platforms": [
-            "web",
-            "android"
-          ]
+          "$description": "translations.json#/div_state_state_id_variable"
         },
         "div_id": {
           "type": "string",
