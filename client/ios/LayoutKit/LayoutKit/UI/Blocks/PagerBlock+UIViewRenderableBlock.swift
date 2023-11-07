@@ -81,31 +81,33 @@ private final class PagerView: BlockView {
       renderingDelegate: renderingDelegate
     )
 
-    let oldModel = self.model
+    let isNewModel = model != self.model
     self.model = model
     self.selectedActions = selectedActions
 
-    onMainThreadAsync {
-      if model != oldModel {
-        self.setState(state.synchronized(with: model), path: model.path, notifyingObservers: true)
+    if isNewModel {
+      onMainThreadAsync {
+        // do not update state if model has been changed already
+        if model == self.model {
+          self.setState(state.synchronized(with: model))
+        }
       }
     }
   }
 
-  private func setState(_ state: PagerViewState, path: UIElementPath, notifyingObservers: Bool) {
+  private func setState(_ state: PagerViewState) {
     let currentPage = state.currentPage
+    let path = model.path
     currentPageIndex = FractionalPageIndex(rawValue: CGFloat(currentPage))
     if lastState?.0 != path || lastState?.1 != state {
-      lastState = (model.path, state)
+      lastState = (path, state)
 
-      if notifyingObservers {
-        observer?.elementStateChanged(state, forPath: model.path)
-      }
+      observer?.elementStateChanged(state, forPath: path)
 
       let pageIndex = Int(round(currentPage))
 
       PagerSelectedPageChangedEvent(
-        path: model.path,
+        path: path,
         selectedPageIndex: pageIndex
       ).sendFrom(self)
 
@@ -143,8 +145,7 @@ extension PagerView: ElementStateObserver {
         PagerViewState(
           numberOfPages: model.items.count,
           currentPage: Int(pageIndex.rounded())
-        ), path: model.path,
-        notifyingObservers: true
+        )
       )
     }
   }
