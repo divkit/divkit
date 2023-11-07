@@ -26,10 +26,12 @@ internal class ReleaseViewVisitor @Inject constructor(
 
     override fun visit(view: DivCustomWrapper) {
         val divCustom = view.div ?: return
-        view.customView?.let { divExtensionController.unbindView(divView, it, divCustom) }
         release(view)
-        divCustomViewAdapter?.release(view, divCustom)
-        divCustomContainerViewAdapter?.release(view, divCustom)
+        view.customView?.let {
+            divExtensionController.unbindView(divView, it, divCustom)
+            divCustomViewAdapter?.release(it, divCustom)
+            divCustomContainerViewAdapter?.release(it, divCustom)
+        }
     }
 
     override fun visit(view: View) = release(view)
