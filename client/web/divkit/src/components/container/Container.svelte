@@ -1,5 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
+    import { Readable, derived } from 'svelte/store';
 
     import css from './Container.module.css';
 
@@ -11,7 +12,7 @@
         ContentAlignmentHorizontal,
         ContentAlignmentVertical
     } from '../../types/alignment';
-    import type { SeparatorStyle } from '../../utils/container';
+    import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
     import { prepareMargins } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
@@ -19,7 +20,7 @@
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
-    import { calcAdditionalPaddings, calcItemsGap } from '../../utils/container';
+    import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
     import { hasGapSupport } from '../../utils/hasGapSupport';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import ContainerSeparators from './ContainerSeparators.svelte';
@@ -92,11 +93,34 @@
         };
     });
 
+    let childStore: Readable<ContainerChildInfo[]>;
+    $: {
+        let children: Readable<ContainerChildInfo>[] = [];
+
+        items.forEach(item => {
+            children.push(
+                rootCtx.getDerivedFromVars({
+                    width: item.json.width,
+                    height: item.json.height
+                })
+            );
+        });
+
+        // Create a new array every time so it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
+    }
+
     let orientation: ContainerOrientation = 'vertical';
     $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
     $: {
         orientation = correctContainerOrientation($jsonOrientation, orientation);
     }
+
+    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
+    $: wrap = $jsonLayoutMode === 'wrap';
+
+    $: hasKnownWidth = orientation !== 'horizontal' && !wrap && $childStore.some(hasKnownWidthCheck);
+    $: hasKnownHeight = orientation !== 'vertical' && !wrap && $childStore.some(hasKnownHeightCheck);
 
     let contentVAlign: ContentAlignmentVertical = 'top';
     $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
@@ -109,9 +133,6 @@
     $: {
         contentHAlign = correctContentAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
-
-    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
-    $: wrap = $jsonLayoutMode === 'wrap';
 
     $: jsonSeparator = rootCtx.getDerivedFromVars(json.separator);
     let separator: SeparatorStyle | null = null;
@@ -195,24 +216,26 @@
         }
         if (orientation !== 'horizontal') {
             newChildLayoutParams.parentHAlign = wrap ? 'start' : HALIGN_MAP[contentHAlign];
-            if (
-                !aspect && (
-                    !$jsonHeight ||
-                    $jsonHeight.type === 'wrap_content' ||
-                    $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
-                )
-            ) {
-                newChildLayoutParams.parentVerticalWrapContent = true;
-            }
         }
         if (orientation !== 'vertical') {
             newChildLayoutParams.parentVAlign = wrap ? 'start' : VALIGN_MAP[contentVAlign];
-            if (
+        }
+        if (
+            !aspect && !hasKnownHeight && (
+                !$jsonHeight ||
+                $jsonHeight.type === 'wrap_content' ||
+                $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+            )
+        ) {
+            newChildLayoutParams.parentVerticalWrapContent = true;
+        }
+        if (
+            !hasKnownWidth && (
                 $jsonWidth?.type === 'wrap_content' ||
                 $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
-            ) {
-                newChildLayoutParams.parentHorizontalWrapContent = true;
-            }
+            )
+        ) {
+            newChildLayoutParams.parentHorizontalWrapContent = true;
         }
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentContainerOrientation = 'horizontal';
