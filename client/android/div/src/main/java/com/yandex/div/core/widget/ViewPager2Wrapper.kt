@@ -14,9 +14,7 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    open val viewPager: ViewPager2 = ViewPager2(context).apply {
-        descendantFocusability = FOCUS_BLOCK_DESCENDANTS
-    }
+    open val viewPager: ViewPager2 = ViewPager2(context)
 
     init {
         addView(viewPager)

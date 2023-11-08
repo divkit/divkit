@@ -1,0 +1,73 @@
+{
+  "card": {
+    "variables": [
+      {
+        "name": "some_text",
+        "type": "string",
+        "value": "1001001"
+      }
+    ],
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "orientation": "vertical",
+          "layout_mode":{
+            "type": "percentage",
+            "page_width": {
+              "type": "percentage",
+              "value": 75
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "items": [
+            {
+              "type": "input",
+              "margins": {
+                "bottom": 10
+              },
+              "height":{
+                "type": "match_parent"
+              },
+              "width":{
+                "type": "match_parent"
+              },
+              "alignment_vertical": "top",
+              "font_size": 20,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "text_variable": "some_text",
+              "hint_text": "type something...",
+              "hint_color": "#88000000",
+              "highlight_color": "#1DFF9000",
+              "line_height": 28,
+              "keyboard_type": "single_line_text"
+            },
+            {
+              "type": "text",
+              "text": "That's a palindrome"
+            },
+            {
+              "type": "text",
+              "text": "Means 73"
+            },{
+              "type": "text",
+              "text": "73 is the best number"
+            }
+          ],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}

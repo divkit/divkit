@@ -2137,6 +2137,20 @@
         "DivState change state."
       ],
       "file": "state_binding.json"
+    },
+    {
+      "title": "Input inside pager",
+      "tags": [
+        "DivPager",
+        "DivInput"
+      ],
+      "steps": [
+        "Click on a number."
+      ],
+      "expected_results": [
+        "A keyboard appears and the number can be edited."
+      ],
+      "file": "input_inside_pager.json"
     }
   ]
 }
