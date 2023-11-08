@@ -3,10 +3,13 @@ package com.yandex.div.evaluable.function
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.REASON_CONVERT_TO_COLOR
+import com.yandex.div.evaluable.REASON_CONVERT_TO_URL
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -175,6 +178,40 @@ internal class GetColorFromDict(override val variableProvider: VariableProvider)
         }?.getOrElse {
             throwException(name, args, "Unable to convert value to Color, expected format #AARRGGBB.")
         } ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal class GetDictUrl(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getDictUrl"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal class GetUrlFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+
+    override val name = "getUrlFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
@@ -403,9 +440,9 @@ internal class GetDictOptColor(override val variableProvider: VariableProvider) 
 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
-        return (evaluateSafe(args, fallback) as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrNull() ?: Color.parse(fallback)
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
+        throwException(name, args, REASON_CONVERT_TO_COLOR)
     }
 }
 
@@ -424,9 +461,97 @@ internal class GetOptColorFromDict(override val variableProvider: VariableProvid
 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
-        return (evaluateSafe(args, fallback) as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrNull() ?: Color.parse(fallback)
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
+        throwException(name, args, REASON_CONVERT_TO_COLOR)
+    }
+}
+
+internal class GetDictOptUrlWithStringFallback(
+    override val variableProvider: VariableProvider) : Function(variableProvider
+) {
+
+    override val name = "getDictOptUrl"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as String
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl() ?:
+        throwException(name, args, REASON_CONVERT_TO_URL)
+    }
+}
+
+internal class GetDictOptUrlWithUrlFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getDictOptUrl"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.URL), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Url
+        return (evaluateSafe(args, fallback) as? String)?.safeConvertToUrl() ?: fallback
+    }
+}
+
+internal class GetOptUrlFromDictWithStringFallback(
+    override val variableProvider: VariableProvider) : Function(variableProvider
+) {
+
+    override val name = "getOptUrlFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as String
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl() ?:
+        throwException(name, args, REASON_CONVERT_TO_URL)
+    }
+}
+
+internal class GetOptUrlFromDictWithUrlFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getOptUrlFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.URL), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.URL
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Url
+        return (evaluateSafe(args, fallback) as? String)?.safeConvertToUrl() ?: fallback
     }
 }
 

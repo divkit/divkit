@@ -614,6 +614,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -634,6 +635,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1160,6 +1162,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1180,6 +1183,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1200,6 +1204,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1220,6 +1225,7 @@
         }
       ],
       "platforms": [
+        "android",
         "web"
       ]
     }

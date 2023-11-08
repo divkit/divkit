@@ -531,6 +531,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -712,6 +713,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -737,6 +739,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -863,6 +866,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1037,6 +1041,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1061,6 +1066,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1335,6 +1341,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1358,6 +1365,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -1382,6 +1390,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -1646,6 +1655,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1669,6 +1679,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1692,6 +1703,7 @@
       ],
       "result_type": "url",
       "platforms": [
+        "android",
         "web"
       ]
     },

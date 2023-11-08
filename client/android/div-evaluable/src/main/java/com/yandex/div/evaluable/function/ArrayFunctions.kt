@@ -4,9 +4,12 @@ import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.REASON_CONVERT_TO_COLOR
+import com.yandex.div.evaluable.REASON_CONVERT_TO_URL
 import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigDecimal
@@ -268,10 +271,9 @@ internal class GetArrayOptColorWithStringFallback(
 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as String
-        val evaluateSafe = evaluateSafe(name, args)
-        return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrNull() ?: Color.parse(fallback)
+        val result = evaluateSafe(name, args)
+        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
+        throwException(name, args, REASON_CONVERT_TO_COLOR)
     }
 }
 
@@ -288,12 +290,13 @@ internal class GetOptColorFromArrayWithStringFallback(
 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[2] as String
-        val evaluateSafe = evaluateSafe(name, args)
-        return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
-            Color.parse(this)
-        }?.getOrNull() ?: Color.parse(fallback)
+        val result = evaluateSafe(name, args)
+        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
+        throwException(name, args, REASON_CONVERT_TO_COLOR)
     }
 }
+
+internal fun String?.safeConvertToColor() = this?.runCatching { Color.parse(this) }?.getOrNull()
 
 internal class GetArrayOptColorWithColorFallback(
     override val variableProvider: VariableProvider
@@ -322,6 +325,96 @@ internal class GetOptColorFromArrayWithColorFallback(
         return (evaluateSafe as? Color) ?: (evaluateSafe as? String)?.runCatching {
             Color.parse(this)
         }?.getOrNull() ?: fallback
+    }
+}
+
+internal class GetArrayUrl(
+    override val variableProvider: VariableProvider
+) : ArrayFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getArrayUrl"
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal class GetUrlFromArray(
+    override val variableProvider: VariableProvider
+) : ArrayFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getUrlFromArray"
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+        (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal class GetArrayOptUrlWithStringFallback(
+    override val variableProvider: VariableProvider
+) : ArrayOptFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getArrayOptUrl"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.ARRAY), // variable name
+        FunctionArgument(type = EvaluableType.INTEGER), // index at array
+        FunctionArgument(type = EvaluableType.STRING) // fallback
+    )
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[2] as String
+        val result = evaluateSafe(name, args)
+        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl()
+        ?: throwException(name, args, REASON_CONVERT_TO_URL)
+    }
+}
+
+internal class GetOptUrlFromArrayWithStringFallback(
+    override val variableProvider: VariableProvider
+) : ArrayOptFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getOptUrlFromArray"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.ARRAY), // variable name
+        FunctionArgument(type = EvaluableType.INTEGER), // index at array
+        FunctionArgument(type = EvaluableType.STRING) // fallback
+    )
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[2] as String
+        val result = evaluateSafe(name, args)
+        return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl()
+        ?: throwException(name, args, REASON_CONVERT_TO_URL)
+    }
+}
+
+internal fun String?.safeConvertToUrl() = this?.runCatching { Url.from(this) }?.getOrNull()
+
+internal class GetArrayOptUrlWithUrlFallback(
+    override val variableProvider: VariableProvider
+) : ArrayOptFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getArrayOptUrl"
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[2] as Url
+        val evaluateSafe = evaluateSafe(name, args)
+        return (evaluateSafe as? String).safeConvertToUrl() ?: fallback
+    }
+}
+
+internal class GetOptUrlFromArrayWithUrlFallback(
+    override val variableProvider: VariableProvider
+) : ArrayOptFunction(variableProvider, EvaluableType.URL) {
+
+    override val name: String = "getOptUrlFromArray"
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[2] as Url
+        val evaluateSafe = evaluateSafe(name, args)
+        return (evaluateSafe as? String).safeConvertToUrl() ?: fallback
     }
 }
 
