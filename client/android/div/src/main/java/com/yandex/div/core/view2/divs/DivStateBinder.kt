@@ -96,6 +96,8 @@ internal class DivStateBinder @Inject constructor(
             ?: div.getDefaultState(resolver)
         val newState = div.states.find { it.stateId == stateId }
             ?: div.getDefaultState(resolver)
+        if (oldState == null || newState == null) return
+
         val currentPath = divStatePath.append(id, newState.stateId)
         val newStateDiv = newState.div
         val newStateDivValue = newStateDiv?.value()
