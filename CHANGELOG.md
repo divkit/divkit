@@ -3,6 +3,11 @@
 # Android Client:
 * Added infinite scrolling property to the pager.
 * Added common interface for all div views.
+* Added a workaround for a bug in R8 that sometimes causes a `ClassCastException` when using `DivGallery` or `DivGridLayout`.
+* Fixed `DivCustom` wrong ids for `DivGallery` items.
+
+# iOS Client:
+* Added `VideoDurationExtensionHandler`.
 
 # Web Client:
 * Fixed the first/last separator of the `container` with `space-evenly` and `space-around` alignment.
