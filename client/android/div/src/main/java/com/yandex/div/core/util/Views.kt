@@ -1,6 +1,5 @@
 package com.yandex.div.core.util
 
-import android.os.Build
 import android.view.View
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnNextLayout
@@ -17,17 +16,6 @@ internal fun View.isLayoutRtl() =
 
 internal fun View.getIndices(start: Int, count: Int) =
     if (isLayoutRtl()) start + count - 1 downTo start else start until start + count
-
-/**
- * @param enableDefaultHighlight if not null, changes [View.setDefaultFocusHighlightEnabled] parameter.
- */
-internal fun View.setFocusableState(focusable: Boolean, enableDefaultHighlight: Boolean? = null) {
-    isFocusable = focusable
-    isFocusableInTouchMode = focusable
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && enableDefaultHighlight != null) {
-        defaultFocusHighlightEnabled = enableDefaultHighlight
-    }
-}
 
 inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     if (isActuallyLaidOut && !isLayoutRequested) {

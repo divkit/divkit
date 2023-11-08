@@ -1,6 +1,7 @@
 package com.yandex.div.core.widget
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,10 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     val child: View?
         get() = if (childCount == 0) null else getChildAt(0)
+
+    init {
+        makeFocusable()
+    }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {
         require(childCount == 0) { "ViewWrapper can host only one child view" }
@@ -91,6 +96,14 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
         (child as? DivBorderSupports)?.setBorder(border, view, resolver)
+    }
+
+    private fun makeFocusable() {
+        isFocusable = true
+        isFocusableInTouchMode = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            defaultFocusHighlightEnabled = false
+        }
     }
 }
 

@@ -15,7 +15,6 @@ import com.yandex.div.core.util.mask.CurrencyInputMask
 import com.yandex.div.core.util.mask.DEFAULT_MASK_DATA
 import com.yandex.div.core.util.mask.FixedLengthInputMask
 import com.yandex.div.core.util.mask.PhoneInputMask
-import com.yandex.div.core.util.setFocusableState
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.validator.ExpressionValidator
 import com.yandex.div.core.util.validator.RegexValidator
@@ -60,7 +59,8 @@ internal class DivInputBinder @Inject constructor(
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.apply {
-            setFocusableState(true)
+            isFocusable = true
+            isFocusableInTouchMode = true
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
 
             observeBackground(div, divView, expressionResolver)

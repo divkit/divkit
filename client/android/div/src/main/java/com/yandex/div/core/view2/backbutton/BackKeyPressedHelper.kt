@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.backbutton
 
 import android.view.KeyEvent
 import android.view.View
-import com.yandex.div.core.util.setFocusableState
 import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper.OnBackClickListener
 
 /**
@@ -77,7 +76,8 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
         if (mOnBackClickListener == null || !mOwnerView.hasWindowFocus()) return
 
         mOwnerView.apply {
-            setFocusableState(true)
+            isFocusable = true
+            isFocusableInTouchMode = true
             when {
                 isShown -> requestFocus()
                 hasFocus() -> rootView?.requestFocus(View.FOCUS_UP)

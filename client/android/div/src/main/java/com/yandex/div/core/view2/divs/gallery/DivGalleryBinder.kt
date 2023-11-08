@@ -16,7 +16,6 @@ import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
-import com.yandex.div.core.util.setFocusableState
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -340,9 +339,7 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-            val view = DivViewWrapper(div2View.context).apply {
-                setFocusableState(focusable = true, enableDefaultHighlight = false)
-            }
+            val view = DivViewWrapper(div2View.context)
             return GalleryViewHolder(view, divBinder, viewCreator)
         }
 
