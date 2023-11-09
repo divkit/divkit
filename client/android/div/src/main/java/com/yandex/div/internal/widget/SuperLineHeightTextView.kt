@@ -36,11 +36,11 @@ internal open class SuperLineHeightTextView @JvmOverloads constructor(
         if (shouldReapplyExtraSpacing()) {
             invalidateTextPadding()
         }
-        if (fixLineHeight()) {
+        if (fixLineHeight() && MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY) {
             var measuredHeightAndState = measuredHeightAndState
             measuredHeightAndState = MeasureSpec.makeMeasureSpec(
-                    MeasureSpec.getSize(measuredHeightAndState) + lineSpacingExtraTop + lineSpacingExtraBottom,
-                    MeasureSpec.getMode(measuredHeightAndState)
+                MeasureSpec.getSize(measuredHeightAndState) + lineSpacingExtraTop + lineSpacingExtraBottom,
+                MeasureSpec.getMode(measuredHeightAndState)
             )
             super.setMeasuredDimension(measuredWidthAndState, measuredHeightAndState)
         }
