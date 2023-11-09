@@ -151,10 +151,10 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
     }
 }
 
-internal fun DivState.getDefaultState(resolver: ExpressionResolver): DivState.State {
+internal fun DivState.getDefaultState(resolver: ExpressionResolver): DivState.State? {
         return defaultStateId?.let { defaultStateId ->
             states.find { it.stateId == defaultStateId.evaluate(resolver) }
-        } ?: states[0]
+        } ?: states.firstOrNull()
     }
 
 internal val Div.isBranch: Boolean
