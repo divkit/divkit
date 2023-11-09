@@ -22,7 +22,7 @@ export function copyToClipboard(
         typeof navigator !== 'undefined' &&
         'clipboard' in navigator &&
         navigator.clipboard &&
-        'write' in navigator.clipboard &&
+        'writeText' in navigator.clipboard &&
         typeof navigator.clipboard.writeText === 'function'
     )) {
         logError(wrapError(new Error('Clipboard is unavailable'), {
