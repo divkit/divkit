@@ -1,3 +1,10 @@
+## 28.10.0 (November 13, 2023)
+
+* Added `copy_to_clipboard` action support.
+* Fixed cross-axis container items with the `match_parent` size logic in combination with the `wrap_content` size of the container itself.
+* Fixed `gallery` scrolling with `wrap_content` and `max_size` property.
+
+
 ## 28.9.0 (November 7, 2023)
 
 * Fixed the first/last separator of the `container` with `space-evenly` and `space-around` alignment.

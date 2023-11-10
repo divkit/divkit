@@ -1,3 +1,21 @@
+## 28.10.0
+
+# Android Client:
+* Added new evaluable type - EvaluableType.URL
+* Added functions `toString(url)`, `toUrl(str)` and `toColor(str)`.
+* Added `scale` property support in the `video` component.
+* Fixed crash when clicking "Next" on keyboard in `DivInput` inside `DivGallery`.
+* Fixed `DivInput` not working in `DivPager`.
+
+# iOS Client:
+* Fixed clipping to bounds of view when rotating.
+
+# Web Client:
+* Added `copy_to_clipboard` action support.
+* Fixed cross-axis container items with the `match_parent` size logic in combination with the `wrap_content` size of the container itself.
+* Fixed `gallery` scrolling with `wrap_content` and `max_size` property.
+
+
 ## 28.9.0
 
 # Android Client:
