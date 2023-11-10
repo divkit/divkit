@@ -295,11 +295,12 @@ class Div2View private constructor(
     fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
-        if (newDivData != null) {
+        val state = newDivData?.stateToBind
+
+        if (state != null) {
             bindOnAttachRunnable?.cancel()
             rebind(oldData, false)
             divData = newDivData
-            val state = newDivData.stateToBind
             div2Component.divBinder.setDataWithoutBinding(getChildAt(0), state.div, expressionResolver)
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
@@ -895,9 +896,10 @@ class Div2View private constructor(
                 updateNow(newData, dataTag)
                 return
             }
+            val state = newData.stateToBind ?: return
+
             histogramReporter?.onRebindingStarted()
             viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
-            val state = newData.stateToBind
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
             }
@@ -916,7 +918,7 @@ class Div2View private constructor(
         }
     }
 
-    private val DivData.stateToBind get() = states.firstOrNull { it.stateId == stateId } ?: states[0]
+    private val DivData.stateToBind get() = states.find { it.stateId == stateId } ?: states.firstOrNull()
 
     var visualErrorsEnabled: Boolean
         set(value) {
