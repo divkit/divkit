@@ -151,6 +151,8 @@ class BuiltinFunctionProvider(
         registry.register(GetStringValue(variableProvider))
         registry.register(GetColorValueString(variableProvider))
         registry.register(GetColorValue(variableProvider))
+        registry.register(GetUrlValueWithStringFallback(variableProvider))
+        registry.register(GetUrlValueWithUrlFallback(variableProvider))
         registry.register(GetBooleanValue(variableProvider))
 
         // Stored value functions

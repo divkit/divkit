@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.function
 import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 
 internal class GetIntegerValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
 
@@ -118,6 +119,55 @@ internal class GetColorValue(override val variableProvider: VariableProvider) : 
         val variableValue = variableProvider.get(variableName) as? Color
 
         return  variableValue ?: fallbackValue
+    }
+
+}
+
+internal class GetUrlValueWithStringFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getUrlValue"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // variable name
+        FunctionArgument(type = EvaluableType.STRING), // fallback
+    )
+
+    override val resultType = EvaluableType.URL
+
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val variableName = args[0] as String
+        val urlString = args[1] as String
+        val variableValue = variableProvider.get(variableName) as? Url
+        return variableValue ?:
+            urlString.safeConvertToUrl() ?:
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_URL)
+    }
+
+}
+
+internal class GetUrlValueWithUrlFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getUrlValue"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // variable name
+        FunctionArgument(type = EvaluableType.URL), // fallback
+    )
+
+    override val resultType = EvaluableType.URL
+
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val variableName = args[0] as String
+        val variableValue = variableProvider.get(variableName) as? Url
+        return variableValue ?: (args[1] as Url)
     }
 
 }
