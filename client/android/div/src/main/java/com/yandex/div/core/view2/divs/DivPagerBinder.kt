@@ -82,8 +82,9 @@ internal class DivPagerBinder @Inject constructor(
 
         val pageTranslations = SparseArray<Float>()
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
-        val divItems = ArrayList(div.items)
+        var divItems = div.items
         if (div.infiniteScroll.evaluate(resolver)) {
+            divItems = ArrayList(div.items)
             val firstItem = divItems.first()
             val lastItem = divItems.last()
             divItems.add(0, lastItem)
