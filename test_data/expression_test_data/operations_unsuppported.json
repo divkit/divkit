@@ -1635,6 +1635,7 @@
                 }
             ],
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]

@@ -583,6 +583,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
