@@ -21,6 +21,7 @@ import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.core.util.makeFocusable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -527,6 +528,10 @@ internal class DivPagerBinder @Inject constructor(
         context: Context,
         private val orientationProvider: () -> Int
     ) : FrameContainerLayout(context) {
+
+        init {
+            makeFocusable()
+        }
 
         override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
             // When the page cross size is equal to MATCH_PARENT or WRAP_CONTENT_CONSTRAINED,

@@ -1,11 +1,11 @@
 package com.yandex.div.core.widget
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import com.yandex.div.core.util.makeFocusable
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -96,14 +96,6 @@ internal class DivViewWrapper @JvmOverloads constructor(
 
     override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
         (child as? DivBorderSupports)?.setBorder(border, view, resolver)
-    }
-
-    private fun makeFocusable() {
-        isFocusable = true
-        isFocusableInTouchMode = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            defaultFocusHighlightEnabled = false
-        }
     }
 }
 
