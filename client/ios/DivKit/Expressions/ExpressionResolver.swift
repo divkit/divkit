@@ -90,6 +90,20 @@ public final class ExpressionResolver {
     }
   }
 
+  func resolveArrayValue(
+    expression: Expression<[Any]>?
+  ) -> [Any]? {
+    switch expression {
+    case let .value(val):
+      return val
+    case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
+      return evaluateSingleItem(link: link)
+    case .none:
+      return nil
+    }
+  }
+
   @inlinable
   func getVariableValue<T>(_ name: String) -> T? {
     guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {

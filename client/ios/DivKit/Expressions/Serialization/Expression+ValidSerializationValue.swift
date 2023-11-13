@@ -80,6 +80,17 @@ extension Expression where T == URL {
   }
 }
 
+extension Expression where T == [Any] {
+  func toValidSerializationValue() -> ValidSerializationValue {
+    switch self {
+    case let .value(value):
+      return value
+    case let .link(link):
+      return link.rawValue
+    }
+  }
+}
+
 extension Expression where T: RawRepresentable, T.RawValue == String {
   func toValidSerializationValue() -> String {
     switch self {

@@ -65,7 +65,7 @@ private let dictWithInvalidField: [String: Any] = [
   "states": [
     [
       "div": [
-        "type": "container",
+        "type": "gallery",
         "items": [] as [Any],
       ] as [String: Any],
       "state_id": 0,
@@ -116,7 +116,7 @@ private let invalidFieldErrors: [DeserializationError] = [
         from: [
           "state_id": 0,
           "div": [
-            "type": "container",
+            "type": "gallery",
             "items": [] as [Any],
           ] as [String: Any],
         ] as [String: Any]
@@ -130,7 +130,7 @@ private let invalidFieldErrors: [DeserializationError] = [
               error: .invalidValue(
                 result: nil,
                 from: [
-                  "type": "container",
+                  "type": "gallery",
                   "items": [] as [Any],
                 ] as [String: Any]
               ),

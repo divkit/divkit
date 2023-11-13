@@ -101,6 +101,15 @@ final class DivSerializationTests: XCTestCase {
     XCTAssertEqual("@{some_var}", dictionary["constrained"] as! String)
   }
 
+  func test_Serialize_ArrayValue() {
+    let variable = ArrayVariable(
+      name: "var",
+      value: [1, "aba", 2.3]
+    )
+    let dictionary = variable.toDictionary()
+    XCTAssertEqual([1, "aba", 2.3], dictionary["value"] as! [AnyHashable])
+  }
+
   private func makeLink<T>(_ rawValue: String) -> Expression<T> {
     .link(try! ExpressionLink(rawValue: rawValue, validator: nil)!)
   }

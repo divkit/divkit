@@ -25,17 +25,10 @@ final class ArrayInsertValueActionHandler {
       array.append(value)
     }
 
-    let typedValue: DivTypedValue = .arrayValue(ArrayValue(value: array))
-    guard let variableArrayValue = typedValue
-      .asVariableValue(expressionResolver: expressionResolver)
-    else {
-      return
-    }
-
     context.variablesStorage.update(
       cardId: context.cardId,
       name: DivVariableName(rawValue: variableName),
-      value: variableArrayValue
+      value: .array(array)
     )
   }
 }

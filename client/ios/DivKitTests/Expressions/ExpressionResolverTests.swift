@@ -11,6 +11,7 @@ final class ExpressionResolverTests: XCTestCase {
       "color_var": .color(Color.color(withHexString: "#AABBCC")!),
       "enum_var": .string("first"),
       "url_var": .url(URL(string: "https://some.url")!),
+      "array_var": .array([1]),
     ],
     persistentValuesStorage: DivPersistentValuesStorage(),
     variableTracker: { [unowned self] in
@@ -89,6 +90,14 @@ final class ExpressionResolverTests: XCTestCase {
     )
   }
 
+  func test_ResolveArray_WithVariable() {
+    XCTAssertEqual(
+      expressionResolver
+        .resolveArrayValue(expression: .link(try .init(rawValue: "@{array_var}")!)) as! [Int],
+      [1]
+    )
+  }
+
   func test_TracksVariable_InSimpleExpression() {
     let _ = expressionResolver.resolveString(expression: "@{string_var}")
 
@@ -102,9 +111,8 @@ final class ExpressionResolverTests: XCTestCase {
   }
 
   func test_TracksVariable_InGetValueFunction() {
-    let _ = expressionResolver.resolveString(
-      expression: "@{getStringValue('string_var', 'default')}"
-    )
+    let _ = expressionResolver
+      .resolveString(expression: "@{getStringValue('string_var', 'default')}")
 
     XCTAssertTrue(usedVariables.contains("string_var"))
   }
