@@ -50,6 +50,7 @@ final class DetachableAnimationBlockView: BlockView {
   private var animationOut: [TransitioningAnimation]?
   private var animationChange: ChangeBoundsTransition?
   private var queuedAnimation: DispatchWorkItem?
+  private var child: Block?
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
@@ -71,6 +72,7 @@ final class DetachableAnimationBlockView: BlockView {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
+    self.child = child
     childView = child.reuse(
       childView,
       observer: observer,
@@ -106,28 +108,40 @@ final class DetachableAnimationBlockView: BlockView {
           let animationChange = animationChange else {
       return
     }
-
     let finishFrame = convertFrame(to: container)
     self.childView = nil
-    childView.frame = startFrame
-    container.addSubview(childView)
+    let blockSize = CGSize(
+      width: startFrame.width,
+      height: child?.intrinsicContentHeight(forWidth: startFrame.width) ?? .zero
+    )
+    childView.frame.size = blockSize
+    childView.layoutIfNeeded()
+
+    let animationContainer = UIView()
+    animationContainer.frame = startFrame
+    animationContainer.clipsToBounds = true
+    animationContainer.addSubview(childView)
+    container.addSubview(animationContainer)
+    container.layoutIfNeeded()
 
     UIView.animate(
       withDuration: animationChange.duration.value,
       delay: animationChange.delay.value,
       options: [animationChange.timingFunction.cast()],
       animations: {
-        childView.center = finishFrame.center
-        childView.transform = CGAffineTransform(
-          scaleX: finishFrame.width / startFrame.width,
-          y: finishFrame.height / startFrame.height
+        animationContainer.frame = finishFrame
+        childView.frame.size = CGSize(
+          width: finishFrame.width,
+          height: self.child?.intrinsicContentHeight(forWidth: finishFrame.width) ?? .zero
         )
+        childView.layoutIfNeeded()
+        container.layoutIfNeeded()
       },
       completion: { [weak self] _ in
-        guard childView.superview == container else {
+        guard animationContainer.superview == container else {
           return
         }
-        childView.transform = .identity
+        animationContainer.removeFromSuperview()
         self?.childView = childView
       }
     )
