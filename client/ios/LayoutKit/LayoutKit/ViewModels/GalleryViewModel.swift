@@ -50,6 +50,7 @@ public struct GalleryViewModel: Equatable {
   public let areEmptySpaceTouchesEnabled: Bool
   public let alwaysBounceVertical: Bool
   public let bounces: Bool
+  public let infiniteScroll: Bool
 
   public init(
     blocks: [Block],
@@ -62,7 +63,8 @@ public struct GalleryViewModel: Equatable {
     crossAlignment: Alignment = .leading,
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
-    bounces: Bool = true
+    bounces: Bool = true,
+    infiniteScroll: Bool = false
   ) {
     self.init(
       items: blocks.map { Item(crossAlignment: crossAlignment, content: $0) },
@@ -74,7 +76,8 @@ public struct GalleryViewModel: Equatable {
       columnCount: columnCount,
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled,
       alwaysBounceVertical: alwaysBounceVertical,
-      bounces: bounces
+      bounces: bounces,
+      infiniteScroll: infiniteScroll
     )
   }
 
@@ -88,7 +91,8 @@ public struct GalleryViewModel: Equatable {
     columnCount: Int = 1,
     areEmptySpaceTouchesEnabled: Bool = true,
     alwaysBounceVertical: Bool = false,
-    bounces: Bool = true
+    bounces: Bool = true,
+    infiniteScroll: Bool = false
   ) {
     validateContent(of: items, for: metrics, with: direction)
 
@@ -104,6 +108,7 @@ public struct GalleryViewModel: Equatable {
     self.areEmptySpaceTouchesEnabled = areEmptySpaceTouchesEnabled
     self.alwaysBounceVertical = alwaysBounceVertical
     self.bounces = bounces
+    self.infiniteScroll = infiniteScroll
   }
 
   public func modifying(
@@ -122,6 +127,14 @@ public struct GalleryViewModel: Equatable {
       direction: direction ?? self.direction,
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled ?? self.areEmptySpaceTouchesEnabled
     )
+  }
+
+  var itemsCountWithoutInfinite: Int {
+    items.count - infiniteCorrection * 2
+  }
+
+  var infiniteCorrection: Int {
+    infiniteScroll ? 1 : 0
   }
 }
 

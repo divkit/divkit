@@ -280,8 +280,19 @@ extension GalleryView: ScrollDelegate {
   }
 
   public func onDidScroll(_ scrollView: ScrollView) {
-    let offset = getOffset(scrollView)
+    var offset = getOffset(scrollView)
     let contentPosition: GalleryViewState.Position
+    if model.infiniteScroll, let newPosition = InfiniteScroll.getNewPosition(
+      currentOffset: offset,
+      itemsCount: model.items.count,
+      size: model.direction.isHorizontal ? layout.contentSize.width : layout.contentSize.height
+    ) {
+      offset = newPosition.offset
+      compoundScrollDelegate.remove(self)
+      updateContentOffset(to: .offset(newPosition.offset), animated: false)
+      compoundScrollDelegate.add(self)
+      updateContentOffset(to: .paging(index: CGFloat(newPosition.page)), animated: true)
+    }
     switch model.scrollMode {
     case .default:
       contentPosition = .offset(
@@ -311,6 +322,12 @@ extension GalleryView: ScrollDelegate {
 
   public func onDidEndDecelerating(_ scrollView: ScrollView) {
     onDidEndScroll(scrollView)
+  }
+
+  public func onDidEndScrollingAnimation(_ scrollView: ScrollView) {
+    if model.infiniteScroll {
+      onDidEndScroll(scrollView)
+    }
   }
 
   private func getOffset(_ scrollView: ScrollView) -> CGFloat {

@@ -205,6 +205,7 @@ func makeDivPager(
     focus: nil,
     height: nil,
     id: nil,
+    infiniteScroll: nil,
     itemSpacing: nil,
     items: items,
     layoutMode: layoutMode,

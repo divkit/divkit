@@ -277,6 +277,16 @@
       "file": "pager/pager_default_item_states.json"
     },
     {
+      "title": "Pager with infinite scroll",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivPager"
+      ],
+      "file": "pager/pager_infinite_scroll.json"
+    },
+    {
       "title": "Action animations",
       "tags": [
         "DivAnimation"

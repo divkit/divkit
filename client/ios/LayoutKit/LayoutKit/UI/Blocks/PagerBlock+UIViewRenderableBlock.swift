@@ -55,14 +55,15 @@ private final class PagerView: BlockView {
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
 
+    let currentPage = state.currentPage + CGFloat(model.infiniteCorrection)
     let galleryState = GalleryViewState(
-      contentPageIndex: CGFloat(state.currentPage),
+      contentPageIndex: currentPage,
       itemsCount: model.items.count
     )
     let layoutFactory: GalleryView.LayoutFactory = { model, boundsSize in
       PagerViewLayout(
         model: model,
-        pageIndex: Int(round(state.currentPage)),
+        pageIndex: Int(round(currentPage)),
         layoutMode: layoutMode,
         boundsSize: boundsSize
       )
@@ -136,8 +137,8 @@ extension PagerView: ElementStateObserver {
     if !galleryState.isScrolling {
       setState(
         PagerViewState(
-          numberOfPages: model.items.count,
-          currentPage: Int(pageIndex.rounded())
+          numberOfPages: model.itemsCountWithoutInfinite,
+          currentPage: Int(pageIndex.rounded()) - model.infiniteCorrection
         )
       )
     }

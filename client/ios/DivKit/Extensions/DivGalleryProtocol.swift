@@ -16,13 +16,14 @@ extension DivGalleryProtocol {
     crossSpacing: CGFloat,
     defaultAlignment: Alignment,
     scrollMode: GalleryViewModel.ScrollMode,
-    columnCount: Int? = nil
+    columnCount: Int? = nil,
+    infiniteScroll: Bool = false
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     let fallbackWidth = getFallbackWidth(direction: direction, context: context)
     let fallbackHeight = getFallbackHeight(direction: direction, context: context)
     let childrenContext = modified(context) { $0.errorsStorage = DivErrorsStorage(errors: []) }
-    let children: [GalleryViewModel.Item] = items.makeBlocks(
+    var children: [GalleryViewModel.Item] = items.makeBlocks(
       context: childrenContext,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
@@ -37,6 +38,12 @@ extension DivGalleryProtocol {
         )
       }
     )
+
+    if infiniteScroll,
+       let last = children.last,
+       let first = children.first {
+      children = [last] + children + [first]
+    }
 
     if children.isEmpty {
       throw DivBlockModelingError(
@@ -63,7 +70,8 @@ extension DivGalleryProtocol {
       scrollMode: scrollMode,
       path: context.parentPath,
       direction: direction,
-      columnCount: columnCount ?? 1
+      columnCount: columnCount ?? 1,
+      infiniteScroll: infiniteScroll
     )
   }
 

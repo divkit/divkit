@@ -52,7 +52,7 @@ public final class PagerBlock: BlockWithTraits {
     case let .intrinsic(_, minSize, maxSize):
       let width = gallery.intrinsicPagerSize(
         forWidth: CGFloat.greatestFiniteMagnitude,
-        pageIndex: Int(round(state.currentPage)),
+        pageIndex: Int(round(state.currentPage)) + gallery.infiniteCorrection,
         layoutMode: layoutMode
       ).width
       return clamp(width, min: minSize, max: maxSize)
@@ -68,7 +68,7 @@ public final class PagerBlock: BlockWithTraits {
     case let .intrinsic(_, minSize, maxSize):
       let height = gallery.intrinsicPagerSize(
         forWidth: width,
-        pageIndex: Int(round(state.currentPage)),
+        pageIndex: Int(round(state.currentPage)) + gallery.infiniteCorrection,
         layoutMode: layoutMode
       ).height
       return clamp(height, min: minSize, max: maxSize)

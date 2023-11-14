@@ -39,14 +39,15 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
         crossSpacing: 0,
         defaultAlignment: .center,
-        scrollMode: .autoPaging
+        scrollMode: .autoPaging,
+        infiniteScroll: resolveInfiniteScroll(expressionResolver)
       )
       return try PagerBlock(
         pagerPath: pagerModelPath,
         layoutMode: layoutMode.cast(with: expressionResolver),
         gallery: gallery,
         selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
-        state: getState(context: context, path: pagerPath, numberOfPages: gallery.items.count),
+        state: getState(context: context, path: pagerPath, numberOfPages: items.count),
         widthTrait: width.makeLayoutTrait(with: expressionResolver),
         heightTrait: height.makeLayoutTrait(with: expressionResolver)
       )

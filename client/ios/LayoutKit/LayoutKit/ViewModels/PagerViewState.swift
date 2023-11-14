@@ -26,8 +26,8 @@ public struct PagerViewState: ElementState, Equatable {
 extension PagerViewState {
   public func synchronized(with model: GalleryViewModel) -> PagerViewState {
     PagerViewState(
-      numberOfPages: model.items.count,
-      currentPage: clamp(Int(currentPage), min: 0, max: model.items.count)
+      numberOfPages: model.itemsCountWithoutInfinite,
+      currentPage: clamp(Int(currentPage), min: 0, max: model.itemsCountWithoutInfinite - 1)
     )
   }
 }

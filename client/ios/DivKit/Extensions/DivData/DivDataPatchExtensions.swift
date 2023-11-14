@@ -229,6 +229,7 @@ extension DivPager {
       focus: focus,
       height: height,
       id: id,
+      infiniteScroll: infiniteScroll,
       itemSpacing: itemSpacing,
       items: patchedItems,
       layoutMode: layoutMode,
