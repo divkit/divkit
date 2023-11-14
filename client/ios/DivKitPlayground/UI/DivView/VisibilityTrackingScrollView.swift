@@ -21,15 +21,13 @@ final class VisibilityTrackingScrollView: UIScrollView {
     divView?.cardSize?.sizeFor(parentViewSize: boundsSize) ?? .zero
   }
 
-  var previousVisibleRect: CGRect = .zero
-
   override func layoutSubviews() {
     super.layoutSubviews()
-    divView?.frame = CGRect(origin: .zero, size: divViewSize)
+
+    let divViewFrame = CGRect(origin: .zero, size: divViewSize)
+    divView?.frame = divViewFrame
     divView?.layoutIfNeeded()
-    let newVisibleRect = bounds.intersection(divView?.frame ?? .zero)
-    divView?.onVisibleBoundsChanged(from: previousVisibleRect, to: newVisibleRect)
-    previousVisibleRect = newVisibleRect
+    divView?.onVisibleBoundsChanged(to: bounds.intersection(divViewFrame))
     contentSize = divViewSize
   }
 }

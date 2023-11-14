@@ -178,11 +178,15 @@ public final class DivView: VisibleBoundsTrackingView {
 
   /// Notifies the DivView about changes in its visible bounds.
   /// - Parameters:
-  ///  - from: The original bounds rectangle.
   ///  - to: The new bounds rectangle.
-  public func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+  public func onVisibleBoundsChanged(to: CGRect) {
     blockProvider?.lastVisibleBounds = to
     setNeedsLayout()
+  }
+
+  /// Use ``onVisibleBoundsChanged(to:)`` instead.
+  public func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+    onVisibleBoundsChanged(to: to)
   }
 }
 
