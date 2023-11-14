@@ -250,14 +250,14 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                             }
                         } else {
                             JSONObject(fieldValue)
-                        }
+                        }.asDivPatchWithTemplates(errorLogger.apply { clear() })
                     } catch (e: JSONException) {
                         longToast("Error while parsing patch!")
                         return@launch
                     } catch (e: Exception) {
                         longToast("Error while downloading patch!")
                         return@launch
-                    }.asDivPatchWithTemplates(errorLogger.apply { clear() })
+                    }
 
                     applyPatch(divPatch) {
                         longToast("Error while applying patch!")

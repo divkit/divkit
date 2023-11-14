@@ -164,7 +164,7 @@ fun JSONObject.asDiv2DataListWithTemplates(errorLogger: ParsingErrorLogger? = nu
 }
 
 fun JSONObject.asDivPatchWithTemplates(errorLogger: ParsingErrorLogger? = null): DivPatch {
-    val templates = getJSONObject("templates")
+    val templates = optJSONObject("templates")
     val card = getJSONObject("patch")
     val environment = createEnvironment(errorLogger, templates)
     return DivPatch(environment, card)
