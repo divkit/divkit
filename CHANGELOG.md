@@ -4,6 +4,7 @@
 * Added new evaluable type - EvaluableType.URL
 * Added functions `toString(url)`, `toUrl(str)` and `toColor(str)`.
 * Added `scale` property support in the `video` component.
+* Fixed crash when `DivState` has empty `states` array.
 * Fixed crash when clicking "Next" on keyboard in `DivInput` inside `DivGallery`.
 * Fixed `DivInput` not working in `DivPager`.
 
