@@ -9,12 +9,24 @@ public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 public final class ExpressionResolver {
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
-  @usableFromInline
-  let variables: DivVariables
+  private let variableValueProvider: AnyCalcExpression.ValueProvider
   private let errorTracker: ExpressionErrorTracker
-  let variableTracker: VariableTracker
+  private let variableTracker: VariableTracker
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let lock = AllocatedUnfairLock()
+  
+  init(
+    cardId: DivCardID,
+    variablesStorage: DivVariablesStorage,
+    persistentValuesStorage: DivPersistentValuesStorage,
+    errorTracker: @escaping ExpressionErrorTracker,
+    variableTracker: @escaping VariableTracker = { _ in }
+  ) {
+    self.variableValueProvider = variablesStorage.asValueProvider(cardId: cardId)
+    self.persistentValuesStorage = persistentValuesStorage
+    self.errorTracker = errorTracker
+    self.variableTracker = variableTracker
+  }
 
   public init(
     variables: DivVariables,
@@ -22,7 +34,7 @@ public final class ExpressionResolver {
     errorTracker: ExpressionErrorTracker? = nil,
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
-    self.variables = variables
+    self.variableValueProvider = variables.asValueProvider()
     self.persistentValuesStorage = persistentValuesStorage
     self.errorTracker = { errorTracker?($0) }
     self.variableTracker = variableTracker
@@ -104,12 +116,13 @@ public final class ExpressionResolver {
     }
   }
 
-  @inlinable
-  func getVariableValue<T>(_ name: String) -> T? {
-    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
-      return nil
-    }
-    return value
+  func getVariableValue(_ name: String) -> Any? {
+    variableTracker([DivVariableName(rawValue: name)])
+    return variableValueProvider(name)
+  }
+
+  func getStoredValue<T>(_ name: String) -> T? {
+    persistentValuesStorage.get(name: name)
   }
 
   private func resolveEscaping<T>(_ value: T?) -> T? {
@@ -154,7 +167,7 @@ public final class ExpressionResolver {
     do {
       let result: T = try AnyCalcExpression(
         parsedExpression,
-        constants: self,
+        variables: variableValueProvider,
         symbols: supportedFunctions
       ).evaluate()
       return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
@@ -181,7 +194,7 @@ public final class ExpressionResolver {
         do {
           let value: String = try AnyCalcExpression(
             parsedExpression,
-            constants: self,
+            variables: variableValueProvider,
             symbols: supportedFunctions
           ).evaluate()
           stringValue += value
@@ -226,10 +239,6 @@ public final class ExpressionResolver {
       return nil
     }
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
-  }
-
-  func getStoredValue<T>(_ name: String) -> T? {
-    persistentValuesStorage.get(name: name)
   }
 
   private func validatedValue<T>(
@@ -279,14 +288,24 @@ private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
     + DictFunctions.allCases.map(\.declaration).flat()
     + ArrayFunctions.allCases.map(\.declaration).flat()
 
-extension ExpressionResolver: ConstantsProvider {
-  func getValue(_ name: String) -> Any? {
-    getVariableValue(name)
-  }
-}
-
 extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
   fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     reduce([:], +)
+  }
+}
+
+extension DivVariables {
+  fileprivate func asValueProvider() -> AnyCalcExpression.ValueProvider {
+    { name in
+      self[DivVariableName(rawValue: name)]?.typedValue()
+    }
+  }
+}
+
+extension DivVariablesStorage {
+  fileprivate func asValueProvider(cardId: DivCardID) -> AnyCalcExpression.ValueProvider {
+    { name in
+      self.getVariableValue(cardId: cardId, name: DivVariableName(rawValue: name))
+    }
   }
 }

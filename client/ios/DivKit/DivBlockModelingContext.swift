@@ -227,7 +227,8 @@ private func makeExpressionResolver(
   variableTracker: DivVariableTracker?
 ) -> ExpressionResolver {
   ExpressionResolver(
-    variables: variablesStorage.makeVariables(for: cardId),
+    cardId: cardId,
+    variablesStorage: variablesStorage,
     persistentValuesStorage: persistentValuesStorage,
     errorTracker: { [weak errorsStorage] error in
       errorsStorage?.add(DivExpressionError(error, path: parentPath))

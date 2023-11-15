@@ -200,7 +200,8 @@ public final class DivActionHandler {
 
   private func makeExpressionResolver(cardId: DivCardID) -> ExpressionResolver {
     ExpressionResolver(
-      variables: variablesStorage.makeVariables(for: cardId),
+      cardId: cardId,
+      variablesStorage: variablesStorage,
       persistentValuesStorage: persistentValuesStorage,
       errorTracker: reporter.asExpressionErrorTracker(cardId: cardId)
     )
