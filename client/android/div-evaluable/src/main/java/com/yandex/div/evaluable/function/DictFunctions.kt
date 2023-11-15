@@ -425,7 +425,9 @@ internal class GetOptStringFromDict(override val variableProvider: VariableProvi
     }
 }
 
-internal class GetDictOptColor(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal class GetDictOptColorWithStringFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
 
     override val name = "getDictOptColor"
 
@@ -441,12 +443,37 @@ internal class GetDictOptColor(override val variableProvider: VariableProvider) 
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
-        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
-        throwException(name, args, REASON_CONVERT_TO_COLOR)
+        return (result as? String).safeConvertToColor()
+            ?: fallback.safeConvertToColor()
+            ?: throwException(name, args, REASON_CONVERT_TO_COLOR)
     }
 }
 
-internal class GetOptColorFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal class GetDictOptColorWithColorFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getDictOptColor"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.COLOR), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.COLOR
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Color
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToColor() ?: fallback
+    }
+}
+
+internal class GetOptColorFromDictWithStringFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
 
     override val name = "getOptColorFromDict"
 
@@ -462,8 +489,31 @@ internal class GetOptColorFromDict(override val variableProvider: VariableProvid
     override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
-        return (result as? String).safeConvertToColor() ?: fallback.safeConvertToColor() ?:
-        throwException(name, args, REASON_CONVERT_TO_COLOR)
+        return (result as? String).safeConvertToColor()
+            ?: fallback.safeConvertToColor()
+            ?: throwException(name, args, REASON_CONVERT_TO_COLOR)
+    }
+}
+
+internal class GetOptColorFromDictWithColorFallback(
+    override val variableProvider: VariableProvider
+) : Function(variableProvider) {
+
+    override val name = "getOptColorFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.COLOR), // fallback
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.COLOR
+    override val isPure = false
+
+    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+        val fallback = args[0] as Color
+        val result = evaluateSafe(args, fallback)
+        return (result as? String).safeConvertToColor() ?: fallback
     }
 }
 
