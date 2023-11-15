@@ -12,7 +12,8 @@
     {
       "$ref": "div-action-focus-element.json",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {

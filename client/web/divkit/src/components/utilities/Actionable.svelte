@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, setContext } from 'svelte';
+    import { getContext, onDestroy, onMount, setContext } from 'svelte';
 
     import rootCss from '../Root.module.css';
 
@@ -12,6 +12,7 @@
     import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
     import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
 
+    export let id = '';
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let doubleTapActions: MaybeMissing<Action[]> | undefined = undefined;
     export let longTapActions: MaybeMissing<Action[]> | undefined = undefined;
@@ -21,6 +22,7 @@
     export let use: ((element: HTMLElement, opts?: any) => void) = doNothing;
     export let customAction: ((event: Event) => boolean) | null = null;
     export let isNativeActionAnimation = true;
+    export let hasInnerFocusable = false;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
@@ -217,6 +219,24 @@
             event.preventDefault();
         }
     }
+
+    onMount(() => {
+        if (id && !hasInnerFocusable) {
+            rootCtx.registerFocusable(id, {
+                focus() {
+                    if (node && (href || hasJSAction)) {
+                        node.focus();
+                    }
+                }
+            });
+        }
+    });
+
+    onDestroy(() => {
+        if (id && !hasInnerFocusable) {
+            rootCtx.unregisterFocusable(id);
+        }
+    });
 </script>
 
 {#if href}

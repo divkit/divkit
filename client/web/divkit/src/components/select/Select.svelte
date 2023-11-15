@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
 
     import css from './Select.module.css';
 
@@ -30,6 +30,7 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     const variable = json.value_variable;
+    let select: HTMLSelectElement;
 
     let hasError = false;
     if (!variable) {
@@ -160,6 +161,24 @@
         'line-height': lineHeight,
         'letter-spacing': letterSpacing
     };
+
+    onMount(() => {
+        if (json.id) {
+            rootCtx.registerFocusable(json.id, {
+                focus() {
+                    if (select) {
+                        select.focus();
+                    }
+                }
+            });
+        }
+    });
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterFocusable(json.id);
+        }
+    });
 </script>
 
 {#if !hasError}
@@ -172,6 +191,7 @@
         customDescription={true}
         customActions={'select'}
         customPaddings={true}
+        hasInnerFocusable={true}
         {json}
         {origJson}
         {templateContext}
@@ -185,6 +205,7 @@
         <select
             class={genClassName('select__select', css, { 'has-custom-focus': hasCustomFocus })}
             aria-label={description}
+            bind:this={select}
             bind:value={$valueVariable}
             style={makeStyle(selectStl)}
             on:focus={focusHandler}

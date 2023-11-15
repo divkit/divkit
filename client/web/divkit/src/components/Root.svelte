@@ -47,7 +47,7 @@
     import type { Patch } from '../types/patch';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
+    import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { wrapError, WrappedError } from '../utils/wrapError';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
@@ -776,6 +776,19 @@
                 case 'copy_to_clipboard':
                     copyToClipboard(logError, actionTyped);
                     break;
+                case 'focus_element': {
+                    const methods = actionTyped.element_id && focusableMap.get(actionTyped.element_id);
+                    if (methods) {
+                        methods.focus();
+                    } else {
+                        logError(wrapError(new Error('Incorrect focus_element action'), {
+                            additional: {
+                                elementId: actionTyped.element_id
+                            }
+                        }));
+                    }
+                    break;
+                }
                 default: {
                     logError(wrapError(new Error('Unknown type of action'), {
                         additional: {
@@ -845,6 +858,7 @@
 
     const instancesMap: Map<string, unknown> = new Map();
     const parentOfMap: Map<string, ParentMethods> = new Map();
+    const focusableMap: Map<string, FocusableMethods> = new Map();
     const tooltipMap: Map<string, {
         onwerNode: HTMLElement;
         tooltip: Tooltip;
@@ -884,6 +898,14 @@
 
     function unregisterParentOf(id: string): void {
         parentOfMap.delete(id);
+    }
+
+    function registerFocusable(id: string, methods: FocusableMethods): void {
+        focusableMap.set(id, methods);
+    }
+
+    function unregisterFocusable(id: string): void {
+        focusableMap.delete(id);
     }
 
     function registerTooltip(onwerNode: HTMLElement, tooltip: Tooltip): void {
@@ -1021,6 +1043,8 @@
         unregisterTooltip,
         onTooltipClose,
         tooltipRoot,
+        registerFocusable,
+        unregisterFocusable,
         addSvgFilter,
         removeSvgFilter,
         getDerivedFromVars,

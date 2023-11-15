@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
 
     import css from './Slider.module.css';
 
@@ -37,6 +37,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
+    let input: HTMLInputElement;
     let tracksInner: HTMLElement;
     let switchedTracks = false;
 
@@ -314,6 +315,22 @@
 
     onMount(() => {
         checkTicks();
+
+        if (json.id) {
+            rootCtx.registerFocusable(json.id, {
+                focus() {
+                    if (input) {
+                        input.focus();
+                    }
+                }
+            });
+        }
+    });
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterFocusable(json.id);
+        }
     });
 </script>
 
@@ -321,10 +338,13 @@
 
 {#if !hasError}
     <Outer
+        let:focusHandler
+        let:blurHandler
         cls={genClassName('slider', css, mods)}
         style={stl}
         customDescription={true}
         customActions={'slider'}
+        hasInnerFocusable={true}
         {json}
         {origJson}
         {templateContext}
@@ -403,6 +423,9 @@
                     value={switchedTracks ? value2 : value}
                     aria-label={description}
                     on:input={event => onInputChange(event, 'first')}
+                    on:focus={focusHandler}
+                    on:blur={blurHandler}
+                    bind:this={input}
                 >
                 {#if secondVariable}
                     <input
@@ -416,6 +439,8 @@
                         on:input={event => onInputChange(event, 'second')}
                         on:mousedown={secondVariable ? onSecondMousedown : null}
                         on:touchstart={secondVariable ? onSecondMousedown : null}
+                        on:focus={focusHandler}
+                        on:blur={blurHandler}
                     >
                 {/if}
             </div>

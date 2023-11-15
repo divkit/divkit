@@ -16,6 +16,10 @@ export interface ParentMethods {
     replaceWith: (id: string, items?: DivBase[]) => void;
 }
 
+export interface FocusableMethods {
+    focus: () => void;
+}
+
 export interface RootCtxValue {
     logError(error: WrappedError): void;
     logStat(type: string, action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void;
@@ -39,6 +43,8 @@ export interface RootCtxValue {
     unregisterTooltip(tooltip: Tooltip): void;
     onTooltipClose(internalId: number): void;
     tooltipRoot: HTMLElement | undefined;
+    registerFocusable(id: string, methods: FocusableMethods): void;
+    unregisterFocusable(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
     getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>>;

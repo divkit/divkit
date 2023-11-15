@@ -16,6 +16,23 @@
       "file": "actions/copy-to-clipboard.json"
     },
     {
+      "title": "Focus action",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on every button",
+        "same, but click buttons with the keyboard (Tab + Enter)"
+      ],
+      "expected_results": [
+        "related element is selected"
+      ],
+      "file": "actions/copy-to-clipboard.json"
+    },
+    {
       "title": "Simple tap",
       "tags": [
         "DivAction"

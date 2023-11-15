@@ -58,6 +58,7 @@
     export let heightByAspect = false;
     export let parentOf: DivBaseData[] | undefined = undefined;
     export let replaceItems: ((items: DivBaseData[]) => void) | undefined = undefined;
+    export let hasInnerFocusable = false;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
         left: 'start',
@@ -868,6 +869,7 @@
 
 {#if !hasWidthError && !hasHeightError}
     <Actionable
+        id={json.id}
         use={useAction}
         cls="{cls} {genClassName('outer', css, mods)}"
         style={makeStyle(stl)}
@@ -875,6 +877,7 @@
         {doubleTapActions}
         {longTapActions}
         {attrs}
+        {hasInnerFocusable}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
         on:focus={focusHandler}
         on:blur={blurHandler}

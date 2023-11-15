@@ -177,8 +177,13 @@ export interface ActionCopyToClipboard {
     content: CopyToClipboardContent;
 }
 
+export interface ActionFocusElement {
+    type: 'focus_element';
+    element_id: string;
+}
+
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
-    ActionCopyToClipboard;
+    ActionCopyToClipboard | ActionFocusElement;
 
 export interface Action {
     log_id: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onMount, tick } from 'svelte';
+    import { getContext, onDestroy, onMount, tick } from 'svelte';
     import type { HTMLAttributes } from 'svelte/elements';
 
     import css from './Input.module.css';
@@ -351,6 +351,22 @@
                 $valueVariable = value = contentEditableValue = inputMask.value;
             }
         }
+
+        if (json.id) {
+            rootCtx.registerFocusable(json.id, {
+                focus() {
+                    if (input) {
+                        input.focus();
+                    }
+                }
+            });
+        }
+    });
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterFocusable(json.id);
+        }
     });
 </script>
 
@@ -364,6 +380,7 @@
         customDescription={true}
         customActions={'input'}
         customPaddings={true}
+        hasInnerFocusable={true}
         {json}
         {origJson}
         {templateContext}
