@@ -52,7 +52,7 @@ private final class SubviewStorage: RenderingDelegate {
     if let view = view as? DetachableAnimationBlockView {
       if getView(id) == nil {
         views.append((id: id, view: view))
-      } else if view.superview != nil {
+      } else {
         views.removeAll { $0.id == id }
         views.append((id: id, view: view))
       }
