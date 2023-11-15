@@ -3,8 +3,10 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
+import androidx.core.view.marginTop
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div2.DivCustom
@@ -30,5 +32,11 @@ internal class DivCustomWrapper @JvmOverloads constructor(
     override fun dispatchDraw(canvas: Canvas) {
         drawChildrenShadows(canvas)
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    }
+
+    override fun getBaseline(): Int {
+        return customView?.let { child ->
+            child.baseline + child.marginTop + paddingTop
+        } ?: super.getBaseline()
     }
 }
