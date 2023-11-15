@@ -14,8 +14,7 @@
           ]
         },
         "pager_id": {
-          "type": "string",
-          "supports_expressions": false,
+          "$ref": "common.json#/id",
           "$description": "translations.json#/div_indicator_pager_id"
         },
         "items_placement" : {

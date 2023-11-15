@@ -6,8 +6,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "supports_expressions": false,
+          "$ref": "common.json#/id",
           "$description": "translations.json#/div_patch_change_id"
         },
         "items": {

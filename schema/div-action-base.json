@@ -1,8 +1,7 @@
 {
   "properties": {
     "log_id": {
-      "$ref": "common.json#/non_empty_string",
-      "supports_expressions": false,
+      "$ref": "common.json#/id",
       "$description": "translations.json#/div_action_base_log_id"
     },
     "url": {

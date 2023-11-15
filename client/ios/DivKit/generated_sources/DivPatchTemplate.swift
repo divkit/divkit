@@ -6,7 +6,7 @@ import Serialization
 
 public final class DivPatchTemplate: TemplateValue {
   public final class ChangeTemplate: TemplateValue {
-    public let id: Field<String>?
+    public let id: Field<String>? // at least 1 char
     public let items: Field<[DivTemplate]>? // at least 1 elements
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -29,7 +29,7 @@ public final class DivPatchTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ChangeTemplate?) -> DeserializationResult<DivPatch.Change> {
-      let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
+      let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
       let itemsValue = parent?.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
@@ -54,16 +54,16 @@ public final class DivPatchTemplate: TemplateValue {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
+      var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
       var itemsValue: DeserializationResult<[Div]> = .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "id":
-          idValue = deserialize(__dictValue).merged(with: idValue)
+          idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
         case "items":
           itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
         case parent?.id?.link:
-          idValue = idValue.merged(with: deserialize(__dictValue))
+          idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
         case parent?.items?.link:
           itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
         default: break

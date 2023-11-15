@@ -34,6 +34,7 @@
               },
               "placeholder": {
                 "type": "string",
+                "minLength": 1,
                 "maxLength": 1,
                 "default_value": "_",
                 "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_placeholder"

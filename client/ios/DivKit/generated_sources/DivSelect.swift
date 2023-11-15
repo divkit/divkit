@@ -18,7 +18,7 @@ public final class DivSelect: DivBase {
     }
 
     static let textValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     init(
       text: Expression<String>? = nil,

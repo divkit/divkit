@@ -36,7 +36,7 @@ public final class DivIndicator: DivBase {
   public let margins: DivEdgeInsets
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
   public let paddings: DivEdgeInsets
-  public let pagerId: String?
+  public let pagerId: String? // at least 1 char
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]? // at least 1 elements
   public let shape: DivShape // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())

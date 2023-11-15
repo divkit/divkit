@@ -32,7 +32,7 @@ public final class DivIndicatorTemplate: TemplateValue {
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let minimumItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 0.5
   public let paddings: Field<DivEdgeInsetsTemplate>?
-  public let pagerId: Field<String>?
+  public let pagerId: Field<String>? // at least 1 char
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let shape: Field<DivShapeTemplate>? // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())

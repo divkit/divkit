@@ -61,8 +61,7 @@
       "$description": "translations.json#/div_data_states"
     },
     "log_id": {
-      "$ref": "common.json#/non_empty_string",
-      "supports_expressions": false,
+      "$ref": "common.json#/id",
       "$description": "translations.json#/div_data_log_id"
     },
     "transition_animation_selector": {

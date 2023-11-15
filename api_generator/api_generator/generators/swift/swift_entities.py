@@ -565,14 +565,13 @@ class SwiftProperty(Property):
             validator_name = f'make{validator_type}ArrayValidator'
             validator_args = [f'minItems: {self.property_type.min_items}']
         elif isinstance(self.property_type, String) and \
-                (self.property_type.min_length > 0 or self.optional or self.property_type.regex is not None):
+                (self.property_type.min_length > 0 or self.property_type.regex is not None):
             optimized = 'CFString' if self.property_type.enable_optimization else 'String'
             validator_name = f'make{optimized}Validator'
             min_length = self.property_type.min_length
-            actual_min_length = 1 if min_length == 0 and self.optional else min_length
             validator_args = []
-            if actual_min_length > 0:
-                validator_args.append(f'minLength: {actual_min_length}')
+            if min_length > 0:
+                validator_args.append(f'minLength: {min_length}')
             if self.property_type.regex is not None:
                 escaped_pattern = self.property_type.regex.pattern.replace('\\', '\\\\')
                 validator_args.append(f'regex: "{escaped_pattern}"')

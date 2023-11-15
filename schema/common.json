@@ -1,8 +1,7 @@
 {
   "non_empty_string": {
     "type": "string",
-    "minLength": 1,
-    "clientMinLength": 1
+    "minLength": 1
   },
   "color": {
     "type": "string",
@@ -38,5 +37,10 @@
         "enum": [ 0, 1 ]
       }
     ]
+  },
+  "id": {
+    "type": "string",
+    "minLength": 1,
+    "supports_expressions": false
   }
 }

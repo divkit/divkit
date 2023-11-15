@@ -7,7 +7,7 @@ import Serialization
 public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   public final class PatternElementTemplate: TemplateValue {
     public let key: Field<Expression<String>>? // at least 1 char
-    public let placeholder: Field<Expression<String>>? // default value: _
+    public let placeholder: Field<Expression<String>>? // at least 1 char; default value: _
     public let regex: Field<Expression<String>>? // at least 1 char
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

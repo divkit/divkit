@@ -20,6 +20,7 @@ public enum Entity {
   case entityWithOptionalProperty(EntityWithOptionalProperty)
   case entityWithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty)
   case entityWithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue)
+  case entityWithRawArray(EntityWithRawArray)
   case entityWithRequiredProperty(EntityWithRequiredProperty)
   case entityWithSimpleProperties(EntityWithSimpleProperties)
   case entityWithStrictArray(EntityWithStrictArray)
@@ -53,6 +54,8 @@ public enum Entity {
     case let .entityWithOptionalStringEnumProperty(value):
       return value
     case let .entityWithPropertyWithDefaultValue(value):
+      return value
+    case let .entityWithRawArray(value):
       return value
     case let .entityWithRequiredProperty(value):
       return value
@@ -99,6 +102,8 @@ extension Entity: Equatable {
     case let (.entityWithOptionalStringEnumProperty(l), .entityWithOptionalStringEnumProperty(r)):
       return l == r
     case let (.entityWithPropertyWithDefaultValue(l), .entityWithPropertyWithDefaultValue(r)):
+      return l == r
+    case let (.entityWithRawArray(l), .entityWithRawArray(r)):
       return l == r
     case let (.entityWithRequiredProperty(l), .entityWithRequiredProperty(r)):
       return l == r

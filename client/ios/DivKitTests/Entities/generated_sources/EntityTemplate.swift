@@ -20,6 +20,7 @@ public enum EntityTemplate: TemplateValue {
   case entityWithOptionalPropertyTemplate(EntityWithOptionalPropertyTemplate)
   case entityWithOptionalStringEnumPropertyTemplate(EntityWithOptionalStringEnumPropertyTemplate)
   case entityWithPropertyWithDefaultValueTemplate(EntityWithPropertyWithDefaultValueTemplate)
+  case entityWithRawArrayTemplate(EntityWithRawArrayTemplate)
   case entityWithRequiredPropertyTemplate(EntityWithRequiredPropertyTemplate)
   case entityWithSimplePropertiesTemplate(EntityWithSimplePropertiesTemplate)
   case entityWithStrictArrayTemplate(EntityWithStrictArrayTemplate)
@@ -53,6 +54,8 @@ public enum EntityTemplate: TemplateValue {
     case let .entityWithOptionalStringEnumPropertyTemplate(value):
       return value
     case let .entityWithPropertyWithDefaultValueTemplate(value):
+      return value
+    case let .entityWithRawArrayTemplate(value):
       return value
     case let .entityWithRequiredPropertyTemplate(value):
       return value
@@ -97,6 +100,8 @@ public enum EntityTemplate: TemplateValue {
       return .entityWithOptionalStringEnumPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithPropertyWithDefaultValueTemplate(value):
       return .entityWithPropertyWithDefaultValueTemplate(try value.resolveParent(templates: templates))
+    case let .entityWithRawArrayTemplate(value):
+      return .entityWithRawArrayTemplate(try value.resolveParent(templates: templates))
     case let .entityWithRequiredPropertyTemplate(value):
       return .entityWithRequiredPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithSimplePropertiesTemplate(value):
@@ -217,6 +222,14 @@ public enum EntityTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.entityWithPropertyWithDefaultValue(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithPropertyWithDefaultValue(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .entityWithRawArrayTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithRawArray(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithRawArray(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -381,6 +394,14 @@ public enum EntityTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case EntityWithRawArray.type:
+      let result = EntityWithRawArrayTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithRawArray(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithRawArray(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case EntityWithRequiredProperty.type:
       let result = EntityWithRequiredPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -472,6 +493,8 @@ extension EntityTemplate {
       self = .entityWithOptionalStringEnumPropertyTemplate(try EntityWithOptionalStringEnumPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithPropertyWithDefaultValueTemplate.type:
       self = .entityWithPropertyWithDefaultValueTemplate(try EntityWithPropertyWithDefaultValueTemplate(dictionary: dictionary, templateToType: templateToType))
+    case EntityWithRawArrayTemplate.type:
+      self = .entityWithRawArrayTemplate(try EntityWithRawArrayTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithRequiredPropertyTemplate.type:
       self = .entityWithRequiredPropertyTemplate(try EntityWithRequiredPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithSimplePropertiesTemplate.type:

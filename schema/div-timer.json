@@ -3,8 +3,7 @@
   "$description": "translations.json#/div_timer",
   "properties": {
     "id": {
-      "$ref": "common.json#/non_empty_string",
-      "supports_expressions": false,
+      "$ref": "common.json#/id",
       "$description": "translations.json#/div_timer_id"
     },
     "duration": {

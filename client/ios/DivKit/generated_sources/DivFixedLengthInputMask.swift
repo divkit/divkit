@@ -7,7 +7,7 @@ import Serialization
 public final class DivFixedLengthInputMask: DivInputMaskBase {
   public final class PatternElement {
     public let key: Expression<String> // at least 1 char
-    public let placeholder: Expression<String> // default value: _
+    public let placeholder: Expression<String> // at least 1 char; default value: _
     public let regex: Expression<String>? // at least 1 char
 
     public func resolveKey(_ resolver: ExpressionResolver) -> String? {

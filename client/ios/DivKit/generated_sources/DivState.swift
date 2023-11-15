@@ -9,7 +9,7 @@ public final class DivState: DivBase {
     public let animationIn: DivAnimation?
     public let animationOut: DivAnimation?
     public let div: Div?
-    public let stateId: String
+    public let stateId: String // at least 1 char
     public let swipeOutActions: [DivAction]? // at least 1 elements
 
     static let animationInValidator: AnyValueValidator<DivAnimation> =
@@ -20,6 +20,9 @@ public final class DivState: DivBase {
 
     static let divValidator: AnyValueValidator<Div> =
       makeNoOpValueValidator()
+
+    static let stateIdValidator: AnyValueValidator<String> =
+      makeStringValidator(minLength: 1)
 
     static let swipeOutActionsValidator: AnyArrayValueValidator<DivAction> =
       makeArrayValidator(minItems: 1)
@@ -47,9 +50,9 @@ public final class DivState: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let defaultStateId: Expression<String>?
+  public let defaultStateId: Expression<String>? // at least 1 char
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let divId: String?
+  public let divId: String? // at least 1 char
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
