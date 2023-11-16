@@ -3,7 +3,7 @@ import { edgeInsertsToCss } from '../../src/utils/edgeInsertsToCss';
 describe('edgeInsertsToCss', () => {
     test('simple', () => {
         expect(edgeInsertsToCss({
-        })).toBe('0 0 0 0');
+        })).toBe('');
 
         expect(edgeInsertsToCss({
             top: 10

@@ -2,11 +2,20 @@ import type { EdgeInsets } from '../types/edgeInserts';
 import { pxToEm } from './pxToEm';
 
 export function edgeInsertsToCss(edgeInsets: EdgeInsets): string {
-    return pxToEm(edgeInsets.top || 0) +
+    const top = edgeInsets.top || 0;
+    const right = edgeInsets.right || 0;
+    const bottom = edgeInsets.bottom || 0;
+    const left = edgeInsets.left || 0;
+
+    if (top === 0 && right === 0 && bottom === 0 && left === 0) {
+        return '';
+    }
+
+    return pxToEm(top) +
         ' ' +
-        pxToEm(edgeInsets.right || 0) +
+        pxToEm(right) +
         ' ' +
-        pxToEm(edgeInsets.bottom || 0) +
+        pxToEm(bottom) +
         ' ' +
-        pxToEm(edgeInsets.left || 0);
+        pxToEm(left);
 }
