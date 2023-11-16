@@ -28,6 +28,7 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const FALLBACK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    const EMPTY_IMAGE = 'empty://';
     // const DEFAULT_PLACEHOLDER_COLOR = correctColor('#14000000');
     const DEFAULT_PLACEHOLDER_COLOR = 'rgba(0,0,0,0.08)';
 
@@ -37,13 +38,22 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    let state = STATE_LOADING;
+    let isEmpty = false;
+    let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
+
     $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
     $: jsonGifUrl = rootCtx.getDerivedFromVars(json.gif_url);
 
-    $: imageUrl = json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
-
-    let state = STATE_LOADING;
-    let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
+    let imageUrl: string | undefined;
+    $: {
+        let img = json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
+        isEmpty = img === EMPTY_IMAGE;
+        if (isEmpty) {
+            img = FALLBACK_IMAGE;
+        }
+        imageUrl = img;
+    }
 
     function updateImageUrl(_url: string | undefined): void {
         state = STATE_LOADING;
@@ -71,7 +81,7 @@
     $: {
         const preview = $jsonPreview;
 
-        if ((state === STATE_LOADING || state === STATE_ERROR) && preview) {
+        if ((state === STATE_LOADING || state === STATE_ERROR || isEmpty) && preview) {
             backgroundImage = `url("${prepareBase64(preview)}")`;
         } else {
             backgroundImage = '';
@@ -79,14 +89,11 @@
     }
 
     $: jsonPlaceholderColor = rootCtx.getDerivedFromVars(json.placeholder_color);
-    function updatePlaceholderColor(state: number, color: string | undefined): void {
-        if (state === STATE_LOADING || state === STATE_ERROR) {
-            placeholderColor = correctColor(color, 1, placeholderColor);
-        } else {
-            placeholderColor = '';
-        }
+    $: if (state === STATE_LOADING || state === STATE_ERROR || isEmpty) {
+        placeholderColor = correctColor($jsonPlaceholderColor, 1, placeholderColor);
+    } else {
+        placeholderColor = '';
     }
-    $: updatePlaceholderColor(state, $jsonPlaceholderColor);
 
     $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
     // Exactly "none", "scale-down" would not match android
