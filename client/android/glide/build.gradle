@@ -10,6 +10,8 @@ dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')
 
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
+    implementation("com.github.bumptech.glide:glide:$versions.glide") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
     kapt "com.github.bumptech.glide:compiler:$versions.glide"
 }

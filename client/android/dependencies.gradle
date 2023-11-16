@@ -52,5 +52,6 @@ ext.versions.androidx = [
         test                            : '1.4.0',
         uiautomator                     : '2.2.0',
         viewpager2                      : '1.0.0',
+        viewpager                       : '1.0.0',
         work                            : '2.7.1'
 ]

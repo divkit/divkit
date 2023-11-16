@@ -16,8 +16,11 @@ dependencies {
     implementation('com.airbnb.android:lottie:6.1.0') {
         // lottie depends on old okio with CVE
         exclude group: 'com.squareup.okio', module: 'okio'
+        exclude group: "androidx.fragment", module: "fragment"
     }
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
 

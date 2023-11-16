@@ -218,18 +218,6 @@ public class Views {
         return dialog;
     }
 
-    /**
-     * Setup a toolbar as a support action bar
-     *
-     * @param activity to setup a toolbar
-     * @param toolbar  to set
-     */
-    public static void setToolbar(@Nullable Activity activity, @Nullable Toolbar toolbar) {
-        if (activity instanceof AppCompatActivity) {
-            ((AppCompatActivity) activity).setSupportActionBar(toolbar);
-        }
-    }
-
     @IntDef(flag = true, value = {
             VIEW_SIDE_BOTTOM, VIEW_SIDE_LEFT, VIEW_SIDE_RIGHT, VIEW_SIDE_TOP
     })

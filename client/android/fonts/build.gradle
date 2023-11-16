@@ -9,7 +9,9 @@ android {
 dependencies {
     implementation project(path: ':div-core')
 
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
     implementation "androidx.core:core:$versions.androidx.core"
     implementation "javax.inject:javax.inject:$versions.javax"
 }

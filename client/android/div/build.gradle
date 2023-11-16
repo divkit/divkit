@@ -36,12 +36,17 @@ dependencies {
     implementation "com.google.dagger:dagger:$versions.dagger"
     kapt "com.google.dagger:dagger-compiler:$versions.dagger"
 
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
     implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
     implementation "androidx.core:core:$versions.androidx.core"
     implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
     implementation "androidx.transition:transition:$versions.androidx.appcompat"
-    implementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
+    implementation "androidx.viewpager:viewpager:$versions.androidx.viewpager"
+    implementation("androidx.viewpager2:viewpager2:$versions.androidx.viewpager2") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
 
     implementation "androidx.datastore:datastore:$versions.dataStore"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinSerialization"

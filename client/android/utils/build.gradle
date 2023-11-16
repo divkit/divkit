@@ -13,5 +13,8 @@ dependencies {
     implementation "androidx.annotation:annotation:$versions.androidx.annotation"
     implementation "androidx.collection:collection:$versions.androidx.collection"
     implementation "androidx.core:core:$versions.androidx.core"
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.viewpager:viewpager:$versions.androidx.viewpager"
+    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat")  {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
 }

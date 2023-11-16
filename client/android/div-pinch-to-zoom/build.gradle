@@ -14,7 +14,9 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 
-    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
+        exclude group: "androidx.fragment", module: "fragment"
+    }
     implementation "androidx.core:core:$versions.androidx.core"
     implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
 
