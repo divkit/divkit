@@ -38,9 +38,9 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
-
     $: jsonGifUrl = rootCtx.getDerivedFromVars(json.gif_url);
-    $: imageUrl = $jsonImageUrl || $jsonGifUrl;
+
+    $: imageUrl = json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
 
     let state = STATE_LOADING;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
@@ -54,7 +54,7 @@
     $: {
         if (!imageUrl) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Missing "image_url" for "image"')));
+            rootCtx.logError(wrapError(new Error(`Missing "${json.type === 'gif' ? 'gif_url' : 'image_url'}" for "${json.type}"`)));
         } else {
             hasError = false;
         }
