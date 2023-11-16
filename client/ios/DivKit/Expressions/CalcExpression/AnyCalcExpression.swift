@@ -36,9 +36,8 @@ import Foundation
 import CommonCorePublic
 
 /// Wrapper for Expression that works with any type of value
-struct AnyCalcExpression: CustomStringConvertible {
+struct AnyCalcExpression {
   private let expression: CalcExpression
-  private let describer: () -> String
   @usableFromInline
   let evaluator: () throws -> Any
 
@@ -53,19 +52,14 @@ struct AnyCalcExpression: CustomStringConvertible {
   /// Runtime error when parsing or evaluating an expression
   typealias Error = CalcExpression.Error
 
-  /// Options for configuring an expression
-  typealias Options = CalcExpression.Options
-
   /// Constructor that accepts parsed expression and constants lookup function
   /// Used in Yandex DivKit Expressions
   init(
     _ expression: ParsedCalcExpression,
-    options: Options = [.boolSymbols],
     variables: ValueProvider
   ) throws {
     try self.init(
       expression,
-      options: options,
       impureSymbols: { _ in nil },
       pureSymbols: { symbol in
         switch symbol {
@@ -82,16 +76,11 @@ struct AnyCalcExpression: CustomStringConvertible {
   /// constants lookup function and SymbolEvaluators
   init(
     _ expression: ParsedCalcExpression,
-    options: Options = [.boolSymbols],
     variables: ValueProvider,
     symbols: [Symbol: SymbolEvaluator]
   ) throws {
-    // Options
-    let pureSymbols = options.contains(.pureSymbols)
-
     try self.init(
       expression,
-      options: options,
       impureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
@@ -99,9 +88,7 @@ struct AnyCalcExpression: CustomStringConvertible {
             return symbols[symbol]
           }
         default:
-          if !pureSymbols {
-            return symbols[symbol]
-          }
+          return symbols[symbol]
         }
         return nil
       },
@@ -123,7 +110,6 @@ struct AnyCalcExpression: CustomStringConvertible {
   /// function
   private init(
     _ expression: ParsedCalcExpression,
-    options: Options,
     impureSymbols: (Symbol) -> SymbolEvaluator?,
     pureSymbols: (Symbol) -> SymbolEvaluator?
   ) throws {
@@ -241,22 +227,13 @@ struct AnyCalcExpression: CustomStringConvertible {
       }
     }
 
-    // Set description based on the parsed expression, prior to
-    // performing optimizations. This avoids issues with inlined
-    // constants and string literals being converted to `nan`
-    describer = { expression.description }
-
-    // Options
-    let boolSymbols = options.contains(.boolSymbols) ? CalcExpression.boolSymbols : [:]
-    let shouldOptimize = !options.contains(.noOptimize)
-
     // Evaluators
     func defaultEvaluator(for symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
       if let fn = AnyCalcExpression.standardSymbols[symbol] {
         return fn
       } else if let fn = CalcExpression.mathSymbols[symbol] {
         return fn
-      } else if let fn = boolSymbols[symbol] {
+      } else if let fn = CalcExpression.boolSymbols[symbol] {
         switch symbol {
         case .infix("=="):
           return {
@@ -360,9 +337,6 @@ struct AnyCalcExpression: CustomStringConvertible {
             }
           }
         }
-        if !shouldOptimize {
-          return try (_pureSymbols[symbol] ?? defaultEvaluator(for: symbol))
-        }
         return nil
       },
       pureSymbols: { symbol in
@@ -443,13 +417,6 @@ struct AnyCalcExpression: CustomStringConvertible {
     }
     return value
   }
-
-  /// All symbols used in the expression
-  var symbols: Set<Symbol> { expression.symbols }
-
-  /// Returns the optmized, pretty-printed expression if it was valid
-  /// Otherwise, returns the original (invalid) expression string
-  var description: String { describer() }
 }
 
 // MARK: Internal API

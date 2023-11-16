@@ -182,17 +182,12 @@ final class CalcExpression: CustomStringConvertible {
 
     case escaping
 
-    /// Empty expression
-    static let emptyExpression = unexpectedToken("")
-
     /// The human-readable description of the error
     var description: String {
       switch self {
       case let .message(message),
            let .shortMessage(message):
         return message
-      case .emptyExpression:
-        return "Empty expression"
       case let .unexpectedToken(string):
         return "Error tokenizing '\(string)'."
       case let .missingDelimiter(string):
@@ -236,28 +231,6 @@ final class CalcExpression: CustomStringConvertible {
     }
   }
 
-  /// Options for configuring an expression
-  struct Options: OptionSet {
-    /// Disable optimizations such as constant substitution
-    static let noOptimize = Options(rawValue: 1 << 1)
-
-    /// Enable standard boolean operators and constants
-    static let boolSymbols = Options(rawValue: 1 << 2)
-
-    /// Assume all functions and operators in `symbols` are "pure", i.e.
-    /// they have no side effects, and always produce the same output
-    /// for a given set of arguments
-    static let pureSymbols = Options(rawValue: 1 << 3)
-
-    /// Packed bitfield of options
-    let rawValue: Int
-
-    /// Designated initializer
-    init(rawValue: Int) {
-      self.rawValue = rawValue
-    }
-  }
-
   /// Alternative constructor for advanced usage
   /// Allows for dynamic symbol lookup or generation without any performance overhead
   /// Note that both math and boolean symbols are enabled by default - to disable them
@@ -286,28 +259,6 @@ final class CalcExpression: CustomStringConvertible {
         return CalcExpression.errorEvaluator(for: $0)
       }
     )
-  }
-
-  /// Verify that the string is a valid identifier
-  static func isValidIdentifier(_ string: String) -> Bool {
-    var characters = UnicodeScalarView(string)
-    switch characters.parseIdentifier() ?? characters.parseEscapedIdentifier() {
-    case .symbol(.variable, _, _)?:
-      return characters.isEmpty
-    default:
-      return false
-    }
-  }
-
-  /// Verify that the string is a valid operator
-  static func isValidOperator(_ string: String) -> Bool {
-    var characters = UnicodeScalarView(string)
-    guard case let .symbol(symbol, _, _)? = characters.parseOperator(),
-          case let .infix(name) = symbol, name != "(", name != "["
-    else {
-      return false
-    }
-    return characters.isEmpty
   }
 
   /// Parse an expression.
@@ -1432,7 +1383,7 @@ extension UnicodeScalarView {
       }
       throw CalcExpression.Error.unexpectedToken(result.description)
     case nil:
-      throw CalcExpression.Error.emptyExpression
+      throw CalcExpression.Error.message("Empty expression")
     }
   }
 }
