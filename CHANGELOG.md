@@ -1,3 +1,19 @@
+## 28.11.0
+
+# Android Client:
+* Added functions to get URL value: `getUrlValue`, `getUrlFromArray`, `getUrlFromDict`.
+* Added functions to get Color from Dict: `getOptColorFromDict`, `getDictOptColor`.
+* Fixed incorrect height of select.
+
+# iOS Client:
+* Supported infinite scrolling in the pager.
+* Fixed `change_bounds` animations content scale.
+
+# Web Client:
+* Fixed an issue with the `focus` property support in `slider` component.
+* Added `focus_element` typed action support.
+
+
 ## 28.10.0
 
 # Android Client:

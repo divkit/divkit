@@ -1,3 +1,9 @@
+## 28.11.0 (ADD DATE HERE)
+
+* Fixed an issue with the `focus` property support in `slider` component.
+* Added `focus_element` typed action support.
+
+
 ## 28.10.0 (November 13, 2023)
 
 * Added `copy_to_clipboard` action support.
