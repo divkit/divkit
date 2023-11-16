@@ -7,6 +7,8 @@ export type GalleryCrossAlignment = 'start' | 'center' | 'end';
 
 export type GalleryScrollMode = 'default' | 'paging';
 
+export type GalleryShowScrollbar = 'none' | 'auto';
+
 export interface DivGalleryData extends DivBaseData, DivActionableData {
     type: 'gallery';
     cross_content_alignment?: GalleryCrossAlignment;
@@ -18,4 +20,5 @@ export interface DivGalleryData extends DivBaseData, DivActionableData {
     orientation?: Orientation;
     restrict_parent_scroll?: BooleanInt;
     default_item?: number;
+    scrollbar?: GalleryShowScrollbar;
 }

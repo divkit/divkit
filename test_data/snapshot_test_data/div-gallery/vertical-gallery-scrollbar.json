@@ -1,0 +1,93 @@
+{
+  "description": "Gallery with the scrollbar",
+  "platforms": [
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "background": [
+            {
+              "color": "#FFFFFF",
+              "type": "solid"
+            }
+          ],
+          "scrollbar": "auto",
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            },
+            "corner_radius": 10
+          },
+          "items": [
+            {
+              "type": "separator",
+              "delimiter_style": {
+                "color": "#00000000"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "delimiter_style": {
+                "color": "#00000000"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "delimiter_style": {
+                "color": "#00000000"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

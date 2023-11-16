@@ -1,9 +1,3 @@
-.gallery {}
-
-.gallery_orientation_horizontal {}
-
-.gallery_orientation_vertical {}
-
 .gallery__scroller {
     width: 100%;
     height: 100%;
@@ -11,23 +5,25 @@
     /** inherit max_size from parent node (100% may be bigger than the actual size of the parent) */
     max-width: inherit;
     max-height: inherit;
+}
 
+.gallery_scrollbar_none .gallery__scroller {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 }
 
-.gallery__scroller::-webkit-scrollbar {
+.gallery_scrollbar_none .gallery__scroller::-webkit-scrollbar {
     display: none;
 }
 
 .gallery_orientation_horizontal > .gallery__scroller {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 
 .gallery_orientation_vertical > .gallery__scroller {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .gallery_scroll-snap > .gallery__scroller {

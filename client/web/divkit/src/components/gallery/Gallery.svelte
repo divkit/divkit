@@ -229,6 +229,8 @@
 
     $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
 
+    $: jsonScrollbar = rootCtx.getDerivedFromVars(json.scrollbar);
+
     $: gridStyle = {
         padding,
         'grid-gap': crossGridGap
@@ -241,7 +243,8 @@
 
     $: mods = {
         orientation,
-        'scroll-snap': scrollSnap
+        'scroll-snap': scrollSnap,
+        scrollbar: $jsonScrollbar === 'auto' ? 'auto' : 'none'
     };
 
     $: jsonDefaultItem = rootCtx.getDerivedFromVars(json.default_item);
