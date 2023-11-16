@@ -99,7 +99,12 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
     )
 
     let item =
-      DispatchWorkItem { [weak self, weak observer, weak overscrollDelegate, weak renderingDelegate] in
+      DispatchWorkItem { [
+        weak self,
+        weak observer,
+        weak overscrollDelegate,
+        weak renderingDelegate
+      ] in
         guard let self = self else { return }
         self.toView = model.block.to.reuse(
           self.toView,

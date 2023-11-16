@@ -323,8 +323,8 @@ struct AnyCalcExpression {
               if let fn = funcEvaluator(for: symbol, value) {
                 return try fn(args)
               }
-              throw Error.typeMismatch(
-                .infix("()"), [value] + [try args.map(box.load)]
+              throw try Error.typeMismatch(
+                .infix("()"), [value] + [args.map(box.load)]
               )
             }
           } else if let fn = pureSymbols(.variable(name)) {
@@ -358,9 +358,9 @@ struct AnyCalcExpression {
             if let fn = pureSymbols(.variable(name)) {
               return { args in
                 let value = try fn([])
-                throw Error.typeMismatch(
+                throw try Error.typeMismatch(
                   .infix("()"),
-                  [value] + [try args.map(box.load)]
+                  [value] + [args.map(box.load)]
                 )
               }
             }

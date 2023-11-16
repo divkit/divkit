@@ -65,12 +65,18 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
         case .buffering:
           self.model.bufferingActions.perform(sendingFrom: self)
         case .pause:
-          self.observer?.elementStateChanged(VideoBlockViewState(state: .paused), forPath: self.model.path)
+          self.observer?.elementStateChanged(
+            VideoBlockViewState(state: .paused),
+            forPath: self.model.path
+          )
           self.model.pauseActions.perform(sendingFrom: self)
         case .fatal:
           self.model.fatalActions.perform(sendingFrom: self)
         case .play:
-          self.observer?.elementStateChanged(VideoBlockViewState(state: .playing), forPath: self.model.path)
+          self.observer?.elementStateChanged(
+            VideoBlockViewState(state: .playing),
+            forPath: self.model.path
+          )
           self.model.resumeActions.perform(sendingFrom: self)
         case let .durationUpdate(duration):
           self.model.duration?.value = Int(duration.seconds)

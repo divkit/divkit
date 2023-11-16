@@ -50,7 +50,7 @@ struct FunctionUnary<T1, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T1.self)),
         ],
         resultType: .from(type: R.self)
       )
@@ -76,8 +76,8 @@ struct FunctionBinary<T1, T2, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
-          try .init(type: .from(type: T2.self)),
+          .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T2.self)),
         ],
         resultType: .from(type: R.self)
       )
@@ -103,9 +103,9 @@ struct FunctionTernary<T1, T2, T3, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
-          try .init(type: .from(type: T2.self)),
-          try .init(type: .from(type: T3.self)),
+          .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T2.self)),
+          .init(type: .from(type: T3.self)),
         ],
         resultType: .from(type: R.self)
       )
@@ -131,10 +131,10 @@ struct FunctionQuaternary<T1, T2, T3, T4, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
-          try .init(type: .from(type: T2.self)),
-          try .init(type: .from(type: T3.self)),
-          try .init(type: .from(type: T4.self)),
+          .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T2.self)),
+          .init(type: .from(type: T3.self)),
+          .init(type: .from(type: T4.self)),
         ],
         resultType: .from(type: R.self)
       )
@@ -161,7 +161,7 @@ struct FunctionVarUnary<T1, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self), vararg: true),
+          .init(type: .from(type: T1.self), vararg: true),
         ],
         resultType: .from(type: R.self)
       )
@@ -187,8 +187,8 @@ struct FunctionVarBinary<T1, T2, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
-          try .init(type: .from(type: T2.self), vararg: true),
+          .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T2.self), vararg: true),
         ],
         resultType: .from(type: R.self)
       )
@@ -215,9 +215,9 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
     get throws {
       try .init(
         arguments: [
-          try .init(type: .from(type: T1.self)),
-          try .init(type: .from(type: T2.self)),
-          try .init(type: .from(type: T3.self), vararg: true),
+          .init(type: .from(type: T1.self)),
+          .init(type: .from(type: T2.self)),
+          .init(type: .from(type: T3.self), vararg: true),
         ],
         resultType: .from(type: R.self)
       )

@@ -1,7 +1,7 @@
 import Foundation
 
 extension DivTypedValue {
-  internal func asVariableValue(
+  func asVariableValue(
     expressionResolver: ExpressionResolver
   ) -> DivVariableValue? {
     switch self {
@@ -48,7 +48,7 @@ extension DivTypedValue {
     }
   }
 
-  internal func asValue(
+  func asValue(
     expressionResolver: ExpressionResolver
   ) -> AnyHashable? {
     switch self {

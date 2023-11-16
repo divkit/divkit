@@ -14,7 +14,7 @@ public final class ExpressionResolver {
   private let variableTracker: VariableTracker
   private let persistentValuesStorage: DivPersistentValuesStorage
   private let lock = AllocatedUnfairLock()
-  
+
   init(
     cardId: DivCardID,
     variablesStorage: DivVariablesStorage,

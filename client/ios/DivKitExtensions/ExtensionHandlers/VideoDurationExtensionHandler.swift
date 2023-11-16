@@ -7,7 +7,7 @@ import LayoutKit
 public final class VideoDurationExtensionHandler: DivExtensionHandler {
   public var id: String = extensionID
 
-  public init() { }
+  public init() {}
 
   public func applyBeforeBaseProperties(
     to block: Block,

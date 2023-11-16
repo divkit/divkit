@@ -3,7 +3,6 @@ import XCTest
 @testable import LayoutKit
 
 final class InfiniteScrollTests: XCTestCase {
-
   func test_newPosition() throws {
     XCTAssertEqual(
       InfiniteScroll.getNewPosition(currentOffset: 10, itemsCount: 5, size: 100),

@@ -4,7 +4,7 @@ import BasePublic
 import CommonCorePublic
 import LayoutKitInterface
 
-internal class TabContentsView: BlockView {
+class TabContentsView: BlockView {
   private enum Appearance {
     static let animationDuration: TimeInterval = 0.2
   }

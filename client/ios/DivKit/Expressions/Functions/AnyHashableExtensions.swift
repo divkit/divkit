@@ -1,9 +1,9 @@
 extension AnyHashable {
-  internal var isBool: Bool {
+  var isBool: Bool {
     Bool(description) != nil && !(self is String)
   }
 
-  internal var actualType: String {
+  var actualType: String {
     if self.isBool {
       return "boolean"
     }

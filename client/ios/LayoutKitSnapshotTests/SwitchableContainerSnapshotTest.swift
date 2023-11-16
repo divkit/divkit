@@ -31,7 +31,8 @@ final class SwitchableContainerSnapshotTest: LayoutKitSnapshotTest {
     )
   }
 
-  // NOTE: actually content always work as resizable, so this test is needed to illustrate such deficiency
+  // NOTE: actually content always work as resizable, so this test is needed to illustrate such
+  // deficiency
   func test_FixedContentSizes() {
     performTest(
       leftContent: makeContentBlock(
@@ -48,7 +49,8 @@ final class SwitchableContainerSnapshotTest: LayoutKitSnapshotTest {
     )
   }
 
-  // NOTE: actually content always work as resizable, so this test is needed to illustrate such deficiency
+  // NOTE: actually content always work as resizable, so this test is needed to illustrate such
+  // deficiency
   func test_IntrinsicContentSizes() {
     performTest(
       leftContent: makeContentBlock(

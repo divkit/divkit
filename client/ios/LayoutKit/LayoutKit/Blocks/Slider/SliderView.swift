@@ -441,7 +441,7 @@ private func updatedThumbsValue(
     return Int(newValue.rounded(.toNearestOrAwayFromZero))
   }
 
-  return (thumbPosition == .right ? newValueIntegerPart : newValueIntegerPart + 1)
+  return thumbPosition == .right ? newValueIntegerPart : newValueIntegerPart + 1
 }
 
 private enum ThumbPosition {

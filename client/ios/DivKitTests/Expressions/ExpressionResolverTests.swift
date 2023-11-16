@@ -90,10 +90,10 @@ final class ExpressionResolverTests: XCTestCase {
     )
   }
 
-  func test_ResolveArray_WithVariable() {
+  func test_ResolveArray_WithVariable() throws {
+    let expression: Expression<[Any]> = try .link(.init(rawValue: "@{array_var}")!)
     XCTAssertEqual(
-      expressionResolver
-        .resolveArrayValue(expression: .link(try .init(rawValue: "@{array_var}")!)) as! [Int],
+      expressionResolver.resolveArrayValue(expression: expression) as! [AnyHashable],
       [1]
     )
   }

@@ -47,7 +47,7 @@ public final class DivVariablesStorage {
   public convenience init() {
     self.init(outerStorage: nil)
   }
-  
+
   public init(outerStorage: DivVariableStorage?) {
     globalStorage = DivVariableStorage(outerStorage: outerStorage)
 

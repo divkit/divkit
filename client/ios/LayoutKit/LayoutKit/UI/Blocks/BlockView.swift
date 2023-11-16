@@ -1,6 +1,6 @@
 #if os(iOS)
 import UIKit
-public typealias BlockView = UIView & BlockViewProtocol
+public typealias BlockView = BlockViewProtocol & UIView
 #else
 public typealias BlockView = AnyObject
 #endif
