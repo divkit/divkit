@@ -12,10 +12,7 @@ extension DivTabs: DivBlockModeling {
       try applyBaseProperties(
         to: { try makeBaseBlock(context: context, tabsPath: tabsPath) },
         context: context,
-        actions: nil,
-        actionAnimation: nil,
-        doubleTapActions: nil,
-        longTapActions: nil
+        actionsHolder: nil
       )
     }
   }
@@ -213,7 +210,7 @@ extension DivTabs.Item {
     let titleContext = modified(context) {
       $0.parentPath += "title"
     }
-    let action = makeAction(context: context)
+    let action = titleClickAction?.uiAction(context: context)
     return UILink(
       text: resolveTitle(titleContext.expressionResolver) ?? "",
       url: action?.url,

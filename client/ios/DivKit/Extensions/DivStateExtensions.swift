@@ -11,10 +11,7 @@ extension DivState: DivBlockModeling {
       to: applyBaseProperties(
         to: { try makeBaseBlock(context: context) },
         context: context,
-        actions: nil,
-        actionAnimation: nil,
-        doubleTapActions: nil,
-        longTapActions: nil
+        actionsHolder: nil
       ),
       context: context
     )
@@ -126,9 +123,7 @@ extension DivState: DivBlockModeling {
       child: child,
       state: .default,
       path: context.parentPath + DivState.type,
-      swipeOutActions: swipeOutActions.map {
-        $0.uiAction(context: context)
-      }
+      swipeOutActions: swipeOutActions.uiActions(context: context)
     )
   }
 

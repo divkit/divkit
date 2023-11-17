@@ -10,10 +10,7 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: makeActions(context: context),
-      actionAnimation: actionAnimation.makeActionAnimation(with: context.expressionResolver),
-      doubleTapActions: makeDoubleTapActions(context: context),
-      longTapActions: makeLongTapActions(context: context)
+      actionsHolder: self
     )
   }
 

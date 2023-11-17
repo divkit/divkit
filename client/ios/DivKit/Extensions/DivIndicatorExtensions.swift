@@ -9,10 +9,7 @@ extension DivIndicator: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil
+      actionsHolder: nil
     )
   }
 

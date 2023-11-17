@@ -523,15 +523,15 @@
       "steps": [
         "Tap on top button",
         "Double tap on top button",
-        "Long click on top button",
+        "Long tap on top button",
         "Tap on 2-nd button",
         "Double tap on 2-nd button",
-        "Long click on 2-nd button",
+        "Long tap on 2-nd button",
         "Tap on 3-rd button",
         "Double tap on 3-rd button",
-        "Long click on 3-rd button",
-        "Tap on image on he bottom button",
-        "Long click between buttons"
+        "Long tap on 3-rd button",
+        "Tap on image on the bottom button",
+        "Long tap between buttons"
       ],
       "expected_results": [
         "Menu with text 'Single tap' appears with delay",

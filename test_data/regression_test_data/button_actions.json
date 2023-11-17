@@ -2,12 +2,6 @@
   "templates": {
     "button": {
       "type": "text",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 16,
         "top": 16,
@@ -33,7 +27,6 @@
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
       "text_color": "#000000",
-      "alpha": 1.0,
       "alignment_horizontal": "center",
       "alignment_vertical": "center",
       "actions": [
@@ -47,7 +40,7 @@
               }
             }
           ],
-          "log_id": "tap_actions"
+          "log_id": "single_tap"
         }
       ]
     }
@@ -77,7 +70,6 @@
           ],
           "items": [
             {
-              "div_id": "with_double_and_long_taps",
               "type": "button",
               "text": "With double and long taps",
               "doubletap_actions": [
@@ -107,24 +99,11 @@
                   ],
                   "log_id": "longtap_actions"
                 }
-              ],
-              "actions": [
-                {
-                  "log_id": "single_tap",
-                  "url": "ui-test://click?type=click&description=With+double+and+long+taps"
-                }
               ]
             },
             {
-              "div_id": "without_double_tap",
               "type": "button",
               "text": "Without double tap",
-              "actions": [
-                {
-                  "log_id": "single_tap",
-                  "url": "ui-test://click?type=click&description=Without+double+tap"
-                }
-              ],
               "longtap_actions": [
                 {
                   "menu_items": [
@@ -141,15 +120,8 @@
               ]
             },
             {
-              "div_id": "without_long_tap",
               "type": "button",
               "text": "Without long tap",
-              "actions": [
-                {
-                  "log_id": "single_tap",
-                  "url": "ui-test://click?type=click&description=Without+long+tap"
-                }
-              ],
               "doubletap_actions": [
                 {
                   "menu_items": [
@@ -166,14 +138,7 @@
               ]
             },
             {
-              "div_id": "with_child_view_inside",
               "type": "container",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,
@@ -193,7 +158,6 @@
               "text_alignment_vertical": "center",
               "text_alignment_horizontal": "center",
               "text_color": "#000000",
-              "alpha": 1.0,
               "alignment_horizontal": "center",
               "alignment_vertical": "center",
               "items": [

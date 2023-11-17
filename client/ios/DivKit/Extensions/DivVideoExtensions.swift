@@ -8,10 +8,7 @@ extension DivVideo: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil
+      actionsHolder: nil
     )
   }
 
@@ -21,11 +18,11 @@ extension DivVideo: DivBlockModeling {
       return EmptyBlock()
     }
 
-    let resumeActions = resumeActions?.makeActions(context: context) ?? []
-    let pauseActions = pauseActions?.makeActions(context: context) ?? []
-    let bufferingActions = bufferingActions?.makeActions(context: context) ?? []
-    let endActions = endActions?.makeActions(context: context) ?? []
-    let fatalActions = fatalActions?.makeActions(context: context) ?? []
+    let resumeActions = resumeActions?.uiActions(context: context) ?? []
+    let pauseActions = pauseActions?.uiActions(context: context) ?? []
+    let bufferingActions = bufferingActions?.uiActions(context: context) ?? []
+    let endActions = endActions?.uiActions(context: context) ?? []
+    let fatalActions = fatalActions?.uiActions(context: context) ?? []
     let resolver = context.expressionResolver
     let aspectRatio = aspect.resolveAspectRatio(resolver)
     let repeatable = resolveRepeatable(resolver)

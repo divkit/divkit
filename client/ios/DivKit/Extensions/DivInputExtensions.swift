@@ -11,10 +11,7 @@ extension DivInput: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil
+      actionsHolder: nil
     )
   }
 
@@ -45,12 +42,8 @@ extension DivInput: DivBlockModeling {
     let hintValue = resolveHintText(expressionResolver) ?? ""
     let keyboardType = resolveKeyboardType(expressionResolver)
 
-    let onFocusActions = (focus?.onFocus ?? []).map {
-      $0.uiAction(context: context)
-    }
-    let onBlurActions = (focus?.onBlur ?? []).map {
-      $0.uiAction(context: context)
-    }
+    let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
+    let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context),

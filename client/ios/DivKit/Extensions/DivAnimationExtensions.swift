@@ -2,7 +2,7 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivAnimation {
-  func makeActionAnimation(with expressionResolver: ExpressionResolver) -> ActionAnimation {
+  func makeActionAnimation(expressionResolver: ExpressionResolver) -> ActionAnimation {
     ActionAnimation(
       touchDown: makeActionAnimation(for: .direct, with: expressionResolver),
       touchUp: makeActionAnimation(for: .reverse, with: expressionResolver)

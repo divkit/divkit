@@ -11,10 +11,7 @@ extension DivSelect: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil
+      actionsHolder: nil
     )
   }
 
@@ -48,12 +45,8 @@ extension DivSelect: DivBlockModeling {
     let textValue: Binding<String> = context
       .makeBinding(variableName: valueVariable, defaultValue: "")
 
-    let onFocusActions = (focus?.onFocus ?? []).map {
-      $0.uiAction(context: context)
-    }
-    let onBlurActions = (focus?.onBlur ?? []).map {
-      $0.uiAction(context: context)
-    }
+    let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
+    let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context),

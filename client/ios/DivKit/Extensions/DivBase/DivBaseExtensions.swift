@@ -9,10 +9,7 @@ extension DivBase {
   func applyBaseProperties(
     to block: () throws -> Block,
     context: DivBlockModelingContext,
-    actions: NonEmptyArray<UserInterfaceAction>?,
-    actionAnimation: ActionAnimation?,
-    doubleTapActions: NonEmptyArray<UserInterfaceAction>?,
-    longTapActions: NonEmptyArray<UserInterfaceAction>?,
+    actionsHolder: DivActionsHolder?,
     options: BasePropertiesOptions = [],
     customA11yElement: AccessibilityElement? = nil
   ) throws -> Block {
@@ -92,12 +89,7 @@ extension DivBase {
     )
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
-      .addingDecorations(
-        actions: actions,
-        actionAnimation: actionAnimation,
-        doubleTapActions: doubleTapActions,
-        longTapActions: longTapActions.map(LongTapActions.actions)
-      )
+      .addActions(context: context, actionsHolder: actionsHolder)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
         boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip },

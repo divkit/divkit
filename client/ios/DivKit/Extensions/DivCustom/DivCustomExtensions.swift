@@ -11,10 +11,7 @@ extension DivCustom: DivBlockModeling {
     return try applyBaseProperties(
       to: { try makeBaseBlock(context: context, children: children) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil
+      actionsHolder: nil
     )
   }
 

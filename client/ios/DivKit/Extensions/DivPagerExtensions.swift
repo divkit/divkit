@@ -9,10 +9,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actions: nil,
-      actionAnimation: nil,
-      doubleTapActions: nil,
-      longTapActions: nil,
+      actionsHolder: nil,
       options: .noPaddings
     )
   }
@@ -100,6 +97,6 @@ extension DivBase {
   fileprivate func makeSelectedActions(
     context: DivBlockModelingContext
   ) -> [UserInterfaceAction] {
-    selectedActions?.map { $0.uiAction(context: context) } ?? []
+    selectedActions?.uiActions(context: context) ?? []
   }
 }
