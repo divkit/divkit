@@ -46,7 +46,7 @@ def _kotlin_default_value_declaration_comment(p: Property) -> str:
         property_type = cast(KotlinPropertyType, Object(name='',
                                                         object=p.property_type.object,
                                                         format=ObjectFormat.DEFAULT))
-        comment_value = property_type.declaration_by_default_value(p.default_value, True)
+        comment_value = property_type.declaration_by_default_value(p.default_value, True, p.supports_expressions_flag)
     else:
         comment_value = p.default_value
     return comment_value
@@ -323,7 +323,8 @@ class KotlinProperty(Property):
         if self.default_value is not None:
             declaration = cast(KotlinPropertyType, self.property_type).declaration_by_default_value(
                 default_value=self.default_value,
-                string_enum_prefixed=self.mode.is_template
+                string_enum_prefixed=self.mode.is_template,
+                supports_expressions_flag=self.supports_expressions_flag
             )
             if declaration is not None:
                 return declaration
@@ -581,9 +582,13 @@ class KotlinPropertyType(PropertyType):
             return f'{self.object.resolved_prefixed_declaration}()'
         return None
 
-    def declaration_by_default_value(self, default_value: str, string_enum_prefixed: bool) -> Optional[str]:
+    def declaration_by_default_value(self,
+                                     default_value: str,
+                                     string_enum_prefixed: bool,
+                                     supports_expressions_flag: bool) -> Optional[str]:
         def wrap(value: str) -> str:
-            if self.supports_expressions and not self.is_array_of_expressions and not self.is_enum_of_expressions:
+            if self.supports_expressions and supports_expressions_flag and \
+                    not self.is_array_of_expressions and not self.is_enum_of_expressions:
                 return f'{EXPRESSION_TYPE_NAME}.constant({value})'
             return value
 
@@ -610,7 +615,8 @@ class KotlinPropertyType(PropertyType):
                 values = without_whitespaces[1:-1].split(',')
             item_type = cast(KotlinPropertyType, self.property_type)
             declarations = list(filter(None, map(
-                lambda value: item_type.declaration_by_default_value(value, string_enum_prefixed),
+                lambda value: item_type.declaration_by_default_value(
+                    value, string_enum_prefixed, supports_expressions_flag),
                 values)))
             if len(values) != len(declarations):
                 return None
@@ -639,7 +645,8 @@ class KotlinPropertyType(PropertyType):
                 if enum_case is None:
                     raise ValueError(type_val)
                 obj = cast(KotlinPropertyType, Object(name='', object=enum_case[1], format=ObjectFormat.DEFAULT))
-                case_constructor: Optional[str] = obj.declaration_by_default_value(default_value, True)
+                case_constructor: Optional[str] = obj.declaration_by_default_value(
+                    default_value, True, supports_expressions_flag)
                 if case_constructor is None:
                     return None
                 obj_name = self.object.resolved_prefixed_declaration
@@ -656,7 +663,8 @@ class KotlinPropertyType(PropertyType):
                 str_type = default_value_dict.get(prop.dict_field)
                 if str_type is None:
                     continue
-                declaration = cast(KotlinPropertyType, prop.property_type).declaration_by_default_value(str_type, True)
+                declaration = cast(KotlinPropertyType, prop.property_type).declaration_by_default_value(
+                    str_type, True, supports_expressions_flag)
                 args.append(f'{prop.declaration_name} = {declaration}')
             args = ', '.join(args)
             return wrap(f'{entity.resolved_prefixed_declaration}({args})')

@@ -690,6 +690,7 @@
           "id": {
             "type": "integer",
             "supports_expressions": false,
+            "default_value": "0",
             "description_translations": {
               "en": "ID. Can't contain expressions.",
               "ru": "Идентификатор. Не может содержать выражение."
@@ -714,6 +715,7 @@
           "integer": {
             "type": "integer",
             "long_type": true,
+            "default_value": "0",
             "description_translations": {
               "en": "Integer.",
               "ru": "Целое число."

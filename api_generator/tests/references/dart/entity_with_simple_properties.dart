@@ -10,8 +10,8 @@ class EntityWithSimpleProperties with EquatableMixin {
     this.booleanInt,
     this.color,
     this.dNum,
-    this.id,
-    this.integer,
+    this.id = 0,
+    this.integer = 0,
     this.positiveInteger,
     this.string,
     this.url,
@@ -26,10 +26,10 @@ class EntityWithSimpleProperties with EquatableMixin {
   final int? color;
 
   final double? dNum;
-
-  final int? id;
-
-  final int? integer;
+  // default value: 0
+  final int id;
+  // default value: 0
+  final int integer;
   // constraint: number > 0
   final int? positiveInteger;
   // at least 1 char
@@ -59,8 +59,8 @@ class EntityWithSimpleProperties with EquatableMixin {
       booleanInt: safeParseBool(json['boolean_int']),
       color: safeParseColor(json['color']),
       dNum: safeParseDouble(json['dNum']),
-      id: safeParseInt(json['id']),
-      integer: safeParseInt(json['integer']),
+      id: safeParseInt(json['id']) ?? 0,
+      integer: safeParseInt(json['integer']) ?? 0,
       positiveInteger: safeParseInt(json['positive_integer']),
       string: json['string'],
       url: safeParseUri(json['url']),

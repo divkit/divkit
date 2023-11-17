@@ -22,8 +22,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
     @JvmField final val booleanInt: Field<Expression<Boolean>>
     @JvmField final val color: Field<Expression<Int>>
     @JvmField final val double: Field<Expression<Double>>
-    @JvmField final val id: Field<Long>
-    @JvmField final val integer: Field<Expression<Long>>
+    @JvmField final val id: Field<Long> // default value: 0
+    @JvmField final val integer: Field<Expression<Long>> // default value: 0
     @JvmField final val positiveInteger: Field<Expression<Long>> // constraint: number > 0
     @JvmField final val string: Field<Expression<String>> // at least 1 char
     @JvmField final val url: Field<Expression<Uri>>
@@ -52,8 +52,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
             booleanInt = booleanInt.resolveOptional(env = env, key = "boolean_int", data = rawData, reader = BOOLEAN_INT_READER),
             color = color.resolveOptional(env = env, key = "color", data = rawData, reader = COLOR_READER),
             double = double.resolveOptional(env = env, key = "double", data = rawData, reader = DOUBLE_READER),
-            id = id.resolveOptional(env = env, key = "id", data = rawData, reader = ID_READER),
-            integer = integer.resolveOptional(env = env, key = "integer", data = rawData, reader = INTEGER_READER),
+            id = id.resolveOptional(env = env, key = "id", data = rawData, reader = ID_READER) ?: ID_DEFAULT_VALUE,
+            integer = integer.resolveOptional(env = env, key = "integer", data = rawData, reader = INTEGER_READER) ?: INTEGER_DEFAULT_VALUE,
             positiveInteger = positiveInteger.resolveOptional(env = env, key = "positive_integer", data = rawData, reader = POSITIVE_INTEGER_READER),
             string = string.resolveOptional(env = env, key = "string", data = rawData, reader = STRING_READER),
             url = url.resolveOptional(env = env, key = "url", data = rawData, reader = URL_READER)
@@ -78,6 +78,9 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
     companion object {
         const val TYPE = "entity_with_simple_properties"
 
+        private val ID_DEFAULT_VALUE = 0L
+        private val INTEGER_DEFAULT_VALUE = Expression.constant(0L)
+
         private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val STRING_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
@@ -87,8 +90,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         val BOOLEAN_INT_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
         val COLOR_READER: Reader<Expression<Int>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_COLOR_INT, env.logger, env, TYPE_HELPER_COLOR) }
         val DOUBLE_READER: Reader<Expression<Double>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_DOUBLE, env.logger, env, TYPE_HELPER_DOUBLE) }
-        val ID_READER: Reader<Long?> = { key, json, env -> JsonParser.readOptional(json, key, NUMBER_TO_INT, env.logger, env) }
-        val INTEGER_READER: Reader<Expression<Long>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, env.logger, env, TYPE_HELPER_INT) }
+        val ID_READER: Reader<Long> = { key, json, env -> JsonParser.readOptional(json, key, NUMBER_TO_INT, env.logger, env) ?: ID_DEFAULT_VALUE }
+        val INTEGER_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, env.logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE }
         val POSITIVE_INTEGER_READER: Reader<Expression<Long>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, env.logger, env, TYPE_HELPER_INT) }
         val STRING_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }

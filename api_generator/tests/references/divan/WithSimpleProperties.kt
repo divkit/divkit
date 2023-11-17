@@ -72,10 +72,12 @@ class WithSimpleProperties internal constructor(
         val double: Property<Double>?,
         /**
          * ID. Can't contain expressions.
+         * Default value: `0`.
          */
         val id: Property<Int>?,
         /**
          * Integer.
+         * Default value: `0`.
          */
         val integer: Property<Long>?,
         /**

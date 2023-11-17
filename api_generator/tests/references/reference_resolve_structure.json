@@ -570,6 +570,7 @@
           "id": {
             "type": "integer",
             "supports_expressions": false,
+            "default_value": "0",
             "$description": "translations.json#/entity_with_simple_properties_id"
           },
           "string": {
@@ -584,6 +585,7 @@
           "integer": {
             "type": "integer",
             "long_type": true,
+            "default_value": "0",
             "$description": "translations.json#/entity_with_simple_properties_integer"
           },
           "double": {

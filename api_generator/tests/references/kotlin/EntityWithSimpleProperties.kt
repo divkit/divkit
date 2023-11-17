@@ -22,8 +22,8 @@ class EntityWithSimpleProperties(
     @JvmField final val booleanInt: Expression<Boolean>? = null,
     @JvmField final val color: Expression<Int>? = null,
     @JvmField final val double: Expression<Double>? = null,
-    @JvmField final val id: Long? = null,
-    @JvmField final val integer: Expression<Long>? = null,
+    @JvmField final val id: Long = ID_DEFAULT_VALUE, // default value: 0
+    @JvmField final val integer: Expression<Long> = INTEGER_DEFAULT_VALUE, // default value: 0
     @JvmField final val positiveInteger: Expression<Long>? = null, // constraint: number > 0
     @JvmField final val string: Expression<String>? = null, // at least 1 char
     @JvmField final val url: Expression<Uri>? = null,
@@ -47,6 +47,9 @@ class EntityWithSimpleProperties(
     companion object {
         const val TYPE = "entity_with_simple_properties"
 
+        private val ID_DEFAULT_VALUE = 0L
+        private val INTEGER_DEFAULT_VALUE = Expression.constant(0L)
+
         @JvmStatic
         @JvmName("fromJson")
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithSimpleProperties {
@@ -56,8 +59,8 @@ class EntityWithSimpleProperties(
                 booleanInt = JsonParser.readOptionalExpression(json, "boolean_int", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
                 color = JsonParser.readOptionalExpression(json, "color", STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR),
                 double = JsonParser.readOptionalExpression(json, "double", NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE),
-                id = JsonParser.readOptional(json, "id", NUMBER_TO_INT, logger, env),
-                integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, TYPE_HELPER_INT),
+                id = JsonParser.readOptional(json, "id", NUMBER_TO_INT, logger, env) ?: ID_DEFAULT_VALUE,
+                integer = JsonParser.readOptionalExpression(json, "integer", NUMBER_TO_INT, logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE,
                 positiveInteger = JsonParser.readOptionalExpression(json, "positive_integer", NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, logger, env, TYPE_HELPER_INT),
                 string = JsonParser.readOptionalExpression(json, "string", STRING_VALIDATOR, logger, env, TYPE_HELPER_STRING),
                 url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, logger, env, TYPE_HELPER_URI)
