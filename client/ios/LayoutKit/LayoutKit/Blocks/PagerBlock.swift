@@ -104,9 +104,9 @@ extension PagerBlock: ElementStateUpdating {
   public func updated(withStates states: BlocksState) throws -> PagerBlock {
     let newBlocks = try gallery.items.map { try $0.content.updated(withStates: states) }
     let blocksAreNotEqual = zip(gallery.items, newBlocks)
-      .contains(where: { $0.content !== $1 })
+      .contains { $0.content !== $1 }
 
-    let newState = states.pagerViewState(for: pagerPath)
+    let newState = states.getState(at: gallery.path) ?? state
 
     guard blocksAreNotEqual || state != newState else {
       return self
@@ -126,7 +126,7 @@ extension PagerBlock: ElementStateUpdating {
       layoutMode: layoutMode,
       gallery: newModel,
       selectedActions: selectedActions,
-      state: newState ?? state,
+      state: newState,
       widthTrait: widthTrait,
       heightTrait: heightTrait
     )
