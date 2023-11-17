@@ -291,7 +291,9 @@ extension GalleryView: ScrollDelegate {
       compoundScrollDelegate.remove(self)
       updateContentOffset(to: .offset(newPosition.offset), animated: false)
       compoundScrollDelegate.add(self)
-      updateContentOffset(to: .paging(index: CGFloat(newPosition.page)), animated: true)
+      if !scrollView.isDragging {
+        updateContentOffset(to: .paging(index: CGFloat(newPosition.page)), animated: true)
+      }
     }
     switch model.scrollMode {
     case .default:
