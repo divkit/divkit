@@ -25,12 +25,12 @@
     "start": {
       "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_edge_insets_start",
-      "platforms": []
+      "platforms": [ "android" ]
     },
     "end": {
       "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_edge_insets_end",
-      "platforms": []
+      "platforms": [ "android" ]
     },
     "unit": {
       "$ref": "div-size-unit.json",
