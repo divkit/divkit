@@ -391,7 +391,7 @@ class Text internal constructor(
     /**
      * Text cropping method. Use `ellipsis` instead.
      * 
-     * Possible values: [none, start, end, middle].
+     * Possible values: [none], [start], [end], [middle].
      */
     @Generated
     sealed interface Truncate

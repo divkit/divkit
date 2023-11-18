@@ -62,7 +62,7 @@ class Patch internal constructor(
     /**
      * Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
      * 
-     * Possible values: [transactional, partial].
+     * Possible values: [transactional], [partial].
      */
     @Generated
     sealed interface Mode

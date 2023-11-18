@@ -296,7 +296,7 @@ class Indicator internal constructor(
     /**
      * Animation of switching between indicators.
      * 
-     * Possible values: [scale, worm, slider].
+     * Possible values: [scale], [worm], [slider].
      */
     @Generated
     sealed interface Animation

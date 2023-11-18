@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
  * 
- * Possible values: [dp, sp, px].
+ * Possible values: [dp], [sp], [px].
  */
 @Generated
 sealed interface SizeUnit

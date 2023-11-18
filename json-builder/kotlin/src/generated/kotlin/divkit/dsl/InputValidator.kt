@@ -17,6 +17,9 @@ import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.Map
 
+/**
+ * Possible values: [InputValidatorRegex], [InputValidatorExpression].
+ */
 @Generated
 sealed interface InputValidator
 

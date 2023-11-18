@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Line style.
  * 
- * Possible values: [none, single].
+ * Possible values: [none], [single].
  */
 @Generated
 sealed interface LineStyle

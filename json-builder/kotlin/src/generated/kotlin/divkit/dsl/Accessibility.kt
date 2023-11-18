@@ -85,7 +85,7 @@ class Accessibility internal constructor(
     /**
      * The way the accessibility tree is organized. In the `merge` mode the accessibility service perceives an element together with a subtree as a whole. In the `exclude` mode an element together with a subtree isn't available for accessibility.
      * 
-     * Possible values: [default, merge, exclude].
+     * Possible values: [default], [merge], [exclude].
      */
     @Generated
     sealed interface Mode
@@ -93,7 +93,7 @@ class Accessibility internal constructor(
     /**
      * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
      * 
-     * Possible values: [none, button, image, text, edit_text, header, tab_bar, list, select].
+     * Possible values: [none], [button], [image], [text], [edit_text], [header], [tab_bar], [list], [select].
      */
     @Generated
     sealed interface Type

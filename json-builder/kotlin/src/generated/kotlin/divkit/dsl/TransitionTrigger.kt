@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Event type that triggers animation.
  * 
- * Possible values: [data_change, state_change, visibility_change].
+ * Possible values: [data_change], [state_change], [visibility_change].
  */
 @Generated
 sealed interface TransitionTrigger

@@ -295,7 +295,7 @@ class Container internal constructor(
     /**
      * Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
      * 
-     * Possible values: [no_wrap, wrap].
+     * Possible values: [no_wrap], [wrap].
      */
     @Generated
     sealed interface LayoutMode
@@ -303,7 +303,7 @@ class Container internal constructor(
     /**
      * Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
      * 
-     * Possible values: [vertical, horizontal, overlap].
+     * Possible values: [vertical], [horizontal], [overlap].
      */
     @Generated
     sealed interface Orientation

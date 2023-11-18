@@ -39,6 +39,7 @@ object ExcludeEnumValue : EnumValue("exclude"),
 @Generated
 object NoneEnumValue : EnumValue("none"),
     Accessibility.Type,
+    Gallery.Scrollbar,
     LineStyle,
     Tabs.TabTitleStyle.AnimationType,
     Text.Truncate,
@@ -274,6 +275,10 @@ object BoldEnumValue : EnumValue("bold"),
 @Generated
 object PagingEnumValue : EnumValue("paging"),
     Gallery.ScrollMode
+
+@Generated
+object AutoEnumValue : EnumValue("auto"),
+    Gallery.Scrollbar
 
 @Generated
 object FillEnumValue : EnumValue("fill"),
@@ -639,6 +644,10 @@ val DivScope.bold: BoldEnumValue
 @Generated
 val DivScope.paging: PagingEnumValue
     get() = PagingEnumValue
+
+@Generated
+val DivScope.auto: AutoEnumValue
+    get() = AutoEnumValue
 
 @Generated
 val DivScope.fill: FillEnumValue

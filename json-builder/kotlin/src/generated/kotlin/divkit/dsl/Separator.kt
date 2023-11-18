@@ -289,7 +289,7 @@ class Separator internal constructor(
         /**
          * Separator orientation:<li>`vertical` — vertical;</li><li>`horizontal` — horizontal.</li><
          * 
-         * Possible values: [vertical, horizontal].
+         * Possible values: [vertical], [horizontal].
          */
         @Generated
         sealed interface Orientation

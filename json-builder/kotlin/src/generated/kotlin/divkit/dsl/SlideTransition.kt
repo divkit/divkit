@@ -85,7 +85,7 @@ class SlideTransition internal constructor(
     /**
      * Edge of a parent element for one of the action types:<li>where the element will move from when appearing;</li><li>where the element will move to when disappearing.</li>
      * 
-     * Possible values: [left, top, right, bottom].
+     * Possible values: [left], [top], [right], [bottom].
      */
     @Generated
     sealed interface Edge

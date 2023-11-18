@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Blend mode.
  * 
- * Possible values: [source_in, source_atop, darken, lighten, multiply, screen].
+ * Possible values: [source_in], [source_atop], [darken], [lighten], [multiply], [screen].
  */
 @Generated
 sealed interface BlendMode

@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [top, center, bottom, baseline, space-between, space-around, space-evenly].
+ * Possible values: [top], [center], [bottom], [baseline], [space_between], [space_around], [space_evenly].
  */
 @Generated
 sealed interface ContentAlignmentVertical

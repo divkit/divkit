@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [light, medium, regular, bold].
+ * Possible values: [light], [medium], [regular], [bold].
  */
 @Generated
 sealed interface FontWeight

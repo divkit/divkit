@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [left, center, right, start, end, space-between, space-around, space-evenly].
+ * Possible values: [left], [center], [right], [start], [end], [space_between], [space_around], [space_evenly].
  */
 @Generated
 sealed interface ContentAlignmentHorizontal

@@ -17,6 +17,9 @@ import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.Map
 
+/**
+ * Possible values: [Image], [GifImage], [Text], [Separator], [Container], [Grid], [Gallery], [Pager], [Tabs], [State], [Custom], [Indicator], [Slider], [Input], [Select], [Video].
+ */
 @Generated
 sealed interface Div
 

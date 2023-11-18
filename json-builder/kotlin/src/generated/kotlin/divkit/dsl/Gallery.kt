@@ -60,6 +60,7 @@ class Gallery internal constructor(
             restrictParentScroll = additive.restrictParentScroll ?: properties.restrictParentScroll,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scrollMode = additive.scrollMode ?: properties.scrollMode,
+            scrollbar = additive.scrollbar ?: properties.scrollbar,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
@@ -180,6 +181,11 @@ class Gallery internal constructor(
          */
         val scrollMode: Property<ScrollMode>?,
         /**
+         * Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+         * Default value: `none`.
+         */
+        val scrollbar: Property<Scrollbar>?,
+        /**
          * List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
          */
         val selectedActions: Property<List<Action>>?,
@@ -253,6 +259,7 @@ class Gallery internal constructor(
             result.tryPutProperty("restrict_parent_scroll", restrictParentScroll)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scroll_mode", scrollMode)
+            result.tryPutProperty("scrollbar", scrollbar)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
@@ -271,7 +278,7 @@ class Gallery internal constructor(
     /**
      * Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
      * 
-     * Possible values: [start, center, end].
+     * Possible values: [start], [center], [end].
      */
     @Generated
     sealed interface CrossContentAlignment
@@ -279,7 +286,7 @@ class Gallery internal constructor(
     /**
      * Gallery orientation.
      * 
-     * Possible values: [horizontal, vertical].
+     * Possible values: [horizontal], [vertical].
      */
     @Generated
     sealed interface Orientation
@@ -287,10 +294,18 @@ class Gallery internal constructor(
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
      * 
-     * Possible values: [paging, default].
+     * Possible values: [paging], [default].
      */
     @Generated
     sealed interface ScrollMode
+
+    /**
+     * Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+     * 
+     * Possible values: [none], [auto].
+     */
+    @Generated
+    sealed interface Scrollbar
 }
 
 /**
@@ -318,6 +333,7 @@ class Gallery internal constructor(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -357,6 +373,7 @@ fun DivScope.gallery(
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
+    scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -394,6 +411,7 @@ fun DivScope.gallery(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         scrollMode = valueOrNull(scrollMode),
+        scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -433,6 +451,7 @@ fun DivScope.gallery(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -472,6 +491,7 @@ fun DivScope.galleryProps(
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
+    scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -508,6 +528,7 @@ fun DivScope.galleryProps(
     restrictParentScroll = valueOrNull(restrictParentScroll),
     rowSpan = valueOrNull(rowSpan),
     scrollMode = valueOrNull(scrollMode),
+    scrollbar = valueOrNull(scrollbar),
     selectedActions = valueOrNull(selectedActions),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
@@ -546,6 +567,7 @@ fun DivScope.galleryProps(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -585,6 +607,7 @@ fun TemplateScope.galleryRefs(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
+    scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -621,6 +644,7 @@ fun TemplateScope.galleryRefs(
     restrictParentScroll = restrictParentScroll,
     rowSpan = rowSpan,
     scrollMode = scrollMode,
+    scrollbar = scrollbar,
     selectedActions = selectedActions,
     tooltips = tooltips,
     transform = transform,
@@ -659,6 +683,7 @@ fun TemplateScope.galleryRefs(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -698,6 +723,7 @@ fun Gallery.override(
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
+    scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -735,6 +761,7 @@ fun Gallery.override(
         restrictParentScroll = valueOrNull(restrictParentScroll) ?: properties.restrictParentScroll,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scrollMode = valueOrNull(scrollMode) ?: properties.scrollMode,
+        scrollbar = valueOrNull(scrollbar) ?: properties.scrollbar,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
@@ -774,6 +801,7 @@ fun Gallery.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -813,6 +841,7 @@ fun Gallery.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
+    scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -850,6 +879,7 @@ fun Gallery.defer(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollMode = scrollMode ?: properties.scrollMode,
+        scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = selectedActions ?: properties.selectedActions,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -878,6 +908,7 @@ fun Gallery.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -896,6 +927,7 @@ fun Gallery.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
+    scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Gallery = Gallery(
     Gallery.Properties(
@@ -923,6 +955,7 @@ fun Gallery.evaluate(
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollMode = scrollMode ?: properties.scrollMode,
+        scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -962,6 +995,7 @@ fun Gallery.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1001,6 +1035,7 @@ fun Component<Gallery>.override(
     restrictParentScroll: Boolean? = null,
     rowSpan: Int? = null,
     scrollMode: Gallery.ScrollMode? = null,
+    scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1039,6 +1074,7 @@ fun Component<Gallery>.override(
         restrictParentScroll = valueOrNull(restrictParentScroll),
         rowSpan = valueOrNull(rowSpan),
         scrollMode = valueOrNull(scrollMode),
+        scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -1078,6 +1114,7 @@ fun Component<Gallery>.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1117,6 +1154,7 @@ fun Component<Gallery>.defer(
     restrictParentScroll: ReferenceProperty<Boolean>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
+    scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1155,6 +1193,7 @@ fun Component<Gallery>.defer(
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         scrollMode = scrollMode,
+        scrollbar = scrollbar,
         selectedActions = selectedActions,
         tooltips = tooltips,
         transform = transform,
@@ -1183,6 +1222,7 @@ fun Component<Gallery>.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -1201,6 +1241,7 @@ fun Component<Gallery>.evaluate(
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
+    scrollbar: ExpressionProperty<Gallery.Scrollbar>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Gallery> = Component(
     template = template,
@@ -1229,6 +1270,7 @@ fun Component<Gallery>.evaluate(
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
         scrollMode = scrollMode,
+        scrollbar = scrollbar,
         selectedActions = null,
         tooltips = null,
         transform = null,
@@ -1260,3 +1302,6 @@ fun Gallery.Orientation.asList() = listOf(this)
 
 @Generated
 fun Gallery.ScrollMode.asList() = listOf(this)
+
+@Generated
+fun Gallery.Scrollbar.asList() = listOf(this)
