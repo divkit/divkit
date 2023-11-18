@@ -91,8 +91,10 @@ class SettingsActivity : AppCompatActivity() {
             AppCompatDelegate.MODE_NIGHT_NO -> NIGHT_MODE_DAY
             else -> NIGHT_MODE_AUTO
         }
+
+        val imageLoader = Container.preferences.imageLoader.value
+        div2View.setVariable(IMAGE_LOADER, imageLoader.toString())
         div2View.setVariable(NIGHT_MODE, nightMode)
-        setPreferenceState(IMAGE_LOADER, Container.preferences.imageLoader)
 
         val appName = resources.getText(R.string.app_name)
         val appVersion = "$appName ${BuildConfig.VERSION_NAME}.${BuildConfig.BUILD_NUMBER} ${BuildConfig.BUILD_TYPE}"

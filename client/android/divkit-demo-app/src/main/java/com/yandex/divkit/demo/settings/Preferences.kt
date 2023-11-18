@@ -9,5 +9,15 @@ class Preferences(context: Context) : DivkitDemoPreferences(context) {
 
     var nightMode by IntPreference(AppCompatDelegate.MODE_NIGHT_NO)
 
-    var imageLoader by BooleanPreference(true)
+    enum class ImageLoaderOption(val value: Int) {
+        PICASSO(0),
+        GLIDE(1),
+        COIL(2);
+
+        companion object {
+            fun fromInt(value: Int) = ImageLoaderOption.values().first { it.value == value }
+        }
+    }
+
+    var imageLoader by EnumPreference(ImageLoaderOption.PICASSO) { ImageLoaderOption.values() }
 }

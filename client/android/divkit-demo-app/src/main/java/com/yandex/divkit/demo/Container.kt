@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.neovisionaries.ws.client.WebSocketFactory
+import com.yandex.div.coil.CoilDivImageLoader
 import com.yandex.div.core.DivKit
 import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.histogram.HistogramBridge
@@ -82,10 +83,10 @@ internal object Container {
     }
 
     val imageLoader by lazy {
-        if (preferences.imageLoader) {
-            PicassoDivImageLoader(context, httpClientBuilder)
-        } else {
-            GlideDivImageLoader(context)
+        when (preferences.imageLoader) {
+            Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder)
+            Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context)
+            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context)
         }
     }
 
