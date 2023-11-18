@@ -57,7 +57,7 @@ class WithStringEnumPropertyWithDefaultValue internal constructor(
     }
 
     /**
-     * Possible values: [first, second, third].
+     * Possible values: [first], [second], [third].
      */
     @Generated
     sealed interface Value

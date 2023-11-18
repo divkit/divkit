@@ -552,6 +552,16 @@ class DivanEntityEnumeration(EntityEnumeration):
     def update_base(self):
         self._entities = list(map(lambda e: (e[0], update_base(e[1], self.remove_prefix)), self._entities))
 
+    def header_comment_block(self, translations: Dict[str, str]) -> Text:
+        comment_lines = []
+        entity_names = list(map(
+            lambda name: f"[{utils.capitalize_camel_case(name, self.remove_prefix)}]",
+            self.entity_names
+        ))
+        possible_values = translations['div_generator_possible_values'].format(', '.join(entity_names))
+        comment_lines.append(possible_values)
+        return comment(*comment_lines)
+
 
 class DivanStringEnumeration(StringEnumeration):
 
@@ -561,8 +571,8 @@ class DivanStringEnumeration(StringEnumeration):
         if description_doc not in ['', 'None']:
             comment_lines.append(description_doc)
             comment_lines.append('')
-        possible_values = translations['div_generator_possible_values']\
-            .format(f"[{', '.join(map(lambda case: case[1], self.cases), )}]")
+        cases = list(map(lambda case: f"[{utils.snake_case(case[1])}]", self.cases))
+        possible_values = translations['div_generator_possible_values'].format(', '.join(cases))
         comment_lines.append(possible_values)
         return comment(*comment_lines)
 

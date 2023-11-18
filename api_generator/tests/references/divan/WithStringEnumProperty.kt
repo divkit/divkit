@@ -54,7 +54,7 @@ class WithStringEnumProperty internal constructor(
     }
 
     /**
-     * Possible values: [first, second].
+     * Possible values: [first], [second].
      */
     @Generated
     sealed interface Property
