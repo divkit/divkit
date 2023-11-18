@@ -32,6 +32,7 @@ open class DivkitDemoPreferences(protected val context: Context) {
         val valueToSet: Any? = when (property.returnType) {
             Boolean::class.createType() -> value.toBoolean()
             Float::class.createType() -> value.toFloatOrNull()
+            Preferences.ImageLoaderOption::class.createType() -> (value as Preferences.ImageLoaderOption)
             Int::class.createType() -> value.toIntOrNull()
             Long::class.createType() -> value.toLongOrNull()
             String::class.createType(), String::class.createType(nullable = true) -> value
