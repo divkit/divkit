@@ -174,34 +174,39 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
   }
 
-  var toolbar: TextFieldBlock.Toolbar? {
+  var toolbar: TextFieldBlock.ToolbarType? {
     didSet {
       guard toolbar != oldValue else { return }
 
-      guard toolbar != nil else {
+      guard let toolbar else {
         textField.inputAccessoryView = nil
         return
       }
 
-      let keyboardToolbar = UIToolbar()
-      keyboardToolbar.sizeToFit()
-      let cancelButton = UIBarButtonItem(
-        barButtonSystemItem: .cancel,
-        target: self,
-        action: #selector(onToolbarCancelButtonPressed)
-      )
-      let flexibleSpaceButton = UIBarButtonItem(
-        barButtonSystemItem: .flexibleSpace,
-        target: nil,
-        action: nil
-      )
-      let doneButton = UIBarButtonItem(
-        barButtonSystemItem: .done,
-        target: self,
-        action: #selector(onToolbarDoneButtonPressed)
-      )
-      keyboardToolbar.items = [cancelButton, flexibleSpaceButton, doneButton]
-      textField.inputAccessoryView = keyboardToolbar
+      switch toolbar {
+      case .default:
+        let keyboardToolbar = UIToolbar()
+        keyboardToolbar.sizeToFit()
+        let cancelButton = UIBarButtonItem(
+          barButtonSystemItem: .cancel,
+          target: self,
+          action: #selector(onToolbarCancelButtonPressed)
+        )
+        let flexibleSpaceButton = UIBarButtonItem(
+          barButtonSystemItem: .flexibleSpace,
+          target: nil,
+          action: nil
+        )
+        let doneButton = UIBarButtonItem(
+          barButtonSystemItem: .done,
+          target: self,
+          action: #selector(onToolbarDoneButtonPressed)
+        )
+        keyboardToolbar.items = [cancelButton, flexibleSpaceButton, doneButton]
+        textField.inputAccessoryView = keyboardToolbar
+      case let .custom(toolbar):
+        textField.inputAccessoryView = toolbar
+      }
     }
   }
 
@@ -408,11 +413,17 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   @objc private func onToolbarDoneButtonPressed() {
-    guard let action = toolbar?.doneButtonAction else {
+    guard let toolbar else {
       return
     }
-    textField.resignFirstResponder()
-    UIActionEvent(uiAction: action, originalSender: self).sendFrom(self)
+
+    switch toolbar {
+    case let .default(toolbar):
+      textField.resignFirstResponder()
+      UIActionEvent(uiAction: toolbar.doneButtonAction, originalSender: self).sendFrom(self)
+    case .custom:
+      break
+    }
   }
 
   @objc private func onToolbarCancelButtonPressed() {

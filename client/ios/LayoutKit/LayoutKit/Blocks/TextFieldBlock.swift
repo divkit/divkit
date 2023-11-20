@@ -26,6 +26,11 @@ public final class TextFieldBlock: Block {
     }
   }
 
+  public enum ToolbarType: Equatable {
+    case `default`(Toolbar)
+    case custom(BlockView)
+  }
+
   public struct Toolbar: Equatable {
     public let doneButtonAction: UserInterfaceAction
 
@@ -138,7 +143,7 @@ public final class TextFieldBlock: Block {
   public let autocorrectionType: TextAutocorrectionType
   public let isSecureTextEntry: Bool
   public let rightControl: SideControl?
-  public let toolbar: Toolbar?
+  public let toolbar: ToolbarType?
   public let keyboardType: KeyboardType
   public let interaction: Interaction
   public let accessibilityElement: AccessibilityElement?
@@ -157,7 +162,7 @@ public final class TextFieldBlock: Block {
     autocorrectionType: TextAutocorrectionType = .no,
     isSecureTextEntry: Bool = false,
     rightControl: SideControl? = nil,
-    toolbar: Toolbar? = nil,
+    toolbar: ToolbarType? = nil,
     keyboardType: KeyboardType = .default,
     interaction: Interaction = .unchanged,
     accessibilityElement: AccessibilityElement? = nil
@@ -319,6 +324,22 @@ extension TextFieldBlock.Placeholders.Separate.AnimatableAttributes {
     rhs: TextFieldBlock.Placeholders.Separate.AnimatableAttributes
   ) -> Bool {
     lhs.size == rhs.size && lhs.color == rhs.color && lhs.height == rhs.height
+  }
+}
+
+extension TextFieldBlock.ToolbarType {
+  public static func == (
+    lhs: TextFieldBlock.ToolbarType,
+    rhs: TextFieldBlock.ToolbarType
+  ) -> Bool {
+    switch (lhs, rhs) {
+    case let (.default(lhs), .default(rhs)):
+      return lhs == rhs
+    case let (.custom(lhs), .custom(rhs)):
+      return lhs == rhs
+    default:
+      return false
+    }
   }
 }
 
