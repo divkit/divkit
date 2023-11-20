@@ -10,12 +10,16 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.Px
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import kotlin.math.abs
+import kotlin.math.absoluteValue
+import kotlin.math.atan
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -26,6 +30,8 @@ private const val MIN_POSSIBLE_RANGE = 1f
 private const val UNSET_VALUE = -1
 private const val DEFAULT_ANIMATION_DURATION = 300L
 private const val DEFAULT_ANIMATION_ENABLED = true
+private const val DEFAULT_INTERCEPTION_ANGLE = 45f
+private const val RIGHT_ANGLE = 90.0
 
 open class SliderView @JvmOverloads constructor(
     context: Context,
@@ -516,6 +522,16 @@ open class SliderView @JvmOverloads constructor(
 
     var interactive = true
 
+    var interceptionAngle = DEFAULT_INTERCEPTION_ANGLE
+        set(value) {
+            val newValue = value.absoluteValue % 90
+            field = maxOf(DEFAULT_INTERCEPTION_ANGLE, newValue)
+        }
+
+    private var prevX = 0f
+    private var prevY = 0f
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         if (!interactive) {
@@ -528,11 +544,25 @@ open class SliderView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 thumbOnTouch = getClosestThumb(touchPosition)
                 setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animationEnabled)
+                prevX = ev.x
+                prevY = ev.y
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
                 setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animated = false, forced = true)
-                this.parent.requestDisallowInterceptTouchEvent(true)
+                val dy = (ev.y - prevY).absoluteValue
+                val dx = (ev.x - prevX).absoluteValue
+                val angle = if (dx != 0f) {
+                    val radian = atan(dy / dx)
+                    radian * 180 / Math.PI
+                } else {
+                    RIGHT_ANGLE
+                }
+                prevX = ev.x
+                prevY = ev.y
+                this.parent.requestDisallowInterceptTouchEvent(
+                    angle <= interceptionAngle || dy < touchSlop
+                )
                 return true
             }
             MotionEvent.ACTION_UP -> {
