@@ -73,6 +73,7 @@ import javax.inject.Inject
 import kotlin.math.min
 
 private const val SOFT_HYPHEN = '\u00AD'
+private const val WORD_JOINER = "\u2060"
 private const val LONGEST_WORD_BREAK = 10
 
 /**
@@ -601,6 +602,8 @@ internal class DivTextBinder @Inject constructor(
         private val sb: SpannableStringBuilder = SpannableStringBuilder(text)
         private val images = images?.filter { it.start.evaluate(resolver) <= text.length }?.sortedBy { it.start.evaluate(resolver) } ?: emptyList()
 
+        private var additionalCharsBeforeImage: IntArray? = null
+
         private var textObserver: ((CharSequence) -> Unit)? = null
 
         fun onTextChanged(action: (CharSequence) -> Unit) {
@@ -608,7 +611,7 @@ internal class DivTextBinder @Inject constructor(
         }
 
         fun run() {
-            if (ranges.isNullOrEmpty() && images.isNullOrEmpty()) {
+            if (ranges.isNullOrEmpty() && images.isEmpty()) {
                 textObserver?.invoke(text)
                 return
             }
@@ -617,6 +620,23 @@ internal class DivTextBinder @Inject constructor(
             ranges?.forEach { item -> sb.addTextRange(item) }
             images.reversed().forEach {
                 sb.insert(it.start.evaluate(resolver).toIntSafely(), "#")
+            }
+
+            images.foldIndexed(Int.MIN_VALUE) { index, prevImageStart, image ->
+                additionalCharsBeforeImage?.takeIf { index > 0 }?.let { chars ->
+                    chars[index] = chars[index - 1]
+                }
+                val rawStart = image.start.evaluate(resolver).toIntSafely()
+                val actualStart = rawStart + index + additionalCharsBeforeImage.getOrZero(index)
+                val notWhitespaceBefore = actualStart > 0 && !sb[actualStart - 1].isWhitespace()
+                val textBeforeImage = actualStart != prevImageStart + 1 && notWhitespaceBefore
+                if (textBeforeImage) {
+                    sb.insert(actualStart, WORD_JOINER)
+                    val charsBeforeImage = additionalCharsBeforeImage
+                            ?: IntArray(this.images.size).also { additionalCharsBeforeImage = it }
+                    charsBeforeImage[index]++
+                }
+                rawStart + index + additionalCharsBeforeImage.getOrZero(index)
             }
 
             images.forEachIndexed { index, image ->
@@ -639,7 +659,8 @@ internal class DivTextBinder @Inject constructor(
 
                 val span = ImagePlaceholderSpan(width, height, offsetY)
 
-                val start = image.start.evaluate(resolver).toIntSafely() + index
+                val start = image.start.evaluate(resolver).toIntSafely() + index +
+                        additionalCharsBeforeImage.getOrZero(index)
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
 
@@ -655,6 +676,8 @@ internal class DivTextBinder @Inject constructor(
                 divView.addLoadReference(reference, textView)
             }
         }
+
+        private fun IntArray?.getOrZero(index: Int) = this?.get(index) ?: 0
 
         private fun SpannableStringBuilder.addTextRange(range: DivText.Range) {
             val start = range.start.evaluate(resolver).toIntSafely().coerceAtMost(text.length)
@@ -762,7 +785,8 @@ internal class DivTextBinder @Inject constructor(
                 super.onSuccess(cachedBitmap)
                 val image = images[index]
                 val span = sb.makeImageSpan(image, cachedBitmap.bitmap)
-                val start = image.start.evaluate(resolver).toIntSafely() + index
+                val start = image.start.evaluate(resolver).toIntSafely() + index +
+                        additionalCharsBeforeImage.getOrZero(index)
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                 textObserver?.invoke(sb)
