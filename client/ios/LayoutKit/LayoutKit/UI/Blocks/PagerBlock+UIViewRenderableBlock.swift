@@ -83,16 +83,20 @@ private final class PagerView: BlockView {
 
     if isNewModel {
       onMainThreadAsync {
-        // do not update state if model has been changed already
-        if model == self.model {
-          self.setState(state.synchronized(with: model))
-        }
+        self.setState(
+          path: model.path,
+          state: state.synchronized(with: model),
+          selectedActions: selectedActions
+        )
       }
     }
   }
 
-  private func setState(_ state: PagerViewState) {
-    let path = model.path
+  private func setState(
+    path: UIElementPath,
+    state: PagerViewState,
+    selectedActions: [[UserInterfaceAction]]
+  ) {
     if lastState?.0 != path || lastState?.1 != state {
       lastState = (path, state)
 
@@ -105,7 +109,11 @@ private final class PagerView: BlockView {
         selectedPageIndex: pageIndex
       ).sendFrom(self)
 
-      selectedActions[pageIndex].perform(sendingFrom: self)
+      if selectedActions.count > pageIndex {
+        selectedActions[pageIndex].perform(sendingFrom: self)
+      } else {
+        assertionFailure("Invalid page index")
+      }
     }
   }
 
@@ -136,10 +144,12 @@ extension PagerView: ElementStateObserver {
 
     if !galleryState.isScrolling {
       setState(
-        PagerViewState(
+        path: model.path,
+        state: PagerViewState(
           numberOfPages: model.itemsCountWithoutInfinite,
           currentPage: Int(pageIndex.rounded()) - model.infiniteCorrection
-        )
+        ),
+        selectedActions: selectedActions
       )
     }
   }
