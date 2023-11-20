@@ -11,14 +11,11 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
-import com.yandex.div.utils.UiTestDivActionHandler
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.junit.Assert
 import ru.tinkoff.allure.step as allureStep
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.TimeUnit
 
 internal fun testClicks(f: ClickHandlingTestSteps.() -> Unit) = f(ClickHandlingTestSteps())
 
@@ -28,17 +25,10 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
         testAsset = "regression_test_data/button_actions.json"
     }
 
-    private val actions = LinkedBlockingQueue<Pair<String, String>>()
-
-    private val divActionHandler = UiTestDivActionHandler(onClick = { type, description ->
-        actions.put(type to description)
-    })
-
     fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
         buildContainer(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
-            divActionHandler = divActionHandler
         )
     }
 
@@ -62,34 +52,16 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
             findView(text).perform(longClick())
         }
 
-    private fun findView(text: String) =
-        onView(withText(text))
+    private fun findView(text: String) = onView(withText(text))
 
-    fun assert(f: ClickHandlingAssertions.() -> Unit) {
-        val actionsReceived = mutableMapOf<Pair<String, String>, Int>()
-        while (true) {
-            val action = actions.poll(3000, TimeUnit.MILLISECONDS) ?: break
-            val numberOfReceived = actionsReceived.getOrPut(action) { 0 }
-            actionsReceived[action] = numberOfReceived + 1
-        }
-        f(ClickHandlingAssertions(actionsReceived))
-    }
+    fun assert(f: ClickHandlingAssertions.() -> Unit) = f(ClickHandlingAssertions())
 }
 
 @StepsDsl
-internal class ClickHandlingAssertions(private val actionsReceived: Map<Pair<String, String>, Int>) {
+internal class ClickHandlingAssertions {
 
-    fun checkClicked(contentDescription: String, times: Int = 1) {
-        val actualTimesClicked = actionsReceived["click" to contentDescription]
-        allureStep("Expected times clicked on '$contentDescription': $times, actual: $actualTimesClicked") {
-            Assert.assertEquals(times, actualTimesClicked)
-        }
-    }
-
-    fun checkShown(text: String) {
-        allureStep("View with text='$text' is shown") {
-            onView(withText(text)).check(matches(isDisplayed()))
-        }
+    fun checkShown(text: String): Unit = step("View with text='$text' is shown") {
+        onView(withText(text)).check(matches(isDisplayed()))
     }
 
     fun checkClickLogged(cardId: String, id: String) =

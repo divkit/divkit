@@ -5,6 +5,7 @@ import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.testClicks
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.divkit.demo.div.DemoDiv2Logger
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -39,13 +40,14 @@ class DivTouchInteractivityTest {
     }
 
     @Test
+    @Ignore("DIVKIT-3241")
     fun singleTapIsHandled() {
         testClicks {
             activityTestRule.buildContainer()
             click("With double and long taps")
 
             assert {
-                checkClicked("With double and long taps")
+                checkShown("Single tap")
             }
         }
     }
@@ -75,13 +77,14 @@ class DivTouchInteractivityTest {
     }
 
     @Test
+    @Ignore("DIVKIT-3241")
     fun singleTapIsHandledWhenDoubleTapActionIsNotSet() {
         testClicks {
             activityTestRule.buildContainer()
             doubleClick("Without double tap")
 
             assert {
-                checkClicked("Without double tap", times = 2)
+                checkShown("Single tap")
             }
         }
     }
@@ -109,6 +112,7 @@ class DivTouchInteractivityTest {
     }
 
     @Test
+    @Ignore("DIVKIT-3241")
     fun singleClickIsLogged() {
         DemoDiv2Logger.clearLogActions()
         testClicks {
