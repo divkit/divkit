@@ -273,18 +273,34 @@ extension DivBase {
 }
 
 extension DivBase {
+  func getTransformedWidth(_ context: DivBlockModelingContext) -> DivSize {
+    context.sizeModifier?.transformWidth(width) ?? width
+  }
+
+  func resolveWidthTrait(_ context: DivBlockModelingContext) -> LayoutTrait {
+    getTransformedWidth(context).makeLayoutTrait(with: context.expressionResolver)
+  }
+
   func makeContentWidthTrait(with context: DivBlockModelingContext) -> LayoutTrait {
-    let overridenWidth = context.override(width: width)
-    return overridenWidth.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(context: context).horizontalInsets
-    )
+    resolveWidthTrait(context)
+      .contentTrait(
+        consideringInsets: paddings.makeEdgeInsets(context: context).horizontalInsets
+      )
+  }
+
+  func getTransformedHeight(_ context: DivBlockModelingContext) -> DivSize {
+    context.sizeModifier?.transformHeight(height) ?? height
+  }
+
+  func resolveHeightTrait(_ context: DivBlockModelingContext) -> LayoutTrait {
+    getTransformedHeight(context).makeLayoutTrait(with: context.expressionResolver)
   }
 
   func makeContentHeightTrait(with context: DivBlockModelingContext) -> LayoutTrait {
-    let overridenHeight = context.override(height: height)
-    return overridenHeight.makeLayoutTrait(with: context.expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(context: context).verticalInsets
-    )
+    resolveHeightTrait(context)
+      .contentTrait(
+        consideringInsets: paddings.makeEdgeInsets(context: context).verticalInsets
+      )
   }
 }
 

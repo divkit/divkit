@@ -4,15 +4,13 @@ import LayoutKit
 extension Array where Element == Div {
   func makeBlocks<T>(
     context: DivBlockModelingContext,
-    overridenWidth: DivOverridenSize? = nil,
-    overridenHeight: DivOverridenSize? = nil,
+    sizeModifier: DivSizeModifier? = nil,
     mappedBy modificator: (Div, Block) throws -> T
   ) rethrows -> [T] {
     try iterativeFlatMap { div, index in
       let itemContext = modified(context) {
         $0.parentPath += index
-        $0.overridenWidth = overridenWidth
-        $0.overridenHeight = overridenHeight
+        $0.sizeModifier = sizeModifier
       }
       let block: Block
       do {

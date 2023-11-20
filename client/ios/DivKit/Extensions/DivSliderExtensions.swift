@@ -95,25 +95,19 @@ extension DivSlider: DivBlockModeling {
       layoutDirection: context.layoutDirection
     )
 
-    let sliderRanges = makeRanges(ranges, with: context)
-
     let sliderModel = SliderModel(
       firstThumb: firstThumb,
       secondThumb: secondThumb,
       minValue: minValue,
       maxValue: maxValue,
       marksConfiguration: marksConfiguration,
-      ranges: sliderRanges,
+      ranges: makeRanges(ranges, with: context),
       layoutDirection: context.layoutDirection
     )
-
-    let width = context.override(width: width)
-    let height = context.override(height: height)
-
     return SliderBlock(
       sliderModel: sliderModel,
-      widthTrait: width.makeLayoutTrait(with: expressionResolver),
-      heightTrait: height.makeLayoutTrait(with: expressionResolver)
+      widthTrait: resolveWidthTrait(context),
+      heightTrait: resolveHeightTrait(context)
     )
   }
 

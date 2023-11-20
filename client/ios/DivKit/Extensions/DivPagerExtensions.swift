@@ -26,8 +26,6 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         pagerId: $0
       )
     }
-    let width = context.override(width: width)
-    let height = context.override(height: height)
 
     return try modifyError({ DivBlockModelingError($0.message, path: pagerPath) }) {
       let gallery = try makeGalleryModel(
@@ -45,8 +43,8 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         gallery: gallery,
         selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
         state: getState(context: context, path: pagerPath, numberOfPages: items.count),
-        widthTrait: width.makeLayoutTrait(with: expressionResolver),
-        heightTrait: height.makeLayoutTrait(with: expressionResolver)
+        widthTrait: resolveWidthTrait(context),
+        heightTrait: resolveHeightTrait(context)
       )
     }
   }

@@ -52,8 +52,7 @@ public struct DivBlockModelingContext {
     }
   }
 
-  var overridenWidth: DivOverridenSize?
-  var overridenHeight: DivOverridenSize?
+  var sizeModifier: DivSizeModifier?
 
   public init(
     cardId: DivCardID,
@@ -173,26 +172,6 @@ public struct DivBlockModelingContext {
       return
     }
     errorsStorage.add(DivUnknownError(error, path: parentPath))
-  }
-
-  func override(width: DivSize) -> DivSize {
-    guard let overridenWidth = overridenWidth else {
-      return width
-    }
-    if overridenWidth.original == width {
-      return overridenWidth.overriden
-    }
-    return width
-  }
-
-  func override(height: DivSize) -> DivSize {
-    guard let overridenHeight = overridenHeight else {
-      return height
-    }
-    if overridenHeight.original == height {
-      return overridenHeight.overriden
-    }
-    return height
   }
 
   func makeBinding<T>(variableName: String, defaultValue: T) -> Binding<T> {
