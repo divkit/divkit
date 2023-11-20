@@ -8,7 +8,7 @@ extension DivContainer: DivBlockModeling {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: modified(context) {
-        $0.childrenA11yDescription = makeChildrenA11yDescription(context: $0)
+        $0.childrenA11yDescription = resolveChildrenA11yDescription($0)
       },
       actionsHolder: self
     )
@@ -32,10 +32,11 @@ extension DivContainer: DivBlockModeling {
     }
   }
 
-  private func makeChildrenA11yDescription(context: DivBlockModelingContext) -> String? {
+  private func resolveChildrenA11yDescription(_ context: DivBlockModelingContext) -> String? {
     var result = ""
     func traverse(div: Div) {
-      result = [result, div.makeA11yDecription(context: context)].compactMap { $0 }
+      result = [result, div.resolveA11yDecription(context)]
+        .compactMap { $0 }
         .joined(separator: " ")
       div.children.forEach(traverse(div:))
     }
@@ -63,10 +64,7 @@ extension DivContainer: DivBlockModeling {
       mappedBy: { div, block in
         LayeredBlock.Child(
           content: block,
-          alignment: div.value.alignment2D(
-            withDefault: defaultAlignment,
-            context: context
-          )
+          alignment: div.value.resolveAlignment(context, defaultAlignment: defaultAlignment)
         )
       }
     )
@@ -82,8 +80,8 @@ extension DivContainer: DivBlockModeling {
 
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let layeredBlock = LayeredBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context, aspectRatio: aspectRatio),
       children: children
     )
 
@@ -178,19 +176,18 @@ extension DivContainer: DivBlockModeling {
       context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
     }
 
-    let widthTrait = makeContentWidthTrait(with: context)
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let containerBlock = try ContainerBlock(
       blockLayoutDirection: context.layoutDirection,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
-      widthTrait: widthTrait,
-      heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context, aspectRatio: aspectRatio),
       axialAlignment: axialAlignment,
       crossAlignment: crossAlignment,
       children: children,
-      separator: makeSeparator(with: context),
-      lineSeparator: makeLineSeparator(with: context)
+      separator: resolveSeparator(context),
+      lineSeparator: resolveLineSeparator(context)
     )
 
     if let aspectRatio = aspectRatio {
@@ -205,25 +202,25 @@ extension DivContainer: DivBlockModeling {
     return containerBlock
   }
 
-  private func makeHeightTrait(
-    context: DivBlockModelingContext,
+  private func resolveContentHeightTrait(
+    _ context: DivBlockModelingContext,
     aspectRatio: CGFloat?
   ) -> LayoutTrait {
     if aspectRatio != nil {
       return .resizable
     }
-    return makeContentHeightTrait(with: context)
+    return resolveContentHeightTrait(context)
   }
 
-  private func makeSeparator(
-    with context: DivBlockModelingContext
+  private func resolveSeparator(
+    _ context: DivBlockModelingContext
   ) throws -> ContainerBlock.Separator? {
     guard let separator = separator else {
       return nil
     }
     let separatorBlock = separator.style.makeBlock(
       context: context, corners: .all
-    ).addingEdgeInsets(separator.margins.makeEdgeInsets(context: context))
+    ).addingEdgeInsets(separator.margins.resolve(context))
 
     let style = ContainerBlock.Child(
       content: separatorBlock,
@@ -239,15 +236,15 @@ extension DivContainer: DivBlockModeling {
     )
   }
 
-  private func makeLineSeparator(
-    with context: DivBlockModelingContext
+  private func resolveLineSeparator(
+    _ context: DivBlockModelingContext
   ) -> ContainerBlock.Separator? {
     guard let lineSeparator = lineSeparator else {
       return nil
     }
     let lineSeparatorBlock = lineSeparator.style.makeBlock(
       context: context, corners: .all
-    ).addingEdgeInsets(lineSeparator.margins.makeEdgeInsets(context: context))
+    ).addingEdgeInsets(lineSeparator.margins.resolve(context))
 
     let style = ContainerBlock.Child(
       content: lineSeparatorBlock,
@@ -409,10 +406,12 @@ extension DivContainer.LayoutMode {
 }
 
 extension Div {
-  fileprivate func makeA11yDecription(context: DivBlockModelingContext) -> String? {
+  fileprivate func resolveA11yDecription(_ context: DivBlockModelingContext) -> String? {
     let expressionResolver = context.expressionResolver
-    guard value.accessibility.resolveMode(expressionResolver) != .exclude
-    else { return nil }
+    let accessibility = value.accessibility
+    guard accessibility.resolveMode(expressionResolver) != .exclude else {
+      return nil
+    }
     switch self {
     case .divContainer,
          .divCustom,
@@ -429,7 +428,7 @@ extension Div {
          .divSlider,
          .divVideo,
          .divState:
-      return value.accessibility.resolveDescription(expressionResolver)
+      return accessibility.resolveDescription(expressionResolver)
     case let .divText(divText):
       let handlerDescription = context
         .getExtensionHandlers(for: divText)

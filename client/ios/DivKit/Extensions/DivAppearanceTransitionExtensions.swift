@@ -2,9 +2,9 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivAppearanceTransition {
-  func makeTransitioningAnimations(
-    for type: TransitioningAnimationType,
-    with expressionResolver: ExpressionResolver
+  func resolveAnimations(
+    _ expressionResolver: ExpressionResolver,
+    type: TransitioningAnimationType
   ) -> [TransitioningAnimation] {
     let kind: TransitioningAnimation.Kind
     let value1: Double
@@ -13,7 +13,7 @@ extension DivAppearanceTransition {
     switch self {
     case let .divAppearanceSetTransition(item):
       return item.items.flatMap {
-        $0.makeTransitioningAnimations(for: type, with: expressionResolver)
+        $0.resolveAnimations(expressionResolver, type: type)
       }
     case let .divFadeTransition(item):
       kind = .fade
@@ -33,7 +33,7 @@ extension DivAppearanceTransition {
       case .top, .bottom:
         kind = .translationY
       }
-      value1 = item.distance?.makeScaledValue(expressionResolver).map {
+      value1 = item.distance?.resolveScaledValue(expressionResolver).map {
         switch edge {
         case .left, .top:
           return -$0
@@ -84,7 +84,7 @@ fileprivate func getDefaultSlideValue(_ edge: DivSlideTransition.Edge) -> Double
 }
 
 extension DivDimension {
-  fileprivate func makeScaledValue(_ expressionResolver: ExpressionResolver) -> Double? {
+  fileprivate func resolveScaledValue(_ expressionResolver: ExpressionResolver) -> Double? {
     guard let value = resolveValue(expressionResolver) else { return nil }
     return resolveUnit(expressionResolver).makeScaledValue(value)
   }

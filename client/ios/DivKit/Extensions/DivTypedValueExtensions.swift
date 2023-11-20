@@ -1,8 +1,8 @@
 import Foundation
 
 extension DivTypedValue {
-  func asVariableValue(
-    expressionResolver: ExpressionResolver
+  func resolveVariableValue(
+    _ expressionResolver: ExpressionResolver
   ) -> DivVariableValue? {
     switch self {
     case let .arrayValue(value):
@@ -48,8 +48,8 @@ extension DivTypedValue {
     }
   }
 
-  func asValue(
-    expressionResolver: ExpressionResolver
+  func resolve(
+    _ expressionResolver: ExpressionResolver
   ) -> AnyHashable? {
     switch self {
     case let .arrayValue(value):

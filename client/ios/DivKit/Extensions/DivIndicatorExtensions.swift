@@ -84,20 +84,19 @@ extension DivIndicator: DivBlockModeling {
       disappearingWidthScale: disappearingScaleX,
       pageSize: pageSize,
       highlightedPageCornerRadius: activeRect?.cornerRadius,
-      pageCornerRadius: inactiveRect?
-        .cornerRadius ?? CGFloat(rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0),
+      pageCornerRadius: inactiveRect?.cornerRadius
+        ?? CGFloat(rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0),
       animation: resolveAnimation(expressionResolver).asBlockAnimation,
-      itemPlacement: itemsPlacement?
-        .makeItemPlacement(with: expressionResolver) ??
-        .fixed(spaceBetweenCenters: spaceBetweenCenters)
+      itemPlacement: itemsPlacement?.resolve(expressionResolver)
+        ?? .fixed(spaceBetweenCenters: spaceBetweenCenters)
     )
 
     return
       PageControlBlock(
         layoutDirection: context.layoutDirection,
         pagerPath: pagerPath,
-        widthTrait: makeContentWidthTrait(with: context),
-        heightTrait: makeContentHeightTrait(with: context),
+        widthTrait: resolveContentWidthTrait(context),
+        heightTrait: resolveContentHeightTrait(context),
         configuration: configuration,
         state: state
       )
@@ -148,17 +147,20 @@ extension DivIndicator.Animation {
 }
 
 extension DivIndicatorItemPlacement {
-  func makeItemPlacement(with expressionResolver: ExpressionResolver) -> PageIndicatorConfiguration
-    .ItemPlacement {
+  fileprivate func resolve(
+    _ expressionResolver: ExpressionResolver
+  ) -> PageIndicatorConfiguration.ItemPlacement {
     switch self {
-    case let .divDefaultIndicatorItemPlacement(defaultPlacement):
-      return .fixed(spaceBetweenCenters: CGFloat(
-        defaultPlacement.spaceBetweenCenters.resolveValue(expressionResolver) ?? 0
-      ))
-    case let .divStretchIndicatorItemPlacement(stretchPlacement):
+    case let .divDefaultIndicatorItemPlacement(placement):
+      return .fixed(
+        spaceBetweenCenters: CGFloat(
+          placement.spaceBetweenCenters.resolveValue(expressionResolver) ?? 0
+        )
+      )
+    case let .divStretchIndicatorItemPlacement(placement):
       return .stretch(
-        spacing: CGFloat(stretchPlacement.itemSpacing.resolveValue(expressionResolver) ?? 0),
-        maxVisibleItems: stretchPlacement.resolveMaxVisibleItems(expressionResolver)
+        spacing: CGFloat(placement.itemSpacing.resolveValue(expressionResolver) ?? 0),
+        maxVisibleItems: placement.resolveMaxVisibleItems(expressionResolver)
       )
     }
   }

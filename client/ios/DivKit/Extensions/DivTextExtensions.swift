@@ -9,12 +9,11 @@ import NetworkingPublic
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    let expressionResolver = context.expressionResolver
-    return try applyBaseProperties(
+    try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: self,
-      customA11yElement: makeCustomA11yElement(with: expressionResolver)
+      customA11yElement: resolveAccessibilityElement(context.expressionResolver)
     )
   }
 
@@ -98,12 +97,11 @@ extension DivText: DivBlockModeling {
     }
 
     return TextBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
       text: attributedString,
-      textGradient: makeGradient(expressionResolver),
-      verticalAlignment:
-      resolveTextAlignmentVertical(expressionResolver).alignment,
+      textGradient: resolveGradient(expressionResolver),
+      verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
       maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
       minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
       images: images,
@@ -207,7 +205,7 @@ extension DivText: DivBlockModeling {
       .apply(to: string, at: cfRange)
   }
 
-  private func makeGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
+  private func resolveGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
     guard let textGradient = textGradient else {
       return nil
     }
@@ -227,8 +225,9 @@ extension DivText: DivBlockModeling {
     }
   }
 
-  private func makeCustomA11yElement(with expressionResolver: ExpressionResolver)
-    -> AccessibilityElement? {
+  private func resolveAccessibilityElement(
+    _ expressionResolver: ExpressionResolver
+  ) -> AccessibilityElement? {
     guard accessibility.resolveDescription(expressionResolver) == nil else {
       return nil
     }

@@ -2,14 +2,18 @@ import CommonCorePublic
 
 protocol DivImageContentMode {
   func resolveScale(_ expressionResolver: ExpressionResolver) -> DivImageScale
-  func resolveContentAlignmentHorizontal(_ expressionResolver: ExpressionResolver)
-    -> DivAlignmentHorizontal
-  func resolveContentAlignmentVertical(_ expressionResolver: ExpressionResolver)
-    -> DivAlignmentVertical
+
+  func resolveContentAlignmentHorizontal(
+    _ expressionResolver: ExpressionResolver
+  ) -> DivAlignmentHorizontal
+
+  func resolveContentAlignmentVertical(
+    _ expressionResolver: ExpressionResolver
+  ) -> DivAlignmentVertical
 }
 
 extension DivImageContentMode {
-  func contentMode(context: DivBlockModelingContext) -> ImageContentMode {
+  func resolveContentMode(_ context: DivBlockModelingContext) -> ImageContentMode {
     let expressionResolver = context.expressionResolver
     return ImageContentMode(
       scale: resolveScale(expressionResolver).contentModeScale,

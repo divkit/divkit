@@ -29,9 +29,9 @@ extension DivBackground {
         imageHolder: context.imageHolderFactory.make(
           imageBackground.resolveImageUrl(expressionResolver)
         ),
-        contentMode: imageBackground.contentMode(context: context),
+        contentMode: imageBackground.resolveContentMode(context),
         alpha: imageBackground.resolveAlpha(expressionResolver),
-        effects: imageBackground.makeEffects(with: expressionResolver)
+        effects: imageBackground.resolveEffects(expressionResolver)
       )
       return .image(image)
     case let .divSolidBackground(solidBackground):
@@ -41,7 +41,7 @@ extension DivBackground {
         imageHolder: context.imageHolderFactory.make(
           ninePatchBackground.resolveImageUrl(expressionResolver)
         ),
-        insets: ninePatchBackground.insets.makeEdgeInsets(with: expressionResolver)
+        insets: ninePatchBackground.insets.resolve(expressionResolver)
       )
       return .ninePatchImage(image)
     }
@@ -51,7 +51,7 @@ extension DivBackground {
 extension DivImageBackground: DivImageContentMode {}
 
 extension DivImageBackground {
-  fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
-    filters?.compactMap { $0.makeImageEffect(with: resolver) } ?? []
+  fileprivate func resolveEffects(_ expressionResolver: ExpressionResolver) -> [ImageEffect] {
+    filters?.compactMap { $0.resolveEffect(expressionResolver) } ?? []
   }
 }

@@ -90,12 +90,12 @@ extension DivState: DivBlockModeling {
       vertical: .leading
     )
     let stateAlignment = activeStateDiv?
-      .alignment2D(withDefault: defaultStateAlignment, context: context) ??
-      defaultStateAlignment
+      .resolveAlignment(context, defaultAlignment: defaultStateAlignment)
+      ?? defaultStateAlignment
 
     return LayeredBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
       children: [
         LayeredBlock.Child(
           content: TransitioningBlock(

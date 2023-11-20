@@ -5,17 +5,15 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivEdgeInsets {
-  func makeEdgeInsets(context: DivBlockModelingContext) -> EdgeInsets {
-    let unit = resolveUnit(context.expressionResolver)
-
-    let top = unit.makeScaledValue(resolveTop(context.expressionResolver))
-    let bottom = unit.makeScaledValue(resolveBottom(context.expressionResolver))
-
-    var left = unit.makeScaledValue(resolveLeft(context.expressionResolver))
-    var right = unit.makeScaledValue(resolveRight(context.expressionResolver))
-
-    let start = resolveStart(context.expressionResolver).flatMap(unit.makeScaledValue)
-    let end = resolveEnd(context.expressionResolver).flatMap(unit.makeScaledValue)
+  func resolve(_ context: DivBlockModelingContext) -> EdgeInsets {
+    let expressionResolver = context.expressionResolver
+    let unit = resolveUnit(expressionResolver)
+    let top = unit.makeScaledValue(resolveTop(expressionResolver))
+    let bottom = unit.makeScaledValue(resolveBottom(expressionResolver))
+    var left = unit.makeScaledValue(resolveLeft(expressionResolver))
+    var right = unit.makeScaledValue(resolveRight(expressionResolver))
+    let start = resolveStart(expressionResolver).flatMap(unit.makeScaledValue)
+    let end = resolveEnd(expressionResolver).flatMap(unit.makeScaledValue)
 
     if start != nil || end != nil {
       switch context.layoutDirection {
@@ -33,7 +31,7 @@ extension DivEdgeInsets {
     return EdgeInsets(top: top, left: left, bottom: bottom, right: right)
   }
 
-  func makeHorizontalInsets(with expressionResolver: ExpressionResolver) -> SideInsets {
+  func resolveHorizontalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
     let unit = resolveUnit(expressionResolver)
     return SideInsets(
       leading: unit.makeScaledValue(resolveLeft(expressionResolver)),
@@ -41,7 +39,7 @@ extension DivEdgeInsets {
     )
   }
 
-  func makeVerticalInsets(with expressionResolver: ExpressionResolver) -> SideInsets {
+  func resolveVerticalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
     let unit = resolveUnit(expressionResolver)
     return SideInsets(
       leading: unit.makeScaledValue(resolveTop(expressionResolver)),

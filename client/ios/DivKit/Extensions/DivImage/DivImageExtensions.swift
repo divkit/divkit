@@ -31,13 +31,13 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
         resolveImageUrl(expressionResolver),
         resolvePlaceholder(expressionResolver, highPriority: highPriority)
       ),
-      widthTrait: makeContentWidthTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
       height: resolveHeight(context),
-      contentMode: contentMode(context: context),
+      contentMode: resolveContentMode(context),
       tintColor: resolveTintColor(expressionResolver),
       tintMode: resolveTintMode(expressionResolver).tintMode,
-      effects: makeEffects(with: expressionResolver),
-      appearanceAnimation: appearanceAnimation?.makeAppearanceAnimation(with: expressionResolver)
+      effects: resolveEffects(expressionResolver),
+      appearanceAnimation: appearanceAnimation?.resolve(expressionResolver)
     )
   }
 }
@@ -62,7 +62,22 @@ extension DivBlendMode {
 }
 
 extension DivImage {
-  fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
-    filters?.compactMap { $0.makeImageEffect(with: resolver) } ?? []
+  fileprivate func resolveEffects(_ expressionResolver: ExpressionResolver) -> [ImageEffect] {
+    filters?.compactMap { $0.resolveEffect(expressionResolver) } ?? []
+  }
+}
+
+extension DivFadeTransition {
+  fileprivate func resolve(
+    _ expressionResolver: ExpressionResolver
+  ) -> TransitioningAnimation {
+    TransitioningAnimation(
+      kind: .fade,
+      start: resolveAlpha(expressionResolver),
+      end: 1,
+      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
+      timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
+    )
   }
 }

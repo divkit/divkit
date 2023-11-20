@@ -1,9 +1,8 @@
-import CommonCorePublic
 import LayoutKit
 
 extension DivChangeTransition {
-  func makeChangeBoundsTransition(
-    with expressionResolver: ExpressionResolver
+  func resolveTransition(
+    _ expressionResolver: ExpressionResolver
   ) -> ChangeBoundsTransition? {
     switch self {
     case let .divChangeBoundsTransition(transition):

@@ -19,17 +19,17 @@ extension DivDrawable {
     }
   }
 
-  func getWidth(context: DivBlockModelingContext) -> CGFloat {
+  func resolveWidth(_ context: DivBlockModelingContext) -> CGFloat {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return shapeDrawable.getWidth(context: context)
+      return shapeDrawable.resolveWidth(context)
     }
   }
 
-  func getHeight(context: DivBlockModelingContext) -> CGFloat {
+  func resolveHeight(_ context: DivBlockModelingContext) -> CGFloat {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return shapeDrawable.getHeight(context: context)
+      return shapeDrawable.resolveHeight(context)
     }
   }
 }

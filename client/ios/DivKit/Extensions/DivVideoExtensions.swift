@@ -65,8 +65,8 @@ extension DivVideo: DivBlockModeling {
     )
 
     let videoBlock = VideoBlock(
-      widthTrait: width.makeLayoutTrait(with: resolver),
-      heightTrait: height.makeHeightLayoutTrait(with: resolver, aspectRatio: aspectRatio),
+      widthTrait: width.resolveLayoutTrait(resolver),
+      heightTrait: height.resolveHeightLayoutTrait(resolver, aspectRatio: aspectRatio),
       model: model,
       state: state,
       playerFactory: playerFactory

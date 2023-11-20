@@ -3,7 +3,7 @@ import CoreGraphics
 import CommonCorePublic
 
 extension DivAbsoluteEdgeInsets {
-  func makeEdgeInsets(with expressionResolver: ExpressionResolver) -> EdgeInsets {
+  func resolve(_ expressionResolver: ExpressionResolver) -> EdgeInsets {
     EdgeInsets(
       top: CGFloat(resolveTop(expressionResolver)),
       left: CGFloat(resolveLeft(expressionResolver)),

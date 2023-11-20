@@ -22,9 +22,9 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
     )
     return AnimatableImageBlock(
       imageHolder: imageHolder,
-      widthTrait: makeContentWidthTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
       height: resolveHeight(context),
-      contentMode: contentMode(context: context)
+      contentMode: resolveContentMode(context)
     )
   }
 }

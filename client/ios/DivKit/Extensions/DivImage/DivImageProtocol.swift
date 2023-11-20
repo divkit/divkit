@@ -15,7 +15,7 @@ extension DivImageProtocol {
     if let aspect = aspect {
       return .ratio(aspect.resolveRatio(context.expressionResolver) ?? 0)
     }
-    return .trait(makeContentHeightTrait(with: context))
+    return .trait(resolveContentHeightTrait(context))
   }
 
   func resolvePlaceholder(
@@ -31,7 +31,7 @@ extension DivImageProtocol {
   }
 
   func checkLayoutTraits(context: DivBlockModelingContext) throws {
-    if case .intrinsic = makeContentWidthTrait(with: context) {
+    if case .intrinsic = resolveContentWidthTrait(context) {
       throw DivBlockModelingError(
         "\(typeName) has wrap_content width",
         path: context.parentPath

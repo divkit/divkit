@@ -10,8 +10,9 @@ public typealias DivTooltipViewFactory = (Div) -> ViewType
 #endif
 
 extension DivTooltip {
-  fileprivate func makeTooltip(context: DivBlockModelingContext) throws
-    -> BlockTooltip? {
+  fileprivate func makeTooltip(
+    context: DivBlockModelingContext
+  ) throws -> BlockTooltip? {
     let expressionResolver = context.expressionResolver
     guard let position = resolvePosition(expressionResolver)?.cast() else {
       return nil
@@ -29,7 +30,7 @@ extension DivTooltip {
       id: id,
       block: block,
       duration: Duration(milliseconds: resolveDuration(expressionResolver)),
-      offset: offset?.cast(with: expressionResolver) ?? .zero,
+      offset: offset?.resolve(expressionResolver) ?? .zero,
       position: position,
       tooltipViewFactory: tooltipViewFactory
     )

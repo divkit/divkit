@@ -48,13 +48,9 @@ extension DivTabs: DivBlockModeling {
     let expressionResolver = context.expressionResolver
     let listModel = TabListViewModel(
       tabTitles: tabs.map { $0.title },
-      titleStyle: tabTitleStyle.makeTitleStyle(
-        fontProvider: context.fontProvider,
-        expressionResolver: expressionResolver,
-        context: context
-      ),
+      titleStyle: tabTitleStyle.resolve(context),
       layoutDirection: context.layoutDirection,
-      listPaddings: titlePaddings.makeEdgeInsets(context: context)
+      listPaddings: titlePaddings.resolve(context)
     )
 
     let contentsModel = try TabContentsViewModel(
@@ -71,22 +67,23 @@ extension DivTabs: DivBlockModeling {
       model: TabViewModel(
         listModel: listModel,
         contentsModel: contentsModel,
-        separatorStyle: makeSeparatorStyle(with: expressionResolver, context: context)
+        separatorStyle: resolveSeparatorStyle(context)
       ),
       state: makeState(context: tabsContext, tabs: tabs),
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context)
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context)
     )
   }
 
-  private func makeSeparatorStyle(
-    with expressionResolver: ExpressionResolver,
-    context: DivBlockModelingContext
+  private func resolveSeparatorStyle(
+    _ context: DivBlockModelingContext
   ) -> TabSeparatorStyle? {
-    resolveHasSeparator(expressionResolver) ? TabSeparatorStyle(
-      color: resolveSeparatorColor(expressionResolver),
-      insets: separatorPaddings.makeEdgeInsets(context: context)
-    ) : nil
+    let expressionResolver = context.expressionResolver
+    return resolveHasSeparator(expressionResolver)
+      ? TabSeparatorStyle(
+        color: resolveSeparatorColor(expressionResolver),
+        insets: separatorPaddings.resolve(context)
+      ) : nil
   }
 
   private func makeState(
@@ -134,13 +131,13 @@ extension DivTabs.TabTitleStyle {
       .allowHeightOverrun
   }
 
-  fileprivate func makeTitleStyle(
-    fontProvider: DivFontProvider,
-    expressionResolver: ExpressionResolver,
-    context: DivBlockModelingContext
-  ) -> LayoutKit.TabTitleStyle {
+  fileprivate func resolve(
+    _ context: DivBlockModelingContext
+  ) -> TabTitleStyle {
+    let expressionResolver = context.expressionResolver
+    let fontProvider = context.fontProvider
     let defaultFontWeight = resolveFontWeight(expressionResolver)
-    return LayoutKit.TabTitleStyle(
+    return TabTitleStyle(
       typo: makeTypo(
         fontProvider: fontProvider,
         fontWeight: resolveActiveFontWeight(expressionResolver) ?? defaultFontWeight,
@@ -151,8 +148,8 @@ extension DivTabs.TabTitleStyle {
         fontWeight: resolveInactiveFontWeight(expressionResolver) ?? defaultFontWeight,
         expressionResolver: expressionResolver
       ),
-      paddings: paddings.makeEdgeInsets(context: context),
-      cornerRadius: makeCornerRadii(with: expressionResolver),
+      paddings: paddings.resolve(context),
+      cornerRadius: resolveCornerRadii(expressionResolver),
       baseTextColor: resolveInactiveTextColor(expressionResolver),
       activeTextColor: resolveActiveTextColor(expressionResolver),
       activeBackgroundColor: resolveActiveBackgroundColor(expressionResolver),
@@ -161,7 +158,7 @@ extension DivTabs.TabTitleStyle {
     )
   }
 
-  private func makeCornerRadii(with expressionResolver: ExpressionResolver) -> CornerRadii? {
+  private func resolveCornerRadii(_ expressionResolver: ExpressionResolver) -> CornerRadii? {
     let cornerRadius = resolveCornerRadius(expressionResolver)
     let topLeft = cornersRadius?.resolveTopLeft(expressionResolver)
       ?? cornerRadius
@@ -171,11 +168,9 @@ extension DivTabs.TabTitleStyle {
       ?? cornerRadius
     let bottomRight = cornersRadius?.resolveBottomRight(expressionResolver)
       ?? cornerRadius
-
     if topLeft == nil, topRight == nil, bottomLeft == nil, bottomRight == nil {
       return nil
     }
-
     return CornerRadii(
       topLeft: CGFloat(topLeft ?? 0),
       topRight: CGFloat(topRight ?? 0),

@@ -50,7 +50,7 @@ extension DivShapeDrawable {
     }
   }
 
-  func getWidth(context: DivBlockModelingContext) -> CGFloat {
+  func resolveWidth(_ context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
       return CGFloat(rectangle.itemWidth.resolveValue(context.expressionResolver) ?? 0)
@@ -60,7 +60,7 @@ extension DivShapeDrawable {
     }
   }
 
-  func getHeight(context: DivBlockModelingContext) -> CGFloat {
+  func resolveHeight(_ context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
       let expressionResolver = context.expressionResolver

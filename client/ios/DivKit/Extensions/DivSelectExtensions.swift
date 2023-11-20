@@ -49,8 +49,8 @@ extension DivSelect: DivBlockModeling {
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     return TextInputBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
       rawTextValue: nil,

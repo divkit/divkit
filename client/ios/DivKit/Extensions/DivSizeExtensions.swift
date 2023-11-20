@@ -4,7 +4,7 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivSize {
-  func makeLayoutTrait(with expressionResolver: ExpressionResolver) -> LayoutTrait {
+  func resolveLayoutTrait(_ expressionResolver: ExpressionResolver) -> LayoutTrait {
     switch self {
     case let .divFixedSize(size):
       return .fixed(
@@ -28,14 +28,14 @@ extension DivSize {
     }
   }
 
-  func makeHeightLayoutTrait(
-    with expressionResolver: ExpressionResolver,
+  func resolveHeightLayoutTrait(
+    _ expressionResolver: ExpressionResolver,
     aspectRatio: CGFloat?
   ) -> LayoutTrait {
     if aspectRatio != nil {
       return .resizable
     }
-    return makeLayoutTrait(with: expressionResolver)
+    return resolveLayoutTrait(expressionResolver)
   }
 
   var isIntrinsic: Bool {

@@ -2,21 +2,21 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivAnimation {
-  func makeActionAnimation(expressionResolver: ExpressionResolver) -> ActionAnimation {
+  func resolveActionAnimation(_ expressionResolver: ExpressionResolver) -> ActionAnimation {
     ActionAnimation(
-      touchDown: makeActionAnimation(for: .direct, with: expressionResolver),
-      touchUp: makeActionAnimation(for: .reverse, with: expressionResolver)
+      touchDown: resolveAnimations(expressionResolver, type: .direct),
+      touchUp: resolveAnimations(expressionResolver, type: .reverse)
     )
   }
 
-  private func makeActionAnimation(
-    for type: TimeOrientation,
-    with expressionResolver: ExpressionResolver
+  private func resolveAnimations(
+    _ expressionResolver: ExpressionResolver,
+    type: TimeOrientation
   ) -> [TransitioningAnimation] {
     let name = resolveName(expressionResolver) ?? .noAnimation
     if name == .set {
       return (items ?? []).flatMap {
-        $0.makeActionAnimation(for: type, with: expressionResolver)
+        $0.resolveAnimations(expressionResolver, type: type)
       }
     }
 

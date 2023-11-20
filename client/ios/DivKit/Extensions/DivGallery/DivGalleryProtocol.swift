@@ -92,8 +92,8 @@ extension DivGalleryProtocol {
 
     let axialInsets: SideInsets
     let crossInsets: SideInsets
-    let horizontalInsets = paddings.makeHorizontalInsets(with: expressionResolver)
-    let verticalInsets = paddings.makeVerticalInsets(with: expressionResolver)
+    let horizontalInsets = paddings.resolveHorizontalInsets(expressionResolver)
+    let verticalInsets = paddings.resolveVerticalInsets(expressionResolver)
     switch direction {
     case .horizontal:
       axialInsets = horizontalInsets

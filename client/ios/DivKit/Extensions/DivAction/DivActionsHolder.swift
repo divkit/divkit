@@ -26,10 +26,10 @@ extension DivActionsHolder {
       // ignore other actions
       return NonEmptyArray(menuAction)
     }
-    
+
     return NonEmptyArray(allActions)
   }
-  
+
   fileprivate func makeDoubleTapActions(
     context: DivBlockModelingContext
   ) -> NonEmptyArray<UserInterfaceAction>? {
@@ -38,7 +38,7 @@ extension DivActionsHolder {
     }
     return nil
   }
-  
+
   fileprivate func makeLongTapActions(
     context: DivBlockModelingContext
   ) -> LongTapActions? {
@@ -68,7 +68,7 @@ extension Block {
     return addingDecorations(
       actions: actions,
       actionAnimation: actionsHolder.actionAnimation
-        .makeActionAnimation(expressionResolver: context.expressionResolver),
+        .resolveActionAnimation(context.expressionResolver),
       doubleTapActions: doubletapActions,
       longTapActions: longtapActions
     )

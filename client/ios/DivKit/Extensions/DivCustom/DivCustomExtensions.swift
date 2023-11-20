@@ -15,9 +15,12 @@ extension DivCustom: DivBlockModeling {
     )
   }
 
-  private func makeBaseBlock(context: DivBlockModelingContext, children: [Block]) throws -> Block {
-    let contentHeightTrait = makeContentHeightTrait(with: context)
-    let contentWidthTrait = makeContentWidthTrait(with: context)
+  private func makeBaseBlock(
+    context: DivBlockModelingContext,
+    children: [Block]
+  ) throws -> Block {
+    let contentWidthTrait = resolveContentWidthTrait(context)
+    let contentHeightTrait = resolveContentHeightTrait(context)
     let customData = DivCustomData(
       name: customType,
       data: customProps ?? [:],
@@ -27,7 +30,7 @@ extension DivCustom: DivBlockModeling {
     )
     return try ContainerBlock(
       layoutDirection: contentHeightTrait.isResizable ? .vertical : .horizontal,
-      widthTrait: makeContentWidthTrait(with: context),
+      widthTrait: contentWidthTrait,
       heightTrait: contentHeightTrait,
       children: [
         context.divCustomBlockFactory.makeBlock(data: customData, context: context),

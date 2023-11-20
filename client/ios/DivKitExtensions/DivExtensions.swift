@@ -4,8 +4,9 @@ import DivKit
 
 extension Div {
   public func makeImageURLs(with expressionResolver: ExpressionResolver) -> [URL] {
-    var urls: [URL] = value.background?.compactMap { $0.makeImageURL(with: expressionResolver) }
-      ?? []
+    var urls: [URL] = value.background?.compactMap {
+      $0.resolveImageURL(expressionResolver)
+    } ?? []
     if let url = LottieExtensionHandler.getPreloadURL(div: value) {
       urls.append(url)
     }

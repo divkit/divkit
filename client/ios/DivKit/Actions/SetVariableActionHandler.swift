@@ -7,8 +7,7 @@ final class SetVariableActionHandler {
       return
     }
 
-    guard let variableValue = action.value.asVariableValue(expressionResolver: expressionResolver)
-    else {
+    guard let variableValue = action.value.resolveVariableValue(expressionResolver) else {
       return
     }
 

@@ -42,17 +42,19 @@ extension DivGrid: DivBlockModeling {
     let expressionResolver = gridContext.expressionResolver
     return try modifyError({ DivBlockModelingError($0.message, path: gridPath) }) {
       try GridBlock(
-        widthTrait: makeContentWidthTrait(with: gridContext),
-        heightTrait: makeContentHeightTrait(with: gridContext),
-        contentAlignment: contentAlignment(with: expressionResolver),
+        widthTrait: resolveContentWidthTrait(gridContext),
+        heightTrait: resolveContentHeightTrait(gridContext),
+        contentAlignment: resolveContentAlignment(expressionResolver),
         items: gridItems,
         columnCount: resolveColumnCount(expressionResolver) ?? 0
       )
     }
   }
 
-  private func contentAlignment(with expressionResolver: ExpressionResolver) -> BlockAlignment2D {
-    .init(
+  private func resolveContentAlignment(
+    _ expressionResolver: ExpressionResolver
+  ) -> BlockAlignment2D {
+    BlockAlignment2D(
       horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
@@ -71,17 +73,19 @@ extension DivBase {
         columns: resolveColumnSpan(expressionResolver) ?? 1
       ),
       weight: .init(
-        column: width.makeWeight(with: expressionResolver),
-        row: height.makeWeight(with: expressionResolver)
+        column: width.resolveWeight(expressionResolver),
+        row: height.resolveWeight(expressionResolver)
       ),
       contents: block,
-      alignment: alignment2D(withDefault: .default, context: context)
+      alignment: resolveAlignment(context, defaultAlignment: .default)
     )
   }
 }
 
 extension DivSize {
-  fileprivate func makeWeight(with expressionResolver: ExpressionResolver) -> LayoutTrait.Weight? {
+  fileprivate func resolveWeight(
+    _ expressionResolver: ExpressionResolver
+  ) -> LayoutTrait.Weight? {
     switch self {
     case .divFixedSize, .divWrapContentSize:
       return nil

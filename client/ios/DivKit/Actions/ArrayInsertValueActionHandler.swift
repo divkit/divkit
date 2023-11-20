@@ -4,7 +4,7 @@ final class ArrayInsertValueActionHandler {
   func handle(_ action: DivActionArrayInsertValue, context: DivActionHandlingContext) {
     let expressionResolver = context.expressionResolver
     guard let variableName = action.resolveVariableName(expressionResolver),
-          let value = action.value.asValue(expressionResolver: expressionResolver),
+          let value = action.value.resolve(expressionResolver),
           var array: [AnyHashable] = context.variablesStorage.getVariableValue(
             cardId: context.cardId,
             name: DivVariableName(rawValue: variableName)

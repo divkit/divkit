@@ -46,8 +46,8 @@ extension DivInput: DivBlockModeling {
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
     return TextInputBlock(
-      widthTrait: makeContentWidthTrait(with: context),
-      heightTrait: makeContentHeightTrait(with: context),
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
       hint: hintValue.with(typo: typo.with(color: resolveHintColor(expressionResolver))),
       textValue: context.makeBinding(variableName: textVariable, defaultValue: ""),
       rawTextValue: mask?.makeRawVariable(context),

@@ -39,7 +39,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       )
       return try PagerBlock(
         pagerPath: pagerModelPath,
-        layoutMode: layoutMode.cast(with: expressionResolver),
+        layoutMode: layoutMode.resolve(expressionResolver),
         gallery: gallery,
         selectedActions: items.map { $0.value.makeSelectedActions(context: itemContext) },
         state: getState(context: context, path: pagerPath, numberOfPages: items.count),
@@ -76,7 +76,7 @@ extension DivPager.Orientation {
 }
 
 extension DivPagerLayoutMode {
-  func cast(with expressionResolver: ExpressionResolver) -> PagerBlock.LayoutMode {
+  fileprivate func resolve(_ expressionResolver: ExpressionResolver) -> PagerBlock.LayoutMode {
     switch self {
     case let .divPageSize(pageSize):
       return .pageSize(
