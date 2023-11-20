@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.storedvalues
 
-import android.net.Uri
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -13,6 +12,7 @@ import com.yandex.div.data.StoredValue.StringStoredValue
 import com.yandex.div.data.StoredValue.Type.Converter
 import com.yandex.div.data.StoredValue.UrlStoredValue
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryException
@@ -114,7 +114,7 @@ internal class StoredValuesController @Inject constructor(
             StoredValue.Type.BOOLEAN -> BooleanStoredValue(name, getBoolean(KEY_VALUE))
             StoredValue.Type.NUMBER -> DoubleStoredValue(name, getDouble(KEY_VALUE))
             StoredValue.Type.COLOR -> ColorStoredValue(name, Color.parse(getString(KEY_VALUE)))
-            StoredValue.Type.URL -> UrlStoredValue(name, Uri.parse(getString(KEY_VALUE)))
+            StoredValue.Type.URL -> UrlStoredValue(name, Url.from(getString(KEY_VALUE)))
         }
 
     private fun StoredValue.toJSONObject(lifetime: Long): JSONObject {
@@ -122,8 +122,8 @@ internal class StoredValuesController @Inject constructor(
             is StringStoredValue,
             is IntegerStoredValue,
             is BooleanStoredValue,
-            is DoubleStoredValue,
-            is UrlStoredValue -> getValue()
+            is DoubleStoredValue -> getValue()
+            is UrlStoredValue,
             is ColorStoredValue -> getValue().toString()
         }
         val json = JSONObject().apply {

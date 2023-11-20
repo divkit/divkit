@@ -1,7 +1,7 @@
 package com.yandex.div.data
 
-import android.net.Uri
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 
 sealed class StoredValue {
     abstract val name: String
@@ -60,11 +60,8 @@ sealed class StoredValue {
 
     data class UrlStoredValue(
         override val name: String,
-        val value: Uri,
-    ) : StoredValue() {
-        val stringValue: String
-            get() = value.toString()
-    }
+        val value: Url,
+    ) : StoredValue()
 
     fun getValue(): Any = when (this) {
         is StringStoredValue -> value
@@ -72,7 +69,7 @@ sealed class StoredValue {
         is BooleanStoredValue -> value
         is DoubleStoredValue -> value
         is ColorStoredValue -> value
-        is UrlStoredValue -> stringValue
+        is UrlStoredValue -> value
     }
 
     fun getType(): Type = when (this) {

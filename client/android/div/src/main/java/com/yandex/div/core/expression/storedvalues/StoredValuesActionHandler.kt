@@ -5,6 +5,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.StoredValue
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.parser.toBoolean
@@ -70,7 +71,7 @@ internal object StoredValuesActionHandler {
         StoredValue.Type.BOOLEAN -> StoredValue.BooleanStoredValue(name, value.parseAsBoolean())
         StoredValue.Type.NUMBER -> StoredValue.DoubleStoredValue(name, value.parseAsDouble())
         StoredValue.Type.COLOR -> StoredValue.ColorStoredValue(name, value.parseAsColor())
-        StoredValue.Type.URL -> StoredValue.UrlStoredValue(name, value.parseAsUri())
+        StoredValue.Type.URL -> StoredValue.UrlStoredValue(name, value.parseAsUrl())
     }
 
     @Throws(StoredValueDeclarationException::class)
@@ -110,9 +111,9 @@ internal object StoredValuesActionHandler {
     }
 
     @Throws(StoredValueDeclarationException::class)
-    private fun String.parseAsUri(): Uri {
+    private fun String.parseAsUrl(): Url {
         return try {
-            Uri.parse(this)
+            Url.from(this)
         } catch (e: IllegalArgumentException) {
             throw StoredValueDeclarationException(cause = e)
         }

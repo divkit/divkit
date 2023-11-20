@@ -162,7 +162,8 @@ class BuiltinFunctionProvider(
         registry.register(GetStoredColorValueString(storedValueProvider))
         registry.register(GetStoredColorValue(storedValueProvider))
         registry.register(GetStoredBooleanValue(storedValueProvider))
-        registry.register(GetStoredUrlValue(storedValueProvider))
+        registry.register(GetStoredUrlValueWithStringFallback(storedValueProvider))
+        registry.register(GetStoredUrlValueWithUrlFallback(storedValueProvider))
 
         // Dict functions legacy
         registry.register(GetDictInteger(variableProvider))
