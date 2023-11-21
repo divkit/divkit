@@ -68,9 +68,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
       imageHolderFactory: imageHolderFactory ?? TestImageHolderFactory(),
-      layoutDirection: getLayoutDirection(from: jsonDict),
-      updateCardAction: nil,
-      urlHandler: DivUrlHandlerDelegate { _, _ in }
+      layoutDirection: getLayoutDirection(from: jsonDict)
     )
     for (path, state) in blocksState {
       divKitComponents.blockStateStorage.setState(path: path, state: state)
