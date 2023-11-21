@@ -151,10 +151,13 @@ private class TriggerExecutor(
         }
 
         actions.forEach {
-            (viewFacade as? Div2View)?.let { div2View ->
+            val handled = (viewFacade as? Div2View)?.let { div2View ->
                 logger.logTrigger(div2View, it)
+                div2View.actionHandler?.handleAction(it, div2View) ?: false
+            } ?: false
+            if (!handled) {
+                divActionHandler.handleAction(it, viewFacade)
             }
-            divActionHandler.handleAction(it, viewFacade)
         }
     }
 

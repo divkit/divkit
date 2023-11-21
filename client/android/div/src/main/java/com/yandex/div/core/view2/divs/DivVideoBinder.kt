@@ -21,6 +21,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivVideo
 import javax.inject.Inject
 
@@ -76,33 +77,23 @@ internal class DivVideoBinder @Inject constructor(
 
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
-                div.resumeActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                handleAction(divView, div.resumeActions)
             }
 
             override fun onPause() {
-                div.pauseActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                handleAction(divView, div.pauseActions)
             }
 
             override fun onBuffering() {
-                div.bufferingActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                handleAction(divView, div.bufferingActions)
             }
 
             override fun onEnd() {
-                div.endActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                handleAction(divView, div.endActions)
             }
 
             override fun onFatal() {
-                div.fatalActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                handleAction(divView, div.fatalActions)
             }
 
             override fun onReady() {
@@ -134,6 +125,15 @@ internal class DivVideoBinder @Inject constructor(
         videoViewMapper.addView(view, div)
         baseBinder.bindView(view, div, oldDiv, divView)
         view.observeAspectRatio(resolver, div.aspect)
+    }
+
+    private fun handleAction(divView: Div2View, divActions: List<DivAction>?) {
+        divActions?.forEach {
+            val handled = divView.actionHandler?.handleAction(it, divView) ?: false
+            if (!handled) {
+                divActionHandler.handleAction(it, divView)
+            }
+        }
     }
 
     private fun DivVideoView.observeElapsedTime(
