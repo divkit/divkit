@@ -7,15 +7,13 @@ enum Expected {
   static let action = makeUiAction(url: "https://ya.ru", logId: "test_log_id")
 
   static let setStateAction = UserInterfaceAction(
-    payloads: [
-      makeDivActionPayload(
-        action: makeDivActionJson(
-          url: "div-action://set_state?state_id=42",
-          logId: "test_log_id"
-        ),
-        url: "div-action://set_state?card_id=test_card_id&state_id=42"
+    payload: makeDivActionPayload(
+      action: makeDivActionJson(
+        url: "div-action://set_state?state_id=42",
+        logId: "test_log_id"
       ),
-    ],
+      url: "div-action://set_state?card_id=test_card_id&state_id=42"
+    ),
     path: .root + "test_log_id"
   )
 
@@ -44,18 +42,11 @@ extension UIElementPath {
 
 private func makeUiAction(url: String, logId: String) -> UserInterfaceAction {
   UserInterfaceAction(
-    payloads: [makeDivActionPayload(url: url, logId: logId)],
+    payload: makeDivActionPayload(
+      action: makeDivActionJson(url: url, logId: logId),
+      url: url
+    ),
     path: .root + logId
-  )
-}
-
-private func makeDivActionPayload(
-  url: String,
-  logId: String
-) -> UserInterfaceAction.Payload {
-  makeDivActionPayload(
-    action: makeDivActionJson(url: url, logId: logId),
-    url: url
   )
 }
 

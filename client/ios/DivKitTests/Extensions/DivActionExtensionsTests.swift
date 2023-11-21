@@ -13,7 +13,7 @@ final class DivActionExtensionsTests: XCTestCase {
     )
     let action = divAction.uiAction(context: context)
     let expectedAction = UserInterfaceAction(
-      payloads: [divAction.makeDivActionPayload()],
+      payload: divAction.makeDivActionPayload(),
       path: expectedPath
     )
     XCTAssertEqual(action, expectedAction)
@@ -43,23 +43,20 @@ final class DivActionExtensionsTests: XCTestCase {
     XCTAssertEqual(action, expectedAction)
   }
 
-  func test_WhenHasJSON_BuildsActionWithIt() {
+  func test_WhenHasPayload_BuildsActionWithIt() {
     let divAction = DivAction(
       logId: logId,
       payload: testPayload
     )
     let action = divAction.uiAction(context: context)
     let expectedAction = UserInterfaceAction(
-      payloads: [
-        .json(.object(testPayload.typedJSON())),
-        divAction.makeDivActionPayload(),
-      ],
+      payload: divAction.makeDivActionPayload(),
       path: expectedPath
     )
     XCTAssertEqual(action, expectedAction)
   }
 
-  func test_WhenHasMultiplePayloads_BuildsCompositeAction() {
+  func test_WhenHasMultiplePayloadAndUrl_BuildsActionWithIt() {
     let divAction = DivAction(
       logId: logId,
       payload: testPayload,
@@ -67,10 +64,7 @@ final class DivActionExtensionsTests: XCTestCase {
     )
     let action = divAction.uiAction(context: context)
     let expectedAction = UserInterfaceAction(
-      payloads: [
-        .json(.object(testPayload.typedJSON())),
-        divAction.makeDivActionPayload(),
-      ],
+      payload: divAction.makeDivActionPayload(),
       path: expectedPath
     )
     XCTAssertEqual(action, expectedAction)
@@ -80,7 +74,7 @@ final class DivActionExtensionsTests: XCTestCase {
     let divAction = DivAction(logId: logId)
     let action = divAction.uiAction(context: context)
     let expectedAction = UserInterfaceAction(
-      payloads: [divAction.makeDivActionPayload()],
+      payload: divAction.makeDivActionPayload(),
       path: expectedPath
     )
     XCTAssertEqual(action, expectedAction)

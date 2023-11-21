@@ -8,26 +8,22 @@ import CommonCorePublic
 final class DivGridExtensionsTests: XCTestCase {
   func test_WhenGridHasAction_AddsItToBlock() throws {
     let block = try makeBlock(fromFile: "with-action") as? DecoratingBlock
-    let expectedPayload = JSONObject.object(["key": .string("value")])
     let expectedAction = UserInterfaceAction(
-      payloads: [
-        .json(expectedPayload),
-        .divAction(
-          params: UserInterfaceAction.DivActionParams(
-            action: .object(
-              [
-                "log_id": .string("test_log_id"),
-                "url": .string("https://ya.ru"),
-                "payload": expectedPayload,
-                "menu_items": .array([.object(["text": .string("menu")])]),
-              ]
-            ),
-            cardId: DivKitTests.cardId.rawValue,
-            source: .tap,
-            url: URL(string: "https://ya.ru")!
-          )
-        ),
-      ],
+      payload: .divAction(
+        params: UserInterfaceAction.DivActionParams(
+          action: .object(
+            [
+              "log_id": .string("test_log_id"),
+              "url": .string("https://ya.ru"),
+              "payload": JSONObject.object(["key": .string("value")]),
+              "menu_items": .array([.object(["text": .string("menu")])]),
+            ]
+          ),
+          cardId: DivKitTests.cardId.rawValue,
+          source: .tap,
+          url: URL(string: "https://ya.ru")!
+        )
+      ),
       path: .root + "test_log_id"
     )
     XCTAssertEqual(block?.actions, NonEmptyArray(expectedAction))

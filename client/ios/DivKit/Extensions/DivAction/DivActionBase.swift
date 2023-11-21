@@ -19,36 +19,21 @@ public protocol DivActionBase: Serializable {
 }
 
 extension DivActionBase {
-  func makeDivActionParams(
-    cardId: DivCardID,
-    source: UserInterfaceAction.DivActionSource
-  ) -> UserInterfaceAction.DivActionParams {
-    let actionJson = JSONObject.object(toDictionary().typedJSON())
-    // url parameter is used for backward compatibility, it should be removed
-    // when all custom div-action handlers will be replaced
-    let url = url?.rawValue.map { $0.adding(cardId: cardId.rawValue) }
-    return UserInterfaceAction.DivActionParams(
-      action: actionJson,
-      cardId: cardId.rawValue,
-      source: source,
-      url: url
-    )
-  }
-
   func makeDivActionPayload(
     cardId: DivCardID,
     source: UserInterfaceAction.DivActionSource
-  ) -> UserInterfaceAction.Payload? {
-    .divAction(params: makeDivActionParams(cardId: cardId, source: source))
-  }
-
-  func makeJsonPayload() -> UserInterfaceAction.Payload? {
-    guard let payload = payload else {
-      return nil
-    }
-
-    let jsonDict = payload.typedJSON()
-    return .json(.object(jsonDict))
+  ) -> UserInterfaceAction.Payload {
+    // url parameter is used for backward compatibility, it should be removed
+    // when all custom div-action handlers will be replaced
+    let url = url?.rawValue.map { $0.adding(cardId: cardId.rawValue) }
+    return .divAction(
+      params: UserInterfaceAction.DivActionParams(
+        action: JSONObject.object(toDictionary().typedJSON()),
+        cardId: cardId.rawValue,
+        source: source,
+        url: url
+      )
+    )
   }
 }
 

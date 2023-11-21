@@ -4,18 +4,14 @@ import LayoutKit
 extension DivAction: DivActionBase {}
 
 extension DivAction {
-  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
-    let menuPayload = makeMenuPayload(context: context)
-    // don't make .divAction payloads for menu actions until DivActionHandler
-    // could handle it
-    let divActionPayload = menuPayload == nil
-      ? makeDivActionPayload(cardId: context.cardId, source: .tap)
-      : nil
-    let payloads: [UserInterfaceAction.Payload] = [
-      menuPayload,
-      makeJsonPayload(),
-      divActionPayload,
-    ].compactMap { $0 }
+  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction {
+    let payload: UserInterfaceAction.Payload
+    if let menuPayload = makeMenuPayload(context: context) {
+      payload = menuPayload
+    } else {
+      // don't make .divAction payloads for menu actions until DivActionHandler could handle it
+      payload = makeDivActionPayload(cardId: context.cardId, source: .tap)
+    }
 
     let path: UIElementPath
     if let cardLogId = context.cardLogId {
@@ -24,11 +20,7 @@ extension DivAction {
       path = UIElementPath(logId)
     }
 
-    let uiAction = UserInterfaceAction(
-      payloads: payloads,
-      path: path
-    )
-    return uiAction.payload == .empty ? nil : uiAction
+    return UserInterfaceAction(payload: payload, path: path)
   }
 
   private func makeMenuPayload(context: DivBlockModelingContext) -> UserInterfaceAction.Payload? {
@@ -37,7 +29,7 @@ extension DivAction {
 
     let items: [Menu.Item] = menuItems.compactMap { item in
       if let actions = item.actions {
-        let uiActions = actions.compactMap { $0.uiAction(context: context) }
+        let uiActions = actions.map { $0.uiAction(context: context) }
         if !uiActions.isEmpty {
           return Menu.Item(
             actions: uiActions,
@@ -62,6 +54,6 @@ extension DivAction {
 
 extension Array where Element == DivAction {
   func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
-    compactMap { $0.uiAction(context: context) }
+    map { $0.uiAction(context: context) }
   }
 }

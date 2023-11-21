@@ -138,19 +138,13 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     (visibilityActions ?? visibilityAction.asArray())
-      .compactMap { action in
-        action.makeVisibilityAction(context: context, logId: action.logId)
-      }
+      .map { $0.makeVisibilityAction(context: context) }
   }
 
   private func makeDisappearActions(
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
-    disappearActions?
-      .compactMap { action in
-        action.makeDisappearAction(context: context, logId: action.logId)
-      }
-      ?? []
+    disappearActions?.map { $0.makeDisappearAction(context: context) } ?? []
   }
 
   private func resolveAccessibilityElement(

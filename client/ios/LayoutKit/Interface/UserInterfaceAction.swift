@@ -9,7 +9,7 @@ public struct UserInterfaceAction: Equatable, Codable {
     case empty // means just analytics logging
     case url(URL)
     case menu(Menu)
-    case json(JSONObject)
+    case json(JSONObject) // deprecated
     indirect case composite(Payload, Payload)
     case divAction(params: DivActionParams)
   }
@@ -58,6 +58,17 @@ public struct UserInterfaceAction: Equatable, Codable {
     self.payload = payload
     self.path = path
     self.accessibilityElement = accessibilityElement
+  }
+
+  public init(
+    payload: Payload,
+    path: UIElementPath
+  ) {
+    self.init(
+      payload: payload,
+      path: path,
+      accessibilityElement: nil
+    )
   }
 
   public init(

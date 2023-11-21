@@ -4,18 +4,15 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivVisibilityAction {
-  func makeVisibilityAction(
-    context: DivBlockModelingContext,
-    logId: String
-  ) -> VisibilityAction? {
-    guard let uiAction = uiAction(context: context, logId: logId) else {
-      return nil
-    }
-
+  func makeVisibilityAction(context: DivBlockModelingContext) -> VisibilityAction {
     let expressionResolver = context.expressionResolver
     let logLimitValue = resolveLogLimit(expressionResolver)
+    let path = context.parentPath + logId
     return VisibilityAction(
-      uiAction: uiAction,
+      uiAction: UserInterfaceAction(
+        payload: makeDivActionPayload(cardId: context.cardId, source: .visibility),
+        path: path
+      ),
       requiredDuration: TimeInterval(
         resolveVisibilityDuration(expressionResolver)
       ) / 1000,
@@ -23,30 +20,13 @@ extension DivVisibilityAction {
       limiter: ActionLimiter(
         canSend: {
           logLimitValue == 0
-            || context.visibilityCounter.visibilityCount(for: uiAction.path) < logLimitValue
+            || context.visibilityCounter.visibilityCount(for: path) < logLimitValue
         },
         markSent: {
-          context.visibilityCounter.incrementCount(for: uiAction.path)
+          context.visibilityCounter.incrementCount(for: path)
         }
       ),
       actionType: .appear
-    )
-  }
-
-  private func uiAction(
-    context: DivBlockModelingContext,
-    logId: String
-  ) -> UserInterfaceAction? {
-    let payloads = [
-      makeDivActionPayload(cardId: context.cardId, source: .visibility),
-      makeJsonPayload(),
-    ].compactMap { $0 }
-    if payloads.isEmpty {
-      return nil
-    }
-    return UserInterfaceAction(
-      payloads: payloads,
-      path: context.parentPath + logId
     )
   }
 }
