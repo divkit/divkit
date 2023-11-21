@@ -354,7 +354,16 @@ internal object TestRegex : Function() {
             val pattern = Pattern.compile(regex)
             return pattern.matcher(string).find()
         } catch (e: PatternSyntaxException) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, "Invalid regular expression.")
+            val argsWithRestoredBackslashes = args.map { arg ->
+                if (arg is String) {
+                    arg.replace("\\", "\\\\")
+                } else {
+                    arg
+                }
+            }
+            throwExceptionOnFunctionEvaluationFailed(
+                name, argsWithRestoredBackslashes, "Invalid regular expression."
+            )
         }
     }
 }

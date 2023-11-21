@@ -55,7 +55,6 @@ internal fun functionToMessageFormat(name: String, args: List<Any>): String {
     }
 }
 
-
 internal fun throwExceptionOnEvaluationFailed(
     operator: Token.Operator.Binary,
     left: Any,

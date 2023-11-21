@@ -258,6 +258,7 @@
                 "value": "Failed to evaluate [testRegex('a', '\\\\')]. Invalid regular expression."
             },
             "platforms": [
+                "android",
                 "web",
                 "ios"
             ]
