@@ -481,7 +481,6 @@ class Div2View private constructor(
 
     override fun switchToState(path: DivStatePath, temporary: Boolean) = synchronized(monitor) {
         if (stateId == path.topLevelStateId) {
-            bindOnAttachRunnable?.cancel()
             val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
             bulkActionsHandler.switchState(state, path, temporary)
         } else if (path.topLevelStateId != DivData.INVALID_STATE_ID) {
