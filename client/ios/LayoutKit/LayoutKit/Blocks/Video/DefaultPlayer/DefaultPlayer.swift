@@ -103,7 +103,7 @@ final class DefaultPlayer: Player {
 
     player
       .playerDurationDidChange
-      .addObserver { weakSelf?.eventPipe.send(.durationUpdate($0)) }
+      .addObserver { weakSelf?.eventPipe.send(.durationUpdate(Int($0 * 1000))) }
       .dispose(in: playerObservers)
   }
 }

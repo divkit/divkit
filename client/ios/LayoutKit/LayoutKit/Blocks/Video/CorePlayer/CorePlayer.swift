@@ -6,7 +6,7 @@ protocol CorePlayer: VideoEngineProvider {
   static func isMIMETypeSupported(_ mimeType: String) -> Bool
 
   var playerStatusDidChange: Signal<PlayerStatus> { get }
-  var playerDurationDidChange: Signal<CMTime> { get }
+  var playerDurationDidChange: Signal<TimeInterval> { get }
   var playbackStatusDidChange: Signal<PlaybackStatus> { get }
   var playbackDidFail: Signal<PlayerError> { get }
   var playbackDidFinish: Signal<Void> { get }

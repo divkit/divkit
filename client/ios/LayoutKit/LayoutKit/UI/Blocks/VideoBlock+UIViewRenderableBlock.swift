@@ -79,7 +79,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
           )
           self.model.resumeActions.perform(sendingFrom: self)
         case let .durationUpdate(duration):
-          self.model.duration?.value = Int(duration.seconds)
+          self.model.duration?.value = duration
         }
       }
     }

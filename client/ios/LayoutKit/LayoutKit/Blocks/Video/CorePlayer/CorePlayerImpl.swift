@@ -15,7 +15,7 @@ final class CorePlayerImpl: CorePlayer {
     playerStatusPipe.signal
   }
 
-  var playerDurationDidChange: Signal<CMTime> {
+  var playerDurationDidChange: Signal<TimeInterval> {
     playerDurationPipe.signal
   }
 
@@ -37,7 +37,7 @@ final class CorePlayerImpl: CorePlayer {
   private let itemObservers = AutodisposePool()
 
   private let playerStatusPipe = SignalPipe<PlayerStatus>()
-  private let playerDurationPipe = SignalPipe<CMTime>()
+  private let playerDurationPipe = SignalPipe<TimeInterval>()
   private let playbackStatusPipe = SignalPipe<PlaybackStatus>()
   private let playerErrorPipe = SignalPipe<PlayerError>()
   private let playbackFinishPipe = SignalPipe<Void>()
@@ -164,7 +164,7 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   private func playerDurationDidChange(_ duration: CMTime) {
-    playerDurationPipe.send(duration)
+    duration.safeSeconds.map { playerDurationPipe.send($0.notNegative) }
   }
 
   private func playbackDidFail(_ error: PlayerError) {

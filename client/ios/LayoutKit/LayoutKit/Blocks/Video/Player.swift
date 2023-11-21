@@ -20,5 +20,5 @@ public enum PlayerEvent {
   case fatal
 
   case currentTimeUpdate(_ ms: Int)
-  case durationUpdate(_ duration: CMTime)
+  case durationUpdate(_ ms: Int)
 }
