@@ -13,21 +13,23 @@ extension ImageBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let remoteImageViewContainer = view as! RemoteImageViewContainer
-    if !effects.isEmpty || tintMode != .sourceIn, !remoteImageViewContainer.contentView
+    var contentView = remoteImageViewContainer.contentView
+    if !effects.isEmpty || tintMode != .sourceIn, !contentView
       .isKind(of: MetalImageView.self) {
-      remoteImageViewContainer.contentView = MetalImageView()
+      contentView = MetalImageView()
     }
-    remoteImageViewContainer.contentView.appearanceAnimation = appearanceAnimation?.cast()
-    if remoteImageViewContainer.imageHolder !== imageHolder {
-      remoteImageViewContainer.imageHolder = imageHolder
-    }
-    remoteImageViewContainer.contentView.imageContentMode = contentMode
-    remoteImageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(
+    contentView.appearanceAnimation = appearanceAnimation?.cast()
+    contentView.imageContentMode = contentMode
+    contentView.imageRedrawingStyle = ImageRedrawingStyle(
       tintColor: tintColor,
       tintMode: tintMode,
       effects: effects
     )
-    remoteImageViewContainer.contentView.isUserInteractionEnabled = false
+    contentView.isUserInteractionEnabled = false
+    remoteImageViewContainer.contentView = contentView
+    if remoteImageViewContainer.imageHolder !== imageHolder {
+      remoteImageViewContainer.imageHolder = imageHolder
+    }
     remoteImageViewContainer.isUserInteractionEnabled = false
     remoteImageViewContainer.applyAccessibility(accessibilityElement)
   }

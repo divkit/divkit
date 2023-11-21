@@ -40,6 +40,7 @@ open class DivViewController: UIViewController {
     scrollView.backgroundColor = .white
     view = scrollView
     scrollView.divView = divView
+    divView.setParentScrollView(scrollView)
   }
 
   public override func viewDidLoad() {
@@ -67,7 +68,6 @@ open class DivViewController: UIViewController {
       debugParams: debugParams,
       shouldResetPreviousCardData: true
     )
-    divView.setParentScrollView(scrollView)
   }
 }
 
