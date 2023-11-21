@@ -43,8 +43,8 @@ extension TextInputBlock {
 }
 
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
-  private let multiLineInput = UITextView()
-  private let singleLineInput = UITextField()
+  private let multiLineInput = PatchedUITextView()
+  private let singleLineInput = PatchedUITextField()
   private let selectionView = UIPickerView()
   private let hintView = UILabel()
   private weak var parentScrollView: ScrollView?
@@ -654,6 +654,20 @@ extension TextInputBlock.TextAlignmentVertical {
     case .bottom:
       return .bottom
     }
+  }
+}
+
+private class PatchedUITextField: UITextField {
+  override func cut(_ sender: Any?) {
+    copy(sender)
+    super.cut(sender)
+  }
+}
+
+private class PatchedUITextView: UITextView {
+  override func cut(_ sender: Any?) {
+    copy(sender)
+    super.cut(sender)
   }
 }
 
