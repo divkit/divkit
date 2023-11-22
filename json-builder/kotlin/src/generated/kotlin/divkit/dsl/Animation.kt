@@ -101,7 +101,7 @@ class Animation internal constructor(
     /**
      * Animation type.
      * 
-     * Possible values: [fade, translate, scale, native, set, no_animation].
+     * Possible values: [fade], [translate], [scale], [native], [set], [no_animation].
      */
     @Generated
     sealed interface Name

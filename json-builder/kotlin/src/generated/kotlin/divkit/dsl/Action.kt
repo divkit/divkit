@@ -100,7 +100,7 @@ class Action internal constructor(
     /**
      * The tab in which the URL must be opened.
      * 
-     * Possible values: [_self, _blank].
+     * Possible values: [self], [blank].
      */
     @Generated
     sealed interface Target

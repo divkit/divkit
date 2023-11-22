@@ -92,7 +92,7 @@ class Tooltip internal constructor(
     /**
      * The position of a tooltip relative to an element it belongs to.
      * 
-     * Possible values: [left, top-left, top, top-right, right, bottom-right, bottom, bottom-left, center].
+     * Possible values: [left], [top_left], [top], [top_right], [right], [bottom_right], [bottom], [bottom_left], [center].
      */
     @Generated
     sealed interface Position

@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Element visibility:<li>`visible` — the element is visible;</li><li>`invisible` — the element is invisible, but a place is reserved for it;</li><li>`gone` — the element is invisible, a place isn't reserved.</li>
  * 
- * Possible values: [visible, invisible, gone].
+ * Possible values: [visible], [invisible], [gone].
  */
 @Generated
 sealed interface Visibility

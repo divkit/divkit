@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [fill, no_scale, fit, stretch].
+ * Possible values: [fill], [no_scale], [fit], [stretch].
  */
 @Generated
 sealed interface ImageScale

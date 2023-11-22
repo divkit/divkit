@@ -20,7 +20,7 @@ import kotlin.collections.Map
 /**
  * Variants of events that will trigger animations in child elements. The parent element can be [data](div-data.md) or [state](div-state.md).
  * 
- * Possible values: [none, data_change, state_change, any_change].
+ * Possible values: [none], [data_change], [state_change], [any_change].
  */
 @Generated
 sealed interface TransitionSelector

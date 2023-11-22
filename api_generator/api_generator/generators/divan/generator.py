@@ -188,8 +188,7 @@ class DivanGenerator(Generator):
                                  with_as_list_method: bool) -> Text:
         result_declaration = Text()
         name = utils.capitalize_camel_case(enumeration.name, self.remove_prefix)
-        if isinstance(enumeration, DivanStringEnumeration):
-            result_declaration += enumeration.header_comment_block(self.translations)
+        result_declaration += enumeration.header_comment_block(self.translations)
         for annotation in self.kotlin_annotations.classes + self.kotlin_annotations.top_level_definitions:
             result_declaration += annotation
 

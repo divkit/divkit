@@ -475,7 +475,7 @@ class Tabs internal constructor(
         /**
          * Active title change animation.
          * 
-         * Possible values: [slide, fade, none].
+         * Possible values: [slide], [fade], [none].
          */
         @Generated
         sealed interface AnimationType

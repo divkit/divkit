@@ -57,7 +57,7 @@ class RadialGradientRelativeRadius internal constructor(
     /**
      * Type of the relative radius of the gradient transition.
      * 
-     * Possible values: [nearest_corner, farthest_corner, nearest_side, farthest_side].
+     * Possible values: [nearest_corner], [farthest_corner], [nearest_side], [farthest_side].
      */
     @Generated
     sealed interface Value

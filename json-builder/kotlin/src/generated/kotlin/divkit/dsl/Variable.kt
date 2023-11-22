@@ -17,6 +17,9 @@ import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.Map
 
+/**
+ * Possible values: [StringVariable], [NumberVariable], [IntegerVariable], [BooleanVariable], [ColorVariable], [UrlVariable], [DictVariable], [ArrayVariable].
+ */
 @Generated
 sealed interface Variable
 

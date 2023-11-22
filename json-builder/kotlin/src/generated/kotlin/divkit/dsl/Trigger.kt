@@ -68,7 +68,7 @@ class Trigger internal constructor(
     /**
      * Trigger activation mode:<li>`on_condition` — a trigger is activated when the condition changes from `false` to `true`;</li><li>`on_variable` — a trigger is activated when the condition is met and the variable value changes.</li>
      * 
-     * Possible values: [on_condition, on_variable].
+     * Possible values: [on_condition], [on_variable].
      */
     @Generated
     sealed interface Mode

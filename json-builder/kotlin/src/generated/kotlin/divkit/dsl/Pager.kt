@@ -258,7 +258,7 @@ class Pager internal constructor(
     /**
      * Pager orientation.
      * 
-     * Possible values: [horizontal, vertical].
+     * Possible values: [horizontal], [vertical].
      */
     @Generated
     sealed interface Orientation

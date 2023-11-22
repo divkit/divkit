@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [top, center, bottom, baseline].
+ * Possible values: [top], [center], [bottom], [baseline].
  */
 @Generated
 sealed interface AlignmentVertical
