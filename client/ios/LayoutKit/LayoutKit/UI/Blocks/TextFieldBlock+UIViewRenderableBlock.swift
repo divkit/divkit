@@ -204,8 +204,10 @@ private final class TextFieldBlockView: BlockView, VisibleBoundsTrackingLeaf {
         )
         keyboardToolbar.items = [cancelButton, flexibleSpaceButton, doneButton]
         textField.inputAccessoryView = keyboardToolbar
-      case let .custom(toolbar):
-        textField.inputAccessoryView = toolbar
+      case let .custom(block):
+        let toolbarView = block.makeBlockView()
+        toolbarView.frame = CGRect(origin: .zero, size: block.intrinsicSize)
+        textField.inputAccessoryView = toolbarView
       }
     }
   }

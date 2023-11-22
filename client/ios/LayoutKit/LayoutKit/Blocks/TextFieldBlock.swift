@@ -28,7 +28,7 @@ public final class TextFieldBlock: Block {
 
   public enum ToolbarType: Equatable {
     case `default`(Toolbar)
-    case custom(BlockView)
+    case custom(Block)
   }
 
   public struct Toolbar: Equatable {
