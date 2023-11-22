@@ -52,52 +52,29 @@ struct AnyCalcExpression {
   /// Runtime error when parsing or evaluating an expression
   typealias Error = CalcExpression.Error
 
-  /// Constructor that accepts parsed expression and constants lookup function
-  /// Used in Yandex DivKit Expressions
-  init(
-    _ expression: ParsedCalcExpression,
-    variables: ValueProvider
-  ) throws {
-    try self.init(
-      expression,
-      impureSymbols: { _ in nil },
-      pureSymbols: { symbol in
-        switch symbol {
-        case let .variable(name):
-          return variables(name).map { value in { _ in value } }
-        default:
-          return nil
-        }
-      }
-    )
-  }
-
-  /// Constructor that accepts parsed expression,
-  /// constants lookup function and SymbolEvaluators
   init(
     _ expression: ParsedCalcExpression,
     variables: ValueProvider,
-    symbols: [Symbol: SymbolEvaluator]
+    functions: [Symbol: Function]
   ) throws {
     try self.init(
       expression,
       impureSymbols: { symbol in
         switch symbol {
-        case let .variable(name):
-          if variables(name) == nil {
-            return symbols[symbol]
-          }
+        case .function:
+          return functions[symbol]?.symbolEvaluator
         default:
-          return symbols[symbol]
+          return nil
         }
-        return nil
       },
       pureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
           return variables(name).map { value in { _ in value } }
+        case .function:
+          return functions[symbol]?.symbolEvaluator
         default:
-          return symbols[symbol]
+          return nil
         }
       }
     )

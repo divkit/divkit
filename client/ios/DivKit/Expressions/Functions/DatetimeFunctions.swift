@@ -58,10 +58,6 @@ enum DatetimeFunctions: String, CaseIterable {
   case getSeconds
   case getMillis
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .parseUnixTime:
@@ -317,11 +313,3 @@ private let dateFormatter: DateFormatter = {
   dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
   return dateFormatter
 }()
-
-private func castToDate(_ value: Any) -> Date? {
-  value as? Date
-}
-
-private func castToInt(_ value: Any) -> Int? {
-  value as? Int
-}

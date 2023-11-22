@@ -48,10 +48,6 @@ enum StringFunctions: String, CaseIterable {
   case padEnd
   case testRegex
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .len:

@@ -10,20 +10,18 @@ public final class ExpressionResolver {
   public typealias VariableTracker = (Set<DivVariableName>) -> Void
 
   private let variableValueProvider: AnyCalcExpression.ValueProvider
+  private let functionsProvider: FunctionsProvider
   private let errorTracker: ExpressionErrorTracker
   private let variableTracker: VariableTracker
-  private let persistentValuesStorage: DivPersistentValuesStorage
-  private let lock = AllocatedUnfairLock()
 
   init(
-    cardId: DivCardID,
-    variablesStorage: DivVariablesStorage,
-    persistentValuesStorage: DivPersistentValuesStorage,
+    variableValueProvider: @escaping AnyCalcExpression.ValueProvider,
+    functionsProvider: FunctionsProvider,
     errorTracker: @escaping ExpressionErrorTracker,
-    variableTracker: @escaping VariableTracker = { _ in }
+    variableTracker: @escaping VariableTracker
   ) {
-    self.variableValueProvider = variablesStorage.asValueProvider(cardId: cardId)
-    self.persistentValuesStorage = persistentValuesStorage
+    self.variableValueProvider = variableValueProvider
+    self.functionsProvider = functionsProvider
     self.errorTracker = errorTracker
     self.variableTracker = variableTracker
   }
@@ -34,8 +32,17 @@ public final class ExpressionResolver {
     errorTracker: ExpressionErrorTracker? = nil,
     variableTracker: @escaping VariableTracker = { _ in }
   ) {
-    self.variableValueProvider = variables.asValueProvider()
-    self.persistentValuesStorage = persistentValuesStorage
+    let variableValueProvider: AnyCalcExpression.ValueProvider = {
+      variables[DivVariableName(rawValue: $0)]?.typedValue()
+    }
+    self.variableValueProvider = variableValueProvider
+    self.functionsProvider = FunctionsProvider(
+      variableValueProvider: {
+        variableTracker([DivVariableName(rawValue: $0)])
+        return variableValueProvider($0)
+      },
+      persistentValuesStorage: persistentValuesStorage
+    )
     self.errorTracker = { errorTracker?($0) }
     self.variableTracker = variableTracker
   }
@@ -116,15 +123,6 @@ public final class ExpressionResolver {
     }
   }
 
-  func getVariableValue(_ name: String) -> Any? {
-    variableTracker([DivVariableName(rawValue: name)])
-    return variableValueProvider(name)
-  }
-
-  func getStoredValue<T>(_ name: String) -> T? {
-    persistentValuesStorage.get(name: name)
-  }
-
   private func resolveEscaping<T>(_ value: T?) -> T? {
     guard var value = value as? String, value.contains("\\") else {
       return value
@@ -165,12 +163,11 @@ public final class ExpressionResolver {
       return nil
     }
     do {
-      let result: T = try AnyCalcExpression(
-        parsedExpression,
-        variables: variableValueProvider,
-        symbols: supportedFunctions
-      ).evaluate()
-      return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
+      return try validatedValue(
+        value: evaluate(parsedExpression),
+        validator: link.validator,
+        rawValue: link.rawValue
+      )
     } catch let error as CalcExpression.Error {
       let expression = parsedExpression.description
       errorTracker(
@@ -192,12 +189,7 @@ public final class ExpressionResolver {
       switch item {
       case let .calcExpression(parsedExpression):
         do {
-          let value: String = try AnyCalcExpression(
-            parsedExpression,
-            variables: variableValueProvider,
-            symbols: supportedFunctions
-          ).evaluate()
-          stringValue += value
+          stringValue += try evaluate(parsedExpression)
         } catch let error as CalcExpression.Error {
           let expression = parsedExpression.description
           errorTracker(
@@ -241,6 +233,14 @@ public final class ExpressionResolver {
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
   }
 
+  private func evaluate<T>(_ parsedExpression: ParsedCalcExpression) throws -> T {
+    try AnyCalcExpression(
+      parsedExpression,
+      variables: variableValueProvider,
+      functions: functionsProvider.functions
+    ).evaluate()
+  }
+
   private func validatedValue<T>(
     value: T?,
     validator: ExpressionValueValidator<T>?,
@@ -268,44 +268,5 @@ public final class ExpressionResolver {
       expression: .link(expressionLink),
       initializer: initializer
     )
-  }
-
-  private lazy var supportedFunctions: [
-    AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator
-  ] = lock.withLock {
-    ValueFunctions.allCases.map { $0.getDeclaration(resolver: self) }
-      .reduce(into: _supportedFunctions) { $0[$1.0] = $1.1 }
-  }
-}
-
-private let _supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
-  CastFunctions.allCases.map(\.declaration).flat()
-    + StringFunctions.allCases.map(\.declaration).flat()
-    + ColorFunctions.allCases.map(\.declaration).flat()
-    + DatetimeFunctions.allCases.map(\.declaration).flat()
-    + MathFunctions.allCases.map(\.declaration).flat()
-    + IntervalFunctions.allCases.map(\.declaration).flat()
-    + DictFunctions.allCases.map(\.declaration).flat()
-    + ArrayFunctions.allCases.map(\.declaration).flat()
-
-extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-  fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    reduce([:], +)
-  }
-}
-
-extension DivVariables {
-  fileprivate func asValueProvider() -> AnyCalcExpression.ValueProvider {
-    { name in
-      self[DivVariableName(rawValue: name)]?.typedValue()
-    }
-  }
-}
-
-extension DivVariablesStorage {
-  fileprivate func asValueProvider(cardId: DivCardID) -> AnyCalcExpression.ValueProvider {
-    { name in
-      self.getVariableValue(cardId: cardId, name: DivVariableName(rawValue: name))
-    }
   }
 }

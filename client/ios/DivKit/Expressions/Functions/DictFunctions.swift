@@ -28,10 +28,6 @@ enum DictFunctions: String, CaseIterable {
   case getUrlFromDict
   case getOptUrlFromDict
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .getDictString:

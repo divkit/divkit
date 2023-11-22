@@ -19,10 +19,6 @@ enum MathFunctions: String, CaseIterable {
   case ceil
   case copySign
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .div:

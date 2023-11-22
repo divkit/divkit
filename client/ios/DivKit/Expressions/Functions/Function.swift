@@ -5,6 +5,7 @@ import BasePublic
 protocol Function {
   var arity: CalcExpression.Arity { get }
   func invoke(args: [Any]) throws -> Any
+  func symbolEvaluator(_ args: [Any]) throws -> Any
   func verify(signature: FunctionSignature) throws
 }
 
@@ -15,6 +16,11 @@ protocol SimpleFunction: Function {
 extension SimpleFunction {
   var arity: CalcExpression.Arity {
     (try? signature.arity) ?? 0
+  }
+
+  func symbolEvaluator(_ args: [Any]) throws -> Any {
+    try signature.checkArguments(args: args)
+    return try invoke(args: args)
   }
 
   func verify(signature: FunctionSignature) throws {
@@ -238,8 +244,9 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 }
 
 struct OverloadedFunction: Function {
-  let functions: [SimpleFunction]
-  let makeError: ([Any]) -> Error
+  private let functions: [SimpleFunction]
+  private let makeError: ([Any]) -> Error
+
   var arity: CalcExpression.Arity {
     functions.first?.arity ?? 0
   }
@@ -256,13 +263,19 @@ struct OverloadedFunction: Function {
   }
 
   func invoke(args: [Any]) throws -> Any {
-    let arguments = try args.map { try FunctionSignature.Argument(type: .from(type: type(of: $0))) }
+    let arguments = try args.map {
+      try FunctionSignature.Argument(type: .from(type: type(of: $0)))
+    }
     guard let function = try functions
       .first(where: { try $0.signature.allArguments(arguments.count) == arguments })
     else {
       throw makeError(args)
     }
     return try function.invoke(args: args)
+  }
+
+  func symbolEvaluator(_ args: [Any]) throws -> Any {
+    try invoke(args: args)
   }
 }
 
@@ -361,17 +374,8 @@ struct FunctionSignature: Decodable {
       }
     }
   }
-}
 
-extension Function {
-  func symbolEvaluator(_ args: [Any]) throws -> Any {
-    try (self as? SimpleFunction)?.signature.checkArguments(args: args)
-    return try invoke(args: args)
-  }
-}
-
-extension FunctionSignature {
-  func checkArguments(args: [Any]) throws {
+  fileprivate func checkArguments(args: [Any]) throws {
     guard arity.matches(.exactly(args.count)) else {
       throw FunctionSignature.Error.arityMismatch.message
     }
@@ -382,7 +386,7 @@ extension FunctionSignature {
     }
   }
 
-  func allArguments(_ i: Int) -> [Argument] {
+  fileprivate func allArguments(_ i: Int) -> [Argument] {
     if let last = arguments.last, last.vararg == true {
       return (arguments + Array(repeating: last, times: UInt(i - arguments.count))).map {
         .init(type: $0.type)
@@ -392,7 +396,7 @@ extension FunctionSignature {
     }
   }
 
-  func verify(_ signature: FunctionSignature) throws {
+  fileprivate func verify(_ signature: FunctionSignature) throws {
     guard arity.matches(signature.arity) else {
       throw FunctionSignature.Error.arityMismatch.message
     }

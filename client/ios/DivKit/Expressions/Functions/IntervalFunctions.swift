@@ -10,10 +10,6 @@ enum IntervalFunctions: String, CaseIterable {
   case getIntervalTotalDays
   case getIntervalTotalWeeks
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .getIntervalSeconds:

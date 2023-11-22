@@ -10,10 +10,6 @@ enum CastFunctions: String, CaseIterable {
   case toColor
   case toUrl
 
-  var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    [.function(rawValue, arity: function.arity): function.symbolEvaluator]
-  }
-
   var function: Function {
     switch self {
     case .toBoolean:
