@@ -23,17 +23,16 @@ private const val METADATA_ID = "metadata_id"
 class DivStorageTest {
     private val rawDivData = JSONObject("""
         {
-                    "type": "div2",
-                    "log_id": "snapshot_test_card",
-                    "states": [
-                        {
-                            "state_id": 0,
-                            "div": {
-                                "type": "text",
-                                "text": "test"
-                            }
-                        }
-                    ]
+            "log_id": "snapshot_test_card",
+            "states": [
+                {
+                    "state_id": 0,
+                    "div": {
+                        "type": "text",
+                        "text": "test"
+                    }
+                }
+            ]
         }
     """.trimIndent())
 

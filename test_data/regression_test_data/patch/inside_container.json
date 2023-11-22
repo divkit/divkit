@@ -45,7 +45,6 @@
     }
   },
   "card": {
-    "type": "div2",
     "log_id": "alerts_gallery",
     "states": [
       {

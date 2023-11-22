@@ -25,7 +25,6 @@ private const val TEMPLATE_SOURCE_TYPE_0 = "template_source_type#0"
 @Language("json")
 private val testRawDivData = """
     {
-        "type": "div2",
         "log_id": "snapshot_test_card",
         "states": [
             {

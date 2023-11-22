@@ -8,7 +8,6 @@ import './devCustomComponents';
 const json = {
     "templates": {},
     "card": {
-        "type": "div2",
         "log_id": "snapshot_test_card",
         "states": [
             {

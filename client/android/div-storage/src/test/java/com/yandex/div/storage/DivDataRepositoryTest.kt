@@ -50,22 +50,21 @@ class DivDataRepositoryTest {
                         "type": "solid"
                     }
                 ]
-          }
+            }
         }
     """.trimIndent())
 
     private val rawDivData = JSONObject("""
         {
-                    "type": "div2",
-                    "log_id": "snapshot_test_card",
-                    "states": [
-                        {
-                            "state_id": 0,
-                            "div": {
-                                "type": "boxed_text"
-                            }
-                        }
-                    ]
+            "log_id": "snapshot_test_card",
+            "states": [
+                {
+                    "state_id": 0,
+                    "div": {
+                        "type": "boxed_text"
+                    }
+                }
+            ]
         }
     """.trimIndent())
 

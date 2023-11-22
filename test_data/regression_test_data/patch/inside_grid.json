@@ -32,7 +32,6 @@
     }
   },
   "card": {
-    "type": "div2",
     "log_id": "alerts_gallerty",
     "states": [
       {

@@ -20,7 +20,6 @@ import org.robolectric.RobolectricTestRunner
 private const val MISSING_TEMPLATE_TYPE = "some_missing_template"
 private val RAW_DIVDATA_WITH_MISSING_TEMPLATE = """
     {
-        "type": "div2",
         "log_id": "snapshot_test_card",
         "states": [
             {
@@ -44,7 +43,6 @@ private val RAW_DIVDATA_WITH_MISSING_TEMPLATE = """
 
 private val CORRECT_RAW_DIVDATA = """
     {
-        "type": "div2",
         "log_id": "snapshot_test_card",
         "states": [
             {

@@ -11,10 +11,12 @@
         "type": "match_parent",
         "weight": 1
       },
-      "background": [{
-        "color": "#FFFFFF",
-        "type": "solid"
-      }],
+      "background": [
+        {
+          "color": "#FFFFFF",
+          "type": "solid"
+        }
+      ],
       "border": {
         "corner_radius": 6,
         "stroke": {
@@ -22,18 +24,20 @@
         }
       },
       "orientation": "horizontal",
-      "items": [{
-        "type": "text",
-        "max_lines": 3,
-        "font_size": 14,
-        "line_height": 18,
-        "margins": {
-          "top": 9,
-          "left": 8
-        },
-        "font_weight": "medium",
-        "$text": "alert_text"
-      }]
+      "items": [
+        {
+          "type": "text",
+          "max_lines": 3,
+          "font_size": 14,
+          "line_height": 18,
+          "margins": {
+            "top": 9,
+            "left": 8
+          },
+          "font_weight": "medium",
+          "$text": "alert_text"
+        }
+      ]
     },
     "patch_card": {
       "type": "container",
@@ -46,10 +50,12 @@
         "type": "match_parent",
         "weight": 2
       },
-      "background": [{
-        "color": "#FF0000",
-        "type": "solid"
-      }],
+      "background": [
+        {
+          "color": "#FF0000",
+          "type": "solid"
+        }
+      ],
       "border": {
         "corner_radius": 6,
         "stroke": {
@@ -57,60 +63,68 @@
         }
       },
       "orientation": "horizontal",
-      "items": [{
-        "type": "text",
-        "max_lines": 3,
-        "font_size": 14,
-        "line_height": 18,
-        "margins": {
-          "top": 9,
-          "left": 8
-        },
-        "font_weight": "medium",
-        "$text": "alert_text"
-      }]
+      "items": [
+        {
+          "type": "text",
+          "max_lines": 3,
+          "font_size": 14,
+          "line_height": 18,
+          "margins": {
+            "top": 9,
+            "left": 8
+          },
+          "font_weight": "medium",
+          "$text": "alert_text"
+        }
+      ]
     }
   },
   "card": {
-    "type": "div2",
     "log_id": "alerts_gallerty",
-    "states": [{
-      "state_id": 0,
-      "div": {
-        "type": "pager",
-        "width": {
-          "type": "match_parent"
-        },
-        "paddings": {
-          "top": 12,
-          "bottom": 12
-        },
-        "item_spacing": {
-          "type": "fixed",
-          "value": 4
-        },
-        "layout_mode": {
-          "neighbour_page_width": {
-            "type": "fixed",
-            "value": 20
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "match_parent"
           },
-          "type": "fixed"
-        },
-        "items": [{
-          "type": "alert_card",
-          "id": "item1",
-          "alert_text": "1 item"
-        }, {
-          "type": "patch_card",
-          "alert_text": "2.1 item from patch"
-        }, {
-          "type": "patch_card",
-          "alert_text": "2.2 item from patch"
-        }, {
-          "type": "alert_card",
-          "alert_text": "4 item"
-        }]
+          "paddings": {
+            "top": 12,
+            "bottom": 12
+          },
+          "item_spacing": {
+            "type": "fixed",
+            "value": 4
+          },
+          "layout_mode": {
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 20
+            },
+            "type": "fixed"
+          },
+          "items": [
+            {
+              "type": "alert_card",
+              "id": "item1",
+              "alert_text": "1 item"
+            },
+            {
+              "type": "patch_card",
+              "alert_text": "2.1 item from patch"
+            },
+            {
+              "type": "patch_card",
+              "alert_text": "2.2 item from patch"
+            },
+            {
+              "type": "alert_card",
+              "alert_text": "4 item"
+            }
+          ]
+        }
       }
-    }]
+    ]
   }
 }
