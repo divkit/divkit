@@ -26,6 +26,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -713,6 +714,20 @@ internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
             }
         }
     }
+}
+
+internal fun View.extractParentContentAlignmentVertical(
+    resolver: ExpressionResolver
+): DivContentAlignmentVertical? {
+    val div = (parent as? DivHolderView<*>)?.div
+    return (div as? DivContainer)?.contentAlignmentVertical?.evaluate(resolver)
+}
+
+internal fun View.extractParentContentAlignmentHorizontal(
+    resolver: ExpressionResolver
+): DivContentAlignmentHorizontal? {
+    val div = (parent as? DivHolderView<*>)?.div
+    return (div as? DivContainer)?.contentAlignmentHorizontal?.evaluate(resolver)
 }
 
 internal fun DivBorder?.isConstantlyEmpty(): Boolean {

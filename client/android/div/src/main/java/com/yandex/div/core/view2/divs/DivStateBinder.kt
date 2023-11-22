@@ -41,6 +41,7 @@ import com.yandex.div.json.missingValue
 import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivAnimation
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivState
 import javax.inject.Inject
 import javax.inject.Provider
@@ -82,6 +83,7 @@ internal class DivStateBinder @Inject constructor(
         baseBinder.bindView(layout, div, oldDivState, divView)
 
         val resolver = divView.expressionResolver
+        layout.fixAlignment(div, oldDivState, resolver)
         val cardId = divView.divTag.id
         val id = div.getId {
             errorCollectors.getOrCreate(divView.dataTag, divView.divData)
@@ -202,6 +204,24 @@ internal class DivStateBinder @Inject constructor(
 
         layout.activeStateDiv = newStateDiv
         layout.path = currentPath
+    }
+
+    private fun DivStateLayout.fixAlignment(
+        div: DivState,
+        oldDiv: DivState?,
+        resolver: ExpressionResolver,
+    ) {
+        val horizontalAlignment = div.alignmentHorizontal
+        val verticalAlignment = div.alignmentVertical
+
+        listOf(horizontalAlignment, verticalAlignment)
+            .applyIfNotEquals(listOf(oldDiv?.alignmentHorizontal, oldDiv?.alignmentVertical)) {
+                val resolvedHorizontalAlignment = horizontalAlignment?.evaluate(resolver)
+                    ?: extractParentContentAlignmentHorizontal(resolver)?.toAlignmentHorizontal()
+                val resolvedVerticalAlignment = verticalAlignment?.evaluate(resolver)
+                    ?: extractParentContentAlignmentVertical(resolver)?.toAlignmentVertical()
+                applyAlignment(resolvedHorizontalAlignment, resolvedVerticalAlignment)
+            }
     }
 
     private fun DivStateLayout.observeStateIdVariable(div: DivState,
