@@ -1,8 +1,17 @@
 package com.yandex.div.internal.util
 
-class SynchronizedList<T> {
+import java.lang.Thread
+import java.lang.ref.WeakReference
 
-    @PublishedApi internal val list = mutableListOf<T>()
+class SynchronizedList<T> @JvmOverloads constructor (
+    ownerThread: Thread? = null
+) {
+
+    @PublishedApi
+    internal val ownerThreadRef = WeakReference(ownerThread)
+
+    @PublishedApi
+    internal val list = mutableListOf<T>()
 
     fun add(value: T) {
         synchronized(list) {
@@ -22,29 +31,23 @@ class SynchronizedList<T> {
         }
     }
 
-    inline fun find(predicate: (T) -> Boolean): T? {
-        val listCopy = mutableListOf<T>()
-
-        synchronized(list) {
-            listCopy.addAll(list)
+    @PublishedApi
+    internal inline fun <R> doWithList(action: List<T>.() -> R): R {
+        val listCopy = synchronized(list) {
+            if (ownerThreadRef.get() == Thread.currentThread()) {
+                return action(list)
+            }
+            list.toList()
         }
 
-        return listCopy.find(predicate)
+        return action(listCopy)
     }
 
-    inline fun forEach(callback: (T) -> Unit) = forEachAnd(callback = callback)
+    inline fun find(predicate: (T) -> Boolean): T? {
+        return doWithList { find(predicate) }
+    }
 
-    inline fun forEachAndClear(callback: (T) -> Unit) = forEachAnd(this::clear, callback)
-
-    @PublishedApi
-    internal inline fun forEachAnd(listCallback: () -> Unit = {}, callback: (T) -> Unit) {
-        val listCopy: List<T>?
-
-        synchronized(list) {
-            listCopy = list.toList()
-            listCallback()
-        }
-
-        listCopy?.forEach { callback(it) }
+    inline fun forEach(action: (T) -> Unit) {
+        doWithList { forEach(action) }
     }
 }

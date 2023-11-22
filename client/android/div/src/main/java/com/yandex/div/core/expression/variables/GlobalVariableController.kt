@@ -8,6 +8,7 @@ import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.SynchronizedList
+import com.yandex.div.internal.util.UiThreadHandler
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -28,10 +29,14 @@ import javax.inject.Inject
 class GlobalVariableController {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
-    private val declarationObservers = SynchronizedList<(Variable) -> Unit>()
+    private val declarationObservers = SynchronizedList<DeclarationObserver>(
+        ownerThread = UiThreadHandler.mainThread()
+    )
     private val declaredVariableNames = mutableSetOf<String>()
     private val pendingDeclaration = mutableSetOf<String>()
-    private val externalVariableRequestObservers = SynchronizedList<(variableName: String) -> Unit>()
+    private val externalVariableRequestObservers = SynchronizedList<VariableRequestObserver>(
+        ownerThread = UiThreadHandler.mainThread()
+    )
 
     private val requestsObserver = { variableName: String ->
         externalVariableRequestObservers.forEach { it.invoke(variableName) }
@@ -122,11 +127,11 @@ class GlobalVariableController {
     /**
      * Allows to track requests to defined or not yet defined global variables.
      */
-    fun addVariableRequestObserver(observer: (variableName: String) -> Unit) {
+    fun addVariableRequestObserver(observer: VariableRequestObserver) {
         externalVariableRequestObservers.add(observer)
     }
 
-    fun removeVariableRequestObserver(observer: (variableName: String) -> Unit) {
+    fun removeVariableRequestObserver(observer: VariableRequestObserver) {
         externalVariableRequestObservers.remove(observer)
     }
 }
