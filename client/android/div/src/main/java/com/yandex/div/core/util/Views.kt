@@ -28,6 +28,14 @@ inline fun View.doOnActualLayout(crossinline action: (view: View) -> Unit) {
     }
 }
 
+internal fun extractMaxHeight(heightMeasureSpec: Int): Int {
+    return if (View.MeasureSpec.getMode(heightMeasureSpec) == View.MeasureSpec.AT_MOST) {
+        View.MeasureSpec.getSize(heightMeasureSpec)
+    } else {
+        Int.MAX_VALUE
+    }
+}
+
 internal fun View.makeFocusable() {
     isFocusable = true
     isFocusableInTouchMode = true

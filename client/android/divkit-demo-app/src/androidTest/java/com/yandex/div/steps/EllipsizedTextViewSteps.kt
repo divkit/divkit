@@ -126,12 +126,7 @@ private fun withHeight(lines: Int) = object : TypeSafeMatcher<View>() {
         if (item !is TextView) {
             return false
         }
-        // We need to have extra spacing for single line text
-        // See |SuperLineHeightTextView|
-        val spacing = if (lines == 1) {
-            item.lineSpacingAdd.toInt()
-        } else 0
-        return item.height == lines * item.lineHeight + spacing
+        return item.height == lines * item.lineHeight
     }
 }
 

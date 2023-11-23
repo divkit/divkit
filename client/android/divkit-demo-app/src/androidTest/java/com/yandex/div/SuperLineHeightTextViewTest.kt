@@ -83,7 +83,6 @@ class SuperLineHeightTextViewTest {
             val containerHeight = CONTAINER_HEIGHT_DP.dpToPx(metrics)
             activityTestRule.buildContainer(containerHeight)
             assert {
-                noExtraSpacing()
                 hasHeight(containerHeight)
             }
         }

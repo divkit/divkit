@@ -6,6 +6,7 @@ import android.os.Build
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
+import com.yandex.div.core.util.extractMaxHeight
 import kotlin.math.roundToInt
 
 private const val UNDEFINED = -1
@@ -62,8 +63,9 @@ internal open class SuperLineHeightEditText constructor(context: Context) : AppC
             return
         }
 
+        val maxHeight = extractMaxHeight(heightMeasureSpec)
         val fixedHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-            fixedLineHeight * visibleLineCount + paddingTop + paddingBottom,
+            minOf(maxHeight, fixedLineHeight * visibleLineCount + paddingTop + paddingBottom),
             MeasureSpec.getMode(measuredHeightAndState)
         )
         setMeasuredDimension(measuredWidthAndState, fixedHeightMeasureSpec)

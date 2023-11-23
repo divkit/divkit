@@ -33,10 +33,10 @@ import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.internal.widget.DivGravity
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.SuperLineHeightTextView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -591,9 +591,15 @@ internal fun DivSizeUnit.toAndroidUnit(): Int {
 
 internal fun TextView.applyLineHeight(lineHeight: Long?, unit: DivSizeUnit) {
     val lineSpacingExtra = lineHeight?.let {
-        it.unitToPx(resources.displayMetrics, unit) - this.fontHeight
-    } ?: 0
-    setLineSpacing(lineSpacingExtra.toFloat(), 1f)
+        it.unitToPx(resources.displayMetrics, unit) - (paint.fontMetrics.descent - paint.fontMetrics.ascent)
+    } ?: 0f
+    setLineSpacing(lineSpacingExtra, 1f)
+}
+
+internal fun SuperLineHeightTextView.applyLineHeight(lineHeight: Long?, unit: DivSizeUnit) {
+    val height = lineHeight?.unitToPx(resources.displayMetrics, unit)
+    setFixedLineHeight(height)
+    (this as TextView).applyLineHeight(lineHeight, unit)
 }
 
 internal fun TextView.applyLetterSpacing(letterSpacing: Double, fontSize: Int) {
