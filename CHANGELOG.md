@@ -1,3 +1,30 @@
+## 28.12.0
+
+# Android Client:
+* Added `getStoredUrlValue` functions.
+* Removed dependency on androidx.fragment.
+* Reduced number of memory allocations at observing of client-side variables.
+* Fixed bug that the slider interfered with the parent's vertical scrolling.
+* Fixed the hyphenation of images in the text.
+* Fixed baseline alignment in `DivCustom`.
+* Fixed bind on enabled bind_on_attach.
+* Fixed a case when the wrong DivActionHandler was used.
+* Fixed alignment of the DivStateLayout.
+
+# iOS Client:
+* Change the unit of video duration to ms
+* Optimized actions resolving.
+* Removed `UserInterfaceAction.Payload.json` usage.
+* Fixed putting text to pasteboard when cutting in the input with a mask.
+* Fixed `DivPager` state updating.
+
+# Web Client:
+* Added `scrollbar` property support in `gallery`.
+* Fixed the text of the missing `gif_url` error. Also the `gif` component now uses `gif_url` and `image` uses `image_url`, instead of both of them consuming any of these 2 properties.
+* Removed empty `padding` attribute from html.
+* Fixed empty `image`s (and `gif`s) to load error. Note "empty image" here is an `image` with an `image_url` property equal to `empty://`.
+
+
 ## 28.11.0
 
 # Android Client:
