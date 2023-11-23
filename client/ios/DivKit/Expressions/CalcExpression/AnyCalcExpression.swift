@@ -208,9 +208,9 @@ struct AnyCalcExpression {
     func defaultEvaluator(for symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
       if let fn = AnyCalcExpression.standardSymbols[symbol] {
         return fn
-      } else if let fn = CalcExpression.mathSymbols[symbol] {
+      } else if let fn = CalcExpression.StandartSymbols.mathSymbols[symbol] {
         return fn
-      } else if let fn = CalcExpression.boolSymbols[symbol] {
+      } else if let fn = CalcExpression.StandartSymbols.boolSymbols[symbol] {
         switch symbol {
         case .infix("=="):
           return {
@@ -223,7 +223,7 @@ struct AnyCalcExpression {
         case .infix("?:"):
           return { args in
             guard args.count == 3 else {
-              throw Error.undefinedSymbol(symbol)
+              throw Error.arityMismatch(symbol)
             }
             guard let doubleValue = loadNumber(args[0].value) else {
               throw try Error.typeMismatch(symbol, args.map(box.load))

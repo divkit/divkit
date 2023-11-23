@@ -157,80 +157,6 @@ final class CalcExpression: CustomStringConvertible {
     }
   }
 
-  /// Runtime error when parsing or evaluating an expression
-  enum Error: Swift.Error, CustomStringConvertible, Equatable {
-    /// An application-specific error
-    case message(String)
-
-    /// An application-specific error without information about failed expression
-    case shortMessage(String)
-
-    /// The parser encountered a sequence of characters it didn't recognize
-    case unexpectedToken(String)
-
-    /// The parser expected to find a delimiter (e.g. closing paren) but didn't
-    case missingDelimiter(String)
-
-    /// The specified constant, operator or function was not recognized
-    case undefinedSymbol(Symbol)
-
-    /// A function was called with the wrong number of arguments (arity)
-    case arityMismatch(Symbol)
-
-    /// An array was accessed with an index outside the valid range
-    case arrayBounds(Symbol, Double)
-
-    case escaping
-
-    /// The human-readable description of the error
-    var description: String {
-      switch self {
-      case let .message(message),
-           let .shortMessage(message):
-        return message
-      case let .unexpectedToken(string):
-        return "Error tokenizing '\(string)'."
-      case let .missingDelimiter(string):
-        return "Missing `\(string)`"
-      case let .undefinedSymbol(symbol):
-        return "Undefined \(symbol)"
-      case let .arityMismatch(symbol):
-        let arity: Arity
-        switch symbol {
-        case let .function(_, requiredArity):
-          arity = requiredArity
-        case .infix("()"):
-          arity = .atLeast(1)
-        case .array, .infix("[]"):
-          arity = 1
-        case .infix("?:"):
-          arity = 3
-        case .infix:
-          arity = 2
-        case .postfix, .prefix:
-          arity = 1
-        case .variable:
-          arity = 0
-        }
-        let description = symbol.description
-        return "\(description.prefix(1).uppercased())\(description.dropFirst()) expects \(arity)"
-      case let .arrayBounds(symbol, index):
-        return "Index \(CalcExpression.stringify(index)) out of bounds for \(symbol)"
-      case .escaping:
-        return "Incorrect string escape"
-      }
-    }
-
-    func makeOutputMessage(for expression: String) -> String {
-      switch self {
-      case let .shortMessage(message):
-        return "Failed to evaluate [\(expression.escaped)]. \(message)"
-      default:
-        return self.description
-      }
-    }
-  }
-
   /// Alternative constructor for advanced usage
   /// Allows for dynamic symbol lookup or generation without any performance overhead
   /// Note that both math and boolean symbols are enabled by default - to disable them
@@ -243,9 +169,7 @@ final class CalcExpression: CustomStringConvertible {
     root = try expression.root.optimized(
       withImpureSymbols: impureSymbols,
       pureSymbols: {
-        if let fn = try pureSymbols($0)
-          ?? CalcExpression.mathSymbols[$0]
-          ?? CalcExpression.boolSymbols[$0] {
+        if let fn = try pureSymbols($0) ?? StandartSymbols.symbols[$0] {
           return fn
         }
         if case let .function(name, _) = $0 {
@@ -303,77 +227,6 @@ final class CalcExpression: CustomStringConvertible {
   func evaluate() throws -> Value {
     try root.evaluate()
   }
-
-  /// Standard math symbols
-  static let mathSymbols: [Symbol: SymbolEvaluator] = {
-    var symbols: [Symbol: SymbolEvaluator] = [:]
-
-    // constants
-    symbols[.variable("pi")] = { _ in .number(.pi) }
-
-    // infix operators
-    symbols[.infix("+")] = { try $0[0] + $0[1] }
-    symbols[.infix("-")] = { try $0[0] - $0[1] }
-    symbols[.infix("*")] = { try $0[0] * $0[1] }
-    symbols[.infix("/")] = { try $0[0] / $0[1] }
-    symbols[.infix("%")] = { try $0[0] % $0[1] }
-
-    // prefix operators
-    symbols[.prefix("-")] = { try -$0[0] }
-    symbols[.prefix("+")] = { try +$0[0] }
-
-    return symbols
-  }()
-
-  /// Standard boolean symbols
-  static let boolSymbols: [Symbol: SymbolEvaluator] = {
-    var symbols: [Symbol: SymbolEvaluator] = [:]
-
-    // boolean constants
-    symbols[.variable("true")] = { _ in .number(1) }
-    symbols[.variable("false")] = { _ in .number(0) }
-
-    // boolean infix operators
-    symbols[.infix("==")] = { (args: [Value]) -> Value in
-      args[0].value.isApproximatelyEqualTo(args[1].value) ? .number(1) : .number(0)
-    }
-    symbols[.infix("!=")] = { (args: [Value]) -> Value in
-      args[0].value.isApproximatelyNotEqualTo(args[1].value) ? .number(1) : .number(0)
-    }
-    symbols[.infix(">")] = { (args: [Value]) -> Value in
-      args[0].value > args[1].value ? .number(1) : .number(0)
-    }
-    symbols[.infix(">=")] = { (args: [Value]) -> Value in
-      args[0].value >= args[1].value ? .number(1) : .number(0)
-    }
-    symbols[.infix("<")] = { (args: [Value]) -> Value in
-      args[0].value < args[1].value ? .number(1) : .number(0)
-    }
-    symbols[.infix("<=")] = { (args: [Value]) -> Value in
-      args[0].value <= args[1].value ? .number(1) : .number(0)
-    }
-    symbols[.infix("&&")] = { (args: [Value]) -> Value in
-      args[0].value != 0 && args[1].value != 0 ? .number(1) : .number(0)
-    }
-    symbols[.infix("||")] = { (args: [Value]) -> Value in
-      args[0].value != 0 || args[1].value != 0 ? .number(1) : .number(0)
-    }
-
-    // boolean prefix operators
-    symbols[.prefix("!")] = { (args: [Value]) -> Value in
-      args[0].value == 0 ? .number(1) : .number(0)
-    }
-
-    // ternary operator
-    symbols[.infix("?:")] = { (args: [Value]) -> Value in
-      if args.count == 3 {
-        return args[0].value != 0 ? args[1] : args[2]
-      }
-      return args[0].value != 0 ? args[0] : args[1]
-    }
-
-    return symbols
-  }()
 }
 
 // MARK: Internal API
@@ -382,11 +235,10 @@ extension CalcExpression {
   // Fallback evaluator for when symbol is not found
   static func errorEvaluator(for symbol: Symbol) -> SymbolEvaluator {
     switch symbol {
-    case .infix(","), .infix("[]"), .function("[]", _), .infix("()"):
+    case .infix("[]"), .function("[]", _), .infix("()"):
       return { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
     case let .function(called, arity):
-      let keys = Set(mathSymbols.keys).union(boolSymbols.keys)
-      for case let .function(name, expected) in keys
+      for case let .function(name, expected) in StandartSymbols.symbols.keys
         where name == called && arity != expected {
         return { _ in throw Error.arityMismatch(.function(called, arity: expected)) }
       }
@@ -414,34 +266,16 @@ extension CalcExpression {
   )] = {
     var precedences = [
       "[]": 100,
-      "<<": 2, ">>": 2, ">>>": 2, // bitshift
-      "*": 1, "/": 1, "%": 1, "&": 1, // multiplication
+      "*": 1, "/": 1, "%": 1, // multiplication
       // +, -, |, ^, etc: 0 (also the default)
-      "..": -1, "...": -1, "..<": -1, // range formation
-      "is": -2, "as": -2, "isa": -2, // casting
-      "??": -3, "?:": -3, // null-coalescing
       // comparison: -4
-      "&&": -5, "and": -5, // and
-      "||": -6, "or": -6, // or
+      "&&": -5, // and
+      "||": -6, // or
       ":": -8, // ternary
-      // assignment: -9
-      ",": -100,
     ].mapValues { ($0, false) }
     precedences["?"] = (-7, true) // ternary
-    let comparisonOperators = [
-      "<", "<=", ">=", ">",
-      "==", "!=", "===", "!==",
-      "lt", "le", "lte", "gt", "ge", "gte", "eq", "ne",
-    ]
-    for op in comparisonOperators {
+    for op in [ "<", "<=", ">=", ">", "==", "!=" ] { // comparison
       precedences[op] = (-4, true)
-    }
-    let assignmentOperators = [
-      "=", "*=", "/=", "%=", "+=", "-=",
-      "<<=", ">>=", "&=", "^=", "|=", ":=",
-    ]
-    for op in assignmentOperators {
-      precedences[op] = (-9, true)
     }
     return precedences
   }()
@@ -618,12 +452,8 @@ private enum Subexpression: CustomStringConvertible {
 
   var description: String {
     func arguments(_ args: [Subexpression]) -> String {
-      args.map {
-        if case .symbol(.infix(","), _, _) = $0 {
-          return "(\($0))"
-        }
-        return $0.description
-      }.joined(separator: ", ")
+      args.map { $0.description }
+        .joined(separator: ", ")
     }
     switch self {
     case let .literal(literal):
@@ -658,8 +488,6 @@ private enum Subexpression: CustomStringConvertible {
         case .symbol, .literal:
           return "\(description)\(symbol.escapedName)" // No parens needed
         }
-      case .infix(","):
-        return "\(args[0]), \(args[1])"
       case .infix("?:") where args.count == 3:
         return "\(args[0]) ? \(args[1]) : \(args[2])"
       case .infix("[]"):
@@ -1385,11 +1213,5 @@ extension UnicodeScalarView {
     case nil:
       throw CalcExpression.Error.message("Empty expression")
     }
-  }
-}
-
-extension String {
-  fileprivate var escaped: String {
-    replacingOccurrences(of: "\\", with: "\\\\")
   }
 }
