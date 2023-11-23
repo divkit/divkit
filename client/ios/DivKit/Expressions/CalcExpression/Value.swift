@@ -6,6 +6,7 @@ extension CalcExpression {
     case number(Double)
     case string(String)
     case datetime(Date)
+    case error(Swift.Error)
   }
 }
 
@@ -20,6 +21,8 @@ extension CalcExpression.Value {
       return .nan
     case let .datetime(date):
       return date.timeIntervalSince1970
+    case .error:
+      return .nan
     }
   }
 }
@@ -164,6 +167,8 @@ extension CalcExpression.Value {
         .message(
           "Failed to evaluate [-\(value.formatString)]. A Number is expected after a unary minus."
         )
+    case .error:
+      return value
     }
   }
 
@@ -180,6 +185,8 @@ extension CalcExpression.Value {
         .message(
           "Failed to evaluate [+\(value.formatString)]. A Number is expected after a unary plus."
         )
+    case .error:
+      return value
     }
   }
 }

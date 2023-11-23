@@ -268,6 +268,7 @@ extension CalcExpression {
       "[]": 100,
       "*": 1, "/": 1, "%": 1, // multiplication
       // +, -, |, ^, etc: 0 (also the default)
+      "!:": -3,
       // comparison: -4
       "&&": -5, // and
       "||": -6, // or
@@ -443,10 +444,16 @@ private enum Subexpression: CustomStringConvertible {
     case let .literal(literal):
       return literal
     case let .symbol(symbol, args, fn):
-      guard let fn = fn else { throw CalcExpression.Error.undefinedSymbol(symbol) }
-      return try fn(args.map { try $0.evaluate() })
+      guard let fn = fn else {
+        return .error(CalcExpression.Error.undefinedSymbol(symbol))
+      }
+      do {
+        return try fn(args.map { try $0.evaluate() })
+      } catch {
+        return .error(error)
+      }
     case let .error(error, _):
-      throw error
+      return .error(error)
     }
   }
 
@@ -1128,6 +1135,8 @@ extension UnicodeScalarView {
               case .string:
                 break
               case .datetime:
+                break
+              case .error:
                 break
               }
             case .error, .symbol:

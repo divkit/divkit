@@ -132,6 +132,8 @@ struct AnyCalcExpression {
               )
           }
           return .number(dateValue.timeIntervalSince1970)
+        case .error:
+          return $0
         }
       }
     }
@@ -644,6 +646,8 @@ extension AnyCalcExpression {
         return .string(stringValue)
       case _ where AnyCalcExpression.isNil(value):
         return .number(NanBox.nilValue)
+      case let error as CalcExpression.Error:
+        return .error(error)
       default:
         break
       }
@@ -684,6 +688,8 @@ extension AnyCalcExpression {
         }
       case let .datetime(value):
         return value
+      case let .error(error):
+        throw error
       }
     }
   }
@@ -693,6 +699,14 @@ extension AnyCalcExpression {
     // Boolean symbols
     .variable("true"): { _ in .number(NanBox.trueValue) },
     .variable("false"): { _ in .number(NanBox.falseValue) },
+    .infix("!:"): { args in
+      switch args[0] {
+      case .error:
+        return args[1]
+      default:
+        return args[0]
+      }
+    }
   ]
 }
 
