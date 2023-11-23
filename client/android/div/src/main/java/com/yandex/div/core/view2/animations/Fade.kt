@@ -88,7 +88,7 @@ internal class Fade(
             return null
         }
 
-        view.visibility = View.INVISIBLE
+        view.alpha = startAlpha
         return ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha).apply {
             addListener(FadeAnimatorListener(view, view.alpha))
         }
