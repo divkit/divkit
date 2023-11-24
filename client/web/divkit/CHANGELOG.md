@@ -1,4 +1,12 @@
-## 28.11.0 (ADD DATE HERE)
+## 28.12.0 (November 27, 2023)
+
+* Added `scrollbar` property support in `gallery`.
+* Fixed the text of the missing `gif_url` error. Also the `gif` component now uses `gif_url` and `image` uses `image_url`, instead of both of them consuming any of these 2 properties.
+* Removed empty `padding` attribute from html.
+* Fixed empty `image`s (and `gif`s) to load error. Note "empty image" here is an `image` with an `image_url` property equal to `empty://`.
+
+
+## 28.11.0 (November 20, 2023)
 
 * Fixed an issue with the `focus` property support in `slider` component.
 * Added `focus_element` typed action support.
