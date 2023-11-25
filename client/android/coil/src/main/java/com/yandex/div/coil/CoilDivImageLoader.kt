@@ -3,10 +3,14 @@ package com.yandex.div.coil
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.widget.ImageView
 import coil.EventListener
 import coil.ImageLoader
 import coil.decode.DataSource
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
 import coil.load
 import coil.request.ErrorResult
@@ -25,6 +29,12 @@ class CoilDivImageLoader(
     private val imageLoader = ImageLoader.Builder(context)
         .components {
             add(SvgDecoder.Factory())
+
+            if (SDK_INT >= Build.VERSION_CODES.P) {
+                add(ImageDecoderDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
         }
         .build()
 
@@ -58,7 +68,19 @@ class CoilDivImageLoader(
         imageUrl: String,
         callback: DivImageDownloadCallback
     ): LoadReference {
-        return loadImage(imageUrl, callback)
+        val imageUri = Uri.parse(imageUrl)
+
+        val request = ImageRequest.Builder(context)
+            .data(imageUri)
+            .allowHardware(false)
+            .listener(GifRequestListener(callback, imageUri))
+            .build()
+
+        val result = imageLoader.enqueue(request)
+
+        return LoadReference {
+            result.dispose()
+        }
     }
 
     private class BitmapRequestListener(
@@ -67,6 +89,19 @@ class CoilDivImageLoader(
     ): EventListener {
         override fun onSuccess(request: ImageRequest, result: SuccessResult) {
             callback.onSuccess(CachedBitmap((result.drawable as BitmapDrawable).bitmap, imageUri, result.dataSource.toBitmapSource()))
+        }
+
+        override fun onError(request: ImageRequest, result: ErrorResult) {
+            callback.onError()
+        }
+    }
+
+    private class GifRequestListener(
+        private val callback: DivImageDownloadCallback,
+        private val imageUri: Uri,
+    ): EventListener {
+        override fun onSuccess(request: ImageRequest, result: SuccessResult) {
+            callback.onSuccess(result.drawable)
         }
 
         override fun onError(request: ImageRequest, result: ErrorResult) {
