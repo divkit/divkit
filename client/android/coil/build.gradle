@@ -9,6 +9,7 @@ android {
 dependencies {
     implementation project(path: ':div')
     implementation project(path: ':div-core')
+    implementation("io.coil-kt:coil-gif:2.5.0")
 
     api "io.coil-kt:coil:2.4.0"
     api "io.coil-kt:coil-svg:2.4.0"

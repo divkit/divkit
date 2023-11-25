@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
+import android.graphics.drawable.ScaleDrawable
 import android.os.AsyncTask
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -128,6 +130,12 @@ internal class DivGifImageBinder @Inject constructor(
                         setImage(cachedBitmap.bitmap)
                         imageLoaded()
                     }
+                }
+
+                override fun onSuccess(drawable: Drawable) {
+                    super.onSuccess(drawable)
+                    setImage(drawable)
+                    imageLoaded()
                 }
 
                 override fun onError() {

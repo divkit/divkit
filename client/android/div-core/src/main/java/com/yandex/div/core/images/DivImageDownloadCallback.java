@@ -1,5 +1,7 @@
 package com.yandex.div.core.images;
 
+import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -13,6 +15,16 @@ public class DivImageDownloadCallback {
      */
     @UiThread
     public void onSuccess(@NonNull CachedBitmap cachedBitmap) {
+        // no implementation
+    }
+
+    /**
+     * Called when image is successfully loaded in a form of drawable
+     * Use when you want to draw Drawable object directly
+     * Ex.: Coil GIFs
+     */
+    @UiThread
+    public void onSuccess(@NonNull Drawable drawable) {
         // no implementation
     }
 
