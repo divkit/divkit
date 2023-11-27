@@ -7,7 +7,6 @@ import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.SynchronizedList
-import com.yandex.div.internal.util.UiThreadHandler
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -26,14 +25,10 @@ class DivVariableController(
 ) {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
-    private val declarationObservers = SynchronizedList<DeclarationObserver>(
-        ownerThread = UiThreadHandler.mainThread()
-    )
+    private val declarationObservers = SynchronizedList<(Variable) -> Unit>()
     private val declaredVariableNames = mutableSetOf<String>()
     private val pendingDeclaration = mutableSetOf<String>()
-    private val externalVariableRequestObservers = SynchronizedList<VariableRequestObserver>(
-        ownerThread = UiThreadHandler.mainThread()
-    )
+    private val externalVariableRequestObservers = SynchronizedList<(variableName: String) -> Unit>()
 
     private val requestsObserver = { variableName: String ->
         externalVariableRequestObservers.forEach { it.invoke(variableName) }
@@ -158,7 +153,7 @@ class DivVariableController(
      * Allows to track requests to defined or not yet defined variables.
      * Also subscribe on requests in internal controllers recursively.
      */
-    fun addVariableRequestObserver(observer: VariableRequestObserver) {
+    fun addVariableRequestObserver(observer: (variableName: String) -> Unit) {
         externalVariableRequestObservers.add(observer)
         internalVariableController?.addVariableRequestObserver(observer)
     }
@@ -166,7 +161,7 @@ class DivVariableController(
     /**
      * Removes observer from this instance and internal controllers recursively.
      */
-    fun removeVariableRequestObserver(observer: VariableRequestObserver) {
+    fun removeVariableRequestObserver(observer: (variableName: String) -> Unit) {
         externalVariableRequestObservers.remove(observer)
         internalVariableController?.removeVariableRequestObserver(observer)
     }
