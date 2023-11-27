@@ -11,16 +11,10 @@ object UiThreadHandler {
     private val INSTANCE = Handler(Looper.getMainLooper())
 
     /**
-     * Returns main thread instance.
-     */
-    @JvmStatic
-    fun mainThread() = Looper.getMainLooper().thread
-
-    /**
      * Returns value indicating if current thread is main thread.
      */
     @JvmStatic
-    fun isMainThread() = Thread.currentThread() == mainThread()
+    fun isMainThread() = Thread.currentThread() == Looper.getMainLooper().thread
 
     /**
      * Returns main thread handler.

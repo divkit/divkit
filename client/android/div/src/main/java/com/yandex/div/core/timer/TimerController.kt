@@ -87,12 +87,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             tickActions?.forEach { divAction ->
-                div2View?.let {
-                    val handled = it.actionHandler?.handleAction(divAction, it) ?: false
-                    if (!handled) {
-                        divActionHandler.handleAction(divAction, it)
-                    }
-                }
+                div2View?.let { divActionHandler.handleAction(divAction, it) }
             }
         }
     }
@@ -102,12 +97,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             endActions?.forEach { divAction ->
-                div2View?.let {
-                    val handled = it.actionHandler?.handleAction(divAction, it) ?: false
-                    if (!handled) {
-                        divActionHandler.handleAction(divAction, it)
-                    }
-                }
+                div2View?.let { divActionHandler.handleAction(divAction, it) }
             }
         }
     }
