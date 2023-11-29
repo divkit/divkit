@@ -1,3 +1,14 @@
+## 28.13.0
+
+# Android Client:
+* Fixed using incorrect uri scheme in Beacon.
+* Fixed broken fade animation.
+* Added the ability to set the lineHeight to be smaller than the font size.
+
+# iOS Client:
+* Supported `!:` operator.
+
+
 ## 28.12.0
 
 # Android Client:
