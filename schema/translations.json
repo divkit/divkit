@@ -47,6 +47,10 @@
     "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
     "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data)."
   },
+  "div_action_base_is_enabled": {
+    "en": "This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).",
+    "ru": "Параметр позволяет отключить экшен по каким-либо причинам. Экшен, при отключении, перестает реагировать на связанное с ним событие (клик, изменение видимости и прочее)."
+  },
   "div_action_base_log_id": {
     "en": "Logging ID.",
     "ru": "Идентификатор для логирования."
@@ -62,10 +66,6 @@
   "div_action_base_url": {
     "en": "URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).",
     "ru": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
-  },
-  "div_action_base_is_enabled": {
-    "en": "This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).",
-    "ru": "Параметр позволяет отключить экшен по каким-либо причинам. Экшен, при отключении, перестает реагировать на связанное с ним событие (клик, изменение видимости и прочее)."
   },
   "div_action_copy_to_clipboard": {
     "en": "Copies data to the clipboard.",
