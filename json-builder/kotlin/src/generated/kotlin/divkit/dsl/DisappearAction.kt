@@ -36,6 +36,7 @@ class DisappearAction internal constructor(
         Properties(
             disappearDuration = additive.disappearDuration ?: properties.disappearDuration,
             downloadCallbacks = additive.downloadCallbacks ?: properties.downloadCallbacks,
+            isEnabled = additive.isEnabled ?: properties.isEnabled,
             logId = additive.logId ?: properties.logId,
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
@@ -56,6 +57,11 @@ class DisappearAction internal constructor(
          * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
+        /**
+         * This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+         * Default value: `true`.
+         */
+        val isEnabled: Property<Boolean>?,
         /**
          * Logging ID.
          */
@@ -89,6 +95,7 @@ class DisappearAction internal constructor(
             result.putAll(properties)
             result.tryPutProperty("disappear_duration", disappearDuration)
             result.tryPutProperty("download_callbacks", downloadCallbacks)
+            result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("log_id", logId)
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
@@ -104,6 +111,7 @@ class DisappearAction internal constructor(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -116,6 +124,7 @@ fun DivScope.disappearAction(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -127,6 +136,7 @@ fun DivScope.disappearAction(
     DisappearAction.Properties(
         disappearDuration = valueOrNull(disappearDuration),
         downloadCallbacks = valueOrNull(downloadCallbacks),
+        isEnabled = valueOrNull(isEnabled),
         logId = valueOrNull(logId),
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
@@ -140,6 +150,7 @@ fun DivScope.disappearAction(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -152,6 +163,7 @@ fun DivScope.disappearActionProps(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -162,6 +174,7 @@ fun DivScope.disappearActionProps(
 ) = DisappearAction.Properties(
     disappearDuration = valueOrNull(disappearDuration),
     downloadCallbacks = valueOrNull(downloadCallbacks),
+    isEnabled = valueOrNull(isEnabled),
     logId = valueOrNull(logId),
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
@@ -174,6 +187,7 @@ fun DivScope.disappearActionProps(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -186,6 +200,7 @@ fun TemplateScope.disappearActionRefs(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: ReferenceProperty<Int>? = null,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
@@ -196,6 +211,7 @@ fun TemplateScope.disappearActionRefs(
 ) = DisappearAction.Properties(
     disappearDuration = disappearDuration,
     downloadCallbacks = downloadCallbacks,
+    isEnabled = isEnabled,
     logId = logId,
     logLimit = logLimit,
     payload = payload,
@@ -208,6 +224,7 @@ fun TemplateScope.disappearActionRefs(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -220,6 +237,7 @@ fun DisappearAction.override(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: Int? = null,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -231,6 +249,7 @@ fun DisappearAction.override(
     DisappearAction.Properties(
         disappearDuration = valueOrNull(disappearDuration) ?: properties.disappearDuration,
         downloadCallbacks = valueOrNull(downloadCallbacks) ?: properties.downloadCallbacks,
+        isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         logId = valueOrNull(logId) ?: properties.logId,
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
@@ -244,6 +263,7 @@ fun DisappearAction.override(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -256,6 +276,7 @@ fun DisappearAction.defer(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: ReferenceProperty<Int>? = null,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
@@ -267,6 +288,7 @@ fun DisappearAction.defer(
     DisappearAction.Properties(
         disappearDuration = disappearDuration ?: properties.disappearDuration,
         downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = logId ?: properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
@@ -279,6 +301,7 @@ fun DisappearAction.defer(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
@@ -288,6 +311,7 @@ fun DisappearAction.defer(
 fun DisappearAction.evaluate(
     `use named arguments`: Guard = Guard.instance,
     disappearDuration: ExpressionProperty<Int>? = null,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
     url: ExpressionProperty<Url>? = null,
@@ -296,6 +320,7 @@ fun DisappearAction.evaluate(
     DisappearAction.Properties(
         disappearDuration = disappearDuration ?: properties.disappearDuration,
         downloadCallbacks = properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,

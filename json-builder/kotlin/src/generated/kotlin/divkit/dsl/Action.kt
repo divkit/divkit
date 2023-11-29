@@ -35,6 +35,7 @@ class Action internal constructor(
     operator fun plus(additive: Properties): Action = Action(
         Properties(
             downloadCallbacks = additive.downloadCallbacks ?: properties.downloadCallbacks,
+            isEnabled = additive.isEnabled ?: properties.isEnabled,
             logId = additive.logId ?: properties.logId,
             logUrl = additive.logUrl ?: properties.logUrl,
             menuItems = additive.menuItems ?: properties.menuItems,
@@ -51,6 +52,11 @@ class Action internal constructor(
          * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
+        /**
+         * This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+         * Default value: `true`.
+         */
+        val isEnabled: Property<Boolean>?,
         /**
          * Logging ID.
          */
@@ -85,6 +91,7 @@ class Action internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("download_callbacks", downloadCallbacks)
+            result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("log_id", logId)
             result.tryPutProperty("log_url", logUrl)
             result.tryPutProperty("menu_items", menuItems)
@@ -155,6 +162,7 @@ class Action internal constructor(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param menuItems Context menu.
@@ -167,6 +175,7 @@ class Action internal constructor(
 fun DivScope.action(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logUrl: Url? = null,
     menuItems: List<Action.MenuItem>? = null,
@@ -178,6 +187,7 @@ fun DivScope.action(
 ): Action = Action(
     Action.Properties(
         downloadCallbacks = valueOrNull(downloadCallbacks),
+        isEnabled = valueOrNull(isEnabled),
         logId = valueOrNull(logId),
         logUrl = valueOrNull(logUrl),
         menuItems = valueOrNull(menuItems),
@@ -191,6 +201,7 @@ fun DivScope.action(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param menuItems Context menu.
@@ -203,6 +214,7 @@ fun DivScope.action(
 fun DivScope.actionProps(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logUrl: Url? = null,
     menuItems: List<Action.MenuItem>? = null,
@@ -213,6 +225,7 @@ fun DivScope.actionProps(
     url: Url? = null,
 ) = Action.Properties(
     downloadCallbacks = valueOrNull(downloadCallbacks),
+    isEnabled = valueOrNull(isEnabled),
     logId = valueOrNull(logId),
     logUrl = valueOrNull(logUrl),
     menuItems = valueOrNull(menuItems),
@@ -225,6 +238,7 @@ fun DivScope.actionProps(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param menuItems Context menu.
@@ -237,6 +251,7 @@ fun DivScope.actionProps(
 fun TemplateScope.actionRefs(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logUrl: ReferenceProperty<Url>? = null,
     menuItems: ReferenceProperty<List<Action.MenuItem>>? = null,
@@ -247,6 +262,7 @@ fun TemplateScope.actionRefs(
     url: ReferenceProperty<Url>? = null,
 ) = Action.Properties(
     downloadCallbacks = downloadCallbacks,
+    isEnabled = isEnabled,
     logId = logId,
     logUrl = logUrl,
     menuItems = menuItems,
@@ -259,6 +275,7 @@ fun TemplateScope.actionRefs(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param menuItems Context menu.
@@ -271,6 +288,7 @@ fun TemplateScope.actionRefs(
 fun Action.override(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logUrl: Url? = null,
     menuItems: List<Action.MenuItem>? = null,
@@ -282,6 +300,7 @@ fun Action.override(
 ): Action = Action(
     Action.Properties(
         downloadCallbacks = valueOrNull(downloadCallbacks) ?: properties.downloadCallbacks,
+        isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         logId = valueOrNull(logId) ?: properties.logId,
         logUrl = valueOrNull(logUrl) ?: properties.logUrl,
         menuItems = valueOrNull(menuItems) ?: properties.menuItems,
@@ -295,6 +314,7 @@ fun Action.override(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param menuItems Context menu.
@@ -307,6 +327,7 @@ fun Action.override(
 fun Action.defer(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logUrl: ReferenceProperty<Url>? = null,
     menuItems: ReferenceProperty<List<Action.MenuItem>>? = null,
@@ -318,6 +339,7 @@ fun Action.defer(
 ): Action = Action(
     Action.Properties(
         downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = logId ?: properties.logId,
         logUrl = logUrl ?: properties.logUrl,
         menuItems = menuItems ?: properties.menuItems,
@@ -330,6 +352,7 @@ fun Action.defer(
 )
 
 /**
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logUrl URL for logging.
  * @param referer Referer URL for logging.
  * @param target The tab in which the URL must be opened.
@@ -338,6 +361,7 @@ fun Action.defer(
 @Generated
 fun Action.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     logUrl: ExpressionProperty<Url>? = null,
     referer: ExpressionProperty<Url>? = null,
     target: ExpressionProperty<Action.Target>? = null,
@@ -345,6 +369,7 @@ fun Action.evaluate(
 ): Action = Action(
     Action.Properties(
         downloadCallbacks = properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = properties.logId,
         logUrl = logUrl ?: properties.logUrl,
         menuItems = properties.menuItems,
