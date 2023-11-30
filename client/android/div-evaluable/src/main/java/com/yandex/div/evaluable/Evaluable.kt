@@ -90,6 +90,17 @@ abstract class Evaluable(val rawExpr: String) {
         }
     }
 
+    internal data class Try(
+        val token: Token.Operator.Try,
+        val tryExpression: Evaluable,
+        val fallbackExpression: Evaluable,
+        val rawExpression: String,
+    ) : Evaluable(rawExpression) {
+        override val variables: List<String> = tryExpression.variables + fallbackExpression.variables
+        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalTry(this)
+        override fun toString() = "($tryExpression $token $fallbackExpression)"
+    }
+
     internal data class FunctionCall(
         val token: Token.Function,
         val arguments: List<Evaluable>,

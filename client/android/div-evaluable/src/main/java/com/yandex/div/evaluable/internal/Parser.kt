@@ -7,7 +7,8 @@ import com.yandex.div.evaluable.EvaluableException
  *  Converts tokens to expression using this Mantras:
  *
  *  The Mantra of Expression
- *  expression -> or ( "?" expression ":" expression )?
+ *  expression -> try ( "?" expression ":" expression )?
+ *  try -> or ( "!:" expression )?
  *  or -> and ( "||" and )*
  *  and -> equal ( "&&" equal )*
  *  equal -> comparison ( ( "!=" | "==" ) comparison )*
@@ -48,7 +49,7 @@ internal object Parser {
     }
 
     private fun expression(state: ParsingState): Evaluable {
-        val first = or(state)
+        val first = `try`(state)
         if (state.isNotAtEnd() && state.currentToken() is Token.Operator.TernaryIf) {
             state.forward()
             val second = expression(state)
@@ -58,6 +59,16 @@ internal object Parser {
             state.forward()
             val third = expression(state)
             return Evaluable.Ternary(Token.Operator.TernaryIfElse, first, second, third, state.rawExpr)
+        }
+        return first
+    }
+
+    private fun `try`(state: ParsingState): Evaluable {
+        val first = or(state)
+        if (state.isNotAtEnd() && state.currentToken() is Token.Operator.Try) {
+            val token = state.next()
+            val second = expression(state)
+            return Evaluable.Try(token as Token.Operator.Try, first, second, state.rawExpr)
         }
         return first
     }

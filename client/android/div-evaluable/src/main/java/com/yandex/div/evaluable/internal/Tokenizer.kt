@@ -220,6 +220,10 @@ internal object Tokenizer {
                             tokens.add(Token.Operator.Binary.Equality.NotEqual)
                             state.forward(2)
                         }
+                        state.nextChar() == ':' -> {
+                            tokens.add(Token.Operator.Try)
+                            state.forward(2)
+                        }
                         isUnaryOperator(tokens) -> {
                             tokens.add(Token.Operator.Unary.Not)
                             state.forward()

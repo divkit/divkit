@@ -160,6 +160,18 @@ class Evaluator(private val evaluationContext: EvaluationContext) {
         }
     }
 
+    internal fun evalTry(tryEvaluable: Evaluable.Try): Any {
+        return runCatching {
+            eval<Any>(tryEvaluable.tryExpression).also {
+                tryEvaluable.updateIsCacheable(tryEvaluable.tryExpression.checkIsCacheable())
+            }
+        }.getOrElse {
+            eval<Any>(tryEvaluable.fallbackExpression).also {
+                tryEvaluable.updateIsCacheable(tryEvaluable.fallbackExpression.checkIsCacheable())
+            }
+        }
+    }
+
     internal fun evalFunctionCall(functionCall: Evaluable.FunctionCall): Any {
         val arguments = mutableListOf<Any>()
         for (arg in functionCall.arguments) {

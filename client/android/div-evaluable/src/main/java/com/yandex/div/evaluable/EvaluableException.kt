@@ -28,7 +28,7 @@ class TokenizingException(
 class MissingVariableException(
     val variableName: String,
     cause: Exception? = null
-) : EvaluableException("Variable '${variableName}' is missing", cause)
+) : EvaluableException("Variable '${variableName}' is missing.", cause)
 
 class IntegerOverflow(
         val expression: String,
