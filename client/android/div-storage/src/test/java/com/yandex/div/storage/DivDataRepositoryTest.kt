@@ -181,7 +181,7 @@ class DivDataRepositoryTest {
 
     private fun verifyCardStructure(divData: DivData) {
         val divContainer = divData.states.first().div as Div.Container
-        val divText = divContainer.value.items.first() as Div.Text
+        val divText = divContainer.value.items!!.first() as Div.Text
         Assert.assertEquals("some text",
                 divText.value.text.evaluate(ExpressionResolver.EMPTY))
     }

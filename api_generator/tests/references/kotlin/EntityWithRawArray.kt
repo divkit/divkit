@@ -18,12 +18,12 @@ import org.json.JSONArray
 
 @Mockable
 class EntityWithRawArray(
-    @JvmField final val array: JSONArray,
+    @JvmField final val array: Expression<JSONArray>,
 ) : JSONSerializable {
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.write(key = "array", value = array)
+        json.writeExpression(key = "array", value = array)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -36,7 +36,7 @@ class EntityWithRawArray(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithRawArray {
             val logger = env.logger
             return EntityWithRawArray(
-                array = JsonParser.read(json, "array", logger, env)
+                array = JsonParser.readExpression(json, "array", logger, env, TYPE_HELPER_JSON_ARRAY)
             )
         }
 

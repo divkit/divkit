@@ -6,10 +6,14 @@ import Serialization
 
 public final class EntityWithRawArray {
   public static let type: String = "entity_with_raw_array"
-  public let array: [Any]
+  public let array: Expression<[Any]>
+
+  public func resolveArray(_ resolver: ExpressionResolver) -> [Any]? {
+    resolver.resolveArrayValue(expression: array)
+  }
 
   init(
-    array: [Any]
+    array: Expression<[Any]>
   ) {
     self.array = array
   }

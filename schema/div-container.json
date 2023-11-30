@@ -34,6 +34,16 @@
       "properties_to_patch": [
         "items"
       ]
+    },
+    "typescript": {
+      "union_interfaces": [
+         {
+           "required_params": [ "items" ]
+         },
+         {
+           "required_params": [ "item_builder" ]
+         }
+      ]
     }
   },
   "definitions": {
@@ -126,8 +136,12 @@
           "items": {
             "$ref": "div.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_container_items"
+        },
+        "item_builder": {
+          "$ref": "div-collection-item-builder.json",
+          "$description": "translations.json#/div_collection_item_builder",
+          "platforms": []
         },
         "aspect": {
           "$ref": "div-aspect.json",
@@ -137,7 +151,6 @@
     }
   ],
   "required": [
-    "type",
-    "items"
+    "type"
   ]
 }

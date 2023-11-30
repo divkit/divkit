@@ -783,7 +783,7 @@ def default_value(lang: GeneratedLanguage,
 class PropertyType(ABC):
     @property
     def supports_expressions(self) -> bool:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url, RawArray)):
             return True
         elif isinstance(self, (Dictionary, StaticString)):
             return False
@@ -891,6 +891,7 @@ class Dictionary(PropertyType):
 
 @dataclass
 class RawArray(PropertyType):
+    min_items: int
     pass
 
 
@@ -965,6 +966,7 @@ class TypeScriptGeneratorProperties(GeneratorProperties):
     ):
         super().__init__(general_properties, lang, mode)
         self.templatable: bool = specific_properties.get('templatable', True)
+        self.union_interfaces = specific_properties.get('union_interfaces')
 
 
 class SwiftGeneratorProperties(GeneratorProperties):
