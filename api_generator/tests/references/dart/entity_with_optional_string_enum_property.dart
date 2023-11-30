@@ -36,6 +36,32 @@ enum EntityWithOptionalStringEnumPropertyProperty {
 
   const EntityWithOptionalStringEnumPropertyProperty(this.value);
 
+  T map<T>({
+    required T Function() first,
+    required T Function() second,
+  }) {
+    switch (this) {
+      case EntityWithOptionalStringEnumPropertyProperty.first:
+        return first();
+      case EntityWithOptionalStringEnumPropertyProperty.second:
+        return second();
+     }
+  }
+
+  T maybeMap<T>({
+    T Function()? first,
+    T Function()? second,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case EntityWithOptionalStringEnumPropertyProperty.first:
+        return first?.call() ?? orElse();
+      case EntityWithOptionalStringEnumPropertyProperty.second:
+        return second?.call() ?? orElse();
+     }
+  }
+
+
   static EntityWithOptionalStringEnumPropertyProperty? fromJson(String? json) {
     if (json == null) {
       return null;

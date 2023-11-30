@@ -183,11 +183,11 @@ class DartProperty(Property):
         elif isinstance(property_type, (Bool, BoolInt)):
             return f"safeParseBool(json['{self.name}']){required_cast}"
         elif isinstance(property_type, (String, StaticString)):
-            return f"json['{self.name}']{required_cast}"
+            return f"json['{self.name}']{required_cast}{'?' if self.optional else ''}.toString()"
         elif isinstance(property_type, Dictionary):
             return f"json{required_cast}"
         elif isinstance(property_type, RawArray):
-            return f"json{required_cast}"
+            return f"json['{self.name}']{required_cast}"
         elif isinstance(property_type, Url):
             return f"safeParseUri(json['{self.name}']){required_cast}"
         elif property_type.is_class():

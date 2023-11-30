@@ -46,7 +46,7 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyWithDefaultValueProperty(
-      value: json['value']!,
+      value: json['value']!.toString(),
     );
   }
 }

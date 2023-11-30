@@ -36,6 +36,32 @@ enum EntityWithArrayOfEnumsItem {
 
   const EntityWithArrayOfEnumsItem(this.value);
 
+  T map<T>({
+    required T Function() first,
+    required T Function() second,
+  }) {
+    switch (this) {
+      case EntityWithArrayOfEnumsItem.first:
+        return first();
+      case EntityWithArrayOfEnumsItem.second:
+        return second();
+     }
+  }
+
+  T maybeMap<T>({
+    T Function()? first,
+    T Function()? second,
+    required T Function() orElse,
+  }) {
+    switch (this) {
+      case EntityWithArrayOfEnumsItem.first:
+        return first?.call() ?? orElse();
+      case EntityWithArrayOfEnumsItem.second:
+        return second?.call() ?? orElse();
+     }
+  }
+
+
   static EntityWithArrayOfEnumsItem? fromJson(String? json) {
     if (json == null) {
       return null;

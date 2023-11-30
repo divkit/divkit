@@ -62,7 +62,7 @@ class EntityWithSimpleProperties with EquatableMixin {
       id: safeParseInt(json['id']) ?? 0,
       integer: safeParseInt(json['integer']) ?? 0,
       positiveInteger: safeParseInt(json['positive_integer']),
-      string: json['string'],
+      string: json['string']?.toString(),
       url: safeParseUri(json['url']),
     );
   }

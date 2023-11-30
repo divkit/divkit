@@ -197,39 +197,39 @@ class DartGenerator(Generator):
         result += '  }'
         result += EMPTY
 
-        result += '  void map(' + '{'
+        result += '  T map<T>(' + '{'
         for n in sorted(entity_enumeration.entity_names):
-            result += f'    required Function({utils.capitalize_camel_case(n)}) {utils.lower_camel_case(n)},'
+            result += f'    required T Function({utils.capitalize_camel_case(n)}) {utils.lower_camel_case(n)},'
         result += '  }) {'
         result += '    final value = _value;'
         for n in sorted(entity_enumeration.entity_names):
             result += f'    if(value is {utils.capitalize_camel_case(n)}) ' + '{'
-            result += f'      {utils.lower_camel_case(n)}(value);'
-            result += '      return;'
+            result += f'      return {utils.lower_camel_case(n)}(value);'
             result += '    }'
         result += '    throw Exception("Type ${value.runtimeType.toString()}' + f' is not generalized in {full_name}");'
         result += '  }'
         result += EMPTY
 
-        result += '  void maybeMap({'
+        result += '  T maybeMap<T>({'
         for n in sorted(entity_enumeration.entity_names):
-            result += f'    Function({utils.capitalize_camel_case(n)})? {utils.lower_camel_case(n)},'
-        result += '    required Function() orElse,'
+            result += f'    T Function({utils.capitalize_camel_case(n)})? {utils.lower_camel_case(n)},'
+        result += '    required T Function() orElse,'
         result += '  }) {'
         result += '    final value = _value;'
         for n in sorted(entity_enumeration.entity_names):
             result += f'    if(value is {utils.capitalize_camel_case(n)} && {utils.lower_camel_case(n)} != null) ' + '{'
-            result += f'      {utils.lower_camel_case(n)}(value);'
-            result += '      return;'
+            result += f'     return {utils.lower_camel_case(n)}(value);'
             result += '    }'
-        result += '    orElse();'
+        result += '    return orElse();'
         result += '  }'
         result += EMPTY
 
         for n in sorted(entity_enumeration.entity_names):
             result += f'  const {full_name}.{utils.lower_camel_case(n)}('
             result += f'    {utils.capitalize_camel_case(n)} value,'
-            result += '  ) : _value = value;'
+            result += '  ) :'
+            result += ' _value = value;'
+
             result += EMPTY
 
         entity_len = len(entity_enumeration.entity_names)
@@ -242,8 +242,7 @@ class DartGenerator(Generator):
         result += '    switch (json[\'type\']) {'
         for i in range(entity_len):
             result += f'      case {utils.capitalize_camel_case(entity_enumeration.entity_names[i])}.type :\n' \
-                      f'        return {full_name}.{utils.lower_camel_case(entity_enumeration.entity_names[i])}' \
-                      f'({utils.capitalize_camel_case(entity_enumeration.entity_names[i])}.fromJson(json)!);'
+                      f'        return {full_name}({utils.capitalize_camel_case(entity_enumeration.entity_names[i])}.fromJson(json)!);'
         result += '    }'
         result += '    return null;'
         result += '  }'
@@ -267,6 +266,32 @@ class DartGenerator(Generator):
         result += '  final String value;'
         result += EMPTY
         result += f'  const {full_name}(this.value);'
+
+        result += EMPTY
+        result += '  T map<T>({'
+        for i in range(cases_len):
+            result += f'    required T Function() {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))},'
+        result += '  }) {'
+        result += '    switch (this) {'
+        for i in range(cases_len):
+            result += f'      case {full_name}.{allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}:'
+            result += f'        return {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}();'
+        result += '     }'
+        result += '  }'
+        result += EMPTY
+
+        result += '  T maybeMap<T>({'
+        for i in range(cases_len):
+            result += f'    T Function()? {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))},'
+        result += '    required T Function() orElse,'
+        result += '  }) {'
+        result += '    switch (this) {'
+        for i in range(cases_len):
+            result += f'      case {full_name}.{allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}:'
+            result += f'        return {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}?.call() ?? orElse();'
+        result += '     }'
+        result += '  }'
+        result += EMPTY
 
         # Serializable declaration
         result += EMPTY
