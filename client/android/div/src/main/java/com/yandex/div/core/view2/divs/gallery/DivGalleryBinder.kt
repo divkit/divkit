@@ -72,6 +72,7 @@ internal class DivGalleryBinder @Inject constructor(
             updateDecorations(view, div, divView, resolver)
         }
         view.addSubscription(div.orientation.observe(resolver, reusableObserver))
+        view.addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         view.addSubscription(div.scrollMode.observe(resolver, reusableObserver))
         view.addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
         view.addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
@@ -148,6 +149,11 @@ internal class DivGalleryBinder @Inject constructor(
         } else {
             RecyclerView.VERTICAL
         }
+
+        val scrollbarEnabled = div.scrollbar.evaluate(resolver) == DivGallery.Scrollbar.AUTO
+        view.isVerticalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.VERTICAL
+        view.isHorizontalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.HORIZONTAL
+        view.isScrollbarFadingEnabled = false
 
         val columnCount = div.columnCount?.evaluate(resolver) ?: 1
 

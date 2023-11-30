@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
@@ -22,7 +23,7 @@ import kotlin.math.ceil
 internal class DivRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = R.attr.divGalleryStyle
 ) : BackHandlingRecyclerView(context, attrs, defStyleAttr),
     DivHolderView<DivGallery> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost {

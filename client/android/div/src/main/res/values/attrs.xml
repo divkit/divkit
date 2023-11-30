@@ -3,6 +3,7 @@
 <resources>
 
     <attr name="divTextStyle" format="reference"/>
+    <attr name="divGalleryStyle" format="reference"/>
     <attr name="divImageStyle" format="reference"/>
     <attr name="divTabIndicatorLayoutStyle" format="reference"/>
 
