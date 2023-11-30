@@ -2,6 +2,7 @@ package com.yandex.div.evaluable.repl
 
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.StoredValueProvider
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
@@ -14,9 +15,11 @@ import com.yandex.div.evaluable.withEvaluator
 internal object EvaluableReplRuntime {
     private val variableProvider = VariableProvider { variableName -> variableList[variableName] }
     private val storedValueProvider = StoredValueProvider { null }
-    private val functionProvider = BuiltinFunctionProvider(
-        variableProvider,
-        storedValueProvider
+    private val evaluationContext = EvaluationContext(
+        variableProvider = variableProvider,
+        storedValueProvider = storedValueProvider,
+        functionProvider = BuiltinFunctionProvider,
+        warningSender = { _, _ -> }
     )
 
     private val variableList = mutableMapOf<String, Any?>()
@@ -60,11 +63,10 @@ internal object EvaluableReplRuntime {
     }
 
     fun evaluateExpression(expression: String) {
-        val evaluable = parseEvaluable(expression)?: return
+        val evaluable = parseEvaluable(expression) ?: return
         try {
             withEvaluator(
-                variableProvider,
-                functionProvider,
+                evaluationContext,
                 warningsValidator = { warnings ->
                     warnings.forEach { println("Warning: $it") }
                 }

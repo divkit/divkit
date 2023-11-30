@@ -1,21 +1,26 @@
 package com.yandex.div.evaluable
 
-abstract class Function(
-    open val variableProvider: VariableProvider? = null,
-    open val storedValueProvider: StoredValueProvider? = null,
-) {
+abstract class Function {
 
     abstract val name: String
     abstract val declaredArgs: List<FunctionArgument>
     abstract val resultType: EvaluableType
     abstract val isPure: Boolean
 
-    protected abstract fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any
+    protected abstract fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any
 
-    operator fun invoke(args: List<Any>, onWarning: (String) -> Unit): Any {
-        val result = evaluate(args, onWarning)
+    operator fun invoke(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val result = evaluate(evaluationContext, expressionContext, args)
         if (EvaluableType.of(result) != resultType) {
-            throw EvaluableException("Function returned ${EvaluableType.of(result)}, but  $resultType was expected")
+            throw EvaluableException("Function returned ${EvaluableType.of(result)}, but $resultType was expected")
         }
         return result
     }
@@ -63,7 +68,11 @@ abstract class Function(
             override val resultType = EvaluableType.BOOLEAN
             override val isPure = true
 
-            override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = true
+            override fun evaluate(
+                evaluationContext: EvaluationContext,
+                expressionContext: ExpressionContext,
+                args: List<Any>
+            ): Any = true
         }
     }
 

@@ -8,7 +8,7 @@ import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.Color
 
 internal abstract class ColorComponentGetter(
-        private val componentGetter: (Color) -> Int
+    private val componentGetter: (Color) -> Int
 ) : Function() {
 
     override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.COLOR))
@@ -17,7 +17,11 @@ internal abstract class ColorComponentGetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return componentGetter(args.first() as Color).toColorFloatComponentValue()
     }
 }
@@ -32,19 +36,23 @@ internal abstract class ColorStringComponentGetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val colorString = args.first() as String
         val color = try {
             Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return componentGetter.invoke(listOf(color), onWarning)
+        return componentGetter.invoke(evaluationContext, expressionContext, listOf(color))
     }
 }
 
 internal object ColorAlphaComponentGetter : ColorComponentGetter(
-        componentGetter = { color: Color -> color.alpha() }
+    componentGetter = { color: Color -> color.alpha() }
 ) {
     override val name = "getColorAlpha"
 }
@@ -62,7 +70,7 @@ internal object ColorRedComponentGetter : ColorComponentGetter(
 }
 
 internal object ColorStringRedComponentGetter : ColorStringComponentGetter(
-        componentGetter = ColorRedComponentGetter
+    componentGetter = ColorRedComponentGetter
 ) {
     override val name = "getColorRed"
 }
@@ -74,7 +82,7 @@ internal object ColorGreenComponentGetter : ColorComponentGetter(
 }
 
 internal object ColorStringGreenComponentGetter : ColorStringComponentGetter(
-        componentGetter = ColorGreenComponentGetter
+    componentGetter = ColorGreenComponentGetter
 ) {
     override val name = "getColorGreen"
 }
@@ -86,7 +94,7 @@ internal object ColorBlueComponentGetter : ColorComponentGetter(
 }
 
 internal object ColorStringBlueComponentGetter : ColorStringComponentGetter(
-        componentGetter = ColorBlueComponentGetter
+    componentGetter = ColorBlueComponentGetter
 ) {
     override val name = "getColorBlue"
 }
@@ -104,7 +112,11 @@ internal abstract class ColorComponentSetter(
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val color = args[0] as Color
         val value = args[1] as Double
         return try {
@@ -116,26 +128,30 @@ internal abstract class ColorComponentSetter(
 }
 
 internal abstract class ColorStringComponentSetter(
-        private val componentSetter: ColorComponentSetter
+    private val componentSetter: ColorComponentSetter
 ) : Function() {
 
     override val declaredArgs = listOf(
-            FunctionArgument(type = EvaluableType.STRING),
-            FunctionArgument(type = EvaluableType.NUMBER), // color component value
+        FunctionArgument(type = EvaluableType.STRING),
+        FunctionArgument(type = EvaluableType.NUMBER), // color component value
     )
 
     override val resultType = EvaluableType.COLOR
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val colorString = args[0] as String
         val color = try {
             Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return componentSetter(listOf(color, args[1]), onWarning)
+        return componentSetter(evaluationContext, expressionContext, listOf(color, args[1]))
     }
 }
 
@@ -153,7 +169,7 @@ internal object ColorAlphaComponentSetter : ColorComponentSetter(
 }
 
 internal object ColorStringAlphaComponentSetter : ColorStringComponentSetter(
-        componentSetter = ColorAlphaComponentSetter
+    componentSetter = ColorAlphaComponentSetter
 ) {
     override val name = "setColorAlpha"
 }
@@ -172,7 +188,7 @@ internal object ColorRedComponentSetter : ColorComponentSetter(
 }
 
 internal object ColorStringRedComponentSetter : ColorStringComponentSetter(
-        componentSetter = ColorRedComponentSetter
+    componentSetter = ColorRedComponentSetter
 ) {
     override val name = "setColorRed"
 }
@@ -191,7 +207,7 @@ internal object ColorGreenComponentSetter : ColorComponentSetter(
 }
 
 internal object ColorStringGreenComponentSetter : ColorStringComponentSetter(
-        componentSetter = ColorGreenComponentSetter
+    componentSetter = ColorGreenComponentSetter
 ) {
     override val name = "setColorGreen"
 }
@@ -210,7 +226,7 @@ internal object ColorBlueComponentSetter : ColorComponentSetter(
 }
 
 internal object ColorStringBlueComponentSetter : ColorStringComponentSetter(
-        componentSetter = ColorBlueComponentSetter
+    componentSetter = ColorBlueComponentSetter
 ) {
     override val name = "setColorBlue"
 }
@@ -230,7 +246,11 @@ internal object ColorArgb : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return try {
             val alpha = (args[0] as Double).toColorIntComponentValue()
             val red = (args[1] as Double).toColorIntComponentValue()
@@ -257,7 +277,11 @@ internal object ColorRgb : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return try {
             val red = (args[0] as Double).toColorIntComponentValue()
             val green = (args[1] as Double).toColorIntComponentValue()

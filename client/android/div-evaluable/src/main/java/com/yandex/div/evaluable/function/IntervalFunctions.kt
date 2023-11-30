@@ -2,6 +2,8 @@ package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 
@@ -23,7 +25,11 @@ internal object GetIntervalSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -45,7 +51,11 @@ internal object GetIntervalTotalSeconds : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -67,7 +77,11 @@ internal object GetIntervalMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -89,7 +103,11 @@ internal object GetIntervalTotalMinutes : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -111,7 +129,11 @@ internal object GetIntervalHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -133,7 +155,11 @@ internal object GetIntervalTotalHours : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -155,7 +181,11 @@ internal object GetIntervalTotalDays : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
@@ -177,7 +207,11 @@ internal object GetIntervalTotalWeeks : Function() {
     override val isPure = true
 
     @Throws(EvaluableException::class)
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val duration = args[0] as Long
 
         if (duration < 0) {
