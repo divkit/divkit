@@ -4,6 +4,7 @@
         "languageChooser": "Выбранный язык",
         "playground": "Веб песочница",
         "samples": "Примеры",
+        "design": "Визуальный редактор",
         "share": "Поделиться",
         "components": "Компоненты: ",
         "timeToRender": "Время на отрисовку: ",
@@ -32,13 +33,17 @@
         "webSupportWarning": "Данный пример содержит функционал, который не поддержан в реализации для Веба. Он может отличаться от нативных платформ.",
         "collapse": "Свернуть",
         "expand": "Развернуть",
-        "selectComponent": "Выбрать компонент"
+        "selectComponent": "Выбрать компонент",
+        "designComponents": "Компоненты",
+        "designPalette": "Палитра",
+        "designVariables": "Переменные"
     },
     "en": {
         "name": "Eng",
         "languageChooser": "Selected language",
         "playground": "Web playground",
         "samples": "Samples",
+        "design": "Visual editor",
         "share": "Share",
         "components": "Components: ",
         "timeToRender": "Time to render: ",
@@ -67,6 +72,9 @@
         "webSupportWarning": "This sample contains functionality that is not supported in the implementation for the Web. It may differ from native platforms.",
         "collapse": "Collapse",
         "expand": "Expand",
-        "selectComponent": "Select component"
+        "selectComponent": "Select component",
+        "designComponents": "Components",
+        "designPalette": "Palette",
+        "designVariables": "Variables"
     }
 }

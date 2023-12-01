@@ -17,7 +17,7 @@
     if (langVal !== 'ru' && langVal !== 'en') {
         langVal = 'en';
     }
-    let lang = writable(langVal);
+    let lang = writable<'ru' | 'en'>(langVal as 'ru' | 'en');
     const l10n = derived(lang, lang => {
         return (key: keyof typeof langObj['en'], overrideLang?: string) =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +36,7 @@
         getLanguage(): string {
             return get(lang);
         },
-        setLanguage(name: string): void {
+        setLanguage(name: 'ru' | 'en'): void {
             lang.set(name);
         },
         l10n,

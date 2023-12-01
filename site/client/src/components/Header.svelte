@@ -64,6 +64,11 @@
                         {$l10n('samples')}
                     </a>
                 </li>
+                <li class="header__subnav-item">
+                    <a class="header__subnav-link" href="/playground?design=1">
+                        {$l10n('design')}
+                    </a>
+                </li>
             </ul>
         </div>
 

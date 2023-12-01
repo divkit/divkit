@@ -1,49 +1,82 @@
 <script lang="ts" context="module">
-    import * as monaco from 'monaco-editor';
+    import { urlPath } from '../utils/const';
+    import type * as monaco from 'monaco-editor';
     import tsBuilderTypes from '../../artifacts/jsonbuilder.d.ts?inline';
 
-    const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
-    const tsModelUri = monaco.Uri.parse('file:///main.tsx');
+    let monacoPromose: Promise<{
+        monaco: typeof import('monaco-editor');
+        jsonModelUri: monaco.Uri;
+        tsModelUri: monaco.Uri;
+    }> | undefined;
+    export function loadMonaco() {
+        if (monacoPromose) {
+            return monacoPromose;
+        }
 
-    const schemas = require.context('../../../../schema/', false, /\.json$/);
-    let schema = schemas.keys().map((key: string) => {
-        const filename = key.replace(/^\.\//, '');
+        monacoPromose = import('monaco-editor').then(monaco => {
+            const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
+            const tsModelUri = monaco.Uri.parse('file:///main.tsx');
 
-        return {
-            uri: 'schema://div2/' + filename,
-            fileMatch: [] as string [],
-            schema: schemas(key)
-        };
-    });
+            const schemas = require.context('../../../../schema/', false, /\.json$/);
+            let schema = schemas.keys().map((key: string) => {
+                const filename = key.replace(/^\.\//, '');
 
-    schema.push({
-        uri: 'schema://div2/root.json',
-        fileMatch: [jsonModelUri.toString()],
-        schema: require('../schema/root.json')
-    });
+                return {
+                    uri: 'schema://div2/' + filename,
+                    fileMatch: [] as string [],
+                    schema: schemas(key)
+                };
+            });
 
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-        validate: true,
-        schemas: schema,
-        allowComments: false
-    });
+            schema.push({
+                uri: 'schema://div2/root.json',
+                fileMatch: [jsonModelUri.toString()],
+                schema: require('../schema/root.json')
+            });
 
-    // validation settings
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: true,
-        noSyntaxValidation: false
-    });
+            monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+                validate: true,
+                schemas: schema,
+                allowComments: false
+            });
 
-    // compiler options
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-        target: monaco.languages.typescript.ScriptTarget.ES2015,
-        allowNonTsExtensions: true
-    });
+            // validation settings
+            monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+                noSemanticValidation: true,
+                noSyntaxValidation: false
+            });
 
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        `declare module '@divkitframework/jsonbuilder' {${tsBuilderTypes}}`,
-        '@types/divcard2/index.d.ts'
-    );
+            // compiler options
+            monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+                target: monaco.languages.typescript.ScriptTarget.ES2015,
+                allowNonTsExtensions: true
+            });
+
+            monaco.languages.typescript.typescriptDefaults.addExtraLib(
+                `declare module '@divkitframework/jsonbuilder' {${tsBuilderTypes}}`,
+                '@types/divcard2/index.d.ts'
+            );
+
+            window.MonacoEnvironment = {
+                getWorkerUrl(_moduleId: string, label: string) {
+                    if (label === 'json') {
+                        return urlPath + '/json.worker.js';
+                    } else if (label === 'typescript') {
+                        return urlPath + '/typescript.worker.js';
+                    }
+                    return urlPath + '/editor.worker.js';
+                }
+            };
+
+            return {
+                monaco,
+                jsonModelUri,
+                tsModelUri,
+            };
+        });
+
+        return monacoPromose;
+    }
 </script>
 
 <script lang="ts">
@@ -52,7 +85,7 @@
     import { codeRunStore, valueStore } from '../data/valueStore';
     import PanelHeader from './PanelHeader.svelte';
     import Select from './Select.svelte';
-    import { urlPath, serverHostPath } from '../utils/const';
+    import { serverHostPath } from '../utils/const';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import { runCode as runCodeShortcut } from '../utils/shortcuts';
     import { jsonStore } from '../data/jsonStore';
@@ -61,17 +94,6 @@
     import { show } from './PointingPopup.svelte';
     import type { ShortcutList } from '../utils/useShortcuts';
     import { shortcuts } from '../utils/useShortcuts';
-
-    window.MonacoEnvironment = {
-        getWorkerUrl(_moduleId: string, label: string) {
-            if (label === 'json') {
-                return urlPath + '/json.worker.js';
-            } else if (label === 'typescript') {
-                return urlPath + '/typescript.worker.js';
-            }
-            return urlPath + '/editor.worker.js';
-        }
-    };
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -89,35 +111,6 @@
     let currentLanguage: Language = 'json';
     let isRunning = false;
     let runButton: HTMLElement;
-
-    valueStore.subscribe(val => {
-        if (editor && editor.getValue() !== val) {
-            editor.setValue(val);
-        }
-    });
-
-    function getModel(type: 'ts' | 'json' | null): monaco.editor.ITextModel {
-        if (type === 'json') {
-            const model = monaco.editor.getModel(jsonModelUri) ||
-                monaco.editor.createModel($valueStore, 'json', jsonModelUri);
-            model.setValue($valueStore);
-            return model;
-        } else {
-            const model = monaco.editor.getModel(tsModelUri) ||
-                monaco.editor.createModel($valueStore, 'typescript', tsModelUri);
-            model.setValue($valueStore);
-            return model;
-        }
-    }
-
-    editorMode.subscribe(val => {
-        if (val) {
-            if (editor) {
-                editor.setModel(getModel(val));
-            }
-            currentLanguage = val;
-        }
-    });
 
     function onLanguageChange(): void {
         if (currentLanguage === $editorMode) {
@@ -182,16 +175,52 @@
             });
     }
 
-    onMount(() => {
+    onMount(async() => {
+        const { monaco, jsonModelUri, tsModelUri } = await loadMonaco();
+
+        function getModel(type: 'ts' | 'json' | null): monaco.editor.ITextModel {
+            if (type === 'json') {
+                const model = monaco.editor.getModel(jsonModelUri) ||
+                    monaco.editor.createModel($valueStore, 'json', jsonModelUri);
+                model.setValue($valueStore);
+                return model;
+            } else {
+                const model = monaco.editor.getModel(tsModelUri) ||
+                    monaco.editor.createModel($valueStore, 'typescript', tsModelUri);
+                model.setValue($valueStore);
+                return model;
+            }
+        }
+
+        valueStore.subscribe(val => {
+            if (editor && editor.getValue() !== val) {
+                editor.setValue(val);
+            }
+        });
+
+        editorMode.subscribe(val => {
+            if (val) {
+                if (editor) {
+                    editor.setModel(getModel(val));
+                }
+                currentLanguage = val;
+            }
+        });
+
         const opts: monaco.editor.IStandaloneEditorConstructionOptions = {
             theme: 'vs',
             minimap: {
                 enabled: false
             },
             automaticLayout: true,
-            wordWrap: 'on',
+            wordWrap: 'off',
             scrollBeyondLastLine: false,
-            model: getModel($editorMode)
+            model: getModel($editorMode),
+            bracketPairColorization: {
+                enabled: true,
+                independentColorPoolPerBracketType: true
+            },
+            smoothScrolling: true
         };
 
         editor = monaco.editor.create(node, opts);
