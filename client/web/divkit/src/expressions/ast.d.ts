@@ -2,7 +2,7 @@ export type Node = BinaryExpression | LogicalExpression |
     UnaryExpression |
     StringLiteral | NumberLiteral | IntegerLiteral | BooleanLiteral |
     TemplateLiteral |
-    ConditionalExpression |
+    ConditionalExpression | TryExpression |
     CallExpression |
     Variable;
 
@@ -62,6 +62,12 @@ export interface ConditionalExpression {
     type: 'ConditionalExpression';
     test: Node;
     consequent: Node;
+    alternate: Node;
+}
+
+export interface TryExpression {
+    type: 'TryExpression';
+    test: Node;
     alternate: Node;
 }
 

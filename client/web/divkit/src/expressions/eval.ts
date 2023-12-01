@@ -6,6 +6,7 @@ import type {
     LogicalExpression,
     Node, NumberLiteral, StringLiteral, SumOperator,
     TemplateLiteral,
+    TryExpression,
     UnaryExpression, Variable
 } from './ast';
 import type { WrappedError } from '../utils/wrapError';
@@ -181,6 +182,14 @@ function evalConditional(ctx: EvalContext, expr: ConditionalExpression): EvalVal
             `${valToPreview(test)} ? ${valToPreview(evalAny(ctx, expr.consequent))} : ${valToPreview(evalAny(ctx, expr.alternate))}`,
             'Ternary must be called with a Boolean value as a condition.'
         );
+    }
+}
+
+function evalTry(ctx: EvalContext, expr: TryExpression): EvalValue {
+    try {
+        return evalAny(ctx, expr.test);
+    } catch (_err) {
+        return evalAny(ctx, expr.alternate);
     }
 }
 
@@ -468,6 +477,7 @@ const EVAL_MAP = {
     BooleanLiteral: evalBooleanLiteral,
     UnaryExpression: evalUnary,
     ConditionalExpression: evalConditional,
+    TryExpression: evalTry,
     TemplateLiteral: evalTemplateLiteral,
     LogicalExpression: evalLogicalExpression,
     BinaryExpression: evalBinaryExpression,
@@ -482,22 +492,6 @@ export function evalAny(ctx: EvalContext, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
-function checkVariables(ctx: EvalContext, expr: Node): void {
-    let unknownVariableName = '';
-
-    walk(expr, {
-        Variable(node) {
-            if (!unknownVariableName && !ctx.variables.has(node.id.name)) {
-                unknownVariableName = node.id.name;
-            }
-        }
-    });
-
-    if (unknownVariableName) {
-        throw new Error(`Variable '${unknownVariableName}' is missing.`);
-    }
-}
-
 export function evalExpression(vars: VariablesMap, expr: Node): {
     result: EvalResult;
     warnings: WrappedError[];
@@ -509,7 +503,6 @@ export function evalExpression(vars: VariablesMap, expr: Node): {
             safeIntegerOverflow: false
         };
 
-        checkVariables(ctx, expr);
         const result = evalAny(ctx, expr);
 
         if (ctx.safeIntegerOverflow) {

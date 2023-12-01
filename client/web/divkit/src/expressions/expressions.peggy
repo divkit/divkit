@@ -91,8 +91,13 @@ JsonStringChar
     / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Expression
-    = expr:Or _ '?' _ first:Expression _ ':' _ second:Expression
+    = expr:Try _ '?' _ first:Expression _ ':' _ second:Expression
         { return {type: 'ConditionalExpression', test: expr, consequent: first, alternate: second}; }
+    / Try
+
+Try
+    = expr:Or _ '!:' _ second:Expression
+        { return {type: 'TryExpression', test: expr, alternate: second}; }
     / Or
 
 Or
