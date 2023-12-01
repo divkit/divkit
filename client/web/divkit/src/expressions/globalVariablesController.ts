@@ -44,6 +44,12 @@ export class GlobalVariablesController {
 
         return vars.get(variableName);
     }
+
+    list(): IterableIterator<Variable> {
+        const vars = getControllerVars(this);
+
+        return vars.values();
+    }
 }
 
 export function createGlobalVariablesController() {
