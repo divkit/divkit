@@ -35,13 +35,13 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
 import com.yandex.div.state.DivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivAnimation
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivState
 import javax.inject.Inject
 import javax.inject.Provider
@@ -174,7 +174,14 @@ internal class DivStateBinder @Inject constructor(
 
         // applying div patch
         if (childDivId != null) {
-            val patchView = divPatchManager.createViewsForId(divView, childDivId)?.firstOrNull()
+            val patchView = divPatchManager.createViewsForId(divView, childDivId)?.let { views ->
+                if (views.size > 1) {
+                    KLog.e(TAG) { "Unable to patch state because there is more than 1 div in the patch" }
+                    null
+                } else {
+                    views.firstOrNull()
+                }
+            }
             val patchDiv = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)?.firstOrNull()
             if (patchView != null && patchDiv != null) {
                 layout.releaseAndRemoveChildren(divView)
@@ -372,6 +379,10 @@ internal class DivStateBinder @Inject constructor(
             return transition
         }
         return null
+    }
+
+    private companion object {
+        const val TAG = "DivStateBinder"
     }
 }
 

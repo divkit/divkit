@@ -1,0 +1,57 @@
+{
+  "templates": {
+    "patch_card": {
+      "type": "container",
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 76
+      },
+      "width": {
+        "type": "match_parent",
+        "weight": 2
+      },
+      "background": [
+        {
+          "color": "#FF0000",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 6,
+        "stroke": {
+          "color": "#E5E5E5"
+        }
+      },
+      "orientation": "horizontal",
+      "items": [
+        {
+          "type": "text",
+          "max_lines": 3,
+          "font_size": 14,
+          "line_height": 18,
+          "margins": {
+            "top": 9,
+            "left": 8
+          },
+          "font_weight": "medium",
+          "$text": "alert_text"
+        }
+      ]
+    }
+  },
+  "patch": {
+    "mode": "transactional",
+    "changes": [
+      {
+        "id": "tab1",
+        "items": [
+          {
+            "type": "patch_card",
+            "alert_text": "1 item from patch"
+          }
+        ]
+      }
+    ]
+  }
+}
