@@ -82,6 +82,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun initSettings() {
+        setPreferenceState(COMPLEX_REBIND, Experiment.COMPLEX_REBIND_ENABLED)
         setPreferenceState(DIV2_VIEW_POOL, Experiment.VIEW_POOL_ENABLED)
         setPreferenceState(DIV2_VIEW_POOL_PROFILING, Experiment.VIEW_POOL_PROFILING_ENABLED)
         setPreferenceState(DIV2_MULTIPLE_STATE_CHANGE, Experiment.MULTIPLE_STATE_CHANGE_ENABLED)

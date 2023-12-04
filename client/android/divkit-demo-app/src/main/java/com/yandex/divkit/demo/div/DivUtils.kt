@@ -57,6 +57,9 @@ fun divConfiguration(
         .enableMultipleStateChange(
             flagPreferenceProvider.getExperimentFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED)
         )
+        .enableComplexRebind(
+            flagPreferenceProvider.getExperimentFlag(Experiment.COMPLEX_REBIND_ENABLED)
+        )
         .tooltipRestrictor { _, _ -> true }
         .divDownloader(DemoDivDownloader())
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))

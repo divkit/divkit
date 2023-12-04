@@ -95,6 +95,7 @@ public class DivConfiguration {
     private boolean mResourceCacheEnabled;
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
+    private boolean mComplexRebindEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -133,6 +134,7 @@ public class DivConfiguration {
             boolean resourceCacheEnabled,
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
+            boolean complexRebindEnabled,
             float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
@@ -167,6 +169,7 @@ public class DivConfiguration {
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
+        mComplexRebindEnabled = complexRebindEnabled;
         mGlobalVariableController = globalVariableController;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
@@ -369,6 +372,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.COMPLEX_REBIND_ENABLED)
+    public boolean isComplexRebindEnabled() {
+        return mComplexRebindEnabled;
+    }
+
+    @Provides
     public float getRecyclerScrollInterceptionAngle() {
         return mRecyclerScrollInterceptionAngle;
     }
@@ -441,6 +450,7 @@ public class DivConfiguration {
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
+        private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
@@ -671,6 +681,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enableComplexRebind(boolean enable) {
+            mComplexRebindEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         @Deprecated
         public Builder globalVariableController(GlobalVariableController globalVariableController) {
             mGlobalVariableController = globalVariableController;
@@ -728,6 +744,7 @@ public class DivConfiguration {
                     mResourceCacheEnabled,
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,
+                    mComplexRebindEnabled,
                     mRecyclerScrollInterceptionAngle);
         }
     }
