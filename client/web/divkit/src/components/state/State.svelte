@@ -229,7 +229,9 @@
                     beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
                     afterBbox: child.node.getBoundingClientRect(),
                     node: child.node,
-                    transition: getTransitionChange(child.transitions) as ChangeBoundsTransition,
+                    transition: rootCtx.getJsonWithVars(
+                        getTransitionChange(child.transitions)
+                    ) as ChangeBoundsTransition,
                     resolvePromise: child.resolvePromise
                 };
 
