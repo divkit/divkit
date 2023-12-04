@@ -47,3 +47,21 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+
+.pager__arrow::before {
+    background: var(--divkit-pager-arrow-bg, #fff);
+    box-shadow: 0 .2em .4em 0 var(--divkit-pager-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.pager__arrow:hover::before {
+    box-shadow: 0 .2em .8em 0 var(--divkit-pager-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.pager__arrow:active::before {
+    box-shadow: 0 .1em .4em 0 var(--divkit-pager-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.pager__arrow-icon-path {
+    fill: var(--divkit-pager-arrow-fg, #000);
+}

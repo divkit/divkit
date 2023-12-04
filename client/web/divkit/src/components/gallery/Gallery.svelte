@@ -4,6 +4,7 @@
 
     import css from './Gallery.module.css';
     import rootCss from '../Root.module.css';
+    import arrowsCss from '../utilities/Arrows.module.css';
 
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
@@ -473,9 +474,9 @@
             {#if hasScrollLeft && shouldCheckArrows}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="{leftClass || `${css.gallery__arrow} ${css.gallery__arrow_left}`}" on:click={() => scroll('left')}>
+                <div class="{leftClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => scroll('left')}>
                     {#if !leftClass}
-                        <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                             <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
                         </svg>
                     {/if}
@@ -484,9 +485,9 @@
             {#if hasScrollRight && shouldCheckArrows}
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="{rightClass || `${css.gallery__arrow} ${css.gallery__arrow_right}`}" on:click={() => scroll('right')}>
+                <div class="{rightClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => scroll('right')}>
                     {#if !rightClass}
-                        <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                             <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
                         </svg>
                     {/if}
