@@ -290,8 +290,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     )
     maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
       guard let self, let position else { return }
-      self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
       DispatchQueue.main.async {
+        self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
         if let textFieldPosition = self.singleLineInput.position(
           from: self.singleLineInput.beginningOfDocument,
           offset: position.rawValue
@@ -311,8 +311,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     maskedViewModel?.$text.currentAndNewValues
       .addObserver { [weak self] input in
         guard let self = self else { return }
-        self.setTextData(input)
-        self.textValue.value = input
+        DispatchQueue.main.async {
+          self.setTextData(input)
+          self.textValue.value = input
+        }
       }.dispose(in: disposePool)
   }
 
