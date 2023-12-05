@@ -5,7 +5,7 @@ package com.yandex.div2
 import org.json.JSONObject
 
 class EntityWithRawArray(
-    @JvmField final val array: JSONArray,
+    @JvmField final val array: Expression<JSONArray>,
 ) {
 
     companion object {

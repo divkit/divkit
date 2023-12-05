@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "name": "declared_variable !: 'fallback' => try",
+      "expression": "@{declared_variable !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "try"
+      },
+      "variables": [
+        {
+          "name": "declared_variable",
+          "type": "string",
+          "value": "try"
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "undeclared_variable !: 'fallback' => fallback",
+      "expression": "@{undeclared_variable !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "'infinity' / 0 !: 'fallback' => fallback",
+      "expression": "@{'infinity' / 0 !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "true ? undefined_var : 'else' !: 'fallback' => error",
+      "expression": "@{true ? undefined_var : 'else' !: 'fallback'}",
+      "expected": {
+        "type": "error",
+        "value": "Variable 'undefined_var' is missing."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "(padStart(12, 3, '') == undefined_var) !: 'fallback' => fallback",
+      "expression": "@{(padStart(12, 3, '') == undefined_var) !: 'fallback'}",
+      "expected": {
+        "type": "string",
+        "value": "fallback"
+      },
+      "expected_warnings": [
+        "String for padding is empty."
+      ],
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}

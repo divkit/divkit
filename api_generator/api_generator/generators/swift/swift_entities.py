@@ -488,6 +488,9 @@ class SwiftProperty(Property):
         elif isinstance(property_type, Object) and isinstance(property_type.object, StringEnumeration):
             method = resolve_string_based_value
             initializer = f'{initializer_prefix}{self.expression_declaration(optionality=False)}.init(rawValue:)'
+        elif isinstance(property_type, RawArray):
+            method = 'resolveArrayValue'
+            initializer = ''
         elif isinstance(property_type, Array):
             return self.expression_resolving_method_parts(cast(SwiftPropertyType, property_type.property_type))
         else:
@@ -559,7 +562,11 @@ class SwiftProperty(Property):
                 pass
             else:
                 return None
-        if isinstance(self.property_type, Array) and \
+        if isinstance(self.property_type, RawArray) and \
+                (self.property_type.min_items > 0):
+            validator_name = 'makeArrayValidator'
+            validator_args = [f'minItems: {self.property_type.min_items}']
+        elif isinstance(self.property_type, Array) and \
                 (self.property_type.min_items > 0 or self.property_type.strict_parsing):
             validator_type = 'Strict' if self.property_type.strict_parsing else ''
             validator_name = f'make{validator_type}ArrayValidator'
@@ -856,9 +863,9 @@ class SwiftPropertyType(PropertyType):
             return True
 
     def serialization_suffix(self, use_expressions: bool) -> str:
-        if isinstance(self, (Dictionary, RawArray)):
+        if isinstance(self, (Dictionary)):
             return ''
-        elif isinstance(self, (String, Int, Double, Bool, BoolInt)):
+        elif isinstance(self, (String, Int, Double, Bool, BoolInt, RawArray)):
             return '.toValidSerializationValue()' if use_expressions else ''
         elif isinstance(self, Object):
             if isinstance(self.object, StringEnumeration):

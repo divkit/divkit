@@ -5,8 +5,7 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
 
-internal class GetStoredIntegerValue(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredIntegerValue : Function() {
 
     override val name = "getStoredIntegerValue"
 
@@ -19,18 +18,21 @@ internal class GetStoredIntegerValue(override val storedValueProvider: StoredVal
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = args[1] as Long
-        val storedValue = storedValueProvider.get(storedValueName) as? Long
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Long
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredNumberValue(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredNumberValue : Function() {
 
     override val name = "getStoredNumberValue"
 
@@ -43,21 +45,24 @@ internal class GetStoredNumberValue(override val storedValueProvider: StoredValu
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = args[1] as Number
-        val storedValue = if (storedValueProvider.get(storedValueName) is Long)
+        val storedValue = if (evaluationContext.storedValueProvider.get(storedValueName) is Long)
             null
         else
-            storedValueProvider.get(storedValueName) as? Number
+            evaluationContext.storedValueProvider.get(storedValueName) as? Number
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredStringValue(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredStringValue : Function() {
 
     override val name = "getStoredStringValue"
 
@@ -70,18 +75,21 @@ internal class GetStoredStringValue(override val storedValueProvider: StoredValu
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = args[1] as String
-        val storedValue = storedValueProvider.get(storedValueName) as? String
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? String
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredColorValueString(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredColorValueString : Function() {
 
     override val name = "getStoredColorValue"
 
@@ -94,18 +102,21 @@ internal class GetStoredColorValueString(override val storedValueProvider: Store
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = Color.parse(args[1] as String)
-        val storedValue = storedValueProvider.get(storedValueName) as? Color
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Color
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredColorValue(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredColorValue : Function() {
 
     override val name = "getStoredColorValue"
 
@@ -118,18 +129,21 @@ internal class GetStoredColorValue(override val storedValueProvider: StoredValue
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = args[1] as Color
-        val storedValue = storedValueProvider.get(storedValueName) as? Color
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Color
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredBooleanValue(override val storedValueProvider: StoredValueProvider) :
-    Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredBooleanValue : Function() {
 
     override val name = "getStoredBooleanValue"
 
@@ -142,19 +156,21 @@ internal class GetStoredBooleanValue(override val storedValueProvider: StoredVal
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val fallbackValue = args[1] as Boolean
-        val storedValue = storedValueProvider.get(storedValueName) as? Boolean
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Boolean
 
         return storedValue ?: fallbackValue
     }
 
 }
 
-internal class GetStoredUrlValueWithStringFallback(
-    override val storedValueProvider: StoredValueProvider
-) : Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredUrlValueWithStringFallback : Function() {
 
     override val name = "getStoredUrlValue"
 
@@ -167,10 +183,14 @@ internal class GetStoredUrlValueWithStringFallback(
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
         val urlString = args[1] as String
-        val storedValue = storedValueProvider.get(storedValueName) as? Url
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Url
         return storedValue
             ?: urlString.safeConvertToUrl()
             ?: throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_URL)
@@ -178,9 +198,7 @@ internal class GetStoredUrlValueWithStringFallback(
 
 }
 
-internal class GetStoredUrlValueWithUrlFallback(
-    override val storedValueProvider: StoredValueProvider
-) : Function(storedValueProvider = storedValueProvider) {
+internal object GetStoredUrlValueWithUrlFallback: Function() {
 
     override val name = "getStoredUrlValue"
 
@@ -193,9 +211,13 @@ internal class GetStoredUrlValueWithUrlFallback(
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val storedValueName = args[0] as String
-        val storedValue = storedValueProvider.get(storedValueName) as? Url
+        val storedValue = evaluationContext.storedValueProvider.get(storedValueName) as? Url
         return storedValue ?: (args[1] as Url)
     }
 

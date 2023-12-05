@@ -12,7 +12,7 @@ from ..schema.modeling.entities import (
     StringEnumeration,
     Property,
     String,
-    Array, Url, Int, Double,
+    Array, Url, Int, Double, RawArray
 )
 from ..schema.modeling.text import Text
 from .. import utils
@@ -27,6 +27,10 @@ def declaration_comment(p: Property, default_value_comment_fun) -> str:
             comments.append(f'at least {string.min_length} char{end}')
         if string.regex is not None:
             comments.append(f'regex: {string.regex.pattern}')
+    elif isinstance(p.property_type, RawArray):
+        array: RawArray = p.property_type
+        if array.min_items > 0:
+            comments.append(f'at least {array.min_items} elements')
     elif isinstance(p.property_type, Array):
         array: Array = p.property_type
         if array.min_items > 0:

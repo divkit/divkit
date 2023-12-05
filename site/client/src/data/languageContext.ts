@@ -4,7 +4,7 @@ import type lang from '../auto/lang.json';
 export const LANGUAGE_CTX = Symbol('language');
 
 export interface LanguageContext {
-    lang: Readable<string>;
+    lang: Readable<'ru' | 'en'>;
     getLanguage(): string;
     setLanguage(name: string): void;
     languagesList(): string[];

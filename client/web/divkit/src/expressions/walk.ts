@@ -24,6 +24,10 @@ export function walk(ast: Node, visitors: {
             walk(ast.consequent, visitors);
             walk(ast.alternate, visitors);
             break;
+        case 'TryExpression':
+            walk(ast.test, visitors);
+            walk(ast.alternate, visitors);
+            break;
         case 'CallExpression':
             ast.arguments.forEach(item => {
                 walk(item, visitors);

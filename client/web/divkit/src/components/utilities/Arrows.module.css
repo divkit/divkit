@@ -1,0 +1,47 @@
+.arrow {
+    position: absolute;
+    top: 50%;
+    width: 4.4em;
+    height: 4.4em;
+    margin-top: -2.2em;
+    cursor: pointer;
+}
+
+.arrow::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    border-radius: 100%;
+    transition: .15s ease-out;
+    transition-property: transform,box-shadow;
+}
+
+.arrow:hover::before {
+    transform: scale(1.1);
+}
+
+.arrow:active::before {
+    transform: scale(1.05);
+}
+
+.arrow__icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 3.2em;
+    height: 3.2em;
+    margin: auto;
+}
+
+.arrow_left {
+    left: .6em;
+}
+
+.arrow_right {
+    right: .6em;
+}

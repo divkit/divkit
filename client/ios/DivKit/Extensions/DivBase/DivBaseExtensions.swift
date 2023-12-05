@@ -287,8 +287,13 @@ extension LayoutTrait {
     switch self {
     case let .fixed(value):
       return .fixed(value - insets.sum)
-    case .intrinsic,
-         .weighted:
+    case let .intrinsic(constrained, minSize, maxSize):
+      return .intrinsic(
+        constrained: constrained,
+        minSize: minSize - insets.sum,
+        maxSize: maxSize - insets.sum
+      )
+    case .weighted:
       return self
     }
   }

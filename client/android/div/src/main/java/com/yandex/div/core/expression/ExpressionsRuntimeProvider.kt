@@ -16,6 +16,9 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
@@ -101,17 +104,27 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             addSource(globalVariableController.variableSource)
         }
 
-        val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider(
+        val evaluationContext = EvaluationContext(
             variableProvider = { variableName ->
                 variableController.getMutableVariable(variableName)?.getValue()
             },
             storedValueProvider = { storedValueName ->
                 storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },
-        ))
+            functionProvider = BuiltinFunctionProvider,
+            warningSender = { expressionContext, message ->
+                val rawExpr = expressionContext.evaluable.rawExpr
+                val warning = "Warning occurred while evaluating '$rawExpr': $message"
+
+                errorCollector.logWarning(Throwable(warning))
+            }
+        )
+
+        val evaluator = Evaluator(evaluationContext)
+
         val expressionResolver = ExpressionResolverImpl(
             variableController,
-            evaluatorFactory,
+            evaluator,
             errorCollector,
         )
 
@@ -119,13 +132,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             variableController,
             expressionResolver,
             divActionHandler,
-            evaluatorFactory.create(
-                variableProvider = { name ->
-                    variableController.getMutableVariable(name)?.getValue()
-                        ?: throw EvaluableException("Unknown variable $name")
-                },
-                onWarning = errorCollector::logWarning
-            ),
+            evaluator,
             errorCollector,
             logger
         )

@@ -99,298 +99,278 @@ class Entity with EquatableMixin {
     throw Exception("Type ${value.runtimeType.toString()} is not generalized in Entity");
   }
 
-  void map({
-    required Function(EntityWithArray) entityWithArray,
-    required Function(EntityWithArrayOfEnums) entityWithArrayOfEnums,
-    required Function(EntityWithArrayOfExpressions) entityWithArrayOfExpressions,
-    required Function(EntityWithArrayOfNestedItems) entityWithArrayOfNestedItems,
-    required Function(EntityWithArrayWithTransform) entityWithArrayWithTransform,
-    required Function(EntityWithComplexProperty) entityWithComplexProperty,
-    required Function(EntityWithComplexPropertyWithDefaultValue) entityWithComplexPropertyWithDefaultValue,
-    required Function(EntityWithEntityProperty) entityWithEntityProperty,
-    required Function(EntityWithOptionalComplexProperty) entityWithOptionalComplexProperty,
-    required Function(EntityWithOptionalProperty) entityWithOptionalProperty,
-    required Function(EntityWithOptionalStringEnumProperty) entityWithOptionalStringEnumProperty,
-    required Function(EntityWithPropertyWithDefaultValue) entityWithPropertyWithDefaultValue,
-    required Function(EntityWithRawArray) entityWithRawArray,
-    required Function(EntityWithRequiredProperty) entityWithRequiredProperty,
-    required Function(EntityWithSimpleProperties) entityWithSimpleProperties,
-    required Function(EntityWithStrictArray) entityWithStrictArray,
-    required Function(EntityWithStringArrayProperty) entityWithStringArrayProperty,
-    required Function(EntityWithStringEnumProperty) entityWithStringEnumProperty,
-    required Function(EntityWithStringEnumPropertyWithDefaultValue) entityWithStringEnumPropertyWithDefaultValue,
-    required Function(EntityWithoutProperties) entityWithoutProperties,
+  T map<T>({
+    required T Function(EntityWithArray) entityWithArray,
+    required T Function(EntityWithArrayOfEnums) entityWithArrayOfEnums,
+    required T Function(EntityWithArrayOfExpressions) entityWithArrayOfExpressions,
+    required T Function(EntityWithArrayOfNestedItems) entityWithArrayOfNestedItems,
+    required T Function(EntityWithArrayWithTransform) entityWithArrayWithTransform,
+    required T Function(EntityWithComplexProperty) entityWithComplexProperty,
+    required T Function(EntityWithComplexPropertyWithDefaultValue) entityWithComplexPropertyWithDefaultValue,
+    required T Function(EntityWithEntityProperty) entityWithEntityProperty,
+    required T Function(EntityWithOptionalComplexProperty) entityWithOptionalComplexProperty,
+    required T Function(EntityWithOptionalProperty) entityWithOptionalProperty,
+    required T Function(EntityWithOptionalStringEnumProperty) entityWithOptionalStringEnumProperty,
+    required T Function(EntityWithPropertyWithDefaultValue) entityWithPropertyWithDefaultValue,
+    required T Function(EntityWithRawArray) entityWithRawArray,
+    required T Function(EntityWithRequiredProperty) entityWithRequiredProperty,
+    required T Function(EntityWithSimpleProperties) entityWithSimpleProperties,
+    required T Function(EntityWithStrictArray) entityWithStrictArray,
+    required T Function(EntityWithStringArrayProperty) entityWithStringArrayProperty,
+    required T Function(EntityWithStringEnumProperty) entityWithStringEnumProperty,
+    required T Function(EntityWithStringEnumPropertyWithDefaultValue) entityWithStringEnumPropertyWithDefaultValue,
+    required T Function(EntityWithoutProperties) entityWithoutProperties,
   }) {
     final value = _value;
     if(value is EntityWithArray) {
-      entityWithArray(value);
-      return;
+      return entityWithArray(value);
     }
     if(value is EntityWithArrayOfEnums) {
-      entityWithArrayOfEnums(value);
-      return;
+      return entityWithArrayOfEnums(value);
     }
     if(value is EntityWithArrayOfExpressions) {
-      entityWithArrayOfExpressions(value);
-      return;
+      return entityWithArrayOfExpressions(value);
     }
     if(value is EntityWithArrayOfNestedItems) {
-      entityWithArrayOfNestedItems(value);
-      return;
+      return entityWithArrayOfNestedItems(value);
     }
     if(value is EntityWithArrayWithTransform) {
-      entityWithArrayWithTransform(value);
-      return;
+      return entityWithArrayWithTransform(value);
     }
     if(value is EntityWithComplexProperty) {
-      entityWithComplexProperty(value);
-      return;
+      return entityWithComplexProperty(value);
     }
     if(value is EntityWithComplexPropertyWithDefaultValue) {
-      entityWithComplexPropertyWithDefaultValue(value);
-      return;
+      return entityWithComplexPropertyWithDefaultValue(value);
     }
     if(value is EntityWithEntityProperty) {
-      entityWithEntityProperty(value);
-      return;
+      return entityWithEntityProperty(value);
     }
     if(value is EntityWithOptionalComplexProperty) {
-      entityWithOptionalComplexProperty(value);
-      return;
+      return entityWithOptionalComplexProperty(value);
     }
     if(value is EntityWithOptionalProperty) {
-      entityWithOptionalProperty(value);
-      return;
+      return entityWithOptionalProperty(value);
     }
     if(value is EntityWithOptionalStringEnumProperty) {
-      entityWithOptionalStringEnumProperty(value);
-      return;
+      return entityWithOptionalStringEnumProperty(value);
     }
     if(value is EntityWithPropertyWithDefaultValue) {
-      entityWithPropertyWithDefaultValue(value);
-      return;
+      return entityWithPropertyWithDefaultValue(value);
     }
     if(value is EntityWithRawArray) {
-      entityWithRawArray(value);
-      return;
+      return entityWithRawArray(value);
     }
     if(value is EntityWithRequiredProperty) {
-      entityWithRequiredProperty(value);
-      return;
+      return entityWithRequiredProperty(value);
     }
     if(value is EntityWithSimpleProperties) {
-      entityWithSimpleProperties(value);
-      return;
+      return entityWithSimpleProperties(value);
     }
     if(value is EntityWithStrictArray) {
-      entityWithStrictArray(value);
-      return;
+      return entityWithStrictArray(value);
     }
     if(value is EntityWithStringArrayProperty) {
-      entityWithStringArrayProperty(value);
-      return;
+      return entityWithStringArrayProperty(value);
     }
     if(value is EntityWithStringEnumProperty) {
-      entityWithStringEnumProperty(value);
-      return;
+      return entityWithStringEnumProperty(value);
     }
     if(value is EntityWithStringEnumPropertyWithDefaultValue) {
-      entityWithStringEnumPropertyWithDefaultValue(value);
-      return;
+      return entityWithStringEnumPropertyWithDefaultValue(value);
     }
     if(value is EntityWithoutProperties) {
-      entityWithoutProperties(value);
-      return;
+      return entityWithoutProperties(value);
     }
     throw Exception("Type ${value.runtimeType.toString()} is not generalized in Entity");
   }
 
-  void maybeMap({
-    Function(EntityWithArray)? entityWithArray,
-    Function(EntityWithArrayOfEnums)? entityWithArrayOfEnums,
-    Function(EntityWithArrayOfExpressions)? entityWithArrayOfExpressions,
-    Function(EntityWithArrayOfNestedItems)? entityWithArrayOfNestedItems,
-    Function(EntityWithArrayWithTransform)? entityWithArrayWithTransform,
-    Function(EntityWithComplexProperty)? entityWithComplexProperty,
-    Function(EntityWithComplexPropertyWithDefaultValue)? entityWithComplexPropertyWithDefaultValue,
-    Function(EntityWithEntityProperty)? entityWithEntityProperty,
-    Function(EntityWithOptionalComplexProperty)? entityWithOptionalComplexProperty,
-    Function(EntityWithOptionalProperty)? entityWithOptionalProperty,
-    Function(EntityWithOptionalStringEnumProperty)? entityWithOptionalStringEnumProperty,
-    Function(EntityWithPropertyWithDefaultValue)? entityWithPropertyWithDefaultValue,
-    Function(EntityWithRawArray)? entityWithRawArray,
-    Function(EntityWithRequiredProperty)? entityWithRequiredProperty,
-    Function(EntityWithSimpleProperties)? entityWithSimpleProperties,
-    Function(EntityWithStrictArray)? entityWithStrictArray,
-    Function(EntityWithStringArrayProperty)? entityWithStringArrayProperty,
-    Function(EntityWithStringEnumProperty)? entityWithStringEnumProperty,
-    Function(EntityWithStringEnumPropertyWithDefaultValue)? entityWithStringEnumPropertyWithDefaultValue,
-    Function(EntityWithoutProperties)? entityWithoutProperties,
-    required Function() orElse,
+  T maybeMap<T>({
+    T Function(EntityWithArray)? entityWithArray,
+    T Function(EntityWithArrayOfEnums)? entityWithArrayOfEnums,
+    T Function(EntityWithArrayOfExpressions)? entityWithArrayOfExpressions,
+    T Function(EntityWithArrayOfNestedItems)? entityWithArrayOfNestedItems,
+    T Function(EntityWithArrayWithTransform)? entityWithArrayWithTransform,
+    T Function(EntityWithComplexProperty)? entityWithComplexProperty,
+    T Function(EntityWithComplexPropertyWithDefaultValue)? entityWithComplexPropertyWithDefaultValue,
+    T Function(EntityWithEntityProperty)? entityWithEntityProperty,
+    T Function(EntityWithOptionalComplexProperty)? entityWithOptionalComplexProperty,
+    T Function(EntityWithOptionalProperty)? entityWithOptionalProperty,
+    T Function(EntityWithOptionalStringEnumProperty)? entityWithOptionalStringEnumProperty,
+    T Function(EntityWithPropertyWithDefaultValue)? entityWithPropertyWithDefaultValue,
+    T Function(EntityWithRawArray)? entityWithRawArray,
+    T Function(EntityWithRequiredProperty)? entityWithRequiredProperty,
+    T Function(EntityWithSimpleProperties)? entityWithSimpleProperties,
+    T Function(EntityWithStrictArray)? entityWithStrictArray,
+    T Function(EntityWithStringArrayProperty)? entityWithStringArrayProperty,
+    T Function(EntityWithStringEnumProperty)? entityWithStringEnumProperty,
+    T Function(EntityWithStringEnumPropertyWithDefaultValue)? entityWithStringEnumPropertyWithDefaultValue,
+    T Function(EntityWithoutProperties)? entityWithoutProperties,
+    required T Function() orElse,
   }) {
     final value = _value;
     if(value is EntityWithArray && entityWithArray != null) {
-      entityWithArray(value);
-      return;
+     return entityWithArray(value);
     }
     if(value is EntityWithArrayOfEnums && entityWithArrayOfEnums != null) {
-      entityWithArrayOfEnums(value);
-      return;
+     return entityWithArrayOfEnums(value);
     }
     if(value is EntityWithArrayOfExpressions && entityWithArrayOfExpressions != null) {
-      entityWithArrayOfExpressions(value);
-      return;
+     return entityWithArrayOfExpressions(value);
     }
     if(value is EntityWithArrayOfNestedItems && entityWithArrayOfNestedItems != null) {
-      entityWithArrayOfNestedItems(value);
-      return;
+     return entityWithArrayOfNestedItems(value);
     }
     if(value is EntityWithArrayWithTransform && entityWithArrayWithTransform != null) {
-      entityWithArrayWithTransform(value);
-      return;
+     return entityWithArrayWithTransform(value);
     }
     if(value is EntityWithComplexProperty && entityWithComplexProperty != null) {
-      entityWithComplexProperty(value);
-      return;
+     return entityWithComplexProperty(value);
     }
     if(value is EntityWithComplexPropertyWithDefaultValue && entityWithComplexPropertyWithDefaultValue != null) {
-      entityWithComplexPropertyWithDefaultValue(value);
-      return;
+     return entityWithComplexPropertyWithDefaultValue(value);
     }
     if(value is EntityWithEntityProperty && entityWithEntityProperty != null) {
-      entityWithEntityProperty(value);
-      return;
+     return entityWithEntityProperty(value);
     }
     if(value is EntityWithOptionalComplexProperty && entityWithOptionalComplexProperty != null) {
-      entityWithOptionalComplexProperty(value);
-      return;
+     return entityWithOptionalComplexProperty(value);
     }
     if(value is EntityWithOptionalProperty && entityWithOptionalProperty != null) {
-      entityWithOptionalProperty(value);
-      return;
+     return entityWithOptionalProperty(value);
     }
     if(value is EntityWithOptionalStringEnumProperty && entityWithOptionalStringEnumProperty != null) {
-      entityWithOptionalStringEnumProperty(value);
-      return;
+     return entityWithOptionalStringEnumProperty(value);
     }
     if(value is EntityWithPropertyWithDefaultValue && entityWithPropertyWithDefaultValue != null) {
-      entityWithPropertyWithDefaultValue(value);
-      return;
+     return entityWithPropertyWithDefaultValue(value);
     }
     if(value is EntityWithRawArray && entityWithRawArray != null) {
-      entityWithRawArray(value);
-      return;
+     return entityWithRawArray(value);
     }
     if(value is EntityWithRequiredProperty && entityWithRequiredProperty != null) {
-      entityWithRequiredProperty(value);
-      return;
+     return entityWithRequiredProperty(value);
     }
     if(value is EntityWithSimpleProperties && entityWithSimpleProperties != null) {
-      entityWithSimpleProperties(value);
-      return;
+     return entityWithSimpleProperties(value);
     }
     if(value is EntityWithStrictArray && entityWithStrictArray != null) {
-      entityWithStrictArray(value);
-      return;
+     return entityWithStrictArray(value);
     }
     if(value is EntityWithStringArrayProperty && entityWithStringArrayProperty != null) {
-      entityWithStringArrayProperty(value);
-      return;
+     return entityWithStringArrayProperty(value);
     }
     if(value is EntityWithStringEnumProperty && entityWithStringEnumProperty != null) {
-      entityWithStringEnumProperty(value);
-      return;
+     return entityWithStringEnumProperty(value);
     }
     if(value is EntityWithStringEnumPropertyWithDefaultValue && entityWithStringEnumPropertyWithDefaultValue != null) {
-      entityWithStringEnumPropertyWithDefaultValue(value);
-      return;
+     return entityWithStringEnumPropertyWithDefaultValue(value);
     }
     if(value is EntityWithoutProperties && entityWithoutProperties != null) {
-      entityWithoutProperties(value);
-      return;
+     return entityWithoutProperties(value);
     }
-    orElse();
+    return orElse();
   }
 
   const Entity.entityWithArray(
     EntityWithArray value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithArrayOfEnums(
     EntityWithArrayOfEnums value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithArrayOfExpressions(
     EntityWithArrayOfExpressions value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithArrayOfNestedItems(
     EntityWithArrayOfNestedItems value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithArrayWithTransform(
     EntityWithArrayWithTransform value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithComplexProperty(
     EntityWithComplexProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithComplexPropertyWithDefaultValue(
     EntityWithComplexPropertyWithDefaultValue value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithEntityProperty(
     EntityWithEntityProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithOptionalComplexProperty(
     EntityWithOptionalComplexProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithOptionalProperty(
     EntityWithOptionalProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithOptionalStringEnumProperty(
     EntityWithOptionalStringEnumProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithPropertyWithDefaultValue(
     EntityWithPropertyWithDefaultValue value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithRawArray(
     EntityWithRawArray value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithRequiredProperty(
     EntityWithRequiredProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithSimpleProperties(
     EntityWithSimpleProperties value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithStrictArray(
     EntityWithStrictArray value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithStringArrayProperty(
     EntityWithStringArrayProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithStringEnumProperty(
     EntityWithStringEnumProperty value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithStringEnumPropertyWithDefaultValue(
     EntityWithStringEnumPropertyWithDefaultValue value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const Entity.entityWithoutProperties(
     EntityWithoutProperties value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
 
   static Entity? fromJson(Map<String, dynamic>? json) {
@@ -399,45 +379,45 @@ class Entity with EquatableMixin {
     }
     switch (json['type']) {
       case EntityWithArray.type :
-        return Entity.entityWithArray(EntityWithArray.fromJson(json)!);
+        return Entity(EntityWithArray.fromJson(json)!);
       case EntityWithArrayOfEnums.type :
-        return Entity.entityWithArrayOfEnums(EntityWithArrayOfEnums.fromJson(json)!);
+        return Entity(EntityWithArrayOfEnums.fromJson(json)!);
       case EntityWithArrayOfExpressions.type :
-        return Entity.entityWithArrayOfExpressions(EntityWithArrayOfExpressions.fromJson(json)!);
+        return Entity(EntityWithArrayOfExpressions.fromJson(json)!);
       case EntityWithArrayOfNestedItems.type :
-        return Entity.entityWithArrayOfNestedItems(EntityWithArrayOfNestedItems.fromJson(json)!);
+        return Entity(EntityWithArrayOfNestedItems.fromJson(json)!);
       case EntityWithArrayWithTransform.type :
-        return Entity.entityWithArrayWithTransform(EntityWithArrayWithTransform.fromJson(json)!);
+        return Entity(EntityWithArrayWithTransform.fromJson(json)!);
       case EntityWithComplexProperty.type :
-        return Entity.entityWithComplexProperty(EntityWithComplexProperty.fromJson(json)!);
+        return Entity(EntityWithComplexProperty.fromJson(json)!);
       case EntityWithComplexPropertyWithDefaultValue.type :
-        return Entity.entityWithComplexPropertyWithDefaultValue(EntityWithComplexPropertyWithDefaultValue.fromJson(json)!);
+        return Entity(EntityWithComplexPropertyWithDefaultValue.fromJson(json)!);
       case EntityWithEntityProperty.type :
-        return Entity.entityWithEntityProperty(EntityWithEntityProperty.fromJson(json)!);
+        return Entity(EntityWithEntityProperty.fromJson(json)!);
       case EntityWithOptionalComplexProperty.type :
-        return Entity.entityWithOptionalComplexProperty(EntityWithOptionalComplexProperty.fromJson(json)!);
+        return Entity(EntityWithOptionalComplexProperty.fromJson(json)!);
       case EntityWithOptionalProperty.type :
-        return Entity.entityWithOptionalProperty(EntityWithOptionalProperty.fromJson(json)!);
+        return Entity(EntityWithOptionalProperty.fromJson(json)!);
       case EntityWithOptionalStringEnumProperty.type :
-        return Entity.entityWithOptionalStringEnumProperty(EntityWithOptionalStringEnumProperty.fromJson(json)!);
+        return Entity(EntityWithOptionalStringEnumProperty.fromJson(json)!);
       case EntityWithPropertyWithDefaultValue.type :
-        return Entity.entityWithPropertyWithDefaultValue(EntityWithPropertyWithDefaultValue.fromJson(json)!);
+        return Entity(EntityWithPropertyWithDefaultValue.fromJson(json)!);
       case EntityWithRawArray.type :
-        return Entity.entityWithRawArray(EntityWithRawArray.fromJson(json)!);
+        return Entity(EntityWithRawArray.fromJson(json)!);
       case EntityWithRequiredProperty.type :
-        return Entity.entityWithRequiredProperty(EntityWithRequiredProperty.fromJson(json)!);
+        return Entity(EntityWithRequiredProperty.fromJson(json)!);
       case EntityWithSimpleProperties.type :
-        return Entity.entityWithSimpleProperties(EntityWithSimpleProperties.fromJson(json)!);
+        return Entity(EntityWithSimpleProperties.fromJson(json)!);
       case EntityWithStrictArray.type :
-        return Entity.entityWithStrictArray(EntityWithStrictArray.fromJson(json)!);
+        return Entity(EntityWithStrictArray.fromJson(json)!);
       case EntityWithStringArrayProperty.type :
-        return Entity.entityWithStringArrayProperty(EntityWithStringArrayProperty.fromJson(json)!);
+        return Entity(EntityWithStringArrayProperty.fromJson(json)!);
       case EntityWithStringEnumProperty.type :
-        return Entity.entityWithStringEnumProperty(EntityWithStringEnumProperty.fromJson(json)!);
+        return Entity(EntityWithStringEnumProperty.fromJson(json)!);
       case EntityWithStringEnumPropertyWithDefaultValue.type :
-        return Entity.entityWithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValue.fromJson(json)!);
+        return Entity(EntityWithStringEnumPropertyWithDefaultValue.fromJson(json)!);
       case EntityWithoutProperties.type :
-        return Entity.entityWithoutProperties(EntityWithoutProperties.fromJson(json)!);
+        return Entity(EntityWithoutProperties.fromJson(json)!);
     }
     return null;
   }

@@ -822,6 +822,8 @@ class KotlinPropertyType(PropertyType):
     def validator_definition(self) -> Optional[str]:
         if isinstance(self, Array) and self.min_items > 0:
             return f'{{ it: List<*> -> it.size >= {self.min_items} }}'
+        elif isinstance(self, RawArray) and self.min_items > 0:
+            return f'{{ it: JSONArray -> it.length() >= {self.min_items} }}'
         elif isinstance(self, String) and (self.min_length > 0 or self.regex is not None):
             expressions = []
             length_field = 'rawLength' if self.formatted else 'length'
@@ -866,6 +868,8 @@ class KotlinPropertyType(PropertyType):
             return f'{prefix}INT'
         elif isinstance(self, Double):
             return f'{prefix}DOUBLE'
+        elif isinstance(self, RawArray):
+            return f'{prefix}JSON_ARRAY'
         elif isinstance(self, Array):
             if self.property_type.supports_expressions:
                 return cast(KotlinPropertyType, self.property_type).type_helper_reference(p)

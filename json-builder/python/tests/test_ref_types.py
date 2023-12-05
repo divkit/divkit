@@ -7,6 +7,7 @@ from pydivkit import (
     DivAction,
     DivBorder,
     DivContainer,
+    DivGallery,
     DivGifImage,
     DivImage,
     DivText,
@@ -73,10 +74,10 @@ def test_union_type():
 
 def test_ref_collections_error_simple_type():
     with pytest.raises(TypeError):
-        class ImageItems(DivContainer):
+        class ImageItems(DivGallery):
             image_items: str = Field()
             items = [
-                DivContainer(
+                DivGallery(
                     items=Ref(image_items),
                 ),
             ]

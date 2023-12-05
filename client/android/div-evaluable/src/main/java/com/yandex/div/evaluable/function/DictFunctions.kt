@@ -1,11 +1,12 @@
 package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_CONVERT_TO_COLOR
 import com.yandex.div.evaluable.REASON_CONVERT_TO_URL
-import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import com.yandex.div.evaluable.types.Color
@@ -15,7 +16,7 @@ import org.json.JSONObject
 import java.math.BigDecimal
 import java.math.BigInteger
 
-internal class GetDictInteger(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictInteger : Function() {
 
     override val name = "getDictInteger"
 
@@ -27,7 +28,11 @@ internal class GetDictInteger(override val variableProvider: VariableProvider) :
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toLong()
             is Long -> it
@@ -38,7 +43,7 @@ internal class GetDictInteger(override val variableProvider: VariableProvider) :
     }
 }
 
-internal class GetIntegerFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetIntegerFromDict : Function() {
 
     override val name = "getIntegerFromDict"
 
@@ -50,7 +55,11 @@ internal class GetIntegerFromDict(override val variableProvider: VariableProvide
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toLong()
             is Long -> it
@@ -61,7 +70,7 @@ internal class GetIntegerFromDict(override val variableProvider: VariableProvide
     }
 }
 
-internal class GetDictNumber(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictNumber : Function() {
 
     override val name = "getDictNumber"
 
@@ -73,7 +82,11 @@ internal class GetDictNumber(override val variableProvider: VariableProvider) : 
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toDouble()
             is Long -> it.toDouble()
@@ -83,7 +96,7 @@ internal class GetDictNumber(override val variableProvider: VariableProvider) : 
     }
 }
 
-internal class GetNumberFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetNumberFromDict : Function() {
 
     override val name = "getNumberFromDict"
 
@@ -95,7 +108,11 @@ internal class GetNumberFromDict(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         when (it) {
             is Int -> it.toDouble()
             is Long -> it.toDouble()
@@ -105,7 +122,7 @@ internal class GetNumberFromDict(override val variableProvider: VariableProvider
     }
 }
 
-internal class GetDictString(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictString : Function() {
 
     override val name = "getDictString"
 
@@ -117,12 +134,16 @@ internal class GetDictString(override val variableProvider: VariableProvider) : 
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         it as? String ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
-internal class GetStringFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetStringFromDict : Function() {
 
     override val name = "getStringFromDict"
 
@@ -134,12 +155,16 @@ internal class GetStringFromDict(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any = evaluate(name, args).let {
         it as? String ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
-internal class GetDictColor(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictColor : Function() {
 
     override val name = "getDictColor"
 
@@ -151,7 +176,11 @@ internal class GetDictColor(override val variableProvider: VariableProvider) : F
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         (it as? String)?.runCatching {
             Color.parse(this)
         }?.getOrElse {
@@ -160,7 +189,7 @@ internal class GetDictColor(override val variableProvider: VariableProvider) : F
     }
 }
 
-internal class GetColorFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetColorFromDict : Function() {
 
     override val name = "getColorFromDict"
 
@@ -172,7 +201,11 @@ internal class GetColorFromDict(override val variableProvider: VariableProvider)
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         (it as? String)?.runCatching {
             Color.parse(this)
         }?.getOrElse {
@@ -181,7 +214,7 @@ internal class GetColorFromDict(override val variableProvider: VariableProvider)
     }
 }
 
-internal class GetDictUrl(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictUrl : Function() {
 
     override val name = "getDictUrl"
 
@@ -193,12 +226,16 @@ internal class GetDictUrl(override val variableProvider: VariableProvider) : Fun
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
-internal class GetUrlFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetUrlFromDict : Function() {
 
     override val name = "getUrlFromDict"
 
@@ -210,12 +247,16 @@ internal class GetUrlFromDict(override val variableProvider: VariableProvider) :
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         (it as? String)?.safeConvertToUrl() ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
-internal class GetDictBoolean(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictBoolean : Function() {
 
     override val name = "getDictBoolean"
 
@@ -227,12 +268,16 @@ internal class GetDictBoolean(override val variableProvider: VariableProvider) :
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
 
-internal class GetBooleanFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetBooleanFromDict : Function() {
 
     override val name = "getBooleanFromDict"
 
@@ -244,7 +289,11 @@ internal class GetBooleanFromDict(override val variableProvider: VariableProvide
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = evaluate(name, args).let {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
         it as? Boolean ?: throwWrongTypeException(name, args, resultType, it)
     }
 }
@@ -285,7 +334,7 @@ private fun throwException(functionName: String, args: List<Any>, message: Strin
     throwExceptionOnEvaluationFailed(signature, message)
 }
 
-internal class GetDictOptInteger(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictOptInteger : Function() {
 
     override val name = "getDictOptInteger"
 
@@ -298,7 +347,11 @@ internal class GetDictOptInteger(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Long
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -310,7 +363,7 @@ internal class GetDictOptInteger(override val variableProvider: VariableProvider
     }
 }
 
-internal class GetOptIntegerFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetOptIntegerFromDict : Function() {
 
     override val name = "getOptIntegerFromDict"
 
@@ -323,7 +376,11 @@ internal class GetOptIntegerFromDict(override val variableProvider: VariableProv
     override val resultType = EvaluableType.INTEGER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Long
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -335,7 +392,7 @@ internal class GetOptIntegerFromDict(override val variableProvider: VariableProv
     }
 }
 
-internal class GetDictOptNumber(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictOptNumber : Function() {
 
     override val name = "getDictOptNumber"
 
@@ -348,7 +405,11 @@ internal class GetDictOptNumber(override val variableProvider: VariableProvider)
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Double
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -361,7 +422,7 @@ internal class GetDictOptNumber(override val variableProvider: VariableProvider)
     }
 }
 
-internal class GetOptNumberFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetOptNumberFromDict : Function() {
 
     override val name = "getOptNumberFromDict"
 
@@ -374,7 +435,11 @@ internal class GetOptNumberFromDict(override val variableProvider: VariableProvi
     override val resultType = EvaluableType.NUMBER
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Double
         return evaluateSafe(args, fallback).let {
             when (it) {
@@ -387,7 +452,7 @@ internal class GetOptNumberFromDict(override val variableProvider: VariableProvi
     }
 }
 
-internal class GetDictOptString(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictOptString : Function() {
 
     override val name = "getDictOptString"
 
@@ -400,13 +465,17 @@ internal class GetDictOptString(override val variableProvider: VariableProvider)
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         return evaluateSafe(args, fallback) as? String ?: fallback
     }
 }
 
-internal class GetOptStringFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetOptStringFromDict : Function() {
 
     override val name = "getOptStringFromDict"
 
@@ -419,15 +488,17 @@ internal class GetOptStringFromDict(override val variableProvider: VariableProvi
     override val resultType = EvaluableType.STRING
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         return evaluateSafe(args, fallback) as? String ?: fallback
     }
 }
 
-internal class GetDictOptColorWithStringFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetDictOptColorWithStringFallback : Function() {
 
     override val name = "getDictOptColor"
 
@@ -440,7 +511,11 @@ internal class GetDictOptColorWithStringFallback(
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToColor()
@@ -449,9 +524,7 @@ internal class GetDictOptColorWithStringFallback(
     }
 }
 
-internal class GetDictOptColorWithColorFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetDictOptColorWithColorFallback : Function() {
 
     override val name = "getDictOptColor"
 
@@ -464,16 +537,18 @@ internal class GetDictOptColorWithColorFallback(
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Color
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToColor() ?: fallback
     }
 }
 
-internal class GetOptColorFromDictWithStringFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetOptColorFromDictWithStringFallback : Function() {
 
     override val name = "getOptColorFromDict"
 
@@ -486,7 +561,11 @@ internal class GetOptColorFromDictWithStringFallback(
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToColor()
@@ -495,9 +574,7 @@ internal class GetOptColorFromDictWithStringFallback(
     }
 }
 
-internal class GetOptColorFromDictWithColorFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetOptColorFromDictWithColorFallback : Function() {
 
     override val name = "getOptColorFromDict"
 
@@ -510,16 +587,18 @@ internal class GetOptColorFromDictWithColorFallback(
     override val resultType = EvaluableType.COLOR
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Color
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToColor() ?: fallback
     }
 }
 
-internal class GetDictOptUrlWithStringFallback(
-    override val variableProvider: VariableProvider) : Function(variableProvider
-) {
+internal object GetDictOptUrlWithStringFallback : Function() {
 
     override val name = "getDictOptUrl"
 
@@ -532,7 +611,11 @@ internal class GetDictOptUrlWithStringFallback(
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl() ?:
@@ -540,9 +623,7 @@ internal class GetDictOptUrlWithStringFallback(
     }
 }
 
-internal class GetDictOptUrlWithUrlFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetDictOptUrlWithUrlFallback : Function() {
 
     override val name = "getDictOptUrl"
 
@@ -555,15 +636,17 @@ internal class GetDictOptUrlWithUrlFallback(
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Url
         return (evaluateSafe(args, fallback) as? String)?.safeConvertToUrl() ?: fallback
     }
 }
 
-internal class GetOptUrlFromDictWithStringFallback(
-    override val variableProvider: VariableProvider) : Function(variableProvider
-) {
+internal object GetOptUrlFromDictWithStringFallback : Function() {
 
     override val name = "getOptUrlFromDict"
 
@@ -576,7 +659,11 @@ internal class GetOptUrlFromDictWithStringFallback(
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as String
         val result = evaluateSafe(args, fallback)
         return (result as? String).safeConvertToUrl() ?: fallback.safeConvertToUrl() ?:
@@ -584,9 +671,7 @@ internal class GetOptUrlFromDictWithStringFallback(
     }
 }
 
-internal class GetOptUrlFromDictWithUrlFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetOptUrlFromDictWithUrlFallback : Function() {
 
     override val name = "getOptUrlFromDict"
 
@@ -599,13 +684,17 @@ internal class GetOptUrlFromDictWithUrlFallback(
     override val resultType = EvaluableType.URL
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Url
         return (evaluateSafe(args, fallback) as? String)?.safeConvertToUrl() ?: fallback
     }
 }
 
-internal class GetDictOptBoolean(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetDictOptBoolean : Function() {
 
     override val name = "getDictOptBoolean"
 
@@ -618,13 +707,17 @@ internal class GetDictOptBoolean(override val variableProvider: VariableProvider
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Boolean
         return evaluateSafe(args, fallback) as? Boolean ?: fallback
     }
 }
 
-internal class GetOptBooleanFromDict(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetOptBooleanFromDict : Function() {
 
     override val name = "getOptBooleanFromDict"
 
@@ -637,7 +730,11 @@ internal class GetOptBooleanFromDict(override val variableProvider: VariableProv
     override val resultType = EvaluableType.BOOLEAN
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val fallback = args[0] as Boolean
         return evaluateSafe(args, fallback) as? Boolean ?: fallback
     }

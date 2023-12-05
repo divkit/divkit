@@ -257,7 +257,7 @@ def type_property_build(dictionary: Dict[str, any],
                                       dictionary=dictionary)
     elif type_value == 'array':
         if 'items' not in dictionary:
-            return RawArray(), []
+            return RawArray(min_items=dictionary.get('minItems', 0)), []
         items_types: Dict[str, any] = dictionary.get('items')
         single_name: str = name[:-1] if name.endswith('s') else name
         min_items: int = dictionary.get('minItems', 1)

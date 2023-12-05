@@ -2,7 +2,7 @@ package com.yandex.div.evaluable.multiplatform
 
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.evaluable.StoredValueProvider
+import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
@@ -28,8 +28,12 @@ import java.io.File
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
 
     private val variableProvider = mock<VariableProvider>()
-    private val storedValueProvider = mock<StoredValueProvider>()
-    private val functionProvider = BuiltinFunctionProvider(variableProvider, storedValueProvider)
+    private val evaluationContext = EvaluationContext(
+        variableProvider = variableProvider,
+        storedValueProvider = mock(),
+        functionProvider = BuiltinFunctionProvider,
+        warningSender = { _, _ ->  }
+    )
     private lateinit var testCase: ExpressionTestCase
 
     @Before
@@ -78,12 +82,15 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     private fun evalExpression(expectedWarnings: List<String>): Any {
         return try {
             withEvaluator(
-                variableProvider,
-                functionProvider,
+                evaluationContext,
                 warningsValidator = { actualWarnings ->
-                    Assert.assertTrue(
+                    val expectedSorted = expectedWarnings.sorted()
+                    val actualSorted = actualWarnings.sorted()
+
+                    Assert.assertEquals(
                         "Expected warnings: $expectedWarnings, got: $actualWarnings",
-                        expectedWarnings.sorted() == actualWarnings.sorted()
+                        expectedSorted,
+                        actualSorted
                     )
                 }
             ) {

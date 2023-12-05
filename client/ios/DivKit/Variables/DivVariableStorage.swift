@@ -18,7 +18,9 @@ public final class DivVariableStorage {
 
   /// Gets all available variables including variables from outer storage.
   public var allValues: DivVariables {
-    (outerStorage?.allValues ?? [:]) + values
+    lock.read {
+      (outerStorage?.allValues ?? [:]) + values
+    }
   }
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()

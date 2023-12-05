@@ -1,7 +1,9 @@
 package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
+import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_DIVISION_BY_ZERO
@@ -25,7 +27,11 @@ internal object IntegerSum : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return args.fold(initial = 0L) { sum, arg ->
             Evaluator.evalSum(Token.Operator.Binary.Sum.Plus, sum, arg) as Long
         }
@@ -43,7 +49,11 @@ internal object IntegerSub : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return args.foldIndexed(initial = 0L) { index, acc, arg ->
             if (index == 0) {
                 arg
@@ -65,7 +75,11 @@ internal object IntegerMul : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return args.foldIndexed(initial = 0L) { index, acc, arg ->
             if (index == 0) {
                 arg
@@ -87,7 +101,11 @@ internal object IntegerDiv : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val dividend = args.first() as Long
         val divisor = args.last() as Long
         if (divisor == 0L) {
@@ -108,7 +126,11 @@ internal object IntegerMod : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val dividend = args.first() as Long
         val divisor = args.last() as Long
         if (divisor == 0L) {
@@ -128,7 +150,11 @@ internal object IntegerMaxValue : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = Long.MAX_VALUE
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = Long.MAX_VALUE
 }
 
 internal object IntegerMinValue : Function() {
@@ -141,7 +167,11 @@ internal object IntegerMinValue : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit) = Long.MIN_VALUE
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = Long.MIN_VALUE
 }
 
 internal object IntegerMax : Function() {
@@ -155,7 +185,11 @@ internal object IntegerMax : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         if (args.isEmpty()) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
@@ -176,7 +210,11 @@ internal object IntegerMin : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         if (args.isEmpty()) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
@@ -196,7 +234,11 @@ internal object IntegerAbs : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val value = args.first() as Long
         if (value == Long.MIN_VALUE) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_INTEGER_OVERFLOW)
@@ -215,7 +257,11 @@ internal object IntegerSignum : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return (args.first() as Long).sign.toLong()
     }
 }
@@ -233,7 +279,11 @@ internal object IntegerCopySign : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val magnitude = args.first() as Long
         val sign = (args.last() as Long).sign
         if (sign == 0) {

@@ -8,6 +8,7 @@ import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -153,6 +154,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     )
                 )
             } else {
+                KLog.e(TAG) { "Unable to patch tab because there is more than 1 div in the patch" }
                 newTabItems.add(tabItem)
             }
         }
@@ -408,5 +410,6 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
 
     companion object {
         private const val PATH_FOLLOWING_ERROR = "Unable to find the next child to patch by following a precalculated path"
+        private const val TAG = "DivPatchApply"
     }
 }

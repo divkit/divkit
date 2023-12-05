@@ -7,7 +7,7 @@ import Serialization
 public final class EntityWithRawArrayTemplate: TemplateValue {
   public static let type: String = "entity_with_raw_array"
   public let parent: String? // at least 1 char
-  public let array: Field<[Any]>?
+  public let array: Field<Expression<[Any]>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -16,7 +16,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        array: try dictionary.getOptionalField("array")
+        array: try dictionary.getOptionalExpressionField("array")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "entity_with_raw_array_template." + field, representation: representation)
@@ -25,7 +25,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
 
   init(
     parent: String?,
-    array: Field<[Any]>? = nil
+    array: Field<Expression<[Any]>>? = nil
   ) {
     self.parent = parent
     self.array = array
@@ -54,7 +54,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var arrayValue: DeserializationResult<[Any]> = parent?.array?.value() ?? .noValue
+    var arrayValue: DeserializationResult<Expression<[Any]>> = parent?.array?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "array":

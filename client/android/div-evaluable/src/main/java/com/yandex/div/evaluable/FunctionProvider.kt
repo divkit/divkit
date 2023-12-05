@@ -3,7 +3,7 @@ package com.yandex.div.evaluable
 /**
  * Interface for providing functions.
  */
-interface FunctionProvider {
+fun interface FunctionProvider {
 
     fun get(name: String, args: List<EvaluableType>): Function
 

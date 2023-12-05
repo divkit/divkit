@@ -2,9 +2,10 @@
     import SplitView from './SplitView.svelte';
     import Editor from './Editor.svelte';
     import Viewer from './Viewer.svelte';
-    import { isSamples } from '../data/session';
+    import { isDesign, isSamples } from '../data/session';
     import Samples from './Samples.svelte';
     import { Truthy } from '../utils/truthy';
+    import Design from './Design.svelte';
 
     $: components = [$isSamples && {
         component: Samples,
@@ -20,7 +21,11 @@
 </script>
 
 <main class="main">
-    <SplitView {components} />
+    {#if $isDesign}
+        <Design />
+    {:else}
+        <SplitView {components} />
+    {/if}
 </main>
 
 <style>

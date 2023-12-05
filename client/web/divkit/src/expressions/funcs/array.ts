@@ -1,4 +1,5 @@
-import { ARRAY, BOOLEAN, COLOR, INTEGER, NUMBER, STRING, URL } from '../const';
+import { toBigInt } from '../bigint';
+import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import type { ArrayValue, BooleanValue, ColorValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
 import { checkIntegerOverflow, transformColorValue } from '../utils';
 import { registerFunc } from './funcs';
@@ -88,7 +89,7 @@ function getArrayOptArray(ctx: EvalContext, array: ArrayValue, index: IntegerVal
     } catch (_err) {
         // ignore error
         return {
-            type: 'array',
+            type: ARRAY,
             value: []
         } as unknown as EvalValue;
     }
@@ -100,10 +101,17 @@ function getArrayOptDict(ctx: EvalContext, array: ArrayValue, index: IntegerValu
     } catch (_err) {
         // ignore error
         return {
-            type: 'dict',
+            type: DICT,
             value: {}
         } as unknown as EvalValue;
     }
+}
+
+function len(_ctx: EvalContext, array: ArrayValue): EvalValue {
+    return {
+        type: INTEGER,
+        value: toBigInt(array.value.length)
+    };
 }
 
 export function registerArray(): void {
@@ -266,4 +274,8 @@ export function registerArray(): void {
         ARRAY,
         INTEGER
     ], getArrayOptDict);
+
+    registerFunc('len', [
+        ARRAY
+    ], len);
 }

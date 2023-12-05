@@ -43,8 +43,8 @@
       "name": "true || abc => error",
       "expression": "@{true || abc}",
       "expected": {
-        "type": "error",
-        "value": "Variable 'abc' is missing."
+        "type": "boolean",
+        "value": true
       },
       "variables": [],
       "platforms": [

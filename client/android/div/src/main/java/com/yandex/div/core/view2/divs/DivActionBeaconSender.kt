@@ -34,8 +34,9 @@ internal class DivActionBeaconSender @Inject constructor(
     }
 
     fun sendVisibilityActionBeacon(action: DivSightAction, resolver: ExpressionResolver) {
-        val url = action.url?.evaluate(resolver)
-        if (isVisibilityBeaconsEnabled && url != null) {
+        val url = action.url?.evaluate(resolver) ?: return
+        if (url.scheme.isNotHttpScheme()) return
+        if (isVisibilityBeaconsEnabled) {
             val sendBeaconManager = sendBeaconManagerLazy.get()
             if (sendBeaconManager == null) {
                 KAssert.fail { "SendBeaconManager was not configured" }
@@ -73,8 +74,12 @@ internal class DivActionBeaconSender @Inject constructor(
         return headers
     }
 
+    private fun String?.isNotHttpScheme() = this != HTTP_SCHEME && this != HTTPS_SCHEME
+
     private companion object {
 
         private const val HTTP_HEADER_REFERER = "Referer"
+        private const val HTTP_SCHEME = "http"
+        private const val HTTPS_SCHEME = "https"
     }
 }

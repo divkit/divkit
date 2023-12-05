@@ -65,7 +65,7 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
     }
     return EntityWithPropertyWithDefaultValueNested(
       iNum: safeParseInt(json['iNum']) ?? 0,
-      nonOptional: json['non_optional']!,
+      nonOptional: json['non_optional']!.toString(),
       url: safeParseUri(json['url']) ?? const Uri.parse("https://yandex.ru"),
     );
   }

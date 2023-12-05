@@ -1355,7 +1355,7 @@
     }
 
     const timers = json?.card?.timers;
-    if (timers) {
+    if (timers && typeof document !== 'undefined') {
         const controller = timersController = new TimersController({
             logError,
             applyVars: getJsonWithVars,

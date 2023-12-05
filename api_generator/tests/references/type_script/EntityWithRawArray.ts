@@ -8,7 +8,7 @@ export class EntityWithRawArray<T extends EntityWithRawArrayProps = EntityWithRa
     readonly _props?: Exact<EntityWithRawArrayProps, T>;
 
     readonly type = 'entity_with_raw_array';
-    array: Type<unknown[]>;
+    array: Type<unknown[] | DivExpression>;
 
     constructor(props: Exact<EntityWithRawArrayProps, T>) {
         this.array = props.array;
@@ -16,5 +16,5 @@ export class EntityWithRawArray<T extends EntityWithRawArrayProps = EntityWithRa
 }
 
 export interface EntityWithRawArrayProps {
-    array: Type<unknown[]>;
+    array: Type<unknown[] | DivExpression>;
 }

@@ -27,46 +27,44 @@ class EnumWithDefaultType with EquatableMixin {
     throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType");
   }
 
-  void map({
-    required Function(WithDefault) withDefault,
-    required Function(WithoutDefault) withoutDefault,
+  T map<T>({
+    required T Function(WithDefault) withDefault,
+    required T Function(WithoutDefault) withoutDefault,
   }) {
     final value = _value;
     if(value is WithDefault) {
-      withDefault(value);
-      return;
+      return withDefault(value);
     }
     if(value is WithoutDefault) {
-      withoutDefault(value);
-      return;
+      return withoutDefault(value);
     }
     throw Exception("Type ${value.runtimeType.toString()} is not generalized in EnumWithDefaultType");
   }
 
-  void maybeMap({
-    Function(WithDefault)? withDefault,
-    Function(WithoutDefault)? withoutDefault,
-    required Function() orElse,
+  T maybeMap<T>({
+    T Function(WithDefault)? withDefault,
+    T Function(WithoutDefault)? withoutDefault,
+    required T Function() orElse,
   }) {
     final value = _value;
     if(value is WithDefault && withDefault != null) {
-      withDefault(value);
-      return;
+     return withDefault(value);
     }
     if(value is WithoutDefault && withoutDefault != null) {
-      withoutDefault(value);
-      return;
+     return withoutDefault(value);
     }
-    orElse();
+    return orElse();
   }
 
   const EnumWithDefaultType.withDefault(
     WithDefault value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
   const EnumWithDefaultType.withoutDefault(
     WithoutDefault value,
-  ) : _value = value;
+  ) :
+ _value = value;
 
 
   static EnumWithDefaultType? fromJson(Map<String, dynamic>? json) {
@@ -75,9 +73,9 @@ class EnumWithDefaultType with EquatableMixin {
     }
     switch (json['type']) {
       case WithDefault.type :
-        return EnumWithDefaultType.withDefault(WithDefault.fromJson(json)!);
+        return EnumWithDefaultType(WithDefault.fromJson(json)!);
       case WithoutDefault.type :
-        return EnumWithDefaultType.withoutDefault(WithoutDefault.fromJson(json)!);
+        return EnumWithDefaultType(WithoutDefault.fromJson(json)!);
     }
     return null;
   }

@@ -203,6 +203,7 @@
         },
         "value": {
           "type": "array",
+          "supports_expressions": false,
           "$description": "translations.json#/div_variable_value"
         }
       },

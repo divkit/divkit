@@ -17,7 +17,8 @@ from ...schema.modeling.entities import (
     String,
     Dictionary,
     RawArray,
-    Declarable
+    Declarable,
+    TypeScriptGeneratorProperties
 )
 from ...schema.modeling.text import Text, EMPTY
 
@@ -156,11 +157,50 @@ class TypeScriptEntity(Entity):
             result += constructor_declaration
         result += '}'
         result += EMPTY
-        result += f'export interface {prop_name} {{'
-        dynamic_properties_declaration = self.dynamic_properties_declaration
-        if dynamic_properties_declaration.lines:
-            result += dynamic_properties_declaration
-        result += '}'
+
+        union_interfaces = None
+        if isinstance(self.generator_properties, TypeScriptGeneratorProperties):
+            properties = cast(TypeScriptGeneratorProperties, self.generator_properties)
+            union_interfaces = properties.union_interfaces
+
+        if union_interfaces:
+            names = []
+
+            result += f'export interface {prop_name}Base {{'
+            dynamic_properties_declaration = self.dynamic_properties_declaration
+            if dynamic_properties_declaration.lines:
+                result += dynamic_properties_declaration
+            result += '}'
+            result += EMPTY
+
+            for i in range(0, len(union_interfaces)):
+                result += f'export interface {prop_name}{i} extends {prop_name}Base {{'
+                required_params = union_interfaces[i].get('required_params')
+
+                for required_prop_name in required_params:
+                    prop = [x for x in self.instance_properties if x.name == required_prop_name][0]
+                    prop.__class__ = TypeScriptProperty
+                    prop = cast(TypeScriptProperty, prop)
+                    commentary = prop.commentary
+                    if commentary is not None:
+                        result += commentary.indented(indent_width=4)
+                    result += f'    {prop.make_declaration(is_templatable=self._type_script_templatable, override_required=True)};'
+
+                result += '}'
+                result += EMPTY
+
+                names.append(f'{prop_name}{i}')
+
+            result += EMPTY
+            result += f'export type {prop_name} = {" | ".join(names)};'
+            result += EMPTY
+        else:
+            result += f'export interface {prop_name} {{'
+            dynamic_properties_declaration = self.dynamic_properties_declaration
+            if dynamic_properties_declaration.lines:
+                result += dynamic_properties_declaration
+            result += '}'
+
         return result
 
     @property
@@ -240,8 +280,8 @@ class TypeScriptProperty(Property):
         else:
             raise TypeError(f'{self.property_type.__class__} is not a static type')
 
-    def make_declaration(self, is_templatable: bool) -> str:
-        optional_mark = '?' if self.optional else ''
+    def make_declaration(self, is_templatable: bool, override_required: bool = False) -> str:
+        optional_mark = '?' if self.optional and not override_required else ''
         type_name = _type_script_type_name(self.property_type, self.supports_expressions)
         if self.supports_expressions and not isinstance(self.property_type, Array):
             type_name += ' | DivExpression'

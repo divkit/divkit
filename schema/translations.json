@@ -47,6 +47,10 @@
     "en": "Callbacks that are called after [data loading](../../interaction.dita#loading-data).",
     "ru": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data)."
   },
+  "div_action_base_is_enabled": {
+    "en": "This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).",
+    "ru": "Параметр позволяет отключить экшен по каким-либо причинам. Экшен, при отключении, перестает реагировать на связанное с ним событие (клик, изменение видимости и прочее)."
+  },
   "div_action_base_log_id": {
     "en": "Logging ID.",
     "ru": "Идентификатор для логирования."
@@ -346,6 +350,30 @@
   "div_border_stroke": {
     "en": "Stroke style.",
     "ru": "Стиль рамки."
+  },
+  "div_collection_item_builder": {
+    "en": "A way to set collection items dynamically using data and prototypes.",
+    "ru": "Способ задать элементы коллекции динамически при помощи `data` и `prototypes`."
+  },
+  "div_collection_item_builder_data": {
+    "en": "Data that will be used to create collection items.",
+    "ru": "Данные, которые будут использоваться для создания элементов коллекции."
+  },
+  "div_collection_item_builder_prototypes": {
+    "en": "Array of `div` from which the collection items will be created.",
+    "ru": "Массив `div` из которых будут созданы элементы коллекции."
+  },
+  "div_collection_item_builder_prototypes_div": {
+    "en": "`Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.",
+    "ru": "`Div` из которого будут созданы элементы коллекции. В `Div` можно использовать выражения с использованием данных из `data`, для обращения к очередному элементу `data` нужно использовать такой же префикс как и в `data_element_prefix`."
+  },
+  "div_collection_item_builder_prototypes_selector": {
+    "en": "A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.",
+    "ru": "Условие, которое используется для выбора прототипа для очередного элемента коллекции. В случае, если будет больше 1 истинного условия, будет выбран прототип, который находится раньше.Если не выполнилось ни одного условия, элемент из data будет пропущен."
+  },
+  "div_collection_item_builder_prototypes_data_element_prefix": {
+    "en": "Prefix for accessing the next `data` element in the prototype.",
+    "ru": "Префикс для обращения к очередному элементу `data` в прототипе."
   },
   "div_change_bounds_transition": {
     "en": "Element position and size change animation.",

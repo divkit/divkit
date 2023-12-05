@@ -58,6 +58,7 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
             children.forEach(element => {
                 element.style.display = 'none';
             });
+            node.setAttribute('data-lottie', 'true');
 
             // create wrapper for an animation, because "lottie-web" destroys container on "destroy" call,
             // and gif node itself cannot be used
@@ -80,6 +81,11 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                 children.forEach(element => {
                     element.style.display = '';
                 });
+                node.removeAttribute('data-lottie');
+                if (this.wrapper) {
+                    this.wrapper.parentNode?.removeChild(this.wrapper);
+                    this.wrapper = undefined;
+                }
                 const err: WrappedError = new Error('Failed to load lottie animation') as WrappedError;
                 err.level = 'error';
                 err.additional = {
@@ -106,12 +112,13 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
             }
         }
 
-        unmountView(_node: HTMLElement, _context: DivExtensionContext): void {
+        unmountView(node: HTMLElement, _context: DivExtensionContext): void {
             this.animItem?.destroy();
             if (this.wrapper) {
                 this.wrapper.parentNode?.removeChild(this.wrapper);
                 this.wrapper = undefined;
             }
+            node.removeAttribute('data-lottie');
         }
     };
 }

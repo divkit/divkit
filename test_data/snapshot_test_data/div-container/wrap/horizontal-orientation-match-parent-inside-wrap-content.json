@@ -1,0 +1,62 @@
+{
+  "description": "match_parent inside wrap_content in horizontal wrap-container without known size should transform into the wrap_content with constrained",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000FF"
+            }
+          },
+          "layout_mode": "wrap",
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "Long title",
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Title",
+              "width": {
+                "type": "match_parent"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

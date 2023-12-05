@@ -1,14 +1,22 @@
+## 28.13.0
+
+# Android Client:
+* Fixed using incorrect uri scheme in Beacon.
+* Fixed broken fade animation.
+* Added the ability to set the lineHeight to be smaller than the font size.
+
+# iOS Client:
+* Supported `!:` operator.
+
+
 ## 28.12.0
 
 # Android Client:
 * Added `getStoredUrlValue` functions.
 * Removed dependency on androidx.fragment.
-* Reduced number of memory allocations at observing of client-side variables.
-* Fixed bug that the slider interfered with the parent's vertical scrolling.
 * Fixed the hyphenation of images in the text.
 * Fixed baseline alignment in `DivCustom`.
 * Fixed bind on enabled bind_on_attach.
-* Fixed a case when the wrong DivActionHandler was used.
 * Fixed alignment of the DivStateLayout.
 
 # iOS Client:

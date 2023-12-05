@@ -16,6 +16,7 @@ const val DIV2_VIEW_POOL_PROFILING = "div2_view_pool_profiling"
 const val DIV2_MULTIPLE_STATE_CHANGE = "multiple_state_change"
 const val DIV2_DEMO_SHOW_RENDERING_TIME = "demo_activity_rendering_time"
 const val IMAGE_LOADER = "image_loader"
+const val COMPLEX_REBIND = "complex_rebind"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"

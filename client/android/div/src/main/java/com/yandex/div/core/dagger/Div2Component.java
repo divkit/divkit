@@ -177,6 +177,10 @@ public interface Div2Component {
     boolean isBindOnAttachEnabled();
 
     @NonNull
+    @ExperimentFlag(experiment = Experiment.COMPLEX_REBIND_ENABLED)
+    boolean isComplexRebindEnabled();
+
+    @NonNull
     DivActionTypedHandlerCombiner getActionTypedHandlerCombiner();
 
     /**

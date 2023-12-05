@@ -96,7 +96,8 @@
           "default_value": "none",
           "$description": "translations.json#/div_scrollbar",
           "platforms": [
-            "web"
+            "web",
+            "android"
           ]
         }
       }

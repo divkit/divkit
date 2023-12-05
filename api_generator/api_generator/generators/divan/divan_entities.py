@@ -651,7 +651,7 @@ class DivanPropertyType(PropertyType):
 
     @property
     def is_primitive(self) -> bool:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url, RawArray)):
             return True
         elif isinstance(self, (Dictionary, Array)):
             return False

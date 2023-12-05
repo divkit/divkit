@@ -809,6 +809,67 @@
         "android",
         "web"
       ]
+    },
+    {
+      "name": "len(array) => 0",
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "len(array) => 1",
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            1
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "len(array) => 3",
+      "expression": "@{len(array)}",
+      "expected": {
+        "type": "integer",
+        "value": 3
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            1,
+            "a",
+            true
+          ]
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

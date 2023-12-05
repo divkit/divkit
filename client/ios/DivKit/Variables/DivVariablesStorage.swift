@@ -87,24 +87,26 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     variables: DivVariables
   ) {
-    let oldValues = allValues
     lock.write {
+      let oldValues = allValues
       cardVariables[cardId] = variables
-    }
 
-    let changedVariables = makeChangedVariables(
-      old: oldValues.local[cardId] ?? [:],
-      new: variables
-    )
-    if changedVariables.isEmpty { return }
-
-    notify(
-      ChangeEvent(
-        kind: .local(cardId, changedVariables),
-        oldValues: oldValues,
-        newValues: allValues
+      let changedVariables = makeChangedVariables(
+        old: oldValues.local[cardId] ?? [:],
+        new: variables
       )
-    )
+      if changedVariables.isEmpty {
+        return
+      }
+
+      notify(
+        ChangeEvent(
+          kind: .local(cardId, changedVariables),
+          oldValues: oldValues,
+          newValues: allValues
+        )
+      )
+    }
   }
 
   public func append(

@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { initialValueStore, valueStore } from './valueStore';
-import { isInitialLoading, isLoadError, isSamples, session } from './session';
+import { isDesign, isInitialLoading, isLoadError, isSamples, session } from './session';
 import { debounce } from '../utils/debounce';
 import { clientHostPath, serverHostPath } from '../utils/const';
 import { savedStore } from './savedStore';
@@ -10,6 +10,7 @@ import { jsonStore } from './jsonStore';
 // import { addListener, wsPromise } from './ws';
 // import { listenToDevices } from './externalViewers';
 import { getLs, setLs } from '../utils/localStorage';
+import { DEFAULT_EDITOR_VALUE } from './defaultEditorValue';
 
 /* function listenJsonForPreview(uuid: string): void {
     wsPromise.then(ws => {
@@ -35,9 +36,13 @@ async function init() {
     const uuid = params.get('uuid');
     // mode = params.get('mode') || '';
 
+    const design = params.get('design') === '1';
     const samples = params.get('samples') === '1';
 
-    if (samples) {
+    if (design) {
+        isDesign.set(true);
+        valueStore.set(DEFAULT_EDITOR_VALUE);
+    } else if (samples) {
         isSamples.set(true);
     }
 
@@ -134,8 +139,10 @@ function unsavedPrompt(event: BeforeUnloadEvent) {
 }
 
 async function genLinks(uuid: string) {
+    const isEditor = get(isDesign);
+
     return {
-        linkToEdit: `${location.protocol}//${clientHostPath}?uuid=${uuid}`,
+        linkToEdit: `${location.protocol}//${clientHostPath}?uuid=${uuid}${isEditor ? '&design=1' : ''}`,
         linkToPreview: `${location.protocol}//${clientHostPath}?uuid=${uuid}&mode=preview`,
         linkToJSON: `${location.protocol}//${serverHostPath}api/json?uuid=${uuid}`
     };
@@ -190,4 +197,4 @@ export async function save() {
     }
 }
 
-init();
+export const initPromise = init();

@@ -3,6 +3,7 @@
 
     import css from './Pager.module.css';
     import rootCss from '../Root.module.css';
+    import arrowsCss from '../utilities/Arrows.module.css';
 
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
@@ -32,6 +33,10 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const instId = rootCtx.genId('pager');
 
+    const leftClass = rootCtx.getCustomization('pagerLeftClass');
+    const rightClass = rootCtx.getCustomization('pagerRightClass');
+
+    const isDesktop = rootCtx.isDesktop;
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
 
@@ -138,6 +143,12 @@
 
     $: hasError = hasItemsError || hasLayoutModeError;
 
+    $: shouldCheckArrows = $isDesktop && mounted && !hasError;
+
+    $: hasScrollLeft = currentItem > 0;
+
+    $: hasScrollRight = currentItem + 1 < items.length;
+
     function checkIsFullyIntersecting(scroller: DOMRect, item: DOMRect): boolean {
         if (orientation === 'horizontal') {
             return item.left >= scroller.left && item.right <= scroller.right;
@@ -216,6 +227,26 @@
         currentItem = index;
     }
 
+    function setPreviousItem(overflow: Overflow) {
+        let previousItem = currentItem - 1;
+
+        if (previousItem < 0) {
+            previousItem = overflow === 'ring' ? items.length - 1 : currentItem;
+        }
+
+        scrollToPagerItem(previousItem);
+    }
+
+    function setNextItem(overflow: Overflow) {
+        let nextItem = currentItem + 1;
+
+        if (nextItem > items.length - 1) {
+            nextItem = overflow === 'ring' ? 0 : currentItem;
+        }
+
+        scrollToPagerItem(nextItem);
+    }
+
     if (json.id && !layoutParams?.fakeElement) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
@@ -225,24 +256,8 @@
 
                 scrollToPagerItem(item);
             },
-            setPreviousItem(overflow: Overflow) {
-                let previousItem = currentItem - 1;
-
-                if (previousItem < 0) {
-                    previousItem = overflow === 'ring' ? items.length - 1 : currentItem;
-                }
-
-                scrollToPagerItem(previousItem);
-            },
-            setNextItem(overflow: Overflow) {
-                let nextItem = currentItem + 1;
-
-                if (nextItem > items.length - 1) {
-                    nextItem = overflow === 'ring' ? 0 : currentItem;
-                }
-
-                scrollToPagerItem(nextItem);
-            }
+            setPreviousItem,
+            setNextItem
         });
     }
 
@@ -301,5 +316,28 @@
                 {/each}
             {/key}
         </div>
+
+        {#if hasScrollLeft && shouldCheckArrows}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => setPreviousItem('clamp')}>
+                {#if !leftClass}
+                    <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path class={css['pager__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
+                    </svg>
+                {/if}
+            </div>
+        {/if}
+        {#if hasScrollRight && shouldCheckArrows}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => setNextItem('clamp')}>
+                {#if !rightClass}
+                    <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path class={css['pager__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
+                    </svg>
+                {/if}
+            </div>
+        {/if}
     </Outer>
 {/if}

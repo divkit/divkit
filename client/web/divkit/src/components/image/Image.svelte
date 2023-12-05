@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onDestroy } from 'svelte';
+    import { afterUpdate, getContext, onDestroy } from 'svelte';
 
     import css from './Image.module.css';
 
@@ -38,8 +38,10 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    let img: HTMLImageElement;
     let state = STATE_LOADING;
     let isEmpty = false;
+    let isLottie = false;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
 
     $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
@@ -186,6 +188,7 @@
     };
 
     $: style = {
+        display: isLottie ? 'none' : undefined,
         // Image preview shows, if loading of original image is failed
         'background-image': backgroundImage,
         'background-color': backgroundImage ? undefined : placeholderColor,
@@ -215,6 +218,16 @@
         }
     }
 
+    afterUpdate(() => {
+        if (!img) {
+            return;
+        }
+        const node = img.closest('.' + css.image);
+        if (node && node.getAttribute('data-lottie')) {
+            isLottie = true;
+        }
+    });
+
     onDestroy(() => {
         rootCtx.removeSvgFilter(tintColor, tintMode);
     });
@@ -235,6 +248,7 @@
             {#if mods.aspect}
                 <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
                     <img
+                        bind:this={img}
                         class={css.image__image}
                         src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
                         loading="lazy"
@@ -248,6 +262,7 @@
                 </span>
             {:else}
                 <img
+                    bind:this={img}
                     class={css.image__image}
                     src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
                     loading="lazy"

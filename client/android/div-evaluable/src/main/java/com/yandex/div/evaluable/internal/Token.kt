@@ -99,6 +99,10 @@ internal sealed interface Token {
             }
         }
 
+        object Try : Operator {
+            override fun toString() = "!:"
+        }
+
         // Ternary
         object TernaryIf : Operator {
             override fun toString() = "?"

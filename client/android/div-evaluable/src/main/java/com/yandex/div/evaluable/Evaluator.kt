@@ -6,11 +6,7 @@ import com.yandex.div.evaluable.types.DateTime
 import kotlin.math.abs
 
 @Mockable
-class Evaluator(
-    private val variableProvider: VariableProvider,
-    private val functionProvider: FunctionProvider,
-    private val onWarning: (String, Evaluable) -> Unit
-) {
+class Evaluator(private val evaluationContext: EvaluationContext) {
 
     @Throws(EvaluableException::class)
     @Suppress("UNCHECKED_CAST")
@@ -164,6 +160,18 @@ class Evaluator(
         }
     }
 
+    internal fun evalTry(tryEvaluable: Evaluable.Try): Any {
+        return runCatching {
+            eval<Any>(tryEvaluable.tryExpression).also {
+                tryEvaluable.updateIsCacheable(tryEvaluable.tryExpression.checkIsCacheable())
+            }
+        }.getOrElse {
+            eval<Any>(tryEvaluable.fallbackExpression).also {
+                tryEvaluable.updateIsCacheable(tryEvaluable.fallbackExpression.checkIsCacheable())
+            }
+        }
+    }
+
     internal fun evalFunctionCall(functionCall: Evaluable.FunctionCall): Any {
         val arguments = mutableListOf<Any>()
         for (arg in functionCall.arguments) {
@@ -174,14 +182,16 @@ class Evaluator(
             EvaluableType.of(arg)
         }
         val function = try {
-            functionProvider.get(functionCall.token.name, argTypes)
+            evaluationContext.functionProvider.get(functionCall.token.name, argTypes)
         } catch (e: EvaluableException) {
             throwExceptionOnFunctionEvaluationFailed(functionCall.token.name, arguments, e.message ?: "")
         }
 
+        val expressionContext = ExpressionContext(functionCall)
+
         functionCall.updateIsCacheable(function.isPure)
         try {
-            return function.invoke(arguments) { onWarning(it, functionCall) }
+            return function.invoke(evaluationContext, expressionContext, arguments)
         } catch (e: IntegerOverflow) {
             throw IntegerOverflow(functionToMessageFormat(function.name, arguments))
         }
@@ -206,7 +216,7 @@ class Evaluator(
     }
 
     internal fun evalVariable(call: Evaluable.Variable): Any {
-        return variableProvider.get(call.token.name)
+        return evaluationContext.variableProvider.get(call.token.name)
             ?: throw MissingVariableException(variableName = call.token.name)
     }
 

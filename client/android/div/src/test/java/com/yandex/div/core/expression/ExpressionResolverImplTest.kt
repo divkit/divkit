@@ -4,11 +4,8 @@ import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
-import com.yandex.div.evaluable.EvaluableType
-import com.yandex.div.evaluable.Function
-import com.yandex.div.evaluable.FunctionProvider
-import com.yandex.div.evaluable.StoredValueProvider
-import com.yandex.div.evaluable.VariableProvider
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.internal.parser.*
@@ -30,8 +27,6 @@ import java.util.*
 class ExpressionResolverImplTest {
     @get:Rule
     val rule = EnableAssertsRule(false)
-    private val variableProvider = mock<VariableProvider>()
-    private val storedValueProvider = mock<StoredValueProvider>()
 
     private val variables = mutableMapOf<String, Variable>().also { map ->
         listOf(
@@ -68,29 +63,33 @@ class ExpressionResolverImplTest {
         addSource(globalVariableController.variableSource)
     }
 
+    private val evaluationContext = EvaluationContext(
+        variableProvider = { externalVariables.getMutableVariable(it)?.getValue() },
+        storedValueProvider = mock(),
+        functionProvider = BuiltinFunctionProvider,
+        warningSender = { _, _ -> }
+    )
+
     private val underTest = ExpressionResolverImpl(
         externalVariables,
-        ExpressionEvaluatorFactory(
-            BuiltinFunctionProvider(
-                variableProvider,
-                storedValueProvider
-            )
-        ),
+        Evaluator(evaluationContext),
         mock(),
     )
 
     private val withFuncGetCallback = { callback: () -> Unit ->
         ExpressionResolverImpl(
             VariableController(),
-            ExpressionEvaluatorFactory(object : FunctionProvider {
-                override fun get(name: String, args: List<EvaluableType>): Function {
-                    callback()
-                    return BuiltinFunctionProvider(
-                        variableProvider,
-                        storedValueProvider
-                    ).get(name, args)
-                }
-            }),
+            Evaluator(
+                EvaluationContext(
+                    variableProvider = evaluationContext.variableProvider,
+                    storedValueProvider = evaluationContext.storedValueProvider,
+                    functionProvider = { name, args ->
+                        callback()
+                        evaluationContext.functionProvider.get(name, args)
+                    },
+                    warningSender = evaluationContext.warningSender
+                )
+            ),
             mock()
         )
     }
@@ -136,7 +135,8 @@ class ExpressionResolverImplTest {
             converter = NUMBER_TO_DOUBLE,
             validator = { true },
             logger = failFastLogger,
-            typeHelper = TYPE_HELPER_DOUBLE)
+            typeHelper = TYPE_HELPER_DOUBLE
+        )
         Assert.assertEquals(100.0f.toDouble(), doubleExpression.evaluate(underTest), 0f.toDouble())
     }
 
@@ -251,7 +251,8 @@ class ExpressionResolverImplTest {
         val expression = mutableExpression(
             "scheme://action?value=@{this.random_property}",
             TYPE_HELPER_STRING,
-            logger = silentLogger)
+            logger = silentLogger
+        )
 
         val uri = expression.evaluate(underTest)
 
@@ -263,7 +264,8 @@ class ExpressionResolverImplTest {
         val expression = mutableExpression(
             "scheme://action?value=@{this.random_property}",
             TYPE_HELPER_STRING,
-            logger = silentLogger)
+            logger = silentLogger
+        )
 
         val uri = expression.evaluate(underTest)
 
@@ -329,8 +331,10 @@ class ExpressionResolverImplTest {
     @Test
     fun `test subscribe to expression`() {
         var callbackCalled = false
-        underTest.subscribeToExpression("@{some_number+another_number}",
-            listOf("some_number", "another_number")) {
+        underTest.subscribeToExpression(
+            "@{some_number+another_number}",
+            listOf("some_number", "another_number")
+        ) {
             callbackCalled = true
         }
         variables["another_number"]?.set("111")
@@ -381,12 +385,12 @@ class ExpressionResolverImplTest {
         Assert.assertEquals(56, declaredValue)
     }
 
-    private fun <T: Any> mutableExpression(
+    private fun <T : Any> mutableExpression(
         rawExpression: String,
         typeHelper: TypeHelper<T>,
         logger: ParsingErrorLogger = failFastLogger,
         validator: (T) -> Boolean = { true },
-    ) = Expression.MutableExpression<T,T>(
+    ) = Expression.MutableExpression<T, T>(
         expressionKey = "some_key",
         rawExpression = rawExpression,
         validator = validator,
@@ -395,13 +399,13 @@ class ExpressionResolverImplTest {
         typeHelper = typeHelper,
     )
 
-    private fun <R : Any, T: Any> mutableExpressionWithConverter(
+    private fun <R : Any, T : Any> mutableExpressionWithConverter(
         rawExpression: String,
         typeHelper: TypeHelper<T>,
         converter: Converter<R, T>,
         logger: ParsingErrorLogger = failFastLogger,
         validator: (T) -> Boolean = { true },
-    ) = Expression.MutableExpression<R,T>(
+    ) = Expression.MutableExpression<R, T>(
         expressionKey = "some_key",
         rawExpression = rawExpression,
         validator = validator,

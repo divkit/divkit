@@ -52,7 +52,7 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
     }
     return EntityWithArrayOfNestedItemsItem(
       entity: Entity.fromJson(json['entity'])!,
-      property: json['property']!,
+      property: json['property']!.toString(),
     );
   }
 }

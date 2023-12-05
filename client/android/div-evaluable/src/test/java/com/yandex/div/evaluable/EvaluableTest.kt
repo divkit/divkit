@@ -12,12 +12,12 @@ private typealias VariableName = String
 private typealias NumOfInvokes = Int
 
 class EvaluableTest {
-
     private val variableProvider = mock<VariableProvider>()
-    private val storedValueProvider = mock<StoredValueProvider>()
-    private val functionProvider = BuiltinFunctionProvider(
-        variableProvider,
-        storedValueProvider
+    private val evaluationContext = EvaluationContext(
+        variableProvider = variableProvider,
+        storedValueProvider = mock(),
+        functionProvider = BuiltinFunctionProvider,
+        warningSender = { _, _ -> }
     )
 
     // Ternary Operator Test
@@ -679,7 +679,7 @@ class EvaluableTest {
     }
 
     private fun assertBooleanTemplate(expected: Boolean, template: String) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val actual: Any = eval(Evaluable.prepare(template))
             assert(actual is Boolean)
             assertEquals(expected, actual as Boolean)
@@ -690,7 +690,7 @@ class EvaluableTest {
     }
 
     private fun assertIntTemplate(expected: Long, template: String) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val actual: Any = eval(Evaluable.prepare(template))
             assert(actual is Long)
             assertEquals(expected, actual as Long)
@@ -701,7 +701,7 @@ class EvaluableTest {
     }
 
     private fun assertDecimalTemplate(expected: Double, template: String) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val actual: Any = eval(Evaluable.prepare(template))
             assert(actual is Double)
             assertEquals(expected, actual as Double)
@@ -712,7 +712,7 @@ class EvaluableTest {
     }
 
     private fun assertStringTemplate(expected: String, template: String) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val actual: Any = eval(Evaluable.prepare(template))
             assert(actual is String)
             assertEquals(expected, actual as String)
@@ -721,7 +721,7 @@ class EvaluableTest {
     private inline fun <reified T> assertExpressionWithInvokeTimes(
         expr: String, expected: T,
         vararg variablesInvokes: Pair<VariableName, NumOfInvokes>
-    ) = withEvaluator(variableProvider, functionProvider) {
+    ) = withEvaluator(evaluationContext) {
         val actual = eval<Any>(Evaluable.prepare("@{$expr}"))
         variablesInvokes.forEach { (varName, invokes) ->
             verify(variableProvider, times(invokes)).get(varName)
@@ -731,14 +731,14 @@ class EvaluableTest {
     }
 
     private fun assertEvaluableIsOrNotCacheable(expr: String, shouldBeCacheable: Boolean) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val evaluable = Evaluable.prepare("@{$expr}")
             eval<Any>(evaluable)
             assertEquals(evaluable.checkIsCacheable(), shouldBeCacheable)
         }
 
     private fun assertStringTemplateIsOrNotCacheable(template: String, shouldBeCacheable: Boolean) =
-        withEvaluator(variableProvider, functionProvider) {
+        withEvaluator(evaluationContext) {
             val evaluable = Evaluable.prepare(template)
             eval<Any>(evaluable)
             assertEquals(evaluable.checkIsCacheable(), shouldBeCacheable)

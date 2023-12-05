@@ -5,7 +5,7 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
 
-internal class GetIntegerValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetIntegerValue : Function() {
 
     override val name = "getIntegerValue"
 
@@ -18,17 +18,21 @@ internal class GetIntegerValue(override val variableProvider: VariableProvider) 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Long
-        val variableValue = variableProvider.get(variableName) as? Long
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Long
 
-        return  variableValue ?: fallbackValue
+        return variableValue ?: fallbackValue
     }
 
 }
 
-internal class GetNumberValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetNumberValue : Function() {
 
     override val name = "getNumberValue"
 
@@ -41,20 +45,24 @@ internal class GetNumberValue(override val variableProvider: VariableProvider) :
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Number
-        val variableValue = if (variableProvider.get(variableName) is Long)
+        val variableValue = if (evaluationContext.variableProvider.get(variableName) is Long)
             null
         else
-            variableProvider.get(variableName) as? Number
+            evaluationContext.variableProvider.get(variableName) as? Number
 
         return  variableValue ?: fallbackValue
     }
 
 }
 
-internal class GetStringValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetStringValue : Function() {
 
     override val name = "getStringValue"
 
@@ -67,17 +75,21 @@ internal class GetStringValue(override val variableProvider: VariableProvider) :
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as String
-        val variableValue = variableProvider.get(variableName) as? String
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? String
 
         return  variableValue ?: fallbackValue
     }
 
 }
 
-internal class GetColorValueString(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetColorValueString : Function() {
 
     override val name = "getColorValue"
 
@@ -90,17 +102,21 @@ internal class GetColorValueString(override val variableProvider: VariableProvid
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = Color.parse(args[1] as String)
-        val variableValue = variableProvider.get(variableName) as? Color
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Color
 
         return  variableValue ?: fallbackValue
     }
 
 }
 
-internal class GetColorValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetColorValue : Function() {
 
     override val name = "getColorValue"
 
@@ -113,19 +129,21 @@ internal class GetColorValue(override val variableProvider: VariableProvider) : 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Color
-        val variableValue = variableProvider.get(variableName) as? Color
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Color
 
         return  variableValue ?: fallbackValue
     }
 
 }
 
-internal class GetUrlValueWithStringFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetUrlValueWithStringFallback : Function() {
 
     override val name = "getUrlValue"
 
@@ -138,10 +156,14 @@ internal class GetUrlValueWithStringFallback(
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val urlString = args[1] as String
-        val variableValue = variableProvider.get(variableName) as? Url
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Url
         return variableValue ?:
             urlString.safeConvertToUrl() ?:
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_URL)
@@ -149,9 +171,7 @@ internal class GetUrlValueWithStringFallback(
 
 }
 
-internal class GetUrlValueWithUrlFallback(
-    override val variableProvider: VariableProvider
-) : Function(variableProvider) {
+internal object GetUrlValueWithUrlFallback : Function() {
 
     override val name = "getUrlValue"
 
@@ -164,15 +184,19 @@ internal class GetUrlValueWithUrlFallback(
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
-        val variableValue = variableProvider.get(variableName) as? Url
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Url
         return variableValue ?: (args[1] as Url)
     }
 
 }
 
-internal class GetBooleanValue(override val variableProvider: VariableProvider) : Function(variableProvider) {
+internal object GetBooleanValue : Function() {
 
     override val name = "getBooleanValue"
 
@@ -185,10 +209,14 @@ internal class GetBooleanValue(override val variableProvider: VariableProvider) 
 
     override val isPure = false
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         val variableName = args[0] as String
         val fallbackValue = args[1] as Boolean
-        val variableValue = variableProvider.get(variableName) as? Boolean
+        val variableValue = evaluationContext.variableProvider.get(variableName) as? Boolean
 
         return  variableValue ?: fallbackValue
     }

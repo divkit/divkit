@@ -266,6 +266,8 @@ export type Theme = 'system' | 'light' | 'dark';
 export interface Customization {
     galleryLeftClass?: string;
     galleryRightClass?: string;
+    pagerLeftClass?: string;
+    pagerRightClass?: string;
 }
 
 export interface DivExtensionContext {

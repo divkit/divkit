@@ -35,6 +35,7 @@ class VisibilityAction internal constructor(
     operator fun plus(additive: Properties): VisibilityAction = VisibilityAction(
         Properties(
             downloadCallbacks = additive.downloadCallbacks ?: properties.downloadCallbacks,
+            isEnabled = additive.isEnabled ?: properties.isEnabled,
             logId = additive.logId ?: properties.logId,
             logLimit = additive.logLimit ?: properties.logLimit,
             payload = additive.payload ?: properties.payload,
@@ -51,6 +52,11 @@ class VisibilityAction internal constructor(
          * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
+        /**
+         * This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+         * Default value: `true`.
+         */
+        val isEnabled: Property<Boolean>?,
         /**
          * Logging ID.
          */
@@ -88,6 +94,7 @@ class VisibilityAction internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("download_callbacks", downloadCallbacks)
+            result.tryPutProperty("is_enabled", isEnabled)
             result.tryPutProperty("log_id", logId)
             result.tryPutProperty("log_limit", logLimit)
             result.tryPutProperty("payload", payload)
@@ -103,6 +110,7 @@ class VisibilityAction internal constructor(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -115,6 +123,7 @@ class VisibilityAction internal constructor(
 fun DivScope.visibilityAction(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -126,6 +135,7 @@ fun DivScope.visibilityAction(
 ): VisibilityAction = VisibilityAction(
     VisibilityAction.Properties(
         downloadCallbacks = valueOrNull(downloadCallbacks),
+        isEnabled = valueOrNull(isEnabled),
         logId = valueOrNull(logId),
         logLimit = valueOrNull(logLimit),
         payload = valueOrNull(payload),
@@ -139,6 +149,7 @@ fun DivScope.visibilityAction(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -151,6 +162,7 @@ fun DivScope.visibilityAction(
 fun DivScope.visibilityActionProps(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -161,6 +173,7 @@ fun DivScope.visibilityActionProps(
     visibilityPercentage: Int? = null,
 ) = VisibilityAction.Properties(
     downloadCallbacks = valueOrNull(downloadCallbacks),
+    isEnabled = valueOrNull(isEnabled),
     logId = valueOrNull(logId),
     logLimit = valueOrNull(logLimit),
     payload = valueOrNull(payload),
@@ -173,6 +186,7 @@ fun DivScope.visibilityActionProps(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -185,6 +199,7 @@ fun DivScope.visibilityActionProps(
 fun TemplateScope.visibilityActionRefs(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
@@ -195,6 +210,7 @@ fun TemplateScope.visibilityActionRefs(
     visibilityPercentage: ReferenceProperty<Int>? = null,
 ) = VisibilityAction.Properties(
     downloadCallbacks = downloadCallbacks,
+    isEnabled = isEnabled,
     logId = logId,
     logLimit = logLimit,
     payload = payload,
@@ -207,6 +223,7 @@ fun TemplateScope.visibilityActionRefs(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -219,6 +236,7 @@ fun TemplateScope.visibilityActionRefs(
 fun VisibilityAction.override(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
+    isEnabled: Boolean? = null,
     logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
@@ -230,6 +248,7 @@ fun VisibilityAction.override(
 ): VisibilityAction = VisibilityAction(
     VisibilityAction.Properties(
         downloadCallbacks = valueOrNull(downloadCallbacks) ?: properties.downloadCallbacks,
+        isEnabled = valueOrNull(isEnabled) ?: properties.isEnabled,
         logId = valueOrNull(logId) ?: properties.logId,
         logLimit = valueOrNull(logLimit) ?: properties.logLimit,
         payload = valueOrNull(payload) ?: properties.payload,
@@ -243,6 +262,7 @@ fun VisibilityAction.override(
 
 /**
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -255,6 +275,7 @@ fun VisibilityAction.override(
 fun VisibilityAction.defer(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: ReferenceProperty<DownloadCallbacks>? = null,
+    isEnabled: ReferenceProperty<Boolean>? = null,
     logId: ReferenceProperty<String>? = null,
     logLimit: ReferenceProperty<Int>? = null,
     payload: ReferenceProperty<Map<String, Any>>? = null,
@@ -266,6 +287,7 @@ fun VisibilityAction.defer(
 ): VisibilityAction = VisibilityAction(
     VisibilityAction.Properties(
         downloadCallbacks = downloadCallbacks ?: properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = logId ?: properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = payload ?: properties.payload,
@@ -278,6 +300,7 @@ fun VisibilityAction.defer(
 )
 
 /**
+ * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
@@ -287,6 +310,7 @@ fun VisibilityAction.defer(
 @Generated
 fun VisibilityAction.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    isEnabled: ExpressionProperty<Boolean>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
     url: ExpressionProperty<Url>? = null,
@@ -295,6 +319,7 @@ fun VisibilityAction.evaluate(
 ): VisibilityAction = VisibilityAction(
     VisibilityAction.Properties(
         downloadCallbacks = properties.downloadCallbacks,
+        isEnabled = isEnabled ?: properties.isEnabled,
         logId = properties.logId,
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,

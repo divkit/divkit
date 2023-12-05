@@ -1,11 +1,17 @@
 // swift-tools-version:5.7
 
+import Foundation
 import PackageDescription
 
-let vgsl = (
-  url: "https://github.com/yandex/vgsl.git",
-  packageName: "vgsl"
-)
+let vgsl = {
+  let url = ProcessInfo.processInfo.environment["VGSL_SPM_REPO"] ?? "https://github.com/yandex/vgsl.git"
+  let packageName = URL(string: url)!.deletingPathExtension().lastPathComponent
+  return (
+    url: url,
+    packageName: packageName,
+    version: Version("2.3.3")
+  )
+}()
 
 let package = Package(
   name: "DivKit",
@@ -20,7 +26,7 @@ let package = Package(
     .library(name: "Serialization", targets: ["Serialization"]),
   ],
   dependencies: [
-    .package(url: vgsl.url, from: "2.3.0"),
+    .package(url: vgsl.url, from: vgsl.version),
   ],
   targets: [
     .target(

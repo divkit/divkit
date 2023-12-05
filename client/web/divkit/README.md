@@ -303,8 +303,10 @@ An additional class added to the root element.
 Object, optional.
 
 Currently supported properties:
-* `galleryLeftClass` — left scroll button class on desktop
-* `galleryRightClass` — right scroll button class on desktop
+* `galleryLeftClass` — left scroll button class on desktop for the gallery
+* `galleryRightClass` — right scroll button class on desktop for the gallery
+* `pagerLeftClass` — left scroll button class on desktop for the pager
+* `pagerRightClass` — right scroll button class on desktop for the pager
 
 #### builtinProtocols
 

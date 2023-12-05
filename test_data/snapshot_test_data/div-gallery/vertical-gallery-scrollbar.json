@@ -1,7 +1,8 @@
 {
   "description": "Gallery with the scrollbar",
   "platforms": [
-    "web"
+    "web",
+    "android"
   ],
   "templates": {},
   "card": {

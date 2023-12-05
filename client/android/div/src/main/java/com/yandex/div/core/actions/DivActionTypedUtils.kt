@@ -22,7 +22,7 @@ internal fun DivTypedValue.evaluate(expressionResolver: ExpressionResolver): Any
         is DivTypedValue.Color -> value.value.evaluate(expressionResolver)
         is DivTypedValue.Number -> value.value.evaluate(expressionResolver)
         is DivTypedValue.Url -> value.value.evaluate(expressionResolver)
-        is DivTypedValue.Array -> value.value
+        is DivTypedValue.Array -> value.value.evaluate(expressionResolver)
         is DivTypedValue.Dict -> value.value
     }
     return newValue

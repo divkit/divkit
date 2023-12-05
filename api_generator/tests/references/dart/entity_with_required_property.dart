@@ -23,7 +23,7 @@ class EntityWithRequiredProperty with EquatableMixin {
       return null;
     }
     return EntityWithRequiredProperty(
-      property: json['property']!,
+      property: json['property']!.toString(),
     );
   }
 }

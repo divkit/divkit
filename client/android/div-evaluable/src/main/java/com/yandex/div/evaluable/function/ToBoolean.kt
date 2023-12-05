@@ -1,6 +1,8 @@
 package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.ExpressionContext
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_CONVERT_TO_BOOLEAN
@@ -18,7 +20,11 @@ internal object IntegerToBoolean : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return when (args.first() as Long) {
             0L -> false
             1L -> true
@@ -37,7 +43,11 @@ internal object StringToBoolean : Function() {
 
     override val isPure = true
 
-    override fun evaluate(args: List<Any>, onWarning: (String) -> Unit): Any {
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
         return when (args.first() as String) {
             "true" -> true
             "false" -> false

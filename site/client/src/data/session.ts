@@ -10,3 +10,5 @@ export const isInitialLoading = writable(false);
 export const isLoadError = writable(false);
 
 export const isSamples = writable(false);
+
+export const isDesign = writable(false);
