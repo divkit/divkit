@@ -17,7 +17,8 @@ extension DivGalleryProtocol {
     defaultAlignment: Alignment,
     scrollMode: GalleryViewModel.ScrollMode,
     columnCount: Int? = nil,
-    infiniteScroll: Bool = false
+    infiniteScroll: Bool = false,
+    scrollbar: GalleryViewModel.Scrollbar = .none
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     let childrenContext = modified(context) {
@@ -74,7 +75,8 @@ extension DivGalleryProtocol {
       path: context.parentPath,
       direction: direction,
       columnCount: columnCount ?? 1,
-      infiniteScroll: infiniteScroll
+      infiniteScroll: infiniteScroll,
+      scrollbar: scrollbar
     )
   }
 

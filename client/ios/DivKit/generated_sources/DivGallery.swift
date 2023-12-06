@@ -24,6 +24,12 @@ public final class DivGallery: DivBase {
     case `default` = "default"
   }
 
+  @frozen
+  public enum Scrollbar: String, CaseIterable {
+    case none = "none"
+    case auto = "auto"
+  }
+
   public static let type: String = "gallery"
   public let accessibility: DivAccessibility
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
@@ -49,6 +55,7 @@ public final class DivGallery: DivBase {
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scrollMode: Expression<ScrollMode> // default value: default
+  public let scrollbar: Expression<Scrollbar> // default value: none
   public let selectedActions: [DivAction]? // at least 1 elements
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
@@ -111,6 +118,10 @@ public final class DivGallery: DivBase {
 
   public func resolveScrollMode(_ resolver: ExpressionResolver) -> ScrollMode {
     resolver.resolveStringBasedValue(expression: scrollMode, initializer: ScrollMode.init(rawValue:)) ?? ScrollMode.default
+  }
+
+  public func resolveScrollbar(_ resolver: ExpressionResolver) -> Scrollbar {
+    resolver.resolveStringBasedValue(expression: scrollbar, initializer: Scrollbar.init(rawValue:)) ?? Scrollbar.none
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
@@ -189,6 +200,9 @@ public final class DivGallery: DivBase {
   static let scrollModeValidator: AnyValueValidator<DivGallery.ScrollMode> =
     makeNoOpValueValidator()
 
+  static let scrollbarValidator: AnyValueValidator<DivGallery.Scrollbar> =
+    makeNoOpValueValidator()
+
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -247,6 +261,7 @@ public final class DivGallery: DivBase {
     restrictParentScroll: Expression<Bool>?,
     rowSpan: Expression<Int>?,
     scrollMode: Expression<ScrollMode>?,
+    scrollbar: Expression<Scrollbar>?,
     selectedActions: [DivAction]?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
@@ -283,6 +298,7 @@ public final class DivGallery: DivBase {
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.rowSpan = rowSpan
     self.scrollMode = scrollMode ?? .value(.default)
+    self.scrollbar = scrollbar ?? .value(.none)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
@@ -357,27 +373,28 @@ extension DivGallery: Equatable {
       return false
     }
     guard
+      lhs.scrollbar == rhs.scrollbar,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -416,6 +433,7 @@ extension DivGallery: Serializable {
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scroll_mode"] = scrollMode.toValidSerializationValue()
+    result["scrollbar"] = scrollbar.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()

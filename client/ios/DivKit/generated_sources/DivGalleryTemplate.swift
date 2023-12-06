@@ -11,6 +11,8 @@ public final class DivGalleryTemplate: TemplateValue {
 
   public typealias ScrollMode = DivGallery.ScrollMode
 
+  public typealias Scrollbar = DivGallery.Scrollbar
+
   public static let type: String = "gallery"
   public let parent: String? // at least 1 char
   public let accessibility: Field<DivAccessibilityTemplate>?
@@ -37,6 +39,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let restrictParentScroll: Field<Expression<Bool>>? // default value: false
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let scrollMode: Field<Expression<ScrollMode>>? // default value: default
+  public let scrollbar: Field<Expression<Scrollbar>>? // default value: none
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
@@ -80,6 +83,7 @@ public final class DivGalleryTemplate: TemplateValue {
         restrictParentScroll: try dictionary.getOptionalExpressionField("restrict_parent_scroll"),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         scrollMode: try dictionary.getOptionalExpressionField("scroll_mode"),
+        scrollbar: try dictionary.getOptionalExpressionField("scrollbar"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
@@ -123,6 +127,7 @@ public final class DivGalleryTemplate: TemplateValue {
     restrictParentScroll: Field<Expression<Bool>>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     scrollMode: Field<Expression<ScrollMode>>? = nil,
+    scrollbar: Field<Expression<Scrollbar>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
@@ -160,6 +165,7 @@ public final class DivGalleryTemplate: TemplateValue {
     self.restrictParentScroll = restrictParentScroll
     self.rowSpan = rowSpan
     self.scrollMode = scrollMode
+    self.scrollbar = scrollbar
     self.selectedActions = selectedActions
     self.tooltips = tooltips
     self.transform = transform
@@ -198,6 +204,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context, validator: ResolvedValue.restrictParentScrollValidator) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let scrollModeValue = parent?.scrollMode?.resolveOptionalValue(context: context, validator: ResolvedValue.scrollModeValidator) ?? .noValue
+    let scrollbarValue = parent?.scrollbar?.resolveOptionalValue(context: context, validator: ResolvedValue.scrollbarValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
@@ -234,6 +241,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
+      scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -279,6 +287,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScroll: restrictParentScrollValue.value,
       rowSpan: rowSpanValue.value,
       scrollMode: scrollModeValue.value,
+      scrollbar: scrollbarValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -322,6 +331,7 @@ public final class DivGalleryTemplate: TemplateValue {
     var restrictParentScrollValue: DeserializationResult<Expression<Bool>> = parent?.restrictParentScroll?.value() ?? .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var scrollModeValue: DeserializationResult<Expression<DivGallery.ScrollMode>> = parent?.scrollMode?.value() ?? .noValue
+    var scrollbarValue: DeserializationResult<Expression<DivGallery.Scrollbar>> = parent?.scrollbar?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
@@ -383,6 +393,8 @@ public final class DivGalleryTemplate: TemplateValue {
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "scroll_mode":
         scrollModeValue = deserialize(__dictValue, validator: ResolvedValue.scrollModeValidator).merged(with: scrollModeValue)
+      case "scrollbar":
+        scrollbarValue = deserialize(__dictValue, validator: ResolvedValue.scrollbarValidator).merged(with: scrollbarValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
       case "tooltips":
@@ -453,6 +465,8 @@ public final class DivGalleryTemplate: TemplateValue {
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.scrollMode?.link:
         scrollModeValue = scrollModeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.scrollModeValidator))
+      case parent?.scrollbar?.link:
+        scrollbarValue = scrollbarValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.scrollbarValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
       case parent?.tooltips?.link:
@@ -524,6 +538,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "restrict_parent_scroll", error: $0) },
       rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
       scrollModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scroll_mode", error: $0) },
+      scrollbarValue.errorsOrWarnings?.map { .nestedObjectError(field: "scrollbar", error: $0) },
       selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
       tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
       transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
@@ -569,6 +584,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScroll: restrictParentScrollValue.value,
       rowSpan: rowSpanValue.value,
       scrollMode: scrollModeValue.value,
+      scrollbar: scrollbarValue.value,
       selectedActions: selectedActionsValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
@@ -617,6 +633,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScroll: restrictParentScroll ?? mergedParent.restrictParentScroll,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       scrollMode: scrollMode ?? mergedParent.scrollMode,
+      scrollbar: scrollbar ?? mergedParent.scrollbar,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
@@ -660,6 +677,7 @@ public final class DivGalleryTemplate: TemplateValue {
       restrictParentScroll: merged.restrictParentScroll,
       rowSpan: merged.rowSpan,
       scrollMode: merged.scrollMode,
+      scrollbar: merged.scrollbar,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),

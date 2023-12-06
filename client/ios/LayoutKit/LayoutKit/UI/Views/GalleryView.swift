@@ -114,6 +114,8 @@ public final class GalleryView: BlockView {
       collectionView.decelerationRate = model.scrollMode.decelerationRate
       collectionView.alwaysBounceVertical = model.alwaysBounceVertical
       collectionView.bounces = model.bounces
+      collectionView.showsHorizontalScrollIndicator = model.scrollbar.show
+      collectionView.showsVerticalScrollIndicator = model.scrollbar.show
       if oldModel?.items.count == model.items.count {
         configureVisibleCells(blocks)
       } else {
@@ -199,8 +201,6 @@ public final class GalleryView: BlockView {
     collectionView.alwaysBounceVertical = false
     collectionView.clipsToBounds = false
     collectionView.backgroundColor = .clear
-    collectionView.showsHorizontalScrollIndicator = false
-    collectionView.showsVerticalScrollIndicator = false
     collectionView.scrollsToTop = false
     collectionView.register(CellType.self, forCellWithReuseIdentifier: reuseID)
     collectionView.dataSource = dataSource

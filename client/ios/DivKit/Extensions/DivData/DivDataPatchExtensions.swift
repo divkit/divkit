@@ -154,6 +154,7 @@ extension DivGallery {
       restrictParentScroll: restrictParentScroll,
       rowSpan: rowSpan,
       scrollMode: scrollMode,
+      scrollbar: scrollbar,
       selectedActions: selectedActions,
       tooltips: tooltips,
       transform: transform,

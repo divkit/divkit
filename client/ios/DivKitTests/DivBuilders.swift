@@ -130,6 +130,7 @@ func makeDivGallery(
     restrictParentScroll: nil,
     rowSpan: nil,
     scrollMode: nil,
+    scrollbar: nil,
     selectedActions: nil,
     tooltips: nil,
     transform: nil,
