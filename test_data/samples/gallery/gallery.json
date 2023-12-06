@@ -81,7 +81,7 @@
               "type": "gallery",
               "height": {
                 "type": "fixed",
-                "value": 120
+                "value": 104
               },
               "paddings": {
                 "left": 16,
