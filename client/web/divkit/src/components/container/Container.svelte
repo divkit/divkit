@@ -59,16 +59,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    let hasItemsError = false;
     $: jsonItems = json.items;
-    $: {
-        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
-            hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "container"')));
-        } else {
-            hasItemsError = false;
-        }
-    }
 
     function replaceItems(items: DivBaseData[]): void {
         json = {
@@ -77,7 +68,7 @@
         };
     }
 
-    $: items = (!hasItemsError && jsonItems || []).map(item => {
+    $: items = (jsonItems || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -265,38 +256,36 @@
     };
 </script>
 
-{#if !hasItemsError}
-    <Outer
-        cls={genClassName('container', css, mods)}
-        {style}
-        {json}
-        {origJson}
-        {templateContext}
-        {layoutParams}
-        {additionalPaddings}
-        heightByAspect={Boolean(aspect)}
-        parentOf={jsonItems}
-        {replaceItems}
-    >
-        {#key jsonItems}
-            {#each items as item}
-                <Unknown
-                    layoutParams={childLayoutParams}
-                    div={item.json}
-                    templateContext={item.templateContext}
-                    origJson={item.origJson}
-                />
-            {/each}
-        {/key}
-
-        {#if separator || lineSeparator}
-            <ContainerSeparators
-                {separator}
-                {lineSeparator}
-                {orientation}
-                {contentHAlign}
-                {contentVAlign}
+<Outer
+    cls={genClassName('container', css, mods)}
+    {style}
+    {json}
+    {origJson}
+    {templateContext}
+    {layoutParams}
+    {additionalPaddings}
+    heightByAspect={Boolean(aspect)}
+    parentOf={jsonItems}
+    {replaceItems}
+>
+    {#key jsonItems}
+        {#each items as item}
+            <Unknown
+                layoutParams={childLayoutParams}
+                div={item.json}
+                templateContext={item.templateContext}
+                origJson={item.origJson}
             />
-        {/if}
-    </Outer>
-{/if}
+        {/each}
+    {/key}
+
+    {#if separator || lineSeparator}
+        <ContainerSeparators
+            {separator}
+            {lineSeparator}
+            {orientation}
+            {contentHAlign}
+            {contentVAlign}
+        />
+    {/if}
+</Outer>
