@@ -18,6 +18,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
 import java.lang.IllegalStateException
+import kotlin.ClassCastException
 
 @Mockable
 internal class TriggersController(
@@ -161,8 +162,15 @@ private class TriggerExecutor(
     private fun conditionSatisfied(): Boolean {
         val nowSatisfied: Boolean = try {
             evaluator.eval(condition)
-        } catch (e: EvaluableException) {
-            val exception = RuntimeException("Condition evaluation failed: '$rawExpression'!", e)
+        } catch (e: Exception) {
+            val exception = when (e) {
+                is ClassCastException -> RuntimeException(
+                    "Condition evaluated in non-boolean result! (expression: '$rawExpression')", e)
+                is EvaluableException -> RuntimeException(
+                    "Condition evaluation failed! (expression: '$rawExpression')", e)
+                else -> throw e
+            }
+
             errorCollector.logError(exception)
             return false
         }
