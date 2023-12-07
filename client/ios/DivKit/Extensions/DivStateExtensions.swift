@@ -148,10 +148,10 @@ extension DivBlockModelingContext {
     id: String,
     stateId: String
   ) -> DivBlockModelingContext {
-    modified(self) {
-      $0.parentPath = parentPath + id + stateId
-      $0.parentDivStatePath = parentDivStatePath + id + stateId
-    }
+    modifying(
+      parentPath: parentPath + id + stateId,
+      parentDivStatePath: parentDivStatePath + id + stateId
+    )
   }
 }
 

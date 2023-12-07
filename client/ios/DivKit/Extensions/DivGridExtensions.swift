@@ -12,16 +12,12 @@ extension DivGrid: DivBlockModeling {
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let gridPath = context.parentPath + DivGrid.type
-    let gridContext = modified(context) {
-      $0.parentPath = gridPath
-    }
-    let gridItemsContext = modified(gridContext) {
-      $0.errorsStorage = DivErrorsStorage(errors: [])
-    }
+    let gridContext = context.modifying(parentPath: gridPath)
+    let gridItemsContext = gridContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
     let gridItems = items.enumerated().compactMap { tuple in
-      let itemContext = modified(gridItemsContext) {
-        $0.parentPath = $0.parentPath + tuple.offset
-      }
+      let itemContext = gridItemsContext.modifying(
+        parentPath: gridItemsContext.parentPath + tuple.offset
+      )
       do {
         return try tuple.element.value.makeGridItem(
           context: itemContext

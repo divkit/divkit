@@ -43,9 +43,7 @@ extension DivVideo: DivBlockModeling {
     )
 
     let videoPath = context.parentPath + (id ?? DivVideo.type)
-    let videoContext = modified(context) {
-      $0.parentPath = videoPath
-    }
+    let videoContext = context.modifying(parentPath: videoPath)
 
     let state: VideoBlockViewState = videoContext.blockStateStorage
       .getState(videoContext.parentPath) ?? .init(state: autostart == true ? .playing : .paused)

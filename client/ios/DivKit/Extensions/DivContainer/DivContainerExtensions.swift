@@ -7,9 +7,9 @@ extension DivContainer: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
-      context: modified(context) {
-        $0.childrenA11yDescription = resolveChildrenA11yDescription($0)
-      },
+      context: context.modifying(
+        childrenA11yDescription: resolveChildrenA11yDescription(context)
+      ),
       actionsHolder: self
     )
   }
@@ -17,11 +17,11 @@ extension DivContainer: DivBlockModeling {
   var nonNilItems: [Div] {
     items ?? []
   }
-  
+
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let childContext = modified(context) {
-      $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
-    }
+    let childContext = context.modifying(
+      parentPath: context.parentPath + (id ?? DivContainer.type)
+    )
     let expressionResolver = context.expressionResolver
     let orientation = resolveOrientation(expressionResolver)
     switch orientation {
@@ -55,9 +55,9 @@ extension DivContainer: DivBlockModeling {
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
 
-    let childrenContext = modified(context) {
-      $0.errorsStorage = DivErrorsStorage(errors: [])
-    }
+    let childrenContext = context.modifying(
+      errorsStorage: DivErrorsStorage(errors: [])
+    )
     let children = nonNilItems.makeBlocks(
       context: childrenContext,
       sizeModifier: DivContainerSizeModifier(
@@ -121,9 +121,9 @@ extension DivContainer: DivBlockModeling {
       uiLayoutDirection: context.layoutDirection
     )
 
-    let childrenContext = modified(context) {
-      $0.errorsStorage = DivErrorsStorage(errors: [])
-    }
+    let childrenContext = context.modifying(
+      errorsStorage: DivErrorsStorage(errors: [])
+    )
 
     // Before block's making we need to filter items and remove
     // what has "matchParent" for opposite directions

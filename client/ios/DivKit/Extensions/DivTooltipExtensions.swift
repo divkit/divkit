@@ -58,9 +58,9 @@ extension Optional where Wrapped == [DivTooltip] {
     context: DivBlockModelingContext
   ) throws -> [BlockTooltip] {
     try self?.iterativeFlatMap { div, index in
-      let tooltipContext = modified(context) {
-        $0.parentPath = $0.parentPath + "tooltip" + index
-      }
+      let tooltipContext = context.modifying(
+        parentPath: context.parentPath + "tooltip" + index
+      )
       return try div.makeTooltip(context: tooltipContext)
     } ?? []
   }

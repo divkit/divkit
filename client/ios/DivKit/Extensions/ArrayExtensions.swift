@@ -8,10 +8,10 @@ extension Array where Element == Div {
     mappedBy modificator: (Div, Block) throws -> T
   ) rethrows -> [T] {
     try iterativeFlatMap { div, index in
-      let itemContext = modified(context) {
-        $0.parentPath += index
-        $0.sizeModifier = sizeModifier
-      }
+      let itemContext = context.modifying(
+        parentPath: context.parentPath + index,
+        sizeModifier: sizeModifier
+      )
       let block: Block
       do {
         block = try modifyError({

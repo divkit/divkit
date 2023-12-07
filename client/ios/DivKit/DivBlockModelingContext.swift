@@ -13,8 +13,8 @@ import AppKit
 
 public struct DivBlockModelingContext {
   public let cardId: DivCardID
-  var cardLogId: String?
-  var parentDivStatePath: DivStatePath?
+  private(set) var cardLogId: String?
+  private(set) var parentDivStatePath: DivStatePath?
   let stateManager: DivStateManager
   public let blockStateStorage: DivBlockStateStorage
   let visibilityCounter: DivVisibilityCounting
@@ -30,9 +30,9 @@ public struct DivBlockModelingContext {
   let debugParams: DebugParams
   let scheduler: Scheduling
   let playerFactory: PlayerFactory?
-  var childrenA11yDescription: String?
+  private(set) var childrenA11yDescription: String?
   private(set) weak var parentScrollView: ScrollView?
-  public internal(set) var errorsStorage: DivErrorsStorage
+  public private(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
   let tooltipViewFactory: DivTooltipViewFactory?
   public let variablesStorage: DivVariablesStorage
@@ -40,20 +40,8 @@ public struct DivBlockModelingContext {
   private let variableValueProvider: (String) -> Any?
   private let functionsProvider: FunctionsProvider
   private let variableTracker: ExpressionResolver.VariableTracker
-
-  public internal(set) var parentPath: UIElementPath {
-    didSet {
-      expressionResolver = makeExpressionResolver(
-        variableValueProvider: variableValueProvider,
-        functionsProvider: functionsProvider,
-        parentPath: parentPath,
-        errorsStorage: errorsStorage,
-        variableTracker: variableTracker
-      )
-    }
-  }
-
-  var sizeModifier: DivSizeModifier?
+  public private(set) var parentPath: UIElementPath
+  private(set) var sizeModifier: DivSizeModifier?
 
   public init(
     cardId: DivCardID,
@@ -83,6 +71,85 @@ public struct DivBlockModelingContext {
     persistentValuesStorage: DivPersistentValuesStorage? = nil,
     tooltipViewFactory: DivTooltipViewFactory? = nil
   ) {
+    let variableTracker: ExpressionResolver.VariableTracker = { variables in
+      variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
+    }
+    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
+    extensionHandlers.forEach {
+      let id = $0.id
+      if extensionsHandlersDictionary[id] != nil {
+        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
+        return
+      }
+      extensionsHandlersDictionary[id] = $0
+    }
+    var stateInterceptorsDictionary = [String: DivStateInterceptor]()
+    stateInterceptors.forEach {
+      let id = $0.id
+      if stateInterceptorsDictionary[id] != nil {
+        DivKitLogger.failure("Duplicate DivStateInterceptor for: \(id)")
+        return
+      }
+      stateInterceptorsDictionary[id] = $0
+    }
+    self.init(
+      cardId: cardId,
+      cardLogId: cardLogId,
+      parentPath: parentPath,
+      parentDivStatePath: parentDivStatePath,
+      stateManager: stateManager,
+      blockStateStorage: blockStateStorage,
+      visibilityCounter: visibilityCounter,
+      lastVisibleBoundsCache: lastVisibleBoundsCache,
+      imageHolderFactory: imageHolderFactory,
+      highPriorityImageHolderFactory: highPriorityImageHolderFactory,
+      divCustomBlockFactory: divCustomBlockFactory,
+      fontProvider: fontProvider,
+      flagsInfo: flagsInfo,
+      extensionHandlers: extensionsHandlersDictionary,
+      stateInterceptors: stateInterceptorsDictionary,
+      variablesStorage: variablesStorage,
+      playerFactory: playerFactory,
+      debugParams: debugParams,
+      scheduler: scheduler,
+      childrenA11yDescription: childrenA11yDescription,
+      parentScrollView: parentScrollView,
+      errorsStorage: errorsStorage,
+      layoutDirection: layoutDirection,
+      variableTracker: variableTracker,
+      persistentValuesStorage: persistentValuesStorage,
+      tooltipViewFactory: tooltipViewFactory
+    )
+  }
+
+  init(
+    cardId: DivCardID,
+    cardLogId: String?,
+    parentPath: UIElementPath?,
+    parentDivStatePath: DivStatePath?,
+    stateManager: DivStateManager,
+    blockStateStorage: DivBlockStateStorage,
+    visibilityCounter: DivVisibilityCounting?,
+    lastVisibleBoundsCache: DivLastVisibleBoundsCache?,
+    imageHolderFactory: DivImageHolderFactory,
+    highPriorityImageHolderFactory: DivImageHolderFactory?,
+    divCustomBlockFactory: DivCustomBlockFactory?,
+    fontProvider: DivFontProvider?,
+    flagsInfo: DivFlagsInfo,
+    extensionHandlers: [String: DivExtensionHandler],
+    stateInterceptors: [String: DivStateInterceptor],
+    variablesStorage: DivVariablesStorage,
+    playerFactory: PlayerFactory?,
+    debugParams: DebugParams,
+    scheduler: Scheduling?,
+    childrenA11yDescription: String?,
+    parentScrollView: ScrollView?,
+    errorsStorage: DivErrorsStorage?,
+    layoutDirection: UserInterfaceLayoutDirection,
+    variableTracker: @escaping ExpressionResolver.VariableTracker,
+    persistentValuesStorage: DivPersistentValuesStorage?,
+    tooltipViewFactory: DivTooltipViewFactory?
+  ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
     let parentPath = parentPath ?? UIElementPath(cardId.rawValue)
@@ -104,36 +171,13 @@ public struct DivBlockModelingContext {
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
     self.layoutDirection = layoutDirection
-    let variableTracker: ExpressionResolver.VariableTracker = { variables in
-      variableTracker?.onVariablesUsed(cardId: cardId, variables: variables)
-    }
     self.variableTracker = variableTracker
     let persistentValuesStorage = persistentValuesStorage ?? DivPersistentValuesStorage()
     self.persistentValuesStorage = persistentValuesStorage
     self.tooltipViewFactory = tooltipViewFactory
     self.variablesStorage = variablesStorage
-
-    var extensionsHandlersDictionary = [String: DivExtensionHandler]()
-    extensionHandlers.forEach {
-      let id = $0.id
-      if extensionsHandlersDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivExtensionHandler for: \(id)")
-        return
-      }
-      extensionsHandlersDictionary[id] = $0
-    }
-    self.extensionHandlers = extensionsHandlersDictionary
-
-    var stateInterceptorsDictionary = [String: DivStateInterceptor]()
-    stateInterceptors.forEach {
-      let id = $0.id
-      if stateInterceptorsDictionary[id] != nil {
-        DivKitLogger.failure("Duplicate DivStateInterceptor for: \(id)")
-        return
-      }
-      stateInterceptorsDictionary[id] = $0
-    }
-    self.stateInterceptors = stateInterceptorsDictionary
+    self.extensionHandlers = extensionHandlers
+    self.stateInterceptors = stateInterceptors
 
     let variableValueProvider: (String) -> Any? = {
       variablesStorage.getVariableValue(
@@ -149,7 +193,7 @@ public struct DivBlockModelingContext {
       },
       persistentValuesStorage: persistentValuesStorage
     )
-    expressionResolver = makeExpressionResolver(
+    self.expressionResolver = makeExpressionResolver(
       variableValueProvider: variableValueProvider,
       functionsProvider: functionsProvider,
       parentPath: parentPath,
@@ -208,6 +252,47 @@ public struct DivBlockModelingContext {
       }
     )
     return Binding(name: variableName.rawValue, value: valueProp)
+  }
+}
+
+extension DivBlockModelingContext {
+  func modifying(
+    cardLogId: String? = nil,
+    parentPath: UIElementPath? = nil,
+    parentDivStatePath: DivStatePath? = nil,
+    errorsStorage: DivErrorsStorage? = nil,
+    sizeModifier: DivSizeModifier? = nil
+  ) -> Self {
+    let expressionResolver: ExpressionResolver
+    let parentPath = parentPath ?? self.parentPath
+    let errorsStorage = errorsStorage ?? self.errorsStorage
+    if parentPath == self.parentPath {
+      expressionResolver = self.expressionResolver
+    } else {
+      expressionResolver = makeExpressionResolver(
+        variableValueProvider: variableValueProvider,
+        functionsProvider: functionsProvider,
+        parentPath: parentPath,
+        errorsStorage: errorsStorage,
+        variableTracker: variableTracker
+      )
+    }
+    return modified(self) {
+      $0.cardLogId = cardLogId ?? self.cardLogId
+      $0.parentPath = parentPath
+      $0.parentDivStatePath = parentDivStatePath ?? self.parentDivStatePath
+      $0.errorsStorage = errorsStorage
+      $0.sizeModifier = sizeModifier ?? self.sizeModifier
+      $0.expressionResolver = expressionResolver
+    }
+  }
+
+  func modifying(
+    childrenA11yDescription: String?
+  ) -> Self {
+    modified(self) {
+      $0.childrenA11yDescription = childrenA11yDescription
+    }
   }
 }
 

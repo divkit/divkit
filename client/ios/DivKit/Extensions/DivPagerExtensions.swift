@@ -17,9 +17,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let pagerPath = context.parentPath + (id ?? DivPager.type)
     let expressionResolver = context.expressionResolver
-    let itemContext = modified(context) {
-      $0.parentPath = pagerPath
-    }
+    let itemContext = context.modifying(parentPath: pagerPath)
     let pagerModelPath = id.map {
       PagerPath(
         cardId: context.cardId.rawValue,

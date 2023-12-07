@@ -21,12 +21,8 @@ extension DivTabs: DivBlockModeling {
     context: DivBlockModelingContext,
     tabsPath: UIElementPath
   ) throws -> Block {
-    let tabsContext = modified(context) {
-      $0.parentPath = tabsPath
-    }
-    let tabsItemContext = modified(tabsContext) {
-      $0.errorsStorage = DivErrorsStorage(errors: [])
-    }
+    let tabsContext = context.modifying(parentPath: tabsPath)
+    let tabsItemContext = tabsContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
     let tabs = items.iterativeFlatMap { item, index in
       do {
         return try item.makeTab(context: tabsItemContext, index: index)
@@ -192,8 +188,8 @@ extension Typo {
 
 extension DivTabs.Item {
   fileprivate func makeTab(context: DivBlockModelingContext, index: Int) throws -> Tab {
-    let tabContext = modified(context) { $0.parentPath = $0.parentPath + index }
-    let pageContext = modified(tabContext) { $0.parentPath += "page" }
+    let tabContext = context.modifying(parentPath: context.parentPath + index)
+    let pageContext = tabContext.modifying(parentPath: tabContext.parentPath + "page")
     let title = makeTitle(context: tabContext)
     let page = try div.value
       .makeBlock(context: pageContext)
@@ -202,9 +198,9 @@ extension DivTabs.Item {
   }
 
   private func makeTitle(context: DivBlockModelingContext) -> UILink {
-    let titleContext = modified(context) {
-      $0.parentPath += "title"
-    }
+    let titleContext = context.modifying(
+      parentPath: context.parentPath + "title"
+    )
     let action = titleClickAction?.uiAction(context: context)
     return UILink(
       text: resolveTitle(titleContext.expressionResolver) ?? "",

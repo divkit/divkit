@@ -20,11 +20,12 @@ extension DivData: DivBlockModeling {
     let stateId = String(state.stateId)
     let statePath = DivStatePath(rawValue: UIElementPath(stateId))
     let div = state.div
-    let divContext = modified(context) {
-      $0.cardLogId = $0.cardLogId ?? logId
-      $0.parentPath = $0.parentPath + stateId
-      $0.parentDivStatePath = statePath
-    }
+
+    let divContext = context.modifying(
+      cardLogId: logId,
+      parentPath: context.parentPath + stateId,
+      parentDivStatePath: statePath
+    )
 
     stateManager.updateBlockIdsWithStateChangeTransition(
       statePath: statePath,

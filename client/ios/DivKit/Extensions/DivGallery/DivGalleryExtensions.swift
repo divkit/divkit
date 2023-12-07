@@ -17,9 +17,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let galleryPath = context.parentPath + (id ?? DivGallery.type)
     let expressionResolver = context.expressionResolver
-    let galleryContext = modified(context) {
-      $0.parentPath = galleryPath
-    }
+    let galleryContext = context.modifying(parentPath: galleryPath)
     let defaultAlignment = resolveCrossContentAlignment(expressionResolver)
       .blockAlignment
     let itemSpacing = resolveItemSpacing(expressionResolver)

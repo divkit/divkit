@@ -21,9 +21,7 @@ extension DivGalleryProtocol {
     scrollbar: GalleryViewModel.Scrollbar = .none
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
-    let childrenContext = modified(context) {
-      $0.errorsStorage = DivErrorsStorage(errors: [])
-    }
+    let childrenContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
     var children: [GalleryViewModel.Item] = items.makeBlocks(
       context: childrenContext,
       sizeModifier: DivGallerySizeModifier(
