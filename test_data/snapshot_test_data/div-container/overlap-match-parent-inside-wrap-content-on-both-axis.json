@@ -1,7 +1,8 @@
 {
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "web"
     ],
     "description": "match_parent inside wrap_content of an overlap container without known size should transform into the wrap_content with constrained",
     "templates": {

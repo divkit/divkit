@@ -234,7 +234,7 @@
             newWidth = pxToEm(widthNum);
         } else if (
             type === 'wrap_content' ||
-            !layoutParams.overlapParent && (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
+            (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
         ) {
             widthType = 'content';
             if (
@@ -335,7 +335,7 @@
         } else if (type === 'fixed') {
             heightNum = correctNonNegativeNumber($jsonHeight?.value, heightNum);
             newHeight = pxToEm(heightNum);
-        } else if (type === 'match_parent' && (layoutParams.overlapParent || !layoutParams.parentVerticalWrapContent)) {
+        } else if (type === 'match_parent' && !layoutParams.parentVerticalWrapContent) {
             heightType = 'parent';
             if (layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerWrap) {
                 newHeightError = true;
@@ -413,8 +413,8 @@
     $: parentOverlapMod = layoutParams.overlapParent ? true : undefined;
 
     $: parentOverlapAbsoluteMod = layoutParams.overlapParent &&
-        (!$jsonWidth || $jsonWidth.type === 'match_parent') &&
-        $jsonHeight?.type === 'match_parent';
+        (!$jsonWidth || $jsonWidth.type === 'match_parent') && !layoutParams.parentHorizontalWrapContent &&
+        $jsonHeight?.type === 'match_parent' && !layoutParams.parentVerticalWrapContent;
 
     $: gridArea = layoutParams.gridArea ?
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
