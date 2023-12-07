@@ -16,6 +16,7 @@
       ],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
@@ -29,6 +30,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
@@ -42,6 +44,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
@@ -55,6 +58,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
@@ -71,6 +75,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     }
