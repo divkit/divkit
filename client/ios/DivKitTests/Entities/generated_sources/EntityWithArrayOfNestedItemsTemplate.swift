@@ -9,7 +9,7 @@ import Serialization
 public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
   public final class ItemTemplate: TemplateValue {
     public let entity: Field<EntityTemplate>?
-    public let property: Field<Expression<String>>? // at least 1 char
+    public let property: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
@@ -32,7 +32,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems.Item> {
       let entityValue = parent?.entity?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-      let propertyValue = parent?.property?.resolveValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
+      let propertyValue = parent?.property?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) },
         propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
@@ -67,11 +67,11 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
         case "entity":
           entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).merged(with: entityValue)
         case "property":
-          propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator).merged(with: propertyValue)
+          propertyValue = deserialize(__dictValue).merged(with: propertyValue)
         case parent?.entity?.link:
           entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self))
         case parent?.property?.link:
-          propertyValue = propertyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.propertyValidator))
+          propertyValue = propertyValue.merged(with: deserialize(__dictValue))
         default: break
         }
       }

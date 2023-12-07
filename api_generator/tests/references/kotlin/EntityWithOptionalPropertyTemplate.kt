@@ -18,7 +18,7 @@ import org.json.JSONArray
 
 @Mockable
 class EntityWithOptionalPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithOptionalProperty> {
-    @JvmField final val property: Field<Expression<String>> // at least 1 char
+    @JvmField final val property: Field<Expression<String>>
 
     constructor (
         env: ParsingEnvironment,
@@ -27,7 +27,7 @@ class EntityWithOptionalPropertyTemplate : JSONSerializable, JsonTemplate<Entity
         json: JSONObject
     ) {
         val logger = env.logger
-        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+        property = JsonTemplateParser.readOptionalFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithOptionalProperty {
@@ -46,10 +46,7 @@ class EntityWithOptionalPropertyTemplate : JSONSerializable, JsonTemplate<Entity
     companion object {
         const val TYPE = "entity_with_optional_property"
 
-        private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-
-        val PROPERTY_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, PROPERTY_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
+        val PROPERTY_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalPropertyTemplate(env, json = it) }

@@ -13,7 +13,7 @@ public final class EntityWithSimpleProperties: EntityProtocol {
   public let id: Int // default value: 0
   public let integer: Expression<Int> // default value: 0
   public let positiveInteger: Expression<Int>? // constraint: number > 0
-  public let string: Expression<String>? // at least 1 char
+  public let string: Expression<String>?
   public let url: Expression<URL>?
 
   public func resolveBoolean(_ resolver: ExpressionResolver) -> Bool? {
@@ -61,7 +61,7 @@ public final class EntityWithSimpleProperties: EntityProtocol {
     makeValueValidator(valueValidator: { $0 > 0 })
 
   static let stringValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let urlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()

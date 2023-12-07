@@ -22,7 +22,6 @@ class EntityWithOptionalProperty(BaseDiv):
 
     type: str = Field(default='entity_with_optional_property')
     property: typing.Optional[typing.Union[Expr, str]] = Field(
-        min_length=1
     )
 
 

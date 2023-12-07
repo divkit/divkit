@@ -6,11 +6,8 @@ import Serialization
 
 public final class ArrayVariable {
   public static let type: String = "array"
-  public let name: String // at least 1 char
+  public let name: String
   public let value: [Any]
-
-  static let nameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     name: String,

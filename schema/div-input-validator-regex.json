@@ -13,7 +13,7 @@
           ]
         },
         "pattern": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_input_validators_regex_pattern"
         }
       }

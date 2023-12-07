@@ -12,7 +12,7 @@
       "type": "object",
       "properties": {
         "property": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         },
         "entity": {
           "$ref": "entity.json"

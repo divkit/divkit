@@ -6,11 +6,11 @@ import Serialization
 
 public final class DivFocus {
   public final class NextFocusIds {
-    public let down: Expression<String>? // at least 1 char
-    public let forward: Expression<String>? // at least 1 char
-    public let left: Expression<String>? // at least 1 char
-    public let right: Expression<String>? // at least 1 char
-    public let up: Expression<String>? // at least 1 char
+    public let down: Expression<String>?
+    public let forward: Expression<String>?
+    public let left: Expression<String>?
+    public let right: Expression<String>?
+    public let up: Expression<String>?
 
     public func resolveDown(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: down, initializer: { $0 })
@@ -33,19 +33,19 @@ public final class DivFocus {
     }
 
     static let downValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let forwardValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let leftValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let rightValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let upValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     init(
       down: Expression<String>? = nil,

@@ -7,15 +7,12 @@ import Serialization
 public final class DivTabs: DivBase {
   public final class Item {
     public let div: Div
-    public let title: Expression<String> // at least 1 char
+    public let title: Expression<String>
     public let titleClickAction: DivAction?
 
     public func resolveTitle(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: title, initializer: { $0 })
     }
-
-    static let titleValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
 
     static let titleClickActionValidator: AnyValueValidator<DivAction> =
       makeNoOpValueValidator()
@@ -46,7 +43,7 @@ public final class DivTabs: DivBase {
     public let animationType: Expression<AnimationType> // default value: slide
     public let cornerRadius: Expression<Int>? // constraint: number >= 0
     public let cornersRadius: DivCornersRadius?
-    public let fontFamily: Expression<String>? // at least 1 char
+    public let fontFamily: Expression<String>?
     public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight> // default value: regular
@@ -144,7 +141,7 @@ public final class DivTabs: DivBase {
       makeNoOpValueValidator()
 
     static let fontFamilyValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -228,7 +225,7 @@ public final class DivTabs: DivBase {
   public let focus: DivFocus?
   public let hasSeparator: Expression<Bool> // default value: false
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let items: [Item] // at least 1 elements
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
@@ -340,7 +337,7 @@ public final class DivTabs: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let itemsValidator: AnyArrayValueValidator<DivTabs.Item> =
     makeArrayValidator(minItems: 1)

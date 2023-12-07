@@ -3,7 +3,7 @@ import Foundation
 extension Div {
   var children: [Div] {
     switch self {
-    case let .divContainer(div): return div.items
+    case let .divContainer(div): return div.nonNilItems
     case let .divGrid(div): return div.items
     case let .divGallery(div): return div.items
     case let .divPager(div): return div.items

@@ -7,10 +7,10 @@ import Serialization
 public final class DivTimer {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 0
   public let endActions: [DivAction]? // at least 1 elements
-  public let id: String // at least 1 char
+  public let id: String
   public let tickActions: [DivAction]? // at least 1 elements
   public let tickInterval: Expression<Int>? // constraint: number > 0
-  public let valueVariable: String? // at least 1 char
+  public let valueVariable: String?
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumericValue(expression: duration) ?? 0
@@ -26,9 +26,6 @@ public final class DivTimer {
   static let endActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
-  static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   static let tickActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -36,7 +33,7 @@ public final class DivTimer {
     makeValueValidator(valueValidator: { $0 > 0 })
 
   static let valueVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   init(
     duration: Expression<Int>? = nil,

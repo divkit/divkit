@@ -12,8 +12,6 @@ class EntityWithArrayOfExpressions(
         const val TYPE = "entity_with_array_of_expressions"
 
         private val ITEMS_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
-        private val ITEMS_ITEM_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val ITEMS_ITEM_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
     }
 
 }

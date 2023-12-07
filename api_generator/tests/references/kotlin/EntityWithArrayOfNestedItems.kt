@@ -55,7 +55,7 @@ class EntityWithArrayOfNestedItems(
     @Mockable
     class Item(
         @JvmField final val entity: Entity,
-        @JvmField final val property: Expression<String>, // at least 1 char
+        @JvmField final val property: Expression<String>,
     ) : JSONSerializable {
 
         override fun writeToJSON(): JSONObject {
@@ -72,12 +72,9 @@ class EntityWithArrayOfNestedItems(
                 val logger = env.logger
                 return Item(
                     entity = JsonParser.read(json, "entity", Entity.CREATOR, logger, env),
-                    property = JsonParser.readExpression(json, "property", PROPERTY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+                    property = JsonParser.readExpression(json, "property", logger, env, TYPE_HELPER_STRING)
                 )
             }
-
-            private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-            private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Item(env, json = it) }
         }

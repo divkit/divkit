@@ -12,5 +12,5 @@ No description yet.
 ## Parameters
 | Parameters | Description |
 | --- | --- |
-| `property` | <p>**string**</p><p>A string must not be empty.</p> |
+| `property` | <p>**string**</p> |
 | `type` | <p>**string**</p><p>Required parameter.</p><p>The value must always be `entity_with_optional_property`.</p> |

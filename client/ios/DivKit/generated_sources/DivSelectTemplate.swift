@@ -109,14 +109,14 @@ public final class DivSelectTemplate: TemplateValue {
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
-  public let fontFamily: Field<Expression<String>>? // at least 1 char
+  public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
-  public let hintText: Field<Expression<String>>? // at least 1 char
-  public let id: Field<String>? // at least 1 char
+  public let hintText: Field<Expression<String>>?
+  public let id: Field<String>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let margins: Field<DivEdgeInsetsTemplate>?
@@ -131,7 +131,7 @@ public final class DivSelectTemplate: TemplateValue {
   public let transitionIn: Field<DivAppearanceTransitionTemplate>?
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
-  public let valueVariable: Field<String>? // at least 1 char
+  public let valueVariable: Field<String>?
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>? // at least 1 elements
@@ -300,7 +300,7 @@ public final class DivSelectTemplate: TemplateValue {
     let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true) ?? .noValue
     let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
-    let valueVariableValue = parent?.valueVariable?.resolveValue(context: context, validator: ResolvedValue.valueVariableValidator) ?? .noValue
+    let valueVariableValue = parent?.valueVariable?.resolveValue(context: context) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityValidator) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -434,7 +434,7 @@ public final class DivSelectTemplate: TemplateValue {
     var transitionInValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue
-    var valueVariableValue: DeserializationResult<String> = parent?.valueVariable?.value(validatedBy: ResolvedValue.valueVariableValidator) ?? .noValue
+    var valueVariableValue: DeserializationResult<String> = parent?.valueVariable?.value() ?? .noValue
     var visibilityValue: DeserializationResult<Expression<DivVisibility>> = parent?.visibility?.value() ?? .noValue
     var visibilityActionValue: DeserializationResult<DivVisibilityAction> = .noValue
     var visibilityActionsValue: DeserializationResult<[DivVisibilityAction]> = .noValue
@@ -506,7 +506,7 @@ public final class DivSelectTemplate: TemplateValue {
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
       case "value_variable":
-        valueVariableValue = deserialize(__dictValue, validator: ResolvedValue.valueVariableValidator).merged(with: valueVariableValue)
+        valueVariableValue = deserialize(__dictValue).merged(with: valueVariableValue)
       case "visibility":
         visibilityValue = deserialize(__dictValue, validator: ResolvedValue.visibilityValidator).merged(with: visibilityValue)
       case "visibility_action":
@@ -580,7 +580,7 @@ public final class DivSelectTemplate: TemplateValue {
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator))
       case parent?.valueVariable?.link:
-        valueVariableValue = valueVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueVariableValidator))
+        valueVariableValue = valueVariableValue.merged(with: deserialize(__dictValue))
       case parent?.visibility?.link:
         visibilityValue = visibilityValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.visibilityValidator))
       case parent?.visibilityAction?.link:

@@ -1,8 +1,4 @@
 {
-  "non_empty_string": {
-    "type": "string",
-    "minLength": 1
-  },
   "color": {
     "type": "string",
     "format": "color"

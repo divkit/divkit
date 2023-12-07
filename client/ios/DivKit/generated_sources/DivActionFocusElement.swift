@@ -6,14 +6,11 @@ import Serialization
 
 public final class DivActionFocusElement {
   public static let type: String = "focus_element"
-  public let elementId: Expression<String> // at least 1 char
+  public let elementId: Expression<String>
 
   public func resolveElementId(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveStringBasedValue(expression: elementId, initializer: { $0 })
   }
-
-  static let elementIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     elementId: Expression<String>

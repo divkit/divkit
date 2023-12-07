@@ -8,7 +8,8 @@
       ]
     },
     "property": {
-      "$ref": "common.json#/non_empty_string"
+      "type": "string",
+      "minLength": 1
     }
   },
   "required": [

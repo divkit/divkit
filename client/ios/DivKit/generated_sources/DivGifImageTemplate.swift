@@ -26,13 +26,13 @@ public final class DivGifImageTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let gifUrl: Field<Expression<URL>>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let longtapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let placeholderColor: Field<Expression<Color>>? // default value: #14000000
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
-  public let preview: Field<Expression<String>>? // at least 1 char
+  public let preview: Field<Expression<String>>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let scale: Field<Expression<DivImageScale>>? // default value: fill
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements

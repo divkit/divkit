@@ -11,7 +11,7 @@ public final class DivTooltipTemplate: TemplateValue {
   public let animationOut: Field<DivAnimationTemplate>?
   public let div: Field<DivTemplate>?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 5000
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let offset: Field<DivPointTemplate>?
   public let position: Field<Expression<Position>>?
 
@@ -54,7 +54,7 @@ public final class DivTooltipTemplate: TemplateValue {
     let animationOutValue = parent?.animationOut?.resolveOptionalValue(context: context, validator: ResolvedValue.animationOutValidator, useOnlyLinks: true) ?? .noValue
     let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
-    let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
+    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
     let offsetValue = parent?.offset?.resolveOptionalValue(context: context, validator: ResolvedValue.offsetValidator, useOnlyLinks: true) ?? .noValue
     let positionValue = parent?.position?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
@@ -102,7 +102,7 @@ public final class DivTooltipTemplate: TemplateValue {
     var animationOutValue: DeserializationResult<DivAnimation> = .noValue
     var divValue: DeserializationResult<Div> = .noValue
     var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
-    var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
+    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var offsetValue: DeserializationResult<DivPoint> = .noValue
     var positionValue: DeserializationResult<Expression<DivTooltip.Position>> = parent?.position?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
@@ -116,7 +116,7 @@ public final class DivTooltipTemplate: TemplateValue {
       case "duration":
         durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
       case "id":
-        idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
+        idValue = deserialize(__dictValue).merged(with: idValue)
       case "offset":
         offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.offsetValidator, type: DivPointTemplate.self).merged(with: offsetValue)
       case "position":
@@ -130,7 +130,7 @@ public final class DivTooltipTemplate: TemplateValue {
       case parent?.duration?.link:
         durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
       case parent?.id?.link:
-        idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
+        idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.offset?.link:
         offsetValue = offsetValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.offsetValidator, type: DivPointTemplate.self))
       case parent?.position?.link:

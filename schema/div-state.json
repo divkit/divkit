@@ -95,7 +95,7 @@
           "deprecated": true
         },
         "default_state_id": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_state_default_state_id"
         },
         "transition_animation_selector": {

@@ -6,11 +6,8 @@ import Serialization
 
 public final class DictVariable {
   public static let type: String = "dict"
-  public let name: String // at least 1 char
+  public let name: String
   public let value: [String: Any]
-
-  static let nameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     name: String,

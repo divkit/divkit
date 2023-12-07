@@ -13,7 +13,7 @@
           ]
         },
         "pattern": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_input_mask_fixed_length_pattern"
         },
         "pattern_elements": {
@@ -29,7 +29,7 @@
                 "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_key"
               },
               "regex": {
-                "$ref": "common.json#/non_empty_string",
+                "type": "string",
                 "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements_regex"
               },
               "placeholder": {

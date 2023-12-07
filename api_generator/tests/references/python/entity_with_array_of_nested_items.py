@@ -45,7 +45,6 @@ class EntityWithArrayOfNestedItemsItem(BaseDiv):
     entity: entity.Entity = Field(
     )
     property: typing.Union[Expr, str] = Field(
-        min_length=1
     )
 
 

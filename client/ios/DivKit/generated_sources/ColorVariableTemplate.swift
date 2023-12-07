@@ -7,7 +7,7 @@ import Serialization
 public final class ColorVariableTemplate: TemplateValue {
   public static let type: String = "color"
   public let parent: String? // at least 1 char
-  public let name: Field<String>? // at least 1 char
+  public let name: Field<String>?
   public let value: Field<Color>?
 
   static let parentValidator: AnyValueValidator<String> =
@@ -36,7 +36,7 @@ public final class ColorVariableTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: ColorVariableTemplate?) -> DeserializationResult<ColorVariable> {
-    let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
+    let nameValue = parent?.name?.resolveValue(context: context) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     var errors = mergeErrors(
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
@@ -65,16 +65,16 @@ public final class ColorVariableTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var nameValue: DeserializationResult<String> = parent?.name?.value(validatedBy: ResolvedValue.nameValidator) ?? .noValue
+    var nameValue: DeserializationResult<String> = parent?.name?.value() ?? .noValue
     var valueValue: DeserializationResult<Color> = parent?.value?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "name":
-        nameValue = deserialize(__dictValue, validator: ResolvedValue.nameValidator).merged(with: nameValue)
+        nameValue = deserialize(__dictValue).merged(with: nameValue)
       case "value":
         valueValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: valueValue)
       case parent?.name?.link:
-        nameValue = nameValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.nameValidator))
+        nameValue = nameValue.merged(with: deserialize(__dictValue))
       case parent?.value?.link:
         valueValue = valueValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       default: break

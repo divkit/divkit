@@ -9,7 +9,7 @@
       ]
     },
     "element_id": {
-      "$ref": "common.json#/non_empty_string"
+      "type": "string"
     }
   },
   "required": [

@@ -5,11 +5,8 @@ import Foundation
 import Serialization
 
 public final class DivExtension {
-  public let id: String // at least 1 char
+  public let id: String
   public let params: [String: Any]?
-
-  static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   static let paramsValidator: AnyValueValidator<[String: Any]> =
     makeNoOpValueValidator()

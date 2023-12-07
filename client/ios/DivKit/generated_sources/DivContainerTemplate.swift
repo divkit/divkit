@@ -175,7 +175,8 @@ public final class DivContainerTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
+  public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let items: Field<[DivTemplate]>? // at least 1 elements
   public let layoutMode: Field<Expression<LayoutMode>>? // default value: no_wrap
   public let lineSeparator: Field<SeparatorTemplate>?
@@ -201,52 +202,49 @@ public final class DivContainerTemplate: TemplateValue {
     makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        action: try dictionary.getOptionalField("action", templateToType: templateToType),
-        actionAnimation: try dictionary.getOptionalField("action_animation", templateToType: templateToType),
-        actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        aspect: try dictionary.getOptionalField("aspect", templateToType: templateToType),
-        background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-        border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
-        contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
-        contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
-        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
-        doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
-        extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
-        focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
-        height: try dictionary.getOptionalField("height", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType),
-        layoutMode: try dictionary.getOptionalExpressionField("layout_mode"),
-        lineSeparator: try dictionary.getOptionalField("line_separator", templateToType: templateToType),
-        longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        orientation: try dictionary.getOptionalExpressionField("orientation"),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
-        selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
-        separator: try dictionary.getOptionalField("separator", templateToType: templateToType),
-        tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
-        transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
-        transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
-        transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
-        transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
-        transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalExpressionField("visibility"),
-        visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
-        visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
-        width: try dictionary.getOptionalField("width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-container_template." + field, representation: representation)
-    }
+    self.init(
+      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
+      action: try dictionary.getOptionalField("action", templateToType: templateToType),
+      actionAnimation: try dictionary.getOptionalField("action_animation", templateToType: templateToType),
+      actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
+      alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: try dictionary.getOptionalExpressionField("alpha"),
+      aspect: try dictionary.getOptionalField("aspect", templateToType: templateToType),
+      background: try dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: try dictionary.getOptionalField("border", templateToType: templateToType),
+      columnSpan: try dictionary.getOptionalExpressionField("column_span"),
+      contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
+      contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
+      disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
+      extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
+      height: try dictionary.getOptionalField("height", templateToType: templateToType),
+      id: try dictionary.getOptionalField("id"),
+      itemBuilder: try dictionary.getOptionalField("item_builder", templateToType: templateToType),
+      items: try dictionary.getOptionalArray("items", templateToType: templateToType),
+      layoutMode: try dictionary.getOptionalExpressionField("layout_mode"),
+      lineSeparator: try dictionary.getOptionalField("line_separator", templateToType: templateToType),
+      longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
+      margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
+      orientation: try dictionary.getOptionalExpressionField("orientation"),
+      paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
+      rowSpan: try dictionary.getOptionalExpressionField("row_span"),
+      selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+      separator: try dictionary.getOptionalField("separator", templateToType: templateToType),
+      tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
+      transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
+      transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
+      transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
+      transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
+      transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
+      visibility: try dictionary.getOptionalExpressionField("visibility"),
+      visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
+      visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
+      width: try dictionary.getOptionalField("width", templateToType: templateToType)
+    )
   }
 
   init(
@@ -270,6 +268,7 @@ public final class DivContainerTemplate: TemplateValue {
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<Expression<LayoutMode>>? = nil,
     lineSeparator: Field<SeparatorTemplate>? = nil,
@@ -311,6 +310,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.focus = focus
     self.height = height
     self.id = id
+    self.itemBuilder = itemBuilder
     self.items = items
     self.layoutMode = layoutMode
     self.lineSeparator = lineSeparator
@@ -353,7 +353,8 @@ public final class DivContainerTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemBuilderValue = parent?.itemBuilder?.resolveOptionalValue(context: context, validator: ResolvedValue.itemBuilderValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = parent?.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveOptionalValue(context: context, validator: ResolvedValue.layoutModeValidator) ?? .noValue
     let lineSeparatorValue = parent?.lineSeparator?.resolveOptionalValue(context: context, validator: ResolvedValue.lineSeparatorValidator, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true) ?? .noValue
@@ -373,7 +374,7 @@ public final class DivContainerTemplate: TemplateValue {
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -393,6 +394,7 @@ public final class DivContainerTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
@@ -414,14 +416,6 @@ public final class DivContainerTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
-    guard
-      let itemsNonNil = itemsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivContainer(
       accessibility: accessibilityValue.value,
       action: actionValue.value,
@@ -442,7 +436,8 @@ public final class DivContainerTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
-      items: itemsNonNil,
+      itemBuilder: itemBuilderValue.value,
+      items: itemsValue.value,
       layoutMode: layoutModeValue.value,
       lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
@@ -489,6 +484,7 @@ public final class DivContainerTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
+    var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<Expression<DivContainer.LayoutMode>> = parent?.layoutMode?.value() ?? .noValue
     var lineSeparatorValue: DeserializationResult<DivContainer.Separator> = .noValue
@@ -549,6 +545,8 @@ public final class DivContainerTemplate: TemplateValue {
         heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.heightValidator, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
         idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
+      case "item_builder":
+        itemBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemBuilderValidator, type: DivCollectionItemBuilderTemplate.self).merged(with: itemBuilderValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
       case "layout_mode":
@@ -627,6 +625,8 @@ public final class DivContainerTemplate: TemplateValue {
         heightValue = heightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.heightValidator, type: DivSizeTemplate.self))
       case parent?.id?.link:
         idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
+      case parent?.itemBuilder?.link:
+        itemBuilderValue = itemBuilderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemBuilderValidator, type: DivCollectionItemBuilderTemplate.self))
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
       case parent?.layoutMode?.link:
@@ -683,7 +683,8 @@ public final class DivContainerTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      itemBuilderValue = itemBuilderValue.merged(with: parent.itemBuilder?.resolveOptionalValue(context: context, validator: ResolvedValue.itemBuilderValidator, useOnlyLinks: true))
+      itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
       lineSeparatorValue = lineSeparatorValue.merged(with: parent.lineSeparator?.resolveOptionalValue(context: context, validator: ResolvedValue.lineSeparatorValidator, useOnlyLinks: true))
       longtapActionsValue = longtapActionsValue.merged(with: parent.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
@@ -699,7 +700,7 @@ public final class DivContainerTemplate: TemplateValue {
       visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true))
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -719,6 +720,7 @@ public final class DivContainerTemplate: TemplateValue {
       focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
       lineSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_separator", error: $0) },
@@ -740,14 +742,6 @@ public final class DivContainerTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
-    guard
-      let itemsNonNil = itemsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivContainer(
       accessibility: accessibilityValue.value,
       action: actionValue.value,
@@ -768,7 +762,8 @@ public final class DivContainerTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
-      items: itemsNonNil,
+      itemBuilder: itemBuilderValue.value,
+      items: itemsValue.value,
       layoutMode: layoutModeValue.value,
       lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
@@ -820,6 +815,7 @@ public final class DivContainerTemplate: TemplateValue {
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
       lineSeparator: lineSeparator ?? mergedParent.lineSeparator,
@@ -867,7 +863,8 @@ public final class DivContainerTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
-      items: try merged.items?.resolveParent(templates: templates),
+      itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
+      items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: merged.layoutMode,
       lineSeparator: merged.lineSeparator?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),

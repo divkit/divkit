@@ -59,7 +59,7 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
     @Mockable
     class ItemTemplate : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
         @JvmField final val entity: Field<EntityTemplate>
-        @JvmField final val property: Field<Expression<String>> // at least 1 char
+        @JvmField final val property: Field<Expression<String>>
 
         constructor (
             env: ParsingEnvironment,
@@ -69,7 +69,7 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         ) {
             val logger = env.logger
             entity = JsonTemplateParser.readField(json, "entity", topLevel, parent?.entity, EntityTemplate.CREATOR, logger, env)
-            property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+            property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, logger, env, TYPE_HELPER_STRING)
         }
 
         override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfNestedItems.Item {
@@ -87,11 +87,8 @@ class EntityWithArrayOfNestedItemsTemplate : JSONSerializable, JsonTemplate<Enti
         }
 
         companion object {
-            private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-            private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-
             val ENTITY_READER: Reader<Entity> = { key, json, env -> JsonParser.read(json, key, Entity.CREATOR, env.logger, env) }
-            val PROPERTY_READER: Reader<Expression<String>> = { key, json, env -> JsonParser.readExpression(json, key, PROPERTY_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
+            val PROPERTY_READER: Reader<Expression<String>> = { key, json, env -> JsonParser.readExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> ItemTemplate(env, json = it) }
         }

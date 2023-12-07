@@ -27,7 +27,7 @@ class EntityWithArrayOfExpressionsTemplate : JSONSerializable, JsonTemplate<Enti
         json: JSONObject
     ) {
         val logger = env.logger
-        items = JsonTemplateParser.readExpressionListField(json, "items", topLevel, parent?.items, ITEMS_TEMPLATE_VALIDATOR, ITEMS_ITEM_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+        items = JsonTemplateParser.readExpressionListField(json, "items", topLevel, parent?.items, ITEMS_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
     override fun resolve(env: ParsingEnvironment, rawData: JSONObject): EntityWithArrayOfExpressions {
@@ -48,10 +48,8 @@ class EntityWithArrayOfExpressionsTemplate : JSONSerializable, JsonTemplate<Enti
 
         private val ITEMS_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
         private val ITEMS_TEMPLATE_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
-        private val ITEMS_ITEM_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val ITEMS_ITEM_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
-        val ITEMS_READER: Reader<ExpressionList<String>> = { key, json, env -> JsonParser.readExpressionList(json, key, ITEMS_VALIDATOR, ITEMS_ITEM_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
+        val ITEMS_READER: Reader<ExpressionList<String>> = { key, json, env -> JsonParser.readExpressionList(json, key, ITEMS_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfExpressionsTemplate(env, json = it) }

@@ -24,7 +24,7 @@ public final class DivIndicatorTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let inactiveItemColor: Field<Expression<Color>>? // default value: #33919cb5
   public let inactiveMinimumShape: Field<DivRoundedRectangleShapeTemplate>?
   public let inactiveShape: Field<DivRoundedRectangleShapeTemplate>?
@@ -32,7 +32,7 @@ public final class DivIndicatorTemplate: TemplateValue {
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let minimumItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 0.5
   public let paddings: Field<DivEdgeInsetsTemplate>?
-  public let pagerId: Field<String>? // at least 1 char
+  public let pagerId: Field<String>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let shape: Field<DivShapeTemplate>? // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())

@@ -18,7 +18,7 @@ import org.json.JSONArray
 
 @Mockable
 class EntityWithOptionalProperty(
-    @JvmField final val property: Expression<String>? = null, // at least 1 char
+    @JvmField final val property: Expression<String>? = null,
 ) : JSONSerializable {
 
     override fun writeToJSON(): JSONObject {
@@ -36,12 +36,9 @@ class EntityWithOptionalProperty(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithOptionalProperty {
             val logger = env.logger
             return EntityWithOptionalProperty(
-                property = JsonParser.readOptionalExpression(json, "property", PROPERTY_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+                property = JsonParser.readOptionalExpression(json, "property", logger, env, TYPE_HELPER_STRING)
             )
         }
-
-        private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithOptionalProperty(env, json = it) }
     }

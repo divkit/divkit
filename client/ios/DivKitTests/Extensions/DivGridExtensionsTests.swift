@@ -17,6 +17,7 @@ final class DivGridExtensionsTests: XCTestCase {
               "url": .string("https://ya.ru"),
               "payload": JSONObject.object(["key": .string("value")]),
               "menu_items": .array([.object(["text": .string("menu")])]),
+              "is_enabled": .bool(true),
             ]
           ),
           cardId: DivKitTests.cardId.rawValue,

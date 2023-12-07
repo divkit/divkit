@@ -32,7 +32,7 @@ class EntityWithSimpleProperties with EquatableMixin {
   final int integer;
   // constraint: number > 0
   final int? positiveInteger;
-  // at least 1 char
+
   final String? string;
 
   final Uri? url;

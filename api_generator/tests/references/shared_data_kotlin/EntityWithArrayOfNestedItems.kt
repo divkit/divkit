@@ -23,13 +23,7 @@ class EntityWithArrayOfNestedItems(
 
     class Item(
         @JvmField final val entity: Entity,
-        @JvmField final val property: Expression<String>, // at least 1 char
+        @JvmField final val property: Expression<String>,
     ) {
-
-        companion object {
-            private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-            private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        }
-
     }
 }

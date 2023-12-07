@@ -25,7 +25,7 @@
           "$description": "translations.json#/div_font_size"
         },
         "font_family": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_font_family"
         },
         "font_size_unit": {
@@ -140,7 +140,7 @@
       "type": "object",
       "properties": {
         "text": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_text_ellipsis_text"
         },
         "actions": {
@@ -199,7 +199,7 @@
           "$description": "translations.json#/div_font_size"
         },
         "font_family": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_font_family"
         },
         "font_size_unit": {
@@ -271,7 +271,7 @@
           "$description": "translations.json#/div_text_text_gradient"
         },
         "text": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "client_optimized": true,
           "$description": "translations.json#/div_text_text"
         },

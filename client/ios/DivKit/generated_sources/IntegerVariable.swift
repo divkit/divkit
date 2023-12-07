@@ -6,11 +6,8 @@ import Serialization
 
 public final class IntegerVariable {
   public static let type: String = "integer"
-  public let name: String // at least 1 char
+  public let name: String
   public let value: Int
-
-  static let nameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     name: String,

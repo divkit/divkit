@@ -6,10 +6,14 @@ import Serialization
 
 public final class ArrayValue {
   public static let type: String = "array"
-  public let value: [Any]
+  public let value: Expression<[Any]>
+
+  public func resolveValue(_ resolver: ExpressionResolver) -> [Any]? {
+    resolver.resolveArrayValue(expression: value)
+  }
 
   init(
-    value: [Any]
+    value: Expression<[Any]>
   ) {
     self.value = value
   }
@@ -28,7 +32,7 @@ extension ArrayValue: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["value"] = value
+    result["value"] = value.toValidSerializationValue()
     return result
   }
 }

@@ -25,13 +25,13 @@ public final class DivGifImage: DivBase {
   public let focus: DivFocus?
   public let gifUrl: Expression<URL>
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let longtapActions: [DivAction]? // at least 1 elements
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
   public let placeholderColor: Expression<Color> // default value: #14000000
   public let preloadRequired: Expression<Bool> // default value: false
-  public let preview: Expression<String>? // at least 1 char
+  public let preview: Expression<String>?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scale: Expression<DivImageScale> // default value: fill
   public let selectedActions: [DivAction]? // at least 1 elements
@@ -153,7 +153,7 @@ public final class DivGifImage: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
@@ -171,7 +171,7 @@ public final class DivGifImage: DivBase {
     makeNoOpValueValidator()
 
   static let previewValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

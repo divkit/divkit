@@ -12,10 +12,10 @@ public final class EntityWithSimpleProperties: EntityProtocol {
   public let booleanInt: Expression<Bool>?
   public let color: Expression<Color>?
   public let double: Expression<Double>?
-  public let id: Int?
-  public let integer: Expression<Int>?
+  public let id: Int // default value: 0
+  public let integer: Expression<Int> // default value: 0
   public let positiveInteger: Expression<Int>? // constraint: number > 0
-  public let string: Expression<String>? // at least 1 char
+  public let string: Expression<String>?
   public let url: Expression<URL>?
 
   public func resolveBoolean(_ resolver: ExpressionResolver) -> Bool? {
@@ -34,8 +34,8 @@ public final class EntityWithSimpleProperties: EntityProtocol {
     resolver.resolveNumericValue(expression: double)
   }
 
-  public func resolveInteger(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: integer)
+  public func resolveInteger(_ resolver: ExpressionResolver) -> Int {
+    resolver.resolveNumericValue(expression: integer) ?? 0
   }
 
   public func resolvePositiveInteger(_ resolver: ExpressionResolver) -> Int? {
@@ -63,7 +63,7 @@ public final class EntityWithSimpleProperties: EntityProtocol {
     makeValueValidator(valueValidator: { $0 > 0 })
 
   static let stringValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let urlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
@@ -83,8 +83,8 @@ public final class EntityWithSimpleProperties: EntityProtocol {
     self.booleanInt = booleanInt
     self.color = color
     self.double = double
-    self.id = id
-    self.integer = integer
+    self.id = id ?? 0
+    self.integer = integer ?? .value(0)
     self.positiveInteger = positiveInteger
     self.string = string
     self.url = url
@@ -129,7 +129,7 @@ extension EntityWithSimpleProperties: Serializable {
     result["color"] = color?.toValidSerializationValue()
     result["double"] = double?.toValidSerializationValue()
     result["id"] = id
-    result["integer"] = integer?.toValidSerializationValue()
+    result["integer"] = integer.toValidSerializationValue()
     result["positive_integer"] = positiveInteger?.toValidSerializationValue()
     result["string"] = string?.toValidSerializationValue()
     result["url"] = url?.toValidSerializationValue()

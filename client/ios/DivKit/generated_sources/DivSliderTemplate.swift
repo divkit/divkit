@@ -290,7 +290,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let maxValue: Field<Expression<Int>>? // default value: 100
   public let minValue: Field<Expression<Int>>? // default value: 0
@@ -301,10 +301,10 @@ public final class DivSliderTemplate: TemplateValue {
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let thumbSecondaryStyle: Field<DivDrawableTemplate>?
   public let thumbSecondaryTextStyle: Field<TextStyleTemplate>?
-  public let thumbSecondaryValueVariable: Field<String>? // at least 1 char
+  public let thumbSecondaryValueVariable: Field<String>?
   public let thumbStyle: Field<DivDrawableTemplate>?
   public let thumbTextStyle: Field<TextStyleTemplate>?
-  public let thumbValueVariable: Field<String>? // at least 1 char
+  public let thumbValueVariable: Field<String>?
   public let tickMarkActiveStyle: Field<DivDrawableTemplate>?
   public let tickMarkInactiveStyle: Field<DivDrawableTemplate>?
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements

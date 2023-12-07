@@ -12,11 +12,8 @@ public final class DivPatch {
   }
 
   public final class Change {
-    public let id: String // at least 1 char
+    public let id: String
     public let items: [Div]? // at least 1 elements
-
-    static let idValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
 
     static let itemsValidator: AnyArrayValueValidator<Div> =
       makeArrayValidator(minItems: 1)

@@ -2,10 +2,6 @@
   "test_schema": [
     {
       "common.json": {
-        "non_empty_string": {
-          "type": "string",
-          "minLength": 1
-        },
         "color": {
           "type": "string",
           "format": "color"
@@ -246,11 +242,7 @@
           "items": {
             "type": "array",
             "items": {
-              "$resolved_refs": [
-                "common.json#/non_empty_string"
-              ],
-              "type": "string",
-              "minLength": 1
+              "type": "string"
             },
             "minItems": 1
           }
@@ -276,11 +268,7 @@
             "type": "object",
             "properties": {
               "property": {
-                "$resolved_refs": [
-                  "common.json#/non_empty_string"
-                ],
-                "type": "string",
-                "minLength": 1
+                "type": "string"
               },
               "entity": {
                 "$resolved_refs": [
@@ -311,11 +299,7 @@
               "type": "object",
               "properties": {
                 "property": {
-                  "$resolved_refs": [
-                    "common.json#/non_empty_string"
-                  ],
-                  "type": "string",
-                  "minLength": 1
+                  "type": "string"
                 },
                 "entity": {
                   "$resolved_refs": [
@@ -577,11 +561,7 @@
             ]
           },
           "property": {
-            "$resolved_refs": [
-              "common.json#/non_empty_string"
-            ],
-            "type": "string",
-            "minLength": 1
+            "type": "string"
           }
         },
         "required": [
@@ -795,9 +775,6 @@
             ]
           },
           "property": {
-            "$resolved_refs": [
-              "common.json#/non_empty_string"
-            ],
             "type": "string",
             "minLength": 1
           }
@@ -829,6 +806,7 @@
             }
           },
           "string": {
+            "type": "string",
             "platforms": [
               "android",
               "ios",
@@ -837,12 +815,7 @@
             "description_translations": {
               "en": "String.",
               "ru": "Строка."
-            },
-            "$resolved_refs": [
-              "common.json#/non_empty_string"
-            ],
-            "type": "string",
-            "minLength": 1
+            }
           },
           "integer": {
             "type": "integer",

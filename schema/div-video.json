@@ -37,7 +37,7 @@
           "$description": "translations.json#/div_video_muted"
         },
         "preview": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_video_preview"
         },
         "elapsed_time_variable": {

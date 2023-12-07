@@ -30,7 +30,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 8
   public let items: Field<[DivTemplate]>? // at least 1 elements
   public let margins: Field<DivEdgeInsetsTemplate>?

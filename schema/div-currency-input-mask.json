@@ -13,7 +13,7 @@
           ]
         },
         "locale": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_input_mask_currency_locale"
         }
       }

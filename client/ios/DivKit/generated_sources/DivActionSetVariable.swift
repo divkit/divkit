@@ -7,14 +7,11 @@ import Serialization
 public final class DivActionSetVariable {
   public static let type: String = "set_variable"
   public let value: DivTypedValue
-  public let variableName: Expression<String> // at least 1 char
+  public let variableName: Expression<String>
 
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveStringBasedValue(expression: variableName, initializer: { $0 })
   }
-
-  static let variableNameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     value: DivTypedValue,

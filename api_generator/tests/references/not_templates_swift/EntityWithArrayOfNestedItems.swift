@@ -7,14 +7,11 @@ import Serialization
 public final class EntityWithArrayOfNestedItems {
   public final class Item {
     public let entity: Entity
-    public let property: Expression<String> // at least 1 char
+    public let property: Expression<String>
 
     public func resolveProperty(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: property, initializer: { $0 })
     }
-
-    static let propertyValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
 
     init(
       entity: Entity,

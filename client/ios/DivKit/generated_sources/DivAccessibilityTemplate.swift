@@ -9,11 +9,11 @@ public final class DivAccessibilityTemplate: TemplateValue {
 
   public typealias Mode = DivAccessibility.Mode
 
-  public let description: Field<Expression<String>>? // at least 1 char
-  public let hint: Field<Expression<String>>? // at least 1 char
+  public let description: Field<Expression<String>>?
+  public let hint: Field<Expression<String>>?
   public let mode: Field<Expression<Mode>>? // default value: default
   public let muteAfterAction: Field<Expression<Bool>>? // default value: false
-  public let stateDescription: Field<Expression<String>>? // at least 1 char
+  public let stateDescription: Field<Expression<String>>?
   public let type: Field<Kind>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {

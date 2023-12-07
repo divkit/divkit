@@ -79,6 +79,7 @@ func makeDivContainer(
     focus: nil,
     height: height,
     id: nil,
+    itemBuilder: nil,
     items: items,
     layoutMode: nil,
     lineSeparator: nil,

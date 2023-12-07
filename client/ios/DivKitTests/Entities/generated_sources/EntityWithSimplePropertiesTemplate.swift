@@ -13,10 +13,10 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
   public let booleanInt: Field<Expression<Bool>>?
   public let color: Field<Expression<Color>>?
   public let double: Field<Expression<Double>>?
-  public let id: Field<Int>?
-  public let integer: Field<Expression<Int>>?
+  public let id: Field<Int>? // default value: 0
+  public let integer: Field<Expression<Int>>? // default value: 0
   public let positiveInteger: Field<Expression<Int>>? // constraint: number > 0
-  public let string: Field<Expression<String>>? // at least 1 char
+  public let string: Field<Expression<String>>?
   public let url: Field<Expression<URL>>?
 
   static let parentValidator: AnyValueValidator<String> =

@@ -17,19 +17,19 @@ public final class DivVideo: DivBase {
   public let bufferingActions: [DivAction]? // at least 1 elements
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let elapsedTimeVariable: String? // at least 1 char
+  public let elapsedTimeVariable: String?
   public let endActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let fatalActions: [DivAction]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let margins: DivEdgeInsets
   public let muted: Expression<Bool> // default value: false
   public let paddings: DivEdgeInsets
   public let pauseActions: [DivAction]? // at least 1 elements
   public let playerSettingsPayload: [String: Any]?
-  public let preview: Expression<String>? // at least 1 char
+  public let preview: Expression<String>?
   public let repeatable: Expression<Bool> // default value: false
   public let resumeActions: [DivAction]? // at least 1 elements
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -125,7 +125,7 @@ public final class DivVideo: DivBase {
     makeArrayValidator(minItems: 1)
 
   static let elapsedTimeVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let endActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
@@ -143,7 +143,7 @@ public final class DivVideo: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
@@ -161,7 +161,7 @@ public final class DivVideo: DivBase {
     makeNoOpValueValidator()
 
   static let previewValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let repeatableValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()

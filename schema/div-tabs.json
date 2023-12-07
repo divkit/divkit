@@ -21,7 +21,7 @@
       },
       "properties": {
         "title": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_tabs_item_title"
         },
         "title_click_action": {
@@ -113,7 +113,7 @@
               "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight"
             },
             "font_family": {
-              "$ref": "common.json#/non_empty_string",
+              "type": "string",
               "$description": "translations.json#/div_font_family"
             },
             "active_text_color": {

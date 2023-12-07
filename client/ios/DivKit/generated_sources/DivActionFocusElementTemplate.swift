@@ -7,7 +7,7 @@ import Serialization
 public final class DivActionFocusElementTemplate: TemplateValue {
   public static let type: String = "focus_element"
   public let parent: String? // at least 1 char
-  public let elementId: Field<Expression<String>>? // at least 1 char
+  public let elementId: Field<Expression<String>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -32,7 +32,7 @@ public final class DivActionFocusElementTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionFocusElementTemplate?) -> DeserializationResult<DivActionFocusElement> {
-    let elementIdValue = parent?.elementId?.resolveValue(context: context, validator: ResolvedValue.elementIdValidator) ?? .noValue
+    let elementIdValue = parent?.elementId?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       elementIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "element_id", error: $0) }
     )
@@ -58,9 +58,9 @@ public final class DivActionFocusElementTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "element_id":
-        elementIdValue = deserialize(__dictValue, validator: ResolvedValue.elementIdValidator).merged(with: elementIdValue)
+        elementIdValue = deserialize(__dictValue).merged(with: elementIdValue)
       case parent?.elementId?.link:
-        elementIdValue = elementIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.elementIdValidator))
+        elementIdValue = elementIdValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

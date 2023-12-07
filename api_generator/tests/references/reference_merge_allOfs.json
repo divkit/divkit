@@ -2,10 +2,6 @@
   "test_schema": [
     {
       "common.json": {
-        "non_empty_string": {
-          "type": "string",
-          "minLength": 1
-        },
         "color": {
           "type": "string",
           "format": "color"
@@ -183,7 +179,7 @@
           "items": {
             "type": "array",
             "items": {
-              "$ref": "common.json#/non_empty_string"
+              "type": "string"
             },
             "minItems": 1
           }
@@ -209,7 +205,7 @@
             "type": "object",
             "properties": {
               "property": {
-                "$ref": "common.json#/non_empty_string"
+                "type": "string"
               },
               "entity": {
                 "$ref": "entity.json"
@@ -421,7 +417,7 @@
             ]
           },
           "property": {
-            "$ref": "common.json#/non_empty_string"
+            "type": "string"
           }
         },
         "required": [
@@ -546,7 +542,8 @@
             ]
           },
           "property": {
-            "$ref": "common.json#/non_empty_string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": [
@@ -574,7 +571,7 @@
             "$description": "translations.json#/entity_with_simple_properties_id"
           },
           "string": {
-            "$ref": "common.json#/non_empty_string",
+            "type": "string",
             "$description": "translations.json#/entity_with_simple_properties_string",
             "platforms": [
               "android",

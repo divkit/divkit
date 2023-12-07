@@ -9,7 +9,7 @@
       ]
     },
     "variable_name": {
-      "$ref": "common.json#/non_empty_string"
+      "type": "string"
     },
     "index": {
       "type": "integer"

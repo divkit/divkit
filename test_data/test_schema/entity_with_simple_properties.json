@@ -16,7 +16,7 @@
       "$description": "translations.json#/entity_with_simple_properties_id"
     },
     "string": {
-      "$ref": "common.json#/non_empty_string",
+      "type": "string",
       "$description": "translations.json#/entity_with_simple_properties_string",
       "platforms": [
         "android",

@@ -83,8 +83,9 @@ public final class DivContainer: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
-  public let items: [Div] // at least 1 elements
+  public let id: String?
+  public let itemBuilder: DivCollectionItemBuilder?
+  public let items: [Div]? // at least 1 elements
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
   public let lineSeparator: Separator?
   public let longtapActions: [DivAction]? // at least 1 elements
@@ -200,7 +201,10 @@ public final class DivContainer: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
+
+  static let itemBuilderValidator: AnyValueValidator<DivCollectionItemBuilder> =
+    makeNoOpValueValidator()
 
   static let itemsValidator: AnyArrayValueValidator<Div> =
     makeArrayValidator(minItems: 1)
@@ -282,7 +286,8 @@ public final class DivContainer: DivBase {
     focus: DivFocus?,
     height: DivSize?,
     id: String?,
-    items: [Div],
+    itemBuilder: DivCollectionItemBuilder?,
+    items: [Div]?,
     layoutMode: Expression<LayoutMode>?,
     lineSeparator: Separator?,
     longtapActions: [DivAction]?,
@@ -322,6 +327,7 @@ public final class DivContainer: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.itemBuilder = itemBuilder
     self.items = items
     self.layoutMode = layoutMode ?? .value(.noWrap)
     self.lineSeparator = lineSeparator
@@ -392,49 +398,54 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.id == rhs.id,
-      lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode
+      lhs.itemBuilder == rhs.itemBuilder,
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.layoutMode == rhs.layoutMode,
       lhs.lineSeparator == rhs.lineSeparator,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator,
-      lhs.tooltips == rhs.tooltips
+      lhs.separator == rhs.separator
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -467,7 +478,8 @@ extension DivContainer: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
-    result["items"] = items.map { $0.toDictionary() }
+    result["item_builder"] = itemBuilder?.toDictionary()
+    result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toValidSerializationValue()
     result["line_separator"] = lineSeparator?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }

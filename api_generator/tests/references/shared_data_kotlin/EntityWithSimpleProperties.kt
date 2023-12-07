@@ -12,7 +12,7 @@ class EntityWithSimpleProperties(
     @JvmField final val id: Long = ID_DEFAULT_VALUE, // default value: 0
     @JvmField final val integer: Expression<Long> = INTEGER_DEFAULT_VALUE, // default value: 0
     @JvmField final val positiveInteger: Expression<Long>? = null, // constraint: number > 0
-    @JvmField final val string: Expression<String>? = null, // at least 1 char
+    @JvmField final val string: Expression<String>? = null,
     @JvmField final val url: Expression<Uri>? = null,
 ) {
 
@@ -24,8 +24,6 @@ class EntityWithSimpleProperties(
 
         private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
-        private val STRING_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val STRING_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
     }
 
 }

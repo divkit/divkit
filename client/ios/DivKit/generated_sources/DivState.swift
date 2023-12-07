@@ -9,7 +9,7 @@ public final class DivState: DivBase {
     public let animationIn: DivAnimation?
     public let animationOut: DivAnimation?
     public let div: Div?
-    public let stateId: String // at least 1 char
+    public let stateId: String
     public let swipeOutActions: [DivAction]? // at least 1 elements
 
     static let animationInValidator: AnyValueValidator<DivAnimation> =
@@ -20,9 +20,6 @@ public final class DivState: DivBase {
 
     static let divValidator: AnyValueValidator<Div> =
       makeNoOpValueValidator()
-
-    static let stateIdValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
 
     static let swipeOutActionsValidator: AnyArrayValueValidator<DivAction> =
       makeArrayValidator(minItems: 1)
@@ -50,18 +47,18 @@ public final class DivState: DivBase {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let defaultStateId: Expression<String>? // at least 1 char
+  public let defaultStateId: Expression<String>?
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let divId: String? // at least 1 char
+  public let divId: String?
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]? // at least 1 elements
-  public let stateIdVariable: String? // at least 1 char
+  public let stateIdVariable: String?
   public let states: [State] // at least 1 elements
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
@@ -129,13 +126,13 @@ public final class DivState: DivBase {
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let defaultStateIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
     makeArrayValidator(minItems: 1)
 
   static let divIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
@@ -147,7 +144,7 @@ public final class DivState: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
@@ -162,7 +159,7 @@ public final class DivState: DivBase {
     makeArrayValidator(minItems: 1)
 
   static let stateIdVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let statesValidator: AnyArrayValueValidator<DivState.State> =
     makeArrayValidator(minItems: 1)

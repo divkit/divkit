@@ -9,7 +9,7 @@ import Serialization
 public final class EntityWithOptionalPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_optional_property"
   public let parent: String? // at least 1 char
-  public let property: Field<Expression<String>>? // at least 1 char
+  public let property: Field<Expression<String>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)

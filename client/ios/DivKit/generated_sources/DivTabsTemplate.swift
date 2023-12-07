@@ -7,7 +7,7 @@ import Serialization
 public final class DivTabsTemplate: TemplateValue {
   public final class ItemTemplate: TemplateValue {
     public let div: Field<DivTemplate>?
-    public let title: Field<Expression<String>>? // at least 1 char
+    public let title: Field<Expression<String>>?
     public let titleClickAction: Field<DivActionTemplate>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -34,7 +34,7 @@ public final class DivTabsTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<DivTabs.Item> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-      let titleValue = parent?.title?.resolveValue(context: context, validator: ResolvedValue.titleValidator) ?? .noValue
+      let titleValue = parent?.title?.resolveValue(context: context) ?? .noValue
       let titleClickActionValue = parent?.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
@@ -73,13 +73,13 @@ public final class DivTabsTemplate: TemplateValue {
         case "div":
           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
         case "title":
-          titleValue = deserialize(__dictValue, validator: ResolvedValue.titleValidator).merged(with: titleValue)
+          titleValue = deserialize(__dictValue).merged(with: titleValue)
         case "title_click_action":
           titleClickActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titleClickActionValidator, type: DivActionTemplate.self).merged(with: titleClickActionValue)
         case parent?.div?.link:
           divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
         case parent?.title?.link:
-          titleValue = titleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.titleValidator))
+          titleValue = titleValue.merged(with: deserialize(__dictValue))
         case parent?.titleClickAction?.link:
           titleClickActionValue = titleClickActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titleClickActionValidator, type: DivActionTemplate.self))
         default: break
@@ -139,7 +139,7 @@ public final class DivTabsTemplate: TemplateValue {
     public let animationType: Field<Expression<AnimationType>>? // default value: slide
     public let cornerRadius: Field<Expression<Int>>? // constraint: number >= 0
     public let cornersRadius: Field<DivCornersRadiusTemplate>?
-    public let fontFamily: Field<Expression<String>>? // at least 1 char
+    public let fontFamily: Field<Expression<String>>?
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
@@ -467,7 +467,7 @@ public final class DivTabsTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let hasSeparator: Field<Expression<Bool>>? // default value: false
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let items: Field<[ItemTemplate]>? // at least 1 elements
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?

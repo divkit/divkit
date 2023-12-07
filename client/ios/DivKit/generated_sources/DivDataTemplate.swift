@@ -113,7 +113,7 @@ public final class DivDataTemplate: TemplateValue {
     }
   }
 
-  public let logId: Field<String>? // at least 1 char
+  public let logId: Field<String>?
   public let states: Field<[StateTemplate]>? // at least 1 elements; all received elements must be valid
   public let timers: Field<[DivTimerTemplate]>? // at least 1 elements
   public let transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? // default value: none
@@ -155,7 +155,7 @@ public final class DivDataTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
-    let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
+    let logIdValue = parent?.logId?.resolveValue(context: context) ?? .noValue
     let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
     let timersValue = parent?.timers?.resolveOptionalValue(context: context, validator: ResolvedValue.timersValidator, useOnlyLinks: true) ?? .noValue
     let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionAnimationSelectorValidator) ?? .noValue
@@ -196,7 +196,7 @@ public final class DivDataTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var logIdValue: DeserializationResult<String> = parent?.logId?.value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
+    var logIdValue: DeserializationResult<String> = parent?.logId?.value() ?? .noValue
     var statesValue: DeserializationResult<[DivData.State]> = .noValue
     var timersValue: DeserializationResult<[DivTimer]> = .noValue
     var transitionAnimationSelectorValue: DeserializationResult<Expression<DivTransitionSelector>> = parent?.transitionAnimationSelector?.value() ?? .noValue
@@ -205,7 +205,7 @@ public final class DivDataTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "log_id":
-        logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator).merged(with: logIdValue)
+        logIdValue = deserialize(__dictValue).merged(with: logIdValue)
       case "states":
         statesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self).merged(with: statesValue)
       case "timers":
@@ -217,7 +217,7 @@ public final class DivDataTemplate: TemplateValue {
       case "variables":
         variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.variablesValidator, type: DivVariableTemplate.self).merged(with: variablesValue)
       case parent?.logId?.link:
-        logIdValue = logIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
+        logIdValue = logIdValue.merged(with: deserialize(__dictValue))
       case parent?.states?.link:
         statesValue = statesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self))
       case parent?.timers?.link:

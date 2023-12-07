@@ -38,7 +38,7 @@
           "$description": "translations.json#/div_font_size_unit"
         },
         "font_family": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_font_family"
         },
         "font_weight": {
@@ -87,7 +87,7 @@
           "$description": "translations.json#/div_input_letter_spacing"
         },
         "hint_text": {
-          "$ref": "common.json#/non_empty_string",
+          "type": "string",
           "$description": "translations.json#/div_input_hint_text"
         },
         "hint_color": {

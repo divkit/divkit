@@ -40,14 +40,14 @@ public final class DivSelect: DivBase {
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
-  public let fontFamily: Expression<String>? // at least 1 char
+  public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let hintColor: Expression<Color> // default value: #73000000
-  public let hintText: Expression<String>? // at least 1 char
-  public let id: String? // at least 1 char
+  public let hintText: Expression<String>?
+  public let id: String?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets
@@ -62,7 +62,7 @@ public final class DivSelect: DivBase {
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
-  public let valueVariable: String // at least 1 char
+  public let valueVariable: String
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
@@ -159,7 +159,7 @@ public final class DivSelect: DivBase {
     makeNoOpValueValidator()
 
   static let fontFamilyValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -177,10 +177,10 @@ public final class DivSelect: DivBase {
     makeNoOpValueValidator()
 
   static let hintTextValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -220,9 +220,6 @@ public final class DivSelect: DivBase {
 
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
-
-  static let valueVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   static let visibilityValidator: AnyValueValidator<DivVisibility> =
     makeNoOpValueValidator()

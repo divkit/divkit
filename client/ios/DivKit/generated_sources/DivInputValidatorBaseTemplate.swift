@@ -6,8 +6,8 @@ import Serialization
 
 public final class DivInputValidatorBaseTemplate: TemplateValue {
   public let allowEmpty: Field<Expression<Bool>>? // default value: false
-  public let labelId: Field<Expression<String>>? // at least 1 char
-  public let variable: Field<String>? // at least 1 char
+  public let labelId: Field<Expression<String>>?
+  public let variable: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(

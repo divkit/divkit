@@ -18,7 +18,7 @@ public final class DivData {
     }
   }
 
-  public let logId: String // at least 1 char
+  public let logId: String
   public let states: [State] // at least 1 elements; all received elements must be valid
   public let timers: [DivTimer]? // at least 1 elements
   public let transitionAnimationSelector: Expression<DivTransitionSelector> // default value: none
@@ -28,9 +28,6 @@ public final class DivData {
   public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver) -> DivTransitionSelector {
     resolver.resolveStringBasedValue(expression: transitionAnimationSelector, initializer: DivTransitionSelector.init(rawValue:)) ?? DivTransitionSelector.none
   }
-
-  static let logIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   static let statesValidator: AnyArrayValueValidator<DivData.State> =
     makeStrictArrayValidator(minItems: 1)

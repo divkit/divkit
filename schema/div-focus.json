@@ -35,19 +35,19 @@
       "$description": "translations.json#/div_focus_next_focus_ids",
       "properties": {
         "forward": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         },
         "right": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         },
         "down": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         },
         "left": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         },
         "up": {
-          "$ref": "common.json#/non_empty_string"
+          "type": "string"
         }
       },
       "platforms": [

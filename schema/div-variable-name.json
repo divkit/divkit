@@ -1,4 +1,4 @@
 {
-  "supports_expressions": false,
-  "$ref": "common.json#/non_empty_string"
+  "type": "string",
+  "supports_expressions": false
 }

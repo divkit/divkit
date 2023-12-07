@@ -8,7 +8,7 @@ public final class DivActionTemplate: TemplateValue {
   public final class MenuItemTemplate: TemplateValue {
     public let action: Field<DivActionTemplate>?
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
-    public let text: Field<Expression<String>>? // at least 1 char
+    public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
@@ -35,7 +35,7 @@ public final class DivActionTemplate: TemplateValue {
     private static func resolveOnlyLinks(context: TemplatesContext, parent: MenuItemTemplate?) -> DeserializationResult<DivAction.MenuItem> {
       let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
-      let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
+      let textValue = parent?.text?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
@@ -71,13 +71,13 @@ public final class DivActionTemplate: TemplateValue {
         case "actions":
           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
         case "text":
-          textValue = deserialize(__dictValue, validator: ResolvedValue.textValidator).merged(with: textValue)
+          textValue = deserialize(__dictValue).merged(with: textValue)
         case parent?.action?.link:
           actionValue = actionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionValidator, type: DivActionTemplate.self))
         case parent?.actions?.link:
           actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
         case parent?.text?.link:
-          textValue = textValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textValidator))
+          textValue = textValue.merged(with: deserialize(__dictValue))
         default: break
         }
       }
@@ -122,7 +122,8 @@ public final class DivActionTemplate: TemplateValue {
   }
 
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
-  public let logId: Field<String>? // at least 1 char
+  public let isEnabled: Field<Expression<Bool>>? // default value: true
+  public let logId: Field<String>?
   public let logUrl: Field<Expression<URL>>?
   public let menuItems: Field<[MenuItemTemplate]>? // at least 1 elements
   public let payload: Field<[String: Any]>?
@@ -134,6 +135,7 @@ public final class DivActionTemplate: TemplateValue {
     do {
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
+        isEnabled: try dictionary.getOptionalExpressionField("is_enabled"),
         logId: try dictionary.getOptionalField("log_id"),
         logUrl: try dictionary.getOptionalExpressionField("log_url", transform: URL.init(string:)),
         menuItems: try dictionary.getOptionalArray("menu_items", templateToType: templateToType),
@@ -149,6 +151,7 @@ public final class DivActionTemplate: TemplateValue {
 
   init(
     downloadCallbacks: Field<DivDownloadCallbacksTemplate>? = nil,
+    isEnabled: Field<Expression<Bool>>? = nil,
     logId: Field<String>? = nil,
     logUrl: Field<Expression<URL>>? = nil,
     menuItems: Field<[MenuItemTemplate]>? = nil,
@@ -158,6 +161,7 @@ public final class DivActionTemplate: TemplateValue {
     url: Field<Expression<URL>>? = nil
   ) {
     self.downloadCallbacks = downloadCallbacks
+    self.isEnabled = isEnabled
     self.logId = logId
     self.logUrl = logUrl
     self.menuItems = menuItems
@@ -169,7 +173,8 @@ public final class DivActionTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionTemplate?) -> DeserializationResult<DivAction> {
     let downloadCallbacksValue = parent?.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true) ?? .noValue
-    let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context, validator: ResolvedValue.isEnabledValidator) ?? .noValue
+    let logIdValue = parent?.logId?.resolveValue(context: context) ?? .noValue
     let logUrlValue = parent?.logUrl?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator) ?? .noValue
     let menuItemsValue = parent?.menuItems?.resolveOptionalValue(context: context, validator: ResolvedValue.menuItemsValidator, useOnlyLinks: true) ?? .noValue
     let payloadValue = parent?.payload?.resolveOptionalValue(context: context, validator: ResolvedValue.payloadValidator) ?? .noValue
@@ -178,6 +183,7 @@ public final class DivActionTemplate: TemplateValue {
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     var errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       logUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_url", error: $0) },
       menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "menu_items", error: $0) },
@@ -196,6 +202,7 @@ public final class DivActionTemplate: TemplateValue {
     }
     let result = DivAction(
       downloadCallbacks: downloadCallbacksValue.value,
+      isEnabled: isEnabledValue.value,
       logId: logIdNonNil,
       logUrl: logUrlValue.value,
       menuItems: menuItemsValue.value,
@@ -212,7 +219,8 @@ public final class DivActionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var downloadCallbacksValue: DeserializationResult<DivDownloadCallbacks> = .noValue
-    var logIdValue: DeserializationResult<String> = parent?.logId?.value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
+    var logIdValue: DeserializationResult<String> = parent?.logId?.value() ?? .noValue
     var logUrlValue: DeserializationResult<Expression<URL>> = parent?.logUrl?.value() ?? .noValue
     var menuItemsValue: DeserializationResult<[DivAction.MenuItem]> = .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value(validatedBy: ResolvedValue.payloadValidator) ?? .noValue
@@ -223,8 +231,10 @@ public final class DivActionTemplate: TemplateValue {
       switch key {
       case "download_callbacks":
         downloadCallbacksValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.downloadCallbacksValidator, type: DivDownloadCallbacksTemplate.self).merged(with: downloadCallbacksValue)
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue, validator: ResolvedValue.isEnabledValidator).merged(with: isEnabledValue)
       case "log_id":
-        logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator).merged(with: logIdValue)
+        logIdValue = deserialize(__dictValue).merged(with: logIdValue)
       case "log_url":
         logUrlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator).merged(with: logUrlValue)
       case "menu_items":
@@ -239,8 +249,10 @@ public final class DivActionTemplate: TemplateValue {
         urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
       case parent?.downloadCallbacks?.link:
         downloadCallbacksValue = downloadCallbacksValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.downloadCallbacksValidator, type: DivDownloadCallbacksTemplate.self))
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.isEnabledValidator))
       case parent?.logId?.link:
-        logIdValue = logIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
+        logIdValue = logIdValue.merged(with: deserialize(__dictValue))
       case parent?.logUrl?.link:
         logUrlValue = logUrlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator))
       case parent?.menuItems?.link:
@@ -263,6 +275,7 @@ public final class DivActionTemplate: TemplateValue {
     }
     var errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       logUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_url", error: $0) },
       menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "menu_items", error: $0) },
@@ -281,6 +294,7 @@ public final class DivActionTemplate: TemplateValue {
     }
     let result = DivAction(
       downloadCallbacks: downloadCallbacksValue.value,
+      isEnabled: isEnabledValue.value,
       logId: logIdNonNil,
       logUrl: logUrlValue.value,
       menuItems: menuItemsValue.value,
@@ -301,6 +315,7 @@ public final class DivActionTemplate: TemplateValue {
 
     return DivActionTemplate(
       downloadCallbacks: merged.downloadCallbacks?.tryResolveParent(templates: templates),
+      isEnabled: merged.isEnabled,
       logId: merged.logId,
       logUrl: merged.logUrl,
       menuItems: merged.menuItems?.tryResolveParent(templates: templates),

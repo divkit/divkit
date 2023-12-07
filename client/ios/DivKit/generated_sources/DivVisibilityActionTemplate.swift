@@ -6,7 +6,8 @@ import Serialization
 
 public final class DivVisibilityActionTemplate: TemplateValue {
   public let downloadCallbacks: Field<DivDownloadCallbacksTemplate>?
-  public let logId: Field<String>? // at least 1 char
+  public let isEnabled: Field<Expression<Bool>>? // default value: true
+  public let logId: Field<String>?
   public let logLimit: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
@@ -19,6 +20,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     do {
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
+        isEnabled: try dictionary.getOptionalExpressionField("is_enabled"),
         logId: try dictionary.getOptionalField("log_id"),
         logLimit: try dictionary.getOptionalExpressionField("log_limit"),
         payload: try dictionary.getOptionalField("payload"),
@@ -35,6 +37,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
 
   init(
     downloadCallbacks: Field<DivDownloadCallbacksTemplate>? = nil,
+    isEnabled: Field<Expression<Bool>>? = nil,
     logId: Field<String>? = nil,
     logLimit: Field<Expression<Int>>? = nil,
     payload: Field<[String: Any]>? = nil,
@@ -45,6 +48,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     visibilityPercentage: Field<Expression<Int>>? = nil
   ) {
     self.downloadCallbacks = downloadCallbacks
+    self.isEnabled = isEnabled
     self.logId = logId
     self.logLimit = logLimit
     self.payload = payload
@@ -57,7 +61,8 @@ public final class DivVisibilityActionTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivVisibilityActionTemplate?) -> DeserializationResult<DivVisibilityAction> {
     let downloadCallbacksValue = parent?.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true) ?? .noValue
-    let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
+    let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context, validator: ResolvedValue.isEnabledValidator) ?? .noValue
+    let logIdValue = parent?.logId?.resolveValue(context: context) ?? .noValue
     let logLimitValue = parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue
     let payloadValue = parent?.payload?.resolveOptionalValue(context: context, validator: ResolvedValue.payloadValidator) ?? .noValue
     let refererValue = parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.refererValidator) ?? .noValue
@@ -67,6 +72,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     let visibilityPercentageValue = parent?.visibilityPercentage?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityPercentageValidator) ?? .noValue
     var errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       logLimitValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_limit", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
@@ -86,6 +92,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     }
     let result = DivVisibilityAction(
       downloadCallbacks: downloadCallbacksValue.value,
+      isEnabled: isEnabledValue.value,
       logId: logIdNonNil,
       logLimit: logLimitValue.value,
       payload: payloadValue.value,
@@ -103,7 +110,8 @@ public final class DivVisibilityActionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var downloadCallbacksValue: DeserializationResult<DivDownloadCallbacks> = .noValue
-    var logIdValue: DeserializationResult<String> = parent?.logId?.value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
+    var isEnabledValue: DeserializationResult<Expression<Bool>> = parent?.isEnabled?.value() ?? .noValue
+    var logIdValue: DeserializationResult<String> = parent?.logId?.value() ?? .noValue
     var logLimitValue: DeserializationResult<Expression<Int>> = parent?.logLimit?.value() ?? .noValue
     var payloadValue: DeserializationResult<[String: Any]> = parent?.payload?.value(validatedBy: ResolvedValue.payloadValidator) ?? .noValue
     var refererValue: DeserializationResult<Expression<URL>> = parent?.referer?.value() ?? .noValue
@@ -115,8 +123,10 @@ public final class DivVisibilityActionTemplate: TemplateValue {
       switch key {
       case "download_callbacks":
         downloadCallbacksValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.downloadCallbacksValidator, type: DivDownloadCallbacksTemplate.self).merged(with: downloadCallbacksValue)
+      case "is_enabled":
+        isEnabledValue = deserialize(__dictValue, validator: ResolvedValue.isEnabledValidator).merged(with: isEnabledValue)
       case "log_id":
-        logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator).merged(with: logIdValue)
+        logIdValue = deserialize(__dictValue).merged(with: logIdValue)
       case "log_limit":
         logLimitValue = deserialize(__dictValue, validator: ResolvedValue.logLimitValidator).merged(with: logLimitValue)
       case "payload":
@@ -133,8 +143,10 @@ public final class DivVisibilityActionTemplate: TemplateValue {
         visibilityPercentageValue = deserialize(__dictValue, validator: ResolvedValue.visibilityPercentageValidator).merged(with: visibilityPercentageValue)
       case parent?.downloadCallbacks?.link:
         downloadCallbacksValue = downloadCallbacksValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.downloadCallbacksValidator, type: DivDownloadCallbacksTemplate.self))
+      case parent?.isEnabled?.link:
+        isEnabledValue = isEnabledValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.isEnabledValidator))
       case parent?.logId?.link:
-        logIdValue = logIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
+        logIdValue = logIdValue.merged(with: deserialize(__dictValue))
       case parent?.logLimit?.link:
         logLimitValue = logLimitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logLimitValidator))
       case parent?.payload?.link:
@@ -158,6 +170,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     }
     var errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
+      isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
       logLimitValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_limit", error: $0) },
       payloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "payload", error: $0) },
@@ -177,6 +190,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
     }
     let result = DivVisibilityAction(
       downloadCallbacks: downloadCallbacksValue.value,
+      isEnabled: isEnabledValue.value,
       logId: logIdNonNil,
       logLimit: logLimitValue.value,
       payload: payloadValue.value,
@@ -198,6 +212,7 @@ public final class DivVisibilityActionTemplate: TemplateValue {
 
     return DivVisibilityActionTemplate(
       downloadCallbacks: merged.downloadCallbacks?.tryResolveParent(templates: templates),
+      isEnabled: merged.isEnabled,
       logId: merged.logId,
       logLimit: merged.logLimit,
       payload: merged.payload,

@@ -109,7 +109,7 @@ public final class DivSlider: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let margins: DivEdgeInsets
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
@@ -120,10 +120,10 @@ public final class DivSlider: DivBase {
   public let selectedActions: [DivAction]? // at least 1 elements
   public let thumbSecondaryStyle: DivDrawable?
   public let thumbSecondaryTextStyle: TextStyle?
-  public let thumbSecondaryValueVariable: String? // at least 1 char
+  public let thumbSecondaryValueVariable: String?
   public let thumbStyle: DivDrawable
   public let thumbTextStyle: TextStyle?
-  public let thumbValueVariable: String? // at least 1 char
+  public let thumbValueVariable: String?
   public let tickMarkActiveStyle: DivDrawable?
   public let tickMarkInactiveStyle: DivDrawable?
   public let tooltips: [DivTooltip]? // at least 1 elements
@@ -205,7 +205,7 @@ public final class DivSlider: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
@@ -232,13 +232,13 @@ public final class DivSlider: DivBase {
     makeNoOpValueValidator()
 
   static let thumbSecondaryValueVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let thumbTextStyleValidator: AnyValueValidator<DivSlider.TextStyle> =
     makeNoOpValueValidator()
 
   static let thumbValueVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let tickMarkActiveStyleValidator: AnyValueValidator<DivDrawable> =
     makeNoOpValueValidator()

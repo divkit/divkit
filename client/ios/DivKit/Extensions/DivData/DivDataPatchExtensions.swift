@@ -81,7 +81,7 @@ extension Div {
 
 extension DivContainer {
   fileprivate func applyPatch(_ patch: DivPatch) -> DivContainer {
-    let patchedItems = items.flatMap { $0.applyMultipleItemsPatch(patch) }
+    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
     return DivContainer(
       accessibility: accessibility,
       action: action,
@@ -102,6 +102,7 @@ extension DivContainer {
       focus: focus,
       height: height,
       id: id,
+      itemBuilder: itemBuilder,
       items: patchedItems,
       layoutMode: layoutMode,
       lineSeparator: lineSeparator,

@@ -14,7 +14,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
   public let id: Field<Int>? // default value: 0
   public let integer: Field<Expression<Int>>? // default value: 0
   public let positiveInteger: Field<Expression<Int>>? // constraint: number > 0
-  public let string: Field<Expression<String>>? // at least 1 char
+  public let string: Field<Expression<String>>?
   public let url: Field<Expression<URL>>?
 
   static let parentValidator: AnyValueValidator<String> =

@@ -8,7 +8,7 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
   public final class PatternElement {
     public let key: Expression<String> // at least 1 char
     public let placeholder: Expression<String> // at least 1 char; default value: _
-    public let regex: Expression<String>? // at least 1 char
+    public let regex: Expression<String>?
 
     public func resolveKey(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: key, initializer: { $0 })
@@ -29,7 +29,7 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
       makeStringValidator(minLength: 1)
 
     static let regexValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     init(
       key: Expression<String>,
@@ -44,9 +44,9 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
 
   public static let type: String = "fixed_length"
   public let alwaysVisible: Expression<Bool> // default value: false
-  public let pattern: Expression<String> // at least 1 char
+  public let pattern: Expression<String>
   public let patternElements: [PatternElement] // at least 1 elements
-  public let rawTextVariable: String // at least 1 char
+  public let rawTextVariable: String
 
   public func resolveAlwaysVisible(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumericValue(expression: alwaysVisible) ?? false
@@ -59,14 +59,8 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
   static let alwaysVisibleValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
-  static let patternValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   static let patternElementsValidator: AnyArrayValueValidator<DivFixedLengthInputMask.PatternElement> =
     makeArrayValidator(minItems: 1)
-
-  static let rawTextVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     alwaysVisible: Expression<Bool>? = nil,

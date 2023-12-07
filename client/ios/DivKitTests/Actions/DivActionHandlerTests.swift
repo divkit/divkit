@@ -96,7 +96,7 @@ final class DivActionHandlerTests: XCTestCase {
         logId: "test_log_id",
         typed: .divActionSetVariable(
           DivActionSetVariable(
-            value: .arrayValue(ArrayValue(value: ["value 1", "value 2"])),
+            value: .arrayValue(ArrayValue(value: .value(["value 1", "value 2"]))),
             variableName: .value("array_var")
           )
         )

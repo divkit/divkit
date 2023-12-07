@@ -9,7 +9,7 @@ public final class DivTextTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
     public let images: Field<[ImageTemplate]>? // at least 1 elements
     public let ranges: Field<[RangeTemplate]>? // at least 1 elements
-    public let text: Field<Expression<String>>? // at least 1 char
+    public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
@@ -40,7 +40,7 @@ public final class DivTextTemplate: TemplateValue {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
       let imagesValue = parent?.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true) ?? .noValue
       let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
-      let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
+      let textValue = parent?.text?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
         imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
@@ -81,7 +81,7 @@ public final class DivTextTemplate: TemplateValue {
         case "ranges":
           rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
         case "text":
-          textValue = deserialize(__dictValue, validator: ResolvedValue.textValidator).merged(with: textValue)
+          textValue = deserialize(__dictValue).merged(with: textValue)
         case parent?.actions?.link:
           actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
         case parent?.images?.link:
@@ -89,7 +89,7 @@ public final class DivTextTemplate: TemplateValue {
         case parent?.ranges?.link:
           rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self))
         case parent?.text?.link:
-          textValue = textValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textValidator))
+          textValue = textValue.merged(with: deserialize(__dictValue))
         default: break
         }
       }
@@ -311,7 +311,7 @@ public final class DivTextTemplate: TemplateValue {
     public let background: Field<DivTextRangeBackgroundTemplate>?
     public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
-    public let fontFamily: Field<Expression<String>>? // at least 1 char
+    public let fontFamily: Field<Expression<String>>?
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
     public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
     public let fontWeight: Field<Expression<DivFontWeight>>?
@@ -646,12 +646,12 @@ public final class DivTextTemplate: TemplateValue {
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let focusedTextColor: Field<Expression<Color>>?
-  public let fontFamily: Field<Expression<String>>? // at least 1 char
+  public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let images: Field<[ImageTemplate]>? // at least 1 elements
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
@@ -665,7 +665,7 @@ public final class DivTextTemplate: TemplateValue {
   public let selectable: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let strike: Field<Expression<DivLineStyle>>? // default value: none
-  public let text: Field<Expression<CFString>>? // at least 1 char
+  public let text: Field<Expression<CFString>>?
   public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
@@ -898,7 +898,7 @@ public final class DivTextTemplate: TemplateValue {
     let selectableValue = parent?.selectable?.resolveOptionalValue(context: context, validator: ResolvedValue.selectableValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
     let strikeValue = parent?.strike?.resolveOptionalValue(context: context, validator: ResolvedValue.strikeValidator) ?? .noValue
-    let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
+    let textValue = parent?.text?.resolveValue(context: context) ?? .noValue
     let textAlignmentHorizontalValue = parent?.textAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentHorizontalValidator) ?? .noValue
     let textAlignmentVerticalValue = parent?.textAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentVerticalValidator) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
@@ -1168,7 +1168,7 @@ public final class DivTextTemplate: TemplateValue {
       case "strike":
         strikeValue = deserialize(__dictValue, validator: ResolvedValue.strikeValidator).merged(with: strikeValue)
       case "text":
-        textValue = deserialize(__dictValue, validator: ResolvedValue.textValidator).merged(with: textValue)
+        textValue = deserialize(__dictValue).merged(with: textValue)
       case "text_alignment_horizontal":
         textAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator).merged(with: textAlignmentHorizontalValue)
       case "text_alignment_vertical":
@@ -1274,7 +1274,7 @@ public final class DivTextTemplate: TemplateValue {
       case parent?.strike?.link:
         strikeValue = strikeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.strikeValidator))
       case parent?.text?.link:
-        textValue = textValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textValidator))
+        textValue = textValue.merged(with: deserialize(__dictValue))
       case parent?.textAlignmentHorizontal?.link:
         textAlignmentHorizontalValue = textAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textAlignmentHorizontalValidator))
       case parent?.textAlignmentVertical?.link:

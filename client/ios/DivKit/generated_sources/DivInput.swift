@@ -40,15 +40,15 @@ public final class DivInput: DivBase {
   public let disappearActions: [DivDisappearAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
-  public let fontFamily: Expression<String>? // at least 1 char
+  public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
-  public let hintText: Expression<String>? // at least 1 char
-  public let id: String? // at least 1 char
+  public let hintText: Expression<String>?
+  public let id: String?
   public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
@@ -63,7 +63,7 @@ public final class DivInput: DivBase {
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
   public let textColor: Expression<Color> // default value: #FF000000
-  public let textVariable: String // at least 1 char
+  public let textVariable: String
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
@@ -191,7 +191,7 @@ public final class DivInput: DivBase {
     makeNoOpValueValidator()
 
   static let fontFamilyValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -212,10 +212,10 @@ public final class DivInput: DivBase {
     makeNoOpValueValidator()
 
   static let hintTextValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let keyboardTypeValidator: AnyValueValidator<DivInput.KeyboardType> =
     makeNoOpValueValidator()
@@ -255,9 +255,6 @@ public final class DivInput: DivBase {
 
   static let textColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
-
-  static let textVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
     makeArrayValidator(minItems: 1)

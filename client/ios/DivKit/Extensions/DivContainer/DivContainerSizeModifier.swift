@@ -12,7 +12,7 @@ struct DivContainerSizeModifier: DivSizeModifier {
     container: DivContainer,
     orientation: DivContainer.Orientation
   ) {
-    let items = container.items
+    let items = container.nonNilItems
 
     let isWrapContentWidth = container.getTransformedWidth(context).isIntrinsic
     switch orientation {

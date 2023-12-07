@@ -37,7 +37,7 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
 
 
   final Entity entity;
-  // at least 1 char
+
   final String property;
 
   @override

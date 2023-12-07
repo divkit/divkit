@@ -8,7 +8,7 @@ public final class DivActionSetVariableTemplate: TemplateValue {
   public static let type: String = "set_variable"
   public let parent: String? // at least 1 char
   public let value: Field<DivTypedValueTemplate>?
-  public let variableName: Field<Expression<String>>? // at least 1 char
+  public let variableName: Field<Expression<String>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -37,7 +37,7 @@ public final class DivActionSetVariableTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionSetVariableTemplate?) -> DeserializationResult<DivActionSetVariable> {
     let valueValue = parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let variableNameValue = parent?.variableName?.resolveValue(context: context, validator: ResolvedValue.variableNameValidator) ?? .noValue
+    let variableNameValue = parent?.variableName?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
       variableNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_name", error: $0) }
@@ -72,11 +72,11 @@ public final class DivActionSetVariableTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
       case "variable_name":
-        variableNameValue = deserialize(__dictValue, validator: ResolvedValue.variableNameValidator).merged(with: variableNameValue)
+        variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
       case parent?.value?.link:
         valueValue = valueValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self))
       case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.variableNameValidator))
+        variableNameValue = variableNameValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

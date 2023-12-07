@@ -36,13 +36,11 @@ class EntityWithArrayOfExpressions(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayOfExpressions {
             val logger = env.logger
             return EntityWithArrayOfExpressions(
-                items = JsonParser.readExpressionList(json, "items", ITEMS_VALIDATOR, ITEMS_ITEM_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+                items = JsonParser.readExpressionList(json, "items", ITEMS_VALIDATOR, logger, env, TYPE_HELPER_STRING)
             )
         }
 
         private val ITEMS_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
-        private val ITEMS_ITEM_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val ITEMS_ITEM_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfExpressions(env, json = it) }
     }

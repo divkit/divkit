@@ -6,11 +6,11 @@ import Serialization
 
 public final class DivFocusTemplate: TemplateValue {
   public final class NextFocusIdsTemplate: TemplateValue {
-    public let down: Field<Expression<String>>? // at least 1 char
-    public let forward: Field<Expression<String>>? // at least 1 char
-    public let left: Field<Expression<String>>? // at least 1 char
-    public let right: Field<Expression<String>>? // at least 1 char
-    public let up: Field<Expression<String>>? // at least 1 char
+    public let down: Field<Expression<String>>?
+    public let forward: Field<Expression<String>>?
+    public let left: Field<Expression<String>>?
+    public let right: Field<Expression<String>>?
+    public let up: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(

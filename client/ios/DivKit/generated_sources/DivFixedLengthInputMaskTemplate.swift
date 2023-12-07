@@ -8,7 +8,7 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   public final class PatternElementTemplate: TemplateValue {
     public let key: Field<Expression<String>>? // at least 1 char
     public let placeholder: Field<Expression<String>>? // at least 1 char; default value: _
-    public let regex: Field<Expression<String>>? // at least 1 char
+    public let regex: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
@@ -114,9 +114,9 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   public static let type: String = "fixed_length"
   public let parent: String? // at least 1 char
   public let alwaysVisible: Field<Expression<Bool>>? // default value: false
-  public let pattern: Field<Expression<String>>? // at least 1 char
+  public let pattern: Field<Expression<String>>?
   public let patternElements: Field<[PatternElementTemplate]>? // at least 1 elements
-  public let rawTextVariable: Field<String>? // at least 1 char
+  public let rawTextVariable: Field<String>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -151,9 +151,9 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFixedLengthInputMaskTemplate?) -> DeserializationResult<DivFixedLengthInputMask> {
     let alwaysVisibleValue = parent?.alwaysVisible?.resolveOptionalValue(context: context, validator: ResolvedValue.alwaysVisibleValidator) ?? .noValue
-    let patternValue = parent?.pattern?.resolveValue(context: context, validator: ResolvedValue.patternValidator) ?? .noValue
+    let patternValue = parent?.pattern?.resolveValue(context: context) ?? .noValue
     let patternElementsValue = parent?.patternElements?.resolveValue(context: context, validator: ResolvedValue.patternElementsValidator, useOnlyLinks: true) ?? .noValue
-    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context, validator: ResolvedValue.rawTextVariableValidator) ?? .noValue
+    let rawTextVariableValue = parent?.rawTextVariable?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       alwaysVisibleValue.errorsOrWarnings?.map { .nestedObjectError(field: "always_visible", error: $0) },
       patternValue.errorsOrWarnings?.map { .nestedObjectError(field: "pattern", error: $0) },
@@ -192,25 +192,25 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     var alwaysVisibleValue: DeserializationResult<Expression<Bool>> = parent?.alwaysVisible?.value() ?? .noValue
     var patternValue: DeserializationResult<Expression<String>> = parent?.pattern?.value() ?? .noValue
     var patternElementsValue: DeserializationResult<[DivFixedLengthInputMask.PatternElement]> = .noValue
-    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value(validatedBy: ResolvedValue.rawTextVariableValidator) ?? .noValue
+    var rawTextVariableValue: DeserializationResult<String> = parent?.rawTextVariable?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "always_visible":
         alwaysVisibleValue = deserialize(__dictValue, validator: ResolvedValue.alwaysVisibleValidator).merged(with: alwaysVisibleValue)
       case "pattern":
-        patternValue = deserialize(__dictValue, validator: ResolvedValue.patternValidator).merged(with: patternValue)
+        patternValue = deserialize(__dictValue).merged(with: patternValue)
       case "pattern_elements":
         patternElementsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self).merged(with: patternElementsValue)
       case "raw_text_variable":
-        rawTextVariableValue = deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator).merged(with: rawTextVariableValue)
+        rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
       case parent?.alwaysVisible?.link:
         alwaysVisibleValue = alwaysVisibleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alwaysVisibleValidator))
       case parent?.pattern?.link:
-        patternValue = patternValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.patternValidator))
+        patternValue = patternValue.merged(with: deserialize(__dictValue))
       case parent?.patternElements?.link:
         patternElementsValue = patternElementsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self))
       case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rawTextVariableValidator))
+        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

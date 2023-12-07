@@ -55,7 +55,7 @@ public final class DivSeparator: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let longtapActions: [DivAction]? // at least 1 elements
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
@@ -145,7 +145,7 @@ public final class DivSeparator: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)

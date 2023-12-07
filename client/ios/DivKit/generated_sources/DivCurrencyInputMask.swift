@@ -6,18 +6,15 @@ import Serialization
 
 public final class DivCurrencyInputMask: DivInputMaskBase {
   public static let type: String = "currency"
-  public let locale: Expression<String>? // at least 1 char
-  public let rawTextVariable: String // at least 1 char
+  public let locale: Expression<String>?
+  public let rawTextVariable: String
 
   public func resolveLocale(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveStringBasedValue(expression: locale, initializer: { $0 })
   }
 
   static let localeValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
-  static let rawTextVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   init(
     locale: Expression<String>? = nil,

@@ -6,11 +6,8 @@ import Serialization
 
 public final class BooleanVariable {
   public static let type: String = "boolean"
-  public let name: String // at least 1 char
+  public let name: String
   public let value: Bool
-
-  static let nameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     name: String,

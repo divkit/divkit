@@ -97,15 +97,15 @@ public final class DivInputTemplate: TemplateValue {
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
-  public let fontFamily: Field<Expression<String>>? // at least 1 char
+  public let fontFamily: Field<Expression<String>>?
   public let fontSize: Field<Expression<Int>>? // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Field<Expression<DivSizeUnit>>? // default value: sp
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let highlightColor: Field<Expression<Color>>?
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
-  public let hintText: Field<Expression<String>>? // at least 1 char
-  public let id: Field<String>? // at least 1 char
+  public let hintText: Field<Expression<String>>?
+  public let id: Field<String>?
   public let keyboardType: Field<Expression<KeyboardType>>? // default value: multi_line_text
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
@@ -120,7 +120,7 @@ public final class DivInputTemplate: TemplateValue {
   public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
-  public let textVariable: Field<String>? // at least 1 char
+  public let textVariable: Field<String>?
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -321,7 +321,7 @@ public final class DivInputTemplate: TemplateValue {
     let textAlignmentHorizontalValue = parent?.textAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentHorizontalValidator) ?? .noValue
     let textAlignmentVerticalValue = parent?.textAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.textAlignmentVerticalValidator) ?? .noValue
     let textColorValue = parent?.textColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator) ?? .noValue
-    let textVariableValue = parent?.textVariable?.resolveValue(context: context, validator: ResolvedValue.textVariableValidator) ?? .noValue
+    let textVariableValue = parent?.textVariable?.resolveValue(context: context) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
     let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true) ?? .noValue
@@ -475,7 +475,7 @@ public final class DivInputTemplate: TemplateValue {
     var textAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.textAlignmentHorizontal?.value() ?? .noValue
     var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
-    var textVariableValue: DeserializationResult<String> = parent?.textVariable?.value(validatedBy: ResolvedValue.textVariableValidator) ?? .noValue
+    var textVariableValue: DeserializationResult<String> = parent?.textVariable?.value() ?? .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -556,7 +556,7 @@ public final class DivInputTemplate: TemplateValue {
       case "text_color":
         textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
       case "text_variable":
-        textVariableValue = deserialize(__dictValue, validator: ResolvedValue.textVariableValidator).merged(with: textVariableValue)
+        textVariableValue = deserialize(__dictValue).merged(with: textVariableValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -646,7 +646,7 @@ public final class DivInputTemplate: TemplateValue {
       case parent?.textColor?.link:
         textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
       case parent?.textVariable?.link:
-        textVariableValue = textVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.textVariableValidator))
+        textVariableValue = textVariableValue.merged(with: deserialize(__dictValue))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
       case parent?.transform?.link:

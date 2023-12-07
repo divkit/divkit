@@ -28,7 +28,7 @@ public final class DivIndicator: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let inactiveItemColor: Expression<Color> // default value: #33919cb5
   public let inactiveMinimumShape: DivRoundedRectangleShape?
   public let inactiveShape: DivRoundedRectangleShape?
@@ -36,7 +36,7 @@ public final class DivIndicator: DivBase {
   public let margins: DivEdgeInsets
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
   public let paddings: DivEdgeInsets
-  public let pagerId: String? // at least 1 char
+  public let pagerId: String?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]? // at least 1 elements
   public let shape: DivShape // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())
@@ -142,7 +142,7 @@ public final class DivIndicator: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let inactiveItemColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
@@ -166,7 +166,7 @@ public final class DivIndicator: DivBase {
     makeNoOpValueValidator()
 
   static let pagerIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

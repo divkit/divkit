@@ -6,7 +6,7 @@ extension DivTypedValue {
   ) -> DivVariableValue? {
     switch self {
     case let .arrayValue(value):
-      if let arrayValue = value.value as? [AnyHashable] {
+      if let arrayValue = value.resolveValue(expressionResolver) as? [AnyHashable] {
         return .array(arrayValue)
       }
       return nil
@@ -53,7 +53,7 @@ extension DivTypedValue {
   ) -> AnyHashable? {
     switch self {
     case let .arrayValue(value):
-      if let arrayValue = value.value as? [AnyHashable] {
+      if let arrayValue = value.resolveValue(expressionResolver) as? [AnyHashable] {
         return arrayValue
       }
       return nil

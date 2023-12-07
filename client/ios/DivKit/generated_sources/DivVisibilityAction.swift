@@ -6,7 +6,8 @@ import Serialization
 
 public final class DivVisibilityAction: DivSightAction {
   public let downloadCallbacks: DivDownloadCallbacks?
-  public let logId: String // at least 1 char
+  public let isEnabled: Expression<Bool> // default value: true
+  public let logId: String
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
@@ -14,6 +15,10 @@ public final class DivVisibilityAction: DivSightAction {
   public let url: Expression<URL>?
   public let visibilityDuration: Expression<Int> // constraint: number >= 0; default value: 800
   public let visibilityPercentage: Expression<Int> // constraint: number > 0 && number <= 100; default value: 50
+
+  public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumericValue(expression: isEnabled) ?? true
+  }
 
   public func resolveLogLimit(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumericValue(expression: logLimit) ?? 1
@@ -38,8 +43,8 @@ public final class DivVisibilityAction: DivSightAction {
   static let downloadCallbacksValidator: AnyValueValidator<DivDownloadCallbacks> =
     makeNoOpValueValidator()
 
-  static let logIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+  static let isEnabledValidator: AnyValueValidator<Bool> =
+    makeNoOpValueValidator()
 
   static let logLimitValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -64,6 +69,7 @@ public final class DivVisibilityAction: DivSightAction {
 
   init(
     downloadCallbacks: DivDownloadCallbacks? = nil,
+    isEnabled: Expression<Bool>? = nil,
     logId: String,
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
@@ -74,6 +80,7 @@ public final class DivVisibilityAction: DivSightAction {
     visibilityPercentage: Expression<Int>? = nil
   ) {
     self.downloadCallbacks = downloadCallbacks
+    self.isEnabled = isEnabled ?? .value(true)
     self.logId = logId
     self.logLimit = logLimit ?? .value(1)
     self.payload = payload
@@ -91,19 +98,20 @@ extension DivVisibilityAction: Equatable {
   public static func ==(lhs: DivVisibilityAction, rhs: DivVisibilityAction) -> Bool {
     guard
       lhs.downloadCallbacks == rhs.downloadCallbacks,
-      lhs.logId == rhs.logId,
-      lhs.logLimit == rhs.logLimit
+      lhs.isEnabled == rhs.isEnabled,
+      lhs.logId == rhs.logId
     else {
       return false
     }
     guard
+      lhs.logLimit == rhs.logLimit,
       lhs.referer == rhs.referer,
-      lhs.typed == rhs.typed,
-      lhs.url == rhs.url
+      lhs.typed == rhs.typed
     else {
       return false
     }
     guard
+      lhs.url == rhs.url,
       lhs.visibilityDuration == rhs.visibilityDuration,
       lhs.visibilityPercentage == rhs.visibilityPercentage
     else {
@@ -118,6 +126,7 @@ extension DivVisibilityAction: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
+    result["is_enabled"] = isEnabled.toValidSerializationValue()
     result["log_id"] = logId
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload

@@ -21,7 +21,7 @@
       "$description": "translations.json#/div_image_base_content_alignment_horizontal"
     },
     "preview": {
-      "$ref": "common.json#/non_empty_string",
+      "type": "string",
       "$description": "translations.json#/div_image_base_preview"
     },
     "preload_required": {

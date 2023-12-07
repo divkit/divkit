@@ -6,10 +6,7 @@ import Serialization
 
 public final class DivPhoneInputMask: DivInputMaskBase {
   public static let type: String = "phone"
-  public let rawTextVariable: String // at least 1 char
-
-  static let rawTextVariableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+  public let rawTextVariable: String
 
   init(
     rawTextVariable: String

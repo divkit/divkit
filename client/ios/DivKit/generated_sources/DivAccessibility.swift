@@ -25,11 +25,11 @@ public final class DivAccessibility {
     case exclude = "exclude"
   }
 
-  public let description: Expression<String>? // at least 1 char
-  public let hint: Expression<String>? // at least 1 char
+  public let description: Expression<String>?
+  public let hint: Expression<String>?
   public let mode: Expression<Mode> // default value: default
   public let muteAfterAction: Expression<Bool> // default value: false
-  public let stateDescription: Expression<String>? // at least 1 char
+  public let stateDescription: Expression<String>?
   public let type: Kind?
 
   public func resolveDescription(_ resolver: ExpressionResolver) -> String? {
@@ -53,10 +53,10 @@ public final class DivAccessibility {
   }
 
   static let descriptionValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let hintValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let modeValidator: AnyValueValidator<DivAccessibility.Mode> =
     makeNoOpValueValidator()
@@ -65,7 +65,7 @@ public final class DivAccessibility {
     makeNoOpValueValidator()
 
   static let stateDescriptionValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let typeValidator: AnyValueValidator<DivAccessibility.Kind> =
     makeNoOpValueValidator()

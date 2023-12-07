@@ -10,7 +10,7 @@
     "items": {
       "type": "array",
       "items": {
-        "$ref": "common.json#/non_empty_string"
+        "type": "string"
       },
       "minItems": 1
     }

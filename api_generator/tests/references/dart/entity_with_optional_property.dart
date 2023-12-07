@@ -10,7 +10,7 @@ class EntityWithOptionalProperty with EquatableMixin {
   });
 
   static const type = "entity_with_optional_property";
-  // at least 1 char
+
   final String? property;
 
   @override

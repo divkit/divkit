@@ -3,7 +3,7 @@
   "$description": "translations.json#/div_accessibility",
   "properties": {
     "description": {
-      "$ref": "common.json#/non_empty_string",
+      "type": "string",
       "$description": "translations.json#/div_accessibility_description"
     },
     "type": {
@@ -27,7 +27,7 @@
       ]
     },
     "state_description": {
-      "$ref": "common.json#/non_empty_string",
+      "type": "string",
       "$description": "translations.json#/div_accessibility_state_description",
       "platforms": [
         "android",
@@ -35,7 +35,7 @@
       ]
     },
     "hint": {
-      "$ref": "common.json#/non_empty_string",
+      "type": "string",
       "$description": "translations.json#/div_accessibility_hint",
       "platforms": [
         "android",

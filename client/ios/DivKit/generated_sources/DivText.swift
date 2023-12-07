@@ -9,7 +9,7 @@ public final class DivText: DivBase {
     public let actions: [DivAction]? // at least 1 elements
     public let images: [Image]? // at least 1 elements
     public let ranges: [Range]? // at least 1 elements
-    public let text: Expression<String> // at least 1 char
+    public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
@@ -23,9 +23,6 @@ public final class DivText: DivBase {
 
     static let rangesValidator: AnyArrayValueValidator<DivText.Range> =
       makeArrayValidator(minItems: 1)
-
-    static let textValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
 
     init(
       actions: [DivAction]? = nil,
@@ -101,7 +98,7 @@ public final class DivText: DivBase {
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
-    public let fontFamily: Expression<String>? // at least 1 char
+    public let fontFamily: Expression<String>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
     public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
     public let fontWeight: Expression<DivFontWeight>?
@@ -175,7 +172,7 @@ public final class DivText: DivBase {
       makeValueValidator(valueValidator: { $0 > 0 })
 
     static let fontFamilyValidator: AnyValueValidator<String> =
-      makeStringValidator(minLength: 1)
+      makeNoOpValueValidator()
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -262,12 +259,12 @@ public final class DivText: DivBase {
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
-  public let fontFamily: Expression<String>? // at least 1 char
+  public let fontFamily: Expression<String>?
   public let fontSize: Expression<Int> // constraint: number >= 0; default value: 12
   public let fontSizeUnit: Expression<DivSizeUnit> // default value: sp
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: String? // at least 1 char
+  public let id: String?
   public let images: [Image]? // at least 1 elements
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
@@ -281,7 +278,7 @@ public final class DivText: DivBase {
   public let selectable: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]? // at least 1 elements
   public let strike: Expression<DivLineStyle> // default value: none
-  public let text: Expression<CFString> // at least 1 char
+  public let text: Expression<CFString>
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
@@ -443,7 +440,7 @@ public final class DivText: DivBase {
     makeNoOpValueValidator()
 
   static let fontFamilyValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -458,7 +455,7 @@ public final class DivText: DivBase {
     makeNoOpValueValidator()
 
   static let idValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let imagesValidator: AnyArrayValueValidator<DivText.Image> =
     makeArrayValidator(minItems: 1)
@@ -495,9 +492,6 @@ public final class DivText: DivBase {
 
   static let strikeValidator: AnyValueValidator<DivLineStyle> =
     makeNoOpValueValidator()
-
-  static let textValidator: AnyValueValidator<CFString> =
-    makeCFStringValidator(minLength: 1)
 
   static let textAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
     makeNoOpValueValidator()

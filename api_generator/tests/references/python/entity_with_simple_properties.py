@@ -61,7 +61,6 @@ class EntityWithSimpleProperties(BaseDiv):
         description="Positive integer."
     )
     string: typing.Optional[typing.Union[Expr, str]] = Field(
-        min_length=1, 
         description="String."
     )
     url: typing.Optional[typing.Union[Expr, str]] = Field(

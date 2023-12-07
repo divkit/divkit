@@ -7,10 +7,10 @@ import Serialization
 public final class DivTimerTemplate: TemplateValue {
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let endActions: Field<[DivActionTemplate]>? // at least 1 elements
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let tickActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let tickInterval: Field<Expression<Int>>? // constraint: number > 0
-  public let valueVariable: Field<String>? // at least 1 char
+  public let valueVariable: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
@@ -46,7 +46,7 @@ public final class DivTimerTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTimerTemplate?) -> DeserializationResult<DivTimer> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let endActionsValue = parent?.endActions?.resolveOptionalValue(context: context, validator: ResolvedValue.endActionsValidator, useOnlyLinks: true) ?? .noValue
-    let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
+    let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
     let tickActionsValue = parent?.tickActions?.resolveOptionalValue(context: context, validator: ResolvedValue.tickActionsValidator, useOnlyLinks: true) ?? .noValue
     let tickIntervalValue = parent?.tickInterval?.resolveOptionalValue(context: context, validator: ResolvedValue.tickIntervalValidator) ?? .noValue
     let valueVariableValue = parent?.valueVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.valueVariableValidator) ?? .noValue
@@ -83,7 +83,7 @@ public final class DivTimerTemplate: TemplateValue {
     }
     var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
     var endActionsValue: DeserializationResult<[DivAction]> = .noValue
-    var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
+    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var tickActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tickIntervalValue: DeserializationResult<Expression<Int>> = parent?.tickInterval?.value() ?? .noValue
     var valueVariableValue: DeserializationResult<String> = parent?.valueVariable?.value(validatedBy: ResolvedValue.valueVariableValidator) ?? .noValue
@@ -94,7 +94,7 @@ public final class DivTimerTemplate: TemplateValue {
       case "end_actions":
         endActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.endActionsValidator, type: DivActionTemplate.self).merged(with: endActionsValue)
       case "id":
-        idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
+        idValue = deserialize(__dictValue).merged(with: idValue)
       case "tick_actions":
         tickActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tickActionsValidator, type: DivActionTemplate.self).merged(with: tickActionsValue)
       case "tick_interval":
@@ -106,7 +106,7 @@ public final class DivTimerTemplate: TemplateValue {
       case parent?.endActions?.link:
         endActionsValue = endActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.endActionsValidator, type: DivActionTemplate.self))
       case parent?.id?.link:
-        idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
+        idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.tickActions?.link:
         tickActionsValue = tickActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tickActionsValidator, type: DivActionTemplate.self))
       case parent?.tickInterval?.link:

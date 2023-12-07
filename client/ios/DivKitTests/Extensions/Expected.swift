@@ -65,5 +65,5 @@ private func makeDivActionPayload(
 }
 
 private func makeDivActionJson(url: String, logId: String) -> JSONObject {
-  .object(["log_id": .string(logId), "url": .string(url)])
+  .object(["log_id": .string(logId), "url": .string(url), "is_enabled": .bool(true)])
 }

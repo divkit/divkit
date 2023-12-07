@@ -18,19 +18,19 @@ public final class DivVideoTemplate: TemplateValue {
   public let bufferingActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
-  public let elapsedTimeVariable: Field<String>? // at least 1 char
+  public let elapsedTimeVariable: Field<String>?
   public let endActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let fatalActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let muted: Field<Expression<Bool>>? // default value: false
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pauseActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let playerSettingsPayload: Field<[String: Any]>?
-  public let preview: Field<Expression<String>>? // at least 1 char
+  public let preview: Field<Expression<String>>?
   public let repeatable: Field<Expression<Bool>>? // default value: false
   public let resumeActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0

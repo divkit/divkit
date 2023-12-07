@@ -6,8 +6,8 @@ import Serialization
 
 public final class DivInputValidatorBase {
   public let allowEmpty: Expression<Bool> // default value: false
-  public let labelId: Expression<String>? // at least 1 char
-  public let variable: String? // at least 1 char
+  public let labelId: Expression<String>?
+  public let variable: String?
 
   public func resolveAllowEmpty(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumericValue(expression: allowEmpty) ?? false
@@ -21,10 +21,10 @@ public final class DivInputValidatorBase {
     makeNoOpValueValidator()
 
   static let labelIdValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   static let variableValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
+    makeNoOpValueValidator()
 
   init(
     allowEmpty: Expression<Bool>? = nil,

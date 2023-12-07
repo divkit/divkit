@@ -9,7 +9,7 @@ public final class DivStateTemplate: TemplateValue {
     public let animationIn: Field<DivAnimationTemplate>?
     public let animationOut: Field<DivAnimationTemplate>?
     public let div: Field<DivTemplate>?
-    public let stateId: Field<String>? // at least 1 char
+    public let stateId: Field<String>?
     public let swipeOutActions: Field<[DivActionTemplate]>? // at least 1 elements
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -44,7 +44,7 @@ public final class DivStateTemplate: TemplateValue {
       let animationInValue = parent?.animationIn?.resolveOptionalValue(context: context, validator: ResolvedValue.animationInValidator, useOnlyLinks: true) ?? .noValue
       let animationOutValue = parent?.animationOut?.resolveOptionalValue(context: context, validator: ResolvedValue.animationOutValidator, useOnlyLinks: true) ?? .noValue
       let divValue = parent?.div?.resolveOptionalValue(context: context, validator: ResolvedValue.divValidator, useOnlyLinks: true) ?? .noValue
-      let stateIdValue = parent?.stateId?.resolveValue(context: context, validator: ResolvedValue.stateIdValidator) ?? .noValue
+      let stateIdValue = parent?.stateId?.resolveValue(context: context) ?? .noValue
       let swipeOutActionsValue = parent?.swipeOutActions?.resolveOptionalValue(context: context, validator: ResolvedValue.swipeOutActionsValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         animationInValue.errorsOrWarnings?.map { .nestedObjectError(field: "animation_in", error: $0) },
@@ -78,7 +78,7 @@ public final class DivStateTemplate: TemplateValue {
       var animationInValue: DeserializationResult<DivAnimation> = .noValue
       var animationOutValue: DeserializationResult<DivAnimation> = .noValue
       var divValue: DeserializationResult<Div> = .noValue
-      var stateIdValue: DeserializationResult<String> = parent?.stateId?.value(validatedBy: ResolvedValue.stateIdValidator) ?? .noValue
+      var stateIdValue: DeserializationResult<String> = parent?.stateId?.value() ?? .noValue
       var swipeOutActionsValue: DeserializationResult<[DivAction]> = .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
@@ -89,7 +89,7 @@ public final class DivStateTemplate: TemplateValue {
         case "div":
           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.divValidator, type: DivTemplate.self).merged(with: divValue)
         case "state_id":
-          stateIdValue = deserialize(__dictValue, validator: ResolvedValue.stateIdValidator).merged(with: stateIdValue)
+          stateIdValue = deserialize(__dictValue).merged(with: stateIdValue)
         case "swipe_out_actions":
           swipeOutActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.swipeOutActionsValidator, type: DivActionTemplate.self).merged(with: swipeOutActionsValue)
         case parent?.animationIn?.link:
@@ -99,7 +99,7 @@ public final class DivStateTemplate: TemplateValue {
         case parent?.div?.link:
           divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.divValidator, type: DivTemplate.self))
         case parent?.stateId?.link:
-          stateIdValue = stateIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.stateIdValidator))
+          stateIdValue = stateIdValue.merged(with: deserialize(__dictValue))
         case parent?.swipeOutActions?.link:
           swipeOutActionsValue = swipeOutActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.swipeOutActionsValidator, type: DivActionTemplate.self))
         default: break
@@ -162,18 +162,18 @@ public final class DivStateTemplate: TemplateValue {
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let defaultStateId: Field<Expression<String>>? // at least 1 char
+  public let defaultStateId: Field<Expression<String>>?
   public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
-  public let divId: Field<String>? // at least 1 char
+  public let divId: Field<String>?
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let id: Field<String>? // at least 1 char
+  public let id: Field<String>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
-  public let stateIdVariable: Field<String>? // at least 1 char
+  public let stateIdVariable: Field<String>?
   public let states: Field<[StateTemplate]>? // at least 1 elements
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?

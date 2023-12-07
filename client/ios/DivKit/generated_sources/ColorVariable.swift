@@ -6,11 +6,8 @@ import Serialization
 
 public final class ColorVariable {
   public static let type: String = "color"
-  public let name: String // at least 1 char
+  public let name: String
   public let value: Color
-
-  static let nameValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   init(
     name: String,

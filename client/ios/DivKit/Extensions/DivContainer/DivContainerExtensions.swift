@@ -14,6 +14,10 @@ extension DivContainer: DivBlockModeling {
     )
   }
 
+  var nonNilItems: [Div] {
+    items ?? []
+  }
+  
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let childContext = modified(context) {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
@@ -40,7 +44,7 @@ extension DivContainer: DivBlockModeling {
         .joined(separator: " ")
       div.children.forEach(traverse(div:))
     }
-    items.forEach(traverse)
+    nonNilItems.forEach(traverse)
     return result.isEmpty ? nil : result
   }
 
@@ -54,7 +58,7 @@ extension DivContainer: DivBlockModeling {
     let childrenContext = modified(context) {
       $0.errorsStorage = DivErrorsStorage(errors: [])
     }
-    let children = items.makeBlocks(
+    let children = nonNilItems.makeBlocks(
       context: childrenContext,
       sizeModifier: DivContainerSizeModifier(
         context: context,
@@ -123,7 +127,7 @@ extension DivContainer: DivBlockModeling {
 
     // Before block's making we need to filter items and remove
     // what has "matchParent" for opposite directions
-    let filtredItems = items.filter {
+    let filtredItems = nonNilItems.filter {
       guard layoutMode == .wrap else { return true }
       if orientation == .vertical && $0.isHorizontallyMatchParent {
         childrenContext.addWarning(

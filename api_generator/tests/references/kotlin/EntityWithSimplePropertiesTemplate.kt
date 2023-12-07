@@ -25,7 +25,7 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
     @JvmField final val id: Field<Long> // default value: 0
     @JvmField final val integer: Field<Expression<Long>> // default value: 0
     @JvmField final val positiveInteger: Field<Expression<Long>> // constraint: number > 0
-    @JvmField final val string: Field<Expression<String>> // at least 1 char
+    @JvmField final val string: Field<Expression<String>>
     @JvmField final val url: Field<Expression<Uri>>
 
     constructor (
@@ -42,7 +42,7 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, logger, env)
         integer = JsonTemplateParser.readOptionalFieldWithExpression(json, "integer", topLevel, parent?.integer, NUMBER_TO_INT, logger, env, TYPE_HELPER_INT)
         positiveInteger = JsonTemplateParser.readOptionalFieldWithExpression(json, "positive_integer", topLevel, parent?.positiveInteger, NUMBER_TO_INT, POSITIVE_INTEGER_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_INT)
-        string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, STRING_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+        string = JsonTemplateParser.readOptionalFieldWithExpression(json, "string", topLevel, parent?.string, logger, env, TYPE_HELPER_STRING)
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, STRING_TO_URI, logger, env, TYPE_HELPER_URI)
     }
 
@@ -83,8 +83,6 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
 
         private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
-        private val STRING_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
-        private val STRING_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
         val BOOLEAN_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
         val BOOLEAN_INT_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
@@ -93,7 +91,7 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         val ID_READER: Reader<Long> = { key, json, env -> JsonParser.readOptional(json, key, NUMBER_TO_INT, env.logger, env) ?: ID_DEFAULT_VALUE }
         val INTEGER_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, env.logger, env, INTEGER_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INTEGER_DEFAULT_VALUE }
         val POSITIVE_INTEGER_READER: Reader<Expression<Long>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, POSITIVE_INTEGER_VALIDATOR, env.logger, env, TYPE_HELPER_INT) }
-        val STRING_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
+        val STRING_READER: Reader<Expression<String>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
         val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, env.logger, env, TYPE_HELPER_URI) }
 
