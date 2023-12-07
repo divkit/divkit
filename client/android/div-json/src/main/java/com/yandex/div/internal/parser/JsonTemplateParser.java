@@ -20,6 +20,7 @@ import java.util.List;
 import static com.yandex.div.internal.parser.JsonParser.alwaysValid;
 import static com.yandex.div.internal.parser.JsonParser.alwaysValidList;
 import static com.yandex.div.internal.parser.JsonParser.doNotConvert;
+import static com.yandex.div.internal.parser.JsonParser.isString;
 import static com.yandex.div.internal.parser.JsonTemplateParserKt.suppressMissingValueOrThrow;
 
 /**
@@ -258,7 +259,7 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env,
             @NonNull TypeHelper<T> typeHelper) {
         return readOptionalFieldWithExpression(
-                json, key, overridable, fallback, doNotConvert(), alwaysValid(), logger, env, typeHelper);
+                json, key, overridable, fallback, doNotConvert(), isString(), logger, env, typeHelper);
     }
 
     @NonNull

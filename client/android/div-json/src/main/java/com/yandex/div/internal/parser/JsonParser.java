@@ -1235,6 +1235,12 @@ public class JsonParser {
         return (Function1<T, T>) AS_IS;
     }
 
+    @NonNull
+    static <T> ValueValidator<T> isString() {
+        //noinspection unchecked
+        return (ValueValidator<T>) IS_STRING;
+    }
+
     @Nullable
     private static <T> T optSafe(@Nullable T json) {
         if (json == null || json == JSONObject.NULL) {
