@@ -823,6 +823,8 @@ class Div2View private constructor(
         viewToDivBindings[view] = div
     }
 
+    internal fun takeBindingDiv(view: View) = viewToDivBindings[view]
+
     internal fun setPropagatedAccessibilityMode(view: View, mode: DivAccessibility.Mode) {
         propagatedAccessibilityModes[view] = mode
     }

@@ -1,6 +1,10 @@
 package com.yandex.div.steps
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.idling.SimpleIdlingResource
 import com.yandex.test.idling.register
@@ -33,6 +37,11 @@ private class VisibilityActionsIdlingResource(private val log: String) : SimpleI
 
 @StepsDsl
 class VisibilityActionsAssertions() {
+
+    fun checkViewShownWithText(text: String) =
+        step("Check view shown with text $text") {
+            onView(withText(text)).check(matches(ViewMatchers.isDisplayed()))
+        }
 
     fun checkViewShownLogged(cardId: String, tabId: String) =
         step("Check gallery view shown logged") {

@@ -16,7 +16,9 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.PositionAssertions
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import com.yandex.div.view.ViewActions.callOnClickAction
@@ -85,6 +87,8 @@ fun ViewInteraction.click() = perform(clickOnPartlyVisibleView())
 fun ViewInteraction.tap() = perform(ViewActions.click())
 
 fun ViewInteraction.scrollTo() = perform(ExtendedScrollTo())
+
+fun ViewInteraction.scrollTo(position: Int) = perform(scrollToPosition<ViewHolder>(position))
 
 fun ViewInteraction.callOnClick() = perform(callOnClickAction())
 

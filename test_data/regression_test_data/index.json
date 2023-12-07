@@ -992,6 +992,24 @@
       "file": "visibility_actions/swipe_div_pager.json"
     },
     {
+      "title": "Visibility action for child of item in gallery",
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "visibility_actions",
+        "DivGallery"
+      ],
+      "steps": [
+        "Scroll to positions from 0 to 4",
+        "Check view shown with text 'Last catched visibility action: item_{item_position}'"
+      ],
+      "expected_results": [
+        "View shown with text 'Last catched visibility action: item_{item_position}'"
+      ],
+      "file": "visibility_actions/gallery_child_of_item.json"
+    },
+    {
       "title": "Send select Pager using Div2View.tryLogVisibility",
       "automated": [
         "web"

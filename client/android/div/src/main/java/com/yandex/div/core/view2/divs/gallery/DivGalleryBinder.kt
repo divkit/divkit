@@ -306,7 +306,7 @@ internal class DivGalleryBinder @Inject constructor(
                 if (position == RecyclerView.NO_POSITION) return@forEach
 
                 val div = (recycler.adapter as GalleryAdapter).items[position]
-                visibilityActionTracker.trackVisibilityActionsOf(divView, child, div)
+                visibilityActionTracker.startTrackingViewsHierarchy(divView, child, div)
             }
 
             // Find and track recycled views containing DisappearActions that are waiting for disappear

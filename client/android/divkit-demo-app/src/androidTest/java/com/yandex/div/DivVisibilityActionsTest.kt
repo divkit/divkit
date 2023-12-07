@@ -124,6 +124,23 @@ class VisibilityActionsTest {
     }
 
     @Test
+    fun galleryChildOfItemVisibilityActions() {
+        gallery {
+            testAsset = "regression_test_data/visibility_actions/gallery_child_of_item.json"
+            activityRule.buildContainer()
+        }
+
+        for (index in 0..4) {
+            gallery { scrollTo(index) }
+            visibilityActions {
+                assert {
+                    checkViewShownWithText("Last catched visibility action: item_$index")
+                }
+            }
+        }
+    }
+
+    @Test
     fun includedVisibilityActions() {
         includedActions {
             activityRule.buildContainer()

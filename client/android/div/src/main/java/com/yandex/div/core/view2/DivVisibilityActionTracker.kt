@@ -3,8 +3,10 @@ package com.yandex.div.core.view2
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.AnyThread
 import androidx.core.os.postDelayed
+import androidx.core.view.children
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.doOnHierarchyLayout
@@ -33,6 +35,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
     private val visibleActions = WeakHashMap<View, Div>()
     private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
+    private val previousVisibilityPercentages = WeakHashMap<View, Int>()
 
     // Actions that was more visible than its disappear trigger percent, so they can be triggered for disappearing
     private val appearedForDisappearActions = WeakHashMap<View, Div>()
@@ -99,6 +102,45 @@ internal class DivVisibilityActionTracker @Inject constructor(
     ) {
         val actions = div.value().disappearActions ?: return
         trackVisibilityActions(scope, view, div, actions)
+    }
+
+    fun startTrackingViewsHierarchy(scope: Div2View, root: View, rootDiv: Div?) {
+        trackViewsHierarchy(scope, root, rootDiv) { currentView, currentDiv ->
+            val currentVisibilityPercentage =
+                viewVisibilityCalculator.calculateVisibilityPercentage(currentView)
+            val previousVisibilityPercentage =
+                previousVisibilityPercentages[currentView] ?: -1
+            if (currentVisibilityPercentage == previousVisibilityPercentage) {
+                false
+            } else {
+                previousVisibilityPercentages[currentView] = currentVisibilityPercentage
+                currentDiv?.let { trackVisibilityActionsOf(scope, currentView, it) }
+                true
+            }
+        }
+    }
+
+    fun cancelTrackingViewsHierarchy(scope: Div2View, root: View, div: Div?) {
+        trackViewsHierarchy(scope, root, div) { currentView, currentDiv ->
+            previousVisibilityPercentages.remove(currentView)
+            currentDiv?.let { trackVisibilityActionsOf(scope, null, it) }
+            true
+        }
+    }
+
+    private fun trackViewsHierarchy(
+        scope: Div2View,
+        view: View,
+        div: Div?,
+        trackAction: (View, Div?) -> Boolean
+    ) {
+        if (!trackAction(view, div) || view !is ViewGroup) {
+            return
+        }
+        view.children.forEach {
+            val childDiv = scope.takeBindingDiv(it)
+            trackViewsHierarchy(scope, it, childDiv, trackAction)
+        }
     }
 
     private fun trackVisibilityActions(
