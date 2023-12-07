@@ -2,41 +2,39 @@ import BaseUIPublic
 import CommonCorePublic
 
 extension DivAccessibility {
-  func accessibilityElement(
-    divId: String? = nil,
-    expressionResolver: ExpressionResolver,
-    childrenA11yDescription: String?
+  func resolve(
+    _ context: DivBlockModelingContext,
+    id: String?
   ) -> AccessibilityElement {
+    let expressionResolver = context.expressionResolver
     let mode = resolveMode(expressionResolver)
     return AccessibilityElement(
       traits: type?.cast() ?? .none,
       strings: AccessibilityElement.Strings(
-        label: makeLabel(
-          with: expressionResolver,
-          childrenA11yDescription: childrenA11yDescription,
-          mode: mode
-        ),
+        label: resolveDescription(context, mode: mode),
         hint: resolveHint(expressionResolver),
         value: resolveStateDescription(expressionResolver),
-        identifier: divId
+        identifier: id
       ),
       startsMediaSession: resolveMuteAfterAction(expressionResolver),
       hideElementWithChildren: mode.isExclude
     )
   }
 
-  private func makeLabel(
-    with expressionResolver: ExpressionResolver,
-    childrenA11yDescription: String?,
+  private func resolveDescription(
+    _ context: DivBlockModelingContext,
     mode: Mode
   ) -> String? {
-    let label = resolveDescription(expressionResolver)
-    if mode == .merge, label == nil {
-      return childrenA11yDescription
-    } else if description == nil, type != nil {
+    if let description = resolveDescription(context.expressionResolver) {
+      return description
+    }
+    if mode == .merge {
+      return context.childrenA11yDescription
+    }
+    if type != nil {
       return ""
     }
-    return label
+    return nil
   }
 }
 

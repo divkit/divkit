@@ -94,7 +94,7 @@ extension DivBase {
       .addingDecorations(
         boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip },
         alpha: CGFloat(resolveAlpha(expressionResolver)),
-        accessibilityElement: customA11yElement ?? resolveAccessibilityElement(context)
+        accessibilityElement: customA11yElement ?? accessibility.resolve(context, id: id)
       )
 
     return applyExtensionHandlersAfterBaseProperties(
@@ -145,16 +145,6 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     disappearActions?.map { $0.makeDisappearAction(context: context) } ?? []
-  }
-
-  private func resolveAccessibilityElement(
-    _ context: DivBlockModelingContext
-  ) -> AccessibilityElement {
-    accessibility.accessibilityElement(
-      divId: id,
-      expressionResolver: context.expressionResolver,
-      childrenA11yDescription: context.childrenA11yDescription
-    )
   }
 
   private func applyTransitioningAnimations(
