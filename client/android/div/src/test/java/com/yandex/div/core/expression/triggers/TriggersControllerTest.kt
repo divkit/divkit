@@ -2,9 +2,9 @@ package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.json.JsonTemplate
@@ -35,7 +35,7 @@ class TriggersControllerTest {
         on { subscribeToVariablesChange(any(), any(), any()) } doReturn Disposable.NULL
     }
     private val expressionResolver = mock<ExpressionResolver>()
-    private val divActionHandler = mock<DivActionHandler>()
+    private val divActionBinder = mock<DivActionBinder>()
     private val evaluator = mock<Evaluator> {
         on { eval<Boolean>(any()) } doReturn true
     }
@@ -59,10 +59,10 @@ class TriggersControllerTest {
     private val underTest = TriggersController(
         variableController,
         expressionResolver,
-        divActionHandler,
         evaluator,
         errorCollector,
         logger,
+        divActionBinder
     )
 
     @Test
@@ -107,10 +107,10 @@ class TriggersControllerTest {
     }
 
     private fun verifyActionTriggered(logId: String, times: Int = 1) {
-        val actions = argumentCaptor<DivAction>()
-        verify(divActionHandler, atLeastOnce()).handleAction(actions.capture(), any())
+        val actions = argumentCaptor<List<DivAction>>()
+        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture())
 
-        val actionsWithLogId = actions.allValues.filter { it.logId == logId }
+        val actionsWithLogId = actions.allValues.flatten().filter { it.logId == logId }
         Assert.assertEquals(times, actionsWithLogId.size)
     }
 

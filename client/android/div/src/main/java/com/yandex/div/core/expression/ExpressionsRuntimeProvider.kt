@@ -2,7 +2,6 @@ package com.yandex.div.core.expression
 
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.storedvalues.StoredValuesController
@@ -11,14 +10,13 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.toVariable
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
-import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
-import com.yandex.div.evaluable.WarningSender
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
@@ -33,7 +31,7 @@ import javax.inject.Inject
 internal class ExpressionsRuntimeProvider @Inject constructor(
     private val divVariableController: DivVariableController,
     private val globalVariableController: GlobalVariableController,
-    private val divActionHandler: DivActionHandler,
+    private val divActionBinder: DivActionBinder,
     private val errorCollectors: ErrorCollectors,
     private val logger: Div2Logger,
     private val storedValuesController: StoredValuesController,
@@ -131,10 +129,10 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         val triggersController = TriggersController(
             variableController,
             expressionResolver,
-            divActionHandler,
             evaluator,
             errorCollector,
-            logger
+            logger,
+            divActionBinder
         )
 
         return ExpressionsRuntime(

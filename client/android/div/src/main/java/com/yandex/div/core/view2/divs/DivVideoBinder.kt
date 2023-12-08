@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
@@ -28,7 +27,7 @@ import javax.inject.Inject
 internal class DivVideoBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayIntegerVariableBinder,
-    private val divActionHandler: DivActionHandler,
+    private val divActionBinder: DivActionBinder,
     private val videoViewMapper: DivVideoViewMapper,
 ) : DivViewBinder<DivVideo, DivVideoView> {
     override fun bindView(view: DivVideoView, div: DivVideo, divView: Div2View) {
@@ -76,33 +75,23 @@ internal class DivVideoBinder @Inject constructor(
 
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
-                div.resumeActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                divActionBinder.handleActions(divView, div.resumeActions)
             }
 
             override fun onPause() {
-                div.pauseActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                divActionBinder.handleActions(divView, div.pauseActions)
             }
 
             override fun onBuffering() {
-                div.bufferingActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                divActionBinder.handleActions(divView, div.bufferingActions)
             }
 
             override fun onEnd() {
-                div.endActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                divActionBinder.handleActions(divView, div.endActions)
             }
 
             override fun onFatal() {
-                div.fatalActions?.forEach { divAction ->
-                    divActionHandler.handleAction(divAction, divView)
-                }
+                divActionBinder.handleActions(divView, div.fatalActions)
             }
 
             override fun onReady() {

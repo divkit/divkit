@@ -1,12 +1,12 @@
 package com.yandex.div.core.expression.triggers
 
-import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.DivActionHandler
+import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
@@ -24,10 +24,10 @@ import kotlin.ClassCastException
 internal class TriggersController(
     private val variableController: VariableController,
     private val expressionResolver: ExpressionResolver,
-    private val divActionHandler: DivActionHandler,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
-    private val logger: Div2Logger
+    private val logger: Div2Logger,
+    private val divActionBinder: DivActionBinder
 ) {
     private val executors = mutableMapOf<List<DivTrigger>, MutableList<TriggerExecutor>>()
     private var currentView: DivViewFacade? = null
@@ -67,10 +67,10 @@ internal class TriggersController(
                 trigger.actions,
                 trigger.mode,
                 expressionResolver,
-                divActionHandler,
                 variableController,
                 errorCollector,
-                logger
+                logger,
+                divActionBinder
             ))
         }
 
@@ -104,10 +104,10 @@ private class TriggerExecutor(
     private val actions: List<DivAction>,
     private val mode: Expression<DivTrigger.Mode>,
     private val resolver: ExpressionResolver,
-    private val divActionHandler: DivActionHandler,
     private val variableController: VariableController,
     private val errorCollector: ErrorCollector,
-    private val logger: Div2Logger
+    private val logger: Div2Logger,
+    private val divActionBinder: DivActionBinder
 ) {
     private val changeTrigger = { _: Variable -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
@@ -155,8 +155,8 @@ private class TriggerExecutor(
             (viewFacade as? Div2View)?.let { div2View ->
                 logger.logTrigger(div2View, it)
             }
-            divActionHandler.handleAction(it, viewFacade)
         }
+        divActionBinder.handleActions(viewFacade, actions)
     }
 
     private fun conditionSatisfied(): Boolean {

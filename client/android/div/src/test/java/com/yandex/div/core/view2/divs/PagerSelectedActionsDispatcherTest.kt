@@ -4,7 +4,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivPager
 import org.junit.Before
@@ -156,11 +155,11 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     private fun verifyActionHandled(urlStr: String, times: Int = 1) {
-        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), anyOrNull())
+        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), anyOrNull(), anyOrNull())
     }
 
     private fun InOrderOnType<DivActionBinder>.verifyActionHandled(div2View: Div2View, url: String) {
-        verify().handleAction(eq(div2View), urlEq(url), anyOrNull())
+        verify().handleAction(eq(div2View), urlEq(url), anyOrNull(), anyOrNull())
     }
 
     private companion object {

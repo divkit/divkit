@@ -1,8 +1,8 @@
 package com.yandex.div.core.timer
 
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @DivScope
 internal class DivTimerEventDispatcherProvider @Inject constructor(
-    private val divActionHandler: DivActionHandler,
+    private val divActionBinder: DivActionBinder,
     private val errorCollectors: ErrorCollectors
 ) {
     private val controllers =
@@ -50,7 +50,7 @@ internal class DivTimerEventDispatcherProvider @Inject constructor(
     ): TimerController {
         return TimerController(
             this,
-            divActionHandler,
+            divActionBinder,
             errorCollector,
             expressionResolver
         )

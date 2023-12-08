@@ -1,7 +1,7 @@
 package com.yandex.div.core.timer
 
-import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -10,7 +10,7 @@ import java.util.Timer
 
 internal class TimerController(
     val divTimer: DivTimer,
-    private val divActionHandler: DivActionHandler,
+    private val divActionBinder: DivActionBinder,
     private val errorCollector: ErrorCollector,
     private val expressionResolver: ExpressionResolver
 ) {
@@ -86,8 +86,8 @@ internal class TimerController(
         updateTimerVariable(time)
 
         UiThreadHandler.executeOnMainThread {
-            tickActions?.forEach { divAction ->
-                div2View?.let { divActionHandler.handleAction(divAction, it) }
+            div2View?.let {
+                divActionBinder.handleActions(it, tickActions)
             }
         }
     }
@@ -96,8 +96,8 @@ internal class TimerController(
         updateTimerVariable(time)
 
         UiThreadHandler.executeOnMainThread {
-            endActions?.forEach { divAction ->
-                div2View?.let { divActionHandler.handleAction(divAction, it) }
+            div2View?.let {
+                divActionBinder.handleActions(it, endActions)
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.appcompat.widget.PopupMenu
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
+import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -247,8 +248,18 @@ internal class DivActionBinder @Inject constructor(
         }
     }
 
-    internal fun handleAction(divView: Div2View, action: DivAction, actionUid: String? = null) {
-        val viewActionHandler = divView.actionHandler
+    internal fun handleActions(divView: DivViewFacade, actions: List<DivAction>?) {
+        if (actions == null) return
+        val viewActionHandler = (divView as? Div2View)?.actionHandler
+        actions.forEach { handleAction(divView, it, null, viewActionHandler) }
+    }
+
+    internal fun handleAction(
+        divView: DivViewFacade,
+        action: DivAction,
+        actionUid: String? = null,
+        viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
+    ) {
         if (actionHandler.useActionUid && actionUid != null) {
             if (viewActionHandler == null || !viewActionHandler.handleAction(action, divView, actionUid)) {
                 actionHandler.handleAction(action, divView, actionUid)
