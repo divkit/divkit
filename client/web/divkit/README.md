@@ -355,7 +355,7 @@ Custom components is supported not only on the client side, but also on the serv
 
 [Custom component extended api](../divkit-examples/custom-extended-api/)
 
-#### theme (EXPERIMENTAL)
+#### theme (DEPRECATED)
 
 `system` | `light` | `dark`
 
