@@ -146,7 +146,7 @@ PrimaryExpression
     / Number
     / Integer
     / Boolean
-    / '(' expr:Expression ')' { return expr; }
+    / '(' _ expr:Expression _ ')' { return expr; }
 
 String "string"
     = "'" str:StringContents "'" { return str; }

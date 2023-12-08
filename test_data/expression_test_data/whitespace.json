@@ -1,0 +1,27 @@
+{
+    "cases": [
+        {
+            "name": "@{value1?( (( value2  ?  '1'  :  '2' )) ):'3'} => '1",
+            "description": "Ternary operator, whitespace style and brackets",
+            "expression": "@{value1?( (( value2  ?  '1'  :  '2' )) ):'3'}",
+            "expected": {
+                "type": "string",
+                "value": "1"
+            },
+            "variables": [{
+                "name": "value1",
+                "type": "boolean",
+                "value": 1
+            }, {
+                "name": "value2",
+                "type": "boolean",
+                "value": 1
+            }],
+            "platforms": [
+                "android",
+                "web",
+                "ios"
+            ]
+        }
+    ]
+}
