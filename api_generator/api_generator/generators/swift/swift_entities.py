@@ -562,8 +562,7 @@ class SwiftProperty(Property):
                 pass
             else:
                 return None
-        if isinstance(self.property_type, RawArray) and \
-                (self.property_type.min_items > 0):
+        if isinstance(self.property_type, RawArray) and self.property_type.min_items > 0:
             validator_name = 'makeArrayValidator'
             validator_args = [f'minItems: {self.property_type.min_items}']
         elif isinstance(self.property_type, Array) and \
@@ -571,6 +570,8 @@ class SwiftProperty(Property):
             validator_type = 'Strict' if self.property_type.strict_parsing else ''
             validator_name = f'make{validator_type}ArrayValidator'
             validator_args = [f'minItems: {self.property_type.min_items}']
+        elif isinstance(self.property_type, Array):
+            return None
         elif isinstance(self.property_type, String) and \
                 (self.property_type.min_length > 0 or self.property_type.regex is not None):
             optimized = 'CFString' if self.property_type.enable_optimization else 'String'
@@ -593,15 +594,11 @@ class SwiftProperty(Property):
             constraint = constraint.replace('number', '$0')
             validator_name = 'makeValueValidator'
             validator_args = [f'valueValidator: {{ {constraint} }}']
-        elif isinstance(self.property_type, Array) and self.optional:
-            validator_name = 'makeNoOpArrayValidator'
+        elif self.optional:
+            validator_name = 'makeNoOpValueValidator'
             validator_args = []
         else:
-            if self.optional:
-                validator_name = 'makeNoOpValueValidator'
-                validator_args = []
-            else:
-                return None
+            return None
 
         prefix = f'{validator_name}('
         separator = f',\n{" " * len(prefix)}'

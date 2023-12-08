@@ -6,9 +6,9 @@ import Serialization
 
 public final class DivTimer {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 0
-  public let endActions: [DivAction]? // at least 1 elements
+  public let endActions: [DivAction]?
   public let id: String
-  public let tickActions: [DivAction]? // at least 1 elements
+  public let tickActions: [DivAction]?
   public let tickInterval: Expression<Int>? // constraint: number > 0
   public let valueVariable: String?
 
@@ -22,12 +22,6 @@ public final class DivTimer {
 
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let endActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let tickActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
 
   static let tickIntervalValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })

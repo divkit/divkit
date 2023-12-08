@@ -500,10 +500,30 @@ public class JsonParser {
             @NonNull final JSONObject jsonObject,
             @NonNull final String key,
             @NonNull final Function2<ParsingEnvironment, R, T> creator,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env) {
+        return readOptionalList(jsonObject, key, creator, alwaysValidList(), alwaysValid(), logger, env);
+    }
+
+    @Nullable
+    public static <R, T> List<T> readOptionalList(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final Function2<ParsingEnvironment, R, T> creator,
             @NonNull final ListValidator<T> validator,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env) {
         return readOptionalList(jsonObject, key, creator, validator, alwaysValid(), logger, env);
+    }
+
+    @Nullable
+    public static <R, T> List<T> readOptionalList(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final Function1<R, T> converter,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env) {
+        return readOptionalList(jsonObject, key, converter, alwaysValidList(), alwaysValid(), logger, env);
     }
 
     @Nullable

@@ -6,18 +6,8 @@ import Serialization
 extension Field {
   @inlinable
   func resolveValue<E: ValidSerializationValue>(
-    context: TemplatesContext
-  ) -> DeserializationResult<T> where T == Expression<E> {
-    resolveValue(
-      context: context,
-      transform: { $0 as E }
-    )
-  }
-
-  @inlinable
-  func resolveValue<E: ValidSerializationValue>(
     context: TemplatesContext,
-    validator: AnyValueValidator<E>
+    validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveValue(
       context: context,
@@ -94,18 +84,8 @@ extension Field {
 
   @inlinable
   func resolveOptionalValue<E: ValidSerializationValue>(
-    context: TemplatesContext
-  ) -> DeserializationResult<T> where T == Expression<E> {
-    resolveOptionalValue(
-      context: context,
-      transform: { $0 as E }
-    )
-  }
-
-  @inlinable
-  func resolveOptionalValue<E: ValidSerializationValue>(
     context: TemplatesContext,
-    validator: AnyValueValidator<E>
+    validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E> {
     resolveOptionalValue(
       context: context,

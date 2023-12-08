@@ -504,7 +504,8 @@ class KotlinProperty(Property):
                     property_name=self.name,
                     with_template_validators=False
                 )
-                validator = f', {validator}'
+                if validator != '':
+                    validator = f', {validator}'
                 expression_or_empty = ''
                 if self.supports_expressions and not kotlin_prop.is_enum_of_expressions:
                     expression_or_empty = EXPRESSION_TYPE_NAME

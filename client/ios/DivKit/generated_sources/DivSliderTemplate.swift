@@ -283,11 +283,11 @@ public final class DivSliderTemplate: TemplateValue {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
-  public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
+  public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
-  public let disappearActions: Field<[DivDisappearActionTemplate]>? // at least 1 elements
-  public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
+  public let disappearActions: Field<[DivDisappearActionTemplate]>?
+  public let extensions: Field<[DivExtensionTemplate]>?
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
@@ -298,7 +298,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let ranges: Field<[RangeTemplate]>? // at least 1 elements
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let secondaryValueAccessibility: Field<DivAccessibilityTemplate>?
-  public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let selectedActions: Field<[DivActionTemplate]>?
   public let thumbSecondaryStyle: Field<DivDrawableTemplate>?
   public let thumbSecondaryTextStyle: Field<TextStyleTemplate>?
   public let thumbSecondaryValueVariable: Field<String>?
@@ -307,7 +307,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let thumbValueVariable: Field<String>?
   public let tickMarkActiveStyle: Field<DivDrawableTemplate>?
   public let tickMarkInactiveStyle: Field<DivDrawableTemplate>?
-  public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
+  public let tooltips: Field<[DivTooltipTemplate]>?
   public let trackActiveStyle: Field<DivDrawableTemplate>?
   public let trackInactiveStyle: Field<DivDrawableTemplate>?
   public let transform: Field<DivTransformTemplate>?
@@ -317,7 +317,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
   public let visibility: Field<Expression<DivVisibility>>? // default value: visible
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
-  public let visibilityActions: Field<[DivVisibilityActionTemplate]>? // at least 1 elements
+  public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
   static let parentValidator: AnyValueValidator<String> =
@@ -464,11 +464,11 @@ public final class DivSliderTemplate: TemplateValue {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
-    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
+    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
-    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true) ?? .noValue
-    let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
+    let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
@@ -479,7 +479,7 @@ public final class DivSliderTemplate: TemplateValue {
     let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let secondaryValueAccessibilityValue = parent?.secondaryValueAccessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.secondaryValueAccessibilityValidator, useOnlyLinks: true) ?? .noValue
-    let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
+    let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let thumbSecondaryStyleValue = parent?.thumbSecondaryStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryStyleValidator, useOnlyLinks: true) ?? .noValue
     let thumbSecondaryTextStyleValue = parent?.thumbSecondaryTextStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryTextStyleValidator, useOnlyLinks: true) ?? .noValue
     let thumbSecondaryValueVariableValue = parent?.thumbSecondaryValueVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryValueVariableValidator) ?? .noValue
@@ -488,7 +488,7 @@ public final class DivSliderTemplate: TemplateValue {
     let thumbValueVariableValue = parent?.thumbValueVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbValueVariableValidator) ?? .noValue
     let tickMarkActiveStyleValue = parent?.tickMarkActiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tickMarkActiveStyleValidator, useOnlyLinks: true) ?? .noValue
     let tickMarkInactiveStyleValue = parent?.tickMarkInactiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tickMarkInactiveStyleValidator, useOnlyLinks: true) ?? .noValue
-    let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
+    let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let trackActiveStyleValue = parent?.trackActiveStyle?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let trackInactiveStyleValue = parent?.trackInactiveStyle?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
@@ -498,7 +498,7 @@ public final class DivSliderTemplate: TemplateValue {
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
     let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityValidator) ?? .noValue
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true) ?? .noValue
-    let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
+    let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
@@ -658,15 +658,15 @@ public final class DivSliderTemplate: TemplateValue {
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
       case "background":
-        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
+        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
         borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self).merged(with: borderValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "disappear_actions":
-        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
+        disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "extensions":
-        extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
+        extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self).merged(with: focusValue)
       case "height":
@@ -688,7 +688,7 @@ public final class DivSliderTemplate: TemplateValue {
       case "secondary_value_accessibility":
         secondaryValueAccessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.secondaryValueAccessibilityValidator, type: DivAccessibilityTemplate.self).merged(with: secondaryValueAccessibilityValue)
       case "selected_actions":
-        selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+        selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: selectedActionsValue)
       case "thumb_secondary_style":
         thumbSecondaryStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.thumbSecondaryStyleValidator, type: DivDrawableTemplate.self).merged(with: thumbSecondaryStyleValue)
       case "thumb_secondary_text_style":
@@ -706,7 +706,7 @@ public final class DivSliderTemplate: TemplateValue {
       case "tick_mark_inactive_style":
         tickMarkInactiveStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tickMarkInactiveStyleValidator, type: DivDrawableTemplate.self).merged(with: tickMarkInactiveStyleValue)
       case "tooltips":
-        tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
+        tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "track_active_style":
         trackActiveStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDrawableTemplate.self).merged(with: trackActiveStyleValue)
       case "track_inactive_style":
@@ -726,7 +726,7 @@ public final class DivSliderTemplate: TemplateValue {
       case "visibility_action":
         visibilityActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionValidator, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionValue)
       case "visibility_actions":
-        visibilityActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionsValidator, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionsValue)
+        visibilityActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionsValue)
       case "width":
         widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.widthValidator, type: DivSizeTemplate.self).merged(with: widthValue)
       case parent?.accessibility?.link:
@@ -738,15 +738,15 @@ public final class DivSliderTemplate: TemplateValue {
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
       case parent?.background?.link:
-        backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self))
+        backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self))
       case parent?.border?.link:
         borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.disappearActions?.link:
-        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.disappearActionsValidator, type: DivDisappearActionTemplate.self))
+        disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self))
       case parent?.extensions?.link:
-        extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
+        extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self))
       case parent?.height?.link:
@@ -768,7 +768,7 @@ public final class DivSliderTemplate: TemplateValue {
       case parent?.secondaryValueAccessibility?.link:
         secondaryValueAccessibilityValue = secondaryValueAccessibilityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.secondaryValueAccessibilityValidator, type: DivAccessibilityTemplate.self))
       case parent?.selectedActions?.link:
-        selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
+        selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
       case parent?.thumbSecondaryStyle?.link:
         thumbSecondaryStyleValue = thumbSecondaryStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.thumbSecondaryStyleValidator, type: DivDrawableTemplate.self))
       case parent?.thumbSecondaryTextStyle?.link:
@@ -786,7 +786,7 @@ public final class DivSliderTemplate: TemplateValue {
       case parent?.tickMarkInactiveStyle?.link:
         tickMarkInactiveStyleValue = tickMarkInactiveStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tickMarkInactiveStyleValidator, type: DivDrawableTemplate.self))
       case parent?.tooltips?.link:
-        tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
+        tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self))
       case parent?.trackActiveStyle?.link:
         trackActiveStyleValue = trackActiveStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDrawableTemplate.self))
       case parent?.trackInactiveStyle?.link:
@@ -806,7 +806,7 @@ public final class DivSliderTemplate: TemplateValue {
       case parent?.visibilityAction?.link:
         visibilityActionValue = visibilityActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionValidator, type: DivVisibilityActionTemplate.self))
       case parent?.visibilityActions?.link:
-        visibilityActionsValue = visibilityActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionsValidator, type: DivVisibilityActionTemplate.self))
+        visibilityActionsValue = visibilityActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self))
       case parent?.width?.link:
         widthValue = widthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.widthValidator, type: DivSizeTemplate.self))
       default: break
@@ -814,24 +814,24 @@ public final class DivSliderTemplate: TemplateValue {
     }
     if let parent = parent {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
-      backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
+      backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
-      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, validator: ResolvedValue.disappearActionsValidator, useOnlyLinks: true))
-      extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
+      disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
       rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
       secondaryValueAccessibilityValue = secondaryValueAccessibilityValue.merged(with: parent.secondaryValueAccessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.secondaryValueAccessibilityValidator, useOnlyLinks: true))
-      selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
+      selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       thumbSecondaryStyleValue = thumbSecondaryStyleValue.merged(with: parent.thumbSecondaryStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryStyleValidator, useOnlyLinks: true))
       thumbSecondaryTextStyleValue = thumbSecondaryTextStyleValue.merged(with: parent.thumbSecondaryTextStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbSecondaryTextStyleValidator, useOnlyLinks: true))
       thumbStyleValue = thumbStyleValue.merged(with: parent.thumbStyle?.resolveValue(context: context, useOnlyLinks: true))
       thumbTextStyleValue = thumbTextStyleValue.merged(with: parent.thumbTextStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.thumbTextStyleValidator, useOnlyLinks: true))
       tickMarkActiveStyleValue = tickMarkActiveStyleValue.merged(with: parent.tickMarkActiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tickMarkActiveStyleValidator, useOnlyLinks: true))
       tickMarkInactiveStyleValue = tickMarkInactiveStyleValue.merged(with: parent.tickMarkInactiveStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tickMarkInactiveStyleValidator, useOnlyLinks: true))
-      tooltipsValue = tooltipsValue.merged(with: parent.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true))
+      tooltipsValue = tooltipsValue.merged(with: parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true))
       trackActiveStyleValue = trackActiveStyleValue.merged(with: parent.trackActiveStyle?.resolveValue(context: context, useOnlyLinks: true))
       trackInactiveStyleValue = trackInactiveStyleValue.merged(with: parent.trackInactiveStyle?.resolveValue(context: context, useOnlyLinks: true))
       transformValue = transformValue.merged(with: parent.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true))
@@ -839,7 +839,7 @@ public final class DivSliderTemplate: TemplateValue {
       transitionInValue = transitionInValue.merged(with: parent.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true))
       transitionOutValue = transitionOutValue.merged(with: parent.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true))
       visibilityActionValue = visibilityActionValue.merged(with: parent.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true))
-      visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true))
+      visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(

@@ -16,7 +16,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_action_menu_item_actions"
         }
       },

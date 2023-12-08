@@ -49,7 +49,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_video_resume_actions"
         },
         "pause_actions": {
@@ -57,7 +56,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_video_pause_actions"
         },
         "end_actions": {
@@ -65,7 +63,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_video_end_actions"
         },
         "buffering_actions": {
@@ -73,7 +70,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_video_buffering_actions"
         },
         "fatal_actions": {
@@ -81,7 +77,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_video_fatal_actions"
         },
         "player_settings_payload": {

@@ -261,7 +261,7 @@ extension Field {
   @inlinable
   func resolveValue<U: TemplateValue>(
     context: TemplatesContext,
-    validator: AnyArrayValueValidator<U.ResolvedValue>?,
+    validator: AnyArrayValueValidator<U.ResolvedValue>? = nil,
     useOnlyLinks _: Bool
     // swiftformat:disable:next typeSugar
   ) -> DeserializationResult<Array<U>.ResolvedValue> where Array<U> == T {

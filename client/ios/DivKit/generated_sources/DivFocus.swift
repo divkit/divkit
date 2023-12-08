@@ -65,8 +65,8 @@ public final class DivFocus {
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let nextFocusIds: NextFocusIds?
-  public let onBlur: [DivAction]? // at least 1 elements
-  public let onFocus: [DivAction]? // at least 1 elements
+  public let onBlur: [DivAction]?
+  public let onFocus: [DivAction]?
 
   static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
     makeArrayValidator(minItems: 1)
@@ -76,12 +76,6 @@ public final class DivFocus {
 
   static let nextFocusIdsValidator: AnyValueValidator<DivFocus.NextFocusIds> =
     makeNoOpValueValidator()
-
-  static let onBlurValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let onFocusValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
 
   init(
     background: [DivBackground]? = nil,

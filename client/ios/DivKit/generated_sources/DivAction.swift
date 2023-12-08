@@ -7,7 +7,7 @@ import Serialization
 public final class DivAction {
   public final class MenuItem {
     public let action: DivAction?
-    public let actions: [DivAction]? // at least 1 elements
+    public let actions: [DivAction]?
     public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
@@ -16,9 +16,6 @@ public final class DivAction {
 
     static let actionValidator: AnyValueValidator<DivAction> =
       makeNoOpValueValidator()
-
-    static let actionsValidator: AnyArrayValueValidator<DivAction> =
-      makeArrayValidator(minItems: 1)
 
     init(
       action: DivAction? = nil,
@@ -35,7 +32,7 @@ public final class DivAction {
   public let isEnabled: Expression<Bool> // default value: true
   public let logId: String
   public let logUrl: Expression<URL>?
-  public let menuItems: [MenuItem]? // at least 1 elements
+  public let menuItems: [MenuItem]?
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
   public let typed: DivActionTyped?
@@ -65,9 +62,6 @@ public final class DivAction {
 
   static let logUrlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
-
-  static let menuItemsValidator: AnyArrayValueValidator<DivAction.MenuItem> =
-    makeArrayValidator(minItems: 1)
 
   static let payloadValidator: AnyValueValidator<[String: Any]> =
     makeNoOpValueValidator()

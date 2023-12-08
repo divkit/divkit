@@ -18,7 +18,7 @@ public final class DivAnimation {
   public let duration: Expression<Int> // constraint: number >= 0; default value: 300
   public let endValue: Expression<Double>?
   public let interpolator: Expression<DivAnimationInterpolator> // default value: spring
-  public let items: [DivAnimation]? // at least 1 elements
+  public let items: [DivAnimation]?
   public let name: Expression<Name>
   public let repeatCount: DivCount // default value: .divInfinityCount(DivInfinityCount())
   public let startDelay: Expression<Int> // constraint: number >= 0; default value: 0
@@ -53,9 +53,6 @@ public final class DivAnimation {
 
   static let interpolatorValidator: AnyValueValidator<DivAnimationInterpolator> =
     makeNoOpValueValidator()
-
-  static let itemsValidator: AnyArrayValueValidator<DivAnimation> =
-    makeArrayValidator(minItems: 1)
 
   static let repeatCountValidator: AnyValueValidator<DivCount> =
     makeNoOpValueValidator()

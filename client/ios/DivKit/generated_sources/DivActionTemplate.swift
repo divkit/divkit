@@ -7,7 +7,7 @@ import Serialization
 public final class DivActionTemplate: TemplateValue {
   public final class MenuItemTemplate: TemplateValue {
     public let action: Field<DivActionTemplate>?
-    public let actions: Field<[DivActionTemplate]>? // at least 1 elements
+    public let actions: Field<[DivActionTemplate]>?
     public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -34,7 +34,7 @@ public final class DivActionTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: MenuItemTemplate?) -> DeserializationResult<DivAction.MenuItem> {
       let actionValue = parent?.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true) ?? .noValue
-      let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
+      let actionsValue = parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let textValue = parent?.text?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
@@ -69,13 +69,13 @@ public final class DivActionTemplate: TemplateValue {
         case "action":
           actionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionValidator, type: DivActionTemplate.self).merged(with: actionValue)
         case "actions":
-          actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
+          actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionsValue)
         case "text":
           textValue = deserialize(__dictValue).merged(with: textValue)
         case parent?.action?.link:
           actionValue = actionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionValidator, type: DivActionTemplate.self))
         case parent?.actions?.link:
-          actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
+          actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
         case parent?.text?.link:
           textValue = textValue.merged(with: deserialize(__dictValue))
         default: break
@@ -83,7 +83,7 @@ public final class DivActionTemplate: TemplateValue {
       }
       if let parent = parent {
         actionValue = actionValue.merged(with: parent.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true))
-        actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
+        actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
@@ -125,7 +125,7 @@ public final class DivActionTemplate: TemplateValue {
   public let isEnabled: Field<Expression<Bool>>? // default value: true
   public let logId: Field<String>?
   public let logUrl: Field<Expression<URL>>?
-  public let menuItems: Field<[MenuItemTemplate]>? // at least 1 elements
+  public let menuItems: Field<[MenuItemTemplate]>?
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
   public let typed: Field<DivActionTypedTemplate>?
@@ -176,7 +176,7 @@ public final class DivActionTemplate: TemplateValue {
     let isEnabledValue = parent?.isEnabled?.resolveOptionalValue(context: context, validator: ResolvedValue.isEnabledValidator) ?? .noValue
     let logIdValue = parent?.logId?.resolveValue(context: context) ?? .noValue
     let logUrlValue = parent?.logUrl?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator) ?? .noValue
-    let menuItemsValue = parent?.menuItems?.resolveOptionalValue(context: context, validator: ResolvedValue.menuItemsValidator, useOnlyLinks: true) ?? .noValue
+    let menuItemsValue = parent?.menuItems?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let payloadValue = parent?.payload?.resolveOptionalValue(context: context, validator: ResolvedValue.payloadValidator) ?? .noValue
     let refererValue = parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.refererValidator) ?? .noValue
     let typedValue = parent?.typed?.resolveOptionalValue(context: context, validator: ResolvedValue.typedValidator, useOnlyLinks: true) ?? .noValue
@@ -238,7 +238,7 @@ public final class DivActionTemplate: TemplateValue {
       case "log_url":
         logUrlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator).merged(with: logUrlValue)
       case "menu_items":
-        menuItemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.menuItemsValidator, type: DivActionTemplate.MenuItemTemplate.self).merged(with: menuItemsValue)
+        menuItemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.MenuItemTemplate.self).merged(with: menuItemsValue)
       case "payload":
         payloadValue = deserialize(__dictValue, validator: ResolvedValue.payloadValidator).merged(with: payloadValue)
       case "referer":
@@ -256,7 +256,7 @@ public final class DivActionTemplate: TemplateValue {
       case parent?.logUrl?.link:
         logUrlValue = logUrlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.logUrlValidator))
       case parent?.menuItems?.link:
-        menuItemsValue = menuItemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.menuItemsValidator, type: DivActionTemplate.MenuItemTemplate.self))
+        menuItemsValue = menuItemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.MenuItemTemplate.self))
       case parent?.payload?.link:
         payloadValue = payloadValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.payloadValidator))
       case parent?.referer?.link:
@@ -270,7 +270,7 @@ public final class DivActionTemplate: TemplateValue {
     }
     if let parent = parent {
       downloadCallbacksValue = downloadCallbacksValue.merged(with: parent.downloadCallbacks?.resolveOptionalValue(context: context, validator: ResolvedValue.downloadCallbacksValidator, useOnlyLinks: true))
-      menuItemsValue = menuItemsValue.merged(with: parent.menuItems?.resolveOptionalValue(context: context, validator: ResolvedValue.menuItemsValidator, useOnlyLinks: true))
+      menuItemsValue = menuItemsValue.merged(with: parent.menuItems?.resolveOptionalValue(context: context, useOnlyLinks: true))
       typedValue = typedValue.merged(with: parent.typed?.resolveOptionalValue(context: context, validator: ResolvedValue.typedValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(

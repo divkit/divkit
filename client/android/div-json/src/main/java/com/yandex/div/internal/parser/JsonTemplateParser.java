@@ -455,6 +455,18 @@ public class JsonTemplateParser {
             boolean overridable,
             @Nullable Field<List<T>> fallback,
             @NonNull Function2<ParsingEnvironment, R, T> creator,
+            @NonNull ParsingErrorLogger logger,
+            @NonNull ParsingEnvironment env) {
+        return readOptionalListField(json, key, overridable, fallback, creator, alwaysValidList(), logger, env);
+    }
+
+    @NonNull
+    public static <R, T> Field<List<T>> readOptionalListField(
+            @NonNull JSONObject json,
+            @NonNull String key,
+            boolean overridable,
+            @Nullable Field<List<T>> fallback,
+            @NonNull Function2<ParsingEnvironment, R, T> creator,
             @NonNull ListValidator<T> validator,
             @NonNull ParsingErrorLogger logger,
             @NonNull ParsingEnvironment env) {

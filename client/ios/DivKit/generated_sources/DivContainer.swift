@@ -68,34 +68,34 @@ public final class DivContainer: DivBase {
   public let accessibility: DivAccessibility
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
-  public let actions: [DivAction]? // at least 1 elements
+  public let actions: [DivAction]?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let aspect: DivAspect?
-  public let background: [DivBackground]? // at least 1 elements
+  public let background: [DivBackground]?
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal> // default value: start
   public let contentAlignmentVertical: Expression<DivContentAlignmentVertical> // default value: top
-  public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let doubletapActions: [DivAction]? // at least 1 elements
-  public let extensions: [DivExtension]? // at least 1 elements
+  public let disappearActions: [DivDisappearAction]?
+  public let doubletapActions: [DivAction]?
+  public let extensions: [DivExtension]?
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let itemBuilder: DivCollectionItemBuilder?
-  public let items: [Div]? // at least 1 elements
+  public let items: [Div]?
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
   public let lineSeparator: Separator?
-  public let longtapActions: [DivAction]? // at least 1 elements
+  public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets
   public let orientation: Expression<Orientation> // default value: vertical
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
-  public let selectedActions: [DivAction]? // at least 1 elements
+  public let selectedActions: [DivAction]?
   public let separator: Separator?
-  public let tooltips: [DivTooltip]? // at least 1 elements
+  public let tooltips: [DivTooltip]?
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
@@ -103,7 +103,7 @@ public final class DivContainer: DivBase {
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
-  public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
+  public let visibilityActions: [DivVisibilityAction]?
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
@@ -155,9 +155,6 @@ public final class DivContainer: DivBase {
   static let actionAnimationValidator: AnyValueValidator<DivAnimation> =
     makeNoOpValueValidator()
 
-  static let actionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
     makeNoOpValueValidator()
 
@@ -169,9 +166,6 @@ public final class DivContainer: DivBase {
 
   static let aspectValidator: AnyValueValidator<DivAspect> =
     makeNoOpValueValidator()
-
-  static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
-    makeArrayValidator(minItems: 1)
 
   static let borderValidator: AnyValueValidator<DivBorder> =
     makeNoOpValueValidator()
@@ -185,15 +179,6 @@ public final class DivContainer: DivBase {
   static let contentAlignmentVerticalValidator: AnyValueValidator<DivContentAlignmentVertical> =
     makeNoOpValueValidator()
 
-  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
-    makeArrayValidator(minItems: 1)
-
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
@@ -206,17 +191,11 @@ public final class DivContainer: DivBase {
   static let itemBuilderValidator: AnyValueValidator<DivCollectionItemBuilder> =
     makeNoOpValueValidator()
 
-  static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeArrayValidator(minItems: 1)
-
   static let layoutModeValidator: AnyValueValidator<DivContainer.LayoutMode> =
     makeNoOpValueValidator()
 
   static let lineSeparatorValidator: AnyValueValidator<DivContainer.Separator> =
     makeNoOpValueValidator()
-
-  static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
 
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
@@ -230,14 +209,8 @@ public final class DivContainer: DivBase {
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let separatorValidator: AnyValueValidator<DivContainer.Separator> =
     makeNoOpValueValidator()
-
-  static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
-    makeArrayValidator(minItems: 1)
 
   static let transformValidator: AnyValueValidator<DivTransform> =
     makeNoOpValueValidator()
@@ -259,9 +232,6 @@ public final class DivContainer: DivBase {
 
   static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
     makeNoOpValueValidator()
-
-  static let visibilityActionsValidator: AnyArrayValueValidator<DivVisibilityAction> =
-    makeArrayValidator(minItems: 1)
 
   static let widthValidator: AnyValueValidator<DivSize> =
     makeNoOpValueValidator()

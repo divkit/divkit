@@ -5,14 +5,8 @@ import Foundation
 import Serialization
 
 public final class DivDownloadCallbacks {
-  public let onFailActions: [DivAction]? // at least 1 elements
-  public let onSuccessActions: [DivAction]? // at least 1 elements
-
-  static let onFailActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let onSuccessActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
+  public let onFailActions: [DivAction]?
+  public let onSuccessActions: [DivAction]?
 
   init(
     onFailActions: [DivAction]? = nil,

@@ -260,7 +260,7 @@ def type_property_build(dictionary: Dict[str, any],
             return RawArray(min_items=dictionary.get('minItems', 0)), []
         items_types: Dict[str, any] = dictionary.get('items')
         single_name: str = name[:-1] if name.endswith('s') else name
-        min_items: int = dictionary.get('minItems', 1)
+        min_items: int = dictionary.get('minItems', 0)
         strict_parsing: bool = dictionary.get('strictParsing', False)
         property_type, declarations = type_property_build(dictionary=items_types,
                                                           outer_name=single_name,

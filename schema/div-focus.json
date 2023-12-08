@@ -19,7 +19,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_focus_on_focus"
     },
     "on_blur": {
@@ -27,7 +26,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_focus_on_blur"
     },
     "next_focus_ids": {

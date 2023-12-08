@@ -33,7 +33,6 @@
       "items": {
         "$ref": "div-background.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_background"
     },
     "paddings": {
@@ -75,7 +74,6 @@
       "items": {
         "$ref": "div-visibility-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_visibility_actions"
     },
     "disappear_actions": {
@@ -83,7 +81,6 @@
       "items": {
         "$ref": "div-disappear-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_disappear_actions"
     },
     "tooltips": {
@@ -91,7 +88,6 @@
       "items": {
         "$ref": "div-tooltip.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_tooltips"
     },
     "accessibility": {
@@ -103,7 +99,6 @@
       "items": {
         "$ref": "div-extension.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_extensions"
     },
     "transition_triggers": {
@@ -132,7 +127,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_base_selected_actions"
     },
     "focus": {

@@ -62,7 +62,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_range_actions"
         },
         "line_height": {
@@ -148,7 +147,6 @@
           "items": {
             "$ref": "div-action.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_ellipsis_actions"
         },
         "ranges": {

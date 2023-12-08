@@ -9,19 +9,19 @@ public protocol DivBase: DivBlockModeling {
   var alignmentHorizontal: Expression<DivAlignmentHorizontal>? { get }
   var alignmentVertical: Expression<DivAlignmentVertical>? { get }
   var alpha: Expression<Double> { get } // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
-  var background: [DivBackground]? { get } // at least 1 elements
+  var background: [DivBackground]? { get }
   var border: DivBorder { get }
   var columnSpan: Expression<Int>? { get } // constraint: number >= 0
-  var disappearActions: [DivDisappearAction]? { get } // at least 1 elements
-  var extensions: [DivExtension]? { get } // at least 1 elements
+  var disappearActions: [DivDisappearAction]? { get }
+  var extensions: [DivExtension]? { get }
   var focus: DivFocus? { get }
   var height: DivSize { get } // default value: .divWrapContentSize(DivWrapContentSize())
   var id: String? { get }
   var margins: DivEdgeInsets { get }
   var paddings: DivEdgeInsets { get }
   var rowSpan: Expression<Int>? { get } // constraint: number >= 0
-  var selectedActions: [DivAction]? { get } // at least 1 elements
-  var tooltips: [DivTooltip]? { get } // at least 1 elements
+  var selectedActions: [DivAction]? { get }
+  var tooltips: [DivTooltip]? { get }
   var transform: DivTransform { get }
   var transitionChange: DivChangeTransition? { get }
   var transitionIn: DivAppearanceTransition? { get }
@@ -29,7 +29,7 @@ public protocol DivBase: DivBlockModeling {
   var transitionTriggers: [DivTransitionTrigger]? { get } // at least 1 elements
   var visibility: Expression<DivVisibility> { get } // default value: visible
   var visibilityAction: DivVisibilityAction? { get }
-  var visibilityActions: [DivVisibilityAction]? { get } // at least 1 elements
+  var visibilityActions: [DivVisibilityAction]? { get }
   var width: DivSize { get } // default value: .divMatchParentSize(DivMatchParentSize())
   func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal?
   func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical?

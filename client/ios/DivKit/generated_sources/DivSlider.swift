@@ -102,11 +102,11 @@ public final class DivSlider: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
-  public let background: [DivBackground]? // at least 1 elements
+  public let background: [DivBackground]?
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let extensions: [DivExtension]? // at least 1 elements
+  public let disappearActions: [DivDisappearAction]?
+  public let extensions: [DivExtension]?
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
@@ -117,7 +117,7 @@ public final class DivSlider: DivBase {
   public let ranges: [Range]? // at least 1 elements
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let secondaryValueAccessibility: DivAccessibility
-  public let selectedActions: [DivAction]? // at least 1 elements
+  public let selectedActions: [DivAction]?
   public let thumbSecondaryStyle: DivDrawable?
   public let thumbSecondaryTextStyle: TextStyle?
   public let thumbSecondaryValueVariable: String?
@@ -126,7 +126,7 @@ public final class DivSlider: DivBase {
   public let thumbValueVariable: String?
   public let tickMarkActiveStyle: DivDrawable?
   public let tickMarkInactiveStyle: DivDrawable?
-  public let tooltips: [DivTooltip]? // at least 1 elements
+  public let tooltips: [DivTooltip]?
   public let trackActiveStyle: DivDrawable
   public let trackInactiveStyle: DivDrawable
   public let transform: DivTransform
@@ -136,7 +136,7 @@ public final class DivSlider: DivBase {
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
-  public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
+  public let visibilityActions: [DivVisibilityAction]?
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
@@ -183,20 +183,11 @@ public final class DivSlider: DivBase {
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
-  static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
-    makeArrayValidator(minItems: 1)
-
   static let borderValidator: AnyValueValidator<DivBorder> =
     makeNoOpValueValidator()
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
-    makeArrayValidator(minItems: 1)
 
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
@@ -222,9 +213,6 @@ public final class DivSlider: DivBase {
   static let secondaryValueAccessibilityValidator: AnyValueValidator<DivAccessibility> =
     makeNoOpValueValidator()
 
-  static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let thumbSecondaryStyleValidator: AnyValueValidator<DivDrawable> =
     makeNoOpValueValidator()
 
@@ -246,9 +234,6 @@ public final class DivSlider: DivBase {
   static let tickMarkInactiveStyleValidator: AnyValueValidator<DivDrawable> =
     makeNoOpValueValidator()
 
-  static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
-    makeArrayValidator(minItems: 1)
-
   static let transformValidator: AnyValueValidator<DivTransform> =
     makeNoOpValueValidator()
 
@@ -269,9 +254,6 @@ public final class DivSlider: DivBase {
 
   static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
     makeNoOpValueValidator()
-
-  static let visibilityActionsValidator: AnyArrayValueValidator<DivVisibilityAction> =
-    makeArrayValidator(minItems: 1)
 
   static let widthValidator: AnyValueValidator<DivSize> =
     makeNoOpValueValidator()

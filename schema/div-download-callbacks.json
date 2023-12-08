@@ -7,7 +7,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_download_callbacks_on_fail_actions"
     },
     "on_success_actions": {
@@ -15,7 +14,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_download_callbacks_on_success_actions"
     }
   }

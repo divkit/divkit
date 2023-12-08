@@ -6,7 +6,7 @@ import Serialization
 
 public final class DivText: DivBase {
   public final class Ellipsis {
-    public let actions: [DivAction]? // at least 1 elements
+    public let actions: [DivAction]?
     public let images: [Image]? // at least 1 elements
     public let ranges: [Range]? // at least 1 elements
     public let text: Expression<String>
@@ -14,9 +14,6 @@ public final class DivText: DivBase {
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
     }
-
-    static let actionsValidator: AnyArrayValueValidator<DivAction> =
-      makeArrayValidator(minItems: 1)
 
     static let imagesValidator: AnyArrayValueValidator<DivText.Image> =
       makeArrayValidator(minItems: 1)
@@ -94,7 +91,7 @@ public final class DivText: DivBase {
   }
 
   public final class Range {
-    public let actions: [DivAction]? // at least 1 elements
+    public let actions: [DivAction]?
     public let background: DivTextRangeBackground?
     public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
@@ -158,9 +155,6 @@ public final class DivText: DivBase {
     public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle? {
       resolver.resolveStringBasedValue(expression: underline, initializer: DivLineStyle.init(rawValue:))
     }
-
-    static let actionsValidator: AnyArrayValueValidator<DivAction> =
-      makeArrayValidator(minItems: 1)
 
     static let backgroundValidator: AnyValueValidator<DivTextRangeBackground> =
       makeNoOpValueValidator()
@@ -245,18 +239,18 @@ public final class DivText: DivBase {
   public let accessibility: DivAccessibility
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
-  public let actions: [DivAction]? // at least 1 elements
+  public let actions: [DivAction]?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let autoEllipsize: Expression<Bool>?
-  public let background: [DivBackground]? // at least 1 elements
+  public let background: [DivBackground]?
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
-  public let disappearActions: [DivDisappearAction]? // at least 1 elements
-  public let doubletapActions: [DivAction]? // at least 1 elements
+  public let disappearActions: [DivDisappearAction]?
+  public let doubletapActions: [DivAction]?
   public let ellipsis: Ellipsis?
-  public let extensions: [DivExtension]? // at least 1 elements
+  public let extensions: [DivExtension]?
   public let focus: DivFocus?
   public let focusedTextColor: Expression<Color>?
   public let fontFamily: Expression<String>?
@@ -268,7 +262,7 @@ public final class DivText: DivBase {
   public let images: [Image]? // at least 1 elements
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
-  public let longtapActions: [DivAction]? // at least 1 elements
+  public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets
   public let maxLines: Expression<Int>? // constraint: number >= 0
   public let minHiddenLines: Expression<Int>? // constraint: number >= 0
@@ -276,7 +270,7 @@ public final class DivText: DivBase {
   public let ranges: [Range]? // at least 1 elements
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectable: Expression<Bool> // default value: false
-  public let selectedActions: [DivAction]? // at least 1 elements
+  public let selectedActions: [DivAction]?
   public let strike: Expression<DivLineStyle> // default value: none
   public let text: Expression<CFString>
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
@@ -284,7 +278,7 @@ public final class DivText: DivBase {
   public let textColor: Expression<Color> // default value: #FF000000
   public let textGradient: DivTextGradient?
   public let textShadow: DivShadow?
-  public let tooltips: [DivTooltip]? // at least 1 elements
+  public let tooltips: [DivTooltip]?
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
@@ -293,7 +287,7 @@ public final class DivText: DivBase {
   public let underline: Expression<DivLineStyle> // default value: none
   public let visibility: Expression<DivVisibility> // default value: visible
   public let visibilityAction: DivVisibilityAction?
-  public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
+  public let visibilityActions: [DivVisibilityAction]?
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
@@ -397,9 +391,6 @@ public final class DivText: DivBase {
   static let actionAnimationValidator: AnyValueValidator<DivAnimation> =
     makeNoOpValueValidator()
 
-  static let actionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
     makeNoOpValueValidator()
 
@@ -412,26 +403,14 @@ public final class DivText: DivBase {
   static let autoEllipsizeValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
-  static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
-    makeArrayValidator(minItems: 1)
-
   static let borderValidator: AnyValueValidator<DivBorder> =
     makeNoOpValueValidator()
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let disappearActionsValidator: AnyArrayValueValidator<DivDisappearAction> =
-    makeArrayValidator(minItems: 1)
-
-  static let doubletapActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let ellipsisValidator: AnyValueValidator<DivText.Ellipsis> =
     makeNoOpValueValidator()
-
-  static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
-    makeArrayValidator(minItems: 1)
 
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
@@ -463,9 +442,6 @@ public final class DivText: DivBase {
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
 
@@ -487,9 +463,6 @@ public final class DivText: DivBase {
   static let selectableValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
-  static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
-    makeArrayValidator(minItems: 1)
-
   static let strikeValidator: AnyValueValidator<DivLineStyle> =
     makeNoOpValueValidator()
 
@@ -507,9 +480,6 @@ public final class DivText: DivBase {
 
   static let textShadowValidator: AnyValueValidator<DivShadow> =
     makeNoOpValueValidator()
-
-  static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
-    makeArrayValidator(minItems: 1)
 
   static let transformValidator: AnyValueValidator<DivTransform> =
     makeNoOpValueValidator()
@@ -534,9 +504,6 @@ public final class DivText: DivBase {
 
   static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
     makeNoOpValueValidator()
-
-  static let visibilityActionsValidator: AnyArrayValueValidator<DivVisibilityAction> =
-    makeArrayValidator(minItems: 1)
 
   static let widthValidator: AnyValueValidator<DivSize> =
     makeNoOpValueValidator()

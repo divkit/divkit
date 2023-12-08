@@ -79,7 +79,6 @@
       "items": {
         "$ref": "div-variable.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_data_variables"
     },
     "variable_triggers": {
@@ -87,7 +86,6 @@
       "items": {
         "$ref": "div-trigger.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_data_variable_triggers"
     },
     "timers": {
@@ -95,7 +93,6 @@
       "items": {
         "$ref": "div-timer.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_data_timers"
     }
   },

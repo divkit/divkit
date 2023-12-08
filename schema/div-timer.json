@@ -26,7 +26,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_timer_tick_actions"
     },
     "end_actions": {
@@ -34,7 +33,6 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_timer_end_actions"
     }
   },

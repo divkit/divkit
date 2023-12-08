@@ -5,8 +5,8 @@ import Foundation
 import Serialization
 
 public final class DivDownloadCallbacksTemplate: TemplateValue {
-  public let onFailActions: Field<[DivActionTemplate]>? // at least 1 elements
-  public let onSuccessActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let onFailActions: Field<[DivActionTemplate]>?
+  public let onSuccessActions: Field<[DivActionTemplate]>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
@@ -24,8 +24,8 @@ public final class DivDownloadCallbacksTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDownloadCallbacksTemplate?) -> DeserializationResult<DivDownloadCallbacks> {
-    let onFailActionsValue = parent?.onFailActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onFailActionsValidator, useOnlyLinks: true) ?? .noValue
-    let onSuccessActionsValue = parent?.onSuccessActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onSuccessActionsValidator, useOnlyLinks: true) ?? .noValue
+    let onFailActionsValue = parent?.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let onSuccessActionsValue = parent?.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
       onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) }
@@ -46,19 +46,19 @@ public final class DivDownloadCallbacksTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "on_fail_actions":
-        onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.onFailActionsValidator, type: DivActionTemplate.self).merged(with: onFailActionsValue)
+        onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFailActionsValue)
       case "on_success_actions":
-        onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.onSuccessActionsValidator, type: DivActionTemplate.self).merged(with: onSuccessActionsValue)
+        onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onSuccessActionsValue)
       case parent?.onFailActions?.link:
-        onFailActionsValue = onFailActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.onFailActionsValidator, type: DivActionTemplate.self))
+        onFailActionsValue = onFailActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
       case parent?.onSuccessActions?.link:
-        onSuccessActionsValue = onSuccessActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.onSuccessActionsValidator, type: DivActionTemplate.self))
+        onSuccessActionsValue = onSuccessActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      onFailActionsValue = onFailActionsValue.merged(with: parent.onFailActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onFailActionsValidator, useOnlyLinks: true))
-      onSuccessActionsValue = onSuccessActionsValue.merged(with: parent.onSuccessActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onSuccessActionsValidator, useOnlyLinks: true))
+      onFailActionsValue = onFailActionsValue.merged(with: parent.onFailActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      onSuccessActionsValue = onSuccessActionsValue.merged(with: parent.onSuccessActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
