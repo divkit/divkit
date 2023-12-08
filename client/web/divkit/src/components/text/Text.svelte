@@ -16,7 +16,6 @@
     import TextRangeView from './TextRange.svelte';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm } from '../../utils/pxToEm';
-    import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { getBackground } from '../../utils/background';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
@@ -35,17 +34,10 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    let hasError = false;
     $: jsonText = rootCtx.getDerivedFromVars(json.text);
     let text = '';
     $: {
-        text = propToString($jsonText, text);
-        if (!text) {
-            hasError = true;
-            rootCtx.logError(wrapError(new Error('Missing "text" prop for div "text"')));
-        } else {
-            hasError = false;
-        }
+        text = propToString($jsonText);
     }
     $: jsonRanges = rootCtx.getDerivedFromVars(json.ranges);
     $: jsonImages = rootCtx.getDerivedFromVars(json.images);
@@ -398,55 +390,53 @@
     });
 </script>
 
-{#if !hasError}
-    <Outer
-        cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
-        {json}
-        {origJson}
-        {templateContext}
-        {layoutParams}
-    >
-        <span class={genClassName('text__inner', css, innerMods)} style={makeStyle(style)}>
-            {#if renderList.length}
-                {#each renderList as item, index}
-                    {#if 'text' in item}
-                        {#if item.text}
-                            <TextRangeView
-                                text={item.text}
-                                rootFontSize={fontSize}
-                                textStyles={item.textStyles}
-                                {singleline}
-                                actions={item.actions}
-                            />
-                        {/if}
-                    {:else if item.image}
-                        <span style={makeStyle(item.image.wrapperStyle)}><img
-                                class={css.text__image}
-                                src={item.image.url}
-                                loading="lazy"
-                                decoding="async"
-                                aria-hidden="true"
-                                alt=""
-                                style={makeStyle({
-                                    width: item.image.width,
-                                    height: item.image.height,
-                                    // Normalizes line-height for the containing text line
-                                    'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
-                                    'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
-                                    filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
-                                })}
-                                on:error={onImgError}
-                            ></span>
+<Outer
+    cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
+    {json}
+    {origJson}
+    {templateContext}
+    {layoutParams}
+>
+    <span class={genClassName('text__inner', css, innerMods)} style={makeStyle(style)}>
+        {#if renderList.length}
+            {#each renderList as item, index}
+                {#if 'text' in item}
+                    {#if item.text}
+                        <TextRangeView
+                            text={item.text}
+                            rootFontSize={fontSize}
+                            textStyles={item.textStyles}
+                            {singleline}
+                            actions={item.actions}
+                        />
                     {/if}
-                {/each}
-            {:else}
-                <TextRangeView
-                    {text}
-                    rootFontSize={fontSize}
-                    textStyles={$jsonRootTextStyles}
-                    {singleline}
-                />
-            {/if}
-        </span>
-    </Outer>
-{/if}
+                {:else if item.image}
+                    <span style={makeStyle(item.image.wrapperStyle)}><img
+                            class={css.text__image}
+                            src={item.image.url}
+                            loading="lazy"
+                            decoding="async"
+                            aria-hidden="true"
+                            alt=""
+                            style={makeStyle({
+                                width: item.image.width,
+                                height: item.image.height,
+                                // Normalizes line-height for the containing text line
+                                'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
+                                'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
+                                filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
+                            })}
+                            on:error={onImgError}
+                        ></span>
+                {/if}
+            {/each}
+        {:else}
+            <TextRangeView
+                {text}
+                rootFontSize={fontSize}
+                textStyles={$jsonRootTextStyles}
+                {singleline}
+            />
+        {/if}
+    </span>
+</Outer>
