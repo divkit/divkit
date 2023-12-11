@@ -114,7 +114,7 @@ internal class DivStateCacheImpl(
     }
 
     @AnyThread
-    fun clear() {
+    override fun clear() {
         cache.clear()
         rootState.clear()
     }
@@ -125,6 +125,34 @@ internal class DivStateCacheImpl(
 
         override fun handleError(e: RuntimeException) {
             Assert.fail("", e)
+        }
+    }
+
+    @AnyThread
+    override fun resetCard(cardId: String) {
+        resetCardStates(cardId)
+        resetCardRootState(cardId)
+    }
+
+    @AnyThread
+    private fun resetCardStates(cardId: String) {
+        synchronized(cache) {
+            cache.remove(cardId)
+
+            singleThreadExecutor.post {
+                divStateDatabase.divStateDao.deleteByCardId(cardId)
+            }
+        }
+    }
+
+    @AnyThread
+    private fun resetCardRootState(cardId: String) {
+        synchronized(rootState) {
+            rootState.remove(cardId)
+
+            singleThreadExecutor.post {
+                divStateDatabase.divStateDao.deleteCardRootState(cardId)
+            }
         }
     }
 }

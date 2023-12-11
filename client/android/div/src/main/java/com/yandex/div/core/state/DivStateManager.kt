@@ -55,4 +55,18 @@ internal class DivStateManager @Inject constructor(
             }
         }
     }
+
+    fun reset(tags: List<DivDataTag>) {
+        if (tags.isEmpty()) {
+            states.clear()
+            cache.clear()
+            temporaryCache.clear()
+        } else {
+            tags.forEach { tag ->
+                states.remove(tag)
+                cache.resetCard(tag.id)
+                temporaryCache.resetCard(tag.id)
+            }
+        }
+    }
 }

@@ -20,8 +20,13 @@ class InMemoryDivStateCache : DivStateCache {
 
     override fun getRootState(cardId: String) = rootStates[cardId]
 
-    internal fun clear() {
+    override fun clear() {
         states.clear()
         rootStates.clear()
+    }
+
+    override fun resetCard(cardId: String) {
+        rootStates.remove(cardId)
+        states.keys.removeAll { key -> key.first == cardId }
     }
 }

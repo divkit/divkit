@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2
 
 import android.view.View
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivVisibilityChangeListener
@@ -84,7 +85,16 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
         visibilityListener.onViewsVisibilityChanged(visibleViews)
     }
 
-    fun reset() {
+    fun reset(tags: List<DivDataTag>) {
+        if (tags.isEmpty()) {
+            actionLogCounters.clear()
+        } else {
+            tags.forEach { tag ->
+                actionLogCounters.keys.removeAll {
+                    compositeLogId -> compositeLogId.dataTag == tag.id
+                }
+            }
+        }
         actionLogCounters.clear()
     }
 

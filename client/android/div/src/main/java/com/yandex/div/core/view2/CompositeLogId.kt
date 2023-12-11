@@ -2,37 +2,21 @@ package com.yandex.div.core.view2
 
 import com.yandex.div2.DivSightAction
 
-internal class CompositeLogId(
-    private val scopeLogId: String,
-    private val dataTag: String,
-    private val actionLogId: String
+internal data class CompositeLogId(
+    val dataTag: String,
+    val scopeLogId: String,
+    val actionLogId: String
 ) {
 
-    private val compositeLogId by lazy { "$scopeLogId#$dataTag#$actionLogId" }
+    private val compositeLogId by lazy { formatCompositeLogId() }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CompositeLogId
-
-        if (scopeLogId != other.scopeLogId) return false
-        if (actionLogId != other.actionLogId) return false
-        if (dataTag != other.dataTag) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = scopeLogId.hashCode()
-        result = 31 * result + actionLogId.hashCode()
-        result = 31 * result + dataTag.hashCode()
-        return result
+    private fun formatCompositeLogId(): String {
+        return dataTag + (if (scopeLogId.isNotEmpty()) "#$scopeLogId" else "") + "#$actionLogId"
     }
 
     override fun toString() = compositeLogId
 }
 
 internal fun compositeLogIdOf(scope: Div2View, action: DivSightAction): CompositeLogId {
-    return CompositeLogId(scopeLogId = scope.logId, actionLogId = action.logId, dataTag = scope.dataTag.id)
+    return CompositeLogId(dataTag = scope.dataTag.id, scopeLogId = scope.logId, actionLogId = action.logId)
 }

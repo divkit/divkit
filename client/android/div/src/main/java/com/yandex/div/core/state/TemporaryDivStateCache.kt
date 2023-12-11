@@ -29,4 +29,9 @@ internal class TemporaryDivStateCache @Inject constructor() {
     fun putRootState(cardId: String, stateId: String) {
         putState(cardId, "/", stateId)
     }
+
+    @AnyThread
+    fun clear() {
+        temporaryCache.clear()
+    }
 }

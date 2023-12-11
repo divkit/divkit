@@ -77,7 +77,7 @@ class DivVisibilityActionDispatcherTest {
         repeat(4) {
             dispatcher.dispatchAction(divView, mock(), action)
         }
-        dispatcher.reset()
+        dispatcher.reset(emptyList())
         dispatcher.dispatchAction(divView, mock(), action)
 
         verify(contextActionHandler, times(3)).handleAction(eq(action) as DivSightAction, eq(divView))

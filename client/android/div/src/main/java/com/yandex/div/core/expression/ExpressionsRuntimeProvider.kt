@@ -36,7 +36,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     private val logger: Div2Logger,
     private val storedValuesController: StoredValuesController,
 ) {
-    private val runtimes = Collections.synchronizedMap(mutableMapOf<Any, ExpressionsRuntime>())
+    private val runtimes = Collections.synchronizedMap(mutableMapOf<String, ExpressionsRuntime>())
 
     internal fun getOrCreate(tag: DivDataTag, data: DivData): ExpressionsRuntime {
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
@@ -44,6 +44,16 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         ensureVariablesSynced(result.variableController, data, errorCollector)
         result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
+    }
+
+    fun reset(tags: List<DivDataTag>) {
+        if (tags.isEmpty()) {
+            runtimes.clear()
+        } else {
+            tags.forEach { tag ->
+                runtimes.remove(tag.id)
+            }
+        }
     }
 
     private fun ensureVariablesSynced(

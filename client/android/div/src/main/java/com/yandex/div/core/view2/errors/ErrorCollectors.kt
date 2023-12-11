@@ -10,6 +10,7 @@ import javax.inject.Inject
 @Mockable
 internal class ErrorCollectors @Inject constructor() {
     private val collectors = mutableMapOf<String, ErrorCollector>()
+
     fun getOrCreate(tag: DivDataTag, divData: DivData?): ErrorCollector = synchronized(collectors) {
         return collectors.getOrPut(tag.id) { ErrorCollector() }.apply {
             attachParsingErrors(divData)
@@ -19,6 +20,16 @@ internal class ErrorCollectors @Inject constructor() {
     fun getOrNull(tag: DivDataTag, divData: DivData?): ErrorCollector? = synchronized(collectors) {
         return collectors[tag.id]?.apply {
             attachParsingErrors(divData)
+        }
+    }
+
+    fun reset(tags: List<DivDataTag>) {
+        if (tags.isEmpty()) {
+            collectors.clear()
+        } else {
+            tags.forEach { tag ->
+                collectors.remove(tag.id)
+            }
         }
     }
 }

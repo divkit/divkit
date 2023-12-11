@@ -23,4 +23,10 @@ public interface DivStateCache {
     @AnyThread
     @Nullable
     String getRootState(@NonNull String cardId);
+
+    @AnyThread
+    void clear();
+
+    @AnyThread
+    void resetCard(@NonNull String cardId);
 }

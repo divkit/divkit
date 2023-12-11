@@ -8,10 +8,12 @@ import android.util.AttributeSet
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.IntDef
 import androidx.annotation.MainThread
 import androidx.annotation.StyleRes
 import androidx.core.view.LayoutInflaterCompat
 import androidx.lifecycle.LifecycleOwner
+import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
@@ -132,11 +134,27 @@ class Div2Context @MainThread private constructor(
         div2Component.div2Builder
     }
 
-    @Deprecated("use warmUp() instead")
+    @Deprecated("use warmUp() instead", ReplaceWith("warmUp()"))
     fun warmUp2() = warmUp()
 
+    @Deprecated("use reset() instead", ReplaceWith("reset(flags = RESET_VISIBILITY_COUNTERS)", "com.yandex.div.core.Div2Context.Companion.RESET_VISIBILITY_COUNTERS"))
     fun resetVisibilityCounters() {
-        div2Component.visibilityActionDispatcher.reset()
+        reset(flags = RESET_VISIBILITY_COUNTERS)
+    }
+
+    fun reset(@ResetFlag flags: Int = RESET_NONE, tags: List<DivDataTag> = emptyList()) {
+        if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
+            div2Component.expressionsRuntimeProvider.reset(tags)
+        }
+        if (flags and RESET_ERROR_COLLECTORS != 0) {
+            div2Component.errorCollectors.reset(tags)
+        }
+        if (flags and RESET_SELECTED_STATES != 0) {
+            div2Component.stateManager.reset(tags)
+        }
+        if (flags and RESET_VISIBILITY_COUNTERS != 0) {
+            div2Component.visibilityActionDispatcher.reset(tags)
+        }
     }
 
     fun childContext(baseContext: ContextThemeWrapper): Div2Context {
@@ -157,6 +175,26 @@ class Div2Context @MainThread private constructor(
      */
     fun childContext(baseContext: ContextThemeWrapper, lifecycleOwner: LifecycleOwner?): Div2Context {
         return Div2Context(baseContext, div2Component, lifecycleOwner)
+    }
+
+    @IntDef(
+        flag = true,
+        value = [
+            RESET_NONE,
+            RESET_EXPRESSION_RUNTIMES,
+            RESET_ERROR_COLLECTORS,
+            RESET_SELECTED_STATES,
+            RESET_VISIBILITY_COUNTERS
+        ]
+    )
+    annotation class ResetFlag
+
+    companion object {
+        private const val RESET_NONE = 0
+        const val RESET_EXPRESSION_RUNTIMES = 1 shl 0
+        const val RESET_ERROR_COLLECTORS = 1 shl 1
+        const val RESET_SELECTED_STATES = 1 shl 2
+        const val RESET_VISIBILITY_COUNTERS = 1 shl 3
     }
 
     private class Div2InflaterFactory(
