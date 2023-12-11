@@ -143,6 +143,8 @@ internal object ShadowCache {
         }
 
         outAllocation.copyTo(out)
+        outAllocation.destroy()
+        inAllocation.destroy()
     }
 
     private fun Bitmap.toNinePatch() =

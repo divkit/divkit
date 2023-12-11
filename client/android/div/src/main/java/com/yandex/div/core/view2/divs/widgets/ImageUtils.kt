@@ -87,6 +87,8 @@ internal fun Bitmap.getBlurredBitmap(
         forEach(output)
     }
     output.copyTo(bitmap)
+    input.destroy()
+    output.destroy()
     return bitmap
 }
 
