@@ -13,9 +13,6 @@ public final class DivCurrencyInputMask: DivInputMaskBase {
     resolver.resolveStringBasedValue(expression: locale, initializer: { $0 })
   }
 
-  static let localeValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
   init(
     locale: Expression<String>? = nil,
     rawTextVariable: String

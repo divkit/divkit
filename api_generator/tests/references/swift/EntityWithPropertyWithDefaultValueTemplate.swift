@@ -112,17 +112,14 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
   }
 
   public static let type: String = "entity_with_property_with_default_value"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let int: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let nested: Field<NestedTemplate>?
   public let url: Field<Expression<URL>>? // valid schemes: [https]; default value: https://yandex.ru
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       int: try dictionary.getOptionalExpressionField("int"),
       nested: try dictionary.getOptionalField("nested", templateToType: templateToType),
       url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
@@ -143,7 +140,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithPropertyWithDefaultValue> {
     let intValue = parent?.int?.resolveOptionalValue(context: context, validator: ResolvedValue.intValidator) ?? .noValue
-    let nestedValue = parent?.nested?.resolveOptionalValue(context: context, validator: ResolvedValue.nestedValidator, useOnlyLinks: true) ?? .noValue
+    let nestedValue = parent?.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },
@@ -170,20 +167,20 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
       case "int":
         intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).merged(with: intValue)
       case "nested":
-        nestedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nestedValidator, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self).merged(with: nestedValue)
+        nestedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self).merged(with: nestedValue)
       case "url":
         urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
       case parent?.int?.link:
         intValue = intValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.intValidator))
       case parent?.nested?.link:
-        nestedValue = nestedValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.nestedValidator, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self))
+        nestedValue = nestedValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self))
       case parent?.url?.link:
         urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator))
       default: break
       }
     }
     if let parent = parent {
-      nestedValue = nestedValue.merged(with: parent.nested?.resolveOptionalValue(context: context, validator: ResolvedValue.nestedValidator, useOnlyLinks: true))
+      nestedValue = nestedValue.merged(with: parent.nested?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },

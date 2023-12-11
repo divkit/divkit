@@ -34,17 +34,8 @@ public final class DivTooltip {
     resolver.resolveStringBasedValue(expression: position, initializer: Position.init(rawValue:))
   }
 
-  static let animationInValidator: AnyValueValidator<DivAnimation> =
-    makeNoOpValueValidator()
-
-  static let animationOutValidator: AnyValueValidator<DivAnimation> =
-    makeNoOpValueValidator()
-
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let offsetValidator: AnyValueValidator<DivPoint> =
-    makeNoOpValueValidator()
 
   init(
     animationIn: DivAnimation? = nil,

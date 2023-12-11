@@ -14,9 +14,6 @@ public final class DivShapeDrawable {
     resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:))
   }
 
-  static let strokeValidator: AnyValueValidator<DivStroke> =
-    makeNoOpValueValidator()
-
   init(
     color: Expression<Color>,
     shape: DivShape,

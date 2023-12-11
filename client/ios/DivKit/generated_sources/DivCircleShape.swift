@@ -14,15 +14,6 @@ public final class DivCircleShape {
     resolver.resolveStringBasedValue(expression: backgroundColor, initializer: Color.color(withHexString:))
   }
 
-  static let backgroundColorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
-  static let radiusValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
-  static let strokeValidator: AnyValueValidator<DivStroke> =
-    makeNoOpValueValidator()
-
   init(
     backgroundColor: Expression<Color>? = nil,
     radius: DivFixedSize? = nil,

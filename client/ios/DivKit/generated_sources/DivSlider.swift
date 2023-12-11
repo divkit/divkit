@@ -20,15 +20,6 @@ public final class DivSlider: DivBase {
       resolver.resolveNumericValue(expression: start)
     }
 
-    static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
-      makeNoOpValueValidator()
-
-    static let trackActiveStyleValidator: AnyValueValidator<DivDrawable> =
-      makeNoOpValueValidator()
-
-    static let trackInactiveStyleValidator: AnyValueValidator<DivDrawable> =
-      makeNoOpValueValidator()
-
     init(
       end: Expression<Int>? = nil,
       margins: DivEdgeInsets? = nil,
@@ -69,18 +60,6 @@ public final class DivSlider: DivBase {
 
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
-
-    static let fontSizeUnitValidator: AnyValueValidator<DivSizeUnit> =
-      makeNoOpValueValidator()
-
-    static let fontWeightValidator: AnyValueValidator<DivFontWeight> =
-      makeNoOpValueValidator()
-
-    static let offsetValidator: AnyValueValidator<DivPoint> =
-      makeNoOpValueValidator()
-
-    static let textColorValidator: AnyValueValidator<Color> =
-      makeNoOpValueValidator()
 
     init(
       fontSize: Expression<Int>,
@@ -171,38 +150,11 @@ public final class DivSlider: DivBase {
     resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
-  static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
-    makeNoOpValueValidator()
-
-  static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
-    makeNoOpValueValidator()
-
-  static let alignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
-    makeNoOpValueValidator()
-
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
-  static let borderValidator: AnyValueValidator<DivBorder> =
-    makeNoOpValueValidator()
-
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let focusValidator: AnyValueValidator<DivFocus> =
-    makeNoOpValueValidator()
-
-  static let heightValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
-
-  static let idValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
-
-  static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
 
   static let rangesValidator: AnyArrayValueValidator<DivSlider.Range> =
     makeArrayValidator(minItems: 1)
@@ -210,53 +162,8 @@ public final class DivSlider: DivBase {
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let secondaryValueAccessibilityValidator: AnyValueValidator<DivAccessibility> =
-    makeNoOpValueValidator()
-
-  static let thumbSecondaryStyleValidator: AnyValueValidator<DivDrawable> =
-    makeNoOpValueValidator()
-
-  static let thumbSecondaryTextStyleValidator: AnyValueValidator<DivSlider.TextStyle> =
-    makeNoOpValueValidator()
-
-  static let thumbSecondaryValueVariableValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let thumbTextStyleValidator: AnyValueValidator<DivSlider.TextStyle> =
-    makeNoOpValueValidator()
-
-  static let thumbValueVariableValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let tickMarkActiveStyleValidator: AnyValueValidator<DivDrawable> =
-    makeNoOpValueValidator()
-
-  static let tickMarkInactiveStyleValidator: AnyValueValidator<DivDrawable> =
-    makeNoOpValueValidator()
-
-  static let transformValidator: AnyValueValidator<DivTransform> =
-    makeNoOpValueValidator()
-
-  static let transitionChangeValidator: AnyValueValidator<DivChangeTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionInValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionOutValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
-
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
-
-  static let visibilityValidator: AnyValueValidator<DivVisibility> =
-    makeNoOpValueValidator()
-
-  static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
-    makeNoOpValueValidator()
-
-  static let widthValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
 
   init(
     accessibility: DivAccessibility? = nil,

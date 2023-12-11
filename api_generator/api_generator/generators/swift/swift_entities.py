@@ -34,7 +34,7 @@ PARENT_PROPERTY = Property(
     description_translations={},
     dict_field='type',
     property_type=String(
-        min_length=1,
+        min_length=0,
         formatted=False,
         regex=None,
         enable_optimization=False
@@ -594,9 +594,6 @@ class SwiftProperty(Property):
             constraint = constraint.replace('number', '$0')
             validator_name = 'makeValueValidator'
             validator_args = [f'valueValidator: {{ {constraint} }}']
-        elif self.optional:
-            validator_name = 'makeNoOpValueValidator'
-            validator_args = []
         else:
             return None
 

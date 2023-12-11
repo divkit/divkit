@@ -8,9 +8,6 @@ public final class DivExtension {
   public let id: String
   public let params: [String: Any]?
 
-  static let paramsValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
   init(
     id: String,
     params: [String: Any]? = nil

@@ -35,7 +35,7 @@ public final class DivTabsTemplate: TemplateValue {
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ItemTemplate?) -> DeserializationResult<DivTabs.Item> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let titleValue = parent?.title?.resolveValue(context: context) ?? .noValue
-      let titleClickActionValue = parent?.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true) ?? .noValue
+      let titleClickActionValue = parent?.titleClickAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
         titleValue.errorsOrWarnings?.map { .nestedObjectError(field: "title", error: $0) },
@@ -75,19 +75,19 @@ public final class DivTabsTemplate: TemplateValue {
         case "title":
           titleValue = deserialize(__dictValue).merged(with: titleValue)
         case "title_click_action":
-          titleClickActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titleClickActionValidator, type: DivActionTemplate.self).merged(with: titleClickActionValue)
+          titleClickActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: titleClickActionValue)
         case parent?.div?.link:
           divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
         case parent?.title?.link:
           titleValue = titleValue.merged(with: deserialize(__dictValue))
         case parent?.titleClickAction?.link:
-          titleClickActionValue = titleClickActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titleClickActionValidator, type: DivActionTemplate.self))
+          titleClickActionValue = titleClickActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
         default: break
         }
       }
       if let parent = parent {
         divValue = divValue.merged(with: parent.div?.resolveValue(context: context, useOnlyLinks: true))
-        titleClickActionValue = titleClickActionValue.merged(with: parent.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true))
+        titleClickActionValue = titleClickActionValue.merged(with: parent.titleClickAction?.resolveOptionalValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
@@ -215,24 +215,24 @@ public final class DivTabsTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: TabTitleStyleTemplate?) -> DeserializationResult<DivTabs.TabTitleStyle> {
-      let activeBackgroundColorValue = parent?.activeBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeBackgroundColorValidator) ?? .noValue
-      let activeFontWeightValue = parent?.activeFontWeight?.resolveOptionalValue(context: context, validator: ResolvedValue.activeFontWeightValidator) ?? .noValue
-      let activeTextColorValue = parent?.activeTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeTextColorValidator) ?? .noValue
+      let activeBackgroundColorValue = parent?.activeBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+      let activeFontWeightValue = parent?.activeFontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let activeTextColorValue = parent?.activeTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let animationDurationValue = parent?.animationDuration?.resolveOptionalValue(context: context, validator: ResolvedValue.animationDurationValidator) ?? .noValue
-      let animationTypeValue = parent?.animationType?.resolveOptionalValue(context: context, validator: ResolvedValue.animationTypeValidator) ?? .noValue
+      let animationTypeValue = parent?.animationType?.resolveOptionalValue(context: context) ?? .noValue
       let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
-      let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornersRadiusValidator, useOnlyLinks: true) ?? .noValue
-      let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context, validator: ResolvedValue.fontFamilyValidator) ?? .noValue
+      let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context) ?? .noValue
       let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
-      let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeUnitValidator) ?? .noValue
-      let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValidator) ?? .noValue
-      let inactiveBackgroundColorValue = parent?.inactiveBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveBackgroundColorValidator) ?? .noValue
-      let inactiveFontWeightValue = parent?.inactiveFontWeight?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveFontWeightValidator) ?? .noValue
-      let inactiveTextColorValue = parent?.inactiveTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveTextColorValidator) ?? .noValue
+      let fontSizeUnitValue = parent?.fontSizeUnit?.resolveOptionalValue(context: context) ?? .noValue
+      let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let inactiveBackgroundColorValue = parent?.inactiveBackgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+      let inactiveFontWeightValue = parent?.inactiveFontWeight?.resolveOptionalValue(context: context) ?? .noValue
+      let inactiveTextColorValue = parent?.inactiveTextColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
       let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue
       let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
       let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
-      let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
+      let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let errors = mergeErrors(
         activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_background_color", error: $0) },
         activeFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_font_weight", error: $0) },
@@ -301,33 +301,33 @@ public final class DivTabsTemplate: TemplateValue {
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "active_background_color":
-          activeBackgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeBackgroundColorValidator).merged(with: activeBackgroundColorValue)
+          activeBackgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: activeBackgroundColorValue)
         case "active_font_weight":
-          activeFontWeightValue = deserialize(__dictValue, validator: ResolvedValue.activeFontWeightValidator).merged(with: activeFontWeightValue)
+          activeFontWeightValue = deserialize(__dictValue).merged(with: activeFontWeightValue)
         case "active_text_color":
-          activeTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeTextColorValidator).merged(with: activeTextColorValue)
+          activeTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: activeTextColorValue)
         case "animation_duration":
           animationDurationValue = deserialize(__dictValue, validator: ResolvedValue.animationDurationValidator).merged(with: animationDurationValue)
         case "animation_type":
-          animationTypeValue = deserialize(__dictValue, validator: ResolvedValue.animationTypeValidator).merged(with: animationTypeValue)
+          animationTypeValue = deserialize(__dictValue).merged(with: animationTypeValue)
         case "corner_radius":
           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
         case "corners_radius":
-          cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornersRadiusValidator, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
+          cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
         case "font_family":
-          fontFamilyValue = deserialize(__dictValue, validator: ResolvedValue.fontFamilyValidator).merged(with: fontFamilyValue)
+          fontFamilyValue = deserialize(__dictValue).merged(with: fontFamilyValue)
         case "font_size":
           fontSizeValue = deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator).merged(with: fontSizeValue)
         case "font_size_unit":
-          fontSizeUnitValue = deserialize(__dictValue, validator: ResolvedValue.fontSizeUnitValidator).merged(with: fontSizeUnitValue)
+          fontSizeUnitValue = deserialize(__dictValue).merged(with: fontSizeUnitValue)
         case "font_weight":
-          fontWeightValue = deserialize(__dictValue, validator: ResolvedValue.fontWeightValidator).merged(with: fontWeightValue)
+          fontWeightValue = deserialize(__dictValue).merged(with: fontWeightValue)
         case "inactive_background_color":
-          inactiveBackgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveBackgroundColorValidator).merged(with: inactiveBackgroundColorValue)
+          inactiveBackgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: inactiveBackgroundColorValue)
         case "inactive_font_weight":
-          inactiveFontWeightValue = deserialize(__dictValue, validator: ResolvedValue.inactiveFontWeightValidator).merged(with: inactiveFontWeightValue)
+          inactiveFontWeightValue = deserialize(__dictValue).merged(with: inactiveFontWeightValue)
         case "inactive_text_color":
-          inactiveTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveTextColorValidator).merged(with: inactiveTextColorValue)
+          inactiveTextColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: inactiveTextColorValue)
         case "item_spacing":
           itemSpacingValue = deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator).merged(with: itemSpacingValue)
         case "letter_spacing":
@@ -335,35 +335,35 @@ public final class DivTabsTemplate: TemplateValue {
         case "line_height":
           lineHeightValue = deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator).merged(with: lineHeightValue)
         case "paddings":
-          paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+          paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
         case parent?.activeBackgroundColor?.link:
-          activeBackgroundColorValue = activeBackgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeBackgroundColorValidator))
+          activeBackgroundColorValue = activeBackgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
         case parent?.activeFontWeight?.link:
-          activeFontWeightValue = activeFontWeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.activeFontWeightValidator))
+          activeFontWeightValue = activeFontWeightValue.merged(with: deserialize(__dictValue))
         case parent?.activeTextColor?.link:
-          activeTextColorValue = activeTextColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeTextColorValidator))
+          activeTextColorValue = activeTextColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
         case parent?.animationDuration?.link:
           animationDurationValue = animationDurationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.animationDurationValidator))
         case parent?.animationType?.link:
-          animationTypeValue = animationTypeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.animationTypeValidator))
+          animationTypeValue = animationTypeValue.merged(with: deserialize(__dictValue))
         case parent?.cornerRadius?.link:
           cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator))
         case parent?.cornersRadius?.link:
-          cornersRadiusValue = cornersRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornersRadiusValidator, type: DivCornersRadiusTemplate.self))
+          cornersRadiusValue = cornersRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self))
         case parent?.fontFamily?.link:
-          fontFamilyValue = fontFamilyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.fontFamilyValidator))
+          fontFamilyValue = fontFamilyValue.merged(with: deserialize(__dictValue))
         case parent?.fontSize?.link:
           fontSizeValue = fontSizeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.fontSizeValidator))
         case parent?.fontSizeUnit?.link:
-          fontSizeUnitValue = fontSizeUnitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.fontSizeUnitValidator))
+          fontSizeUnitValue = fontSizeUnitValue.merged(with: deserialize(__dictValue))
         case parent?.fontWeight?.link:
-          fontWeightValue = fontWeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.fontWeightValidator))
+          fontWeightValue = fontWeightValue.merged(with: deserialize(__dictValue))
         case parent?.inactiveBackgroundColor?.link:
-          inactiveBackgroundColorValue = inactiveBackgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveBackgroundColorValidator))
+          inactiveBackgroundColorValue = inactiveBackgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
         case parent?.inactiveFontWeight?.link:
-          inactiveFontWeightValue = inactiveFontWeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.inactiveFontWeightValidator))
+          inactiveFontWeightValue = inactiveFontWeightValue.merged(with: deserialize(__dictValue))
         case parent?.inactiveTextColor?.link:
-          inactiveTextColorValue = inactiveTextColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveTextColorValidator))
+          inactiveTextColorValue = inactiveTextColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
         case parent?.itemSpacing?.link:
           itemSpacingValue = itemSpacingValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator))
         case parent?.letterSpacing?.link:
@@ -371,13 +371,13 @@ public final class DivTabsTemplate: TemplateValue {
         case parent?.lineHeight?.link:
           lineHeightValue = lineHeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.lineHeightValidator))
         case parent?.paddings?.link:
-          paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self))
+          paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
         default: break
         }
       }
       if let parent = parent {
-        cornersRadiusValue = cornersRadiusValue.merged(with: parent.cornersRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornersRadiusValidator, useOnlyLinks: true))
-        paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
+        cornersRadiusValue = cornersRadiusValue.merged(with: parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true))
+        paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
       }
       let errors = mergeErrors(
         activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_background_color", error: $0) },
@@ -453,7 +453,7 @@ public final class DivTabsTemplate: TemplateValue {
   }
 
   public static let type: String = "tabs"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
@@ -491,13 +491,10 @@ public final class DivTabsTemplate: TemplateValue {
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
         alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
         alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
@@ -619,42 +616,42 @@ public final class DivTabsTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTabsTemplate?) -> DeserializationResult<DivTabs> {
-    let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
-    let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
-    let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
+    let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
+    let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
+    let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let disappearActionsValue = parent?.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let dynamicHeightValue = parent?.dynamicHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.dynamicHeightValidator) ?? .noValue
+    let dynamicHeightValue = parent?.dynamicHeight?.resolveOptionalValue(context: context) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
-    let hasSeparatorValue = parent?.hasSeparator?.resolveOptionalValue(context: context, validator: ResolvedValue.hasSeparatorValidator) ?? .noValue
-    let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
-    let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
+    let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let hasSeparatorValue = parent?.hasSeparator?.resolveOptionalValue(context: context) ?? .noValue
+    let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
-    let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
-    let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
-    let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context, validator: ResolvedValue.restrictParentScrollValidator) ?? .noValue
+    let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let restrictParentScrollValue = parent?.restrictParentScroll?.resolveOptionalValue(context: context) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let selectedTabValue = parent?.selectedTab?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedTabValidator) ?? .noValue
-    let separatorColorValue = parent?.separatorColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.separatorColorValidator) ?? .noValue
-    let separatorPaddingsValue = parent?.separatorPaddings?.resolveOptionalValue(context: context, validator: ResolvedValue.separatorPaddingsValidator, useOnlyLinks: true) ?? .noValue
-    let switchTabsByContentSwipeEnabledValue = parent?.switchTabsByContentSwipeEnabled?.resolveOptionalValue(context: context, validator: ResolvedValue.switchTabsByContentSwipeEnabledValidator) ?? .noValue
-    let tabTitleStyleValue = parent?.tabTitleStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tabTitleStyleValidator, useOnlyLinks: true) ?? .noValue
-    let titlePaddingsValue = parent?.titlePaddings?.resolveOptionalValue(context: context, validator: ResolvedValue.titlePaddingsValidator, useOnlyLinks: true) ?? .noValue
+    let separatorColorValue = parent?.separatorColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let separatorPaddingsValue = parent?.separatorPaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let switchTabsByContentSwipeEnabledValue = parent?.switchTabsByContentSwipeEnabled?.resolveOptionalValue(context: context) ?? .noValue
+    let tabTitleStyleValue = parent?.tabTitleStyle?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let titlePaddingsValue = parent?.titlePaddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
-    let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true) ?? .noValue
-    let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true) ?? .noValue
-    let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true) ?? .noValue
+    let transformValue = parent?.transform?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let transitionInValue = parent?.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let transitionOutValue = parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let transitionTriggersValue = parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue
-    let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityValidator) ?? .noValue
-    let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true) ?? .noValue
+    let visibilityValue = parent?.visibility?.resolveOptionalValue(context: context) ?? .noValue
+    let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
+    let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
@@ -759,7 +756,7 @@ public final class DivTabsTemplate: TemplateValue {
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var hasSeparatorValue: DeserializationResult<Expression<Bool>> = parent?.hasSeparator?.value() ?? .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
-    var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
+    var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var itemsValue: DeserializationResult<[DivTabs.Item]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
@@ -785,41 +782,41 @@ public final class DivTabsTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "accessibility":
-        accessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.accessibilityValidator, type: DivAccessibilityTemplate.self).merged(with: accessibilityValue)
+        accessibilityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self).merged(with: accessibilityValue)
       case "alignment_horizontal":
-        alignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.alignmentHorizontalValidator).merged(with: alignmentHorizontalValue)
+        alignmentHorizontalValue = deserialize(__dictValue).merged(with: alignmentHorizontalValue)
       case "alignment_vertical":
-        alignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.alignmentVerticalValidator).merged(with: alignmentVerticalValue)
+        alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
       case "background":
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
-        borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self).merged(with: borderValue)
+        borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "disappear_actions":
         disappearActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self).merged(with: disappearActionsValue)
       case "dynamic_height":
-        dynamicHeightValue = deserialize(__dictValue, validator: ResolvedValue.dynamicHeightValidator).merged(with: dynamicHeightValue)
+        dynamicHeightValue = deserialize(__dictValue).merged(with: dynamicHeightValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self).merged(with: extensionsValue)
       case "focus":
-        focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self).merged(with: focusValue)
+        focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self).merged(with: focusValue)
       case "has_separator":
-        hasSeparatorValue = deserialize(__dictValue, validator: ResolvedValue.hasSeparatorValidator).merged(with: hasSeparatorValue)
+        hasSeparatorValue = deserialize(__dictValue).merged(with: hasSeparatorValue)
       case "height":
-        heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.heightValidator, type: DivSizeTemplate.self).merged(with: heightValue)
+        heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
       case "id":
-        idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
+        idValue = deserialize(__dictValue).merged(with: idValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTabsTemplate.ItemTemplate.self).merged(with: itemsValue)
       case "margins":
-        marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
+        marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "paddings":
-        paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
+        paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "restrict_parent_scroll":
-        restrictParentScrollValue = deserialize(__dictValue, validator: ResolvedValue.restrictParentScrollValidator).merged(with: restrictParentScrollValue)
+        restrictParentScrollValue = deserialize(__dictValue).merged(with: restrictParentScrollValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
@@ -827,71 +824,71 @@ public final class DivTabsTemplate: TemplateValue {
       case "selected_tab":
         selectedTabValue = deserialize(__dictValue, validator: ResolvedValue.selectedTabValidator).merged(with: selectedTabValue)
       case "separator_color":
-        separatorColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.separatorColorValidator).merged(with: separatorColorValue)
+        separatorColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: separatorColorValue)
       case "separator_paddings":
-        separatorPaddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.separatorPaddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: separatorPaddingsValue)
+        separatorPaddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: separatorPaddingsValue)
       case "switch_tabs_by_content_swipe_enabled":
-        switchTabsByContentSwipeEnabledValue = deserialize(__dictValue, validator: ResolvedValue.switchTabsByContentSwipeEnabledValidator).merged(with: switchTabsByContentSwipeEnabledValue)
+        switchTabsByContentSwipeEnabledValue = deserialize(__dictValue).merged(with: switchTabsByContentSwipeEnabledValue)
       case "tab_title_style":
-        tabTitleStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tabTitleStyleValidator, type: DivTabsTemplate.TabTitleStyleTemplate.self).merged(with: tabTitleStyleValue)
+        tabTitleStyleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleStyleTemplate.self).merged(with: tabTitleStyleValue)
       case "title_paddings":
-        titlePaddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titlePaddingsValidator, type: DivEdgeInsetsTemplate.self).merged(with: titlePaddingsValue)
+        titlePaddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: titlePaddingsValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
-        transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transformValidator, type: DivTransformTemplate.self).merged(with: transformValue)
+        transformValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self).merged(with: transformValue)
       case "transition_change":
-        transitionChangeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionChangeValidator, type: DivChangeTransitionTemplate.self).merged(with: transitionChangeValue)
+        transitionChangeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self).merged(with: transitionChangeValue)
       case "transition_in":
-        transitionInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionInValidator, type: DivAppearanceTransitionTemplate.self).merged(with: transitionInValue)
+        transitionInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionInValue)
       case "transition_out":
-        transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionOutValidator, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
+        transitionOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self).merged(with: transitionOutValue)
       case "transition_triggers":
         transitionTriggersValue = deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator).merged(with: transitionTriggersValue)
       case "visibility":
-        visibilityValue = deserialize(__dictValue, validator: ResolvedValue.visibilityValidator).merged(with: visibilityValue)
+        visibilityValue = deserialize(__dictValue).merged(with: visibilityValue)
       case "visibility_action":
-        visibilityActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionValidator, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionValue)
+        visibilityActionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionValue)
       case "visibility_actions":
         visibilityActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self).merged(with: visibilityActionsValue)
       case "width":
-        widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.widthValidator, type: DivSizeTemplate.self).merged(with: widthValue)
+        widthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: widthValue)
       case parent?.accessibility?.link:
-        accessibilityValue = accessibilityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.accessibilityValidator, type: DivAccessibilityTemplate.self))
+        accessibilityValue = accessibilityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAccessibilityTemplate.self))
       case parent?.alignmentHorizontal?.link:
-        alignmentHorizontalValue = alignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alignmentHorizontalValidator))
+        alignmentHorizontalValue = alignmentHorizontalValue.merged(with: deserialize(__dictValue))
       case parent?.alignmentVertical?.link:
-        alignmentVerticalValue = alignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alignmentVerticalValidator))
+        alignmentVerticalValue = alignmentVerticalValue.merged(with: deserialize(__dictValue))
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
       case parent?.background?.link:
         backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self))
       case parent?.border?.link:
-        borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self))
+        borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.disappearActions?.link:
         disappearActionsValue = disappearActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDisappearActionTemplate.self))
       case parent?.dynamicHeight?.link:
-        dynamicHeightValue = dynamicHeightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.dynamicHeightValidator))
+        dynamicHeightValue = dynamicHeightValue.merged(with: deserialize(__dictValue))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivExtensionTemplate.self))
       case parent?.focus?.link:
-        focusValue = focusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self))
+        focusValue = focusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.self))
       case parent?.hasSeparator?.link:
-        hasSeparatorValue = hasSeparatorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.hasSeparatorValidator))
+        hasSeparatorValue = hasSeparatorValue.merged(with: deserialize(__dictValue))
       case parent?.height?.link:
-        heightValue = heightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.heightValidator, type: DivSizeTemplate.self))
+        heightValue = heightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self))
       case parent?.id?.link:
-        idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
+        idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTabsTemplate.ItemTemplate.self))
       case parent?.margins?.link:
-        marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.marginsValidator, type: DivEdgeInsetsTemplate.self))
+        marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.paddings?.link:
-        paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.paddingsValidator, type: DivEdgeInsetsTemplate.self))
+        paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.restrictParentScroll?.link:
-        restrictParentScrollValue = restrictParentScrollValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.restrictParentScrollValidator))
+        restrictParentScrollValue = restrictParentScrollValue.merged(with: deserialize(__dictValue))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectedActions?.link:
@@ -899,61 +896,61 @@ public final class DivTabsTemplate: TemplateValue {
       case parent?.selectedTab?.link:
         selectedTabValue = selectedTabValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.selectedTabValidator))
       case parent?.separatorColor?.link:
-        separatorColorValue = separatorColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.separatorColorValidator))
+        separatorColorValue = separatorColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       case parent?.separatorPaddings?.link:
-        separatorPaddingsValue = separatorPaddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.separatorPaddingsValidator, type: DivEdgeInsetsTemplate.self))
+        separatorPaddingsValue = separatorPaddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.switchTabsByContentSwipeEnabled?.link:
-        switchTabsByContentSwipeEnabledValue = switchTabsByContentSwipeEnabledValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.switchTabsByContentSwipeEnabledValidator))
+        switchTabsByContentSwipeEnabledValue = switchTabsByContentSwipeEnabledValue.merged(with: deserialize(__dictValue))
       case parent?.tabTitleStyle?.link:
-        tabTitleStyleValue = tabTitleStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tabTitleStyleValidator, type: DivTabsTemplate.TabTitleStyleTemplate.self))
+        tabTitleStyleValue = tabTitleStyleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTabsTemplate.TabTitleStyleTemplate.self))
       case parent?.titlePaddings?.link:
-        titlePaddingsValue = titlePaddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.titlePaddingsValidator, type: DivEdgeInsetsTemplate.self))
+        titlePaddingsValue = titlePaddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipTemplate.self))
       case parent?.transform?.link:
-        transformValue = transformValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transformValidator, type: DivTransformTemplate.self))
+        transformValue = transformValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTransformTemplate.self))
       case parent?.transitionChange?.link:
-        transitionChangeValue = transitionChangeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionChangeValidator, type: DivChangeTransitionTemplate.self))
+        transitionChangeValue = transitionChangeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivChangeTransitionTemplate.self))
       case parent?.transitionIn?.link:
-        transitionInValue = transitionInValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionInValidator, type: DivAppearanceTransitionTemplate.self))
+        transitionInValue = transitionInValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self))
       case parent?.transitionOut?.link:
-        transitionOutValue = transitionOutValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.transitionOutValidator, type: DivAppearanceTransitionTemplate.self))
+        transitionOutValue = transitionOutValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAppearanceTransitionTemplate.self))
       case parent?.transitionTriggers?.link:
         transitionTriggersValue = transitionTriggersValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionTriggersValidator))
       case parent?.visibility?.link:
-        visibilityValue = visibilityValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.visibilityValidator))
+        visibilityValue = visibilityValue.merged(with: deserialize(__dictValue))
       case parent?.visibilityAction?.link:
-        visibilityActionValue = visibilityActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.visibilityActionValidator, type: DivVisibilityActionTemplate.self))
+        visibilityActionValue = visibilityActionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self))
       case parent?.visibilityActions?.link:
         visibilityActionsValue = visibilityActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVisibilityActionTemplate.self))
       case parent?.width?.link:
-        widthValue = widthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.widthValidator, type: DivSizeTemplate.self))
+        widthValue = widthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
+      accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
+      borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true))
       disappearActionsValue = disappearActionsValue.merged(with: parent.disappearActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
-      heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
+      focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
       itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
-      marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
-      paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
+      marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      separatorPaddingsValue = separatorPaddingsValue.merged(with: parent.separatorPaddings?.resolveOptionalValue(context: context, validator: ResolvedValue.separatorPaddingsValidator, useOnlyLinks: true))
-      tabTitleStyleValue = tabTitleStyleValue.merged(with: parent.tabTitleStyle?.resolveOptionalValue(context: context, validator: ResolvedValue.tabTitleStyleValidator, useOnlyLinks: true))
-      titlePaddingsValue = titlePaddingsValue.merged(with: parent.titlePaddings?.resolveOptionalValue(context: context, validator: ResolvedValue.titlePaddingsValidator, useOnlyLinks: true))
+      separatorPaddingsValue = separatorPaddingsValue.merged(with: parent.separatorPaddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      tabTitleStyleValue = tabTitleStyleValue.merged(with: parent.tabTitleStyle?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      titlePaddingsValue = titlePaddingsValue.merged(with: parent.titlePaddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
       tooltipsValue = tooltipsValue.merged(with: parent.tooltips?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      transformValue = transformValue.merged(with: parent.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true))
-      transitionChangeValue = transitionChangeValue.merged(with: parent.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true))
-      transitionInValue = transitionInValue.merged(with: parent.transitionIn?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionInValidator, useOnlyLinks: true))
-      transitionOutValue = transitionOutValue.merged(with: parent.transitionOut?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionOutValidator, useOnlyLinks: true))
-      visibilityActionValue = visibilityActionValue.merged(with: parent.visibilityAction?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionValidator, useOnlyLinks: true))
+      transformValue = transformValue.merged(with: parent.transform?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      transitionChangeValue = transitionChangeValue.merged(with: parent.transitionChange?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      transitionInValue = transitionInValue.merged(with: parent.transitionIn?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      transitionOutValue = transitionOutValue.merged(with: parent.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      visibilityActionValue = visibilityActionValue.merged(with: parent.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true))
       visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
+      widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },

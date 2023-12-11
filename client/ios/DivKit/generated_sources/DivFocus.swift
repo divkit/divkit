@@ -32,21 +32,6 @@ public final class DivFocus {
       resolver.resolveStringBasedValue(expression: up, initializer: { $0 })
     }
 
-    static let downValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
-    static let forwardValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
-    static let leftValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
-    static let rightValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
-    static let upValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
     init(
       down: Expression<String>? = nil,
       forward: Expression<String>? = nil,
@@ -70,12 +55,6 @@ public final class DivFocus {
 
   static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
     makeArrayValidator(minItems: 1)
-
-  static let borderValidator: AnyValueValidator<DivBorder> =
-    makeNoOpValueValidator()
-
-  static let nextFocusIdsValidator: AnyValueValidator<DivFocus.NextFocusIds> =
-    makeNoOpValueValidator()
 
   init(
     background: [DivBackground]? = nil,

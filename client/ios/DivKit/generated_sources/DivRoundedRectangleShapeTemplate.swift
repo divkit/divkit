@@ -6,19 +6,16 @@ import Serialization
 
 public final class DivRoundedRectangleShapeTemplate: TemplateValue {
   public static let type: String = "rounded_rectangle"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let backgroundColor: Field<Expression<Color>>?
   public let cornerRadius: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(5))
   public let itemHeight: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(10))
   public let itemWidth: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(10))
   public let stroke: Field<DivStrokeTemplate>?
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
       cornerRadius: try dictionary.getOptionalField("corner_radius", templateToType: templateToType),
       itemHeight: try dictionary.getOptionalField("item_height", templateToType: templateToType),
@@ -44,11 +41,11 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRoundedRectangleShapeTemplate?) -> DeserializationResult<DivRoundedRectangleShape> {
-    let backgroundColorValue = parent?.backgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.backgroundColorValidator) ?? .noValue
-    let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator, useOnlyLinks: true) ?? .noValue
-    let itemHeightValue = parent?.itemHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.itemHeightValidator, useOnlyLinks: true) ?? .noValue
-    let itemWidthValue = parent?.itemWidth?.resolveOptionalValue(context: context, validator: ResolvedValue.itemWidthValidator, useOnlyLinks: true) ?? .noValue
-    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
+    let backgroundColorValue = parent?.backgroundColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
+    let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let itemHeightValue = parent?.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let itemWidthValue = parent?.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       backgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_color", error: $0) },
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
@@ -78,33 +75,33 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "background_color":
-        backgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.backgroundColorValidator).merged(with: backgroundColorValue)
+        backgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: backgroundColorValue)
       case "corner_radius":
-        cornerRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornerRadiusValidator, type: DivFixedSizeTemplate.self).merged(with: cornerRadiusValue)
+        cornerRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: cornerRadiusValue)
       case "item_height":
-        itemHeightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemHeightValidator, type: DivFixedSizeTemplate.self).merged(with: itemHeightValue)
+        itemHeightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemHeightValue)
       case "item_width":
-        itemWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemWidthValidator, type: DivFixedSizeTemplate.self).merged(with: itemWidthValue)
+        itemWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemWidthValue)
       case "stroke":
-        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self).merged(with: strokeValue)
+        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.backgroundColor?.link:
-        backgroundColorValue = backgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.backgroundColorValidator))
+        backgroundColorValue = backgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       case parent?.cornerRadius?.link:
-        cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornerRadiusValidator, type: DivFixedSizeTemplate.self))
+        cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       case parent?.itemHeight?.link:
-        itemHeightValue = itemHeightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemHeightValidator, type: DivFixedSizeTemplate.self))
+        itemHeightValue = itemHeightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       case parent?.itemWidth?.link:
-        itemWidthValue = itemWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemWidthValidator, type: DivFixedSizeTemplate.self))
+        itemWidthValue = itemWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self))
+        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      cornerRadiusValue = cornerRadiusValue.merged(with: parent.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator, useOnlyLinks: true))
-      itemHeightValue = itemHeightValue.merged(with: parent.itemHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.itemHeightValidator, useOnlyLinks: true))
-      itemWidthValue = itemWidthValue.merged(with: parent.itemWidth?.resolveOptionalValue(context: context, validator: ResolvedValue.itemWidthValidator, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true))
+      cornerRadiusValue = cornerRadiusValue.merged(with: parent.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      itemHeightValue = itemHeightValue.merged(with: parent.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      itemWidthValue = itemWidthValue.merged(with: parent.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       backgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_color", error: $0) },

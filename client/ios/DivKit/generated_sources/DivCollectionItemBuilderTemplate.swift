@@ -30,7 +30,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: PrototypeTemplate?) -> DeserializationResult<DivCollectionItemBuilder.Prototype> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-      let selectorValue = parent?.selector?.resolveOptionalValue(context: context, validator: ResolvedValue.selectorValidator) ?? .noValue
+      let selectorValue = parent?.selector?.resolveOptionalValue(context: context) ?? .noValue
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
         selectorValue.errorsOrWarnings?.map { .nestedObjectError(field: "selector", error: $0) }
@@ -61,11 +61,11 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         case "div":
           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
         case "selector":
-          selectorValue = deserialize(__dictValue, validator: ResolvedValue.selectorValidator).merged(with: selectorValue)
+          selectorValue = deserialize(__dictValue).merged(with: selectorValue)
         case parent?.div?.link:
           divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
         case parent?.selector?.link:
-          selectorValue = selectorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.selectorValidator))
+          selectorValue = selectorValue.merged(with: deserialize(__dictValue))
         default: break
         }
       }
@@ -133,7 +133,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCollectionItemBuilderTemplate?) -> DeserializationResult<DivCollectionItemBuilder> {
     let dataValue = parent?.data?.resolveValue(context: context) ?? .noValue
-    let dataElementPrefixValue = parent?.dataElementPrefix?.resolveOptionalValue(context: context, validator: ResolvedValue.dataElementPrefixValidator) ?? .noValue
+    let dataElementPrefixValue = parent?.dataElementPrefix?.resolveOptionalValue(context: context) ?? .noValue
     let prototypesValue = parent?.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
@@ -165,20 +165,20 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var dataValue: DeserializationResult<Expression<[Any]>> = parent?.data?.value() ?? .noValue
-    var dataElementPrefixValue: DeserializationResult<String> = parent?.dataElementPrefix?.value(validatedBy: ResolvedValue.dataElementPrefixValidator) ?? .noValue
+    var dataElementPrefixValue: DeserializationResult<String> = parent?.dataElementPrefix?.value() ?? .noValue
     var prototypesValue: DeserializationResult<[DivCollectionItemBuilder.Prototype]> = .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "data":
         dataValue = deserialize(__dictValue).merged(with: dataValue)
       case "data_element_prefix":
-        dataElementPrefixValue = deserialize(__dictValue, validator: ResolvedValue.dataElementPrefixValidator).merged(with: dataElementPrefixValue)
+        dataElementPrefixValue = deserialize(__dictValue).merged(with: dataElementPrefixValue)
       case "prototypes":
         prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
       case parent?.data?.link:
         dataValue = dataValue.merged(with: deserialize(__dictValue))
       case parent?.dataElementPrefix?.link:
-        dataElementPrefixValue = dataElementPrefixValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.dataElementPrefixValidator))
+        dataElementPrefixValue = dataElementPrefixValue.merged(with: deserialize(__dictValue))
       case parent?.prototypes?.link:
         prototypesValue = prototypesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self))
       default: break

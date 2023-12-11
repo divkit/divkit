@@ -6,17 +6,14 @@ import Serialization
 
 public final class DivRadialGradientFixedCenterTemplate: TemplateValue {
   public static let type: String = "fixed"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
   public let value: Field<Expression<Int>>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         unit: try dictionary.getOptionalExpressionField("unit"),
         value: try dictionary.getOptionalExpressionField("value")
       )
@@ -36,7 +33,7 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivRadialGradientFixedCenterTemplate?) -> DeserializationResult<DivRadialGradientFixedCenter> {
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
+    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
@@ -66,11 +63,11 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "unit":
-        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
+        unitValue = deserialize(__dictValue).merged(with: unitValue)
       case "value":
         valueValue = deserialize(__dictValue).merged(with: valueValue)
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+        unitValue = unitValue.merged(with: deserialize(__dictValue))
       case parent?.value?.link:
         valueValue = valueValue.merged(with: deserialize(__dictValue))
       default: break

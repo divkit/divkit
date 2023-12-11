@@ -50,7 +50,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
     let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
     let startValue = parent?.start?.resolveOptionalValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
     let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
+    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       bottomValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom", error: $0) },
       endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
@@ -98,7 +98,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
       case "top":
         topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
       case "unit":
-        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
+        unitValue = deserialize(__dictValue).merged(with: unitValue)
       case parent?.bottom?.link:
         bottomValue = bottomValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomValidator))
       case parent?.end?.link:
@@ -112,7 +112,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
       case parent?.top?.link:
         topValue = topValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topValidator))
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+        unitValue = unitValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

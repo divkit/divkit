@@ -13,9 +13,6 @@ public final class DivStretchIndicatorItemPlacement {
     resolver.resolveNumericValue(expression: maxVisibleItems) ?? 10
   }
 
-  static let itemSpacingValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
   static let maxVisibleItemsValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 

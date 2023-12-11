@@ -58,20 +58,8 @@ public final class DivText: DivBase {
       resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
     }
 
-    static let heightValidator: AnyValueValidator<DivFixedSize> =
-      makeNoOpValueValidator()
-
     static let startValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
-
-    static let tintColorValidator: AnyValueValidator<Color> =
-      makeNoOpValueValidator()
-
-    static let tintModeValidator: AnyValueValidator<DivBlendMode> =
-      makeNoOpValueValidator()
-
-    static let widthValidator: AnyValueValidator<DivFixedSize> =
-      makeNoOpValueValidator()
 
     init(
       height: DivFixedSize? = nil,
@@ -156,26 +144,11 @@ public final class DivText: DivBase {
       resolver.resolveStringBasedValue(expression: underline, initializer: DivLineStyle.init(rawValue:))
     }
 
-    static let backgroundValidator: AnyValueValidator<DivTextRangeBackground> =
-      makeNoOpValueValidator()
-
-    static let borderValidator: AnyValueValidator<DivTextRangeBorder> =
-      makeNoOpValueValidator()
-
     static let endValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 > 0 })
 
-    static let fontFamilyValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
     static let fontSizeValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
-
-    static let fontSizeUnitValidator: AnyValueValidator<DivSizeUnit> =
-      makeNoOpValueValidator()
-
-    static let fontWeightValidator: AnyValueValidator<DivFontWeight> =
-      makeNoOpValueValidator()
 
     static let lineHeightValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
@@ -183,20 +156,8 @@ public final class DivText: DivBase {
     static let startValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
 
-    static let strikeValidator: AnyValueValidator<DivLineStyle> =
-      makeNoOpValueValidator()
-
-    static let textColorValidator: AnyValueValidator<Color> =
-      makeNoOpValueValidator()
-
-    static let textShadowValidator: AnyValueValidator<DivShadow> =
-      makeNoOpValueValidator()
-
     static let topOffsetValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 >= 0 })
-
-    static let underlineValidator: AnyValueValidator<DivLineStyle> =
-      makeNoOpValueValidator()
 
     init(
       actions: [DivAction]? = nil,
@@ -382,59 +343,14 @@ public final class DivText: DivBase {
     resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
-  static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
-    makeNoOpValueValidator()
-
-  static let actionValidator: AnyValueValidator<DivAction> =
-    makeNoOpValueValidator()
-
-  static let actionAnimationValidator: AnyValueValidator<DivAnimation> =
-    makeNoOpValueValidator()
-
-  static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
-    makeNoOpValueValidator()
-
-  static let alignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
-    makeNoOpValueValidator()
-
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
-
-  static let autoEllipsizeValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let borderValidator: AnyValueValidator<DivBorder> =
-    makeNoOpValueValidator()
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let ellipsisValidator: AnyValueValidator<DivText.Ellipsis> =
-    makeNoOpValueValidator()
-
-  static let focusValidator: AnyValueValidator<DivFocus> =
-    makeNoOpValueValidator()
-
-  static let focusedTextColorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
-  static let fontFamilyValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let fontSizeUnitValidator: AnyValueValidator<DivSizeUnit> =
-    makeNoOpValueValidator()
-
-  static let fontWeightValidator: AnyValueValidator<DivFontWeight> =
-    makeNoOpValueValidator()
-
-  static let heightValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
-
-  static let idValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
 
   static let imagesValidator: AnyArrayValueValidator<DivText.Image> =
     makeArrayValidator(minItems: 1)
@@ -442,17 +358,11 @@ public final class DivText: DivBase {
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
-
   static let maxLinesValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let minHiddenLinesValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
 
   static let rangesValidator: AnyArrayValueValidator<DivText.Range> =
     makeArrayValidator(minItems: 1)
@@ -460,53 +370,8 @@ public final class DivText: DivBase {
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let selectableValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let strikeValidator: AnyValueValidator<DivLineStyle> =
-    makeNoOpValueValidator()
-
-  static let textAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
-    makeNoOpValueValidator()
-
-  static let textAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
-    makeNoOpValueValidator()
-
-  static let textColorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
-  static let textGradientValidator: AnyValueValidator<DivTextGradient> =
-    makeNoOpValueValidator()
-
-  static let textShadowValidator: AnyValueValidator<DivShadow> =
-    makeNoOpValueValidator()
-
-  static let transformValidator: AnyValueValidator<DivTransform> =
-    makeNoOpValueValidator()
-
-  static let transitionChangeValidator: AnyValueValidator<DivChangeTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionInValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionOutValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
-
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
-
-  static let underlineValidator: AnyValueValidator<DivLineStyle> =
-    makeNoOpValueValidator()
-
-  static let visibilityValidator: AnyValueValidator<DivVisibility> =
-    makeNoOpValueValidator()
-
-  static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
-    makeNoOpValueValidator()
-
-  static let widthValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
 
   init(
     accessibility: DivAccessibility? = nil,

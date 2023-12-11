@@ -23,9 +23,6 @@ public final class DivInputValidatorRegex {
     resolver.resolveStringBasedValue(expression: pattern, initializer: { $0 })
   }
 
-  static let allowEmptyValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
   init(
     allowEmpty: Expression<Bool>? = nil,
     labelId: Expression<String>,

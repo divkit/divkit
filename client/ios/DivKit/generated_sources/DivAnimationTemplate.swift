@@ -56,10 +56,10 @@ public final class DivAnimationTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAnimationTemplate?) -> DeserializationResult<DivAnimation> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
     let endValueValue = parent?.endValue?.resolveOptionalValue(context: context) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
+    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
     let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let nameValue = parent?.name?.resolveValue(context: context) ?? .noValue
-    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatCountValidator, useOnlyLinks: true) ?? .noValue
+    let repeatCountValue = parent?.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let startValueValue = parent?.startValue?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
@@ -112,13 +112,13 @@ public final class DivAnimationTemplate: TemplateValue {
       case "end_value":
         endValueValue = deserialize(__dictValue).merged(with: endValueValue)
       case "interpolator":
-        interpolatorValue = deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator).merged(with: interpolatorValue)
+        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).merged(with: itemsValue)
       case "name":
         nameValue = deserialize(__dictValue).merged(with: nameValue)
       case "repeat":
-        repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.repeatCountValidator, type: DivCountTemplate.self).merged(with: repeatCountValue)
+        repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).merged(with: repeatCountValue)
       case "start_delay":
         startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case "start_value":
@@ -128,13 +128,13 @@ public final class DivAnimationTemplate: TemplateValue {
       case parent?.endValue?.link:
         endValueValue = endValueValue.merged(with: deserialize(__dictValue))
       case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator))
+        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue))
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self))
       case parent?.name?.link:
         nameValue = nameValue.merged(with: deserialize(__dictValue))
       case parent?.repeatCount?.link:
-        repeatCountValue = repeatCountValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.repeatCountValidator, type: DivCountTemplate.self))
+        repeatCountValue = repeatCountValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self))
       case parent?.startDelay?.link:
         startDelayValue = startDelayValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startDelayValidator))
       case parent?.startValue?.link:
@@ -144,7 +144,7 @@ public final class DivAnimationTemplate: TemplateValue {
     }
     if let parent = parent {
       itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      repeatCountValue = repeatCountValue.merged(with: parent.repeatCount?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatCountValidator, useOnlyLinks: true))
+      repeatCountValue = repeatCountValue.merged(with: parent.repeatCount?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },

@@ -6,17 +6,14 @@ import Serialization
 
 public final class DivLinearGradientTemplate: TemplateValue {
   public static let type: String = "gradient"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let angle: Field<Expression<Int>>? // constraint: number >= 0 && number <= 360; default value: 0
   public let colors: Field<[Expression<Color>]>? // at least 2 elements
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         angle: try dictionary.getOptionalExpressionField("angle"),
         colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
       )

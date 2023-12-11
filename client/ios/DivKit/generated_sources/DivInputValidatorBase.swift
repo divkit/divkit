@@ -17,15 +17,6 @@ public final class DivInputValidatorBase {
     resolver.resolveStringBasedValue(expression: labelId, initializer: { $0 })
   }
 
-  static let allowEmptyValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let labelIdValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let variableValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
   init(
     allowEmpty: Expression<Bool>? = nil,
     labelId: Expression<String>? = nil,

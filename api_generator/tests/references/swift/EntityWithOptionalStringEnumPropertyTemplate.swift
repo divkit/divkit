@@ -8,15 +8,12 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
   public typealias Property = EntityWithOptionalStringEnumProperty.Property
 
   public static let type: String = "entity_with_optional_string_enum_property"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let property: Field<Expression<Property>>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       property: try dictionary.getOptionalExpressionField("property")
     )
   }
@@ -30,7 +27,7 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithOptionalStringEnumPropertyTemplate?) -> DeserializationResult<EntityWithOptionalStringEnumProperty> {
-    let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
+    let propertyValue = parent?.property?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
@@ -48,9 +45,9 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "property":
-        propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator).merged(with: propertyValue)
+        propertyValue = deserialize(__dictValue).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.propertyValidator))
+        propertyValue = propertyValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

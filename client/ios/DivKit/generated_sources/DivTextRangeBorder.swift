@@ -15,9 +15,6 @@ public final class DivTextRangeBorder {
   static let cornerRadiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let strokeValidator: AnyValueValidator<DivStroke> =
-    makeNoOpValueValidator()
-
   init(
     cornerRadius: Expression<Int>? = nil,
     stroke: DivStroke? = nil

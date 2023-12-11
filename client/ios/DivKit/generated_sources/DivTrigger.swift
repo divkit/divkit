@@ -26,9 +26,6 @@ public final class DivTrigger {
   static let actionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
-  static let modeValidator: AnyValueValidator<DivTrigger.Mode> =
-    makeNoOpValueValidator()
-
   init(
     actions: [DivAction],
     condition: Expression<Bool>,

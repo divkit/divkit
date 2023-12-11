@@ -6,16 +6,13 @@ import Serialization
 
 public final class DivPageSizeTemplate: TemplateValue {
   public static let type: String = "percentage"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let pageWidth: Field<DivPercentageSizeTemplate>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         pageWidth: try dictionary.getOptionalField("page_width", templateToType: templateToType)
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {

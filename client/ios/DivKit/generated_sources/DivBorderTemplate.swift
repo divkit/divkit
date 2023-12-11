@@ -37,10 +37,10 @@ public final class DivBorderTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivBorderTemplate?) -> DeserializationResult<DivBorder> {
     let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
-    let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornersRadiusValidator, useOnlyLinks: true) ?? .noValue
-    let hasShadowValue = parent?.hasShadow?.resolveOptionalValue(context: context, validator: ResolvedValue.hasShadowValidator) ?? .noValue
-    let shadowValue = parent?.shadow?.resolveOptionalValue(context: context, validator: ResolvedValue.shadowValidator, useOnlyLinks: true) ?? .noValue
-    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
+    let cornersRadiusValue = parent?.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let hasShadowValue = parent?.hasShadow?.resolveOptionalValue(context: context) ?? .noValue
+    let shadowValue = parent?.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
       cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corners_radius", error: $0) },
@@ -72,30 +72,30 @@ public final class DivBorderTemplate: TemplateValue {
       case "corner_radius":
         cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).merged(with: cornerRadiusValue)
       case "corners_radius":
-        cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornersRadiusValidator, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
+        cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self).merged(with: cornersRadiusValue)
       case "has_shadow":
-        hasShadowValue = deserialize(__dictValue, validator: ResolvedValue.hasShadowValidator).merged(with: hasShadowValue)
+        hasShadowValue = deserialize(__dictValue).merged(with: hasShadowValue)
       case "shadow":
-        shadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.shadowValidator, type: DivShadowTemplate.self).merged(with: shadowValue)
+        shadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self).merged(with: shadowValue)
       case "stroke":
-        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self).merged(with: strokeValue)
+        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.cornerRadius?.link:
         cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator))
       case parent?.cornersRadius?.link:
-        cornersRadiusValue = cornersRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.cornersRadiusValidator, type: DivCornersRadiusTemplate.self))
+        cornersRadiusValue = cornersRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self))
       case parent?.hasShadow?.link:
-        hasShadowValue = hasShadowValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.hasShadowValidator))
+        hasShadowValue = hasShadowValue.merged(with: deserialize(__dictValue))
       case parent?.shadow?.link:
-        shadowValue = shadowValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.shadowValidator, type: DivShadowTemplate.self))
+        shadowValue = shadowValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self))
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self))
+        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      cornersRadiusValue = cornersRadiusValue.merged(with: parent.cornersRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornersRadiusValidator, useOnlyLinks: true))
-      shadowValue = shadowValue.merged(with: parent.shadow?.resolveOptionalValue(context: context, validator: ResolvedValue.shadowValidator, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true))
+      cornersRadiusValue = cornersRadiusValue.merged(with: parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      shadowValue = shadowValue.merged(with: parent.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },

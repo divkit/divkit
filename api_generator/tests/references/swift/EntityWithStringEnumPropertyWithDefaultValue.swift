@@ -19,9 +19,6 @@ public final class EntityWithStringEnumPropertyWithDefaultValue {
     resolver.resolveStringBasedValue(expression: value, initializer: Value.init(rawValue:)) ?? Value.second
   }
 
-  static let valueValidator: AnyValueValidator<EntityWithStringEnumPropertyWithDefaultValue.Value> =
-    makeNoOpValueValidator()
-
   init(
     value: Expression<Value>? = nil
   ) {

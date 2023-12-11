@@ -51,9 +51,6 @@ public final class DivVideoSource {
     resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
   }
 
-  static let resolutionValidator: AnyValueValidator<DivVideoSource.Resolution> =
-    makeNoOpValueValidator()
-
   init(
     bitrate: Expression<Int>? = nil,
     mimeType: Expression<String>,

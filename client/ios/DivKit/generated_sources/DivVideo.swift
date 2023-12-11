@@ -91,92 +91,20 @@ public final class DivVideo: DivBase {
     resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
-  static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
-    makeNoOpValueValidator()
-
-  static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
-    makeNoOpValueValidator()
-
-  static let alignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
-    makeNoOpValueValidator()
-
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
-
-  static let aspectValidator: AnyValueValidator<DivAspect> =
-    makeNoOpValueValidator()
-
-  static let autostartValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let borderValidator: AnyValueValidator<DivBorder> =
-    makeNoOpValueValidator()
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let elapsedTimeVariableValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let focusValidator: AnyValueValidator<DivFocus> =
-    makeNoOpValueValidator()
-
-  static let heightValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
-
-  static let idValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
-
-  static let mutedValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let paddingsValidator: AnyValueValidator<DivEdgeInsets> =
-    makeNoOpValueValidator()
-
-  static let playerSettingsPayloadValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
-  static let previewValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let repeatableValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let scaleValidator: AnyValueValidator<DivVideoScale> =
-    makeNoOpValueValidator()
-
-  static let transformValidator: AnyValueValidator<DivTransform> =
-    makeNoOpValueValidator()
-
-  static let transitionChangeValidator: AnyValueValidator<DivChangeTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionInValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
-
-  static let transitionOutValidator: AnyValueValidator<DivAppearanceTransition> =
-    makeNoOpValueValidator()
 
   static let transitionTriggersValidator: AnyArrayValueValidator<DivTransitionTrigger> =
     makeArrayValidator(minItems: 1)
 
   static let videoSourcesValidator: AnyArrayValueValidator<DivVideoSource> =
     makeArrayValidator(minItems: 1)
-
-  static let visibilityValidator: AnyValueValidator<DivVisibility> =
-    makeNoOpValueValidator()
-
-  static let visibilityActionValidator: AnyValueValidator<DivVisibilityAction> =
-    makeNoOpValueValidator()
-
-  static let widthValidator: AnyValueValidator<DivSize> =
-    makeNoOpValueValidator()
 
   init(
     accessibility: DivAccessibility? = nil,

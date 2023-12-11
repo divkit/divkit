@@ -40,9 +40,6 @@ public final class DivScaleTransition: DivTransitionBase {
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let interpolatorValidator: AnyValueValidator<DivAnimationInterpolator> =
-    makeNoOpValueValidator()
-
   static let pivotXValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 

@@ -28,9 +28,6 @@ public final class DivShadow {
   static let blurValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let colorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
   init(
     alpha: Expression<Double>? = nil,
     blur: Expression<Int>? = nil,

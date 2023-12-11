@@ -52,24 +52,6 @@ public final class DivAccessibility {
     resolver.resolveStringBasedValue(expression: stateDescription, initializer: { $0 })
   }
 
-  static let descriptionValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let hintValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let modeValidator: AnyValueValidator<DivAccessibility.Mode> =
-    makeNoOpValueValidator()
-
-  static let muteAfterActionValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let stateDescriptionValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let typeValidator: AnyValueValidator<DivAccessibility.Kind> =
-    makeNoOpValueValidator()
-
   init(
     description: Expression<String>? = nil,
     hint: Expression<String>? = nil,

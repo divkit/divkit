@@ -38,7 +38,7 @@ public final class DivShadowTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivShadowTemplate?) -> DeserializationResult<DivShadow> {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let blurValue = parent?.blur?.resolveOptionalValue(context: context, validator: ResolvedValue.blurValidator) ?? .noValue
-    let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
+    let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let offsetValue = parent?.offset?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
@@ -78,7 +78,7 @@ public final class DivShadowTemplate: TemplateValue {
       case "blur":
         blurValue = deserialize(__dictValue, validator: ResolvedValue.blurValidator).merged(with: blurValue)
       case "color":
-        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator).merged(with: colorValue)
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
       case "offset":
         offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).merged(with: offsetValue)
       case parent?.alpha?.link:
@@ -86,7 +86,7 @@ public final class DivShadowTemplate: TemplateValue {
       case parent?.blur?.link:
         blurValue = blurValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.blurValidator))
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator))
+        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       case parent?.offset?.link:
         offsetValue = offsetValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self))
       default: break

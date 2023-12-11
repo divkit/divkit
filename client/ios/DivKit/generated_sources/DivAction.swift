@@ -14,9 +14,6 @@ public final class DivAction {
       resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
     }
 
-    static let actionValidator: AnyValueValidator<DivAction> =
-      makeNoOpValueValidator()
-
     init(
       action: DivAction? = nil,
       actions: [DivAction]? = nil,
@@ -53,27 +50,6 @@ public final class DivAction {
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
     resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
   }
-
-  static let downloadCallbacksValidator: AnyValueValidator<DivDownloadCallbacks> =
-    makeNoOpValueValidator()
-
-  static let isEnabledValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let logUrlValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
-
-  static let payloadValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
-  static let refererValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
-
-  static let typedValidator: AnyValueValidator<DivActionTyped> =
-    makeNoOpValueValidator()
-
-  static let urlValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
 
   init(
     downloadCallbacks: DivDownloadCallbacks? = nil,

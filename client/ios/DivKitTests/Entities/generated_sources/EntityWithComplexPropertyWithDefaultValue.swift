@@ -24,9 +24,6 @@ public final class EntityWithComplexPropertyWithDefaultValue {
   public static let type: String = "entity_with_complex_property_with_default_value"
   public let property: Property // default value: EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
 
-  static let propertyValidator: AnyValueValidator<EntityWithComplexPropertyWithDefaultValue.Property> =
-    makeNoOpValueValidator()
-
   init(
     property: Property? = nil
   ) {

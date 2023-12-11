@@ -6,7 +6,7 @@ import Serialization
 
 public final class DivScaleTransitionTemplate: TemplateValue {
   public static let type: String = "scale"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200
   public let interpolator: Field<Expression<DivAnimationInterpolator>>? // default value: ease_in_out
   public let pivotX: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.5
@@ -14,12 +14,9 @@ public final class DivScaleTransitionTemplate: TemplateValue {
   public let scale: Field<Expression<Double>>? // constraint: number >= 0.0; default value: 0.0
   public let startDelay: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       duration: try dictionary.getOptionalExpressionField("duration"),
       interpolator: try dictionary.getOptionalExpressionField("interpolator"),
       pivotX: try dictionary.getOptionalExpressionField("pivot_x"),
@@ -49,7 +46,7 @@ public final class DivScaleTransitionTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivScaleTransitionTemplate?) -> DeserializationResult<DivScaleTransition> {
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
+    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
     let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator) ?? .noValue
     let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator) ?? .noValue
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
@@ -88,7 +85,7 @@ public final class DivScaleTransitionTemplate: TemplateValue {
       case "duration":
         durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
       case "interpolator":
-        interpolatorValue = deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator).merged(with: interpolatorValue)
+        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
       case "pivot_x":
         pivotXValue = deserialize(__dictValue, validator: ResolvedValue.pivotXValidator).merged(with: pivotXValue)
       case "pivot_y":
@@ -100,7 +97,7 @@ public final class DivScaleTransitionTemplate: TemplateValue {
       case parent?.duration?.link:
         durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
       case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator))
+        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue))
       case parent?.pivotX?.link:
         pivotXValue = pivotXValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.pivotXValidator))
       case parent?.pivotY?.link:

@@ -176,9 +176,6 @@ public final class PhoneMasks {
   }
   """) as! [String: Any]
 
-  static let valueValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
   init(
     value: [String: Any]? = nil
   ) {

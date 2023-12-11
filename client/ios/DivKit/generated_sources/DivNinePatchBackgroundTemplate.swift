@@ -6,17 +6,14 @@ import Serialization
 
 public final class DivNinePatchBackgroundTemplate: TemplateValue {
   public static let type: String = "nine_patch_image"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let imageUrl: Field<Expression<URL>>?
   public let insets: Field<DivAbsoluteEdgeInsetsTemplate>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         imageUrl: try dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
         insets: try dictionary.getOptionalField("insets", templateToType: templateToType)
       )

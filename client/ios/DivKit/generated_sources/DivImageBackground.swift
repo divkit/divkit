@@ -41,20 +41,8 @@ public final class DivImageBackground {
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
 
-  static let contentAlignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
-    makeNoOpValueValidator()
-
-  static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
-    makeNoOpValueValidator()
-
   static let filtersValidator: AnyArrayValueValidator<DivFilter> =
     makeArrayValidator(minItems: 1)
-
-  static let preloadRequiredValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let scaleValidator: AnyValueValidator<DivImageScale> =
-    makeNoOpValueValidator()
 
   init(
     alpha: Expression<Double>? = nil,

@@ -44,12 +44,12 @@ public final class DivAccessibilityTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivAccessibilityTemplate?) -> DeserializationResult<DivAccessibility> {
-    let descriptionValue = parent?.description?.resolveOptionalValue(context: context, validator: ResolvedValue.descriptionValidator) ?? .noValue
-    let hintValue = parent?.hint?.resolveOptionalValue(context: context, validator: ResolvedValue.hintValidator) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
-    let muteAfterActionValue = parent?.muteAfterAction?.resolveOptionalValue(context: context, validator: ResolvedValue.muteAfterActionValidator) ?? .noValue
-    let stateDescriptionValue = parent?.stateDescription?.resolveOptionalValue(context: context, validator: ResolvedValue.stateDescriptionValidator) ?? .noValue
-    let typeValue = parent?.type?.resolveOptionalValue(context: context, validator: ResolvedValue.typeValidator) ?? .noValue
+    let descriptionValue = parent?.description?.resolveOptionalValue(context: context) ?? .noValue
+    let hintValue = parent?.hint?.resolveOptionalValue(context: context) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
+    let muteAfterActionValue = parent?.muteAfterAction?.resolveOptionalValue(context: context) ?? .noValue
+    let stateDescriptionValue = parent?.stateDescription?.resolveOptionalValue(context: context) ?? .noValue
+    let typeValue = parent?.type?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       descriptionValue.errorsOrWarnings?.map { .nestedObjectError(field: "description", error: $0) },
       hintValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint", error: $0) },
@@ -78,33 +78,33 @@ public final class DivAccessibilityTemplate: TemplateValue {
     var modeValue: DeserializationResult<Expression<DivAccessibility.Mode>> = parent?.mode?.value() ?? .noValue
     var muteAfterActionValue: DeserializationResult<Expression<Bool>> = parent?.muteAfterAction?.value() ?? .noValue
     var stateDescriptionValue: DeserializationResult<Expression<String>> = parent?.stateDescription?.value() ?? .noValue
-    var typeValue: DeserializationResult<DivAccessibility.Kind> = parent?.type?.value(validatedBy: ResolvedValue.typeValidator) ?? .noValue
+    var typeValue: DeserializationResult<DivAccessibility.Kind> = parent?.type?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "description":
-        descriptionValue = deserialize(__dictValue, validator: ResolvedValue.descriptionValidator).merged(with: descriptionValue)
+        descriptionValue = deserialize(__dictValue).merged(with: descriptionValue)
       case "hint":
-        hintValue = deserialize(__dictValue, validator: ResolvedValue.hintValidator).merged(with: hintValue)
+        hintValue = deserialize(__dictValue).merged(with: hintValue)
       case "mode":
-        modeValue = deserialize(__dictValue, validator: ResolvedValue.modeValidator).merged(with: modeValue)
+        modeValue = deserialize(__dictValue).merged(with: modeValue)
       case "mute_after_action":
-        muteAfterActionValue = deserialize(__dictValue, validator: ResolvedValue.muteAfterActionValidator).merged(with: muteAfterActionValue)
+        muteAfterActionValue = deserialize(__dictValue).merged(with: muteAfterActionValue)
       case "state_description":
-        stateDescriptionValue = deserialize(__dictValue, validator: ResolvedValue.stateDescriptionValidator).merged(with: stateDescriptionValue)
+        stateDescriptionValue = deserialize(__dictValue).merged(with: stateDescriptionValue)
       case "type":
-        typeValue = deserialize(__dictValue, validator: ResolvedValue.typeValidator).merged(with: typeValue)
+        typeValue = deserialize(__dictValue).merged(with: typeValue)
       case parent?.description?.link:
-        descriptionValue = descriptionValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.descriptionValidator))
+        descriptionValue = descriptionValue.merged(with: deserialize(__dictValue))
       case parent?.hint?.link:
-        hintValue = hintValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.hintValidator))
+        hintValue = hintValue.merged(with: deserialize(__dictValue))
       case parent?.mode?.link:
-        modeValue = modeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.modeValidator))
+        modeValue = modeValue.merged(with: deserialize(__dictValue))
       case parent?.muteAfterAction?.link:
-        muteAfterActionValue = muteAfterActionValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.muteAfterActionValidator))
+        muteAfterActionValue = muteAfterActionValue.merged(with: deserialize(__dictValue))
       case parent?.stateDescription?.link:
-        stateDescriptionValue = stateDescriptionValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.stateDescriptionValidator))
+        stateDescriptionValue = stateDescriptionValue.merged(with: deserialize(__dictValue))
       case parent?.type?.link:
-        typeValue = typeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.typeValidator))
+        typeValue = typeValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

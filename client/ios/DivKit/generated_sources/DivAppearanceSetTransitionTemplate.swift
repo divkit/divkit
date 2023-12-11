@@ -6,16 +6,13 @@ import Serialization
 
 public final class DivAppearanceSetTransitionTemplate: TemplateValue {
   public static let type: String = "set"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let items: Field<[DivAppearanceTransitionTemplate]>? // at least 1 elements
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType)
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {

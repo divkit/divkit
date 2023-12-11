@@ -86,15 +86,12 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
   }
 
   public static let type: String = "entity_with_optional_complex_property"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let property: Field<PropertyTemplate>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       property: try dictionary.getOptionalField("property", templateToType: templateToType)
     )
   }
@@ -108,7 +105,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithOptionalComplexPropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty> {
-    let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true) ?? .noValue
+    let propertyValue = parent?.property?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
@@ -126,14 +123,14 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "property":
-        propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.propertyValidator, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self).merged(with: propertyValue)
+        propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.propertyValidator, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self))
+        propertyValue = propertyValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true))
+      propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }

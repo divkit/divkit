@@ -32,9 +32,6 @@ public final class DivData {
   static let statesValidator: AnyArrayValueValidator<DivData.State> =
     makeStrictArrayValidator(minItems: 1)
 
-  static let transitionAnimationSelectorValidator: AnyValueValidator<DivTransitionSelector> =
-    makeNoOpValueValidator()
-
   init(
     logId: String,
     states: [State],

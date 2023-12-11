@@ -16,21 +16,6 @@ public final class DivRoundedRectangleShape {
     resolver.resolveStringBasedValue(expression: backgroundColor, initializer: Color.color(withHexString:))
   }
 
-  static let backgroundColorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
-  static let cornerRadiusValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
-  static let itemHeightValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
-  static let itemWidthValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
-  static let strokeValidator: AnyValueValidator<DivStroke> =
-    makeNoOpValueValidator()
-
   init(
     backgroundColor: Expression<Color>? = nil,
     cornerRadius: DivFixedSize? = nil,

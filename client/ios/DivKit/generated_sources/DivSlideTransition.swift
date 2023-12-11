@@ -36,17 +36,8 @@ public final class DivSlideTransition: DivTransitionBase {
     resolver.resolveNumericValue(expression: startDelay) ?? 0
   }
 
-  static let distanceValidator: AnyValueValidator<DivDimension> =
-    makeNoOpValueValidator()
-
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let edgeValidator: AnyValueValidator<DivSlideTransition.Edge> =
-    makeNoOpValueValidator()
-
-  static let interpolatorValidator: AnyValueValidator<DivAnimationInterpolator> =
-    makeNoOpValueValidator()
 
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

@@ -36,7 +36,7 @@ public final class DivTriggerTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivTriggerTemplate?) -> DeserializationResult<DivTrigger> {
     let actionsValue = parent?.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
     let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
       actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
       conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
@@ -76,13 +76,13 @@ public final class DivTriggerTemplate: TemplateValue {
       case "condition":
         conditionValue = deserialize(__dictValue).merged(with: conditionValue)
       case "mode":
-        modeValue = deserialize(__dictValue, validator: ResolvedValue.modeValidator).merged(with: modeValue)
+        modeValue = deserialize(__dictValue).merged(with: modeValue)
       case parent?.actions?.link:
         actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
       case parent?.condition?.link:
         conditionValue = conditionValue.merged(with: deserialize(__dictValue))
       case parent?.mode?.link:
-        modeValue = modeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.modeValidator))
+        modeValue = modeValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

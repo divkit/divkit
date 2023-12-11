@@ -40,26 +40,8 @@ public final class DivVisibilityAction: DivSightAction {
     resolver.resolveNumericValue(expression: visibilityPercentage) ?? 50
   }
 
-  static let downloadCallbacksValidator: AnyValueValidator<DivDownloadCallbacks> =
-    makeNoOpValueValidator()
-
-  static let isEnabledValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
   static let logLimitValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let payloadValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
-  static let refererValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
-
-  static let typedValidator: AnyValueValidator<DivActionTyped> =
-    makeNoOpValueValidator()
-
-  static let urlValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
 
   static let visibilityDurationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

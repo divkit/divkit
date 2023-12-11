@@ -49,7 +49,7 @@ public final class DivTimerTemplate: TemplateValue {
     let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
     let tickActionsValue = parent?.tickActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let tickIntervalValue = parent?.tickInterval?.resolveOptionalValue(context: context, validator: ResolvedValue.tickIntervalValidator) ?? .noValue
-    let valueVariableValue = parent?.valueVariable?.resolveOptionalValue(context: context, validator: ResolvedValue.valueVariableValidator) ?? .noValue
+    let valueVariableValue = parent?.valueVariable?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
       durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
       endActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "end_actions", error: $0) },
@@ -86,7 +86,7 @@ public final class DivTimerTemplate: TemplateValue {
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
     var tickActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tickIntervalValue: DeserializationResult<Expression<Int>> = parent?.tickInterval?.value() ?? .noValue
-    var valueVariableValue: DeserializationResult<String> = parent?.valueVariable?.value(validatedBy: ResolvedValue.valueVariableValidator) ?? .noValue
+    var valueVariableValue: DeserializationResult<String> = parent?.valueVariable?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "duration":
@@ -100,7 +100,7 @@ public final class DivTimerTemplate: TemplateValue {
       case "tick_interval":
         tickIntervalValue = deserialize(__dictValue, validator: ResolvedValue.tickIntervalValidator).merged(with: tickIntervalValue)
       case "value_variable":
-        valueVariableValue = deserialize(__dictValue, validator: ResolvedValue.valueVariableValidator).merged(with: valueVariableValue)
+        valueVariableValue = deserialize(__dictValue).merged(with: valueVariableValue)
       case parent?.duration?.link:
         durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
       case parent?.endActions?.link:
@@ -112,7 +112,7 @@ public final class DivTimerTemplate: TemplateValue {
       case parent?.tickInterval?.link:
         tickIntervalValue = tickIntervalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.tickIntervalValidator))
       case parent?.valueVariable?.link:
-        valueVariableValue = valueVariableValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueVariableValidator))
+        valueVariableValue = valueVariableValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

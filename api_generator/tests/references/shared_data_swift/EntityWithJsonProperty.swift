@@ -8,9 +8,6 @@ public final class EntityWithJsonProperty {
   public static let type: String = "entity_with_json_property"
   public let jsonProperty: [String: Any] // default value: { "key": "value", "items": [ "value" ] }
 
-  static let jsonPropertyValidator: AnyValueValidator<[String: Any]> =
-    makeNoOpValueValidator()
-
   init(
     jsonProperty: [String: Any]? = nil
   ) {

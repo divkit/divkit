@@ -13,9 +13,6 @@ public final class DivCollectionItemBuilder {
       resolver.resolveNumericValue(expression: selector) ?? true
     }
 
-    static let selectorValidator: AnyValueValidator<Bool> =
-      makeNoOpValueValidator()
-
     init(
       div: Div,
       selector: Expression<Bool>? = nil
@@ -32,9 +29,6 @@ public final class DivCollectionItemBuilder {
   public func resolveData(_ resolver: ExpressionResolver) -> [Any]? {
     resolver.resolveArrayValue(expression: data)
   }
-
-  static let dataElementPrefixValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
 
   static let prototypesValidator: AnyArrayValueValidator<DivCollectionItemBuilder.Prototype> =
     makeArrayValidator(minItems: 1)

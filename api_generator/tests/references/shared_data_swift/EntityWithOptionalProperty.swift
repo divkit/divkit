@@ -12,9 +12,6 @@ public final class EntityWithOptionalProperty {
     resolver.resolveStringBasedValue(expression: property, initializer: { $0 })
   }
 
-  static let propertyValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
   init(
     property: Expression<String>? = nil
   ) {

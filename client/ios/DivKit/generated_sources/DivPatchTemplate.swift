@@ -131,7 +131,7 @@ public final class DivPatchTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivPatchTemplate?) -> DeserializationResult<DivPatch> {
     let changesValue = parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
       changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
       modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
@@ -162,11 +162,11 @@ public final class DivPatchTemplate: TemplateValue {
       case "changes":
         changesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self).merged(with: changesValue)
       case "mode":
-        modeValue = deserialize(__dictValue, validator: ResolvedValue.modeValidator).merged(with: modeValue)
+        modeValue = deserialize(__dictValue).merged(with: modeValue)
       case parent?.changes?.link:
         changesValue = changesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self))
       case parent?.mode?.link:
-        modeValue = modeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.modeValidator))
+        modeValue = modeValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

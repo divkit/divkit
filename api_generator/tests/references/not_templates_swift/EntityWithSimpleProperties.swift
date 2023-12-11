@@ -48,23 +48,8 @@ public final class EntityWithSimpleProperties: EntityProtocol {
     resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
   }
 
-  static let booleanValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let booleanIntValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let colorValidator: AnyValueValidator<Color> =
-    makeNoOpValueValidator()
-
   static let positiveIntegerValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
-
-  static let stringValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
-  static let urlValidator: AnyValueValidator<URL> =
-    makeNoOpValueValidator()
 
   init(
     boolean: Expression<Bool>? = nil,

@@ -17,9 +17,6 @@ public final class DivFixedSize {
     resolver.resolveNumericValue(expression: value)
   }
 
-  static let unitValidator: AnyValueValidator<DivSizeUnit> =
-    makeNoOpValueValidator()
-
   static let valueValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 

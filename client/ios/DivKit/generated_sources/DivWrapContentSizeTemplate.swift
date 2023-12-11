@@ -29,7 +29,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
     }
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ConstraintSizeTemplate?) -> DeserializationResult<DivWrapContentSize.ConstraintSize> {
-      let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
+      let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
       let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
       var errors = mergeErrors(
         unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
@@ -59,11 +59,11 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "unit":
-          unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
+          unitValue = deserialize(__dictValue).merged(with: unitValue)
         case "value":
           valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
         case parent?.unit?.link:
-          unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+          unitValue = unitValue.merged(with: deserialize(__dictValue))
         case parent?.value?.link:
           valueValue = valueValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
         default: break
@@ -98,17 +98,14 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
   }
 
   public static let type: String = "wrap_content"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let constrained: Field<Expression<Bool>>?
   public let maxSize: Field<ConstraintSizeTemplate>?
   public let minSize: Field<ConstraintSizeTemplate>?
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       constrained: try dictionary.getOptionalExpressionField("constrained"),
       maxSize: try dictionary.getOptionalField("max_size", templateToType: templateToType),
       minSize: try dictionary.getOptionalField("min_size", templateToType: templateToType)
@@ -128,9 +125,9 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivWrapContentSizeTemplate?) -> DeserializationResult<DivWrapContentSize> {
-    let constrainedValue = parent?.constrained?.resolveOptionalValue(context: context, validator: ResolvedValue.constrainedValidator) ?? .noValue
-    let maxSizeValue = parent?.maxSize?.resolveOptionalValue(context: context, validator: ResolvedValue.maxSizeValidator, useOnlyLinks: true) ?? .noValue
-    let minSizeValue = parent?.minSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minSizeValidator, useOnlyLinks: true) ?? .noValue
+    let constrainedValue = parent?.constrained?.resolveOptionalValue(context: context) ?? .noValue
+    let maxSizeValue = parent?.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let minSizeValue = parent?.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       constrainedValue.errorsOrWarnings?.map { .nestedObjectError(field: "constrained", error: $0) },
       maxSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_size", error: $0) },
@@ -154,23 +151,23 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "constrained":
-        constrainedValue = deserialize(__dictValue, validator: ResolvedValue.constrainedValidator).merged(with: constrainedValue)
+        constrainedValue = deserialize(__dictValue).merged(with: constrainedValue)
       case "max_size":
-        maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maxSizeValidator, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: maxSizeValue)
+        maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: maxSizeValue)
       case "min_size":
-        minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.minSizeValidator, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: minSizeValue)
+        minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self).merged(with: minSizeValue)
       case parent?.constrained?.link:
-        constrainedValue = constrainedValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.constrainedValidator))
+        constrainedValue = constrainedValue.merged(with: deserialize(__dictValue))
       case parent?.maxSize?.link:
-        maxSizeValue = maxSizeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.maxSizeValidator, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self))
+        maxSizeValue = maxSizeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self))
       case parent?.minSize?.link:
-        minSizeValue = minSizeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.minSizeValidator, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self))
+        minSizeValue = minSizeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivWrapContentSizeTemplate.ConstraintSizeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      maxSizeValue = maxSizeValue.merged(with: parent.maxSize?.resolveOptionalValue(context: context, validator: ResolvedValue.maxSizeValidator, useOnlyLinks: true))
-      minSizeValue = minSizeValue.merged(with: parent.minSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minSizeValidator, useOnlyLinks: true))
+      maxSizeValue = maxSizeValue.merged(with: parent.maxSize?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      minSizeValue = minSizeValue.merged(with: parent.minSize?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       constrainedValue.errorsOrWarnings?.map { .nestedObjectError(field: "constrained", error: $0) },

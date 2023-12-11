@@ -8,16 +8,13 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue {
   public typealias Value = DivRadialGradientRelativeRadius.Value
 
   public static let type: String = "relative"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let value: Field<Expression<Value>>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         value: try dictionary.getOptionalExpressionField("value")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {

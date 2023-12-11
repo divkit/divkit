@@ -6,15 +6,12 @@ import Serialization
 
 public final class DivMatchParentSizeTemplate: TemplateValue {
   public static let type: String = "match_parent"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let weight: Field<Expression<Double>>? // constraint: number > 0
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       weight: try dictionary.getOptionalExpressionField("weight")
     )
   }

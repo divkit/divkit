@@ -29,7 +29,7 @@ public final class DivExtensionTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivExtensionTemplate?) -> DeserializationResult<DivExtension> {
     let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
-    let paramsValue = parent?.params?.resolveOptionalValue(context: context, validator: ResolvedValue.paramsValidator) ?? .noValue
+    let paramsValue = parent?.params?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       paramsValue.errorsOrWarnings?.map { .nestedObjectError(field: "params", error: $0) }
@@ -54,17 +54,17 @@ public final class DivExtensionTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var idValue: DeserializationResult<String> = parent?.id?.value() ?? .noValue
-    var paramsValue: DeserializationResult<[String: Any]> = parent?.params?.value(validatedBy: ResolvedValue.paramsValidator) ?? .noValue
+    var paramsValue: DeserializationResult<[String: Any]> = parent?.params?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "params":
-        paramsValue = deserialize(__dictValue, validator: ResolvedValue.paramsValidator).merged(with: paramsValue)
+        paramsValue = deserialize(__dictValue).merged(with: paramsValue)
       case parent?.id?.link:
         idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.params?.link:
-        paramsValue = paramsValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.paramsValidator))
+        paramsValue = paramsValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

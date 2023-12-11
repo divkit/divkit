@@ -6,15 +6,12 @@ import Serialization
 
 public final class EntityWithJsonPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_json_property"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let jsonProperty: Field<[String: Any]>? // default value: { "key": "value", "items": [ "value" ] }
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       jsonProperty: try dictionary.getOptionalField("json_property")
     )
   }
@@ -28,7 +25,7 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithJsonPropertyTemplate?) -> DeserializationResult<EntityWithJsonProperty> {
-    let jsonPropertyValue = parent?.jsonProperty?.resolveOptionalValue(context: context, validator: ResolvedValue.jsonPropertyValidator) ?? .noValue
+    let jsonPropertyValue = parent?.jsonProperty?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
       jsonPropertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "json_property", error: $0) }
     )
@@ -42,13 +39,13 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var jsonPropertyValue: DeserializationResult<[String: Any]> = parent?.jsonProperty?.value(validatedBy: ResolvedValue.jsonPropertyValidator) ?? .noValue
+    var jsonPropertyValue: DeserializationResult<[String: Any]> = parent?.jsonProperty?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "json_property":
-        jsonPropertyValue = deserialize(__dictValue, validator: ResolvedValue.jsonPropertyValidator).merged(with: jsonPropertyValue)
+        jsonPropertyValue = deserialize(__dictValue).merged(with: jsonPropertyValue)
       case parent?.jsonProperty?.link:
-        jsonPropertyValue = jsonPropertyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.jsonPropertyValidator))
+        jsonPropertyValue = jsonPropertyValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }

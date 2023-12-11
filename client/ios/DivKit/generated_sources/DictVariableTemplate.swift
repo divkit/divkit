@@ -6,17 +6,14 @@ import Serialization
 
 public final class DictVariableTemplate: TemplateValue {
   public static let type: String = "dict"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let name: Field<String>?
   public let value: Field<[String: Any]>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         name: try dictionary.getOptionalField("name"),
         value: try dictionary.getOptionalField("value")
       )

@@ -6,19 +6,16 @@ import Serialization
 
 public final class DivInputValidatorRegexTemplate: TemplateValue {
   public static let type: String = "regex"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let allowEmpty: Field<Expression<Bool>>? // default value: false
   public let labelId: Field<Expression<String>>?
   public let pattern: Field<Expression<String>>?
   public let variable: Field<String>?
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         allowEmpty: try dictionary.getOptionalExpressionField("allow_empty"),
         labelId: try dictionary.getOptionalExpressionField("label_id"),
         pattern: try dictionary.getOptionalExpressionField("pattern"),
@@ -44,7 +41,7 @@ public final class DivInputValidatorRegexTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivInputValidatorRegexTemplate?) -> DeserializationResult<DivInputValidatorRegex> {
-    let allowEmptyValue = parent?.allowEmpty?.resolveOptionalValue(context: context, validator: ResolvedValue.allowEmptyValidator) ?? .noValue
+    let allowEmptyValue = parent?.allowEmpty?.resolveOptionalValue(context: context) ?? .noValue
     let labelIdValue = parent?.labelId?.resolveValue(context: context) ?? .noValue
     let patternValue = parent?.pattern?.resolveValue(context: context) ?? .noValue
     let variableValue = parent?.variable?.resolveValue(context: context) ?? .noValue
@@ -90,7 +87,7 @@ public final class DivInputValidatorRegexTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "allow_empty":
-        allowEmptyValue = deserialize(__dictValue, validator: ResolvedValue.allowEmptyValidator).merged(with: allowEmptyValue)
+        allowEmptyValue = deserialize(__dictValue).merged(with: allowEmptyValue)
       case "label_id":
         labelIdValue = deserialize(__dictValue).merged(with: labelIdValue)
       case "pattern":
@@ -98,7 +95,7 @@ public final class DivInputValidatorRegexTemplate: TemplateValue {
       case "variable":
         variableValue = deserialize(__dictValue).merged(with: variableValue)
       case parent?.allowEmpty?.link:
-        allowEmptyValue = allowEmptyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.allowEmptyValidator))
+        allowEmptyValue = allowEmptyValue.merged(with: deserialize(__dictValue))
       case parent?.labelId?.link:
         labelIdValue = labelIdValue.merged(with: deserialize(__dictValue))
       case parent?.pattern?.link:

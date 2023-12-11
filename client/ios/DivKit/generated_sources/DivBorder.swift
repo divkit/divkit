@@ -22,18 +22,6 @@ public final class DivBorder {
   static let cornerRadiusValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let cornersRadiusValidator: AnyValueValidator<DivCornersRadius> =
-    makeNoOpValueValidator()
-
-  static let hasShadowValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
-
-  static let shadowValidator: AnyValueValidator<DivShadow> =
-    makeNoOpValueValidator()
-
-  static let strokeValidator: AnyValueValidator<DivStroke> =
-    makeNoOpValueValidator()
-
   init(
     cornerRadius: Expression<Int>? = nil,
     cornersRadius: DivCornersRadius? = nil,

@@ -28,9 +28,6 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
     static let placeholderValidator: AnyValueValidator<String> =
       makeStringValidator(minLength: 1)
 
-    static let regexValidator: AnyValueValidator<String> =
-      makeNoOpValueValidator()
-
     init(
       key: Expression<String>,
       placeholder: Expression<String>? = nil,
@@ -55,9 +52,6 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
   public func resolvePattern(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveStringBasedValue(expression: pattern, initializer: { $0 })
   }
-
-  static let alwaysVisibleValidator: AnyValueValidator<Bool> =
-    makeNoOpValueValidator()
 
   static let patternElementsValidator: AnyArrayValueValidator<DivFixedLengthInputMask.PatternElement> =
     makeArrayValidator(minItems: 1)

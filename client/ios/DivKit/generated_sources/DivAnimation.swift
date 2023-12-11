@@ -51,12 +51,6 @@ public final class DivAnimation {
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let interpolatorValidator: AnyValueValidator<DivAnimationInterpolator> =
-    makeNoOpValueValidator()
-
-  static let repeatCountValidator: AnyValueValidator<DivCount> =
-    makeNoOpValueValidator()
-
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 

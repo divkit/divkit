@@ -6,17 +6,14 @@ import Serialization
 
 public final class DivActionArrayRemoveValueTemplate: TemplateValue {
   public static let type: String = "array_remove_value"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let index: Field<Expression<Int>>?
   public let variableName: Field<Expression<String>>?
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         index: try dictionary.getOptionalExpressionField("index"),
         variableName: try dictionary.getOptionalExpressionField("variable_name")
       )

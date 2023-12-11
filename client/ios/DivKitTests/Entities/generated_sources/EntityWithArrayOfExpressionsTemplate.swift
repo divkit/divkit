@@ -8,16 +8,13 @@ import Serialization
 
 public final class EntityWithArrayOfExpressionsTemplate: TemplateValue {
   public static let type: String = "entity_with_array_of_expressions"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let items: Field<[Expression<String>]>? // at least 1 elements
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
-        parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+        parent: try dictionary.getOptionalField("type"),
         items: try dictionary.getOptionalExpressionArray("items")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {

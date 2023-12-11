@@ -37,9 +37,6 @@ public final class DivPatch {
   static let changesValidator: AnyArrayValueValidator<DivPatch.Change> =
     makeArrayValidator(minItems: 1)
 
-  static let modeValidator: AnyValueValidator<DivPatch.Mode> =
-    makeNoOpValueValidator()
-
   init(
     changes: [Change],
     mode: Expression<Mode>? = nil

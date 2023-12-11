@@ -8,15 +8,12 @@ import Serialization
 
 public final class EntityWithEntityPropertyTemplate: TemplateValue {
   public static let type: String = "entity_with_entity_property"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let entity: Field<EntityTemplate>? // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       entity: try dictionary.getOptionalField("entity", templateToType: templateToType)
     )
   }
@@ -30,7 +27,7 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: EntityWithEntityPropertyTemplate?) -> DeserializationResult<EntityWithEntityProperty> {
-    let entityValue = parent?.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true) ?? .noValue
+    let entityValue = parent?.entity?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) }
     )
@@ -48,14 +45,14 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "entity":
-        entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.entityValidator, type: EntityTemplate.self).merged(with: entityValue)
+        entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).merged(with: entityValue)
       case parent?.entity?.link:
-        entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.entityValidator, type: EntityTemplate.self))
+        entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true))
+      entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) }

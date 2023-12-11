@@ -28,7 +28,7 @@ public final class DivDimensionTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDimensionTemplate?) -> DeserializationResult<DivDimension> {
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
+    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
@@ -58,11 +58,11 @@ public final class DivDimensionTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "unit":
-        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
+        unitValue = deserialize(__dictValue).merged(with: unitValue)
       case "value":
         valueValue = deserialize(__dictValue).merged(with: valueValue)
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+        unitValue = unitValue.merged(with: deserialize(__dictValue))
       case parent?.value?.link:
         valueValue = valueValue.merged(with: deserialize(__dictValue))
       default: break

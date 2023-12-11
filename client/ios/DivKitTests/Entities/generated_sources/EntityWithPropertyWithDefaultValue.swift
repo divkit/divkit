@@ -57,9 +57,6 @@ public final class EntityWithPropertyWithDefaultValue {
   static let intValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let nestedValidator: AnyValueValidator<EntityWithPropertyWithDefaultValue.Nested> =
-    makeNoOpValueValidator()
-
   static let urlValidator: AnyValueValidator<URL> =
     makeURLValidator(schemes: ["https"])
 

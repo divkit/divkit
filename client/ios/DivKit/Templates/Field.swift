@@ -86,13 +86,13 @@ extension Field {
   func resolveOptionalValue<U: ValidSerializationValue>(
     context: TemplatesContext,
     transform: (U) -> T?,
-    validator: AnyValueValidator<T>
+    validator: AnyValueValidator<T>? = nil
   ) -> DeserializationResult<T> {
     let result = resolveOptionalValue(context: context, transform: transform)
     if case .noValue = result {
       return .noValue
     }
-    guard let resultValue = result.value, validator.isValid(resultValue) else {
+    guard let resultValue = result.value, validator?.isValid(resultValue) != false else {
       if let resultErrors = result.errorsOrWarnings {
         return .failure(NonEmptyArray(.composite(
           error: .invalidValue(result: result.value, from: nil),
@@ -107,27 +107,17 @@ extension Field {
 
 extension Field where T: ValidSerializationValue {
   @inlinable
-  func resolveValue(context: TemplatesContext) -> DeserializationResult<T> {
-    resolveValue(context: context, transform: { $0 as T })
-  }
-
-  @inlinable
   func resolveValue(
     context: TemplatesContext,
-    validator: AnyValueValidator<T>
+    validator: AnyValueValidator<T>? = nil
   ) -> DeserializationResult<T> {
     resolveValue(context: context, transform: { $0 as T }, validator: validator)
   }
 
   @inlinable
-  func resolveOptionalValue(context: TemplatesContext) -> DeserializationResult<T> {
-    resolveOptionalValue(context: context, transform: { $0 as T })
-  }
-
-  @inlinable
   func resolveOptionalValue(
     context: TemplatesContext,
-    validator: AnyValueValidator<T>
+    validator: AnyValueValidator<T>? = nil
   ) -> DeserializationResult<T> {
     resolveOptionalValue(context: context, transform: { $0 as T }, validator: validator)
   }
@@ -137,7 +127,7 @@ extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
   @inlinable
   func resolveOptionalValue(
     context: TemplatesContext,
-    validator: AnyValueValidator<T>
+    validator: AnyValueValidator<T>? = nil
   ) -> DeserializationResult<T> {
     resolveOptionalValue(context: context, transform: T.init(rawValue:), validator: validator)
   }
@@ -235,22 +225,14 @@ extension Field where T: TemplateValue {
   @inlinable
   func resolveOptionalValue(
     context: TemplatesContext,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<T.ResolvedValue> {
-    resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-  }
-
-  @inlinable
-  func resolveOptionalValue(
-    context: TemplatesContext,
-    validator: AnyValueValidator<T.ResolvedValue>,
+    validator: AnyValueValidator<T.ResolvedValue>? = nil,
     useOnlyLinks: Bool
   ) -> DeserializationResult<T.ResolvedValue> {
     let result = resolveValue(context: context, useOnlyLinks: useOnlyLinks)
     guard let value = result.value else {
       return .noValue
     }
-    guard validator.isValid(value) else {
+    guard validator?.isValid(value) != false else {
       return .failure(NonEmptyArray(.invalidValue(result: result.value, value: nil)))
     }
     return result

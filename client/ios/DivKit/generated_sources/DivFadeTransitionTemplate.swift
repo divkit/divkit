@@ -6,18 +6,15 @@ import Serialization
 
 public final class DivFadeTransitionTemplate: TemplateValue {
   public static let type: String = "fade"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 0.0
   public let duration: Field<Expression<Int>>? // constraint: number >= 0; default value: 200
   public let interpolator: Field<Expression<DivAnimationInterpolator>>? // default value: ease_in_out
   public let startDelay: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
 
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       alpha: try dictionary.getOptionalExpressionField("alpha"),
       duration: try dictionary.getOptionalExpressionField("duration"),
       interpolator: try dictionary.getOptionalExpressionField("interpolator"),
@@ -42,7 +39,7 @@ public final class DivFadeTransitionTemplate: TemplateValue {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFadeTransitionTemplate?) -> DeserializationResult<DivFadeTransition> {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
+    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
@@ -74,7 +71,7 @@ public final class DivFadeTransitionTemplate: TemplateValue {
       case "duration":
         durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
       case "interpolator":
-        interpolatorValue = deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator).merged(with: interpolatorValue)
+        interpolatorValue = deserialize(__dictValue).merged(with: interpolatorValue)
       case "start_delay":
         startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case parent?.alpha?.link:
@@ -82,7 +79,7 @@ public final class DivFadeTransitionTemplate: TemplateValue {
       case parent?.duration?.link:
         durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
       case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator))
+        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue))
       case parent?.startDelay?.link:
         startDelayValue = startDelayValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startDelayValidator))
       default: break

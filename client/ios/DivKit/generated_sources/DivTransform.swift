@@ -13,12 +13,6 @@ public final class DivTransform {
     resolver.resolveNumericValue(expression: rotation)
   }
 
-  static let pivotXValidator: AnyValueValidator<DivPivot> =
-    makeNoOpValueValidator()
-
-  static let pivotYValidator: AnyValueValidator<DivPivot> =
-    makeNoOpValueValidator()
-
   init(
     pivotX: DivPivot? = nil,
     pivotY: DivPivot? = nil,

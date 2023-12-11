@@ -22,9 +22,6 @@ public final class EntityWithOptionalComplexProperty {
   public static let type: String = "entity_with_optional_complex_property"
   public let property: Property?
 
-  static let propertyValidator: AnyValueValidator<EntityWithOptionalComplexProperty.Property> =
-    makeNoOpValueValidator()
-
   init(
     property: Property? = nil
   ) {

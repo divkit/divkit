@@ -8,9 +8,6 @@ public final class DivDefaultIndicatorItemPlacement {
   public static let type: String = "default"
   public let spaceBetweenCenters: DivFixedSize // default value: DivFixedSize(value: .value(15))
 
-  static let spaceBetweenCentersValidator: AnyValueValidator<DivFixedSize> =
-    makeNoOpValueValidator()
-
   init(
     spaceBetweenCenters: DivFixedSize? = nil
   ) {

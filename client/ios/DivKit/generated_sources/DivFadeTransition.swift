@@ -33,9 +33,6 @@ public final class DivFadeTransition: DivTransitionBase {
   static let durationValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let interpolatorValidator: AnyValueValidator<DivAnimationInterpolator> =
-    makeNoOpValueValidator()
-
   static let startDelayValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 

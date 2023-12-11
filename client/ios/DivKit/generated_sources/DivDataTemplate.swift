@@ -158,7 +158,7 @@ public final class DivDataTemplate: TemplateValue {
     let logIdValue = parent?.logId?.resolveValue(context: context) ?? .noValue
     let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
     let timersValue = parent?.timers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionAnimationSelectorValidator) ?? .noValue
+    let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?.resolveOptionalValue(context: context) ?? .noValue
     let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let variablesValue = parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
@@ -211,7 +211,7 @@ public final class DivDataTemplate: TemplateValue {
       case "timers":
         timersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self).merged(with: timersValue)
       case "transition_animation_selector":
-        transitionAnimationSelectorValue = deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator).merged(with: transitionAnimationSelectorValue)
+        transitionAnimationSelectorValue = deserialize(__dictValue).merged(with: transitionAnimationSelectorValue)
       case "variable_triggers":
         variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self).merged(with: variableTriggersValue)
       case "variables":
@@ -223,7 +223,7 @@ public final class DivDataTemplate: TemplateValue {
       case parent?.timers?.link:
         timersValue = timersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self))
       case parent?.transitionAnimationSelector?.link:
-        transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator))
+        transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: deserialize(__dictValue))
       case parent?.variableTriggers?.link:
         variableTriggersValue = variableTriggersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self))
       case parent?.variables?.link:

@@ -6,15 +6,12 @@ import Serialization
 
 public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
   public static let type: String = "default"
-  public let parent: String? // at least 1 char
+  public let parent: String?
   public let spaceBetweenCenters: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(15))
-
-  static let parentValidator: AnyValueValidator<String> =
-    makeStringValidator(minLength: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
+      parent: try dictionary.getOptionalField("type"),
       spaceBetweenCenters: try dictionary.getOptionalField("space_between_centers", templateToType: templateToType)
     )
   }
@@ -28,7 +25,7 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivDefaultIndicatorItemPlacementTemplate?) -> DeserializationResult<DivDefaultIndicatorItemPlacement> {
-    let spaceBetweenCentersValue = parent?.spaceBetweenCenters?.resolveOptionalValue(context: context, validator: ResolvedValue.spaceBetweenCentersValidator, useOnlyLinks: true) ?? .noValue
+    let spaceBetweenCentersValue = parent?.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
       spaceBetweenCentersValue.errorsOrWarnings?.map { .nestedObjectError(field: "space_between_centers", error: $0) }
     )
@@ -46,14 +43,14 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "space_between_centers":
-        spaceBetweenCentersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.spaceBetweenCentersValidator, type: DivFixedSizeTemplate.self).merged(with: spaceBetweenCentersValue)
+        spaceBetweenCentersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: spaceBetweenCentersValue)
       case parent?.spaceBetweenCenters?.link:
-        spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.spaceBetweenCentersValidator, type: DivFixedSizeTemplate.self))
+        spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: parent.spaceBetweenCenters?.resolveOptionalValue(context: context, validator: ResolvedValue.spaceBetweenCentersValidator, useOnlyLinks: true))
+      spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: parent.spaceBetweenCenters?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     let errors = mergeErrors(
       spaceBetweenCentersValue.errorsOrWarnings?.map { .nestedObjectError(field: "space_between_centers", error: $0) }

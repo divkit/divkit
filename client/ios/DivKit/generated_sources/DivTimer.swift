@@ -26,9 +26,6 @@ public final class DivTimer {
   static let tickIntervalValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
-  static let valueVariableValidator: AnyValueValidator<String> =
-    makeNoOpValueValidator()
-
   init(
     duration: Expression<Int>? = nil,
     endActions: [DivAction]? = nil,

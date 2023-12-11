@@ -33,7 +33,7 @@ public final class DivStrokeTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivStrokeTemplate?) -> DeserializationResult<DivStroke> {
     let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
-    let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
+    let unitValue = parent?.unit?.resolveOptionalValue(context: context) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
@@ -68,13 +68,13 @@ public final class DivStrokeTemplate: TemplateValue {
       case "color":
         colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
       case "unit":
-        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
+        unitValue = deserialize(__dictValue).merged(with: unitValue)
       case "width":
         widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).merged(with: widthValue)
       case parent?.color?.link:
         colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+        unitValue = unitValue.merged(with: deserialize(__dictValue))
       case parent?.width?.link:
         widthValue = widthValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.widthValidator))
       default: break

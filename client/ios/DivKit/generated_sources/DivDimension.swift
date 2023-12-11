@@ -16,9 +16,6 @@ public final class DivDimension {
     resolver.resolveNumericValue(expression: value)
   }
 
-  static let unitValidator: AnyValueValidator<DivSizeUnit> =
-    makeNoOpValueValidator()
-
   init(
     unit: Expression<DivSizeUnit>? = nil,
     value: Expression<Double>

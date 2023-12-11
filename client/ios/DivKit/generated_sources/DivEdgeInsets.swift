@@ -59,9 +59,6 @@ public final class DivEdgeInsets {
   static let topValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let unitValidator: AnyValueValidator<DivSizeUnit> =
-    makeNoOpValueValidator()
-
   init(
     bottom: Expression<Int>? = nil,
     end: Expression<Int>? = nil,

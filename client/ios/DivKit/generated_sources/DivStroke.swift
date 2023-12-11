@@ -21,9 +21,6 @@ public final class DivStroke {
     resolver.resolveNumericValue(expression: width) ?? 1
   }
 
-  static let unitValidator: AnyValueValidator<DivSizeUnit> =
-    makeNoOpValueValidator()
-
   static let widthValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
