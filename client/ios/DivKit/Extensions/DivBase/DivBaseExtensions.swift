@@ -11,7 +11,8 @@ extension DivBase {
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
     options: BasePropertiesOptions = [],
-    customA11yElement: AccessibilityElement? = nil
+    customA11yElement: AccessibilityElement? = nil,
+    clipToBounds: Bool = true
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
     let statePath = context.parentDivStatePath ?? DivData.rootPath
@@ -33,14 +34,14 @@ extension DivBase {
     let internalInsets = options.contains(.noPaddings)
       ? .zero
       : paddings.resolve(context)
-    block = block.addingEdgeInsets(internalInsets)
+    block = block.addingEdgeInsets(internalInsets, clipsToBounds: clipToBounds)
 
     let externalInsets = margins.resolve(context)
     if visibility == .invisible {
       context.lastVisibleBoundsCache.dropVisibleBounds(forMatchingPrefix: context.parentPath)
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
       block = applyExtensionHandlersAfterBaseProperties(
-        to: block.addingEdgeInsets(externalInsets),
+        to: block.addingEdgeInsets(externalInsets, clipsToBounds: clipToBounds),
         extensionHandlers: extensionHandlers,
         context: context
       )
@@ -66,7 +67,7 @@ extension DivBase {
       context: context
     )
     .addingDecorations(
-      boundary: .clipCorner(border.resolveCornerRadii(expressionResolver)),
+      boundary: clipToBounds ? .clipCorner(border.resolveCornerRadii(expressionResolver)) : .noClip,
       border: border.resolveBorder(expressionResolver),
       shadow: border.resolveShadow(expressionResolver),
       visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
@@ -92,7 +93,8 @@ extension DivBase {
       .addActions(context: context, actionsHolder: actionsHolder)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip },
+        boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip } ??
+          border.resolveShadow(expressionResolver).flatMap { _ in .noClip },
         alpha: CGFloat(resolveAlpha(expressionResolver)),
         accessibilityElement: customA11yElement ?? accessibility.resolve(context, id: id)
       )

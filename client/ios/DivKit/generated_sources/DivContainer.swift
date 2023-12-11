@@ -75,6 +75,7 @@ public final class DivContainer: DivBase {
   public let aspect: DivAspect?
   public let background: [DivBackground]?
   public let border: DivBorder
+  public let clipToBounds: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal> // default value: start
   public let contentAlignmentVertical: Expression<DivContentAlignmentVertical> // default value: top
@@ -116,6 +117,10 @@ public final class DivContainer: DivBase {
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumericValue(expression: alpha) ?? 1.0
+  }
+
+  public func resolveClipToBounds(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumericValue(expression: clipToBounds) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -168,6 +173,9 @@ public final class DivContainer: DivBase {
     makeNoOpValueValidator()
 
   static let borderValidator: AnyValueValidator<DivBorder> =
+    makeNoOpValueValidator()
+
+  static let clipToBoundsValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
   static let columnSpanValidator: AnyValueValidator<Int> =
@@ -247,6 +255,7 @@ public final class DivContainer: DivBase {
     aspect: DivAspect?,
     background: [DivBackground]?,
     border: DivBorder?,
+    clipToBounds: Expression<Bool>?,
     columnSpan: Expression<Int>?,
     contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal>?,
     contentAlignmentVertical: Expression<DivContentAlignmentVertical>?,
@@ -288,6 +297,7 @@ public final class DivContainer: DivBase {
     self.aspect = aspect
     self.background = background
     self.border = border ?? DivBorder()
+    self.clipToBounds = clipToBounds ?? .value(true)
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.start)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.top)
@@ -347,75 +357,76 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
+      lhs.clipToBounds == rhs.clipToBounds,
+      lhs.columnSpan == rhs.columnSpan
     else {
       return false
     }
     guard
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
       lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
-      lhs.disappearActions == rhs.disappearActions,
-      lhs.doubletapActions == rhs.doubletapActions
+      lhs.disappearActions == rhs.disappearActions
     else {
       return false
     }
     guard
+      lhs.doubletapActions == rhs.doubletapActions,
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.id == rhs.id,
-      lhs.itemBuilder == rhs.itemBuilder,
-      lhs.items == rhs.items
+      lhs.itemBuilder == rhs.itemBuilder
     else {
       return false
     }
     guard
+      lhs.items == rhs.items,
       lhs.layoutMode == rhs.layoutMode,
-      lhs.lineSeparator == rhs.lineSeparator,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.lineSeparator == rhs.lineSeparator
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.separator == rhs.separator,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -439,6 +450,7 @@ extension DivContainer: Serializable {
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
+    result["clip_to_bounds"] = clipToBounds.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()

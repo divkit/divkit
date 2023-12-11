@@ -10,7 +10,8 @@ extension DivContainer: DivBlockModeling {
       context: context.modifying(
         childrenA11yDescription: resolveChildrenA11yDescription(context)
       ),
-      actionsHolder: self
+      actionsHolder: self,
+      clipToBounds: resolveClipToBounds(context.expressionResolver)
     )
   }
 
@@ -191,7 +192,8 @@ extension DivContainer: DivBlockModeling {
       crossAlignment: crossAlignment,
       children: children,
       separator: resolveSeparator(context),
-      lineSeparator: resolveLineSeparator(context)
+      lineSeparator: resolveLineSeparator(context),
+      clipContent: resolveClipToBounds(expressionResolver)
     )
 
     if let aspectRatio = aspectRatio {

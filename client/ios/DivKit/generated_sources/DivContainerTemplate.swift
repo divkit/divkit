@@ -167,6 +167,7 @@ public final class DivContainerTemplate: TemplateValue {
   public let aspect: Field<DivAspectTemplate>?
   public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
+  public let clipToBounds: Field<Expression<Bool>>? // default value: true
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? // default value: start
   public let contentAlignmentVertical: Field<Expression<DivContentAlignmentVertical>>? // default value: top
@@ -214,6 +215,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspect: try dictionary.getOptionalField("aspect", templateToType: templateToType),
       background: try dictionary.getOptionalArray("background", templateToType: templateToType),
       border: try dictionary.getOptionalField("border", templateToType: templateToType),
+      clipToBounds: try dictionary.getOptionalExpressionField("clip_to_bounds"),
       columnSpan: try dictionary.getOptionalExpressionField("column_span"),
       contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
       contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
@@ -259,6 +261,7 @@ public final class DivContainerTemplate: TemplateValue {
     aspect: Field<DivAspectTemplate>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
+    clipToBounds: Field<Expression<Bool>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     contentAlignmentHorizontal: Field<Expression<DivContentAlignmentHorizontal>>? = nil,
     contentAlignmentVertical: Field<Expression<DivContentAlignmentVertical>>? = nil,
@@ -301,6 +304,7 @@ public final class DivContainerTemplate: TemplateValue {
     self.aspect = aspect
     self.background = background
     self.border = border
+    self.clipToBounds = clipToBounds
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal
     self.contentAlignmentVertical = contentAlignmentVertical
@@ -344,6 +348,7 @@ public final class DivContainerTemplate: TemplateValue {
     let aspectValue = parent?.aspect?.resolveOptionalValue(context: context, validator: ResolvedValue.aspectValidator, useOnlyLinks: true) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
+    let clipToBoundsValue = parent?.clipToBounds?.resolveOptionalValue(context: context, validator: ResolvedValue.clipToBoundsValidator) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentHorizontalValidator) ?? .noValue
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
@@ -385,6 +390,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      clipToBoundsValue.errorsOrWarnings?.map { .nestedObjectError(field: "clip_to_bounds", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
@@ -427,6 +433,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
+      clipToBounds: clipToBoundsValue.value,
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
@@ -475,6 +482,7 @@ public final class DivContainerTemplate: TemplateValue {
     var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
+    var clipToBoundsValue: DeserializationResult<Expression<Bool>> = parent?.clipToBounds?.value() ?? .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivContentAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
     var contentAlignmentVerticalValue: DeserializationResult<Expression<DivContentAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
@@ -527,6 +535,8 @@ public final class DivContainerTemplate: TemplateValue {
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
         borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self).merged(with: borderValue)
+      case "clip_to_bounds":
+        clipToBoundsValue = deserialize(__dictValue, validator: ResolvedValue.clipToBoundsValidator).merged(with: clipToBoundsValue)
       case "column_span":
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "content_alignment_horizontal":
@@ -607,6 +617,8 @@ public final class DivContainerTemplate: TemplateValue {
         backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self))
       case parent?.border?.link:
         borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivBorderTemplate.self))
+      case parent?.clipToBounds?.link:
+        clipToBoundsValue = clipToBoundsValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.clipToBoundsValidator))
       case parent?.columnSpan?.link:
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.contentAlignmentHorizontal?.link:
@@ -711,6 +723,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      clipToBoundsValue.errorsOrWarnings?.map { .nestedObjectError(field: "clip_to_bounds", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
       contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
@@ -753,6 +766,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
+      clipToBounds: clipToBoundsValue.value,
       columnSpan: columnSpanValue.value,
       contentAlignmentHorizontal: contentAlignmentHorizontalValue.value,
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
@@ -806,6 +820,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspect: aspect ?? mergedParent.aspect,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
+      clipToBounds: clipToBounds ?? mergedParent.clipToBounds,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
@@ -854,6 +869,7 @@ public final class DivContainerTemplate: TemplateValue {
       aspect: merged.aspect?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
+      clipToBounds: merged.clipToBounds,
       columnSpan: merged.columnSpan,
       contentAlignmentHorizontal: merged.contentAlignmentHorizontal,
       contentAlignmentVertical: merged.contentAlignmentVertical,

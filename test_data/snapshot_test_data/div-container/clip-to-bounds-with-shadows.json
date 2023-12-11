@@ -1,0 +1,88 @@
+{
+  "description": "Container with no clipToBounds and items with shadow",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "item": {
+      "type": "separator",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#2995fa"
+        }
+      ],
+      "border": {
+        "has_shadow": true,
+        "shadow": {
+          "color": "#777777",
+          "alpha": 1,
+          "offset": {
+            "x": {
+              "value": 15
+            },
+            "y": {
+              "value": 15
+            }
+          }
+        },
+        "corner_radius": 20
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      },
+      "width": {
+        "type": "fixed",
+        "value": 50
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "clip_to_bounds": false,
+              "width": {
+                "type": "fixed",
+                "value": 50
+              },
+              "border": {
+                "stroke": {
+                  "color": "#000000",
+                  "width": 1
+                }
+              },
+              "items": [
+                {
+                  "type": "item"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -70,6 +70,7 @@ func makeDivContainer(
     aspect: nil,
     background: nil,
     border: nil,
+    clipToBounds: nil,
     columnSpan: nil,
     contentAlignmentHorizontal: nil,
     contentAlignmentVertical: nil,

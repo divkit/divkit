@@ -93,6 +93,7 @@ extension DivContainer {
       aspect: aspect,
       background: background,
       border: border,
+      clipToBounds: clipToBounds,
       columnSpan: columnSpan,
       contentAlignmentHorizontal: contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical,
