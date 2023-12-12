@@ -86,11 +86,11 @@ class DartEntity(Entity):
         return [] if not unique_types else make_imports(sorted(unique_types))
 
     @property
-    def import_parsing_extensions(self) -> List[str]:
+    def import_parsing_utils(self) -> List[str]:
         # ToDo(man-y): Follow the import execution logic if necessary.
         # if any(isinstance(item, (Color, Int, Bool, BoolInt, Double, Url)) for item in
         #        [p.property_type for p in self.instance_properties]):
-        return ["import '../utils/parsing_extensions.dart';"]
+        return ["import '../utils/parsing_utils.dart';"]
         # else:
         #     return []
 
@@ -147,7 +147,10 @@ class DartProperty(Property):
     @property
     def type_declaration(self) -> str:
         optionality = '?' if self.optional and not self.has_default else ''
-        return cast(DartPropertyType, self.property_type).declaration() + optionality
+        declaration = cast(DartPropertyType, self.property_type).declaration()
+        if self.supports_expressions:
+            declaration = f"Expression<{declaration}>"
+        return declaration + optionality
 
     @property
     def get_default_import(self) -> Optional[str]:
@@ -174,39 +177,41 @@ class DartProperty(Property):
         prop_type_decl = property_type.declaration()
         required_cast = '' if self.optional or self.has_default else '!'
 
+        expr = 'Expr' if self.supports_expressions else ''
+
         if isinstance(property_type, Int):
-            return f"safeParseInt(json['{self.name}']){required_cast}"
+            return f"safeParseInt{expr}(json['{self.name}']){required_cast}"
         elif isinstance(property_type, Color):
-            return f"safeParseColor(json['{self.name}']){required_cast}"
+            return f"safeParseColor{expr}(json['{self.name}']){required_cast}"
         elif isinstance(property_type, Double):
-            return f"safeParseDouble(json['{self.name}']){required_cast}"
+            return f"safeParseDouble{expr}(json['{self.name}']){required_cast}"
         elif isinstance(property_type, (Bool, BoolInt)):
-            return f"safeParseBool(json['{self.name}']){required_cast}"
+            return f"safeParseBool{expr}(json['{self.name}']){required_cast}"
         elif isinstance(property_type, (String, StaticString)):
-            return f"json['{self.name}']{required_cast}{'?' if self.optional else ''}.toString()"
+            return f"safeParseStr{expr}(json['{self.name}']?.toString()){required_cast}"
         elif isinstance(property_type, Dictionary):
-            return f"json{required_cast}"
+            return f"safeParseClass{expr}(json){required_cast}"
         elif isinstance(property_type, RawArray):
-            return f"json['{self.name}']{required_cast}"
+            return f"safeParseClass{expr}(json['{self.name}']){required_cast}"
         elif isinstance(property_type, Url):
-            return f"safeParseUri(json['{self.name}']){required_cast}"
+            return f"safeParseUri{expr}(json['{self.name}']){required_cast}"
         elif property_type.is_class():
-            return f"{prop_type_decl}.fromJson(json['{self.name}']){required_cast}"
+            return f"safeParseClass{expr}({prop_type_decl}.fromJson(json['{self.name}'])){required_cast}"
         elif property_type.is_list():
             inner_item_type = property_type.get_list_inner_class()
             if inner_item_type.is_class():
                 if inner_item_type.is_string_enumeration():
-                    return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                    return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                            f"{'?' if self.optional or self.has_default else ''}.map((s) => {prop_type_decl[5:-1]}" \
-                           ".fromJson(s)!).toList()"
+                           f".fromJson(s)!).toList()){'' if self.optional or self.has_default else '!'}"
                 else:
-                    return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                    return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                            f"{'?' if self.optional or self.has_default else ''}.map((j) => {prop_type_decl[5:-1]}." \
-                           "fromJson(j as Map <String, dynamic>)!).toList()"
+                           f"fromJson(j as Map <String, dynamic>)!).toList()){'' if self.optional or self.has_default else '!'}"
             else:
-                return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                        f"{'?' if self.optional or self.has_default else ''}.map((v) => (v as {prop_type_decl[5:-1]}))" \
-                       ".toList()"
+                       f".toList()){'' if self.optional or self.has_default else '!'}"
 
     def add_default_value_to(self, declaration: str, in_constructor=True) -> str:
         prop_type = cast(DartPropertyType, self.property_type)
@@ -217,6 +222,9 @@ class DartProperty(Property):
             default_value_declaration_to_use = empty_dict_deserialization
         else:
             return declaration
+
+        if self.supports_expressions:
+            default_value_declaration_to_use = f'const Expression.value({default_value_declaration_to_use})'
 
         if in_constructor:
             default_value_declaration_to_use = f'{declaration} = {default_value_declaration_to_use}'
@@ -355,7 +363,7 @@ class DartPropertyType(PropertyType):
                 if case_constructor is None:
                     return None
 
-                return f'const {get_full_name(self.object)}.{allowed_name(utils.lower_camel_case(enum_case[0]))}({case_constructor})'
+                return f'const {get_full_name(self.object)}({case_constructor})'
 
             if isinstance(self.object, DartEntity):
                 entity = cast(DartEntity, self.object)
@@ -369,7 +377,12 @@ class DartPropertyType(PropertyType):
                     if str_type is None:
                         continue
                     declaration = cast(DartPropertyType, prop.property_type).internal_declaration(str_type)
+
+                    if prop.supports_expressions:
+                        declaration = f'Expression.value({declaration})'
+
                     args.append(f'{prop.declaration_name}: {declaration}')
+
                 if len(args) != 0:
                     prop_init = ', '.join(args)
                     prop_init += ','

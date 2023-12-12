@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithSimpleProperties with EquatableMixin {
   const EntityWithSimpleProperties({
@@ -11,7 +11,7 @@ class EntityWithSimpleProperties with EquatableMixin {
     this.color,
     this.dNum,
     this.id = 0,
-    this.integer = 0,
+    this.integer = const Expression.value(0),
     this.positiveInteger,
     this.string,
     this.url,
@@ -19,23 +19,23 @@ class EntityWithSimpleProperties with EquatableMixin {
 
   static const type = "entity_with_simple_properties";
 
-  final bool? boolean;
+  final Expression<bool>? boolean;
 
-  final bool? booleanInt;
+  final Expression<bool>? booleanInt;
 
-  final int? color;
+  final Expression<int>? color;
 
-  final double? dNum;
+  final Expression<double>? dNum;
   // default value: 0
   final int id;
   // default value: 0
-  final int integer;
+  final Expression<int> integer;
   // constraint: number > 0
-  final int? positiveInteger;
+  final Expression<int>? positiveInteger;
 
-  final String? string;
+  final Expression<String>? string;
 
-  final Uri? url;
+  final Expression<Uri>? url;
 
   @override
   List<Object?> get props => [
@@ -55,15 +55,15 @@ class EntityWithSimpleProperties with EquatableMixin {
       return null;
     }
     return EntityWithSimpleProperties(
-      boolean: safeParseBool(json['boolean']),
-      booleanInt: safeParseBool(json['boolean_int']),
-      color: safeParseColor(json['color']),
-      dNum: safeParseDouble(json['dNum']),
+      boolean: safeParseBoolExpr(json['boolean']),
+      booleanInt: safeParseBoolExpr(json['boolean_int']),
+      color: safeParseColorExpr(json['color']),
+      dNum: safeParseDoubleExpr(json['dNum']),
       id: safeParseInt(json['id']) ?? 0,
-      integer: safeParseInt(json['integer']) ?? 0,
-      positiveInteger: safeParseInt(json['positive_integer']),
-      string: json['string']?.toString(),
-      url: safeParseUri(json['url']),
+      integer: safeParseIntExpr(json['integer']) ?? const Expression.value(0),
+      positiveInteger: safeParseIntExpr(json['positive_integer']),
+      string: safeParseStrExpr(json['string']?.toString()),
+      url: safeParseUriExpr(json['url']),
     );
   }
 }

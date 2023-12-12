@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithOptionalProperty with EquatableMixin {
   const EntityWithOptionalProperty({
@@ -11,7 +11,7 @@ class EntityWithOptionalProperty with EquatableMixin {
 
   static const type = "entity_with_optional_property";
 
-  final String? property;
+  final Expression<String>? property;
 
   @override
   List<Object?> get props => [
@@ -23,7 +23,7 @@ class EntityWithOptionalProperty with EquatableMixin {
       return null;
     }
     return EntityWithOptionalProperty(
-      property: json['property']?.toString(),
+      property: safeParseStrExpr(json['property']?.toString()),
     );
   }
 }

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithRequiredProperty with EquatableMixin {
   const EntityWithRequiredProperty({
@@ -11,7 +11,7 @@ class EntityWithRequiredProperty with EquatableMixin {
 
   static const type = "entity_with_required_property";
   // at least 1 char
-  final String property;
+  final Expression<String> property;
 
   @override
   List<Object?> get props => [
@@ -23,7 +23,7 @@ class EntityWithRequiredProperty with EquatableMixin {
       return null;
     }
     return EntityWithRequiredProperty(
-      property: json['property']!.toString(),
+      property: safeParseStrExpr(json['property']?.toString())!,
     );
   }
 }

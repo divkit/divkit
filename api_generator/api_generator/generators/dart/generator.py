@@ -55,8 +55,8 @@ class DartGenerator(Generator):
         defaults_import = [f"import '{utils.snake_case(e)}.dart';" for e in
                            filter(None, [d.get_default_import for d in entity.instance_properties])]
 
-        # Parsing extensions import
-        parsing_ext_import = entity.import_parsing_extensions
+        # Parsing utils import
+        parsing_ext_import = entity.import_parsing_utils
 
         # Imports section declaration
         if entity.is_main_declaration:
@@ -100,9 +100,10 @@ class DartGenerator(Generator):
             override = '  @override\n' if instance_prop.name in needs_override_names else ''
             property_type = cast(DartPropertyType, instance_prop.property_type)
             prop_type = property_type.declaration()
+            type_decl = f'Expression<{prop_type}>' if instance_prop.supports_expressions else prop_type
             option = '?' if instance_prop.optional and not instance_prop.has_default else ''
             comment = f'{" " + instance_prop.comment}' + '\n'
-            result += f'{comment}{override}  final {prop_type}{option} {utils.lower_camel_case(instance_prop.name)};'
+            result += f'{comment}{override}  final {type_decl}{option} {utils.lower_camel_case(instance_prop.name)};'
 
         # Equatable declaration
         if len(entity.instance_properties) != 0:

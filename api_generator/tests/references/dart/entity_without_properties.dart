@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithoutProperties with EquatableMixin {
   const EntityWithoutProperties();

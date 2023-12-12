@@ -2,16 +2,16 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
   const EntityWithStringEnumPropertyWithDefaultValue({
-    this.value = EntityWithStringEnumPropertyWithDefaultValueValue.second,
+    this.value = const Expression.value(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
 
   static const type = "entity_with_string_enum_property_with_default_value";
   // default value: EntityWithStringEnumPropertyWithDefaultValueValue.second
-  final EntityWithStringEnumPropertyWithDefaultValueValue value;
+  final Expression<EntityWithStringEnumPropertyWithDefaultValueValue> value;
 
   @override
   List<Object?> get props => [
@@ -23,7 +23,7 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
     return EntityWithStringEnumPropertyWithDefaultValue(
-      value: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson(json['value']) ?? EntityWithStringEnumPropertyWithDefaultValueValue.second,
+      value: safeParseClassExpr(EntityWithStringEnumPropertyWithDefaultValueValue.fromJson(json['value'])) ?? const Expression.value(EntityWithStringEnumPropertyWithDefaultValueValue.second),
     );
   }
 }

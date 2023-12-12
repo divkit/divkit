@@ -2,15 +2,15 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithComplexPropertyWithDefaultValue with EquatableMixin {
   const EntityWithComplexPropertyWithDefaultValue({
-    this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: "Default text",),
+    this.property = const EntityWithComplexPropertyWithDefaultValueProperty(value: Expression.value("Default text"),),
   });
 
   static const type = "entity_with_complex_property_with_default_value";
-  // default value: const EntityWithComplexPropertyWithDefaultValueProperty(value: "Default text",)
+  // default value: const EntityWithComplexPropertyWithDefaultValueProperty(value: Expression.value("Default text"),)
   final EntityWithComplexPropertyWithDefaultValueProperty property;
 
   @override
@@ -23,7 +23,7 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyWithDefaultValue(
-      property: EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']) ?? const EntityWithComplexPropertyWithDefaultValueProperty(value: "Default text",),
+      property: safeParseClass(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property'])) ?? const EntityWithComplexPropertyWithDefaultValueProperty(value: Expression.value("Default text"),),
     );
   }
 }
@@ -34,7 +34,7 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
   });
 
 
-  final String value;
+  final Expression<String> value;
 
   @override
   List<Object?> get props => [
@@ -46,7 +46,7 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyWithDefaultValueProperty(
-      value: json['value']!.toString(),
+      value: safeParseStrExpr(json['value']?.toString())!,
     );
   }
 }

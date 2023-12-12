@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithComplexProperty with EquatableMixin {
   const EntityWithComplexProperty({
@@ -23,7 +23,7 @@ class EntityWithComplexProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexProperty(
-      property: EntityWithComplexPropertyProperty.fromJson(json['property'])!,
+      property: safeParseClass(EntityWithComplexPropertyProperty.fromJson(json['property']))!,
     );
   }
 }
@@ -34,7 +34,7 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
   });
 
 
-  final Uri value;
+  final Expression<Uri> value;
 
   @override
   List<Object?> get props => [
@@ -46,7 +46,7 @@ class EntityWithComplexPropertyProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyProperty(
-      value: safeParseUri(json['value'])!,
+      value: safeParseUriExpr(json['value'])!,
     );
   }
 }

@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithRawArray with EquatableMixin {
   const EntityWithRawArray({
@@ -11,7 +11,7 @@ class EntityWithRawArray with EquatableMixin {
 
   static const type = "entity_with_raw_array";
 
-  final List<dynamic> array;
+  final Expression<List<dynamic>> array;
 
   @override
   List<Object?> get props => [
@@ -23,7 +23,7 @@ class EntityWithRawArray with EquatableMixin {
       return null;
     }
     return EntityWithRawArray(
-      array: json['array']!,
+      array: safeParseClassExpr(json['array'])!,
     );
   }
 }

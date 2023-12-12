@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 
 class EntityWithJsonProperty with EquatableMixin {
   const EntityWithJsonProperty({
@@ -23,7 +23,7 @@ class EntityWithJsonProperty with EquatableMixin {
       return null;
     }
     return EntityWithJsonProperty(
-      jsonProperty: json ?? None,
+      jsonProperty: safeParseClass(json) ?? None,
     );
   }
 }

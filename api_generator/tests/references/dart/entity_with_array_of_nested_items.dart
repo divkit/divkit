@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 import 'entity.dart';
 
 class EntityWithArrayOfNestedItems with EquatableMixin {
@@ -24,7 +24,7 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfNestedItems(
-      items: (json['items'] as List<dynamic>).map((j) => EntityWithArrayOfNestedItemsItem.fromJson(j as Map <String, dynamic>)!).toList(),
+      items: safeParseClass((json['items'] as List<dynamic>).map((j) => EntityWithArrayOfNestedItemsItem.fromJson(j as Map <String, dynamic>)!).toList())!,
     );
   }
 }
@@ -38,7 +38,7 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
 
   final Entity entity;
 
-  final String property;
+  final Expression<String> property;
 
   @override
   List<Object?> get props => [
@@ -51,8 +51,8 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfNestedItemsItem(
-      entity: Entity.fromJson(json['entity'])!,
-      property: json['property']!.toString(),
+      entity: safeParseClass(Entity.fromJson(json['entity']))!,
+      property: safeParseStrExpr(json['property']?.toString())!,
     );
   }
 }

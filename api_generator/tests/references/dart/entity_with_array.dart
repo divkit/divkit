@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 
-import '../utils/parsing_extensions.dart';
+import '../utils/parsing_utils.dart';
 import 'entity.dart';
 
 class EntityWithArray with EquatableMixin {
@@ -24,7 +24,7 @@ class EntityWithArray with EquatableMixin {
       return null;
     }
     return EntityWithArray(
-      array: (json['array'] as List<dynamic>).map((j) => Entity.fromJson(j as Map <String, dynamic>)!).toList(),
+      array: safeParseClass((json['array'] as List<dynamic>).map((j) => Entity.fromJson(j as Map <String, dynamic>)!).toList())!,
     );
   }
 }
