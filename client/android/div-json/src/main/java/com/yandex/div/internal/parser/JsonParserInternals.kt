@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
-
 package com.yandex.div.internal.parser
 
 import com.yandex.div.json.JSONSerializable

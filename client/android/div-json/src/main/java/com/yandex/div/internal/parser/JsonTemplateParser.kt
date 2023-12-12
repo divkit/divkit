@@ -1,5 +1,7 @@
 package com.yandex.div.internal.parser
 
+import com.yandex.div.internal.parser.JsonParser.alwaysValid
+import com.yandex.div.internal.parser.JsonParser.alwaysValidList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.internal.parser.JsonParser.doNotConvert
@@ -16,7 +18,7 @@ fun <T : Any> JSONObject.readField(
     key: String,
     overridable: Boolean,
     fallback: Field<T>?,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<T> {
@@ -36,7 +38,7 @@ inline fun <reified R, reified T : Any> JSONObject.readField(
     overridable: Boolean,
     fallback: Field<T>?,
     converter: Converter<R, T?>,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<T> {
@@ -76,7 +78,7 @@ fun <T : Any> JSONObject.readOptionalField(
     key: String,
     overridable: Boolean,
     fallback: Field<T>?,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<T> {
@@ -100,7 +102,7 @@ fun <R, T : Any> JSONObject.readOptionalField(
     overridable: Boolean,
     fallback: Field<T>?,
     converter: Converter<R, T?>,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<T> {
@@ -147,8 +149,8 @@ fun <T : Any> JSONObject.readListField(
     key: String,
     overridable: Boolean,
     fallback: Field<List<T>>?,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -174,8 +176,8 @@ fun <R, T : Any> JSONObject.readListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     converter: Converter<R, T?>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -203,7 +205,7 @@ fun <T : JSONSerializable> JSONObject.readListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     creator: Creator<JSONObject, T>,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -228,8 +230,8 @@ fun <T : Any> JSONObject.readOptionalListField(
     key: String,
     overridable: Boolean,
     fallback: Field<List<T>>?,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -258,8 +260,8 @@ fun <R, T : Any> JSONObject.readOptionalListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     converter: Converter<R, T?>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -290,8 +292,8 @@ fun <T : JSONSerializable> JSONObject.readOptionalListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     creator: Creator<JSONObject, T>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -321,8 +323,8 @@ fun <T : Any> JSONObject.readStrictListField(
     key: String,
     overridable: Boolean,
     fallback: Field<List<T>>?,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -347,8 +349,8 @@ fun <R, T : Any> JSONObject.readStrictListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     converter: Converter<R, T?>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {
@@ -375,7 +377,7 @@ fun <T : JSONSerializable> JSONObject.readStrictListField(
     overridable: Boolean,
     fallback: Field<List<T>>?,
     creator: Creator<JSONObject, T>,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): Field<List<T>> {

@@ -1,7 +1,9 @@
-@file:Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE", "UNUSED_PARAMETER")
+@file:Suppress("UNCHECKED_CAST", "UNUSED_PARAMETER")
 
 package com.yandex.div.internal.parser
 
+import com.yandex.div.internal.parser.JsonParser.alwaysValid
+import com.yandex.div.internal.parser.JsonParser.alwaysValidList
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionList
@@ -21,7 +23,7 @@ import org.json.JSONObject
 
 fun <T : Any> JSONObject.read(
     key: String,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): T {
@@ -38,7 +40,7 @@ fun <T : Any> JSONObject.read(
 inline fun <reified R, reified T : Any> JSONObject.read(
     key: String,
     converter: Converter<R, T?>,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
     ): T {
@@ -80,7 +82,7 @@ fun <T : JSONSerializable> JSONObject.read(
 
 fun <T : Any> JSONObject.readOptional(
     key: String,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): T? {
@@ -102,7 +104,7 @@ fun <T : Any> JSONObject.readOptional(
 fun <R, T : Any> JSONObject.readOptional(
     key: String,
     converter: Converter<R, T?>,
-    validator: ValueValidator<T> = ValueValidator { true },
+    validator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): T? {
@@ -139,8 +141,8 @@ fun <T : JSONSerializable> JSONObject.readOptional(
 
 fun <T : Any> JSONObject.readList(
     key: String,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): List<T> {
@@ -155,8 +157,8 @@ fun <T : Any> JSONObject.readList(
 fun <R, T : Any> JSONObject.readList(
     key: String,
     converter: Converter<R, T?>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): List<T> {
@@ -188,8 +190,8 @@ fun <T : JSONSerializable> JSONObject.readList(
 
 fun <T : Any> JSONObject.readStrictList(
     key: String,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger
 ): List<T> {
     return getList(key, validator, logger) { jsonArray, i ->
@@ -202,8 +204,8 @@ fun <T : Any> JSONObject.readStrictList(
 fun <R, T : Any> JSONObject.readStrictList(
     key: String,
     converter: Converter<R, T?>,
-    validator: ListValidator<T> = ListValidator { true },
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger
 ): List<T> {
     return getList(key, validator, logger) { jsonArray, i ->
@@ -275,7 +277,7 @@ fun <T : JSONSerializable> JSONObject.readOptionalList(
     key: String,
     creator: Creator<JSONObject, T>,
     validator: ListValidator<T>,
-    itemValidator: ValueValidator<T> = ValueValidator { true },
+    itemValidator: ValueValidator<T> = alwaysValid(),
     logger: ParsingErrorLogger,
     env: ParsingEnvironment,
 ): List<T>? {

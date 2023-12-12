@@ -38,7 +38,7 @@ public class JsonParser {
     @NonNull
     private static final ValueValidator<?> ALWAYS_VALID = (any) -> true;
     @NonNull
-    private static final ValueValidator<String> IS_STRING = (any) -> true;
+    private static final ValueValidator<String> ALWAYS_VALID_STRING = (any) -> true;
     @NonNull
     private static final ListValidator<?> ALWAYS_VALID_LIST = (any) -> true;
     @NonNull
@@ -74,7 +74,7 @@ public class JsonParser {
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env,
             @NonNull final TypeHelper<String> typeHelper) {
-        return readOptionalExpression(jsonObject, key, doNotConvert(), IS_STRING, logger, env, typeHelper);
+        return readOptionalExpression(jsonObject, key, doNotConvert(), ALWAYS_VALID_STRING, logger, env, typeHelper);
     }
 
     @Nullable
@@ -788,7 +788,7 @@ public class JsonParser {
             @NonNull final ListValidator<String> validator,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env) {
-        return readList(jsonObject, key, doNotConvert(), validator, IS_STRING, logger, env);
+        return readList(jsonObject, key, doNotConvert(), validator, ALWAYS_VALID_STRING, logger, env);
     }
 
     @NonNull
@@ -886,7 +886,7 @@ public class JsonParser {
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env,
             @NonNull final TypeHelper<String> typeHelper) {
-        return readExpressionList(jsonObject, key, doNotConvert(), validator, IS_STRING, logger, env, typeHelper);
+        return readExpressionList(jsonObject, key, doNotConvert(), validator, ALWAYS_VALID_STRING, logger, env, typeHelper);
     }
 
     @NonNull
@@ -896,7 +896,7 @@ public class JsonParser {
             @NonNull final ListValidator<String> validator,
             @NonNull final ParsingErrorLogger logger,
             @NonNull final ParsingEnvironment env) {
-        return readExpressionList(jsonObject, key, doNotConvert(), validator, IS_STRING, logger, env, TYPE_HELPER_STRING);
+        return readExpressionList(jsonObject, key, doNotConvert(), validator, ALWAYS_VALID_STRING, logger, env, TYPE_HELPER_STRING);
     }
 
     @NonNull
@@ -1082,13 +1082,18 @@ public class JsonParser {
     }
 
     @NonNull
-    static <T> ValueValidator<T> alwaysValid() {
+    public static <T> ValueValidator<T> alwaysValid() {
         //noinspection unchecked
         return (ValueValidator<T>) ALWAYS_VALID;
     }
 
     @NonNull
-    static <T> ListValidator<T> alwaysValidList() {
+    static ValueValidator<String> alwaysValidString() {
+        return ALWAYS_VALID_STRING;
+    }
+
+    @NonNull
+    public static <T> ListValidator<T> alwaysValidList() {
         //noinspection unchecked
         return (ListValidator<T>) ALWAYS_VALID_LIST;
     }
@@ -1097,12 +1102,6 @@ public class JsonParser {
     static <T> Function1<T, T> doNotConvert() {
         //noinspection unchecked
         return (Function1<T, T>) AS_IS;
-    }
-
-    @NonNull
-    static <T> ValueValidator<T> isString() {
-        //noinspection unchecked
-        return (ValueValidator<T>) IS_STRING;
     }
 
     @Nullable

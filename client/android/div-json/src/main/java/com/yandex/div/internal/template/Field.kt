@@ -1,7 +1,6 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.yandex.div.internal.template
 
+import com.yandex.div.internal.parser.JsonParser.alwaysValidList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.internal.parser.ListValidator
@@ -65,7 +64,7 @@ fun <T> Field<out List<T>>.resolveList(
     env: ParsingEnvironment,
     key: String,
     data: JSONObject,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     reader: Reader<List<T>>
 ): List<T> {
     val result = when {
@@ -86,7 +85,7 @@ fun <T> Field<out List<T>>.resolveOptionalList(
     env: ParsingEnvironment,
     key: String,
     data: JSONObject,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     reader: Reader<List<T>?>
 ): List<T>? {
     val result = when {
@@ -136,7 +135,7 @@ fun <T : JSONSerializable> Field<out List<JsonTemplate<T>>>.resolveTemplateList(
     env: ParsingEnvironment,
     key: String,
     data: JSONObject,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     reader: Reader<List<T>>
 ): List<T> {
     val result = when {
@@ -157,7 +156,7 @@ fun <T : JSONSerializable> Field<out List<JsonTemplate<T>>>.resolveOptionalTempl
     env: ParsingEnvironment,
     key: String,
     data: JSONObject,
-    validator: ListValidator<T> = ListValidator { true },
+    validator: ListValidator<T> = alwaysValidList(),
     reader: Reader<List<T>?>
 ): List<T>? {
     val result = when {
@@ -237,7 +236,6 @@ fun <T: Any> Field<ExpressionList<T>>.resolveExpressionList(
         else -> throw missingValue(data, key)
     }
 }
-
 
 fun <T: Any> Field<Expression<T>>.resolveOptionalExpression(
     env: ParsingEnvironment,
