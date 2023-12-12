@@ -5,6 +5,7 @@ includeBuild('screenshot-test-plugin')
 include ':api-generator-test'
 include ':assertion'
 include ':beacon'
+include ':coil'
 include ':div'
 include ':div-core'
 include ':div-data'

@@ -31,32 +31,29 @@ internal object SettingsActionHandler {
 
         val value = uri.getQueryParameter(PARAM_VALUE)
 
-        if (value?.toIntOrNull() != null) {
-            val valueBool = value.toIntOrNull()!! > 0
-            when (uri.getQueryParameter(PARAM_NAME)) {
-                COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, valueBool)
-                DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, valueBool)
-                DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueBool)
-                DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueBool)
-                DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueBool)
-                IMAGE_LOADER -> Container.preferences.imageLoader = valueBool
-                else -> return false
+        when (uri.getQueryParameter(PARAM_NAME)) {
+            IMAGE_LOADER -> {
+                val valueInt = value?.toIntOrNull() ?: 0
+                Container.preferences.imageLoader = Preferences.ImageLoaderOption.fromInt(valueInt)
             }
-        } else {
-            when(uri.getQueryParameter(PARAM_NAME)) {
-                NIGHT_MODE ->  {
-                    when(value) {
-                        NIGHT_MODE_AUTO -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                        NIGHT_MODE_NIGHT -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_YES
-                        NIGHT_MODE_DAY -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_NO
-                        else -> return false
-                    }
-                    AppCompatDelegate.setDefaultNightMode(Container.preferences.nightMode)
-                    return true
+            NIGHT_MODE -> {
+                when (value) {
+                    NIGHT_MODE_AUTO -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    NIGHT_MODE_NIGHT -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_YES
+                    NIGHT_MODE_DAY -> Container.preferences.nightMode = AppCompatDelegate.MODE_NIGHT_NO
+                    else -> return false
                 }
-                else -> return false
+                AppCompatDelegate.setDefaultNightMode(Container.preferences.nightMode)
+                return true
             }
+            COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, value.toBoolean())
+            DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, value.toBoolean())
+            DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, value.toBoolean())
+            DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, value.toBoolean())
+            DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, value.toBoolean())
+            else -> return false
         }
+
         return true
     }
 
