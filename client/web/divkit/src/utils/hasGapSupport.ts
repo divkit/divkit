@@ -6,6 +6,10 @@ let res: boolean;
  * MIT License
  */
 export function hasGapSupport(): boolean {
+    if (typeof document === 'undefined') {
+        res = true;
+    }
+
     if (res !== undefined) {
         return res;
     }
