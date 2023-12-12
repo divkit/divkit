@@ -25,7 +25,7 @@ public final class DivGrid: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let items: [Div] // at least 1 elements; all received elements must be valid
+  public let items: [Div] // at least 1 elements
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
@@ -88,7 +88,7 @@ public final class DivGrid: DivBase {
     makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeStrictArrayValidator(minItems: 1)
+    makeArrayValidator(minItems: 1)
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

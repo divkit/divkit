@@ -118,18 +118,6 @@ public func deserialize<T: ValidSerializationValue, U>(
     )
   }
 
-  if result.count != resultBeforeTransform.count,
-     validator?.isPartialDeserializationAllowed == false {
-    if let errors = NonEmptyArray(errors) {
-      return .failure(NonEmptyArray(.composite(
-        error: .invalidValue(result: result, from: value),
-        causes: errors
-      )))
-    } else {
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: value)))
-    }
-  }
-
   guard validator?.isValid(result) != false else {
     if let errors = NonEmptyArray(errors) {
       return .failure(NonEmptyArray(.composite(

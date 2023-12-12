@@ -26,7 +26,7 @@ public final class DivGridTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
-  public let items: Field<[DivTemplate]>? // at least 1 elements; all received elements must be valid
+  public let items: Field<[DivTemplate]>? // at least 1 elements
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -42,9 +42,6 @@ public final class DivGridTemplate: TemplateValue {
   public let visibilityAction: Field<DivVisibilityActionTemplate>?
   public let visibilityActions: Field<[DivVisibilityActionTemplate]>?
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
-
-  static let itemsValidator: AnyArrayValueValidator<DivTemplate> =
-    makeStrictArrayValidator(minItems: 1)
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
@@ -69,7 +66,7 @@ public final class DivGridTemplate: TemplateValue {
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
         id: try dictionary.getOptionalField("id"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType, validator: Self.itemsValidator),
+        items: try dictionary.getOptionalArray("items", templateToType: templateToType),
         longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
@@ -662,7 +659,7 @@ public final class DivGridTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
-      items: try merged.items?.resolveParent(templates: templates, validator: Self.itemsValidator),
+      items: try merged.items?.resolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

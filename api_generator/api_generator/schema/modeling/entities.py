@@ -349,8 +349,7 @@ class Entity(Declarable):
             return self.parent.__resolve_declaration(property_type) if self.parent is not None else property_type
         elif isinstance(property_type, Array):
             return Array(property_type=self.__resolve_declaration(property_type.property_type),
-                         min_items=property_type.min_items,
-                         strict_parsing=property_type.strict_parsing)
+                         min_items=property_type.min_items)
         return property_type
 
     @property
@@ -466,8 +465,7 @@ class Entity(Declarable):
             return Array(
                 property_type=self.__resolve_declaration_with_objects(property_type=property_type.property_type,
                                                                       global_objects=global_objects),
-                min_items=property_type.min_items,
-                strict_parsing=property_type.strict_parsing)
+                min_items=property_type.min_items)
         return property_type
 
     def resolve_dependencies(self, global_objects: List[Declarable]) -> None:
@@ -899,7 +897,6 @@ class RawArray(PropertyType):
 class Array(PropertyType):
     property_type: PropertyType
     min_items: int
-    strict_parsing: bool
 
 
 class ObjectFormat(Enum):

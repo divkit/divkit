@@ -174,9 +174,11 @@ class DivDataRepositoryTest {
                 RawDataAndMetadata(ID_0, rawDivData)), templates))
         (storageComponent as InternalStorageComponent).storage.removeAllTemplates()
         createSUT().get(listWithOneId)
-        Assert.assertEquals(loggedErrors.size, 1)
-        Assert.assertEquals(loggedErrors[0].message,
-                "missing template = boxed_text, reason = cached, but not loaded into memory")
+        Assert.assertEquals(2, loggedErrors.size)
+        Assert.assertEquals(
+            "missing template = boxed_text, reason = cached, but not loaded into memory",
+            loggedErrors[0].message
+        )
     }
 
     private fun verifyCardStructure(divData: DivData) {

@@ -114,20 +114,17 @@ public final class DivDataTemplate: TemplateValue {
   }
 
   public let logId: Field<String>?
-  public let states: Field<[StateTemplate]>? // at least 1 elements; all received elements must be valid
+  public let states: Field<[StateTemplate]>? // at least 1 elements
   public let timers: Field<[DivTimerTemplate]>?
   public let transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? // default value: none
   public let variableTriggers: Field<[DivTriggerTemplate]>?
   public let variables: Field<[DivVariableTemplate]>?
 
-  static let statesValidator: AnyArrayValueValidator<DivDataTemplate.StateTemplate> =
-    makeStrictArrayValidator(minItems: 1)
-
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         logId: try dictionary.getOptionalField("log_id"),
-        states: try dictionary.getOptionalArray("states", templateToType: templateToType, validator: Self.statesValidator),
+        states: try dictionary.getOptionalArray("states", templateToType: templateToType),
         timers: try dictionary.getOptionalArray("timers", templateToType: templateToType),
         transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector"),
         variableTriggers: try dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
@@ -277,7 +274,7 @@ public final class DivDataTemplate: TemplateValue {
 
     return DivDataTemplate(
       logId: merged.logId,
-      states: try merged.states?.resolveParent(templates: templates, validator: Self.statesValidator),
+      states: try merged.states?.resolveParent(templates: templates),
       timers: merged.timers?.tryResolveParent(templates: templates),
       transitionAnimationSelector: merged.transitionAnimationSelector,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),

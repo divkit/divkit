@@ -54,32 +54,10 @@ extension Array where Element: TemplateValue {
   @usableFromInline
   typealias ResolvedValue = [Element.ResolvedValue]
 
-  func resolveParent(templates: [TemplateName: Any]) throws -> [Element] {
-    try resolveParent(templates: templates, validator: nil)
-  }
-
   @usableFromInline
-  func resolveParent(
-    templates: [TemplateName: Any],
-    validator: AnyArrayValueValidator<Element.ResolvedValue>?
-  ) throws -> [Element] {
-    let result: [Element] = try enumerated().compactMap {
-      do {
-        let result: Element = try $0.element.resolveParent(templates: templates)
-        return result
-      } catch {
-        if validator?.isPartialDeserializationAllowed == false {
-          throw error
-        }
-        return nil
-      }
-    }
-    if count != result.count,
-       validator?.isPartialDeserializationAllowed == false {
-      throw DeserializationError.invalidValue(
-        result: result,
-        value: self
-      )
+  func resolveParent(templates: [TemplateName: Any]) -> [Element] {
+    let result: [Element] = enumerated().compactMap {
+      try? $0.element.resolveParent(templates: templates)
     }
     return result
   }
@@ -100,16 +78,6 @@ extension Array where Element: TemplateValue {
       let itemErrors: [DeserializationError] = (itemResult.errorsOrWarnings?.asArray() ?? [])
         .map { .nestedObjectError(field: "\(index)", error: $0) }
       errors.append(contentsOf: itemErrors)
-    }
-    if result.count != count,
-       validator?.isPartialDeserializationAllowed == false {
-      if let errors = NonEmptyArray(errors) {
-        return .failure(NonEmptyArray(.composite(
-          error: .invalidValue(result: result, from: self),
-          causes: errors
-        )))
-      }
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: self)))
     }
     guard validator?.isValid(result) != false else {
       if let errors = NonEmptyArray(errors) {

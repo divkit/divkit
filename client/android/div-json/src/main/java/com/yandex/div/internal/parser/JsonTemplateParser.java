@@ -555,20 +555,6 @@ public class JsonTemplateParser {
     }
 
     @NonNull
-    public static <T> Field<List<T>> readStrictListField(
-            @NonNull JSONObject json,
-            @NonNull String key,
-            boolean overridable,
-            @Nullable Field<List<T>> fallback,
-            @NonNull Function2<ParsingEnvironment, JSONObject,T> creator,
-            @NonNull ListValidator<T> listValidator,
-            @NonNull ParsingErrorLogger logger,
-            @NonNull ParsingEnvironment env) {
-        return readStrictListField(
-                json, key, overridable, fallback, creator, listValidator, alwaysValid(), logger, env);
-    }
-
-    @NonNull
     public static <T> Field<List<T>> readListField(
             @NonNull JSONObject json,
             @NonNull String key,
@@ -606,60 +592,6 @@ public class JsonTemplateParser {
             }
         }
     }
-
-    @NonNull
-    public static <T> Field<List<T>> readStrictListField(
-            @NonNull JSONObject json,
-            @NonNull String key,
-            boolean overridable,
-            @Nullable Field<List<T>> fallback,
-            @NonNull Function2<ParsingEnvironment, JSONObject,T> creator,
-            @NonNull ListValidator<T> listValidator,
-            @NonNull ValueValidator<T> itemValidator,
-            @NonNull ParsingErrorLogger logger,
-            @NonNull ParsingEnvironment env) {
-        try {
-            List<T> opt = JsonParser.readStrictList(json, key, creator, listValidator, itemValidator, logger, env);
-            return new Field.Value<>(overridable, opt);
-        } catch (ParsingException e) {
-            suppressMissingValueOrThrow(e);
-            String reference = readReference(json, key, logger, env);
-            Field<List<T>> result = referenceOrFallback(overridable, reference, fallback);
-            if (result != null) {
-                return result;
-            } else {
-                throw e;
-            }
-        }
-    }
-
-    @NonNull
-    @SuppressWarnings("unused")
-    public static <R, T> Field<List<T>> readStrictListField(
-            @NonNull JSONObject json,
-            @NonNull String key,
-            boolean overridable,
-            @Nullable Field<List<T>> fallback,
-            @NonNull Function1<R,T> converter,
-            @NonNull ListValidator<T> listValidator,
-            @NonNull ValueValidator<T> itemValidator,
-            @NonNull ParsingErrorLogger logger,
-            @NonNull ParsingEnvironment env) {
-        try {
-            List<T> opt = JsonParser.readStrictList(json, key, converter, listValidator, itemValidator, logger);
-            return new Field.Value<>(overridable, opt);
-        } catch (ParsingException e) {
-            suppressMissingValueOrThrow(e);
-            String reference = readReference(json, key, logger, env);
-            Field<List<T>> result = referenceOrFallback(overridable, reference, fallback);
-            if (result != null) {
-                return result;
-            } else {
-                throw e;
-            }
-        }
-    }
-
 
     @PublishedApi
     @Nullable

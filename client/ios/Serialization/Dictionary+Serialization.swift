@@ -150,17 +150,9 @@ extension Dictionary where Key == String {
       errors.append(
         invalidFieldErrorForKey(key, element: index, representation: array[index])
       )
-      if validator?.isPartialDeserializationAllowed == false {
-        return .failure(NonEmptyArray(errors)!)
-      }
     }
 
     if validator?.isValid(result) == false {
-      errors.append(invalidFieldErrorForKey(key, representation: array))
-      return .failure(NonEmptyArray(errors)!)
-    }
-
-    if result.count != array.count, validator?.isPartialDeserializationAllowed == false {
       errors.append(invalidFieldErrorForKey(key, representation: array))
       return .failure(NonEmptyArray(errors)!)
     }
@@ -208,27 +200,14 @@ extension Dictionary where Key == String {
     }
 
     let result: [U] = try valueBeforeConversion.enumerated().compactMap {
-      do {
-        guard let element = $0.element as? T else {
-          throw invalidFieldErrorForKey(
-            key,
-            element: $0.offset,
-            representation: $0.element
-          )
-        }
-
-        return try transform(element)
-      } catch {
-        if validator?.isPartialDeserializationAllowed == false {
-          throw error
-        }
-        return nil
+      guard let element = $0.element as? T else {
+        throw invalidFieldErrorForKey(
+          key,
+          element: $0.offset,
+          representation: $0.element
+        )
       }
-    }
-
-    if result.count != valueBeforeConversion.count,
-       validator?.isPartialDeserializationAllowed == false {
-      throw invalidFieldErrorForKey(key, representation: valueBeforeConversion)
+      return try? transform(element)
     }
 
     if validator?.isValid(result) == false {

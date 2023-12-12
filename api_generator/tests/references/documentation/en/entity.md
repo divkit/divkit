@@ -15,7 +15,6 @@ Can have one of the following types:
 * [entity_with_raw_array](entity_with_raw_array.md#entity_with_raw_array)
 * [entity_with_required_property](entity_with_required_property.md#entity_with_required_property)
 * [entity_with_simple_properties](entity_with_simple_properties.md#entity_with_simple_properties)
-* [entity_with_strict_array](entity_with_strict_array.md#entity_with_strict_array)
 * [entity_with_string_array_property](entity_with_string_array_property.md#entity_with_string_array_property)
 * [entity_with_string_enum_property](entity_with_string_enum_property.md#entity_with_string_enum_property)
 * [entity_with_string_enum_property_with_default_value](entity_with_string_enum_property_with_default_value.md#entity_with_string_enum_property_with_default_value)

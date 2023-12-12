@@ -113,8 +113,6 @@
 		8C23F42C29DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */; };
 		8C23F42D29DDB3810069F3F7 /* EntityWithSimpleProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */; };
 		8C23F42E29DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */; };
-		8C23F42F29DDB3810069F3F7 /* EntityWithStrictArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F629DDB3810069F3F7 /* EntityWithStrictArray.swift */; };
-		8C23F43029DDB3810069F3F7 /* EntityWithStrictArrayTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F729DDB3810069F3F7 /* EntityWithStrictArrayTemplate.swift */; };
 		8C23F43129DDB3810069F3F7 /* EntityWithStringArrayProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */; };
 		8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */; };
 		8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */; };
@@ -136,7 +134,6 @@
 		8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40B29DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift */; };
 		8C23F44529DDB3810069F3F7 /* PropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40C29DDB3810069F3F7 /* PropertyTests.swift */; };
 		8C23F44629DDB3810069F3F7 /* SimplePropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40D29DDB3810069F3F7 /* SimplePropertiesTests.swift */; };
-		8C23F44729DDB3810069F3F7 /* StrictArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40E29DDB3810069F3F7 /* StrictArrayTests.swift */; };
 		8C23F44829DDB3810069F3F7 /* StringEnumPropertyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40F29DDB3810069F3F7 /* StringEnumPropertyTests.swift */; };
 		8C23F44929DDB3810069F3F7 /* EntityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F41029DDB3810069F3F7 /* EntityUtils.swift */; };
 		8C23F44B29DDBD880069F3F7 /* unit_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C23F44A29DDBD880069F3F7 /* unit_test_data */; };
@@ -370,8 +367,6 @@
 		8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithRequiredPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithSimpleProperties.swift; sourceTree = "<group>"; };
 		8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithSimplePropertiesTemplate.swift; sourceTree = "<group>"; };
-		8C23F3F629DDB3810069F3F7 /* EntityWithStrictArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStrictArray.swift; sourceTree = "<group>"; };
-		8C23F3F729DDB3810069F3F7 /* EntityWithStrictArrayTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStrictArrayTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringArrayProperty.swift; sourceTree = "<group>"; };
 		8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringArrayPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringEnumProperty.swift; sourceTree = "<group>"; };
@@ -394,7 +389,6 @@
 		8C23F40B29DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalStringEnumPropertyTests.swift; sourceTree = "<group>"; };
 		8C23F40C29DDB3810069F3F7 /* PropertyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PropertyTests.swift; sourceTree = "<group>"; };
 		8C23F40D29DDB3810069F3F7 /* SimplePropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePropertiesTests.swift; sourceTree = "<group>"; };
-		8C23F40E29DDB3810069F3F7 /* StrictArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrictArrayTests.swift; sourceTree = "<group>"; };
 		8C23F40F29DDB3810069F3F7 /* StringEnumPropertyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringEnumPropertyTests.swift; sourceTree = "<group>"; };
 		8C23F41029DDB3810069F3F7 /* EntityUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityUtils.swift; sourceTree = "<group>"; };
 		8C23F44A29DDBD880069F3F7 /* unit_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unit_test_data; path = ../../../test_data/unit_test_data; sourceTree = "<group>"; };
@@ -673,7 +667,6 @@
 				8C23F40B29DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift */,
 				8C23F40C29DDB3810069F3F7 /* PropertyTests.swift */,
 				8C23F40D29DDB3810069F3F7 /* SimplePropertiesTests.swift */,
-				8C23F40E29DDB3810069F3F7 /* StrictArrayTests.swift */,
 				8C23F40F29DDB3810069F3F7 /* StringEnumPropertyTests.swift */,
 			);
 			path = Entities;
@@ -718,8 +711,6 @@
 				8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */,
 				8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */,
 				8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */,
-				8C23F3F629DDB3810069F3F7 /* EntityWithStrictArray.swift */,
-				8C23F3F729DDB3810069F3F7 /* EntityWithStrictArrayTemplate.swift */,
 				8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */,
 				8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */,
 				8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */,
@@ -1563,11 +1554,9 @@
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
 				8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */,
 				8C23F42029DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,
-				8C23F43029DDB3810069F3F7 /* EntityWithStrictArrayTemplate.swift in Sources */,
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C23F43A29DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift in Sources */,
 				8C22BBBC2B037BA20076BAEB /* WithDefaultTemplate.swift in Sources */,
-				8C23F42F29DDB3810069F3F7 /* EntityWithStrictArray.swift in Sources */,
 				8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C22BBC12B037BA20076BAEB /* WithoutDefault.swift in Sources */,
 				8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
@@ -1576,7 +1565,6 @@
 				52CD806B2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift in Sources */,
 				8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */,
 				8C22BBC02B037BA20076BAEB /* WithDefault.swift in Sources */,
-				8C23F44729DDB3810069F3F7 /* StrictArrayTests.swift in Sources */,
 				8C23F43B29DDB3810069F3F7 /* ArrayTests.swift in Sources */,
 				8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */,
 				8C23F43129DDB3810069F3F7 /* EntityWithStringArrayProperty.swift in Sources */,

@@ -52,9 +52,6 @@ items:
   -name: entity_with_simple_properties
    href: concepts/divs/entity_with_simple_properties.md
    hidden: true
-  -name: entity_with_strict_array
-   href: concepts/divs/entity_with_strict_array.md
-   hidden: true
   -name: entity_with_string_array_property
    href: concepts/divs/entity_with_string_array_property.md
    hidden: true

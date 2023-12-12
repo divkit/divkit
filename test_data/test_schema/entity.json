@@ -46,9 +46,6 @@
       "$ref": "entity_with_simple_properties.json"
     },
     {
-      "$ref": "entity_with_strict_array.json"
-    },
-    {
       "$ref": "entity_with_string_array_property.json"
     },
     {

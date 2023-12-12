@@ -83,9 +83,6 @@
             "$ref": "entity_with_simple_properties.json"
           },
           {
-            "$ref": "entity_with_strict_array.json"
-          },
-          {
             "$ref": "entity_with_string_array_property.json"
           },
           {
@@ -617,38 +614,6 @@
         },
         "required": [
           "type"
-        ]
-      }
-    },
-    {
-      "entity_with_strict_array.json": {
-        "type": "object",
-        "codegen": {
-          "kotlin": {
-            "properties_to_patch": [
-              "array"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_strict_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$ref": "entity.json"
-            },
-            "minItems": 1,
-            "strictParsing": true
-          }
-        },
-        "required": [
-          "type",
-          "array"
         ]
       }
     },

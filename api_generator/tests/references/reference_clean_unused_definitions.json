@@ -129,12 +129,6 @@
           },
           {
             "$resolved_refs": [
-              "entity_with_strict_array.json"
-            ],
-            "type": "$defined_entity_with_strict_array"
-          },
-          {
-            "$resolved_refs": [
               "entity_with_string_array_property.json"
             ],
             "type": "$defined_entity_with_string_array_property"
@@ -776,41 +770,6 @@
           "en": "Entity with simple properties.",
           "ru": "Объект с простыми свойствами."
         }
-      }
-    },
-    {
-      "entity_with_strict_array.json": {
-        "type": "object",
-        "codegen": {
-          "kotlin": {
-            "properties_to_patch": [
-              "array"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_strict_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "entity.json"
-              ],
-              "type": "$defined_entity"
-            },
-            "minItems": 1,
-            "strictParsing": true
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
       }
     },
     {

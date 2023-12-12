@@ -20,7 +20,6 @@ sealed class Entity {
     class WithRawArray(val value: EntityWithRawArray) : Entity()
     class WithRequiredProperty(val value: EntityWithRequiredProperty) : Entity()
     class WithSimpleProperties(val value: EntityWithSimpleProperties) : Entity()
-    class WithStrictArray(val value: EntityWithStrictArray) : Entity()
     class WithStringArrayProperty(val value: EntityWithStringArrayProperty) : Entity()
     class WithStringEnumProperty(val value: EntityWithStringEnumProperty) : Entity()
     class WithStringEnumPropertyWithDefaultValue(val value: EntityWithStringEnumPropertyWithDefaultValue) : Entity()
@@ -43,7 +42,6 @@ sealed class Entity {
             is WithRawArray -> value
             is WithRequiredProperty -> value
             is WithSimpleProperties -> value
-            is WithStrictArray -> value
             is WithStringArrayProperty -> value
             is WithStringEnumProperty -> value
             is WithStringEnumPropertyWithDefaultValue -> value

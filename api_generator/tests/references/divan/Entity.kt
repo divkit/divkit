@@ -22,7 +22,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [WithArray], [WithArrayOfEnums], [WithArrayOfExpressions], [WithArrayOfNestedItems], [WithArrayWithTransform], [WithComplexProperty], [WithComplexPropertyWithDefaultValue], [WithEntityProperty], [WithOptionalComplexProperty], [WithOptionalProperty], [WithOptionalStringEnumProperty], [WithPropertyWithDefaultValue], [WithRawArray], [WithRequiredProperty], [WithSimpleProperties], [WithStrictArray], [WithStringArrayProperty], [WithStringEnumProperty], [WithStringEnumPropertyWithDefaultValue], [WithoutProperties].
+ * Possible values: [WithArray], [WithArrayOfEnums], [WithArrayOfExpressions], [WithArrayOfNestedItems], [WithArrayWithTransform], [WithComplexProperty], [WithComplexPropertyWithDefaultValue], [WithEntityProperty], [WithOptionalComplexProperty], [WithOptionalProperty], [WithOptionalStringEnumProperty], [WithPropertyWithDefaultValue], [WithRawArray], [WithRequiredProperty], [WithSimpleProperties], [WithStringArrayProperty], [WithStringEnumProperty], [WithStringEnumPropertyWithDefaultValue], [WithoutProperties].
  */
 @Generated
 sealed interface Entity

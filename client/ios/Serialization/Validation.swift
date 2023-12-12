@@ -13,17 +13,7 @@ public class AnyValueValidator<T> {
   }
 }
 
-public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]> {
-  public let isPartialDeserializationAllowed: Bool
-
-  public init(
-    arrayValidator: @escaping ([U]) -> Bool,
-    isPartialDeserializationAllowed: Bool
-  ) {
-    self.isPartialDeserializationAllowed = isPartialDeserializationAllowed
-    super.init(arrayValidator)
-  }
-}
+public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]> {}
 
 public func makeCFStringValidator(minLength: Int) -> AnyValueValidator<CFString> {
   AnyValueValidator { CFStringGetLength($0) >= minLength }
@@ -59,16 +49,5 @@ public func makeNoOpValueValidator<T>() -> AnyValueValidator<T> {
 
 @inlinable
 public func makeArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator<T> {
-  AnyArrayValueValidator(
-    arrayValidator: { $0.count >= minItems },
-    isPartialDeserializationAllowed: true
-  )
-}
-
-@inlinable
-public func makeStrictArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator<T> {
-  AnyArrayValueValidator(
-    arrayValidator: { $0.count >= minItems },
-    isPartialDeserializationAllowed: false
-  )
+  AnyArrayValueValidator { $0.count >= minItems }
 }

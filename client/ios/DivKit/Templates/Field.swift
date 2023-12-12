@@ -136,8 +136,7 @@ extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
 extension Field {
   @inlinable
   func resolveParent<U: TemplateValue>(
-    templates: [TemplateName: Any],
-    validator: AnyArrayValueValidator<U>? = nil
+    templates: [TemplateName: Any]
   ) throws -> Field<[U]> where T == [U] {
     switch self {
     case .link:
@@ -146,28 +145,16 @@ extension Field {
       var result: [U] = []
       result.reserveCapacity(value.count)
       for index in value.indices {
-        do {
-          try result.append(value[index].resolveParent(templates: templates))
-        } catch {
-          if validator?.isPartialDeserializationAllowed == false {
-            throw error
-          }
-        }
-      }
-      if result.count != value.count,
-         validator?.isPartialDeserializationAllowed == false {
-        throw DeserializationError.invalidValue(
-          result: result,
-          value: value
-        )
+        try? result.append(value[index].resolveParent(templates: templates))
       }
       return .value(result)
     }
   }
 
   @inlinable
-  func tryResolveParent<U: TemplateValue>(templates: [TemplateName: Any]) -> Field<[U]>?
-    where T == [U] {
+  func tryResolveParent<U: TemplateValue>(
+    templates: [TemplateName: Any]
+  ) -> Field<[U]>? where T == [U] {
     try? resolveParent(templates: templates)
   }
 }
@@ -248,11 +235,10 @@ extension Field {
     // swiftformat:disable:next typeSugar
   ) -> DeserializationResult<Array<U>.ResolvedValue> where Array<U> == T {
     switch self {
-    case let .value(v):
-      let result = try? v
-        .resolveParent(templates: context.templates, validator: validator)
+    case let .value(value):
+      return value
+        .resolveParent(templates: context.templates)
         .resolveValue(context: context, validator: validator)
-      return result ?? .failure(NonEmptyArray(.generic))
     case let .link(link):
       return context.getArray(link, validator: validator, type: T.Element.self)
     }

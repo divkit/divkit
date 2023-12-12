@@ -35,8 +35,6 @@ def declaration_comment(p: Property, default_value_comment_fun) -> str:
         array: Array = p.property_type
         if array.min_items > 0:
             comments.append(f'at least {array.min_items} elements')
-        if array.strict_parsing:
-            comments.append('all received elements must be valid')
     elif isinstance(p.property_type, Url) and p.property_type.schemes:
         joined_schemes = ', '.join(p.property_type.schemes)
         comments.append(f'valid schemes: [{joined_schemes}]')

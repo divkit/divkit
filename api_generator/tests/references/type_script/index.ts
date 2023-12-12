@@ -17,7 +17,6 @@ export * from './EntityWithPropertyWithDefaultValue';
 export * from './EntityWithRawArray';
 export * from './EntityWithRequiredProperty';
 export * from './EntityWithSimpleProperties';
-export * from './EntityWithStrictArray';
 export * from './EntityWithStringArrayProperty';
 export * from './EntityWithStringEnumProperty';
 export * from './EntityWithStringEnumPropertyWithDefaultValue';

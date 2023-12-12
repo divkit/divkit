@@ -225,8 +225,6 @@ class DocumentationArray(Array, DocumentationPropertyType):
             result += dictionary['div_generator_non_empty_array']
         elif min_items > 1:
             result += dictionary['div_generator_elements_min_number'].format(min_items)
-        if self.strict_parsing:
-            result += dictionary['div_generator_partial_parsing']
         return str(result)
 
     def details(self, dictionary: Dict[str, str]) -> str:

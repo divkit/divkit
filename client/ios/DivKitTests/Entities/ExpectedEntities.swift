@@ -44,13 +44,6 @@ enum ExpectedEntities {
     ]
   )
 
-  static let withStrictArray = EntityWithStrictArray(
-    array: [
-      .entityWithComplexProperty(withRequiredComplexProperty),
-      .entityWithComplexProperty(withRequiredComplexProperty),
-    ]
-  )
-
   static let withHeterogeneousArray = EntityWithArray(
     array: [
       .entityWithComplexProperty(withRequiredComplexProperty),

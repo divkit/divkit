@@ -33,7 +33,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
     class WithRawArray(val value: EntityWithRawArrayTemplate) : EntityTemplate()
     class WithRequiredProperty(val value: EntityWithRequiredPropertyTemplate) : EntityTemplate()
     class WithSimpleProperties(val value: EntityWithSimplePropertiesTemplate) : EntityTemplate()
-    class WithStrictArray(val value: EntityWithStrictArrayTemplate) : EntityTemplate()
     class WithStringArrayProperty(val value: EntityWithStringArrayPropertyTemplate) : EntityTemplate()
     class WithStringEnumProperty(val value: EntityWithStringEnumPropertyTemplate) : EntityTemplate()
     class WithStringEnumPropertyWithDefaultValue(val value: EntityWithStringEnumPropertyWithDefaultValueTemplate) : EntityTemplate()
@@ -56,7 +55,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
             is WithRawArray -> value
             is WithRequiredProperty -> value
             is WithSimpleProperties -> value
-            is WithStrictArray -> value
             is WithStringArrayProperty -> value
             is WithStringEnumProperty -> value
             is WithStringEnumPropertyWithDefaultValue -> value
@@ -81,7 +79,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
             is WithRawArray -> value.writeToJSON()
             is WithRequiredProperty -> value.writeToJSON()
             is WithSimpleProperties -> value.writeToJSON()
-            is WithStrictArray -> value.writeToJSON()
             is WithStringArrayProperty -> value.writeToJSON()
             is WithStringEnumProperty -> value.writeToJSON()
             is WithStringEnumPropertyWithDefaultValue -> value.writeToJSON()
@@ -106,7 +103,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
             is WithRawArray -> Entity.WithRawArray(value.resolve(env, data))
             is WithRequiredProperty -> Entity.WithRequiredProperty(value.resolve(env, data))
             is WithSimpleProperties -> Entity.WithSimpleProperties(value.resolve(env, data))
-            is WithStrictArray -> Entity.WithStrictArray(value.resolve(env, data))
             is WithStringArrayProperty -> Entity.WithStringArrayProperty(value.resolve(env, data))
             is WithStringEnumProperty -> Entity.WithStringEnumProperty(value.resolve(env, data))
             is WithStringEnumPropertyWithDefaultValue -> Entity.WithStringEnumPropertyWithDefaultValue(value.resolve(env, data))
@@ -132,7 +128,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
                 is WithRawArray -> EntityWithRawArrayTemplate.TYPE
                 is WithRequiredProperty -> EntityWithRequiredPropertyTemplate.TYPE
                 is WithSimpleProperties -> EntityWithSimplePropertiesTemplate.TYPE
-                is WithStrictArray -> EntityWithStrictArrayTemplate.TYPE
                 is WithStringArrayProperty -> EntityWithStringArrayPropertyTemplate.TYPE
                 is WithStringEnumProperty -> EntityWithStringEnumPropertyTemplate.TYPE
                 is WithStringEnumPropertyWithDefaultValue -> EntityWithStringEnumPropertyWithDefaultValueTemplate.TYPE
@@ -167,7 +162,6 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
                 EntityWithRawArrayTemplate.TYPE -> return WithRawArray(EntityWithRawArrayTemplate(env, parent?.value() as EntityWithRawArrayTemplate?, topLevel, json))
                 EntityWithRequiredPropertyTemplate.TYPE -> return WithRequiredProperty(EntityWithRequiredPropertyTemplate(env, parent?.value() as EntityWithRequiredPropertyTemplate?, topLevel, json))
                 EntityWithSimplePropertiesTemplate.TYPE -> return WithSimpleProperties(EntityWithSimplePropertiesTemplate(env, parent?.value() as EntityWithSimplePropertiesTemplate?, topLevel, json))
-                EntityWithStrictArrayTemplate.TYPE -> return WithStrictArray(EntityWithStrictArrayTemplate(env, parent?.value() as EntityWithStrictArrayTemplate?, topLevel, json))
                 EntityWithStringArrayPropertyTemplate.TYPE -> return WithStringArrayProperty(EntityWithStringArrayPropertyTemplate(env, parent?.value() as EntityWithStringArrayPropertyTemplate?, topLevel, json))
                 EntityWithStringEnumPropertyTemplate.TYPE -> return WithStringEnumProperty(EntityWithStringEnumPropertyTemplate(env, parent?.value() as EntityWithStringEnumPropertyTemplate?, topLevel, json))
                 EntityWithStringEnumPropertyWithDefaultValueTemplate.TYPE -> return WithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValueTemplate(env, parent?.value() as EntityWithStringEnumPropertyWithDefaultValueTemplate?, topLevel, json))

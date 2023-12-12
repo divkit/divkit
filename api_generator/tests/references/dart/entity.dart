@@ -17,7 +17,6 @@ import 'entity_with_property_with_default_value.dart';
 import 'entity_with_raw_array.dart';
 import 'entity_with_required_property.dart';
 import 'entity_with_simple_properties.dart';
-import 'entity_with_strict_array.dart';
 import 'entity_with_string_array_property.dart';
 import 'entity_with_string_enum_property.dart';
 import 'entity_with_string_enum_property_with_default_value.dart';
@@ -81,9 +80,6 @@ class Entity with EquatableMixin {
     if(value is EntityWithSimpleProperties) {
       return value;
     }
-    if(value is EntityWithStrictArray) {
-      return value;
-    }
     if(value is EntityWithStringArrayProperty) {
       return value;
     }
@@ -115,7 +111,6 @@ class Entity with EquatableMixin {
     required T Function(EntityWithRawArray) entityWithRawArray,
     required T Function(EntityWithRequiredProperty) entityWithRequiredProperty,
     required T Function(EntityWithSimpleProperties) entityWithSimpleProperties,
-    required T Function(EntityWithStrictArray) entityWithStrictArray,
     required T Function(EntityWithStringArrayProperty) entityWithStringArrayProperty,
     required T Function(EntityWithStringEnumProperty) entityWithStringEnumProperty,
     required T Function(EntityWithStringEnumPropertyWithDefaultValue) entityWithStringEnumPropertyWithDefaultValue,
@@ -167,9 +162,6 @@ class Entity with EquatableMixin {
     if(value is EntityWithSimpleProperties) {
       return entityWithSimpleProperties(value);
     }
-    if(value is EntityWithStrictArray) {
-      return entityWithStrictArray(value);
-    }
     if(value is EntityWithStringArrayProperty) {
       return entityWithStringArrayProperty(value);
     }
@@ -201,7 +193,6 @@ class Entity with EquatableMixin {
     T Function(EntityWithRawArray)? entityWithRawArray,
     T Function(EntityWithRequiredProperty)? entityWithRequiredProperty,
     T Function(EntityWithSimpleProperties)? entityWithSimpleProperties,
-    T Function(EntityWithStrictArray)? entityWithStrictArray,
     T Function(EntityWithStringArrayProperty)? entityWithStringArrayProperty,
     T Function(EntityWithStringEnumProperty)? entityWithStringEnumProperty,
     T Function(EntityWithStringEnumPropertyWithDefaultValue)? entityWithStringEnumPropertyWithDefaultValue,
@@ -253,9 +244,6 @@ class Entity with EquatableMixin {
     }
     if(value is EntityWithSimpleProperties && entityWithSimpleProperties != null) {
      return entityWithSimpleProperties(value);
-    }
-    if(value is EntityWithStrictArray && entityWithStrictArray != null) {
-     return entityWithStrictArray(value);
     }
     if(value is EntityWithStringArrayProperty && entityWithStringArrayProperty != null) {
      return entityWithStringArrayProperty(value);
@@ -347,11 +335,6 @@ class Entity with EquatableMixin {
   ) :
  _value = value;
 
-  const Entity.entityWithStrictArray(
-    EntityWithStrictArray value,
-  ) :
- _value = value;
-
   const Entity.entityWithStringArrayProperty(
     EntityWithStringArrayProperty value,
   ) :
@@ -408,8 +391,6 @@ class Entity with EquatableMixin {
         return Entity(EntityWithRequiredProperty.fromJson(json)!);
       case EntityWithSimpleProperties.type :
         return Entity(EntityWithSimpleProperties.fromJson(json)!);
-      case EntityWithStrictArray.type :
-        return Entity(EntityWithStrictArray.fromJson(json)!);
       case EntityWithStringArrayProperty.type :
         return Entity(EntityWithStringArrayProperty.fromJson(json)!);
       case EntityWithStringEnumProperty.type :

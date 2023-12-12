@@ -558,17 +558,12 @@ class SwiftProperty(Property):
 
     def internal_validator_declaration(self, mode: GenerationMode) -> Optional[str]:
         if mode is GenerationMode.TEMPLATE:
-            if isinstance(self.property_type, Array) and self.property_type.strict_parsing:
-                pass
-            else:
-                return None
+            return None
         if isinstance(self.property_type, RawArray) and self.property_type.min_items > 0:
             validator_name = 'makeArrayValidator'
             validator_args = [f'minItems: {self.property_type.min_items}']
-        elif isinstance(self.property_type, Array) and \
-                (self.property_type.min_items > 0 or self.property_type.strict_parsing):
-            validator_type = 'Strict' if self.property_type.strict_parsing else ''
-            validator_name = f'make{validator_type}ArrayValidator'
+        elif isinstance(self.property_type, Array) and self.property_type.min_items > 0:
+            validator_name = 'makeArrayValidator'
             validator_args = [f'minItems: {self.property_type.min_items}']
         elif isinstance(self.property_type, Array):
             return None

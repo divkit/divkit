@@ -261,13 +261,12 @@ def type_property_build(dictionary: Dict[str, any],
         items_types: Dict[str, any] = dictionary.get('items')
         single_name: str = name[:-1] if name.endswith('s') else name
         min_items: int = dictionary.get('minItems', 0)
-        strict_parsing: bool = dictionary.get('strictParsing', False)
         property_type, declarations = type_property_build(dictionary=items_types,
                                                           outer_name=single_name,
                                                           location=location + 'items',
                                                           mode=mode,
                                                           config=config)
-        return Array(property_type=property_type, min_items=min_items, strict_parsing=strict_parsing), declarations
+        return Array(property_type=property_type, min_items=min_items), declarations
     elif type_value == 'object':
         if dictionary.get('additionalProperties', False) and 'properties' not in dictionary:
             return Dictionary(), []

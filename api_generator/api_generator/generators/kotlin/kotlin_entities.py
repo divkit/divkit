@@ -403,11 +403,10 @@ class KotlinProperty(Property):
 
     def deserialization_expression(self, mode: GenerationMode, reuse_logger_instance: bool) -> str:
         if isinstance(self.property_type, Array):
-            strict = 'Strict' if self.property_type.strict_parsing else ''
             if self.supports_expressions and cast(KotlinPropertyType, self.property_type).is_array_of_expressions:
-                list_or_empty = f'{strict}{EXPRESSION_LIST_TYPE_NAME}'
+                list_or_empty = EXPRESSION_LIST_TYPE_NAME
             else:
-                list_or_empty = f'{strict}List'
+                list_or_empty = 'List'
             expression_or_empty = ''
             expression_suffix_or_empty = ''
         else:

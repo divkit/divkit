@@ -19,7 +19,7 @@ public final class DivData {
   }
 
   public let logId: String
-  public let states: [State] // at least 1 elements; all received elements must be valid
+  public let states: [State] // at least 1 elements
   public let timers: [DivTimer]?
   public let transitionAnimationSelector: Expression<DivTransitionSelector> // default value: none
   public let variableTriggers: [DivTrigger]?
@@ -30,7 +30,7 @@ public final class DivData {
   }
 
   static let statesValidator: AnyArrayValueValidator<DivData.State> =
-    makeStrictArrayValidator(minItems: 1)
+    makeArrayValidator(minItems: 1)
 
   init(
     logId: String,

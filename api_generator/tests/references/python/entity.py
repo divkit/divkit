@@ -20,7 +20,6 @@ from . import entity_with_property_with_default_value
 from . import entity_with_raw_array
 from . import entity_with_required_property
 from . import entity_with_simple_properties
-from . import entity_with_strict_array
 from . import entity_with_string_array_property
 from . import entity_with_string_enum_property
 from . import entity_with_string_enum_property_with_default_value
@@ -44,7 +43,6 @@ Entity = Union[
     entity_with_raw_array.EntityWithRawArray,
     entity_with_required_property.EntityWithRequiredProperty,
     entity_with_simple_properties.EntityWithSimpleProperties,
-    entity_with_strict_array.EntityWithStrictArray,
     entity_with_string_array_property.EntityWithStringArrayProperty,
     entity_with_string_enum_property.EntityWithStringEnumProperty,
     entity_with_string_enum_property_with_default_value.EntityWithStringEnumPropertyWithDefaultValue,

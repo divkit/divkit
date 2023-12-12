@@ -66,10 +66,6 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "en": "Parameters",
         "ru": "Параметры"
     },
-    "div_generator_partial_parsing": {
-        "en": "Partial parsing is not allowed.",
-        "ru": "Не допускается частичный парсинг."
-    },
     "div_generator_platforms": {
         "en": "Available platforms: {}.",
         "ru": "Доступные платформы: {}."

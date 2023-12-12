@@ -13,7 +13,6 @@ import com.yandex.testing.EntityWithOptionalComplexProperty
 import com.yandex.testing.EntityWithOptionalProperty
 import com.yandex.testing.EntityWithOptionalStringEnumProperty
 import com.yandex.testing.EntityWithRequiredProperty
-import com.yandex.testing.EntityWithStrictArray
 import com.yandex.testing.EntityWithStringEnumProperty
 
 internal val ENTITY_WITH_STRING_ENUM_PROPERTY = Entity.WithStringEnumProperty(
@@ -81,12 +80,5 @@ internal val ENTITY_WITH_ARRAY_OF_NESTED_ITEMS = Entity.WithArrayOfNestedItems(
     EntityWithArrayOfNestedItems(listOf(
         EntityWithArrayOfNestedItems.Item(ENTITY_WITH_REQUIRED_COMPLEX_PROPERTY, Expression.constant("Some text")),
         EntityWithArrayOfNestedItems.Item(ENTITY_WITH_REQUIRED_COMPLEX_PROPERTY, Expression.constant("Some text"))
-    ))
-)
-
-internal val ENTITY_WITH_STRICT_ARRAY = Entity.WithStrictArray(
-    EntityWithStrictArray(listOf(
-        ENTITY_WITH_REQUIRED_COMPLEX_PROPERTY,
-        ENTITY_WITH_REQUIRED_COMPLEX_PROPERTY
     ))
 )

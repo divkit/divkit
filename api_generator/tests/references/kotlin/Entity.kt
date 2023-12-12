@@ -33,7 +33,6 @@ sealed class Entity : JSONSerializable {
     class WithRawArray(val value: EntityWithRawArray) : Entity()
     class WithRequiredProperty(val value: EntityWithRequiredProperty) : Entity()
     class WithSimpleProperties(val value: EntityWithSimpleProperties) : Entity()
-    class WithStrictArray(val value: EntityWithStrictArray) : Entity()
     class WithStringArrayProperty(val value: EntityWithStringArrayProperty) : Entity()
     class WithStringEnumProperty(val value: EntityWithStringEnumProperty) : Entity()
     class WithStringEnumPropertyWithDefaultValue(val value: EntityWithStringEnumPropertyWithDefaultValue) : Entity()
@@ -56,7 +55,6 @@ sealed class Entity : JSONSerializable {
             is WithRawArray -> value
             is WithRequiredProperty -> value
             is WithSimpleProperties -> value
-            is WithStrictArray -> value
             is WithStringArrayProperty -> value
             is WithStringEnumProperty -> value
             is WithStringEnumPropertyWithDefaultValue -> value
@@ -81,7 +79,6 @@ sealed class Entity : JSONSerializable {
             is WithRawArray -> value.writeToJSON()
             is WithRequiredProperty -> value.writeToJSON()
             is WithSimpleProperties -> value.writeToJSON()
-            is WithStrictArray -> value.writeToJSON()
             is WithStringArrayProperty -> value.writeToJSON()
             is WithStringEnumProperty -> value.writeToJSON()
             is WithStringEnumPropertyWithDefaultValue -> value.writeToJSON()
@@ -112,7 +109,6 @@ sealed class Entity : JSONSerializable {
                 EntityWithRawArray.TYPE -> return WithRawArray(EntityWithRawArray(env, json))
                 EntityWithRequiredProperty.TYPE -> return WithRequiredProperty(EntityWithRequiredProperty(env, json))
                 EntityWithSimpleProperties.TYPE -> return WithSimpleProperties(EntityWithSimpleProperties(env, json))
-                EntityWithStrictArray.TYPE -> return WithStrictArray(EntityWithStrictArray(env, json))
                 EntityWithStringArrayProperty.TYPE -> return WithStringArrayProperty(EntityWithStringArrayProperty(env, json))
                 EntityWithStringEnumProperty.TYPE -> return WithStringEnumProperty(EntityWithStringEnumProperty(env, json))
                 EntityWithStringEnumPropertyWithDefaultValue.TYPE -> return WithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValue(env, json))

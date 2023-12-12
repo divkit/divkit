@@ -70,12 +70,6 @@ private let dictWithInvalidField: [String: Any] = [
       ] as [String: Any],
       "state_id": 0,
     ] as [String: Any],
-    [
-      "div": [
-        "type": "separator",
-      ],
-      "state_id": 1,
-    ],
   ],
 ]
 
