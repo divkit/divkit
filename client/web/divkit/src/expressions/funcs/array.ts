@@ -33,6 +33,7 @@ function arrayGetter(jsType: string, runtimeType: string) {
                 throw new Error('Cannot convert value to integer.');
             }
             checkIntegerOverflow(ctx, val);
+            val = toBigInt(val);
         }
         if (jsType === 'string' && runtimeType === 'color') {
             val = transformColorValue(val as string);

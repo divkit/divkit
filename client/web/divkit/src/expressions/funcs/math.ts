@@ -2,7 +2,7 @@ import type { EvalContext, EvalValue, IntegerValue, NumberValue } from '../eval'
 import { registerFunc } from './funcs';
 import { INTEGER, MAX_NUMBER, MIN_NUMBER, NUMBER } from '../const';
 import { checkIntegerOverflow, roundInteger } from '../utils';
-import { absBigInt, bigIntZero, signBigInt, MAX_INT, MIN_INT } from '../bigint';
+import { absBigInt, bigIntZero, signBigInt, MAX_INT, MIN_INT, toBigInt } from '../bigint';
 
 function divInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValue): EvalValue {
     if (arg1.value === bigIntZero) {
@@ -297,7 +297,7 @@ function copySignInteger(ctx: EvalContext, arg0: IntegerValue, arg1: IntegerValu
     if (arg1.value === bigIntZero) {
         res = arg0.value;
     } else if (arg0.value === bigIntZero) {
-        res = 0;
+        res = toBigInt(0);
     } else {
         const sign = signBigInt(arg1.value);
 

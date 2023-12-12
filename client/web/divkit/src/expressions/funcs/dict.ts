@@ -1,3 +1,4 @@
+import { toBigInt } from '../bigint';
 import { BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
 import { BooleanValue, DictValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
 import { checkIntegerOverflow, transformColorValue } from '../utils';
@@ -42,6 +43,7 @@ function dictGetter(jsType: string, runtimeType: string) {
                 throw new Error('Cannot convert value to integer.');
             }
             checkIntegerOverflow(ctx, val);
+            val = toBigInt(val);
         }
         if (jsType === 'string' && runtimeType === 'color') {
             val = transformColorValue(val as string);
