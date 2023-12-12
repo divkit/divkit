@@ -5,6 +5,7 @@ import type {
     Customization,
     DivExtensionClass,
     DivJson,
+    DivkitInstance,
     ErrorCallback,
     FetchInit,
     Platform,
@@ -35,14 +36,29 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
-}) {
+}): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 
-    return new Root({
+    const instance = new Root({
         target: target,
         props: rest,
         hydrate: hydrate
     });
+
+    return {
+        $destroy() {
+            instance.$destroy();
+        },
+        execAction(action) {
+            instance.execAction(action);
+        },
+        setTheme(theme) {
+            instance.setTheme(theme);
+        },
+        setData(newJson) {
+            instance.setData(newJson);
+        }
+    };
 }
 
 export {

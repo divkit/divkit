@@ -1,40 +1,4 @@
-<script lang="ts">
-    import { getContext } from 'svelte';
-    import { Readable, derived } from 'svelte/store';
-
-    import css from './Container.module.css';
-
-    import type { ContainerOrientation, DivContainerData } from '../../types/container';
-    import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
-    import type { DivBaseData } from '../../types/base';
-    import type {
-        ContentAlignmentHorizontal,
-        ContentAlignmentVertical
-    } from '../../types/alignment';
-    import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
-    import { prepareMargins } from '../../utils/container';
-    import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import { wrapError } from '../../utils/wrapError';
-    import { genClassName } from '../../utils/genClassName';
-    import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
-    import { assignIfDifferent } from '../../utils/assignIfDifferent';
-    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
-    import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
-    import { hasGapSupport } from '../../utils/hasGapSupport';
-    import { isPositiveNumber } from '../../utils/isPositiveNumber';
-    import ContainerSeparators from './ContainerSeparators.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
-    import Outer from '../utilities/Outer.svelte';
-    import { correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
-    import { correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
-    import { Truthy } from '../../utils/truthy';
-
-    export let json: Partial<DivContainerData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
-    export let layoutParams: LayoutParams | undefined = undefined;
-
+<script lang="ts" context="module">
     const HALIGN_MAP = {
         left: 'start',
         center: 'center',
@@ -56,11 +20,77 @@
         'space-evenly': 'start'
     } as const;
 
-    const AVAIL_SEPARATOR_SHAPES = ['rounded_rectangle', 'circle'];
+    const AVAIL_SEPARATOR_SHAPES = [
+        'rounded_rectangle',
+        'circle'
+    ];
+</script>
+
+<script lang="ts">
+    import { getContext } from 'svelte';
+    import { Readable, derived } from 'svelte/store';
+
+    import css from './Container.module.css';
+
+    import type { ContainerOrientation, DivContainerData } from '../../types/container';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivBaseData } from '../../types/base';
+    import type {
+        ContentAlignmentHorizontal,
+        ContentAlignmentVertical
+    } from '../../types/alignment';
+    import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
+    import { prepareMargins } from '../../utils/container';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { genClassName } from '../../utils/genClassName';
+    import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
+    import { assignIfDifferent } from '../../utils/assignIfDifferent';
+    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
+    import { hasGapSupport } from '../../utils/hasGapSupport';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import ContainerSeparators from './ContainerSeparators.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import Outer from '../utilities/Outer.svelte';
+    import { correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
+    import { correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
+    import { Truthy } from '../../utils/truthy';
+
+    export let json: Partial<DivContainerData> = {};
+    export let templateContext: TemplateContext;
+    export let origJson: DivBase | undefined = undefined;
+    export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    let childStore: Readable<ContainerChildInfo[]>;
+    let orientation: ContainerOrientation = 'vertical';
+    let contentVAlign: ContentAlignmentVertical = 'top';
+    let contentHAlign: ContentAlignmentHorizontal = 'left';
+    let separator: SeparatorStyle | null = null;
+    let lineSeparator: SeparatorStyle | null = null;
+    let aspect: number | undefined = undefined;
+    let childLayoutParams: LayoutParams = {};
+
+    $: if (json) {
+        orientation = 'vertical';
+        contentVAlign = 'top';
+        contentHAlign = 'left';
+        aspect = undefined;
+    }
+
     $: jsonItems = json.items;
+
+    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
+    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
+    $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
+    $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
+    $: jsonSeparator = rootCtx.getDerivedFromVars(json.separator);
+    $: jsonLineSeparator = rootCtx.getDerivedFromVars(json.line_separator);
+    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
 
     function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
@@ -85,7 +115,6 @@
         };
     });
 
-    let childStore: Readable<ContainerChildInfo[]>;
     $: {
         let children: Readable<ContainerChildInfo>[] = [];
 
@@ -102,32 +131,23 @@
         childStore = derived(children, val => [...val]);
     }
 
-    let orientation: ContainerOrientation = 'vertical';
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
     $: {
         orientation = correctContainerOrientation($jsonOrientation, orientation);
     }
 
-    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
     $: wrap = $jsonLayoutMode === 'wrap';
 
     $: hasKnownWidth = orientation !== 'horizontal' && !wrap && $childStore.some(hasKnownWidthCheck);
     $: hasKnownHeight = orientation !== 'vertical' && !wrap && $childStore.some(hasKnownHeightCheck);
 
-    let contentVAlign: ContentAlignmentVertical = 'top';
-    $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
     $: {
         contentVAlign = correctContentAlignmentVertical($jsonContentVAlign, contentVAlign);
     }
 
-    let contentHAlign: ContentAlignmentHorizontal = 'left';
-    $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
     $: {
         contentHAlign = correctContentAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
 
-    $: jsonSeparator = rootCtx.getDerivedFromVars(json.separator);
-    let separator: SeparatorStyle | null = null;
     $: {
         if ($jsonSeparator?.style && orientation !== 'overlap' && hasGapSupport()) {
             const style = correctDrawableStyle<DrawableStyle | null>(
@@ -152,8 +172,6 @@
         }
     }
 
-    $: jsonLineSeparator = rootCtx.getDerivedFromVars(json.line_separator);
-    let lineSeparator: SeparatorStyle | null = null;
     $: {
         if ($jsonLineSeparator?.style && orientation !== 'overlap' && hasGapSupport()) {
             const style = correctDrawableStyle<DrawableStyle | null>(
@@ -182,8 +200,6 @@
         calcAdditionalPaddings(orientation, separator, lineSeparator) :
         null;
 
-    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
-    let aspect: number | undefined = undefined;
     $: {
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
@@ -193,10 +209,7 @@
         }
     }
 
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
 
-    let childLayoutParams: LayoutParams = {};
     $: {
         let newChildLayoutParams: LayoutParams = {};
 
@@ -269,16 +282,14 @@
     parentOf={jsonItems}
     {replaceItems}
 >
-    {#key jsonItems}
-        {#each items as item}
-            <Unknown
-                layoutParams={childLayoutParams}
-                div={item.json}
-                templateContext={item.templateContext}
-                origJson={item.origJson}
-            />
-        {/each}
-    {/key}
+    {#each items as item}
+        <Unknown
+            layoutParams={childLayoutParams}
+            div={item.json}
+            templateContext={item.templateContext}
+            origJson={item.origJson}
+        />
+    {/each}
 
     {#if separator || lineSeparator}
         <ContainerSeparators

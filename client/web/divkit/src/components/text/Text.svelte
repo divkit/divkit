@@ -34,14 +34,52 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    $: jsonText = rootCtx.getDerivedFromVars(json.text);
     let text = '';
-    $: {
-        text = propToString($jsonText);
+    let fontSize = 12;
+    let lineHeight = 1.25;
+    let customLineHeight = false;
+    let maxHeight = '';
+    let lineClamp: string | number = '';
+    let multiline = false;
+    let halign: AlignmentHorizontal = 'left';
+    let valign: AlignmentVertical = 'top';
+    let rootTextColor = '';
+    let focusTextColor = '';
+    let gradient = '';
+    let selectable = false;
+
+    let renderList: ({
+        text: string;
+        textStyles: TextStyles;
+        actions?: MaybeMissing<Action[]>;
+    } | {
+        image: {
+            url: string;
+            width: string;
+            height: string;
+            wrapperStyle: Style;
+            svgFilterId: string;
+        };
+    })[] = [];
+    let usedTintColors: [string, TintMode][] = [];
+
+    $: if (json) {
+        fontSize = 12;
+        lineHeight = 1.25;
+        customLineHeight = false;
+        maxHeight = '';
+        lineClamp = '';
+        multiline = false;
+        halign = 'left';
+        valign = 'top';
+        rootTextColor = '';
+        gradient = '';
+        selectable = false;
     }
+
+    $: jsonText = rootCtx.getDerivedFromVars(json.text);
     $: jsonRanges = rootCtx.getDerivedFromVars(json.ranges);
     $: jsonImages = rootCtx.getDerivedFromVars(json.images);
-
     $: jsonRootTextStyles = rootCtx.getDerivedFromVars({
         font_size: json.font_size,
         letter_spacing: json.letter_spacing,
@@ -53,16 +91,25 @@
         line_height: json.line_height,
         text_shadow: json.text_shadow
     });
-
     $: jsonTextSize = rootCtx.getDerivedFromVars(json.font_size);
-    let fontSize = 12;
+    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
+    $: jsonMaxLines = rootCtx.getDerivedFromVars(json.max_lines);
+    $: jsonHAlign = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
+    $: jsonVAlign = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
+    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
+    $: jsonFocusTextColor = rootCtx.getDerivedFromVars(json.focused_text_color);
+    $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
+    $: jsonTextGradient = rootCtx.getDerivedFromVars(json.text_gradient);
+    $: jsonSelectable = rootCtx.getDerivedFromVars(json.selectable);
+
+    $: {
+        text = propToString($jsonText);
+    }
+
     $: {
         fontSize = correctPositiveNumber($jsonTextSize, fontSize);
     }
 
-    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    let lineHeight = 1.25;
-    let customLineHeight = false;
     $: {
         const newLineHeight = $jsonLineHeight;
         if (isPositiveNumber(newLineHeight)) {
@@ -73,11 +120,7 @@
         }
     }
 
-    $: jsonMaxLines = rootCtx.getDerivedFromVars(json.max_lines);
     $: singleline = $jsonMaxLines === 1;
-    let maxHeight = '';
-    let lineClamp: string | number = '';
-    let multiline = false;
     $: {
         let newMaxHeight = '';
         let newLineClamp: string | number = '';
@@ -96,14 +139,10 @@
         multiline = newMultiline;
     }
 
-    let halign: AlignmentHorizontal = 'left';
-    $: jsonHAlign = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
     $: {
         halign = correctAlignmentHorizontal($jsonHAlign, halign);
     }
 
-    let valign: AlignmentVertical = 'top';
-    $: jsonVAlign = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
     $: {
         valign = correctAlignmentVertical($jsonVAlign, valign);
     }
@@ -115,12 +154,10 @@
             $jsonRanges[0].start === 0 && typeof $jsonRanges[0].end === 'number' && $jsonRanges[0].end >= text.length
         );
 
-    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
 
     $: isOnlyOneColorDefined = Boolean($jsonTextColor) !==
         Boolean($jsonRanges && $jsonRanges[0] && $jsonRanges[0].text_color);
 
-    let rootTextColor = '';
     $: {
         let newRootTextColor = '';
 
@@ -136,17 +173,12 @@
         rootTextColor = newRootTextColor;
     }
 
-    let focusTextColor = '';
-    $: jsonFocusTextColor = rootCtx.getDerivedFromVars(json.focused_text_color);
     $: {
         focusTextColor = correctColor($jsonFocusTextColor, 1, focusTextColor);
     }
 
-    $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
     $: truncate = $jsonTruncate === 'none' ? 'none' : '';
 
-    $: jsonTextGradient = rootCtx.getDerivedFromVars(json.text_gradient);
-    let gradient = '';
     $: {
         let newGradient = '';
 
@@ -160,26 +192,9 @@
         gradient = newGradient;
     }
 
-    $: jsonSelectable = rootCtx.getDerivedFromVars(json.selectable);
-    let selectable = false;
     $: {
         selectable = correctBooleanInt($jsonSelectable, selectable);
     }
-
-    let renderList: ({
-        text: string;
-        textStyles: TextStyles;
-        actions?: MaybeMissing<Action[]>;
-    } | {
-        image: {
-            url: string;
-            width: string;
-            height: string;
-            wrapperStyle: Style;
-            svgFilterId: string;
-        };
-    })[] = [];
-    let usedTintColors: [string, TintMode][] = [];
 
     function updateRenderList(
         text: string,
@@ -403,6 +418,7 @@
                 {#if 'text' in item}
                     {#if item.text}
                         <TextRangeView
+                            {json}
                             text={item.text}
                             rootFontSize={fontSize}
                             textStyles={item.textStyles}
@@ -432,6 +448,7 @@
             {/each}
         {:else}
             <TextRangeView
+                {json}
                 {text}
                 rootFontSize={fontSize}
                 textStyles={$jsonRootTextStyles}

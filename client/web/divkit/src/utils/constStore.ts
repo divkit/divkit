@@ -12,3 +12,5 @@ export function constStore<T>(val: T): Readable<T> {
         }
     };
 }
+
+export const constUndefStore = constStore(undefined);

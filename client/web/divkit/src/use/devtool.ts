@@ -3,6 +3,15 @@ import type { DivBase, TemplateContext } from '../../typings/common';
 import type { DivBaseData } from '../types/base';
 
 export interface DevtoolResult {
+    update({
+        json,
+        origJson,
+        templateContext
+    }: {
+        json: Partial<DivBaseData>;
+        origJson?: DivBase | undefined;
+        templateContext: TemplateContext;
+    }): void;
     destroy(): void;
 }
 
@@ -17,7 +26,8 @@ function devtoolReal(node: HTMLElement, {
     templateContext: TemplateContext;
     rootCtx: RootCtxValue;
 }): DevtoolResult {
-    rootCtx.registerComponent?.({
+    rootCtx.componentDevtool?.({
+        type: 'mount',
         node,
         json,
         origJson,
@@ -25,8 +35,31 @@ function devtoolReal(node: HTMLElement, {
     });
 
     return {
+        update({
+            json,
+            origJson,
+            templateContext
+        }: {
+            json: Partial<DivBaseData>;
+            origJson?: DivBase | undefined;
+            templateContext: TemplateContext;
+        }) {
+            rootCtx.componentDevtool?.({
+                type: 'update',
+                node,
+                json,
+                origJson,
+                templateContext
+            });
+        },
         destroy() {
-            rootCtx.unregisterComponent?.({ node });
+            rootCtx.componentDevtool?.({
+                type: 'destroy',
+                node,
+                json,
+                origJson,
+                templateContext
+            });
         }
     };
 }

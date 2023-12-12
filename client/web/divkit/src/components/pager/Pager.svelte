@@ -38,10 +38,38 @@
     const rightClass = rootCtx.getCustomization('pagerRightClass');
 
     const isDesktop = rootCtx.isDesktop;
+
+    const onScrollDebounced = debounce(onScroll, 50);
+
+    let prevId: string | undefined;
+
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
 
     let hasItemsError = false;
+
+    let currentItem = 0;
+    let prevSelectedItem = 0;
+
+    let hasLayoutModeError = false;
+
+    let orientation: Orientation = 'horizontal';
+    let itemSpacing = '';
+    let padding = '';
+    let sizeVal = '';
+
+    $: if (json) {
+        itemSpacing = '';
+        padding = '';
+        sizeVal = '';
+    }
+
+    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
+    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
+    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+
     $: {
         if (!json.items?.length || !Array.isArray(json.items)) {
             hasItemsError = true;
@@ -73,12 +101,6 @@
             origJson: item
         };
     });
-
-    let currentItem = 0;
-    let prevSelectedItem = 0;
-
-    let hasLayoutModeError = false;
-    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
     $: {
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
@@ -91,14 +113,10 @@
         }
     }
 
-    let orientation: Orientation = 'horizontal';
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
     $: {
         orientation = correctGeneralOrientation($jsonOrientation, orientation);
     }
 
-    let itemSpacing = '';
-    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
     $: {
         const val = $jsonItemSpacing?.value;
         if (val && isNonNegativeNumber(val)) {
@@ -106,16 +124,11 @@
         }
     }
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let padding = '';
     $: {
         padding = correctEdgeInserts($jsonPaddings, padding);
     }
 
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
-
     $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
-    let sizeVal = '';
 
     $: {
         if ($jsonLayoutMode?.type === 'fixed') {
@@ -185,8 +198,6 @@
         }
     }
 
-    const onScrollDebounced = debounce(onScroll, 50);
-
     $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
 
     function pagerDataUpdate(size: number, currentItem: number): void {
@@ -248,18 +259,26 @@
         scrollToPagerItem(nextItem);
     }
 
-    if (json.id && !layoutParams?.fakeElement) {
-        rootCtx.registerInstance<SwitchElements>(json.id, {
-            setCurrentItem(item: number) {
-                if (item < 0 || item > items.length - 1) {
-                    throw new Error('Item is out of range in "set-current-item" action');
-                }
+    $: if (json) {
+        if (prevId) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
+        }
 
-                scrollToPagerItem(item);
-            },
-            setPreviousItem,
-            setNextItem
-        });
+        if (json.id && !layoutParams?.fakeElement) {
+            prevId = json.id;
+            rootCtx.registerInstance<SwitchElements>(json.id, {
+                setCurrentItem(item: number) {
+                    if (item < 0 || item > items.length - 1) {
+                        throw new Error('Item is out of range in "set-current-item" action');
+                    }
+
+                    scrollToPagerItem(item);
+                },
+                setPreviousItem,
+                setNextItem
+            });
+        }
     }
 
     onMount(() => {
@@ -281,8 +300,9 @@
     onDestroy(() => {
         mounted = false;
 
-        if (json.id && !layoutParams?.fakeElement) {
-            rootCtx.unregisterInstance(json.id);
+        if (prevId) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
         }
     });
 </script>
@@ -304,18 +324,16 @@
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}
         >
-            {#key items}
-                {#each items as item}
-                    <div class={css.pager__item}>
-                        <Unknown
-                            div={item.json}
-                            templateContext={item.templateContext}
-                            origJson={item.origJson}
-                            layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
-                        />
-                    </div>
-                {/each}
-            {/key}
+            {#each items as item}
+                <div class={css.pager__item}>
+                    <Unknown
+                        div={item.json}
+                        templateContext={item.templateContext}
+                        origJson={item.origJson}
+                        layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
+                    />
+                </div>
+            {/each}
         </div>
 
         {#if hasScrollLeft && shouldCheckArrows}

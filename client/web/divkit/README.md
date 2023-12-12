@@ -446,6 +446,22 @@ render(({
 });
 ```
 
+#### setData (EXPERIMENTAL)
+
+This methods allows you to quckly redraw the DivKit card:
+
+```ts
+instance.setData({
+    ...
+});
+```
+
+Some notes:
+
+* This method is experimental, its logic and api may be changed the future versions.
+* `setData` doesn't change any existing variables or variable triggers. It will onky create new variables. This is intentional.
+* This method will try to do as little work as possible and will try to preserve the state of the card (input values and so on).
+
 ### Note about 64-bit integers
 
 DivKit internally uses the `BigInt` type if the current platform supports it (both client-side and server-side). This means that on unsupported platforms, integers will lose precision if the value exceeds 2^53.

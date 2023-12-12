@@ -1,5 +1,16 @@
+<script lang="ts" context="module">
+    const DEFAULT_ANIMATION: Animation = {
+        name: 'set',
+        items: [{
+            name: 'translate'
+        }, {
+            name: 'fade'
+        }]
+    };
+</script>
+
 <script lang="ts">
-    import { afterUpdate, createEventDispatcher, getContext, onDestroy, onMount } from 'svelte';
+    import { afterUpdate, getContext, onDestroy, onMount } from 'svelte';
 
     import rootCss from '../Root.module.css';
     import css from './Tooltip.module.css';
@@ -19,25 +30,9 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    const DEFAULT_ANIMATION: Animation = {
-        name: 'set',
-        items: [{
-            name: 'translate'
-        }, {
-            name: 'fade'
-        }]
-    };
+    const isDesktop = rootCtx.isDesktop;
 
     const creationTime = Date.now();
-
-    $: isDesktop = rootCtx.isDesktop;
-
-    $: position = rootCtx.getDerivedFromVars(data.position);
-    $: offsetX = rootCtx.getDerivedFromVars(data.offset?.x?.value);
-    $: offsetY = rootCtx.getDerivedFromVars(data.offset?.y?.value);
-
-    $: animationIn = rootCtx.getDerivedFromVars(data.animation_in);
-    $: animationOut = rootCtx.getDerivedFromVars(data.animation_out);
 
     let tooltipNode: HTMLElement;
     let visible = false;
@@ -46,6 +41,13 @@
     let tooltipWidth = '';
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
+
+    $: position = rootCtx.getDerivedFromVars(data.position);
+    $: offsetX = rootCtx.getDerivedFromVars(data.offset?.x?.value);
+    $: offsetY = rootCtx.getDerivedFromVars(data.offset?.y?.value);
+
+    $: animationIn = rootCtx.getDerivedFromVars(data.animation_in);
+    $: animationOut = rootCtx.getDerivedFromVars(data.animation_out);
 
     $: mods = {
         visible

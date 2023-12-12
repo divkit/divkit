@@ -50,8 +50,44 @@
     const leftClass = rootCtx.getCustomization('galleryLeftClass');
     const rightClass = rootCtx.getCustomization('galleryRightClass');
 
+    let prevId: string | undefined;
     let hasError = false;
+    let columns = 1;
+    let orientation: Orientation = 'horizontal';
+    let align: Align = 'start';
+    let gridGap: string | undefined;
+    let itemSpacing = 8;
+    let crossGridGap: string | undefined;
+    let crossSpacing;
+    let padding = '';
+    let templateSizes: string[] = [];
+    let childStore: Readable<(MaybeMissing<Size> | undefined)[]>;
+    let scrollerStyle: Style = {};
+    let scrollSnap = false;
+    let childLayoutParams: LayoutParams = {};
+    let defaultItem = 0;
+
+    $: if (json) {
+        columns = 1;
+        orientation = 'horizontal';
+        align = 'start';
+        itemSpacing = 8;
+        padding = '';
+    }
+
     $: jsonItems = json.items;
+
+    $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
+    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
+    $: jsonCrossContentAlignment = rootCtx.getDerivedFromVars(json.cross_content_alignment);
+    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
+    $: jsonCrossSpacing = rootCtx.getDerivedFromVars(json.cross_spacing);
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
+    $: jsonScrollMode = rootCtx.getDerivedFromVars(json.scroll_mode);
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+    $: jsonScrollbar = rootCtx.getDerivedFromVars(json.scrollbar);
+    $: jsonDefaultItem = rootCtx.getDerivedFromVars(json.default_item);
+
     $: {
         if (!jsonItems?.length || !Array.isArray(jsonItems)) {
             hasError = true;
@@ -106,8 +142,6 @@
         resizeObserver = null;
     }
 
-    $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
-    let columns = 1;
     $: {
         columns = correctPositiveNumber($jsonColumnCount, columns);
     }
@@ -130,44 +164,29 @@
     }
     $: itemsGrid = rebuildItemsGrid(items, columns);
 
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
-    let orientation: Orientation = 'horizontal';
     $: {
         orientation = correctGeneralOrientation($jsonOrientation, orientation);
     }
 
-    let align: Align = 'start';
-    $: jsonCrossContentAlignment = rootCtx.getDerivedFromVars(json.cross_content_alignment);
     $: {
         align = correctAlignment($jsonCrossContentAlignment, align);
     }
 
-    let gridGap: string | undefined;
-    let itemSpacing = 8;
-    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
     $: {
         itemSpacing = correctNonNegativeNumber($jsonItemSpacing, itemSpacing);
         gridGap = pxToEm(itemSpacing);
     }
 
-    let crossGridGap: string | undefined;
-    let crossSpacing;
-    $: jsonCrossSpacing = rootCtx.getDerivedFromVars(json.cross_spacing);
     $: {
         crossSpacing = correctNonNegativeNumber($jsonCrossSpacing, itemSpacing);
         crossGridGap = pxToEm(crossSpacing);
     }
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let padding = '';
     $: {
         padding = correctEdgeInserts($jsonPaddings, padding);
     }
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
-    let templateSizes: string[] = [];
-
-    let childStore: Readable<(MaybeMissing<Size> | undefined)[]>;
     $: {
         let children: Readable<MaybeMissing<Size> | undefined>[] = [];
 
@@ -194,10 +213,6 @@
         }
     }
 
-    let scrollerStyle: Style = {};
-    let scrollSnap = false;
-    $: jsonScrollMode = rootCtx.getDerivedFromVars(json.scroll_mode);
-    let childLayoutParams: LayoutParams = {};
     $: {
         const newScrollerStyle: Style = {};
         let newChildLayoutParams: LayoutParams = {};
@@ -229,10 +244,6 @@
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }
 
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
-
-    $: jsonScrollbar = rootCtx.getDerivedFromVars(json.scrollbar);
-
     $: gridStyle = {
         padding,
         'grid-gap': crossGridGap
@@ -249,14 +260,12 @@
         scrollbar: $jsonScrollbar === 'auto' ? 'auto' : 'none'
     };
 
-    $: jsonDefaultItem = rootCtx.getDerivedFromVars(json.default_item);
-    let defaultItem = 0;
     $: {
         defaultItem = correctNonNegativeNumber($jsonDefaultItem, defaultItem);
     }
 
     function updateArrowsVisibility(): void {
-        if (!scroller) {
+        if (!scroller || hasError) {
             return;
         }
 
@@ -269,6 +278,10 @@
     }
 
     const updateArrowsVisibilityDebounced = debounce(updateArrowsVisibility, 50);
+
+    $: if (json) {
+        updateArrowsVisibilityDebounced();
+    }
 
     function scroll(type: 'left' | 'right'): void {
         scroller.scroll({
@@ -358,50 +371,58 @@
         return action === 'prev' ? 1 : galleryElements.length - 2;
     }
 
-    if (json.id && !hasError && !layoutParams?.fakeElement) {
-        rootCtx.registerInstance<SwitchElements>(json.id, {
-            setCurrentItem(item: number) {
-                const galleryElements = getItems();
-                if (item < 0 || item > galleryElements.length - 1) {
-                    throw new Error('Item is out of range in "set-current-item" action');
+    $: if (json) {
+        if (prevId) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
+        }
+
+        if (json.id && !hasError && !layoutParams?.fakeElement) {
+            prevId = json.id;
+            rootCtx.registerInstance<SwitchElements>(json.id, {
+                setCurrentItem(item: number) {
+                    const galleryElements = getItems();
+                    if (item < 0 || item > galleryElements.length - 1) {
+                        throw new Error('Item is out of range in "set-current-item" action');
+                    }
+
+                    scrollToGalleryItem(galleryElements, item);
+                },
+                setPreviousItem(overflow: Overflow) {
+                    const currentElementIndex = calculateCurrentElementIndex('prev');
+                    const galleryElements = getItems();
+                    let previousItem = currentElementIndex - 1;
+
+                    if (previousItem < 0) {
+                        previousItem = overflow === 'ring' ? galleryElements.length - 1 : currentElementIndex;
+                    }
+
+                    scrollToGalleryItem(galleryElements, previousItem);
+                },
+                setNextItem(overflow: Overflow) {
+                    // Go to scroller start, if we reached right/bottom edge of scroller
+                    const isEdgeScroll = orientation === 'horizontal' ? (
+                        scroller.scrollLeft + scroller.offsetWidth === scroller.scrollWidth
+                    ) : (
+                        scroller.scrollTop + scroller.offsetHeight === scroller.scrollHeight
+                    );
+                    const galleryElements = getItems();
+                    if (isEdgeScroll && overflow === 'ring') {
+                        scrollToGalleryItem(galleryElements, 0);
+                        return;
+                    }
+
+                    const currentElementIndex = calculateCurrentElementIndex('next');
+                    let nextItem = currentElementIndex + 1;
+
+                    if (nextItem > galleryElements.length - 1) {
+                        nextItem = overflow === 'ring' ? 0 : currentElementIndex;
+                    }
+
+                    scrollToGalleryItem(galleryElements, nextItem);
                 }
-
-                scrollToGalleryItem(galleryElements, item);
-            },
-            setPreviousItem(overflow: Overflow) {
-                const currentElementIndex = calculateCurrentElementIndex('prev');
-                const galleryElements = getItems();
-                let previousItem = currentElementIndex - 1;
-
-                if (previousItem < 0) {
-                    previousItem = overflow === 'ring' ? galleryElements.length - 1 : currentElementIndex;
-                }
-
-                scrollToGalleryItem(galleryElements, previousItem);
-            },
-            setNextItem(overflow: Overflow) {
-                // Go to scroller start, if we reached right/bottom edge of scroller
-                const isEdgeScroll = orientation === 'horizontal' ? (
-                    scroller.scrollLeft + scroller.offsetWidth === scroller.scrollWidth
-                ) : (
-                    scroller.scrollTop + scroller.offsetHeight === scroller.scrollHeight
-                );
-                const galleryElements = getItems();
-                if (isEdgeScroll && overflow === 'ring') {
-                    scrollToGalleryItem(galleryElements, 0);
-                    return;
-                }
-
-                const currentElementIndex = calculateCurrentElementIndex('next');
-                let nextItem = currentElementIndex + 1;
-
-                if (nextItem > galleryElements.length - 1) {
-                    nextItem = overflow === 'ring' ? 0 : currentElementIndex;
-                }
-
-                scrollToGalleryItem(galleryElements, nextItem);
-            }
-        });
+            });
+        }
     }
 
     onMount(() => {
@@ -420,8 +441,9 @@
     onDestroy(() => {
         mounted = false;
 
-        if (json.id && !layoutParams?.fakeElement) {
-            rootCtx.unregisterInstance(json.id);
+        if (prevId && !layoutParams?.fakeElement) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
         }
     });
 </script>
@@ -451,24 +473,22 @@
                 class={css['gallery__items-grid']}
                 style={makeStyle(gridStyle)}
             >
-                {#key itemsGrid}
-                    {#each itemsGrid as itemsRow, rowIndex}
-                        <div
-                            class={css.gallery__items}
-                            style={makeStyle(columnStyle)}
-                            bind:this={galleryItemsWrappers[rowIndex]}
-                        >
-                            {#each itemsRow as item}
-                                <Unknown
-                                    layoutParams={childLayoutParams}
-                                    div={item.json}
-                                    templateContext={item.templateContext}
-                                    origJson={item.origJson}
-                                />
-                            {/each}
-                        </div>
-                    {/each}
-                {/key}
+                {#each itemsGrid as itemsRow, rowIndex}
+                    <div
+                        class={css.gallery__items}
+                        style={makeStyle(columnStyle)}
+                        bind:this={galleryItemsWrappers[rowIndex]}
+                    >
+                        {#each itemsRow as item}
+                            <Unknown
+                                layoutParams={childLayoutParams}
+                                div={item.json}
+                                templateContext={item.templateContext}
+                                origJson={item.origJson}
+                            />
+                        {/each}
+                    </div>
+                {/each}
             </div>
         </div>
         {#if orientation === 'horizontal'}

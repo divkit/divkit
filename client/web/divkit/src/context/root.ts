@@ -62,20 +62,17 @@ export interface RootCtxValue {
     customComponents: Map<string, CustomComponentDescription> | undefined;
 
     // Devtool
-    registerComponent?({
+    componentDevtool?({
+        type,
         node,
         json,
         origJson,
         templateContext
     }: {
+        type: 'mount' | 'update' | 'destroy';
         node: HTMLElement;
         json: Partial<DivBaseData>;
         origJson: DivBase | undefined;
         templateContext: TemplateContext;
-    }): void;
-    unregisterComponent?({
-        node
-    }: {
-        node: HTMLElement;
     }): void;
 }

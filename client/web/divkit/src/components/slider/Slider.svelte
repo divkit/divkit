@@ -1,3 +1,19 @@
+<script lang="ts" context="module">
+    const DEFAULT_DRAWABLE_STYLE: DrawableStyle = {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        background: '#000'
+    };
+    const THUMB_MARK_SHAPES = [
+        'rounded_rectangle',
+        'circle'
+    ];
+    const TRACK_SHAPES = [
+        'rounded_rectangle'
+    ];
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
 
@@ -25,37 +41,66 @@
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
-    const DEFAULT_DRAWABLE_STYLE: DrawableStyle = {
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        background: '#000'
-    };
-
-    const THUMB_MARK_SHAPES = ['rounded_rectangle', 'circle'];
-    const TRACK_SHAPES = ['rounded_rectangle'];
-
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
+
+    let prevId: string | undefined;
     let input: HTMLInputElement;
     let tracksInner: HTMLElement;
     let switchedTracks = false;
+    let minValue = 0;
+    let maxValue = 100;
+    let thumbStyle = DEFAULT_DRAWABLE_STYLE;
+    let thumbSecondaryStyle = thumbStyle;
+    let trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
+    let trackActiveStyle = DEFAULT_DRAWABLE_STYLE;
+    let markActiveTicks: number[];
+    let markActiveStyle: DrawableStyle | null = null;
+    let markInactiveTicks: number[];
+    let markInactiveStyle: DrawableStyle | null = null;
+    let textStyle: TransformedSliderTextStyle | undefined = undefined;
+    let textSecondaryStyle: TransformedSliderTextStyle | undefined = textStyle;
+    let description = '';
+    let secondaryDescription = '';
+    let hasError = false;
+
+    $: if (json) {
+        thumbStyle = DEFAULT_DRAWABLE_STYLE;
+        thumbSecondaryStyle = thumbStyle;
+        trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
+        trackActiveStyle = DEFAULT_DRAWABLE_STYLE;
+        markActiveStyle = null;
+        markInactiveStyle = null;
+        textStyle = undefined;
+        textSecondaryStyle = undefined;
+        description = '';
+        secondaryDescription = '';
+    }
+
+    $: firstVariable = json.thumb_value_variable;
+    $: secondVariable = json.thumb_secondary_value_variable;
+
+    $: valueVariable = firstVariable && rootCtx.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
+    $: value2Variable = secondVariable && rootCtx.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);
 
     $: jsonMinValue = rootCtx.getDerivedFromVars(json.min_value);
     $: jsonMaxValue = rootCtx.getDerivedFromVars(json.max_value);
-    let minValue = 0;
-    let maxValue = 100;
+    $: jsonThumbStyle = rootCtx.getDerivedFromVars(json.thumb_style);
+    $: jsonThumbSecondaryStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_style);
+    $: jsonTrackInactiveStyle = rootCtx.getDerivedFromVars(json.track_inactive_style);
+    $: jsonTrackActiveStyle = rootCtx.getDerivedFromVars(json.track_active_style);
+    $: jsonMarkActiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_active_style);
+    $: jsonMarkInactiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_inactive_style);
+    $: jsonTextStyle = rootCtx.getDerivedFromVars(json.thumb_text_style);
+    $: jsonSecondaryTextStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_text_style);
+    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
+    $: jsonSecondaryAccessibility = rootCtx.getDerivedFromVars(json.secondary_value_accessibility);
+
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
         maxValue = correctNumber($jsonMaxValue, maxValue);
         checkTicks();
     }
-
-    const firstVariable = json.thumb_value_variable;
-    const secondVariable = json.thumb_secondary_value_variable;
-
-    let valueVariable = firstVariable && rootCtx.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
-    let value2Variable = secondVariable && rootCtx.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);
 
     let value = clamp($valueVariable || 0, minValue, maxValue);
     let value2 = clamp($value2Variable || 0, minValue, maxValue);
@@ -74,26 +119,18 @@
         }
     }
 
-    $: jsonThumbStyle = rootCtx.getDerivedFromVars(json.thumb_style);
-    let thumbStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
         thumbStyle = correctDrawableStyle($jsonThumbStyle, THUMB_MARK_SHAPES, thumbStyle);
     }
 
-    $: jsonThumbSecondaryStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_style);
-    let thumbSecondaryStyle = thumbStyle;
     $: {
         thumbSecondaryStyle = correctDrawableStyle($jsonThumbSecondaryStyle, THUMB_MARK_SHAPES, thumbStyle);
     }
 
-    $: jsonTrackInactiveStyle = rootCtx.getDerivedFromVars(json.track_inactive_style);
-    let trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
         trackInactiveStyle = correctDrawableStyle($jsonTrackInactiveStyle, TRACK_SHAPES, trackInactiveStyle);
     }
 
-    $: jsonTrackActiveStyle = rootCtx.getDerivedFromVars(json.track_active_style);
-    let trackActiveStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
         trackActiveStyle = correctDrawableStyle($jsonTrackActiveStyle, TRACK_SHAPES, trackActiveStyle);
     }
@@ -117,9 +154,6 @@
         return res;
     }
 
-    $: jsonMarkActiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_active_style);
-    let markActiveTicks: number[];
-    let markActiveStyle: DrawableStyle | null = null;
     $: {
         let newStyle = correctDrawableStyle($jsonMarkActiveStyle, THUMB_MARK_SHAPES, DEFAULT_DRAWABLE_STYLE);
 
@@ -136,9 +170,6 @@
         markActiveTicks = [];
     }
 
-    $: jsonMarkInactiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_inactive_style);
-    let markInactiveTicks: number[];
-    let markInactiveStyle: DrawableStyle | null = null;
     $: {
         let newStyle = correctDrawableStyle($jsonMarkInactiveStyle, THUMB_MARK_SHAPES, DEFAULT_DRAWABLE_STYLE);
 
@@ -155,20 +186,14 @@
         markInactiveTicks = [];
     }
 
-    $: jsonTextStyle = rootCtx.getDerivedFromVars(json.thumb_text_style);
-    let textStyle: TransformedSliderTextStyle | undefined = undefined;
     $: {
         textStyle = correctSliderTextStyle($jsonTextStyle, textStyle);
     }
 
-    $: jsonSecondaryTextStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_text_style);
-    let textSecondaryStyle: TransformedSliderTextStyle | undefined = textStyle;
     $: {
         textSecondaryStyle = correctSliderTextStyle($jsonSecondaryTextStyle, textStyle);
     }
 
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    let description = '';
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
@@ -177,8 +202,6 @@
         }));
     }
 
-    $: jsonSecondaryAccessibility = rootCtx.getDerivedFromVars(json.secondary_value_accessibility);
-    let secondaryDescription = '';
     $: if ($jsonSecondaryAccessibility?.description) {
         secondaryDescription = $jsonSecondaryAccessibility.description;
     } else if (secondVariable) {
@@ -187,7 +210,6 @@
         }));
     }
 
-    let hasError = false;
     $: {
         let newHasError = false;
 
@@ -313,10 +335,14 @@
 
     const checkTicksDebounced = debounce(checkTicks, 50);
 
-    onMount(() => {
-        checkTicks();
+    $: if (json && input) {
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
+        }
 
-        if (json.id) {
+        if (json.id && !layoutParams?.fakeElement) {
+            prevId = json.id;
             rootCtx.registerFocusable(json.id, {
                 focus() {
                     if (input) {
@@ -325,11 +351,16 @@
                 }
             });
         }
+    }
+
+    onMount(() => {
+        checkTicks();
     });
 
     onDestroy(() => {
-        if (json.id) {
-            rootCtx.unregisterFocusable(json.id);
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
         }
     });
 </script>

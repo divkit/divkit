@@ -1,9 +1,24 @@
+<script lang="ts" context="module">
+    const HORIZONTAL_ALIGN_TO_GENERAL = {
+        left: 'start',
+        center: 'center',
+        right: 'end'
+    };
+
+    const VERTICAL_ALIGN_TO_GENERAL = {
+        top: 'start',
+        center: 'center',
+        bottom: 'end',
+        baseline: 'baseline'
+    };
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, tick } from 'svelte';
 
     import css from './Outer.module.css';
 
-    import type { DivBaseData } from '../../types/base';
+    import type { DivBaseData, Extension } from '../../types/base';
     import type { Mods, Style } from '../../types/general';
     import type { DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
@@ -42,6 +57,7 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { Truthy } from '../../utils/truthy';
     import { shadowToCssBoxShadow } from '../../utils/shadow';
+    import { isDeepEqual } from '../../utils/isDeepEqual';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -61,27 +77,132 @@
     export let replaceItems: ((items: (DivBaseData | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
 
-    const HORIZONTAL_ALIGN_TO_GENERAL = {
-        left: 'start',
-        center: 'center',
-        right: 'end'
-    };
-
-    const VERTICAL_ALIGN_TO_GENERAL = {
-        top: 'start',
-        center: 'center',
-        bottom: 'end',
-        baseline: 'baseline'
-    };
-
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
+    const isPointerFocus = rootCtx.isPointerFocus;
 
     let currentNode: HTMLElement;
     let attrs: Record<string, string> | undefined;
     let extensions: DivExtension[] | null = null;
 
     let prevChilds: string[] = [];
+
+    let borderStyle: Style = {};
+    let borderElemStyle: Style = {};
+    let hasBorder = false;
+    let strokeWidth = 1;
+    let strokeColor = 'transparent';
+    let cornerRadius = 0;
+    let cornersRadius: CornersRadius = {
+        'top-left': 0,
+        'top-right': 0,
+        'bottom-right': 0,
+        'bottom-left': 0
+    };
+    let backgroundRadius = '';
+
+    let selfPadding: EdgeInsets | null = null;
+    let margin = '';
+
+    let widthMods: Mods = {};
+    let width: string | undefined;
+    let widthMin: string | undefined;
+    let widthMax: string | undefined;
+    let widthNum = 0;
+    let widthFlexGrow = 0;
+    let widthFlexShrink = 0;
+    let widthFill = false;
+    let hasWidthError = false;
+
+    let heightMods: Mods = {};
+    let height: string | undefined;
+    let heightMin: string | undefined;
+    let heightMax: string | undefined;
+    let heightNum = 0;
+    let heightFlexGrow = 0;
+    let heightFlexShrink = 0;
+    let heightFill = false;
+    let hasHeightError = false;
+
+    let alpha = 1;
+    let opacity: number | undefined;
+
+    let background: MaybeMissing<Background[]> | undefined;
+    let backgroundStyle: Style;
+    let hasSeparateBg: boolean;
+
+    let jsonTransitionTriggers = [];
+    let hasStateChangeTrigger = false;
+    let hasVisibilityChangeTrigger = false;
+
+    let stateChangingInProgress: boolean | undefined;
+    let visibilityChangingInProgress: boolean | undefined;
+    let transitionChangeInProgress: boolean | undefined;
+
+    let actions: MaybeMissing<Action>[] = [];
+    let doubleTapActions: MaybeMissing<Action>[] = [];
+    let longTapActions: MaybeMissing<Action>[] = [];
+    let focusActions: MaybeMissing<Action>[] = [];
+    let blurActions: MaybeMissing<Action>[] = [];
+
+    let actionAnimationList: MaybeMissing<AnyAnimation>[] = [];
+    let actionAnimationTransition = '';
+    let animationOpacityStart: number | undefined = undefined;
+    let animationOpacityEnd: number | undefined = undefined;
+    let animationScaleStart: number | undefined = undefined;
+    let animationScaleEnd: number | undefined = undefined;
+
+    let isVisibilityInited = false;
+    let visibility: Visibility = 'visible';
+
+    let pivotXNum = 0;
+    let pivotYNum = 0;
+    let transformOrigin: string | undefined;
+    let transform: string | undefined;
+
+    let hasCustomFocus = false;
+
+    let prevExtensionsVal: Extension[] | undefined = undefined;
+
+    let dev: DevtoolResult | null = null;
+
+    $: if (json && layoutParams) {
+        selfPadding = null;
+        margin = '';
+        alpha = 1;
+        isVisibilityInited = false;
+        visibility = 'visible';
+        pivotXNum = 0;
+        pivotYNum = 0;
+        transformOrigin = undefined;
+        transform = undefined;
+
+        jsonTransitionTriggers = layoutParams.fakeElement ?
+            [] :
+            (json.transition_triggers || ['state_change', 'visibility_change']);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && json.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && json.id);
+    }
+
+    $: jsonFocus = rootCtx.getDerivedFromVars(json.focus);
+    $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
+    $: jsonMargins = rootCtx.getDerivedFromVars(json.margins);
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.alignment_horizontal);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+    $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.alignment_vertical);
+    $: jsonAlpha = rootCtx.getDerivedFromVars(json.alpha);
+    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
+    $: jsonBackground = rootCtx.getDerivedFromVars(json.background);
+    $: jsonAction = rootCtx.getDerivedFromVars(json.action);
+    $: jsonActions = rootCtx.getDerivedFromVars(json.actions);
+    $: jsonDoubleTapActions = rootCtx.getDerivedFromVars(json.doubletap_actions);
+    $: jsonLongTapActions = rootCtx.getDerivedFromVars(json.longtap_actions);
+    $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
+    $: jsonVisibility = rootCtx.getDerivedFromVars(json.visibility);
+    $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
+
     $: {
         prevChilds.forEach(id => {
             rootCtx.unregisterParentOf(id);
@@ -121,22 +242,6 @@
         replaceItems(newItems);
     }
 
-    $: jsonFocus = rootCtx.getDerivedFromVars(json.focus);
-
-    $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
-    let borderStyle: Style = {};
-    let borderElemStyle: Style = {};
-    let hasBorder = false;
-    let strokeWidth = 1;
-    let strokeColor = 'transparent';
-    let cornerRadius = 0;
-    let cornersRadius: CornersRadius = {
-        'top-left': 0,
-        'top-right': 0,
-        'bottom-right': 0,
-        'bottom-left': 0
-    };
-    let backgroundRadius = '';
     $: {
         const border = hasCustomFocus && $jsonFocus?.border ? $jsonFocus.border : $jsonBorder;
         let newBorderStyle: Style = {};
@@ -195,8 +300,6 @@
         backgroundRadius = newBackgroundRadius;
     }
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let selfPadding: EdgeInsets | null = null;
     $: {
         selfPadding = correctEdgeInsertsObject(
             ($jsonPaddings && !customPaddings) ?
@@ -208,23 +311,9 @@
 
     $: padding = edgeInsertsToCss(sumEdgeInsets(selfPadding, additionalPaddings));
 
-    $: jsonMargins = rootCtx.getDerivedFromVars(json.margins);
-    let margin = '';
     $: {
         margin = correctEdgeInserts($jsonMargins, margin);
     }
-
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.alignment_horizontal);
-    let widthMods: Mods = {};
-    let width: string | undefined;
-    let widthMin: string | undefined;
-    let widthMax: string | undefined;
-    let widthNum = 0;
-    let widthFlexGrow = 0;
-    let widthFlexShrink = 0;
-    let widthFill = false;
-    let hasWidthError = false;
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
         let newWidth: string | undefined = undefined;
@@ -314,17 +403,6 @@
         hasWidthError = newWidthError;
     }
 
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.alignment_vertical);
-    let heightMods: Mods = {};
-    let height: string | undefined;
-    let heightMin: string | undefined;
-    let heightMax: string | undefined;
-    let heightNum = 0;
-    let heightFlexGrow = 0;
-    let heightFlexShrink = 0;
-    let heightFill = false;
-    let hasHeightError = false;
     $: {
         let heightType: 'parent' | 'content' | undefined = undefined;
         let newHeight: string | undefined = undefined;
@@ -429,15 +507,11 @@
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
         undefined;
 
-    $: jsonAlpha = rootCtx.getDerivedFromVars(json.alpha);
-    let alpha = 1;
-    let opacity: number | undefined;
     $: {
         alpha = correctAlpha($jsonAlpha, alpha);
         opacity = alpha === 1 ? undefined : alpha;
     }
 
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
     $: {
         attrs = undefined;
         if ($jsonAccessibility && !customDescription && $jsonAccessibility.description) {
@@ -446,10 +520,6 @@
         }
     }
 
-    $: jsonBackground = rootCtx.getDerivedFromVars(json.background);
-    let background: MaybeMissing<Background[]> | undefined;
-    let backgroundStyle: Style;
-    let hasSeparateBg: boolean;
     $: {
         background = hasCustomFocus && $jsonFocus?.background ? $jsonFocus.background : $jsonBackground;
         backgroundStyle = {};
@@ -470,15 +540,6 @@
         }
     }
 
-    const jsonTransitionTriggers = layoutParams.fakeElement ?
-        [] :
-        (json.transition_triggers || ['state_change', 'visibility_change']);
-    const hasStateChangeTrigger = jsonTransitionTriggers.indexOf('state_change') !== -1 && json.id;
-    const hasVisibilityChangeTrigger = jsonTransitionTriggers.indexOf('visibility_change') !== -1 && json.id;
-
-    let stateChangingInProgress: boolean | undefined;
-    let visibilityChangingInProgress: boolean | undefined;
-    let transitionChangeInProgress: boolean | undefined;
     $: {
         stateChangingInProgress = undefined;
         if (hasStateChangeTrigger && json.transition_in && rootCtx.isRunning('stateChange')) {
@@ -495,15 +556,6 @@
         }
     }
 
-    $: jsonAction = rootCtx.getDerivedFromVars(json.action);
-    $: jsonActions = rootCtx.getDerivedFromVars(json.actions);
-    $: jsonDoubleTapActions = rootCtx.getDerivedFromVars(json.doubletap_actions);
-    $: jsonLongTapActions = rootCtx.getDerivedFromVars(json.longtap_actions);
-    let actions: MaybeMissing<Action>[] = [];
-    let doubleTapActions: MaybeMissing<Action>[] = [];
-    let longTapActions: MaybeMissing<Action>[] = [];
-    let focusActions: MaybeMissing<Action>[] = [];
-    let blurActions: MaybeMissing<Action>[] = [];
     $: {
         let newActions = $jsonActions || $jsonAction && [$jsonAction] || [];
         let newDoubleTapActions = $jsonDoubleTapActions || [];
@@ -555,13 +607,6 @@
         blurActions = newBlurActions;
     }
 
-    $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
-    let actionAnimationList: MaybeMissing<AnyAnimation>[] = [];
-    let actionAnimationTransition = '';
-    let animationOpacityStart: number | undefined = undefined;
-    let animationOpacityEnd: number | undefined = undefined;
-    let animationScaleStart: number | undefined = undefined;
-    let animationScaleEnd: number | undefined = undefined;
     $: {
         if ($jsonActionAnimation) {
             actionAnimationList = flattenAnimation($jsonActionAnimation as Animation);
@@ -602,9 +647,6 @@
         }
     }
 
-    let isVisibilityInited = false;
-    let visibility: Visibility = 'visible';
-    $: jsonVisibility = rootCtx.getDerivedFromVars(json.visibility);
     $: {
         const prevVisibility = visibility;
         const nextVisibility = correctVisibility($jsonVisibility, visibility);
@@ -659,6 +701,48 @@
         }
     }
 
+    function unmountExtensions(): void {
+        if (extensions && currentNode) {
+            const ctx = rootCtx.getExtensionContext();
+            extensions.forEach(it => {
+                it.unmountView?.(currentNode, ctx);
+            });
+            extensions = null;
+        }
+    }
+
+    $: if (json && currentNode && !isDeepEqual(json.extensions, prevExtensionsVal)) {
+        unmountExtensions();
+
+        if (Array.isArray(json.extensions)) {
+            const ctx = rootCtx.getExtensionContext();
+            extensions = json.extensions.map(it => {
+                const instance = rootCtx.getExtension(it.id, it.params);
+
+                if (instance) {
+                    instance.mountView?.(currentNode, ctx);
+                }
+
+                return instance;
+            }).filter(Truthy);
+        }
+        prevExtensionsVal = json.extensions;
+    }
+
+    function updateDevtool(): void {
+        if (dev) {
+            dev.update({
+                json,
+                origJson,
+                templateContext
+            });
+        }
+    }
+
+    $: if (json && origJson && templateContext) {
+        updateDevtool();
+    }
+
     $: mods = {
         ...widthMods,
         ...heightMods,
@@ -675,11 +759,6 @@
         'has-custom-focus': Boolean(hasCustomFocus && json.focus)
     };
 
-    $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
-    let pivotXNum = 0;
-    let pivotYNum = 0;
-    let transformOrigin: string | undefined;
-    let transform: string | undefined;
     $: {
         if ($jsonTransform && $jsonTransform.rotation !== undefined) {
             const pivotX = $jsonTransform.pivot_x || {
@@ -797,8 +876,6 @@
             rootCtx.registerTooltip(node, tooltip);
         });
 
-        let dev: DevtoolResult | null = null;
-
         if (devtool && !layoutParams.fakeElement) {
             dev = devtool(node, {
                 json,
@@ -808,30 +885,10 @@
             });
         }
 
-        if (Array.isArray(json.extensions)) {
-            const ctx = rootCtx.getExtensionContext();
-            extensions = json.extensions.map(it => {
-                const instance = rootCtx.getExtension(it.id, it.params);
-
-                if (instance) {
-                    instance.mountView?.(node, ctx);
-                }
-
-                return instance;
-            }).filter(Truthy);
-        }
-
         return {
             destroy() {
                 if (id) {
                     stateCtx.unregisterChild(id);
-                }
-                if (extensions) {
-                    const ctx = rootCtx.getExtensionContext();
-                    extensions.forEach(it => {
-                        it.unmountView?.(node, ctx);
-                    });
-                    extensions = null;
                 }
                 if (dev) {
                     dev.destroy();
@@ -839,9 +896,6 @@
             }
         };
     }
-
-    let hasCustomFocus: boolean;
-    $: isPointerFocus = rootCtx.isPointerFocus;
 
     function focusHandler() {
         if (!json.focus) {
@@ -873,6 +927,8 @@
         json.tooltips?.forEach(tooltip => {
             rootCtx.unregisterTooltip(tooltip);
         });
+
+        unmountExtensions();
     });
 </script>
 

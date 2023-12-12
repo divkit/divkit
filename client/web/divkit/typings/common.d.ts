@@ -228,14 +228,11 @@ export type StatCallback = (details: {
 export type CustomActionCallback = (action: Action & { url: string }) => void;
 
 export type ComponentCallback = (details: {
-    type: 'mount';
+    type: 'mount' | 'update' | 'destroy';
     node: HTMLElement;
     json: DivBase;
     origJson: DivBase | undefined;
     templateContext: TemplateContext;
-} | {
-    type: 'destroy';
-    node: HTMLElement;
 }) => void;
 
 export interface WrappedError extends Error {
@@ -256,7 +253,10 @@ export type FetchInit = RequestInit | ((url: string) => RequestInit);
 export interface DivkitInstance {
     $destroy(): void;
     execAction(action: Action | VisibilityAction): void;
+    /** @deprecated */
     setTheme(theme: Theme): void;
+    /** Experimental */
+    setData(json: DivJson): void;
 }
 
 export type Platform = 'desktop' | 'touch' | 'auto';

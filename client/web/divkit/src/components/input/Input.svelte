@@ -1,3 +1,16 @@
+<script lang="ts" context="module">
+    const isSupportInputMode = typeof document !== 'undefined' && 'inputMode' in document.createElement('input');
+
+    const KEYBOARD_MAP: Record<KeyboardType, string> = {
+        email: 'email',
+        number: 'number',
+        phone: 'tel',
+        single_line_text: 'text',
+        multi_line_text: 'text',
+        uri: 'url'
+    };
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, onMount, tick } from 'svelte';
     import type { HTMLAttributes } from 'svelte/elements';
@@ -41,25 +54,79 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    let prevId: string | undefined;
     let input: HTMLInputElement | HTMLSpanElement;
     let isPressed = false;
     let inputMask: BaseInputMask | null = null;
-
-    const variable = json.text_variable;
-    const rawVariable = json.mask?.raw_text_variable;
-
+    let value = '';
+    let contentEditableValue = '';
     let hasError = false;
-    if (!variable) {
+    let hintColor = '';
+    let fontSize = 12;
+    let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
+    let lineHeight: number | undefined = undefined;
+    let letterSpacing = '';
+    let textColor = '#000';
+    let highlightColor = '';
+    let alignmentHorizontal: AlignmentHorizontal = 'left';
+    let alignmentVertical: AlignmentVertical = 'center';
+    let keyboardType = 'multi_line_text';
+    let inputType = 'text';
+    let inputMode: HTMLAttributes<HTMLInputElement>['inputmode'] = undefined;
+    let maxHeight = '';
+    let selfPadding: EdgeInsets | null = null;
+    let padding = '';
+    let verticalPadding = '';
+    let description = '';
+
+    $: if (json) {
+        hintColor = '';
+        fontSize = 12;
+        fontWeight = undefined;
+        fontFamily = '';
+        lineHeight = undefined;
+        textColor = '#000';
+        highlightColor = '';
+        alignmentHorizontal = 'left';
+        alignmentVertical = 'center';
+        keyboardType = 'multi_line_text';
+        inputType = 'text';
+        inputMode = undefined;
+    }
+
+    $: variable = json.text_variable;
+    $: rawVariable = json.mask?.raw_text_variable;
+
+    $: valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+    $: rawValueVariable = rawVariable && rootCtx.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
+
+    $: jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
+    $: jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
+    $: jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
+    $: jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
+    $: jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
+    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
+    $: jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
+    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
+    $: jsonHighlightColor = rootCtx.getDerivedFromVars(json.highlight_color);
+    $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
+    $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
+    $: jsonKeyboardType = rootCtx.getDerivedFromVars(json.keyboard_type);
+    $: jsonMask = rootCtx.getDerivedFromVars(json.mask);
+    $: jsonVisibleMaxLines = rootCtx.getDerivedFromVars(json.max_visible_lines);
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
+    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
+    $: jsonSelectAll = rootCtx.getDerivedFromVars(json.select_all_on_focus);
+
+    $: if (variable) {
+        hasError = false;
+    } else {
         hasError = true;
         rootCtx.logError(wrapError(new Error('Missing "text_variable" in "input"')));
     }
 
-    let valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
-    let rawValueVariable = rawVariable && rootCtx.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
-    let value = '';
-    let contentEditableValue = '';
-
-    const jsonMask = rootCtx.getDerivedFromVars(json.mask);
     function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {
         if (mask?.type === 'fixed_length') {
             inputMask = updateFixedMask(mask, rootCtx.logError, inputMask as FixedLengthInputMask);
@@ -81,25 +148,16 @@
         runRawValueMask();
     }
 
-    const jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
     $: placeholder = $jsonHintText;
 
-    const jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
-    let hintColor = '';
     $: {
         hintColor = correctColor($jsonHintColor, 1, hintColor);
     }
 
-    const jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
-    let fontSize = 12;
     $: {
         fontSize = correctPositiveNumber($jsonFontSize, fontSize);
     }
 
-    const jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
-    const jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
-    let fontWeight: number | undefined = undefined;
-    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
         if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
@@ -111,8 +169,6 @@
         }
     }
 
-    const jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    let lineHeight: number | undefined = undefined;
     $: {
         const val = $jsonLineHeight;
         if (isPositiveNumber(val)) {
@@ -120,51 +176,28 @@
         }
     }
 
-    const jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
-    let letterSpacing = '';
     $: {
         if (isNumber($jsonLetterSpacing)) {
             letterSpacing = pxToEm($jsonLetterSpacing);
         }
     }
 
-    const jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    let textColor = '#000';
     $: {
         textColor = correctColor($jsonTextColor, 1, textColor);
     }
 
-    const jsonHighlightColor = rootCtx.getDerivedFromVars(json.highlight_color);
-    let highlightColor = '';
     $: {
         highlightColor = correctColor($jsonHighlightColor, 1, highlightColor);
     }
 
-    const jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
-    let alignmentHorizontal: AlignmentHorizontal = 'left';
     $: {
         alignmentHorizontal = correctAlignmentHorizontal($jsonAlignmentHorizontal, alignmentHorizontal);
     }
 
-    const jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
-    let alignmentVertical: AlignmentVertical = 'center';
     $: {
         alignmentVertical = correctAlignmentVertical($jsonAlignmentVertical, alignmentVertical);
     }
 
-    const jsonKeyboardType = rootCtx.getDerivedFromVars(json.keyboard_type);
-    const KEYBOARD_MAP: Record<KeyboardType, string> = {
-        email: 'email',
-        number: 'number',
-        phone: 'tel',
-        single_line_text: 'text',
-        multi_line_text: 'text',
-        uri: 'url'
-    };
-    let keyboardType = 'multi_line_text';
-    let inputType = 'text';
-    const isSupportInputMode = typeof document !== 'undefined' && 'inputMode' in document.createElement('input');
-    let inputMode: HTMLAttributes<HTMLInputElement>['inputmode'] = undefined;
     $: {
         if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
             inputType = KEYBOARD_MAP[$jsonKeyboardType as KeyboardType];
@@ -177,17 +210,13 @@
         }
     }
 
-    const jsonVisibleMaxLines = rootCtx.getDerivedFromVars(json.max_visible_lines);
     $: isMultiline = keyboardType === 'multi_line_text'/* && isPositiveNumber($jsonVisibleMaxLines) && $jsonVisibleMaxLines > 1*/;
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let maxHeight = '';
-    let selfPadding: EdgeInsets | null = null;
-    let padding = '';
-    let verticalPadding = '';
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
             maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) * (fontSize / 10) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
+        } else {
+            maxHeight = '';
         }
         selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
         padding = selfPadding ? edgeInsertsToCss({
@@ -202,8 +231,6 @@
         }) : '';
     }
 
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    let description = '';
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
@@ -211,8 +238,6 @@
             level: 'warn'
         }));
     }
-
-    const jsonSelectAll = rootCtx.getDerivedFromVars(json.select_all_on_focus);
 
     $: mods = {
         'highlight-color': Boolean(highlightColor),
@@ -344,15 +369,14 @@
         }
     }
 
-    onMount(() => {
-        if (input && inputMask) {
-            if ($rawValueVariable) {
-                inputMask.overrideRawValue($rawValueVariable);
-                $valueVariable = value = contentEditableValue = inputMask.value;
-            }
+    $: if (input && json) {
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
         }
 
-        if (json.id) {
+        if (json.id && !layoutParams?.fakeElement) {
+            prevId = json.id;
             rootCtx.registerFocusable(json.id, {
                 focus() {
                     if (input) {
@@ -361,11 +385,21 @@
                 }
             });
         }
+    }
+
+    onMount(() => {
+        if (input && inputMask) {
+            if ($rawValueVariable) {
+                inputMask.overrideRawValue($rawValueVariable);
+                $valueVariable = value = contentEditableValue = inputMask.value;
+            }
+        }
     });
 
     onDestroy(() => {
-        if (json.id) {
-            rootCtx.unregisterFocusable(json.id);
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
         }
     });
 </script>

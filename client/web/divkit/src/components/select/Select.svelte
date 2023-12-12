@@ -29,28 +29,61 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    const variable = json.value_variable;
+    let prevId: string | undefined;
     let select: HTMLSelectElement;
-
     let hasError = false;
-    if (!variable) {
+    let selectText = '';
+    let selfPadding: EdgeInsets | null = null;
+    let padding = '';
+    let hintColor = 'rgba(0,0,0,.45)';
+    let fontSize = 12;
+    let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
+    let lineHeight: number | undefined = undefined;
+    let letterSpacing = '';
+    let textColor = '#000';
+    let description = '';
+
+    $: if (json) {
+        selfPadding = null;
+        hintColor = 'rgba(0,0,0,.45)';
+        fontSize = 12;
+        fontWeight = undefined;
+        fontFamily = '';
+        lineHeight = undefined;
+        letterSpacing = '';
+        textColor = '#000';
+        description = '';
+    }
+
+    $: variable = json.value_variable;
+    $: items = json.options;
+    $: filteredItems = Array.isArray(items) && items.filter(it => typeof it.value === 'string') || [];
+
+    $: valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
+    $: jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
+    $: jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
+    $: jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
+    $: jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
+    $: jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
+    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
+    $: jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
+    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
+    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
+
+    $: if (!(Array.isArray(filteredItems) && filteredItems.length)) {
+        rootCtx.logError(wrapError(new Error('Empty selection "items" in "select"')));
+    }
+
+    $: if (variable) {
+        hasError = false;
+    } else {
         hasError = true;
         rootCtx.logError(wrapError(new Error('Missing "value_variable" in "select"')));
     }
 
-    let valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
-    let value = '';
-    $: {
-        value = $valueVariable as string;
-    }
-
-    const items = json.options;
-    const filteredItems = Array.isArray(items) && items.filter(it => typeof it.value === 'string') || [];
-    if (!(Array.isArray(filteredItems) && filteredItems.length)) {
-        rootCtx.logError(wrapError(new Error('Empty selection "items" in "select"')));
-    }
-
-    let selectText = '';
     $: {
         const item = filteredItems.find(it => {
             return it.value === $valueVariable;
@@ -65,9 +98,6 @@
         }
     }
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let selfPadding: EdgeInsets | null = null;
-    let padding = '';
     $: {
         selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
         padding = selfPadding ? edgeInsertsToCss({
@@ -78,25 +108,14 @@
         }) : '';
     }
 
-    const jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
-    $: hint = $jsonHintText;
-
-    const jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
-    let hintColor = 'rgba(0,0,0,.45)';
     $: {
         hintColor = correctColor($jsonHintColor, 1, hintColor);
     }
 
-    const jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
-    let fontSize = 12;
     $: {
         fontSize = correctPositiveNumber($jsonFontSize, fontSize);
     }
 
-    const jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
-    const jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
-    let fontWeight: number | undefined = undefined;
-    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight($jsonFontWeight, fontWeight);
         if ($jsonFontFamily && typeof $jsonFontFamily === 'string') {
@@ -108,8 +127,6 @@
         }
     }
 
-    const jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    let lineHeight: number | undefined = undefined;
     $: {
         const val = $jsonLineHeight;
         if (isPositiveNumber(val)) {
@@ -117,22 +134,16 @@
         }
     }
 
-    const jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
-    let letterSpacing = '';
     $: {
         if (isNumber($jsonLetterSpacing)) {
             letterSpacing = pxToEm($jsonLetterSpacing / fontSize * 10);
         }
     }
 
-    const jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    let textColor = '#000';
     $: {
         textColor = correctColor($jsonTextColor, 1, textColor);
     }
 
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    let description = '';
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
@@ -162,8 +173,14 @@
         'letter-spacing': letterSpacing
     };
 
-    onMount(() => {
-        if (json.id) {
+    $: if (json && select) {
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
+        }
+
+        if (json.id && !layoutParams?.fakeElement) {
+            prevId = json.id;
             rootCtx.registerFocusable(json.id, {
                 focus() {
                     if (select) {
@@ -172,11 +189,12 @@
                 }
             });
         }
-    });
+    }
 
     onDestroy(() => {
-        if (json.id) {
-            rootCtx.unregisterFocusable(json.id);
+        if (prevId) {
+            rootCtx.unregisterFocusable(prevId);
+            prevId = undefined;
         }
     });
 </script>
@@ -199,7 +217,7 @@
     >
         <span class={css['select__select-text']} style={makeStyle(innerStl)} aria-hidden="true">
             <!--Space holder should have height even it has no value-->
-            {selectText || hint || '​'}
+            {selectText || $jsonHintText || '​'}
         </span>
 
         <select

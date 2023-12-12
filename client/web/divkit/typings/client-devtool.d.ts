@@ -18,6 +18,7 @@ import type { CustomComponentDescription } from './custom';
 
 export interface DivkitDebugInstance extends DivkitInstance {
     getDebugVariables(): Map<string, Variable>;
+    getDebugAllVariables(): Map<string, Variable>;
 }
 
 export function render(opts: {

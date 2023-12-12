@@ -30,7 +30,35 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     let hasItemsError = false;
+    let columnCount = 1;
+    let childStore: Readable<ChildInfo[]>;
+    let resultItems: {
+        json: DivBaseData;
+        templateContext: TemplateContext;
+        origJson: DivBaseData;
+        layoutParams: LayoutParams;
+    }[];
+    let columnsWeight: number[] = [];
+    let rowsWeight: number[] = [];
+    let columnsMinWidth: number[] = [];
+    let rowsMinHeight: number[] = [];
+    let rowCount = 0;
+    let hasLayoutError = false;
+    let contentVAlign: AlignmentVertical = 'top';
+    let contentHAlign: AlignmentHorizontal = 'left';
+
+    $: if (json) {
+        columnCount = 1;
+        contentVAlign = 'top';
+        contentHAlign = 'left';
+    }
+
     $: jsonItems = json.items;
+
+    $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
+    $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
+    $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
+
     $: {
         if (!jsonItems?.length || !Array.isArray(jsonItems)) {
             hasItemsError = true;
@@ -40,9 +68,6 @@
         }
     }
 
-
-    let columnCount = 1;
-    $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
     $: {
         columnCount = correctPositiveNumber($jsonColumnCount, columnCount);
     }
@@ -76,7 +101,6 @@
         width: MaybeMissing<Size> | undefined;
         height: MaybeMissing<Size> | undefined;
     }
-    let childStore: Readable<ChildInfo[]>;
     $: {
         let children: Readable<ChildInfo>[] = [];
 
@@ -95,18 +119,6 @@
         childStore = derived(children, val => [...val]);
     }
 
-    let resultItems: {
-        json: DivBaseData;
-        templateContext: TemplateContext;
-        origJson: DivBaseData;
-        layoutParams: LayoutParams;
-    }[];
-    let columnsWeight: number[] = [];
-    let rowsWeight: number[] = [];
-    let columnsMinWidth: number[] = [];
-    let rowsMinHeight: number[] = [];
-    let rowCount = 0;
-    let hasLayoutError = false;
     $: {
         const used: Record<string, boolean> = {};
         let x = 0;
@@ -202,14 +214,10 @@
         rowCount = y;
     }
 
-    let contentVAlign: AlignmentVertical = 'top';
-    $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
     $: {
         contentVAlign = correctAlignmentVertical($jsonContentVAlign, contentVAlign);
     }
 
-    let contentHAlign: AlignmentHorizontal = 'left';
-    $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
     $: {
         contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
@@ -238,15 +246,13 @@
         parentOf={json.items}
         {replaceItems}
     >
-        {#key resultItems}
-            {#each resultItems as item}
-                <Unknown
-                    layoutParams={item.layoutParams}
-                    div={item.json}
-                    templateContext={item.templateContext}
-                    origJson={item.origJson}
-                />
-            {/each}
-        {/key}
+        {#each resultItems as item}
+            <Unknown
+                layoutParams={item.layoutParams}
+                div={item.json}
+                templateContext={item.templateContext}
+                origJson={item.origJson}
+            />
+        {/each}
     </Outer>
 {/if}

@@ -25,19 +25,50 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
+
+    let hasError = false;
+
     let animationRoot: HTMLElement | undefined;
     let transitionChangeBoxes: Map<string, DOMRect> = new Map();
     let childrenIds = new Set<string>();
+
+    let childStateMap: Map<string, StateInterface> | null = null;
+    let animationList: (AnimationItemWithMaxDuration | ChangeBoundsItem)[] = [];
+    let childrenWithTransitionIn: ChildWithTransition[] = [];
+    let childrenWithTransitionOut: ChildWithTransition[] = [];
+    let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
+
+    let prevStateId: string | undefined;
+    $: stateId = json.div_id || json.id;
+    let selectedId: string | undefined;
+    let selectedState: State | null = null;
+    $: jsonDefaultStateId = rootCtx.getJsonWithVars(json.default_state_id);
+    $: stateVariableName = json.state_id_variable;
+    $: stateVariable = stateVariableName ?
+        rootCtx.getVariable(stateVariableName, 'string') :
+        null;
+    let inited = false;
+
+    $: if (json) {
+        inited = false;
+    }
+
+    $: if (stateId) {
+        hasError = false;
+    } else {
+        hasError = true;
+        rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
+    }
 
     $: if (json) {
         childrenIds = new Set<string>();
     }
 
-    let hasError = false;
     $: items = json.states || [];
     $: parentOfItems = items.map(it => {
         return it.div;
     });
+
     $: {
         if (!items?.length) {
             hasError = true;
@@ -70,8 +101,6 @@
         }
     }
 
-    let childStateMap: Map<string, StateInterface> | null = null;
-
     interface AnimationItem {
         json: DivBaseData;
         templateContext: TemplateContext;
@@ -100,7 +129,6 @@
         resolvePromise?: (val?: void) => void;
         node: HTMLElement;
     }
-    let animationList: (AnimationItemWithMaxDuration | ChangeBoundsItem)[] = [];
 
     interface ChildWithTransition {
         json: DivBaseData;
@@ -117,9 +145,6 @@
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
     }
-    let childrenWithTransitionIn: ChildWithTransition[] = [];
-    let childrenWithTransitionOut: ChildWithTransition[] = [];
-    let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
     function haveFadeTransition(list: AnyTransition[]): boolean {
         return list.some(it => it.type === 'fade');
@@ -162,8 +187,6 @@
         }
         return null;
     }
-
-    const stateId = json.div_id || json.id;
 
     async function setState(stateId: string) {
         if (selectedId === stateId) {
@@ -278,167 +301,166 @@
         rootCtx.setRunning('stateChange', false);
     }
 
-    if (!stateId) {
-        hasError = true;
-        rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
-    } else if (!layoutParams?.fakeElement) {
-        stateCtx.registerInstance(stateId, {
-            setState,
-            getChild(id: string): StateInterface | undefined {
-                if (childStateMap && childStateMap.has(id)) {
-                    return childStateMap.get(id);
-                }
+    function getChild(id: string): StateInterface | undefined {
+        if (childStateMap && childStateMap.has(id)) {
+            return childStateMap.get(id);
+        }
 
-                rootCtx.logError(wrapError(new Error('Missing state block with id'), {
+        rootCtx.logError(wrapError(new Error('Missing state block with id'), {
+            additional: {
+                id
+            }
+        }));
+        return undefined;
+    }
+
+    $: if (json) {
+        if (prevStateId) {
+            stateCtx.unregisterInstance(prevStateId);
+            prevStateId = undefined;
+        }
+
+        if (stateId && !layoutParams?.fakeElement) {
+            prevStateId = stateId;
+            stateCtx.registerInstance(stateId, {
+                setState,
+                getChild
+            });
+        }
+    }
+
+    setContext<StateCtxValue>(STATE_CTX, {
+        registerInstance(id: string, block: StateInterface) {
+            if (!childStateMap) {
+                childStateMap = new Map();
+            }
+
+            if (childStateMap.has(id)) {
+                rootCtx.logError(wrapError(new Error('Duplicate state with id'), {
                     additional: {
                         id
                     }
                 }));
-                return undefined;
+            } else {
+                childStateMap.set(id, block);
             }
-        });
-
-        setContext<StateCtxValue>(STATE_CTX, {
-            registerInstance(id: string, block: StateInterface) {
-                if (!childStateMap) {
-                    childStateMap = new Map();
-                }
-
-                if (childStateMap.has(id)) {
-                    rootCtx.logError(wrapError(new Error('Duplicate state with id'), {
-                        additional: {
-                            id
-                        }
-                    }));
-                } else {
-                    childStateMap.set(id, block);
-                }
-            },
-            unregisterInstance(id: string) {
-                childStateMap?.delete(id);
-            },
-            runVisibilityTransition(
-                json: DivBaseData,
-                templateContext: TemplateContext,
-                transitions: AppearanceTransition,
-                node: HTMLElement,
-                direction: 'in' | 'out'
-            ) {
-                if (!animationRoot) {
-                    return Promise.resolve();
-                }
-
-                const rootBbox = animationRoot.getBoundingClientRect();
-                const item: AnimationItem = getItemAnimation(
-                    rootBbox,
-                    {
-                        json,
-                        templateContext,
-                        transitions,
-                        node
-                    },
-                    direction
-                );
-
-                const maxDuration = calcMaxDuration(item.transitions);
-                const itemWithMaxDuration: AnimationItemWithMaxDuration = {
-                    ...item,
-                    maxDuration
-                };
-                animationList = [
-                    ...animationList.filter(it => it.node !== item.node),
-                    itemWithMaxDuration
-                ];
-
-                return new Promise<void>(resolve => {
-                    itemWithMaxDuration.resolvePromise = resolve;
-                });
-            },
-            registerChildWithTransitionIn(
-                json: DivBaseData,
-                templateContext: TemplateContext,
-                transitions: AppearanceTransition,
-                node: HTMLElement
-            ) {
-                const item: ChildWithTransition = {
-                    json,
-                    templateContext,
-                    transitions,
-                    node
-                };
-                childrenWithTransitionIn.push(item);
-
-                return new Promise<void>(resolve => {
-                    item.resolvePromise = resolve;
-                });
-            },
-            registerChildWithTransitionOut(
-                json: DivBaseData,
-                templateContext: TemplateContext,
-                transitions: AppearanceTransition,
-                node: HTMLElement
-            ) {
-                const item: ChildWithTransition = {
-                    json,
-                    templateContext,
-                    transitions,
-                    node
-                };
-                childrenWithTransitionOut.push(item);
-
-                return new Promise<void>(resolve => {
-                    item.resolvePromise = resolve;
-                });
-            },
-            registerChildWithTransitionChange(
-                json: DivBaseData,
-                templateContext: TemplateContext,
-                transitions: TransitionChange,
-                node: HTMLElement
-            ) {
-                const id = json.id;
-
-                if (!id) {
-                    return Promise.resolve();
-                }
-
-                const item: ChildWithTransitionChange = {
-                    id,
-                    json,
-                    templateContext,
-                    transitions,
-                    node
-                };
-                childrenWithTransitionChange.push(item);
-
-                return new Promise<void>(resolve => {
-                    item.resolvePromise = resolve;
-                });
-            },
-            hasTransitionChange(id?: string) {
-                if (!id) {
-                    return false;
-                }
-
-                return transitionChangeBoxes.has(id);
-            },
-            registerChild(id: string): void {
-                childrenIds.add(id);
-            },
-            unregisterChild(id: string): void {
-                childrenIds.delete(id);
+        },
+        unregisterInstance(id: string) {
+            childStateMap?.delete(id);
+        },
+        runVisibilityTransition(
+            json: DivBaseData,
+            templateContext: TemplateContext,
+            transitions: AppearanceTransition,
+            node: HTMLElement,
+            direction: 'in' | 'out'
+        ) {
+            if (!animationRoot) {
+                return Promise.resolve();
             }
-        });
-    }
 
-    let selectedId: string | undefined;
-    let selectedState: State | null = null;
-    const jsonDefaultStateId = rootCtx.getJsonWithVars(json.default_state_id);
-    const stateVariableName = json.state_id_variable;
-    const stateVariable = stateVariableName ?
-        rootCtx.getVariable(stateVariableName, 'string') :
-        null;
-    let inited = false;
+            const rootBbox = animationRoot.getBoundingClientRect();
+            const item: AnimationItem = getItemAnimation(
+                rootBbox,
+                {
+                    json,
+                    templateContext,
+                    transitions,
+                    node
+                },
+                direction
+            );
+
+            const maxDuration = calcMaxDuration(item.transitions);
+            const itemWithMaxDuration: AnimationItemWithMaxDuration = {
+                ...item,
+                maxDuration
+            };
+            animationList = [
+                ...animationList.filter(it => it.node !== item.node),
+                itemWithMaxDuration
+            ];
+
+            return new Promise<void>(resolve => {
+                itemWithMaxDuration.resolvePromise = resolve;
+            });
+        },
+        registerChildWithTransitionIn(
+            json: DivBaseData,
+            templateContext: TemplateContext,
+            transitions: AppearanceTransition,
+            node: HTMLElement
+        ) {
+            const item: ChildWithTransition = {
+                json,
+                templateContext,
+                transitions,
+                node
+            };
+            childrenWithTransitionIn.push(item);
+
+            return new Promise<void>(resolve => {
+                item.resolvePromise = resolve;
+            });
+        },
+        registerChildWithTransitionOut(
+            json: DivBaseData,
+            templateContext: TemplateContext,
+            transitions: AppearanceTransition,
+            node: HTMLElement
+        ) {
+            const item: ChildWithTransition = {
+                json,
+                templateContext,
+                transitions,
+                node
+            };
+            childrenWithTransitionOut.push(item);
+
+            return new Promise<void>(resolve => {
+                item.resolvePromise = resolve;
+            });
+        },
+        registerChildWithTransitionChange(
+            json: DivBaseData,
+            templateContext: TemplateContext,
+            transitions: TransitionChange,
+            node: HTMLElement
+        ) {
+            const id = json.id;
+
+            if (!id) {
+                return Promise.resolve();
+            }
+
+            const item: ChildWithTransitionChange = {
+                id,
+                json,
+                templateContext,
+                transitions,
+                node
+            };
+            childrenWithTransitionChange.push(item);
+
+            return new Promise<void>(resolve => {
+                item.resolvePromise = resolve;
+            });
+        },
+        hasTransitionChange(id?: string) {
+            if (!id) {
+                return false;
+            }
+
+            return transitionChangeBoxes.has(id);
+        },
+        registerChild(id: string): void {
+            childrenIds.add(id);
+        },
+        unregisterChild(id: string): void {
+            childrenIds.delete(id);
+        }
+    });
+
     function initDefaultState(items: State[]): void {
         if (inited) {
             return;
@@ -470,7 +492,7 @@
             }
         }
     }
-    $: initDefaultState(items);
+    $: !inited && initDefaultState(items);
 
     function onOutro(item: AnimationItem | ChangeBoundsItem): void {
         animationList = animationList.filter(it => it !== item);
@@ -481,8 +503,8 @@
     }
 
     onDestroy(() => {
-        if (stateId && !layoutParams?.fakeElement) {
-            stateCtx.unregisterInstance(stateId);
+        if (prevStateId) {
+            stateCtx.unregisterInstance(prevStateId);
         }
     });
 </script>
@@ -499,7 +521,7 @@
         {replaceItems}
     >
         {#if selectedState?.div}
-            {#key selectedState}
+            {#key selectedId}
                 <Unknown div={selectedState.div} templateContext={templateContext} />
             {/key}
         {/if}

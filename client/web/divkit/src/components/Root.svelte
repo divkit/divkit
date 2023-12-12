@@ -37,7 +37,8 @@
         DivExtensionClass,
         TypefaceProvider,
         DisappearAction,
-        FetchInit
+        FetchInit,
+        DivVariable
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -137,34 +138,46 @@
 
     export function getDebugVariables() {
         if (!process.env.DEVTOOL) {
-            return;
+            return new Map<string, Variable>();
         }
 
         return localVariables;
     }
 
+    export function getDebugAllVariables() {
+        if (!process.env.DEVTOOL) {
+            return new Map<string, Variable>();
+        }
+
+        return variables;
+    }
+
+    export function setData(newJson: Partial<DivJson>) {
+        json = newJson;
+    }
+
     const builtinSet = new Set(builtinProtocols);
 
     let hasError = false;
+    let hsaIdError = false;
 
-    if (!json) {
-        hasError = true;
-        logError(wrapError(new Error('"json" prop is required')));
+    $: {
+        hasError = false;
+
+        const initialError = simpleCheckInput(json);
+        if (initialError) {
+            hasError = true;
+            logError(initialError);
+        }
     }
 
     if (!id) {
-        hasError = true;
+        hsaIdError = true;
         logError(wrapError(new Error('"id" prop is required')));
     }
 
-    let initialError = simpleCheckInput(json);
     let templateContext: TemplateContext = {};
-    const templates = json.templates || {};
-
-    if (initialError) {
-        hasError = true;
-        logError(initialError);
-    }
+    $: templates = json.templates || {};
 
     const running: Record<Running, boolean> = {
         stateChange: false
@@ -302,12 +315,14 @@
         };
     }
 
-    function registerComponentReal({
+    function componentDevtoolReal({
+        type,
         node,
         json,
         origJson,
         templateContext
     }: {
+        type: 'mount' | 'update' | 'destroy';
         node: HTMLElement;
         json: Partial<DivBaseData>;
         origJson: DivBase | undefined;
@@ -315,23 +330,11 @@
     }): void {
         if (onComponent) {
             onComponent({
-                type: 'mount',
+                type,
                 node,
                 json: json as DivBase,
                 origJson,
                 templateContext
-            });
-        }
-    }
-    function unregisterComponentReal({
-        node
-    }: {
-        node: HTMLElement;
-    }): void {
-        if (onComponent) {
-            onComponent({
-                type: 'destroy',
-                node
             });
         }
     }
@@ -1069,8 +1072,7 @@
         isDesktop,
         isPointerFocus,
         customComponents,
-        registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
-        unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
+        componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
     });
 
     setContext<ActionCtxValue>(ACTION_CTX, {
@@ -1181,10 +1183,43 @@
         }
     }
 
+    function declVariable(variable: DivVariable): void {
+        if (!(variable.type in TYPE_TO_CLASS)) {
+            // Skip unknown types (from the future versions maybe)
+            return;
+        }
+
+        if (
+            variable.type === 'integer' && typeof variable.value === 'number' &&
+            (variable.value > Number.MAX_SAFE_INTEGER || variable.value < Number.MIN_SAFE_INTEGER)
+        ) {
+            logError(wrapError(new Error('The value of the integer variable could lose accuracy'), {
+                level: 'warn',
+                additional: {
+                    name: variable.name,
+                    value: variable.value
+                }
+            }));
+        }
+
+        try {
+            const varInstance = createVariable(variable.name, variable.type, variable.value);
+
+            localVariables.set(variable.name, varInstance);
+            variables.set(variable.name, varInstance);
+        } catch (err: any) {
+            logError(wrapError(err, {
+                additional: {
+                    name: variable.name
+                }
+            }));
+        }
+    }
+
     const startVariables = json?.card?.variables;
     if (Array.isArray(startVariables)) {
         startVariables.forEach(variable => {
-            if (variable && variable.type in TYPE_TO_CLASS && variable.name) {
+            if (variable && variable.name) {
                 if (localVariables.has(variable.name)) {
                     logError(wrapError(new Error('Duplicate variable'), {
                         additional: {
@@ -1195,31 +1230,15 @@
                     return;
                 }
 
-                if (
-                    variable.type === 'integer' && typeof variable.value === 'number' &&
-                    (variable.value > Number.MAX_SAFE_INTEGER || variable.value < Number.MIN_SAFE_INTEGER)
-                ) {
-                    logError(wrapError(new Error('The value of the integer variable could lose accuracy'), {
-                        level: 'warn',
-                        additional: {
-                            name: variable.name,
-                            value: variable.value
-                        }
-                    }));
-                }
+                declVariable(variable);
+            }
+        });
+    }
 
-                try {
-                    const varInstance = createVariable(variable.name, variable.type, variable.value);
-
-                    localVariables.set(variable.name, varInstance);
-                    variables.set(variable.name, varInstance);
-                } catch (err: any) {
-                    logError(wrapError(err, {
-                        additional: {
-                            name: variable.name
-                        }
-                    }));
-                }
+    $: if (json?.card?.variables && Array.isArray(json.card.variables) && json.card.variables !== startVariables) {
+        json.card.variables.forEach(variable => {
+            if (variable && variable.name && !localVariables.has(variable.name)) {
+                declVariable(variable);
             }
         });
     }
@@ -1376,9 +1395,9 @@
         timers.forEach(timer => controller.createTimer(timer));
     }
 
-    const states = json?.card?.states;
+    $: states = json?.card?.states;
     let rootStateDiv: DivBaseData | undefined;
-    if (states && !hasError) {
+    $: if (states && !hasError && !hsaIdError) {
         rootStateDiv = (process.env.ENABLE_COMPONENT_STATE || process.env.ENABLE_COMPONENT_STATE === undefined) ? {
             type: 'state',
             id: 'root',
@@ -1435,7 +1454,7 @@
     });
 </script>
 
-{#if !hasError && rootStateDiv}
+{#if !hasError && !hsaIdError && rootStateDiv}
     <div
         class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}{mix ? ` ${mix}` : ''}"
         on:touchstart={emptyTouchstartHandler}

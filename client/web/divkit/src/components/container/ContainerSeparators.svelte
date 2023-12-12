@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+    const THROTTLE_TIMEOUT = 10;
+</script>
+
 <script lang="ts">
     import { onDestroy, onMount } from 'svelte';
 
@@ -17,7 +21,6 @@
     export let contentHAlign: ContentAlignmentHorizontal;
     export let contentVAlign: ContentAlignmentVertical;
 
-    const THROTTLE_TIMEOUT = 10;
     const throttledUpdated = simpleThrottle(updateSeparators, THROTTLE_TIMEOUT);
 
     interface SeparatorItem {

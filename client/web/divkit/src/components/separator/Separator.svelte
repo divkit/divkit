@@ -22,8 +22,17 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    $: jsonDelimiterStyle = rootCtx.getDerivedFromVars(json.delimiter_style);
     let orientation: Orientation = 'horizontal';
+    // let background = correctColor('#14000000');
+    let background = 'rgba(0,0,0,0.08)';
+
+    $: if (json) {
+        orientation = 'horizontal';
+        background = 'rgba(0,0,0,0.08)';
+    }
+
+    $: jsonDelimiterStyle = rootCtx.getDerivedFromVars(json.delimiter_style);
+
     $: {
         orientation = correctGeneralOrientation($jsonDelimiterStyle?.orientation, orientation);
     }
@@ -40,8 +49,6 @@
         )
     );
 
-    // let background = correctColor('#14000000');
-    let background = 'rgba(0,0,0,0.08)';
     $: {
         background = correctColor($jsonDelimiterStyle?.color, 1, background);
     }

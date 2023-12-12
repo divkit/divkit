@@ -13,6 +13,7 @@
     import type { SwitchElements, Overflow } from '../../types/switch-elements';
     import type { TabItem } from '../../types/tabs';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { DivBaseData } from '../../types/base';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -34,28 +35,98 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
-  import { DivBaseData } from '../../types/base';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
-    const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
-    const instId = rootCtx.genId('tabs');
-
-    let hasError = false;
-    $: items = json.items || [];
-    $: parentOfItems = items.map(it => {
-        return it.div;
-    });
-
     interface ChildInfo {
         index: number;
         title: MaybeMissing<string> | undefined;
         title_click_action?: MaybeMissing<Action> | undefined;
     }
+
+    const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const instId = rootCtx.genId('tabs');
+
+    let prevId: string | undefined;
+    let hasError = false;
     let childStore = writable<ChildInfo[]>([]);
+    let childLayoutParams: LayoutParams = {};
+
+    let tabsElem: HTMLElement;
+    let panelsWrapper: HTMLElement;
+    let swiperElem: HTMLElement;
+    let mods: Mods = {};
+
+    let tabFontSize = 12;
+    let tabPaddings = '';
+    let tabLineHeight = '';
+    let tabLetterSpacing = '';
+    let tabBorderRadius = '';
+    let tabActiveFontWeight: number | undefined = undefined;
+    let tabActiveFontFamily = '';
+    let tabInactiveFontWeight: number | undefined = undefined;
+    let tabInactiveFontFamily = '';
+    let tabActiveTextColor = '';
+    let tabInactiveTextColor = '';
+    let tabActiveBackground = '';
+    let tabInactiveBackground = '';
+    let tabItemSpacing = 0;
+    let separatorBackground = '';
+    let separatorMargins = '';
+    let titlePadding: EdgeInsets | null = null;
+    let isSwipeInitialized = false;
+    let isAnimated = false;
+    let previousSelected: number | undefined;
+    let showedPanels: boolean[] = [];
+    let visiblePanels: boolean[] = [];
+    let hidePanelsTimeout: number | null = null;
+    let startCoords: Coords | null = null;
+    let moveCoords: Coords | null = null;
+    let swipeStartTime: number;
+    let isSwipeStarted = false;
+    let isSwipeCanceled = false;
+    let startTransform: number;
+    let currentTransform: number;
+
+    $: if (json) {
+        tabFontSize = 12;
+        tabPaddings = '';
+        tabBorderRadius = '';
+        tabActiveFontWeight = undefined;
+        tabActiveFontFamily = '';
+        tabInactiveFontWeight = undefined;
+        tabInactiveFontFamily = '';
+        tabActiveTextColor = '';
+        tabInactiveTextColor = '';
+        tabActiveBackground = '';
+        tabInactiveBackground = '';
+        tabItemSpacing = 0;
+        separatorBackground = '';
+        separatorMargins = '';
+        titlePadding = null;
+    }
+
+    $: items = json.items || [];
+    $: parentOfItems = items.map(it => {
+        return it.div;
+    });
+
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+    $: jsonSelectedTab = rootCtx.getJsonWithVars(json.selected_tab);
+    $: jsonTabStyle = rootCtx.getDerivedFromVars(json.tab_title_style);
+    $: jsonSeparator = rootCtx.getDerivedFromVars(json.has_separator);
+    $: jsonSeparatorColor = rootCtx.getDerivedFromVars(json.separator_color);
+    $: jsonSeparatorPaddings = rootCtx.getDerivedFromVars(json.separator_paddings);
+    $: jsonSwipeEnabled = rootCtx.getDerivedFromVars(json.switch_tabs_by_content_swipe_enabled);
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+    $: jsonTitlePaddings = rootCtx.getDerivedFromVars(json.title_paddings);
+
+    $: selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
+
     $: if (Array.isArray(items) && items.length) {
         let children: ChildInfo[] = [];
 
@@ -106,9 +177,6 @@
         }
     }
 
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    let childLayoutParams: LayoutParams = {};
     $: {
         let newLayoutParams: LayoutParams = {};
 
@@ -124,13 +192,6 @@
 
         childLayoutParams = assignIfDifferent(newLayoutParams, childLayoutParams);
     }
-
-    let tabsElem: HTMLElement;
-    let panelsWrapper: HTMLElement;
-    let swiperElem: HTMLElement;
-    let mods: Mods = {};
-    const jsonSelectedTab = rootCtx.getJsonWithVars(json.selected_tab);
-    let selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
     $: if (!hasError && (selected < 0 || selected >= items.length)) {
         rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
@@ -151,15 +212,11 @@
         selected = $childStore[0]?.index || 0;
     }
 
-    $: jsonTabStyle = rootCtx.getDerivedFromVars(json.tab_title_style);
     $: tabStyle = $jsonTabStyle || {};
 
-    let tabFontSize = 12;
     $: {
         tabFontSize = correctPositiveNumber(tabStyle.font_size, tabFontSize);
     }
-
-    let tabPaddings = '';
 
     $: {
         if (tabStyle.font_size || tabStyle.paddings) {
@@ -181,7 +238,6 @@
         }
     }
 
-    let tabLineHeight = '';
     $: {
         const lineHeight = tabStyle.line_height;
         if (lineHeight !== undefined && isPositiveNumber(lineHeight)) {
@@ -189,7 +245,6 @@
         }
     }
 
-    let tabLetterSpacing = '';
     $: {
         const letterSpacing = tabStyle.letter_spacing;
         if (letterSpacing !== undefined && isNonNegativeNumber(letterSpacing)) {
@@ -197,7 +252,6 @@
         }
     }
 
-    let tabBorderRadius = '';
     $: {
         if (tabStyle.corner_radius || tabStyle.corners_radius || tabStyle.font_size) {
             const defaultRadius = tabStyle.corner_radius ?? 1000;
@@ -215,8 +269,6 @@
         }
     }
 
-    let tabActiveFontWeight: number | undefined = undefined;
-    let tabActiveFontFamily = '';
     $: {
         tabActiveFontWeight = correctFontWeight(
             tabStyle.active_font_weight || tabStyle.font_weight,
@@ -231,8 +283,6 @@
         }
     }
 
-    let tabInactiveFontWeight: number | undefined = undefined;
-    let tabInactiveFontFamily = '';
     $: {
         tabInactiveFontWeight = correctFontWeight(
             tabStyle.inactive_font_weight || tabStyle.font_weight,
@@ -247,36 +297,26 @@
         }
     }
 
-    let tabActiveTextColor = '';
     $: {
         tabActiveTextColor = correctColor(tabStyle.active_text_color, 1, tabActiveTextColor);
     }
 
-    let tabInactiveTextColor = '';
     $: {
         tabInactiveTextColor = correctColor(tabStyle.inactive_text_color, 1, tabInactiveTextColor);
     }
 
-    let tabActiveBackground = '';
     $: {
         tabActiveBackground = correctColor(tabStyle.active_background_color, 1, tabActiveBackground);
     }
 
-    let tabInactiveBackground = '';
     $: {
         tabInactiveBackground = correctColor(tabStyle.inactive_background_color, 1, tabInactiveBackground);
     }
 
-    let tabItemSpacing = 0;
     $: {
         tabItemSpacing = correctNonNegativeNumber(tabStyle.item_spacing, tabItemSpacing);
     }
 
-    $: jsonSeparator = rootCtx.getDerivedFromVars(json.has_separator);
-    $: jsonSeparatorColor = rootCtx.getDerivedFromVars(json.separator_color);
-    $: jsonSeparatorPaddings = rootCtx.getDerivedFromVars(json.separator_paddings);
-    let separatorBackground = '';
-    let separatorMargins = '';
     $: {
         if ($jsonSeparator) {
             if ($jsonSeparatorColor) {
@@ -292,24 +332,14 @@
         margin: separatorMargins
     };
 
-    $: jsonSwipeEnabled = rootCtx.getDerivedFromVars(json.switch_tabs_by_content_swipe_enabled);
     $: isSwipeEnabled = typeof $jsonSwipeEnabled === 'undefined' ?
         true :
         Boolean($jsonSwipeEnabled);
 
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
-
-    $: jsonTitlePaddings = rootCtx.getDerivedFromVars(json.title_paddings);
-    let titlePadding: EdgeInsets | null = null;
     $: {
         titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
     }
 
-    let isSwipeInitialized = false;
-    let isAnimated = false;
-    let previousSelected = selected;
-    let showedPanels: boolean[] = [];
-    let visiblePanels: boolean[] = [];
     function updateItems(_items: TabItem[]): void {
         if (hasError) {
             return;
@@ -383,10 +413,10 @@
     function updateShowedPanels(around = false): void {
         const start = around ?
             Math.max(0, selected - 1) :
-            Math.min(selected, previousSelected);
+            Math.min(selected, previousSelected ?? selected);
         const end = around ?
             Math.min(items.length - 1, selected + 1) :
-            Math.max(selected, previousSelected);
+            Math.max(selected, previousSelected ?? selected);
 
         showedPanels = showedPanels.map((isShowed, index) => isShowed || index >= start && index <= end);
         visiblePanels = visiblePanels.map((_, index) => index >= start && index <= end);
@@ -400,8 +430,6 @@
             panelsWrapper.style.height = pxToEm(activePanel.offsetHeight);
         }
     }
-
-    let hidePanelsTimeout: number | null = null;
 
     function hideNonVisiblePanels(): void {
         if (hidePanelsTimeout) {
@@ -444,16 +472,8 @@
 
         isSwipeInitialized = true;
         panelsWrapper.style.height = pxToEm(panelsWrapper.clientHeight);
-        swiperElem.style.transform = `translate3d(${-previousSelected * 100}%,0,0)`;
+        swiperElem.style.transform = `translate3d(${-(previousSelected ?? selected) * 100}%,0,0)`;
     }
-
-    let startCoords: Coords | null = null;
-    let moveCoords: Coords | null = null;
-    let swipeStartTime: number;
-    let isSwipeStarted = false;
-    let isSwipeCanceled = false;
-    let startTransform: number;
-    let currentTransform: number;
 
     function onTouchStart(event: TouchEvent): void {
         const target = event.target as HTMLElement | null;
@@ -554,39 +574,48 @@
         }
     }
 
-    if (json.id && !hasError && !layoutParams?.fakeElement) {
-        rootCtx.registerInstance<SwitchElements>(json.id, {
-            setCurrentItem(item: number) {
-                if (item < 0 || item > items.length - 1) {
-                    throw new Error('Item is out of range in "set-current-item" action');
+    $: if (json) {
+        if (prevId) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
+        }
+
+        if (json.id && !hasError && !layoutParams?.fakeElement) {
+            prevId = json.id;
+            rootCtx.registerInstance<SwitchElements>(json.id, {
+                setCurrentItem(item: number) {
+                    if (item < 0 || item > items.length - 1) {
+                        throw new Error('Item is out of range in "set-current-item" action');
+                    }
+
+                    setSelected(item);
+                },
+                setPreviousItem(overflow: Overflow) {
+                    let previousItem = selected - 1;
+
+                    if (previousItem < 0) {
+                        previousItem = overflow === 'ring' ? items.length - 1 : selected;
+                    }
+
+                    setSelected(previousItem);
+                },
+                setNextItem(overflow: Overflow) {
+                    let nextItem = selected + 1;
+
+                    if (nextItem > items.length - 1) {
+                        nextItem = overflow === 'ring' ? 0 : selected;
+                    }
+
+                    setSelected(nextItem);
                 }
-
-                setSelected(item);
-            },
-            setPreviousItem(overflow: Overflow) {
-                let previousItem = selected - 1;
-
-                if (previousItem < 0) {
-                    previousItem = overflow === 'ring' ? items.length - 1 : selected;
-                }
-
-                setSelected(previousItem);
-            },
-            setNextItem(overflow: Overflow) {
-                let nextItem = selected + 1;
-
-                if (nextItem > items.length - 1) {
-                    nextItem = overflow === 'ring' ? 0 : selected;
-                }
-
-                setSelected(nextItem);
-            }
-        });
+            });
+        }
     }
 
     onDestroy(() => {
-        if (json.id && !layoutParams?.fakeElement) {
-            rootCtx.unregisterInstance(json.id);
+        if (prevId) {
+            rootCtx.unregisterInstance(prevId);
+            prevId = undefined;
         }
     });
 </script>

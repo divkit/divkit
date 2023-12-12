@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import css from './TextRange.module.css';
 
-    import type { TextRange } from '../../types/text';
+    import type { DivTextData, TextRange } from '../../types/text';
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
     import Actionable from '../utilities/Actionable.svelte';
@@ -18,6 +18,7 @@
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { shadowToCssFilter } from '../../utils/shadow';
 
+    export let json: Partial<DivTextData>;
     export let text: string;
     export let rootFontSize: number;
     export let textStyles: MaybeMissing<Partial<TextRange>> = {};
@@ -27,6 +28,28 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     let decoration = 'none';
+    let fontSize = 12;
+    let lineHeight = 1.25;
+    let letterSpacing = '';
+    let fontWeight: number | undefined = undefined;
+    let fontFamily = '';
+    let color = '';
+    let border: {
+        color: string;
+        width: number;
+    } | null = null;
+
+    $: if (json) {
+        decoration = 'none';
+        fontSize = 12;
+        lineHeight = 1.25;
+        letterSpacing = '';
+        fontWeight = undefined;
+        fontFamily = '';
+        color = '';
+        border = null;
+    }
+
     $: {
         let newDecoration = 'none';
 
@@ -43,27 +66,22 @@
         decoration = newDecoration;
     }
 
-    let fontSize = 12;
     $: {
         fontSize = correctPositiveNumber(textStyles.font_size, fontSize);
     }
 
-    let lineHeight = 1.25;
     $: {
         if (isPositiveNumber(textStyles.line_height)) {
             lineHeight = Number(textStyles.line_height) / fontSize;
         }
     }
 
-    let letterSpacing = '';
     $: {
         if (isNonNegativeNumber(textStyles.letter_spacing)) {
             letterSpacing = pxToEm(textStyles.letter_spacing);
         }
     }
 
-    let fontWeight: number | undefined = undefined;
-    let fontFamily = '';
     $: {
         fontWeight = correctFontWeight(textStyles.font_weight, fontWeight);
         if (typeof textStyles.font_family === 'string' && textStyles.font_family) {
@@ -75,7 +93,6 @@
         }
     }
 
-    let color = '';
     $: {
         color = correctColor(textStyles.text_color, 1, color);
     }
@@ -84,10 +101,6 @@
 
     $: bg = textStyles.background ? getBackground([textStyles.background]) : null;
 
-    let border: {
-        color: string;
-        width: number;
-    } | null = null;
     $: if (
         textStyles.border?.stroke &&
         textStyles.border.stroke.color &&

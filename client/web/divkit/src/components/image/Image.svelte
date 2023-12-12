@@ -1,3 +1,14 @@
+<script lang="ts" context="module">
+    const FALLBACK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    const EMPTY_IMAGE = 'empty://';
+    // const DEFAULT_PLACEHOLDER_COLOR = correctColor('#14000000');
+    const DEFAULT_PLACEHOLDER_COLOR = 'rgba(0,0,0,0.08)';
+
+    const STATE_LOADING = 0;
+    const STATE_LOADED = 1;
+    const STATE_ERROR = 2;
+</script>
+
 <script lang="ts">
     import { afterUpdate, getContext, onDestroy } from 'svelte';
 
@@ -27,15 +38,6 @@
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
-    const FALLBACK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-    const EMPTY_IMAGE = 'empty://';
-    // const DEFAULT_PLACEHOLDER_COLOR = correctColor('#14000000');
-    const DEFAULT_PLACEHOLDER_COLOR = 'rgba(0,0,0,0.08)';
-
-    const STATE_LOADING = 0;
-    const STATE_LOADED = 1;
-    const STATE_ERROR = 2;
-
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     let img: HTMLImageElement;
@@ -44,10 +46,47 @@
     let isLottie = false;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
 
+    let hasError = false;
+    let imageUrl: string | undefined;
+    let backgroundImage = '';
+    // Exactly "none", "scale-down" would not match android
+    let scale = 'none';
+    let position = '50% 50%';
+    let aspectPaddingBottom = '0';
+    let tintColor: string | undefined = undefined;
+    let tintMode: TintMode = 'source_in';
+    let svgFilterId = '';
+    let animationInterpolator = '';
+    let animationFadeStart = 0;
+    let animationDelay = 0;
+    let animationDuration = 0;
+    let filter = '';
+    let filterClipPath = '';
+
+    $: if (json) {
+        scale = 'none';
+        position = '50% 50%';
+        tintMode = 'source_in';
+    }
+
     $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
     $: jsonGifUrl = rootCtx.getDerivedFromVars(json.gif_url);
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+    $: jsonPreview = rootCtx.getDerivedFromVars(json.preview);
+    $: jsonPlaceholderColor = rootCtx.getDerivedFromVars(json.placeholder_color);
+    $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
+    $: jsonPosition = rootCtx.getDerivedFromVars({
+        content_alignment_horizontal: json.content_alignment_horizontal,
+        content_alignment_vertical: json.content_alignment_vertical
+    });
+    $: jsonA11y = rootCtx.getDerivedFromVars(json.accessibility);
+    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
+    $: jsonTintColor = rootCtx.getDerivedFromVars(json.tint_color);
+    $: jsonTintMode = rootCtx.getDerivedFromVars(json.tint_mode);
+    $: jsonAppearanceAnimation = rootCtx.getDerivedFromVars(json.appearance_animation);
+    $: jsonFilters = rootCtx.getDerivedFromVars(json.filters);
 
-    let imageUrl: string | undefined;
     $: {
         let img = json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
         isEmpty = img === EMPTY_IMAGE;
@@ -62,7 +101,6 @@
     }
     $: updateImageUrl(imageUrl);
 
-    let hasError = false;
     $: {
         if (!imageUrl) {
             hasError = true;
@@ -72,14 +110,10 @@
         }
     }
 
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
     $: isWidthContent = $jsonWidth?.type === 'wrap_content';
 
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
     $: isHeightContent = $jsonHeight?.type === 'wrap_content';
 
-    $: jsonPreview = rootCtx.getDerivedFromVars(json.preview);
-    let backgroundImage = '';
     $: {
         const preview = $jsonPreview;
 
@@ -90,25 +124,16 @@
         }
     }
 
-    $: jsonPlaceholderColor = rootCtx.getDerivedFromVars(json.placeholder_color);
     $: if (state === STATE_LOADING || state === STATE_ERROR || isEmpty) {
         placeholderColor = correctColor($jsonPlaceholderColor, 1, placeholderColor);
     } else {
         placeholderColor = '';
     }
 
-    $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
-    // Exactly "none", "scale-down" would not match android
-    let scale = 'none';
     $: {
         scale = imageSize($jsonScale) || scale;
     }
 
-    $: jsonPosition = rootCtx.getDerivedFromVars({
-        content_alignment_horizontal: json.content_alignment_horizontal,
-        content_alignment_vertical: json.content_alignment_vertical
-    });
-    let position = '50% 50%';
     function updatePosition(pos: {
         content_alignment_horizontal?: AlignmentHorizontal;
         content_alignment_vertical?: AlignmentVertical;
@@ -117,11 +142,8 @@
     }
     $: updatePosition($jsonPosition);
 
-    $: jsonA11y = rootCtx.getDerivedFromVars(json.accessibility);
     $: alt = $jsonA11y?.description || '';
 
-    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
-    let aspectPaddingBottom = '0';
     $: {
         const newRatio = $jsonAspect?.ratio;
         if (newRatio && isPositiveNumber(newRatio)) {
@@ -131,11 +153,6 @@
         }
     }
 
-    $: jsonTintColor = rootCtx.getDerivedFromVars(json.tint_color);
-    let tintColor: string | undefined = undefined;
-    $: jsonTintMode = rootCtx.getDerivedFromVars(json.tint_mode);
-    let tintMode: TintMode = 'source_in';
-    let svgFilterId = '';
     $: {
         const val = $jsonTintColor;
         const newTintColor = val ? correctColor(val) : undefined;
@@ -148,12 +165,6 @@
         }
     }
 
-    $: jsonAppearanceAnimation = rootCtx.getDerivedFromVars(json.appearance_animation);
-    let animationInterpolator = '';
-    let animationFadeStart = 0;
-    let animationDelay = 0;
-    let animationDuration = 0;
-
     $: if ($jsonAppearanceAnimation && $jsonAppearanceAnimation.type === 'fade') {
         const animation = $jsonAppearanceAnimation;
 
@@ -163,9 +174,6 @@
         animationFadeStart = correctNonNegativeNumber(animation.alpha, 0);
     }
 
-    $: jsonFilters = rootCtx.getDerivedFromVars(json.filters);
-    let filter = '';
-    let filterClipPath = '';
     $: {
         let newFilter = '';
         let newClipPath = '';

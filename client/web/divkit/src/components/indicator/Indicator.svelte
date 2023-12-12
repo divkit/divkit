@@ -1,3 +1,10 @@
+<script lang="ts" context="module">
+    const AVAIL_SHAPES = [
+        'rounded_rectangle',
+        'circle'
+    ];
+</script>
+
 <script lang="ts">
     import { getContext, tick } from 'svelte';
 
@@ -26,16 +33,8 @@
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
-    const AVAIL_SHAPES = ['rounded_rectangle', 'circle'];
-
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    $: jsonShape = rootCtx.getDerivedFromVars(json.shape);
-    $: jsonActiveItemColor = rootCtx.getDerivedFromVars(json.active_item_color);
-    $: jsonInactiveItemColor = rootCtx.getDerivedFromVars(json.inactive_item_color);
-    $: jsonActiveItemSize = rootCtx.getDerivedFromVars(json.active_item_size);
-    $: jsonActiveShape = rootCtx.getDerivedFromVars(json.active_shape);
-    $: jsonInactiveShape = rootCtx.getDerivedFromVars(json.inactive_shape);
     let activeStyle: DrawableStyle = {
         width: 13,
         height: 13,
@@ -48,6 +47,44 @@
         borderRadius: 5,
         background: '#33919cb5'
     };
+
+    let placement: 'default' | 'stretch' = 'default';
+    let spaceBetweenCenters = 15;
+    let maxVisibleItems = 10;
+    let itemSpacing = 5;
+
+    let scroller: HTMLElement;
+    let indicatorItemsWrapper: HTMLElement;
+    let pagerData: PagerData;
+
+    $: if (json) {
+        placement = 'default';
+        spaceBetweenCenters = 15;
+        maxVisibleItems = 10;
+        itemSpacing = 5;
+        activeStyle = {
+            width: 13,
+            height: 13,
+            borderRadius: 6.5,
+            background: '#ffdc60'
+        };
+        inactiveStyle = {
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            background: '#33919cb5'
+        };
+    }
+
+    $: jsonShape = rootCtx.getDerivedFromVars(json.shape);
+    $: jsonActiveItemColor = rootCtx.getDerivedFromVars(json.active_item_color);
+    $: jsonInactiveItemColor = rootCtx.getDerivedFromVars(json.inactive_item_color);
+    $: jsonActiveItemSize = rootCtx.getDerivedFromVars(json.active_item_size);
+    $: jsonActiveShape = rootCtx.getDerivedFromVars(json.active_shape);
+    $: jsonInactiveShape = rootCtx.getDerivedFromVars(json.inactive_shape);
+    $: jsonSpaceBetweenCenters = rootCtx.getDerivedFromVars(json.space_between_centers);
+    $: jsonItemsPlacement = rootCtx.getDerivedFromVars(json.items_placement);
+
     $: {
         if ($jsonActiveShape) {
             activeStyle = correctDrawableStyle<DrawableStyle>({
@@ -80,12 +117,6 @@
         }
     }
 
-    $: jsonSpaceBetweenCenters = rootCtx.getDerivedFromVars(json.space_between_centers);
-    $: jsonItemsPlacement = rootCtx.getDerivedFromVars(json.items_placement);
-    let placement: 'default' | 'stretch' = 'default';
-    let spaceBetweenCenters = 15;
-    let maxVisibleItems = 10;
-    let itemSpacing = 5;
     $: if ($jsonItemsPlacement && ($jsonItemsPlacement.type === 'default' || $jsonItemsPlacement.type === 'stretch')) {
         placement = $jsonItemsPlacement.type;
         if (placement === 'default') {
@@ -104,11 +135,6 @@
             spaceBetweenCenters = correctNonNegativeNumber($jsonSpaceBetweenCenters.value, spaceBetweenCenters);
         }
     }
-
-    let scroller: HTMLElement;
-    let indicatorItemsWrapper: HTMLElement;
-    let pagerData: PagerData;
-
     $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
     $: {
         onPagerDataUpdate($pagers);

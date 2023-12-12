@@ -1,3 +1,8 @@
+<script lang="ts" context="module">
+    const MIN_SWIPE_PX = 8;
+    const MIN_LONG_TAP_DURATION = 400;
+</script>
+
 <script lang="ts">
     import { getContext, onDestroy, onMount, setContext } from 'svelte';
 
@@ -32,9 +37,6 @@
             return Boolean(actionCtx.hasAction() || actions?.length);
         }
     });
-
-    const MIN_SWIPE_PX = 8;
-    const MIN_LONG_TAP_DURATION = 400;
 
     let node: HTMLElement;
     let href = '';
