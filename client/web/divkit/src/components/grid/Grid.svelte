@@ -20,6 +20,7 @@
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
+    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivGridData> = {};
     export let templateContext: TemplateContext;
@@ -62,10 +63,10 @@
         };
     });
 
-    function replaceItems(items: DivBaseData[]): void {
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
             ...json,
-            items
+            items: items.filter(Truthy)
         };
     }
 

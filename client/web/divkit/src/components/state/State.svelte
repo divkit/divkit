@@ -14,7 +14,6 @@
     import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
     import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
     import { flattenTransition } from '../../utils/flattenTransition';
-    import { createVariable } from '../../expressions/variable';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import TooltipView from '../tooltip/Tooltip.svelte';
@@ -36,12 +35,38 @@
 
     let hasError = false;
     $: items = json.states || [];
+    $: parentOfItems = items.map(it => {
+        return it.div;
+    });
     $: {
         if (!items?.length) {
             hasError = true;
             rootCtx.logError(wrapError(new Error('Empty "states" prop for div "state"')));
         } else {
             hasError = false;
+        }
+    }
+
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
+        const states = json.states;
+
+        if (!states) {
+            return;
+        }
+
+        const newStates = states.map((it, index) => {
+            return {
+                ...it,
+                div: items[index]
+            };
+        });
+
+        json = {
+            ...json,
+            states: newStates
+        };
+        if (selectedId) {
+            selectedState = newStates.find(it => it.state_id === selectedId) || null;
         }
     }
 
@@ -469,6 +494,9 @@
         {origJson}
         {templateContext}
         {layoutParams}
+        parentOf={parentOfItems}
+        parentOfSimpleMode={true}
+        {replaceItems}
     >
         {#if selectedState?.div}
             {#key selectedState}

@@ -28,6 +28,7 @@
     import Outer from '../utilities/Outer.svelte';
     import { correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
     import { correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
+    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivContainerData> = {};
     export let templateContext: TemplateContext;
@@ -61,10 +62,10 @@
 
     $: jsonItems = json.items;
 
-    function replaceItems(items: DivBaseData[]): void {
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
             ...json,
-            items
+            items: items.filter(Truthy)
         };
     }
 

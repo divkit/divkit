@@ -14,6 +14,7 @@ export type Running = 'stateChange';
 
 export interface ParentMethods {
     replaceWith: (id: string, items?: DivBase[]) => void;
+    isSingleMode: boolean;
 }
 
 export interface FocusableMethods {

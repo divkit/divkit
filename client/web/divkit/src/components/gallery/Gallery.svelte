@@ -30,6 +30,7 @@
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { joinTemplateSizes } from '../../utils/joinTemplateSizes';
     import { debounce } from '../../utils/debounce';
+    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivGalleryData> = {};
     export let templateContext: TemplateContext;
@@ -60,10 +61,10 @@
         }
     }
 
-    function replaceItems(items: DivBaseData[]): void {
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
             ...json,
-            items
+            items: items.filter(Truthy)
         };
     }
 

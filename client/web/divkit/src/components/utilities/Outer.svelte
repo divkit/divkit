@@ -56,8 +56,9 @@
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
     export let heightByAspect = false;
-    export let parentOf: DivBaseData[] | undefined = undefined;
-    export let replaceItems: ((items: DivBaseData[]) => void) | undefined = undefined;
+    export let parentOf: (DivBaseData | undefined)[] | undefined = undefined;
+    export let parentOfSimpleMode: boolean | undefined = undefined;
+    export let replaceItems: ((items: (DivBaseData | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
@@ -88,10 +89,11 @@
         prevChilds = [];
         if (parentOf) {
             parentOf.forEach(item => {
-                if (item.id) {
+                if (item?.id) {
                     prevChilds.push(item.id);
                     rootCtx.registerParentOf(item.id, {
-                        replaceWith
+                        replaceWith,
+                        isSingleMode: Boolean(parentOfSimpleMode)
                     });
                 }
             });
@@ -101,6 +103,13 @@
     function replaceWith(id: string, items?: DivBase[]): void {
         if (!Array.isArray(parentOf) || !replaceItems) {
             return;
+        }
+
+        if (parentOfSimpleMode) {
+            const newItemsLen = Array.isArray(items) && items.length || 0;
+            if (newItemsLen !== 1) {
+                return;
+            }
         }
 
         const index = parentOf.findIndex(json => json?.id === id);

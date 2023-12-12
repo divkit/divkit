@@ -34,6 +34,7 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+  import { DivBaseData } from '../../types/base';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
@@ -45,6 +46,10 @@
 
     let hasError = false;
     $: items = json.items || [];
+    $: parentOfItems = items.map(it => {
+        return it.div;
+    });
+
     interface ChildInfo {
         index: number;
         title: MaybeMissing<string> | undefined;
@@ -74,6 +79,22 @@
         childStore.set(children);
     } else {
         childStore.set([]);
+    }
+
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
+        if (!json.items) {
+            return;
+        }
+
+        json = {
+            ...json,
+            items: json.items.map((it, index) => {
+                return {
+                    ...it,
+                    div: (items)[index] as DivBaseData
+                };
+            })
+        };
     }
 
     $: {
@@ -578,6 +599,9 @@
         {templateContext}
         {layoutParams}
         customActions={'tabs'}
+        parentOf={parentOfItems}
+        parentOfSimpleMode={true}
+        {replaceItems}
     >
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <div

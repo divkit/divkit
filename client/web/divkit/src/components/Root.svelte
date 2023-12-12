@@ -540,9 +540,19 @@
                 }
                 if (Array.isArray(json.patch?.changes)) {
                     if (json.patch.mode === 'transactional') {
-                        const failed = json.patch.changes.find(change => !parentOfMap.has(change.id));
+                        const failed = json.patch.changes.find(change => {
+                            const methods = parentOfMap.get(change.id);
+                            if (!methods) {
+                                return true;
+                            }
+                            const newItemsLen = Array.isArray(change.items) ? change.items.length : 0;
+                            if (methods.isSingleMode && newItemsLen !== 1) {
+                                return true;
+                            }
+                            return false;
+                        });
                         if (failed) {
-                            logError(wrapError(new Error('Skipping transactional, child is not found'), {
+                            logError(wrapError(new Error('Skipping transactional, child is not found or broken'), {
                                 additional: {
                                     url,
                                     id: failed.id

@@ -2167,6 +2167,92 @@
       "file": "patch/inside_pager.json"
     },
     {
+      "title": "Patch state partial",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "First state should be replaced",
+        "Second state should persist without changes"
+      ],
+      "file": "patch/state_partial.json"
+    },
+    {
+      "title": "Patch state transactional broken",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "Both states should have no changes"
+      ],
+      "file": "patch/state_transactional_broken.json"
+    },
+    {
+      "title": "Patch state transactional success",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "toggle state"
+      ],
+      "expected_results": [
+        "First state should be replaced",
+        "Second state should persist without changes"
+      ],
+      "file": "patch/state_transactional_broken.json"
+    },
+    {
+      "title": "Patch tabs partial",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "Second tab should be replaced, other should have no changes"
+      ],
+      "file": "patch/tabs_partial.json"
+    },
+    {
+      "title": "Patch tabs transactional broken",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "All tabs should have no changes"
+      ],
+      "file": "patch/tabs_transactional_broken.json"
+    },
+    {
+      "title": "Patch tabs transactional success",
+      "tags": [
+        "patch"
+      ],
+      "steps": [
+        "Wait 1 second",
+        "Check all tabs"
+      ],
+      "expected_results": [
+        "First tab should be replaced, other should have no changes"
+      ],
+      "file": "patch/tabs_transactional_success.json"
+    },
+    {
       "title": "State with variable binding",
       "tags": [
         "DivState"

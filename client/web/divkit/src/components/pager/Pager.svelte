@@ -24,6 +24,7 @@
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { debounce } from '../../utils/debounce';
+    import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivPagerData> = {};
     export let templateContext: TemplateContext;
@@ -50,10 +51,10 @@
         }
     }
 
-    function replaceItems(items: DivBaseData[]): void {
+    function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
             ...json,
-            items
+            items: items.filter(Truthy)
         };
     }
 
