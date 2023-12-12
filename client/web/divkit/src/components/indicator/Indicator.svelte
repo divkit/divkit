@@ -149,13 +149,16 @@
             if (indicatorItemsWrapper) {
                 // if not destroyed yet
 
-                const currentItemOffsetLeft =
-                    (indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement).offsetLeft;
+                const elem = indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement;
 
-                scroller.scroll({
-                    left: currentItemOffsetLeft - scroller.clientWidth / 2,
-                    behavior: 'smooth'
-                });
+                if (elem) {
+                    const currentItemOffsetLeft = elem.offsetLeft;
+
+                    scroller.scroll({
+                        left: currentItemOffsetLeft - scroller.clientWidth / 2,
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
     }

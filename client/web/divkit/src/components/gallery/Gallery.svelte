@@ -51,7 +51,6 @@
     const rightClass = rootCtx.getCustomization('galleryRightClass');
 
     let prevId: string | undefined;
-    let hasError = false;
     let columns = 1;
     let orientation: Orientation = 'horizontal';
     let align: Align = 'start';
@@ -75,7 +74,7 @@
         padding = '';
     }
 
-    $: jsonItems = json.items;
+    $: jsonItems = Array.isArray(json.items) && json.items || [];
 
     $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
     $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
@@ -87,15 +86,6 @@
     $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
     $: jsonScrollbar = rootCtx.getDerivedFromVars(json.scrollbar);
     $: jsonDefaultItem = rootCtx.getDerivedFromVars(json.default_item);
-
-    $: {
-        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
-            hasError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "gallery"')));
-        } else {
-            hasError = false;
-        }
-    }
 
     function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
@@ -112,7 +102,7 @@
         origJson: DivBaseData;
     }
 
-    $: items = (!hasError && jsonItems || []).map(item => {
+    $: items = jsonItems.map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -128,7 +118,7 @@
         };
     });
 
-    $: shouldCheckArrows = $isDesktop && mounted && !hasError;
+    $: shouldCheckArrows = $isDesktop && mounted;
     $: if (shouldCheckArrows) {
         if (typeof ResizeObserver !== 'undefined') {
             // Gallery can contain a dynamic content (e.g. loading images with auto-size)
@@ -265,7 +255,7 @@
     }
 
     function updateArrowsVisibility(): void {
-        if (!scroller || hasError) {
+        if (!scroller) {
             return;
         }
 
@@ -377,7 +367,7 @@
             prevId = undefined;
         }
 
-        if (json.id && !hasError && !layoutParams?.fakeElement) {
+        if (json.id && !layoutParams?.fakeElement) {
             prevId = json.id;
             rootCtx.registerInstance<SwitchElements>(json.id, {
                 setCurrentItem(item: number) {
@@ -428,13 +418,11 @@
     onMount(() => {
         mounted = true;
 
-        if (!hasError) {
-            updateArrowsVisibility();
+        updateArrowsVisibility();
 
-            if (defaultItem) {
-                const galleryElements = getItems();
-                scrollToGalleryItem(galleryElements, defaultItem, 'auto');
-            }
+        if (defaultItem) {
+            const galleryElements = getItems();
+            scrollToGalleryItem(galleryElements, defaultItem, 'auto');
         }
     });
 
@@ -450,70 +438,68 @@
 
 <svelte:window on:resize={shouldCheckArrows ? updateArrowsVisibilityDebounced : null} />
 
-{#if !hasError}
-    <Outer
-        cls={genClassName('gallery', css, mods)}
-        {json}
-        {origJson}
-        {templateContext}
-        {layoutParams}
-        customPaddings={true}
-        customActions={'gallery'}
-        parentOf={jsonItems}
-        {replaceItems}
+<Outer
+    cls={genClassName('gallery', css, mods)}
+    {json}
+    {origJson}
+    {templateContext}
+    {layoutParams}
+    customPaddings={true}
+    customActions={'gallery'}
+    parentOf={jsonItems}
+    {replaceItems}
+>
+    <div
+        class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
+        bind:this={scroller}
+        on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
+        style={makeStyle(scrollerStyle)}
     >
         <div
-            class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
-            bind:this={scroller}
-            on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
-            style={makeStyle(scrollerStyle)}
+            bind:this={itemsGridElem}
+            class={css['gallery__items-grid']}
+            style={makeStyle(gridStyle)}
         >
-            <div
-                bind:this={itemsGridElem}
-                class={css['gallery__items-grid']}
-                style={makeStyle(gridStyle)}
-            >
-                {#each itemsGrid as itemsRow, rowIndex}
-                    <div
-                        class={css.gallery__items}
-                        style={makeStyle(columnStyle)}
-                        bind:this={galleryItemsWrappers[rowIndex]}
-                    >
-                        {#each itemsRow as item}
-                            <Unknown
-                                layoutParams={childLayoutParams}
-                                div={item.json}
-                                templateContext={item.templateContext}
-                                origJson={item.origJson}
-                            />
-                        {/each}
-                    </div>
-                {/each}
-            </div>
+            {#each itemsGrid as itemsRow, rowIndex}
+                <div
+                    class={css.gallery__items}
+                    style={makeStyle(columnStyle)}
+                    bind:this={galleryItemsWrappers[rowIndex]}
+                >
+                    {#each itemsRow as item}
+                        <Unknown
+                            layoutParams={childLayoutParams}
+                            div={item.json}
+                            templateContext={item.templateContext}
+                            origJson={item.origJson}
+                        />
+                    {/each}
+                </div>
+            {/each}
         </div>
-        {#if orientation === 'horizontal'}
-            {#if hasScrollLeft && shouldCheckArrows}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="{leftClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => scroll('left')}>
-                    {#if !leftClass}
-                        <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
-                        </svg>
-                    {/if}
-                </div>
-            {/if}
-            {#if hasScrollRight && shouldCheckArrows}
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div class="{rightClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => scroll('right')}>
-                    {#if !rightClass}
-                        <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
-                        </svg>
-                    {/if}
-                </div>
-            {/if}
+    </div>
+    {#if orientation === 'horizontal'}
+        {#if hasScrollLeft && shouldCheckArrows}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div class="{leftClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => scroll('left')}>
+                {#if !leftClass}
+                    <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
+                    </svg>
+                {/if}
+            </div>
         {/if}
-    </Outer>
-{/if}
+        {#if hasScrollRight && shouldCheckArrows}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div class="{rightClass || `${css.gallery__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => scroll('right')}>
+                {#if !rightClass}
+                    <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
+                    </svg>
+                {/if}
+            </div>
+        {/if}
+    {/if}
+</Outer>

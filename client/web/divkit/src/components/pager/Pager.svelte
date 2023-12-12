@@ -46,8 +46,6 @@
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
 
-    let hasItemsError = false;
-
     let currentItem = 0;
     let prevSelectedItem = 0;
 
@@ -70,15 +68,6 @@
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
 
-    $: {
-        if (!json.items?.length || !Array.isArray(json.items)) {
-            hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "pager"')));
-        } else {
-            hasItemsError = false;
-        }
-    }
-
     function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
             ...json,
@@ -86,7 +75,7 @@
         };
     }
 
-    $: items = (!hasItemsError && json.items || []).map(item => {
+    $: items = (Array.isArray(json.items) && json.items || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -155,7 +144,7 @@
         orientation
     };
 
-    $: hasError = hasItemsError || hasLayoutModeError;
+    $: hasError = hasLayoutModeError;
 
     $: shouldCheckArrows = $isDesktop && mounted && !hasError;
 

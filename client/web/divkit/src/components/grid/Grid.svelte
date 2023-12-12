@@ -29,7 +29,6 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    let hasItemsError = false;
     let columnCount = 1;
     let childStore: Readable<ChildInfo[]>;
     let resultItems: {
@@ -53,26 +52,17 @@
         contentHAlign = 'left';
     }
 
-    $: jsonItems = json.items;
+    $: jsonItems = Array.isArray(json.items) && json.items || [];
 
     $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
     $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
     $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
 
     $: {
-        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
-            hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "grid"')));
-        } else {
-            hasItemsError = false;
-        }
-    }
-
-    $: {
         columnCount = correctPositiveNumber($jsonColumnCount, columnCount);
     }
 
-    $: items = (!hasItemsError && jsonItems || []).map(item => {
+    $: items = jsonItems.map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -232,7 +222,7 @@
         'grid-template-rows': gridCalcTemplates(rowsWeight, rowsMinHeight, rowCount)
     };
 
-    $: hasError = hasItemsError || hasLayoutError;
+    $: hasError = hasLayoutError;
 </script>
 
 {#if !hasError}
