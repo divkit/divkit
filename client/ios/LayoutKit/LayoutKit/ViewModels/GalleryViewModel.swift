@@ -54,7 +54,6 @@ public struct GalleryViewModel: Equatable {
     }
   }
 
-
   public var items: [Item]
   public let layoutDirection: UserInterfaceLayoutDirection
   public let metrics: GalleryViewMetrics
@@ -113,7 +112,7 @@ public struct GalleryViewModel: Equatable {
     infiniteScroll: Bool = false,
     scrollbar: Scrollbar = .none
   ) {
-    validateContent(of: items, for: metrics, with: direction)
+    validateContent(of: items, with: direction)
 
     precondition(columnCount > 0)
 
@@ -166,11 +165,8 @@ extension GalleryViewModel.Item {
 
 private func validateContent(
   of items: [GalleryViewModel.Item],
-  for metrics: GalleryViewMetrics,
   with direction: GalleryViewModel.Direction
 ) {
-  precondition(!items.isEmpty)
-
   let blocks = items.map { $0.content }
   switch direction {
   case .horizontal:
@@ -186,6 +182,4 @@ private func validateContent(
       }
     )
   }
-
-  precondition(items.count - 1 == metrics.spacings.count)
 }

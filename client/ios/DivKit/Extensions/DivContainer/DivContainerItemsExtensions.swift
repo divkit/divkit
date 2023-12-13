@@ -66,15 +66,9 @@ extension DivContainer {
         mappedBy: modificator
       )
     }
-    if children.isEmpty {
-      throw DivBlockModelingError(
-        "DivContainer is empty",
-        path: containerContext.parentPath,
-        causes: childrenContext.errorsStorage.errors
-      )
-    } else {
-      containerContext.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
-    }
+
+    containerContext.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
+
     return children
   }
 }

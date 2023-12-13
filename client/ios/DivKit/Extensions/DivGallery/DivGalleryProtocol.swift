@@ -51,15 +51,7 @@ extension DivGalleryProtocol {
       children = [last] + children + [first]
     }
 
-    if children.isEmpty {
-      throw DivBlockModelingError(
-        "\(typeName) has no items",
-        path: context.parentPath,
-        causes: childrenContext.errorsStorage.errors
-      )
-    } else {
-      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
-    }
+    context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
 
     let metrics = try makeMetrics(
       spacing: spacing,
@@ -89,9 +81,9 @@ extension DivGalleryProtocol {
     direction: GalleryViewModel.Direction,
     with expressionResolver: ExpressionResolver
   ) throws -> GalleryViewMetrics {
-    let spacings = try [CGFloat](
+    let spacings = [CGFloat](
       repeating: spacing,
-      times: UInt(value: childrenCount - 1)
+      times: UInt(max(0, childrenCount - 1))
     )
 
     let axialInsets: SideInsets
