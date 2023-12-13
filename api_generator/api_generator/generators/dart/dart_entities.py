@@ -173,45 +173,57 @@ class DartProperty(Property):
 
     # ToDo(man-y): Transfer the parsing strategy to the subtypes themselves.
     def get_parse_strategy(self) -> str:
-        property_type = cast(DartPropertyType, self.property_type)
-        prop_type_decl = property_type.declaration()
+        prop_type = cast(DartPropertyType, self.property_type)
+        prop_type_decl = prop_type.declaration()
         required_cast = '' if self.optional or self.has_default else '!'
 
         expr = 'Expr' if self.supports_expressions else ''
+        fallback = f', fallback: {self.fallback_declaration}' if self.supports_expressions and self.has_default else ''
 
-        if isinstance(property_type, Int):
-            return f"safeParseInt{expr}(json['{self.name}']){required_cast}"
-        elif isinstance(property_type, Color):
-            return f"safeParseColor{expr}(json['{self.name}']){required_cast}"
-        elif isinstance(property_type, Double):
-            return f"safeParseDouble{expr}(json['{self.name}']){required_cast}"
-        elif isinstance(property_type, (Bool, BoolInt)):
-            return f"safeParseBool{expr}(json['{self.name}']){required_cast}"
-        elif isinstance(property_type, (String, StaticString)):
-            return f"safeParseStr{expr}(json['{self.name}']?.toString()){required_cast}"
-        elif isinstance(property_type, Dictionary):
-            return f"safeParseClass{expr}(json){required_cast}"
-        elif isinstance(property_type, RawArray):
-            return f"safeParseClass{expr}(json['{self.name}']){required_cast}"
-        elif isinstance(property_type, Url):
+        if isinstance(prop_type, Int):
+            return f"safeParseInt{expr}(json['{self.name}']{fallback}){required_cast}"
+        elif isinstance(prop_type, Color):
+            return f"safeParseColor{expr}(json['{self.name}']{fallback}){required_cast}"
+        elif isinstance(prop_type, Double):
+            return f"safeParseDouble{expr}(json['{self.name}']{fallback}){required_cast}"
+        elif isinstance(prop_type, (Bool, BoolInt)):
+            return f"safeParseBool{expr}(json['{self.name}']{fallback}){required_cast}"
+        elif isinstance(prop_type, (String, StaticString)):
+            return f"safeParseStr{expr}(json['{self.name}']?.toString(){fallback}){required_cast}"
+        elif isinstance(prop_type, Dictionary):
+            return f"safeParseClass{expr}(json{fallback}){required_cast}"
+        elif isinstance(prop_type, RawArray):
+            return f"safeParseClass{expr}(json['{self.name}']{fallback}){required_cast}"
+        elif isinstance(prop_type, Url):
             return f"safeParseUri{expr}(json['{self.name}']){required_cast}"
-        elif property_type.is_class():
-            return f"safeParseClass{expr}({prop_type_decl}.fromJson(json['{self.name}'])){required_cast}"
-        elif property_type.is_list():
-            inner_item_type = property_type.get_list_inner_class()
+        elif prop_type.is_class():
+            return f"safeParseClass{expr}({prop_type_decl}.fromJson(json['{self.name}']){fallback}){required_cast}"
+        elif prop_type.is_list():
+            inner_item_type = prop_type.get_list_inner_class()
             if inner_item_type.is_class():
                 if inner_item_type.is_string_enumeration():
                     return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                            f"{'?' if self.optional or self.has_default else ''}.map((s) => {prop_type_decl[5:-1]}" \
-                           f".fromJson(s)!).toList()){'' if self.optional or self.has_default else '!'}"
+                           f".fromJson(s)!).toList(){fallback}){'' if self.optional or self.has_default else '!'}"
                 else:
                     return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                            f"{'?' if self.optional or self.has_default else ''}.map((j) => {prop_type_decl[5:-1]}." \
-                           f"fromJson(j as Map <String, dynamic>)!).toList()){'' if self.optional or self.has_default else '!'}"
+                           f"fromJson(j as Map <String, dynamic>)!{fallback}).toList()){'' if self.optional or self.has_default else '!'}"
             else:
                 return f"safeParseClass{expr}((json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
                        f"{'?' if self.optional or self.has_default else ''}.map((v) => (v as {prop_type_decl[5:-1]}))" \
-                       f".toList()){'' if self.optional or self.has_default else '!'}"
+                       f".toList(){fallback}){'' if self.optional or self.has_default else '!'}"
+
+    @property
+    def fallback_declaration(self) -> str:
+        prop_type = cast(DartPropertyType, self.property_type)
+        empty_dict_deserialization = prop_type.empty_constructor
+        if self.default_value is not None:
+            return prop_type.internal_declaration(self.default_value)
+        elif empty_dict_deserialization is not None:
+            return empty_dict_deserialization
+        else:
+            return ''
 
     def add_default_value_to(self, declaration: str, in_constructor=True) -> str:
         prop_type = cast(DartPropertyType, self.property_type)

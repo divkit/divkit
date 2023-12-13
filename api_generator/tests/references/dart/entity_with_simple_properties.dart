@@ -60,7 +60,7 @@ class EntityWithSimpleProperties with EquatableMixin {
       color: safeParseColorExpr(json['color']),
       dNum: safeParseDoubleExpr(json['dNum']),
       id: safeParseInt(json['id']) ?? 0,
-      integer: safeParseIntExpr(json['integer']) ?? const Expression.value(0),
+      integer: safeParseIntExpr(json['integer'], fallback: 0) ?? const Expression.value(0),
       positiveInteger: safeParseIntExpr(json['positive_integer']),
       string: safeParseStrExpr(json['string']?.toString()),
       url: safeParseUriExpr(json['url']),
