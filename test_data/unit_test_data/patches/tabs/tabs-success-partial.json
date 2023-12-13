@@ -98,15 +98,16 @@
               "title": "Tab1",
               "div": {
                 "id": "tab1",
-                "type": "alert_card",
-                "alert_text": "1 item"
+                "type": "patch_card",
+                "alert_text": "4 item from patch"
               }
             },
             {
               "title": "Tab2",
               "div": {
-                "type": "patch_card",
-                "alert_text": "4 item from patch"
+                "id": "tab2",
+                "type": "alert_card",
+                "alert_text": "1 item"
               }
             },
             {

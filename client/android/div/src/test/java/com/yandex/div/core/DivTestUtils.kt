@@ -38,24 +38,18 @@ internal fun runAsync(action: () -> Unit) {
 }
 
 internal fun View.viewEquals(other: View): Boolean {
-    if (this::class.java == other::class.java) {
-        if (this is ViewGroup && other is ViewGroup) {
-            return if (this.childCount == other.childCount) {
-                this.children
-                    .zip(other.children)
-                    .map {
-                        it.first.viewEquals(it.second)
-            }
-                    .reduceOrNull { a, b ->
-                        a && b
-                    } ?: true
-            } else {
-                false
-    }
+    if (this::class.java != other::class.java) return false
+    if (this is ViewGroup && other is ViewGroup) {
+        return if (this.childCount == other.childCount) {
+            this.children
+                .zip(other.children)
+                .map { it.first.viewEquals(it.second) }
+                .reduceOrNull { a, b -> a && b } ?: true
+        } else {
+            false
         }
-        return compareViews(this, other)
     }
-    return false
+    return compareViews(this, other)
 }
 
 internal fun compareViews(first: View, second: View): Boolean {

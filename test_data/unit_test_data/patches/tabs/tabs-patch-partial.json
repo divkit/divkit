@@ -44,7 +44,7 @@
     "mode": "partial",
     "changes": [
       {
-        "id": "tab1",
+        "id": "tab2",
         "items": [
           {
             "type": "patch_card",
@@ -61,11 +61,13 @@
         ]
       },
       {
-        "id": "tab2",
-        "items": {
-          "type": "patch_card",
-          "alert_text": "4 item from patch"
-        }
+        "id": "tab1",
+        "items": [
+          {
+            "type": "patch_card",
+            "alert_text": "4 item from patch"
+          }
+        ]
       }
     ]
   }

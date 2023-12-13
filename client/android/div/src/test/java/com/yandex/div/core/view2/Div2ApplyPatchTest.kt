@@ -1,6 +1,9 @@
 package com.yandex.div.core.view2
 
 import android.app.Activity
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -19,7 +22,9 @@ const val PATCH_DIR = "patches"
 @RunWith(RobolectricTestRunner::class)
 class Div2ApplyPatchTest {
     private val divImageLoader = mock<DivImageLoader>()
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
+    private val controller = Robolectric.buildActivity(Activity::class.java)
+    private val activity = controller.get()
+
     private val div2Context = Div2Context(
         activity,
         DivConfiguration.Builder(divImageLoader).build()
@@ -169,7 +174,8 @@ class Div2ApplyPatchTest {
         testPatch(
             initial = UnitTestData("$PATCH_DIR/tabs", "tabs-initial.json"),
             expected = UnitTestData("$PATCH_DIR/tabs", "tabs-success-transactional.json"),
-            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-transactional-success.json")
+            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-transactional-success.json"),
+            beforeComparison = ::configureTabsComparison
         )
     }
 
@@ -178,7 +184,8 @@ class Div2ApplyPatchTest {
         testPatch(
             initial = UnitTestData("$PATCH_DIR/tabs", "tabs-initial.json"),
             expected = UnitTestData("$PATCH_DIR/tabs", "tabs-initial.json"),
-            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-transactional-broken.json")
+            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-transactional-broken.json"),
+            beforeComparison = ::configureTabsComparison
         )
     }
 
@@ -187,14 +194,24 @@ class Div2ApplyPatchTest {
         testPatch(
             initial = UnitTestData("$PATCH_DIR/tabs", "tabs-initial.json"),
             expected = UnitTestData("$PATCH_DIR/tabs", "tabs-success-partial.json"),
-            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-partial.json")
+            patch = UnitTestData("$PATCH_DIR/tabs", "tabs-patch-partial.json"),
+            beforeComparison = ::configureTabsComparison
         )
+    }
+
+    private fun configureTabsComparison() {
+        controller.visible()
+        val root = FrameLayout(activity)
+        root.addView(div2View)
+        root.addView(div2ReferenceView)
+        activity.addContentView(root, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
     }
 
     private fun testPatch(
         initial: UnitTestData,
         expected: UnitTestData,
-        patch: UnitTestData
+        patch: UnitTestData,
+        beforeComparison: () -> Unit = {}
     ) {
         val oldData = initial.dataWithTemplates
         val referenceData = expected.dataWithTemplates
@@ -206,6 +223,7 @@ class Div2ApplyPatchTest {
         div2View.bindOnAttachRunnable?.onAttach()
         div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
+        beforeComparison()
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
 }
