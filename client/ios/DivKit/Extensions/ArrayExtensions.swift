@@ -5,7 +5,7 @@ extension Array where Element == Div {
   func makeBlocks<T>(
     context: DivBlockModelingContext,
     sizeModifier: DivSizeModifier? = nil,
-    mappedBy modificator: (Div, Block) throws -> T
+    mappedBy modificator: (Div, Block, DivBlockModelingContext) throws -> T
   ) rethrows -> [T] {
     try iterativeFlatMap { div, index in
       let itemContext = context.modifying(
@@ -23,11 +23,11 @@ extension Array where Element == Div {
         context.addError(error: error)
         return nil
       }
-      return try modificator(div, block)
+      return try modificator(div, block, itemContext)
     }
   }
 
   func makeBlocks(context: DivBlockModelingContext) -> [Block] {
-    makeBlocks(context: context, mappedBy: { $1 })
+    makeBlocks(context: context, mappedBy: { _, block, _ in block })
   }
 }

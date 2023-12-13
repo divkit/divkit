@@ -16,6 +16,8 @@
 		4356EDC12A6C54E40017205B /* PlaygroundJsonProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4356EDC02A6C54E40017205B /* PlaygroundJsonProvider.swift */; };
 		437B19D429C8A73300A4C467 /* MaskValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */; };
 		4391F7C32A77DB9B006D8818 /* DivViewController+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */; };
+		43AB42112B273B0900020E3D /* FunctionProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB42102B273B0900020E3D /* FunctionProviderTests.swift */; };
+		43F0907F2B27CFCC00929F50 /* PrototypesValueStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F0907E2B27CFCC00929F50 /* PrototypesValueStorageTests.swift */; };
 		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */; };
 		52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */; };
@@ -275,6 +277,8 @@
 		4356EDC02A6C54E40017205B /* PlaygroundJsonProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundJsonProvider.swift; sourceTree = "<group>"; };
 		437B19D329C8A73300A4C467 /* MaskValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskValidatorTests.swift; sourceTree = "<group>"; };
 		4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivViewController+SwiftUI.swift"; sourceTree = "<group>"; };
+		43AB42102B273B0900020E3D /* FunctionProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionProviderTests.swift; sourceTree = "<group>"; };
+		43F0907E2B27CFCC00929F50 /* PrototypesValueStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrototypesValueStorageTests.swift; sourceTree = "<group>"; };
 		5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunLoopCardUpdateAggregatorTests.swift; sourceTree = "<group>"; };
 		52907F652A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivLastVisibleBoundsCacheTests.swift; sourceTree = "<group>"; };
 		52CD80662A7122AA00B828B0 /* DivBaseExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBaseExtensionsTests.swift; sourceTree = "<group>"; };
@@ -902,7 +906,10 @@
 			children = (
 				8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */,
 				8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */,
+				43F0907E2B27CFCC00929F50 /* PrototypesValueStorageTests.swift */,
+				8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */,
 				8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */,
+				43AB42102B273B0900020E3D /* FunctionProviderTests.swift */,
 			);
 			path = Expressions;
 			sourceTree = "<group>";
@@ -1620,6 +1627,7 @@
 				8C7B1BF82865C01C0036EF4C /* DivGifImageExtensionsTests.swift in Sources */,
 				8C7B1BFE2865C01C0036EF4C /* DivSerializationTests.swift in Sources */,
 				8C23F43529DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift in Sources */,
+				43F0907F2B27CFCC00929F50 /* PrototypesValueStorageTests.swift in Sources */,
 				8C23F43C29DDB3810069F3F7 /* ArrayWithTransformTests.swift in Sources */,
 				8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */,
 				8C23F43429DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift in Sources */,
@@ -1627,6 +1635,7 @@
 				8C23F42D29DDB3810069F3F7 /* EntityWithSimpleProperties.swift in Sources */,
 				8C23F42B29DDB3810069F3F7 /* EntityWithRequiredProperty.swift in Sources */,
 				52CD80692A7159C200B828B0 /* DivStateExtensionsTests.swift in Sources */,
+				43AB42112B273B0900020E3D /* FunctionProviderTests.swift in Sources */,
 				8C23F44329DDB3810069F3F7 /* OptionalPropertyTests.swift in Sources */,
 				8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */,
 				8C7B1BFA2865C01C0036EF4C /* DivDataExtensionsTests.swift in Sources */,

@@ -37,11 +37,12 @@ public struct DivBlockModelingContext {
   let tooltipViewFactory: DivTooltipViewFactory?
   public let variablesStorage: DivVariablesStorage
   public private(set) var expressionResolver: ExpressionResolver
-  private let variableValueProvider: (String) -> Any?
-  private let functionsProvider: FunctionsProvider
+  private var variableValueProvider: (String) -> Any?
+  private var functionsProvider: FunctionsProvider
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
   private(set) var sizeModifier: DivSizeModifier?
+  var prototypesStorage = PrototypesValueStorage()
 
   public init(
     cardId: DivCardID,
@@ -178,22 +179,16 @@ public struct DivBlockModelingContext {
     self.variablesStorage = variablesStorage
     self.extensionHandlers = extensionHandlers
     self.stateInterceptors = stateInterceptors
-
-    let variableValueProvider: (String) -> Any? = {
-      variablesStorage.getVariableValue(
-        cardId: cardId,
-        name: DivVariableName(rawValue: $0)
-      )
-    }
-    self.variableValueProvider = variableValueProvider
-    functionsProvider = FunctionsProvider(
-      variableValueProvider: {
-        variableTracker([DivVariableName(rawValue: $0)])
-        return variableValueProvider($0)
-      },
+    variableValueProvider = makeVariableValueProvider(
+      cardId: cardId,
+      variablesStorage: variablesStorage
+    )
+    functionsProvider = makeFunctionsProvider(
+      variableTracker: variableTracker,
+      variableValueProvider: variableValueProvider,
       persistentValuesStorage: persistentValuesStorage
     )
-    self.expressionResolver = makeExpressionResolver(
+    expressionResolver = makeExpressionResolver(
       variableValueProvider: variableValueProvider,
       functionsProvider: functionsProvider,
       parentPath: parentPath,
@@ -261,22 +256,44 @@ extension DivBlockModelingContext {
     parentPath: UIElementPath? = nil,
     parentDivStatePath: DivStatePath? = nil,
     errorsStorage: DivErrorsStorage? = nil,
-    sizeModifier: DivSizeModifier? = nil
+    sizeModifier: DivSizeModifier? = nil,
+    prototypesData: (String, [String: AnyHashable])? = nil
   ) -> Self {
     let expressionResolver: ExpressionResolver
     let parentPath = parentPath ?? self.parentPath
     let errorsStorage = errorsStorage ?? self.errorsStorage
-    if parentPath == self.parentPath {
-      expressionResolver = self.expressionResolver
+    let prototypesStorage = self.prototypesStorage
+    if let prototypesData {
+      prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
+    }
+    let variableValueProvider: AnyCalcExpression.ValueProvider
+    let functionsProvider: FunctionsProvider
+
+    if prototypesData == nil {
+      variableValueProvider = self.variableValueProvider
+      functionsProvider = self.functionsProvider
     } else {
-      expressionResolver = makeExpressionResolver(
+      variableValueProvider = makeVariableValueProvider(
+        cardId: cardId,
+        variablesStorage: variablesStorage,
+        prototypesStorage: prototypesStorage
+      )
+      functionsProvider = makeFunctionsProvider(
+        variableTracker: variableTracker,
         variableValueProvider: variableValueProvider,
-        functionsProvider: functionsProvider,
-        parentPath: parentPath,
-        errorsStorage: errorsStorage,
-        variableTracker: variableTracker
+        persistentValuesStorage: persistentValuesStorage,
+        prototypesStorage: prototypesStorage
       )
     }
+
+    expressionResolver = makeExpressionResolver(
+      variableValueProvider: variableValueProvider,
+      functionsProvider: functionsProvider,
+      parentPath: parentPath,
+      errorsStorage: errorsStorage,
+      variableTracker: variableTracker
+    )
+
     return modified(self) {
       $0.cardLogId = cardLogId ?? self.cardLogId
       $0.parentPath = parentPath
@@ -284,6 +301,9 @@ extension DivBlockModelingContext {
       $0.errorsStorage = errorsStorage
       $0.sizeModifier = sizeModifier ?? self.sizeModifier
       $0.expressionResolver = expressionResolver
+      $0.variableValueProvider = variableValueProvider
+      $0.functionsProvider = functionsProvider
+      $0.prototypesStorage = prototypesStorage
     }
   }
 

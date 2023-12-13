@@ -33,14 +33,14 @@ extension DivGalleryProtocol {
         gallery: self,
         direction: direction
       ),
-      mappedBy: {
+      mappedBy: { div, block, _ in
         GalleryViewModel.Item(
           crossAlignment: (
             direction.isHorizontal
-              ? $0.value.resolveAlignmentVertical(expressionResolver)?.alignment
-              : $0.value.resolveAlignmentHorizontal(expressionResolver)?.alignment
+              ? div.value.resolveAlignmentVertical(expressionResolver)?.alignment
+              : div.value.resolveAlignmentHorizontal(expressionResolver)?.alignment
           ) ?? defaultAlignment,
-          content: $1
+          content: block
         )
       }
     )
