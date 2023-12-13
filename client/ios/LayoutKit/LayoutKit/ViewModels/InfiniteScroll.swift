@@ -6,16 +6,16 @@ enum InfiniteScroll {
     let page: Int
   }
 
-  static func getNewPosition(currentOffset: CGFloat, itemsCount: Int, size: CGFloat) -> Position? {
-    guard itemsCount > 2 else {
+  static func getNewPosition(currentOffset: CGFloat, origins: [CGFloat]) -> Position? {
+    guard origins.count > 2 else {
       return nil
     }
-    let pageSize = size / CGFloat(itemsCount)
-    let moveSize = pageSize / 2
-    let cycleSize = pageSize * CGFloat(itemsCount - 2)
-    if currentOffset < moveSize {
+    let itemsCount = origins.count
+    let cycleSize = origins[itemsCount - 1] - origins[1]
+    let jumpOffset = cycleSize / CGFloat((itemsCount - 2) * 2) + origins[0]
+    if currentOffset < jumpOffset {
       return Position(offset: currentOffset + cycleSize, page: itemsCount - 2)
-    } else if currentOffset > cycleSize + moveSize {
+    } else if currentOffset > cycleSize + jumpOffset {
       return Position(offset: currentOffset - cycleSize, page: 1)
     }
     return nil

@@ -284,8 +284,7 @@ extension GalleryView: ScrollDelegate {
     let contentPosition: GalleryViewState.Position
     if model.infiniteScroll, let newPosition = InfiniteScroll.getNewPosition(
       currentOffset: offset,
-      itemsCount: model.items.count,
-      size: model.direction.isHorizontal ? layout.contentSize.width : layout.contentSize.height
+      origins: layout.blockFrames.map { model.direction.isHorizontal ? $0.minX : $0.minY }
     ) {
       offset = newPosition.offset
       compoundScrollDelegate.remove(self)
