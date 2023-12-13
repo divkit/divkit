@@ -11,15 +11,15 @@ public final class DivShadow {
   public let offset: DivPoint
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 0.19
+    resolver.resolveNumeric(alpha) ?? 0.19
   }
 
   public func resolveBlur(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: blur) ?? 2
+    resolver.resolveNumeric(blur) ?? 2
   }
 
   public func resolveColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
+    resolver.resolveColor(color) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

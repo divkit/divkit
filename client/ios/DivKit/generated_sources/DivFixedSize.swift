@@ -10,11 +10,11 @@ public final class DivFixedSize {
   public let value: Expression<Int> // constraint: number >= 0
 
   public func resolveUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(expression: unit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.dp
+    resolver.resolveEnum(unit) ?? DivSizeUnit.dp
   }
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   static let valueValidator: AnyValueValidator<Int> =

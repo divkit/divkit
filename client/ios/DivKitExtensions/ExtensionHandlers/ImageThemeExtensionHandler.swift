@@ -64,7 +64,7 @@ extension DivImage {
       return nil
     }
 
-    return expressionResolver.resolveUrl(expression: urlExpression)
+    return expressionResolver.resolveUrl(urlExpression)
   }
 
   fileprivate func resolveDarkThemePlaceholder(
@@ -77,7 +77,7 @@ extension DivImage {
       return nil
     }
 
-    let preview = expressionResolver.resolveString(expression: previewExpression)
+    let preview = expressionResolver.resolveString(previewExpression)
     if let data = Data(base64Encoded: preview),
        let image = Image(data: data) {
       return .image(image)

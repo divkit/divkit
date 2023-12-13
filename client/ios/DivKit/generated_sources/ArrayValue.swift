@@ -9,7 +9,7 @@ public final class ArrayValue {
   public let value: Expression<[Any]>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> [Any]? {
-    resolver.resolveArrayValue(expression: value)
+    resolver.resolveArray(value)
   }
 
   init(

@@ -10,11 +10,11 @@ public final class DivLinearGradient {
   public let colors: [Expression<Color>] // at least 2 elements
 
   public func resolveAngle(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: angle) ?? 0
+    resolver.resolveNumeric(angle) ?? 0
   }
 
   public func resolveColors(_ resolver: ExpressionResolver) -> [Color]? {
-    colors.map { resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:)) }.compactMap { $0 }
+    colors.map { resolver.resolveColor($0) }.compactMap { $0 }
   }
 
   static let angleValidator: AnyValueValidator<Int> =

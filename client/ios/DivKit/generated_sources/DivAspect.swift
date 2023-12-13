@@ -8,7 +8,7 @@ public final class DivAspect {
   public let ratio: Expression<Double> // constraint: number > 0
 
   public func resolveRatio(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: ratio)
+    resolver.resolveNumeric(ratio)
   }
 
   static let ratioValidator: AnyValueValidator<Double> =

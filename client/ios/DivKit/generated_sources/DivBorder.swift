@@ -12,11 +12,11 @@ public final class DivBorder {
   public let stroke: DivStroke?
 
   public func resolveCornerRadius(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: cornerRadius)
+    resolver.resolveNumeric(cornerRadius)
   }
 
   public func resolveHasShadow(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: hasShadow) ?? false
+    resolver.resolveNumeric(hasShadow) ?? false
   }
 
   static let cornerRadiusValidator: AnyValueValidator<Int> =

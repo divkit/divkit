@@ -11,7 +11,7 @@ public final class DivTabs: DivBase {
     public let titleClickAction: DivAction?
 
     public func resolveTitle(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: title, initializer: { $0 })
+      resolver.resolveString(title, initializer: { $0 })
     }
 
     init(
@@ -53,67 +53,67 @@ public final class DivTabs: DivBase {
     public let paddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(6), left: .value(8), right: .value(8), top: .value(6))
 
     public func resolveActiveBackgroundColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(expression: activeBackgroundColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
+      resolver.resolveColor(activeBackgroundColor) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
     }
 
     public func resolveActiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
-      resolver.resolveStringBasedValue(expression: activeFontWeight, initializer: DivFontWeight.init(rawValue:))
+      resolver.resolveEnum(activeFontWeight)
     }
 
     public func resolveActiveTextColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(expression: activeTextColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xCC000000)
+      resolver.resolveColor(activeTextColor) ?? Color.colorWithARGBHexCode(0xCC000000)
     }
 
     public func resolveAnimationDuration(_ resolver: ExpressionResolver) -> Int {
-      resolver.resolveNumericValue(expression: animationDuration) ?? 300
+      resolver.resolveNumeric(animationDuration) ?? 300
     }
 
     public func resolveAnimationType(_ resolver: ExpressionResolver) -> AnimationType {
-      resolver.resolveStringBasedValue(expression: animationType, initializer: AnimationType.init(rawValue:)) ?? AnimationType.slide
+      resolver.resolveEnum(animationType) ?? AnimationType.slide
     }
 
     public func resolveCornerRadius(_ resolver: ExpressionResolver) -> Int? {
-      resolver.resolveNumericValue(expression: cornerRadius)
+      resolver.resolveNumeric(cornerRadius)
     }
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
+      resolver.resolveString(fontFamily, initializer: { $0 })
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
-      resolver.resolveNumericValue(expression: fontSize) ?? 12
+      resolver.resolveNumeric(fontSize) ?? 12
     }
 
     public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-      resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
+      resolver.resolveEnum(fontSizeUnit) ?? DivSizeUnit.sp
     }
 
     public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-      resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
+      resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
     }
 
     public func resolveInactiveBackgroundColor(_ resolver: ExpressionResolver) -> Color? {
-      resolver.resolveStringBasedValue(expression: inactiveBackgroundColor, initializer: Color.color(withHexString:))
+      resolver.resolveColor(inactiveBackgroundColor)
     }
 
     public func resolveInactiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
-      resolver.resolveStringBasedValue(expression: inactiveFontWeight, initializer: DivFontWeight.init(rawValue:))
+      resolver.resolveEnum(inactiveFontWeight)
     }
 
     public func resolveInactiveTextColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(expression: inactiveTextColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x80000000)
+      resolver.resolveColor(inactiveTextColor) ?? Color.colorWithARGBHexCode(0x80000000)
     }
 
     public func resolveItemSpacing(_ resolver: ExpressionResolver) -> Int {
-      resolver.resolveNumericValue(expression: itemSpacing) ?? 0
+      resolver.resolveNumeric(itemSpacing) ?? 0
     }
 
     public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
-      resolver.resolveNumericValue(expression: letterSpacing) ?? 0
+      resolver.resolveNumeric(letterSpacing) ?? 0
     }
 
     public func resolveLineHeight(_ resolver: ExpressionResolver) -> Int? {
-      resolver.resolveNumericValue(expression: lineHeight)
+      resolver.resolveNumeric(lineHeight)
     }
 
     static let animationDurationValidator: AnyValueValidator<Int> =
@@ -211,51 +211,51 @@ public final class DivTabs: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveDynamicHeight(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: dynamicHeight) ?? false
+    resolver.resolveNumeric(dynamicHeight) ?? false
   }
 
   public func resolveHasSeparator(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: hasSeparator) ?? false
+    resolver.resolveNumeric(hasSeparator) ?? false
   }
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: restrictParentScroll) ?? false
+    resolver.resolveNumeric(restrictParentScroll) ?? false
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveSelectedTab(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: selectedTab) ?? 0
+    resolver.resolveNumeric(selectedTab) ?? 0
   }
 
   public func resolveSeparatorColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: separatorColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x14000000)
+    resolver.resolveColor(separatorColor) ?? Color.colorWithARGBHexCode(0x14000000)
   }
 
   public func resolveSwitchTabsByContentSwipeEnabled(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: switchTabsByContentSwipeEnabled) ?? true
+    resolver.resolveNumeric(switchTabsByContentSwipeEnabled) ?? true
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

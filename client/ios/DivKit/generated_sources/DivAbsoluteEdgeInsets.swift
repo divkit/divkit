@@ -11,19 +11,19 @@ public final class DivAbsoluteEdgeInsets {
   public let top: Expression<Int> // constraint: number >= 0; default value: 0
 
   public func resolveBottom(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: bottom) ?? 0
+    resolver.resolveNumeric(bottom) ?? 0
   }
 
   public func resolveLeft(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: left) ?? 0
+    resolver.resolveNumeric(left) ?? 0
   }
 
   public func resolveRight(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: right) ?? 0
+    resolver.resolveNumeric(right) ?? 0
   }
 
   public func resolveTop(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: top) ?? 0
+    resolver.resolveNumeric(top) ?? 0
   }
 
   static let bottomValidator: AnyValueValidator<Int> =

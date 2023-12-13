@@ -1,8 +1,8 @@
-import BaseTinyPublic
-import DivKit
 import Foundation
 import UIKit
 
+import BaseTinyPublic
+import DivKit
 import Serialization
 
 public struct ShimmerStyle {
@@ -19,24 +19,25 @@ public struct ShimmerStyle {
 
 extension ShimmerStyle {
   init(dictionary: [String: Any], expressionResolver: ExpressionResolver) throws {
-    self.angle = try dictionary.getOptionalFloatAsExpression(
+    self.angle = try dictionary.getOptionalFloat(
       "angle",
       expressionResolver: expressionResolver
     ) ?? defaultAngle
-    self.duration = try dictionary.getOptionalFloatAsExpression(
+    
+    self.duration = try dictionary.getOptionalFloat(
       "duration",
       expressionResolver: expressionResolver
     ) ?? defaultDuration
+    
     let colors: [Color] = try dictionary.getOptionalArray(
       "colors",
-      transform: { RGBAColor.color(withHexString: expressionResolver.resolveString(expression: $0))
-      }
+      transform: { expressionResolver.resolveColor($0) }
     ) ?? defaultColors
-    let locations: [CGFloat] = try dictionary.getOptionalFloatArrayElementsAsExpression(
+    
+    let locations: [CGFloat] = try dictionary.getOptionalFloatArray(
       "locations",
       expressionResolver: expressionResolver
-    )
-      ?? defaultLocations
+    ) ?? defaultLocations
 
     if colors.count != locations.count {
       throw ShimmerSerializationError.error
@@ -67,54 +68,34 @@ private enum ShimmerSerializationError: Error {
 }
 
 extension Dictionary where Key == String {
-  fileprivate func getOptionalFloatAsExpression(
+  fileprivate func getOptionalFloat(
     _ key: Key,
     expressionResolver: ExpressionResolver
   ) throws -> CGFloat? {
-    let result: Double? = try getOptionalFieldAsExpression(
-      key,
-      fromExpression: { Double(expressionResolver.resolveString(expression: $0)) }
-    )
-
+    let result: Double?
+    if let value = self[key] as? Double {
+      result = value
+    } else if let expression: String = try getOptionalField(key) {
+      result = expressionResolver.resolveNumeric(expression)
+    } else {
+      return nil
+    }
     return result.map { CGFloat($0) }
   }
 
-  fileprivate func getOptionalFloatArrayElementsAsExpression(
+  fileprivate func getOptionalFloatArray(
     _ key: Key,
     expressionResolver: ExpressionResolver
   ) throws -> [CGFloat]? {
-    try getOptionalArrayElementsAsExpression(
+    let result: [Double]? = try getOptionalArray(
       key,
-      fromExpression: { Double(expressionResolver.resolveString(expression: $0)) }
-    )?.map { CGFloat($0) }
-  }
-
-  fileprivate func getOptionalFieldAsExpression<T: ValidSerializationValue>(
-    _ key: Key,
-    fromExpression: (String) -> T?
-  ) throws -> T? {
-    if let value = self[key] as? T {
-      return value
-    } else {
-      let expression: String? = try getOptionalField(key)
-      return expression.flatMap(fromExpression)
-    }
-  }
-
-  fileprivate func getOptionalArrayElementsAsExpression<T: ValidSerializationValue>(
-    _ key: Key,
-    fromExpression: (String) -> T?
-  ) throws -> [T]? {
-    try getOptionalArray(
-      key,
-      transform: { (obj: Any) -> T? in
+      transform: { (obj: Any) -> Double? in
         if let expression = obj as? String {
-          return fromExpression(expression)
-        } else {
-          return obj as? T
+          return expressionResolver.resolveNumeric(expression)
         }
-      },
-      validator: nil
+        return obj as? Double
+      }
     )
+    return result?.map { CGFloat($0) }
   }
 }

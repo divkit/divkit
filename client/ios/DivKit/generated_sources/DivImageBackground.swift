@@ -15,27 +15,27 @@ public final class DivImageBackground {
   public let scale: Expression<DivImageScale> // default value: fill
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.center
+    resolver.resolveEnum(contentAlignmentHorizontal) ?? DivAlignmentHorizontal.center
   }
 
   public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
+    resolver.resolveEnum(contentAlignmentVertical) ?? DivAlignmentVertical.center
   }
 
   public func resolveImageUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: imageUrl, initializer: URL.init(string:))
+    resolver.resolveUrl(imageUrl)
   }
 
   public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: preloadRequired) ?? false
+    resolver.resolveNumeric(preloadRequired) ?? false
   }
 
   public func resolveScale(_ resolver: ExpressionResolver) -> DivImageScale {
-    resolver.resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ?? DivImageScale.fill
+    resolver.resolveEnum(scale) ?? DivImageScale.fill
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

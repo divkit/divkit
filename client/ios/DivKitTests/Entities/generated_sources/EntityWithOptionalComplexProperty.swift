@@ -11,7 +11,7 @@ public final class EntityWithOptionalComplexProperty {
     public let value: Expression<URL>
 
     public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
-      resolver.resolveStringBasedValue(expression: value, initializer: URL.init(string:))
+      resolver.resolveUrl(value)
     }
 
     init(

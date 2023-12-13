@@ -11,15 +11,15 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
     public let regex: Expression<String>?
 
     public func resolveKey(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: key, initializer: { $0 })
+      resolver.resolveString(key, initializer: { $0 })
     }
 
     public func resolvePlaceholder(_ resolver: ExpressionResolver) -> String {
-      resolver.resolveStringBasedValue(expression: placeholder, initializer: { $0 }) ?? "_"
+      resolver.resolveString(placeholder, initializer: { $0 }) ?? "_"
     }
 
     public func resolveRegex(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: regex, initializer: { $0 })
+      resolver.resolveString(regex, initializer: { $0 })
     }
 
     static let keyValidator: AnyValueValidator<String> =
@@ -46,11 +46,11 @@ public final class DivFixedLengthInputMask: DivInputMaskBase {
   public let rawTextVariable: String
 
   public func resolveAlwaysVisible(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: alwaysVisible) ?? false
+    resolver.resolveNumeric(alwaysVisible) ?? false
   }
 
   public func resolvePattern(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: pattern, initializer: { $0 })
+    resolver.resolveString(pattern, initializer: { $0 })
   }
 
   static let patternElementsValidator: AnyArrayValueValidator<DivFixedLengthInputMask.PatternElement> =

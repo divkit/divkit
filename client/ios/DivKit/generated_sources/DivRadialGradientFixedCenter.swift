@@ -10,11 +10,11 @@ public final class DivRadialGradientFixedCenter {
   public let value: Expression<Int>
 
   public func resolveUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(expression: unit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.dp
+    resolver.resolveEnum(unit) ?? DivSizeUnit.dp
   }
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   init(

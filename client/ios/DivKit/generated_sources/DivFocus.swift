@@ -13,23 +13,23 @@ public final class DivFocus {
     public let up: Expression<String>?
 
     public func resolveDown(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: down, initializer: { $0 })
+      resolver.resolveString(down, initializer: { $0 })
     }
 
     public func resolveForward(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: forward, initializer: { $0 })
+      resolver.resolveString(forward, initializer: { $0 })
     }
 
     public func resolveLeft(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: left, initializer: { $0 })
+      resolver.resolveString(left, initializer: { $0 })
     }
 
     public func resolveRight(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: right, initializer: { $0 })
+      resolver.resolveString(right, initializer: { $0 })
     }
 
     public func resolveUp(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: up, initializer: { $0 })
+      resolver.resolveString(up, initializer: { $0 })
     }
 
     init(

@@ -15,7 +15,7 @@ public final class EntityWithOptionalStringEnumProperty {
   public let property: Expression<Property>?
 
   public func resolveProperty(_ resolver: ExpressionResolver) -> Property? {
-    resolver.resolveStringBasedValue(expression: property, initializer: Property.init(rawValue:))
+    resolver.resolveEnum(property)
   }
 
   init(

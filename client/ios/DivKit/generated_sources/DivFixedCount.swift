@@ -9,7 +9,7 @@ public final class DivFixedCount {
   public let value: Expression<Int> // constraint: number >= 0
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   static let valueValidator: AnyValueValidator<Int> =

@@ -69,63 +69,63 @@ public final class DivGallery: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveColumnCount(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnCount)
+    resolver.resolveNumeric(columnCount)
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveCrossContentAlignment(_ resolver: ExpressionResolver) -> CrossContentAlignment {
-    resolver.resolveStringBasedValue(expression: crossContentAlignment, initializer: CrossContentAlignment.init(rawValue:)) ?? CrossContentAlignment.start
+    resolver.resolveEnum(crossContentAlignment) ?? CrossContentAlignment.start
   }
 
   public func resolveCrossSpacing(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: crossSpacing)
+    resolver.resolveNumeric(crossSpacing)
   }
 
   public func resolveDefaultItem(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: defaultItem) ?? 0
+    resolver.resolveNumeric(defaultItem) ?? 0
   }
 
   public func resolveItemSpacing(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: itemSpacing) ?? 8
+    resolver.resolveNumeric(itemSpacing) ?? 8
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
-    resolver.resolveStringBasedValue(expression: orientation, initializer: Orientation.init(rawValue:)) ?? Orientation.horizontal
+    resolver.resolveEnum(orientation) ?? Orientation.horizontal
   }
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: restrictParentScroll) ?? false
+    resolver.resolveNumeric(restrictParentScroll) ?? false
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveScrollMode(_ resolver: ExpressionResolver) -> ScrollMode {
-    resolver.resolveStringBasedValue(expression: scrollMode, initializer: ScrollMode.init(rawValue:)) ?? ScrollMode.default
+    resolver.resolveEnum(scrollMode) ?? ScrollMode.default
   }
 
   public func resolveScrollbar(_ resolver: ExpressionResolver) -> Scrollbar {
-    resolver.resolveStringBasedValue(expression: scrollbar, initializer: Scrollbar.init(rawValue:)) ?? Scrollbar.none
+    resolver.resolveEnum(scrollbar) ?? Scrollbar.none
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

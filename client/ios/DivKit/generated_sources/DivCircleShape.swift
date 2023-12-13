@@ -11,7 +11,7 @@ public final class DivCircleShape {
   public let stroke: DivStroke?
 
   public func resolveBackgroundColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(expression: backgroundColor, initializer: Color.color(withHexString:))
+    resolver.resolveColor(backgroundColor)
   }
 
   init(

@@ -10,11 +10,11 @@ public final class DivSelect: DivBase {
     public let value: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
+      resolver.resolveString(text, initializer: { $0 })
     }
 
     public func resolveValue(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: value, initializer: { $0 })
+      resolver.resolveString(value, initializer: { $0 })
     }
 
     init(
@@ -66,63 +66,63 @@ public final class DivSelect: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: fontFamily, initializer: { $0 })
+    resolver.resolveString(fontFamily, initializer: { $0 })
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: fontSize) ?? 12
+    resolver.resolveNumeric(fontSize) ?? 12
   }
 
   public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
+    resolver.resolveEnum(fontSizeUnit) ?? DivSizeUnit.sp
   }
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-    resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
+    resolver.resolveEnum(fontWeight) ?? DivFontWeight.regular
   }
 
   public func resolveHintColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: hintColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x73000000)
+    resolver.resolveColor(hintColor) ?? Color.colorWithARGBHexCode(0x73000000)
   }
 
   public func resolveHintText(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: hintText, initializer: { $0 })
+    resolver.resolveString(hintText, initializer: { $0 })
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: letterSpacing) ?? 0
+    resolver.resolveNumeric(letterSpacing) ?? 0
   }
 
   public func resolveLineHeight(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: lineHeight)
+    resolver.resolveNumeric(lineHeight)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
+    resolver.resolveColor(textColor) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

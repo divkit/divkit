@@ -21,19 +21,19 @@ public final class DivSlideTransition: DivTransitionBase {
   public let startDelay: Expression<Int> // constraint: number >= 0; default value: 0
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: duration) ?? 200
+    resolver.resolveNumeric(duration) ?? 200
   }
 
   public func resolveEdge(_ resolver: ExpressionResolver) -> Edge {
-    resolver.resolveStringBasedValue(expression: edge, initializer: Edge.init(rawValue:)) ?? Edge.bottom
+    resolver.resolveEnum(edge) ?? Edge.bottom
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.easeInOut
+    resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: startDelay) ?? 0
+    resolver.resolveNumeric(startDelay) ?? 0
   }
 
   static let durationValidator: AnyValueValidator<Int> =

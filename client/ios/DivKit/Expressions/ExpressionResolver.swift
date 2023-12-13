@@ -47,60 +47,70 @@ public final class ExpressionResolver {
     self.variableTracker = variableTracker
   }
 
-  public func resolveString(expression: String) -> String {
-    resolveStringBasedValue(
-      expression: expression,
-      initializer: { $0 }
-    ) ?? expression
+  public func resolveString(_ expression: String) -> String {
+    resolveString(expression, initializer: { $0 }) ?? expression
   }
 
-  public func resolveUrl(expression: String) -> URL? {
-    resolveStringBasedValue(
-      expression: expression,
-      initializer: URL.init(string:)
-    ) ?? URL(string: expression)
+  public func resolveColor(_ expression: String) -> Color? {
+    resolveString(expression, initializer: Color.color(withHexString:))
   }
 
-  public func resolveColor(expression: String) -> Color? {
-    resolveStringBasedValue(
-      expression: expression,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.color(withHexString: expression)
+  public func resolveUrl(_ expression: String) -> URL? {
+    resolveString(expression, initializer: URL.init(string:))
   }
 
   public func resolveEnum<T: RawRepresentable>(
-    expression: String
+    _ expression: String
   ) -> T? where T.RawValue == String {
-    resolveStringBasedValue(
-      expression: expression,
-      initializer: T.init(rawValue:)
-    ) ?? T(rawValue: expression)
+    resolveString(expression, initializer: T.init(rawValue:))
   }
 
-  func resolveStringBasedValue<T>(
-    expression: Expression<T>?,
-    initializer: (String) -> T?
+  public func resolveNumeric<T>(_ expression: String) -> T? {
+    if let link = try? ExpressionLink<T>(rawValue: expression) {
+      return resolveNumeric(.link(link))
+    }
+    return nil
+  }
+
+  func resolveString<T>(
+    _ expression: Expression<T>?,
+    initializer: (String) -> T? = { $0 }
   ) -> T? {
     switch expression {
-    case let .value(val):
-      return resolveEscaping(val)
+    case let .value(value):
+      return resolveEscaping(value)
     case let .link(link):
       variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
-      return evaluateStringBasedValue(
-        link: link,
-        initializer: initializer
-      )
+      return evaluateString(link: link, initializer: initializer)
     case .none:
       return nil
     }
   }
 
-  func resolveNumericValue<T>(
-    expression: Expression<T>?
+  func resolveEnum<T: RawRepresentable>(
+    _ expression: Expression<T>?
+  ) -> T? where T.RawValue == String {
+    resolveString(expression, initializer: T.init(rawValue:))
+  }
+
+  func resolveColor(
+    _ expression: Expression<Color>?
+  ) -> Color? {
+    resolveString(expression, initializer: Color.color(withHexString:))
+  }
+
+  func resolveUrl(
+    _ expression: Expression<URL>?
+  ) -> URL? {
+    resolveString(expression, initializer: URL.init(string:))
+  }
+
+  func resolveNumeric<T>(
+    _ expression: Expression<T>?
   ) -> T? {
     switch expression {
-    case let .value(val):
-      return val
+    case let .value(value):
+      return value
     case let .link(link):
       variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateSingleItem(link: link)
@@ -109,12 +119,12 @@ public final class ExpressionResolver {
     }
   }
 
-  func resolveArrayValue(
-    expression: Expression<[Any]>?
+  func resolveArray(
+    _ expression: Expression<[Any]>?
   ) -> [Any]? {
     switch expression {
-    case let .value(val):
-      return val
+    case let .value(value):
+      return value
     case let .link(link):
       variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
       return evaluateSingleItem(link: link)
@@ -180,7 +190,7 @@ public final class ExpressionResolver {
     }
   }
 
-  private func evaluateStringBasedValue<T>(
+  private func evaluateString<T>(
     link: ExpressionLink<T>,
     initializer: (String) -> T?
   ) -> T? {
@@ -203,7 +213,7 @@ public final class ExpressionResolver {
       case let .string(value):
         stringValue += value
       case let .nestedCalcExpression(link):
-        if let expression = evaluateStringBasedValue(
+        if let expression = evaluateString(
           link: link,
           initializer: { $0 }
         ) {
@@ -212,7 +222,7 @@ public final class ExpressionResolver {
             errorTracker: link.errorTracker,
             resolveNested: false
           )
-          if let link = link, let value = evaluateStringBasedValue(
+          if let link = link, let value = evaluateString(
             link: link,
             initializer: { $0 }
           ) {
@@ -257,16 +267,13 @@ public final class ExpressionResolver {
     return value
   }
 
-  private func resolveStringBasedValue<T>(
-    expression: String,
+  private func resolveString<T>(
+    _ expression: String,
     initializer: (String) -> T?
   ) -> T? {
-    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression) else {
-      return nil
+    if let link = try? ExpressionLink<T>(rawValue: expression) {
+      return resolveString(.link(link), initializer: initializer)
     }
-    return resolveStringBasedValue(
-      expression: .link(expressionLink),
-      initializer: initializer
-    )
+    return initializer(expression)
   }
 }

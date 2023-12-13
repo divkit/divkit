@@ -26,15 +26,15 @@ public final class DivContainer: DivBase {
     public let style: DivDrawable
 
     public func resolveShowAtEnd(_ resolver: ExpressionResolver) -> Bool {
-      resolver.resolveNumericValue(expression: showAtEnd) ?? false
+      resolver.resolveNumeric(showAtEnd) ?? false
     }
 
     public func resolveShowAtStart(_ resolver: ExpressionResolver) -> Bool {
-      resolver.resolveNumericValue(expression: showAtStart) ?? false
+      resolver.resolveNumeric(showAtStart) ?? false
     }
 
     public func resolveShowBetween(_ resolver: ExpressionResolver) -> Bool {
-      resolver.resolveNumericValue(expression: showBetween) ?? true
+      resolver.resolveNumeric(showBetween) ?? true
     }
 
     init(
@@ -96,47 +96,47 @@ public final class DivContainer: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveClipToBounds(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: clipToBounds) ?? true
+    resolver.resolveNumeric(clipToBounds) ?? true
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivContentAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivContentAlignmentHorizontal.init(rawValue:)) ?? DivContentAlignmentHorizontal.start
+    resolver.resolveEnum(contentAlignmentHorizontal) ?? DivContentAlignmentHorizontal.start
   }
 
   public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivContentAlignmentVertical {
-    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivContentAlignmentVertical.init(rawValue:)) ?? DivContentAlignmentVertical.top
+    resolver.resolveEnum(contentAlignmentVertical) ?? DivContentAlignmentVertical.top
   }
 
   public func resolveLayoutMode(_ resolver: ExpressionResolver) -> LayoutMode {
-    resolver.resolveStringBasedValue(expression: layoutMode, initializer: LayoutMode.init(rawValue:)) ?? LayoutMode.noWrap
+    resolver.resolveEnum(layoutMode) ?? LayoutMode.noWrap
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
-    resolver.resolveStringBasedValue(expression: orientation, initializer: Orientation.init(rawValue:)) ?? Orientation.vertical
+    resolver.resolveEnum(orientation) ?? Orientation.vertical
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

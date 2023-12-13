@@ -9,7 +9,7 @@ public final class IntegerValue {
   public let value: Expression<Int>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   init(

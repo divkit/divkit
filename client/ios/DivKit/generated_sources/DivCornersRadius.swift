@@ -11,19 +11,19 @@ public final class DivCornersRadius {
   public let topRight: Expression<Int>? // constraint: number >= 0
 
   public func resolveBottomLeft(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: bottomLeft)
+    resolver.resolveNumeric(bottomLeft)
   }
 
   public func resolveBottomRight(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: bottomRight)
+    resolver.resolveNumeric(bottomRight)
   }
 
   public func resolveTopLeft(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: topLeft)
+    resolver.resolveNumeric(topLeft)
   }
 
   public func resolveTopRight(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: topRight)
+    resolver.resolveNumeric(topRight)
   }
 
   static let bottomLeftValidator: AnyValueValidator<Int> =

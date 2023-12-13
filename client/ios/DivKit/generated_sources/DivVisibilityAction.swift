@@ -17,27 +17,27 @@ public final class DivVisibilityAction: DivSightAction {
   public let visibilityPercentage: Expression<Int> // constraint: number > 0 && number <= 100; default value: 50
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: isEnabled) ?? true
+    resolver.resolveNumeric(isEnabled) ?? true
   }
 
   public func resolveLogLimit(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: logLimit) ?? 1
+    resolver.resolveNumeric(logLimit) ?? 1
   }
 
   public func resolveReferer(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: referer, initializer: URL.init(string:))
+    resolver.resolveUrl(referer)
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
+    resolver.resolveUrl(url)
   }
 
   public func resolveVisibilityDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: visibilityDuration) ?? 800
+    resolver.resolveNumeric(visibilityDuration) ?? 800
   }
 
   public func resolveVisibilityPercentage(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: visibilityPercentage) ?? 50
+    resolver.resolveNumeric(visibilityPercentage) ?? 50
   }
 
   static let logLimitValidator: AnyValueValidator<Int> =

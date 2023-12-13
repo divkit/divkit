@@ -17,7 +17,7 @@ public final class DivRadialGradientRelativeRadius {
   public let value: Expression<Value>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Value? {
-    resolver.resolveStringBasedValue(expression: value, initializer: Value.init(rawValue:))
+    resolver.resolveEnum(value)
   }
 
   init(

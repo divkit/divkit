@@ -11,11 +11,11 @@ public final class DivActionArrayInsertValue {
   public let variableName: Expression<String>
 
   public func resolveIndex(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: index)
+    resolver.resolveNumeric(index)
   }
 
   public func resolveVariableName(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: variableName, initializer: { $0 })
+    resolver.resolveString(variableName, initializer: { $0 })
   }
 
   init(

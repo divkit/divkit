@@ -457,39 +457,38 @@ class SwiftProperty(Property):
         if isinstance(self.property_type, Array):
             item_type = cast(SwiftPropertyType, self.property_type.property_type)
             method, initializer = self.expression_resolving_method_parts(item_type)
-            map_text = f'resolver.{method}(expression: $0{initializer})'
+            map_text = f'resolver.{method}($0{initializer})'
             result += Text(f'{self.declaration_name}.map {{ {map_text} }}.compactMap {{ $0 }}').indented()
         else:
             prop_type = cast(SwiftPropertyType, self.property_type)
             method, initializer = self.expression_resolving_method_parts(prop_type)
             default_value = self.expression_resolving_method_default_value(prop_type)
-            expression_str = f'expression: {self.declaration_name}{initializer}'
+            expression_str = f'{self.declaration_name}{initializer}'
             result += Text(f'resolver.{method}({expression_str}){default_value}').indented()
         result += '}'
         result += EMPTY
         return result
 
     def expression_resolving_method_parts(self, property_type: SwiftPropertyType) -> Tuple[str, str]:
-        resolve_string_based_value = 'resolveStringBasedValue'
         initializer_prefix = ', initializer: '
         if isinstance(property_type, Color):
-            method = resolve_string_based_value
-            initializer = f'{initializer_prefix}Color.color(withHexString:)'
+            method = 'resolveColor'
+            initializer = ''
         elif isinstance(property_type, String):
-            method = resolve_string_based_value
+            method = 'resolveString'
             optimized = 'as CFString' if property_type.enable_optimization else ''
             initializer = f'{initializer_prefix}{{ $0 {optimized}}}'
         elif isinstance(property_type, Url):
-            method = resolve_string_based_value
-            initializer = f'{initializer_prefix}URL.init(string:)'
+            method = 'resolveUrl'
+            initializer = ''
         elif isinstance(property_type, (Int, Double, Bool, BoolInt)):
-            method = 'resolveNumericValue'
+            method = 'resolveNumeric'
             initializer = ''
         elif isinstance(property_type, Object) and isinstance(property_type.object, StringEnumeration):
-            method = resolve_string_based_value
-            initializer = f'{initializer_prefix}{self.expression_declaration(optionality=False)}.init(rawValue:)'
+            method = 'resolveEnum'
+            initializer = ''
         elif isinstance(property_type, RawArray):
-            method = 'resolveArrayValue'
+            method = 'resolveArray'
             initializer = ''
         elif isinstance(property_type, Array):
             return self.expression_resolving_method_parts(cast(SwiftPropertyType, property_type.property_type))

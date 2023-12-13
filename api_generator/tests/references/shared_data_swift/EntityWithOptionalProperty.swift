@@ -9,7 +9,7 @@ public final class EntityWithOptionalProperty {
   public let property: Expression<String>?
 
   public func resolveProperty(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: property, initializer: { $0 })
+    resolver.resolveString(property, initializer: { $0 })
   }
 
   init(

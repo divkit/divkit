@@ -9,7 +9,7 @@ public final class ColorValue {
   public let value: Expression<Color>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(expression: value, initializer: Color.color(withHexString:))
+    resolver.resolveColor(value)
   }
 
   init(

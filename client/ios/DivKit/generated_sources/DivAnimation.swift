@@ -25,27 +25,27 @@ public final class DivAnimation {
   public let startValue: Expression<Double>?
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: duration) ?? 300
+    resolver.resolveNumeric(duration) ?? 300
   }
 
   public func resolveEndValue(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: endValue)
+    resolver.resolveNumeric(endValue)
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.spring
+    resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.spring
   }
 
   public func resolveName(_ resolver: ExpressionResolver) -> Name? {
-    resolver.resolveStringBasedValue(expression: name, initializer: Name.init(rawValue:))
+    resolver.resolveEnum(name)
   }
 
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: startDelay) ?? 0
+    resolver.resolveNumeric(startDelay) ?? 0
   }
 
   public func resolveStartValue(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: startValue)
+    resolver.resolveNumeric(startValue)
   }
 
   static let durationValidator: AnyValueValidator<Int> =

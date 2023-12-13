@@ -10,7 +10,7 @@ public final class DivCollectionItemBuilder {
     public let selector: Expression<Bool> // default value: true
 
     public func resolveSelector(_ resolver: ExpressionResolver) -> Bool {
-      resolver.resolveNumericValue(expression: selector) ?? true
+      resolver.resolveNumeric(selector) ?? true
     }
 
     init(
@@ -27,7 +27,7 @@ public final class DivCollectionItemBuilder {
   public let prototypes: [Prototype] // at least 1 elements
 
   public func resolveData(_ resolver: ExpressionResolver) -> [Any]? {
-    resolver.resolveArrayValue(expression: data)
+    resolver.resolveArray(data)
   }
 
   static let prototypesValidator: AnyArrayValueValidator<DivCollectionItemBuilder.Prototype> =

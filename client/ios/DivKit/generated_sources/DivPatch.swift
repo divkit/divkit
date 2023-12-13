@@ -28,7 +28,7 @@ public final class DivPatch {
   public let mode: Expression<Mode> // default value: partial
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.partial
+    resolver.resolveEnum(mode) ?? Mode.partial
   }
 
   static let changesValidator: AnyArrayValueValidator<DivPatch.Change> =

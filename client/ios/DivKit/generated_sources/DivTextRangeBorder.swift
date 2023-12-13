@@ -9,7 +9,7 @@ public final class DivTextRangeBorder {
   public let stroke: DivStroke?
 
   public func resolveCornerRadius(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: cornerRadius)
+    resolver.resolveNumeric(cornerRadius)
   }
 
   static let cornerRadiusValidator: AnyValueValidator<Int> =

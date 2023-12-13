@@ -163,7 +163,6 @@
 		8C7915D028B177CE00A4642A /* ViewWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7915CF28B177CE00A4642A /* ViewWithHeader.swift */; };
 		8C7B18782864C9C70036EF4C /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18712864C9C70036EF4C /* MainView.swift */; };
 		8C7B18952864CA380036EF4C /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18832864CA380036EF4C /* Alert.swift */; };
-		8C7B1BF12865C01C0036EF4C /* ExpressionResolvingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */; };
 		8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */; };
 		8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */; };
 		8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */; };
@@ -211,6 +210,7 @@
 		8C97EA3C2A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */; };
 		8C9898402A4C570400FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* YSFontProvider.swift */; };
 		8C9898422A4C59DF00FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */; };
+		8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
 		8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */; };
 		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
@@ -421,7 +421,6 @@
 		8C7B18712864C9C70036EF4C /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		8C7B18832864CA380036EF4C /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		8C7B1B1A2865BFF10036EF4C /* DivKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionResolvingTests.swift; sourceTree = "<group>"; };
 		8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTabsExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGridExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGalleryExtensionsTests.swift; sourceTree = "<group>"; };
@@ -476,6 +475,7 @@
 		8C97EA382A5C169E00EC0C3E /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
 		8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
+		8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionTests.swift; sourceTree = "<group>"; };
 		8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundUrlHandler.swift; sourceTree = "<group>"; };
 		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
@@ -901,7 +901,7 @@
 			isa = PBXGroup;
 			children = (
 				8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */,
-				8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */,
+				8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */,
 				8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */,
 			);
 			path = Expressions;
@@ -1559,6 +1559,7 @@
 				8C22BBBC2B037BA20076BAEB /* WithDefaultTemplate.swift in Sources */,
 				8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C22BBC12B037BA20076BAEB /* WithoutDefault.swift in Sources */,
+				8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */,
 				8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
 				8C23F44829DDB3810069F3F7 /* StringEnumPropertyTests.swift in Sources */,
 				8CD234922AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift in Sources */,
@@ -1643,7 +1644,6 @@
 				8C23F44029DDB3810069F3F7 /* ExpectedEntities.swift in Sources */,
 				8C7B1CA82865C01E0036EF4C /* DivBlockStateStorageTests.swift in Sources */,
 				8C23F42529DDB3810069F3F7 /* EntityWithOptionalProperty.swift in Sources */,
-				8C7B1BF12865C01C0036EF4C /* ExpressionResolvingTests.swift in Sources */,
 				8C7B1BF92865C01C0036EF4C /* DivImageExtensionsTests.swift in Sources */,
 				8C22BBBD2B037BA20076BAEB /* EntityWithJsonProperty.swift in Sources */,
 				8C7B1BFC2865C01C0036EF4C /* DivActionExtensionsTests.swift in Sources */,

@@ -33,23 +33,23 @@ public final class DivAccessibility {
   public let type: Kind?
 
   public func resolveDescription(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: description, initializer: { $0 })
+    resolver.resolveString(description, initializer: { $0 })
   }
 
   public func resolveHint(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: hint, initializer: { $0 })
+    resolver.resolveString(hint, initializer: { $0 })
   }
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.default
+    resolver.resolveEnum(mode) ?? Mode.default
   }
 
   public func resolveMuteAfterAction(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: muteAfterAction) ?? false
+    resolver.resolveNumeric(muteAfterAction) ?? false
   }
 
   public func resolveStateDescription(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: stateDescription, initializer: { $0 })
+    resolver.resolveString(stateDescription, initializer: { $0 })
   }
 
   init(

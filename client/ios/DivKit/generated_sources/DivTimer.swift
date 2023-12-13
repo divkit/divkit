@@ -13,11 +13,11 @@ public final class DivTimer {
   public let valueVariable: String?
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: duration) ?? 0
+    resolver.resolveNumeric(duration) ?? 0
   }
 
   public func resolveTickInterval(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: tickInterval)
+    resolver.resolveNumeric(tickInterval)
   }
 
   static let durationValidator: AnyValueValidator<Int> =

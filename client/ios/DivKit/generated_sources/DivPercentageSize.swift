@@ -9,7 +9,7 @@ public final class DivPercentageSize {
   public let value: Expression<Double> // constraint: number > 0
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   static let valueValidator: AnyValueValidator<Double> =

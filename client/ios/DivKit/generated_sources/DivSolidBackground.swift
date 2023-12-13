@@ -9,7 +9,7 @@ public final class DivSolidBackground {
   public let color: Expression<Color>
 
   public func resolveColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:))
+    resolver.resolveColor(color)
   }
 
   init(

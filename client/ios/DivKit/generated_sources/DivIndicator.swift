@@ -53,47 +53,47 @@ public final class DivIndicator: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveActiveItemColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: activeItemColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
+    resolver.resolveColor(activeItemColor) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
   }
 
   public func resolveActiveItemSize(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: activeItemSize) ?? 1.3
+    resolver.resolveNumeric(activeItemSize) ?? 1.3
   }
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveAnimation(_ resolver: ExpressionResolver) -> Animation {
-    resolver.resolveStringBasedValue(expression: animation, initializer: Animation.init(rawValue:)) ?? Animation.scale
+    resolver.resolveEnum(animation) ?? Animation.scale
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveInactiveItemColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: inactiveItemColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x33919CB5)
+    resolver.resolveColor(inactiveItemColor) ?? Color.colorWithARGBHexCode(0x33919CB5)
   }
 
   public func resolveMinimumItemSize(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: minimumItemSize) ?? 0.5
+    resolver.resolveNumeric(minimumItemSize) ?? 0.5
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let activeItemSizeValidator: AnyValueValidator<Double> =

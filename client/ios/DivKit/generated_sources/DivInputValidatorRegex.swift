@@ -12,15 +12,15 @@ public final class DivInputValidatorRegex {
   public let variable: String
 
   public func resolveAllowEmpty(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: allowEmpty) ?? false
+    resolver.resolveNumeric(allowEmpty) ?? false
   }
 
   public func resolveLabelId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: labelId, initializer: { $0 })
+    resolver.resolveString(labelId, initializer: { $0 })
   }
 
   public func resolvePattern(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: pattern, initializer: { $0 })
+    resolver.resolveString(pattern, initializer: { $0 })
   }
 
   init(

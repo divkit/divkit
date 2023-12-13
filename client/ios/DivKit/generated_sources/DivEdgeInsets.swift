@@ -14,31 +14,31 @@ public final class DivEdgeInsets {
   public let unit: Expression<DivSizeUnit> // default value: dp
 
   public func resolveBottom(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: bottom) ?? 0
+    resolver.resolveNumeric(bottom) ?? 0
   }
 
   public func resolveEnd(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: end)
+    resolver.resolveNumeric(end)
   }
 
   public func resolveLeft(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: left) ?? 0
+    resolver.resolveNumeric(left) ?? 0
   }
 
   public func resolveRight(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: right) ?? 0
+    resolver.resolveNumeric(right) ?? 0
   }
 
   public func resolveStart(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: start)
+    resolver.resolveNumeric(start)
   }
 
   public func resolveTop(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: top) ?? 0
+    resolver.resolveNumeric(top) ?? 0
   }
 
   public func resolveUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(expression: unit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.dp
+    resolver.resolveEnum(unit) ?? DivSizeUnit.dp
   }
 
   static let bottomValidator: AnyValueValidator<Int> =

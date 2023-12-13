@@ -9,7 +9,7 @@ public final class StringValue {
   public let value: Expression<String>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: value, initializer: { $0 })
+    resolver.resolveString(value, initializer: { $0 })
   }
 
   init(

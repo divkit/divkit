@@ -19,35 +19,35 @@ public final class EntityWithSimpleProperties: EntityProtocol {
   public let url: Expression<URL>?
 
   public func resolveBoolean(_ resolver: ExpressionResolver) -> Bool? {
-    resolver.resolveNumericValue(expression: boolean)
+    resolver.resolveNumeric(boolean)
   }
 
   public func resolveBooleanInt(_ resolver: ExpressionResolver) -> Bool? {
-    resolver.resolveNumericValue(expression: booleanInt)
+    resolver.resolveNumeric(booleanInt)
   }
 
   public func resolveColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:))
+    resolver.resolveColor(color)
   }
 
   public func resolveDouble(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: double)
+    resolver.resolveNumeric(double)
   }
 
   public func resolveInteger(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: integer) ?? 0
+    resolver.resolveNumeric(integer) ?? 0
   }
 
   public func resolvePositiveInteger(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: positiveInteger)
+    resolver.resolveNumeric(positiveInteger)
   }
 
   public func resolveString(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: string, initializer: { $0 })
+    resolver.resolveString(string, initializer: { $0 })
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
+    resolver.resolveUrl(url)
   }
 
   static let positiveIntegerValidator: AnyValueValidator<Int> =

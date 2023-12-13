@@ -26,7 +26,7 @@ public final class DivData {
   public let variables: [DivVariable]?
 
   public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver) -> DivTransitionSelector {
-    resolver.resolveStringBasedValue(expression: transitionAnimationSelector, initializer: DivTransitionSelector.init(rawValue:)) ?? DivTransitionSelector.none
+    resolver.resolveEnum(transitionAnimationSelector) ?? DivTransitionSelector.none
   }
 
   static let statesValidator: AnyArrayValueValidator<DivData.State> =

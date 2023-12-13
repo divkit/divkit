@@ -11,7 +11,7 @@ public final class DivAction {
     public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
+      resolver.resolveString(text, initializer: { $0 })
     }
 
     init(
@@ -36,19 +36,19 @@ public final class DivAction {
   public let url: Expression<URL>?
 
   public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: isEnabled) ?? true
+    resolver.resolveNumeric(isEnabled) ?? true
   }
 
   public func resolveLogUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: logUrl, initializer: URL.init(string:))
+    resolver.resolveUrl(logUrl)
   }
 
   public func resolveReferer(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: referer, initializer: URL.init(string:))
+    resolver.resolveUrl(referer)
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:))
+    resolver.resolveUrl(url)
   }
 
   init(

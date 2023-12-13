@@ -11,7 +11,7 @@ public final class EntityWithArrayWithTransform {
   public let array: [Expression<Color>] // at least 1 elements
 
   public func resolveArray(_ resolver: ExpressionResolver) -> [Color]? {
-    array.map { resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:)) }.compactMap { $0 }
+    array.map { resolver.resolveColor($0) }.compactMap { $0 }
   }
 
   static let arrayValidator: AnyArrayValueValidator<Expression<Color>> =

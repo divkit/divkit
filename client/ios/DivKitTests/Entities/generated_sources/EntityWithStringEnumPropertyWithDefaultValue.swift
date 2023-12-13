@@ -18,7 +18,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValue {
   public let value: Expression<Value> // default value: second
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Value {
-    resolver.resolveStringBasedValue(expression: value, initializer: Value.init(rawValue:)) ?? Value.second
+    resolver.resolveEnum(value) ?? Value.second
   }
 
   init(

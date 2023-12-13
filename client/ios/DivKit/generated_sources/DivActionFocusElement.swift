@@ -9,7 +9,7 @@ public final class DivActionFocusElement {
   public let elementId: Expression<String>
 
   public func resolveElementId(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: elementId, initializer: { $0 })
+    resolver.resolveString(elementId, initializer: { $0 })
   }
 
   init(

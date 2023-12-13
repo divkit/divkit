@@ -16,11 +16,11 @@ public final class DivTrigger {
   public let mode: Expression<Mode> // default value: on_condition
 
   public func resolveCondition(_ resolver: ExpressionResolver) -> Bool? {
-    resolver.resolveNumericValue(expression: condition)
+    resolver.resolveNumeric(condition)
   }
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.onCondition
+    resolver.resolveEnum(mode) ?? Mode.onCondition
   }
 
   static let actionsValidator: AnyArrayValueValidator<DivAction> =

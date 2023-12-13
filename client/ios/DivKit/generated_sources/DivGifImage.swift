@@ -47,55 +47,55 @@ public final class DivGifImage: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.center
+    resolver.resolveEnum(contentAlignmentHorizontal) ?? DivAlignmentHorizontal.center
   }
 
   public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
+    resolver.resolveEnum(contentAlignmentVertical) ?? DivAlignmentVertical.center
   }
 
   public func resolveGifUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: gifUrl, initializer: URL.init(string:))
+    resolver.resolveUrl(gifUrl)
   }
 
   public func resolvePlaceholderColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(expression: placeholderColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x14000000)
+    resolver.resolveColor(placeholderColor) ?? Color.colorWithARGBHexCode(0x14000000)
   }
 
   public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: preloadRequired) ?? false
+    resolver.resolveNumeric(preloadRequired) ?? false
   }
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: preview, initializer: { $0 })
+    resolver.resolveString(preview, initializer: { $0 })
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveScale(_ resolver: ExpressionResolver) -> DivImageScale {
-    resolver.resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ?? DivImageScale.fill
+    resolver.resolveEnum(scale) ?? DivImageScale.fill
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

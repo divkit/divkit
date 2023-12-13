@@ -9,7 +9,7 @@ public final class DivMatchParentSize {
   public let weight: Expression<Double>? // constraint: number > 0
 
   public func resolveWeight(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: weight)
+    resolver.resolveNumeric(weight)
   }
 
   static let weightValidator: AnyValueValidator<Double> =

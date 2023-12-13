@@ -9,7 +9,7 @@ public final class DivBlur {
   public let radius: Expression<Int> // constraint: number >= 0
 
   public func resolveRadius(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: radius)
+    resolver.resolveNumeric(radius)
   }
 
   static let radiusValidator: AnyValueValidator<Int> =

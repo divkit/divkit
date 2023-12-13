@@ -27,11 +27,11 @@ public final class DivTooltip {
   public let position: Expression<Position>
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: duration) ?? 5000
+    resolver.resolveNumeric(duration) ?? 5000
   }
 
   public func resolvePosition(_ resolver: ExpressionResolver) -> Position? {
-    resolver.resolveStringBasedValue(expression: position, initializer: Position.init(rawValue:))
+    resolver.resolveEnum(position)
   }
 
   static let durationValidator: AnyValueValidator<Int> =

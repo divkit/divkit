@@ -11,7 +11,7 @@ public final class EntityWithRawArray {
   public let array: Expression<[Any]>
 
   public func resolveArray(_ resolver: ExpressionResolver) -> [Any]? {
-    resolver.resolveArrayValue(expression: array)
+    resolver.resolveArray(array)
   }
 
   init(

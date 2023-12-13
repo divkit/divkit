@@ -48,47 +48,47 @@ public final class DivVideo: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
+    resolver.resolveEnum(alignmentHorizontal)
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
+    resolver.resolveEnum(alignmentVertical)
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 1.0
+    resolver.resolveNumeric(alpha) ?? 1.0
   }
 
   public func resolveAutostart(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: autostart) ?? false
+    resolver.resolveNumeric(autostart) ?? false
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: columnSpan)
+    resolver.resolveNumeric(columnSpan)
   }
 
   public func resolveMuted(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: muted) ?? false
+    resolver.resolveNumeric(muted) ?? false
   }
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
-    resolver.resolveStringBasedValue(expression: preview, initializer: { $0 })
+    resolver.resolveString(preview, initializer: { $0 })
   }
 
   public func resolveRepeatable(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumericValue(expression: repeatable) ?? false
+    resolver.resolveNumeric(repeatable) ?? false
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: rowSpan)
+    resolver.resolveNumeric(rowSpan)
   }
 
   public func resolveScale(_ resolver: ExpressionResolver) -> DivVideoScale {
-    resolver.resolveStringBasedValue(expression: scale, initializer: DivVideoScale.init(rawValue:)) ?? DivVideoScale.fit
+    resolver.resolveEnum(scale) ?? DivVideoScale.fit
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
+    resolver.resolveEnum(visibility) ?? DivVisibility.visible
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

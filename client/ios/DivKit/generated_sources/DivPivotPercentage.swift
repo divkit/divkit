@@ -9,7 +9,7 @@ public final class DivPivotPercentage {
   public let value: Expression<Double>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Double? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   init(

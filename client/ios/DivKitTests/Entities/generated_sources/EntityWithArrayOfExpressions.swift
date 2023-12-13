@@ -11,7 +11,7 @@ public final class EntityWithArrayOfExpressions {
   public let items: [Expression<String>] // at least 1 elements
 
   public func resolveItems(_ resolver: ExpressionResolver) -> [String]? {
-    items.map { resolver.resolveStringBasedValue(expression: $0, initializer: { $0 }) }.compactMap { $0 }
+    items.map { resolver.resolveString($0, initializer: { $0 }) }.compactMap { $0 }
   }
 
   static let itemsValidator: AnyArrayValueValidator<Expression<String>> =

@@ -12,19 +12,19 @@ public final class DivFadeTransition: DivTransitionBase {
   public let startDelay: Expression<Int> // constraint: number >= 0; default value: 0
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
-    resolver.resolveNumericValue(expression: alpha) ?? 0.0
+    resolver.resolveNumeric(alpha) ?? 0.0
   }
 
   public func resolveDuration(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: duration) ?? 200
+    resolver.resolveNumeric(duration) ?? 200
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.easeInOut
+    resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: startDelay) ?? 0
+    resolver.resolveNumeric(startDelay) ?? 0
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

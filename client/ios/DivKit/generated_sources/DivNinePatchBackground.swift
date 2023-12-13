@@ -10,7 +10,7 @@ public final class DivNinePatchBackground {
   public let insets: DivAbsoluteEdgeInsets
 
   public func resolveImageUrl(_ resolver: ExpressionResolver) -> URL? {
-    resolver.resolveStringBasedValue(expression: imageUrl, initializer: URL.init(string:))
+    resolver.resolveUrl(imageUrl)
   }
 
   init(

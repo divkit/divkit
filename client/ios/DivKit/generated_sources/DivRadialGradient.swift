@@ -12,7 +12,7 @@ public final class DivRadialGradient {
   public let radius: DivRadialGradientRadius // default value: .divRadialGradientRelativeRadius(DivRadialGradientRelativeRadius(value: .value(.farthestCorner)))
 
   public func resolveColors(_ resolver: ExpressionResolver) -> [Color]? {
-    colors.map { resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:)) }.compactMap { $0 }
+    colors.map { resolver.resolveColor($0) }.compactMap { $0 }
   }
 
   static let colorsValidator: AnyArrayValueValidator<Expression<Color>> =

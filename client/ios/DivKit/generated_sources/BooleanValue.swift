@@ -9,7 +9,7 @@ public final class BooleanValue {
   public let value: Expression<Bool>
 
   public func resolveValue(_ resolver: ExpressionResolver) -> Bool? {
-    resolver.resolveNumericValue(expression: value)
+    resolver.resolveNumeric(value)
   }
 
   init(

@@ -13,15 +13,15 @@ public final class EntityWithPropertyWithDefaultValue {
     public let url: Expression<URL> // valid schemes: [https]; default value: https://yandex.ru
 
     public func resolveInt(_ resolver: ExpressionResolver) -> Int {
-      resolver.resolveNumericValue(expression: int) ?? 0
+      resolver.resolveNumeric(int) ?? 0
     }
 
     public func resolveNonOptional(_ resolver: ExpressionResolver) -> String? {
-      resolver.resolveStringBasedValue(expression: nonOptional, initializer: { $0 })
+      resolver.resolveString(nonOptional, initializer: { $0 })
     }
 
     public func resolveUrl(_ resolver: ExpressionResolver) -> URL {
-      resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:)) ?? URL(string: "https://yandex.ru")!
+      resolver.resolveUrl(url) ?? URL(string: "https://yandex.ru")!
     }
 
     static let intValidator: AnyValueValidator<Int> =
@@ -47,11 +47,11 @@ public final class EntityWithPropertyWithDefaultValue {
   public let url: Expression<URL> // valid schemes: [https]; default value: https://yandex.ru
 
   public func resolveInt(_ resolver: ExpressionResolver) -> Int {
-    resolver.resolveNumericValue(expression: int) ?? 0
+    resolver.resolveNumeric(int) ?? 0
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL {
-    resolver.resolveStringBasedValue(expression: url, initializer: URL.init(string:)) ?? URL(string: "https://yandex.ru")!
+    resolver.resolveUrl(url) ?? URL(string: "https://yandex.ru")!
   }
 
   static let intValidator: AnyValueValidator<Int> =

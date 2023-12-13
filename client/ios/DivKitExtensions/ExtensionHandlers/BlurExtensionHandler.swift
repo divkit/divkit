@@ -28,7 +28,7 @@ extension DivBase {
       return nil
     }
 
-    if let blur: InternalBlurEffect = expressionResolver.resolveEnum(expression: styleExpression) {
+    if let blur: InternalBlurEffect = expressionResolver.resolveEnum(styleExpression) {
       return BlurEffect(internalBlurEffect: blur)
     }
 
