@@ -123,9 +123,6 @@ public final class ContainerBlock: BlockWithLayout {
     clipContent: Bool = true,
     accessibilityElement: AccessibilityElement? = nil
   ) throws {
-    if children.isEmpty {
-      throw BlockError("Container block error: no children provided")
-    }
     let gaps = gaps ?? Array(repeating: 0, times: try! UInt(value: children.count + 1))
 
     if gaps.count != children.count + 1 {

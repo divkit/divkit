@@ -30,22 +30,6 @@ final class DivContainerExtensionsTests: XCTestCase {
     XCTAssertEqual(block?.actions, Expected.setStateActions)
   }
 
-  func test_WhenCantBuildBlockForItems_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "invalid_items"),
-      DivBlockModelingError(
-        "DivContainer is empty",
-        path: .root + "container",
-        causes: [
-          DivBlockModelingError(
-            "DivImage without aspect has wrap_content height",
-            path: .root + "container" + "0"
-          ),
-        ]
-      )
-    )
-  }
-
   func test_AddsIndexedParentPathToItems() throws {
     let block = try makeBlock(
       fromFile: "item_with_action"

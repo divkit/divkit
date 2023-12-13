@@ -73,15 +73,8 @@ extension DivContainer: DivBlockModeling {
         )
       }
     )
-    if children.isEmpty {
-      throw DivBlockModelingError(
-        "DivContainer is empty",
-        path: context.parentPath,
-        causes: childrenContext.errorsStorage.errors
-      )
-    } else {
-      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
-    }
+
+    context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
 
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let layeredBlock = LayeredBlock(
@@ -171,15 +164,7 @@ extension DivContainer: DivBlockModeling {
       }
     )
 
-    if children.isEmpty {
-      throw DivBlockModelingError(
-        "DivContainer is empty",
-        path: context.parentPath,
-        causes: childrenContext.errorsStorage.errors
-      )
-    } else {
-      context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
-    }
+    context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
 
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
     let containerBlock = try ContainerBlock(

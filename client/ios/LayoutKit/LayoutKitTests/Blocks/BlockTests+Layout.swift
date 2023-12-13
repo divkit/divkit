@@ -450,13 +450,6 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, 0)
   }
 
-  func test_WhenMakingContainerWithNoChildren_Throws() {
-    XCTAssertThrowsError(
-      try ContainerBlock(layoutDirection: .horizontal, children: []),
-      BlockError("Container block error: no children provided")
-    )
-  }
-
   func test_WhenMakingContainerWithWrongNumberOfGaps_Throws() {
     XCTAssertThrowsError(
       try ContainerBlock(
