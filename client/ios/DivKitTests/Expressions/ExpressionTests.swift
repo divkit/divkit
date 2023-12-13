@@ -6,89 +6,34 @@ import CommonCorePublic
 
 final class ExpressionTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
-    let files = [
-      "functions_arithmetic_integer",
-      "functions_arithmetic_number",
-      "functions_array",
-      "functions_color_argb",
-      "functions_color_getters",
-      "functions_color_setters",
-      "functions_comparison_integer",
-      "functions_comparison_number",
-      "functions_datetime",
-      "functions_dict",
-      "functions_interval",
-      "functions_stored_values",
-      "functions_string",
-      "functions_to_boolean",
-      "functions_to_color",
-      "functions_to_integer",
-      "functions_to_number",
-      "functions_to_string",
-      "functions_to_url",
-      "functions_unsupported",
-      "functions_variables",
-      "literals_boolean",
-      "literals_integer",
-      "literals_number",
-      "literals_number_scientific",
-      "literals_string",
-//      "operations_comparison_boolean",
-      "operations_comparison_datetime",
-      "operations_comparison_integer",
-      "operations_comparison_number",
-//      "operations_comparison_with_different_types",
-      "operations_div_integer",
-      "operations_div_number",
-      "operations_equality_boolean",
-      "operations_equality_color",
-      "operations_equality_datetime",
-      "operations_equality_integer",
-      "operations_equality_number",
-      "operations_equality_string",
-      "operations_equality_url",
-//      "operations_equality_with_different_types",
-      "operations_logical_boolean",
-      "operations_logical_with_different_types",
-      "operations_mod_integer",
-      "operations_mod_number",
-      "operations_mul_integer",
-      "operations_mul_number",
-      "operations_sub_integer",
-      "operations_sub_number",
-      "operations_sum_integer",
-      "operations_sum_number",
-//      "operations_sum_string",
-      "operations_ternary",
-//      "operations_try",
-//      "operations_unsupported",
-      "operations_unsupported_datetime",
-      "string_escape",
-      "string_regex",
-      "string_templates",
-//      "variables_names",
-//      "variables_values",
-      "whitespace",
-    ]
-
-    var testCases: [(name: String, data: ExpressionTestCase)] = []
-    try! files.forEach { fileName in
-      try makeTestCases(fileName: fileName).forEach {
-        testCases.append(("\(fileName): \($0.name)", $0))
-      }
-    }
-
-    return makeSuite(input: testCases, test: runTest)
+    makeSuite(input: makeTestCases(), test: runTest)
   }
 }
 
-private func makeTestCases(fileName: String) throws -> [ExpressionTestCase] {
-  let url = Bundle(for: DivKitTests.self)
-    .url(forResource: fileName, withExtension: "json", subdirectory: "expression_test_data")!
-  return try JSONDecoder()
-    .decode(TestCases.self, from: Data(contentsOf: url))
-    .cases
-    .filter { $0.platforms.contains(.ios) }
+private let excludedFiles = [
+  "operations_comparison_boolean.json",
+  "operations_comparison_with_different_types.json",
+  "operations_equality_with_different_types.json",
+  "operations_sum_string.json",
+  "operations_try.json",
+  "operations_unsuppported.json",
+  "variables_names.json",
+  "variables_values.json",
+]
+
+private func makeTestCases() -> [(String, ExpressionTestCase)] {
+  try! Bundle(for: DivKitTests.self)
+    .urls(forResourcesWithExtension: "json", subdirectory: "expression_test_data")!
+    .filter { !excludedFiles.contains($0.lastPathComponent) }
+    .flatMap { url in
+      let fileName = url.lastPathComponent
+      let testCases = try JSONDecoder()
+        .decode(TestCases.self, from: Data(contentsOf: url))
+        .cases ?? []
+      return testCases
+        .filter { $0.platforms.contains(.ios) }
+        .map { ("\(fileName): \($0.name)", $0) }
+    }
 }
 
 private func runTest(_ testCase: ExpressionTestCase) {
@@ -118,7 +63,7 @@ private func runTest(_ testCase: ExpressionTestCase) {
 }
 
 private struct TestCases: Decodable {
-  let cases: [ExpressionTestCase]
+  let cases: [ExpressionTestCase]?
 }
 
 private struct ExpressionTestCase: Decodable {
