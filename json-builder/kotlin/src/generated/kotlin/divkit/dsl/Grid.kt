@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [grid].
  * 
- * Required parameters: `type, items, column_count`.
+ * Required parameters: `type, column_count`.
  */
 @Generated
 class Grid internal constructor(

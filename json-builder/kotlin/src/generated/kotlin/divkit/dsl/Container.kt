@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [container].
  * 
- * Required parameters: `type, items`.
+ * Required parameters: `type`.
  */
 @Generated
 class Container internal constructor(
@@ -47,6 +47,7 @@ class Container internal constructor(
             aspect = additive.aspect ?: properties.aspect,
             background = additive.background ?: properties.background,
             border = additive.border ?: properties.border,
+            clipToBounds = additive.clipToBounds ?: properties.clipToBounds,
             columnSpan = additive.columnSpan ?: properties.columnSpan,
             contentAlignmentHorizontal = additive.contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
             contentAlignmentVertical = additive.contentAlignmentVertical ?: properties.contentAlignmentVertical,
@@ -56,6 +57,7 @@ class Container internal constructor(
             focus = additive.focus ?: properties.focus,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
             lineSeparator = additive.lineSeparator ?: properties.lineSeparator,
@@ -128,6 +130,11 @@ class Container internal constructor(
          */
         val border: Property<Border>?,
         /**
+         * Parameter that determines whether child elements are bounded by the parent's boundaries.
+         * Default value: `true`.
+         */
+        val clipToBounds: Property<Boolean>?,
+        /**
          * Merges cells in a column of the [grid](div-grid.md) element.
          */
         val columnSpan: Property<Int>?,
@@ -166,6 +173,10 @@ class Container internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * A way to set collection items dynamically using data and prototypes.
+         */
+        val itemBuilder: Property<CollectionItemBuilder>?,
         /**
          * Nested elements.
          */
@@ -260,6 +271,7 @@ class Container internal constructor(
             result.tryPutProperty("aspect", aspect)
             result.tryPutProperty("background", background)
             result.tryPutProperty("border", border)
+            result.tryPutProperty("clip_to_bounds", clipToBounds)
             result.tryPutProperty("column_span", columnSpan)
             result.tryPutProperty("content_alignment_horizontal", contentAlignmentHorizontal)
             result.tryPutProperty("content_alignment_vertical", contentAlignmentVertical)
@@ -269,6 +281,7 @@ class Container internal constructor(
             result.tryPutProperty("focus", focus)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
             result.tryPutProperty("line_separator", lineSeparator)
@@ -383,6 +396,7 @@ class Container internal constructor(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -392,6 +406,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -426,6 +441,7 @@ fun DivScope.row(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -435,6 +451,7 @@ fun DivScope.row(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -465,6 +482,7 @@ fun DivScope.row(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -474,6 +492,7 @@ fun DivScope.row(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -507,6 +526,7 @@ fun DivScope.row(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -516,6 +536,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -550,6 +571,7 @@ fun DivScope.row(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -559,6 +581,7 @@ fun DivScope.row(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -589,6 +612,7 @@ fun DivScope.row(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -598,6 +622,7 @@ fun DivScope.row(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -631,6 +656,7 @@ fun DivScope.row(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -640,6 +666,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -674,6 +701,7 @@ fun DivScope.column(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -683,6 +711,7 @@ fun DivScope.column(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -713,6 +742,7 @@ fun DivScope.column(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -722,6 +752,7 @@ fun DivScope.column(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -755,6 +786,7 @@ fun DivScope.column(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -764,6 +796,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -798,6 +831,7 @@ fun DivScope.column(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -807,6 +841,7 @@ fun DivScope.column(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -837,6 +872,7 @@ fun DivScope.column(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -846,6 +882,7 @@ fun DivScope.column(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -879,6 +916,7 @@ fun DivScope.column(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -888,6 +926,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -922,6 +961,7 @@ fun DivScope.stack(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -931,6 +971,7 @@ fun DivScope.stack(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -961,6 +1002,7 @@ fun DivScope.stack(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -970,6 +1012,7 @@ fun DivScope.stack(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items.toList(),
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -1003,6 +1046,7 @@ fun DivScope.stack(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1012,6 +1056,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1046,6 +1091,7 @@ fun DivScope.stack(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -1055,6 +1101,7 @@ fun DivScope.stack(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
@@ -1085,6 +1132,7 @@ fun DivScope.stack(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -1094,6 +1142,7 @@ fun DivScope.stack(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -1128,6 +1177,7 @@ fun DivScope.stack(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1137,6 +1187,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1171,6 +1222,7 @@ fun DivScope.container(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -1180,6 +1232,7 @@ fun DivScope.container(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
@@ -1212,6 +1265,7 @@ fun DivScope.container(
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
@@ -1221,6 +1275,7 @@ fun DivScope.container(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         lineSeparator = valueOrNull(lineSeparator),
@@ -1256,6 +1311,7 @@ fun DivScope.container(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1265,6 +1321,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1299,6 +1356,7 @@ fun DivScope.containerProps(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -1308,6 +1366,7 @@ fun DivScope.containerProps(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
@@ -1339,6 +1398,7 @@ fun DivScope.containerProps(
     aspect = valueOrNull(aspect),
     background = valueOrNull(background),
     border = valueOrNull(border),
+    clipToBounds = valueOrNull(clipToBounds),
     columnSpan = valueOrNull(columnSpan),
     contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
     contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
@@ -1348,6 +1408,7 @@ fun DivScope.containerProps(
     focus = valueOrNull(focus),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    itemBuilder = valueOrNull(itemBuilder),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
     lineSeparator = valueOrNull(lineSeparator),
@@ -1382,6 +1443,7 @@ fun DivScope.containerProps(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1391,6 +1453,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1425,6 +1488,7 @@ fun TemplateScope.containerRefs(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
@@ -1434,6 +1498,7 @@ fun TemplateScope.containerRefs(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
@@ -1465,6 +1530,7 @@ fun TemplateScope.containerRefs(
     aspect = aspect,
     background = background,
     border = border,
+    clipToBounds = clipToBounds,
     columnSpan = columnSpan,
     contentAlignmentHorizontal = contentAlignmentHorizontal,
     contentAlignmentVertical = contentAlignmentVertical,
@@ -1474,6 +1540,7 @@ fun TemplateScope.containerRefs(
     focus = focus,
     height = height,
     id = id,
+    itemBuilder = itemBuilder,
     items = items,
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
@@ -1508,6 +1575,7 @@ fun TemplateScope.containerRefs(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1517,6 +1585,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1551,6 +1620,7 @@ fun Container.override(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -1560,6 +1630,7 @@ fun Container.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
@@ -1592,6 +1663,7 @@ fun Container.override(
         aspect = valueOrNull(aspect) ?: properties.aspect,
         background = valueOrNull(background) ?: properties.background,
         border = valueOrNull(border) ?: properties.border,
+        clipToBounds = valueOrNull(clipToBounds) ?: properties.clipToBounds,
         columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
@@ -1601,6 +1673,7 @@ fun Container.override(
         focus = valueOrNull(focus) ?: properties.focus,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
         lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
@@ -1636,6 +1709,7 @@ fun Container.override(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1645,6 +1719,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1679,6 +1754,7 @@ fun Container.defer(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
@@ -1688,6 +1764,7 @@ fun Container.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
@@ -1720,6 +1797,7 @@ fun Container.defer(
         aspect = aspect ?: properties.aspect,
         background = background ?: properties.background,
         border = border ?: properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
@@ -1729,6 +1807,7 @@ fun Container.defer(
         focus = focus ?: properties.focus,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        itemBuilder = itemBuilder ?: properties.itemBuilder,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         lineSeparator = lineSeparator ?: properties.lineSeparator,
@@ -1756,6 +1835,7 @@ fun Container.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1770,6 +1850,7 @@ fun Container.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
@@ -1789,6 +1870,7 @@ fun Container.evaluate(
         aspect = properties.aspect,
         background = properties.background,
         border = properties.border,
+        clipToBounds = clipToBounds ?: properties.clipToBounds,
         columnSpan = columnSpan ?: properties.columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
@@ -1798,6 +1880,7 @@ fun Container.evaluate(
         focus = properties.focus,
         height = properties.height,
         id = properties.id,
+        itemBuilder = properties.itemBuilder,
         items = properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
         lineSeparator = properties.lineSeparator,
@@ -1833,6 +1916,7 @@ fun Container.evaluate(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1842,6 +1926,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -1876,6 +1961,7 @@ fun Component<Container>.override(
     aspect: Aspect? = null,
     background: List<Background>? = null,
     border: Border? = null,
+    clipToBounds: Boolean? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: ContentAlignmentHorizontal? = null,
     contentAlignmentVertical: ContentAlignmentVertical? = null,
@@ -1885,6 +1971,7 @@ fun Component<Container>.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
+    itemBuilder: CollectionItemBuilder? = null,
     items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
@@ -1918,6 +2005,7 @@ fun Component<Container>.override(
         aspect = valueOrNull(aspect),
         background = valueOrNull(background),
         border = valueOrNull(border),
+        clipToBounds = valueOrNull(clipToBounds),
         columnSpan = valueOrNull(columnSpan),
         contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
         contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
@@ -1927,6 +2015,7 @@ fun Component<Container>.override(
         focus = valueOrNull(focus),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        itemBuilder = valueOrNull(itemBuilder),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
         lineSeparator = valueOrNull(lineSeparator),
@@ -1962,6 +2051,7 @@ fun Component<Container>.override(
 On the web, support for the `aspect-ratio` CSS property is required to use this parameter.
  * @param background Element background. It can contain multiple layers.
  * @param border Element stroke.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -1971,6 +2061,7 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param focus Parameters when focusing on an element or losing focus.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param itemBuilder A way to set collection items dynamically using data and prototypes.
  * @param items Nested elements.
  * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
@@ -2005,6 +2096,7 @@ fun Component<Container>.defer(
     aspect: ReferenceProperty<Aspect>? = null,
     background: ReferenceProperty<List<Background>>? = null,
     border: ReferenceProperty<Border>? = null,
+    clipToBounds: ReferenceProperty<Boolean>? = null,
     columnSpan: ReferenceProperty<Int>? = null,
     contentAlignmentHorizontal: ReferenceProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ReferenceProperty<ContentAlignmentVertical>? = null,
@@ -2014,6 +2106,7 @@ fun Component<Container>.defer(
     focus: ReferenceProperty<Focus>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
@@ -2047,6 +2140,7 @@ fun Component<Container>.defer(
         aspect = aspect,
         background = background,
         border = border,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
@@ -2056,6 +2150,7 @@ fun Component<Container>.defer(
         focus = focus,
         height = height,
         id = id,
+        itemBuilder = itemBuilder,
         items = items,
         layoutMode = layoutMode,
         lineSeparator = lineSeparator,
@@ -2083,6 +2178,7 @@ fun Component<Container>.defer(
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param clipToBounds Parameter that determines whether child elements are bounded by the parent's boundaries.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
  * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
@@ -2097,6 +2193,7 @@ fun Component<Container>.evaluate(
     alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    clipToBounds: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     contentAlignmentHorizontal: ExpressionProperty<ContentAlignmentHorizontal>? = null,
     contentAlignmentVertical: ExpressionProperty<ContentAlignmentVertical>? = null,
@@ -2117,6 +2214,7 @@ fun Component<Container>.evaluate(
         aspect = null,
         background = null,
         border = null,
+        clipToBounds = clipToBounds,
         columnSpan = columnSpan,
         contentAlignmentHorizontal = contentAlignmentHorizontal,
         contentAlignmentVertical = contentAlignmentVertical,
@@ -2126,6 +2224,7 @@ fun Component<Container>.evaluate(
         focus = null,
         height = null,
         id = null,
+        itemBuilder = null,
         items = null,
         layoutMode = layoutMode,
         lineSeparator = null,

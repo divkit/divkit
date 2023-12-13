@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [pager].
  * 
- * Required parameters: `type, layout_mode, items`.
+ * Required parameters: `type, layout_mode`.
  */
 @Generated
 class Pager internal constructor(

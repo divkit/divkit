@@ -58,7 +58,7 @@ class DistrictCardTest {
         val galleryTailActionLinkRef = reference<DivAction>("gallery_tail_action_link")
         val tailTextLinkRef = reference<String>("tail_text_link")
 
-        val templates = templates {
+        val templates = templates<Any> {
             define(
                 "title_text",
                 divText(

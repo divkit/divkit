@@ -30,7 +30,7 @@ class CardWithTemplatesTest {
     @Test
     fun renderCard() {
         val titleRef = reference<String>("title")
-        val templates = templates {
+        val templates = templates<Any> {
             define(
                 "title_text",
                 divText(

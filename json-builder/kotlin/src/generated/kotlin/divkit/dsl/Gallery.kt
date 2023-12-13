@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [gallery].
  * 
- * Required parameters: `type, items`.
+ * Required parameters: `type`.
  */
 @Generated
 class Gallery internal constructor(
