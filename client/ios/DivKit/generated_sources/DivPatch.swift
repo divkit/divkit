@@ -13,10 +13,7 @@ public final class DivPatch {
 
   public final class Change {
     public let id: String
-    public let items: [Div]? // at least 1 elements
-
-    static let itemsValidator: AnyArrayValueValidator<Div> =
-      makeArrayValidator(minItems: 1)
+    public let items: [Div]?
 
     init(
       id: String,

@@ -7,8 +7,8 @@ import Serialization
 public final class DivTextTemplate: TemplateValue {
   public final class EllipsisTemplate: TemplateValue {
     public let actions: Field<[DivActionTemplate]>?
-    public let images: Field<[ImageTemplate]>? // at least 1 elements
-    public let ranges: Field<[RangeTemplate]>? // at least 1 elements
+    public let images: Field<[ImageTemplate]>?
+    public let ranges: Field<[RangeTemplate]>?
     public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
@@ -38,8 +38,8 @@ public final class DivTextTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: EllipsisTemplate?) -> DeserializationResult<DivText.Ellipsis> {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-      let imagesValue = parent?.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true) ?? .noValue
-      let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
+      let imagesValue = parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+      let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       let textValue = parent?.text?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
@@ -77,17 +77,17 @@ public final class DivTextTemplate: TemplateValue {
         case "actions":
           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: actionsValue)
         case "images":
-          imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.imagesValidator, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
+          imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
         case "ranges":
-          rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
+          rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
         case "text":
           textValue = deserialize(__dictValue).merged(with: textValue)
         case parent?.actions?.link:
           actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
         case parent?.images?.link:
-          imagesValue = imagesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.imagesValidator, type: DivTextTemplate.ImageTemplate.self))
+          imagesValue = imagesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self))
         case parent?.ranges?.link:
-          rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self))
+          rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self))
         case parent?.text?.link:
           textValue = textValue.merged(with: deserialize(__dictValue))
         default: break
@@ -95,8 +95,8 @@ public final class DivTextTemplate: TemplateValue {
       }
       if let parent = parent {
         actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, useOnlyLinks: true))
-        imagesValue = imagesValue.merged(with: parent.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true))
-        rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
+        imagesValue = imagesValue.merged(with: parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true))
+        rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
@@ -652,7 +652,7 @@ public final class DivTextTemplate: TemplateValue {
   public let fontWeight: Field<Expression<DivFontWeight>>? // default value: regular
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
-  public let images: Field<[ImageTemplate]>? // at least 1 elements
+  public let images: Field<[ImageTemplate]>?
   public let letterSpacing: Field<Expression<Double>>? // default value: 0
   public let lineHeight: Field<Expression<Int>>? // constraint: number >= 0
   public let longtapActions: Field<[DivActionTemplate]>?
@@ -660,7 +660,7 @@ public final class DivTextTemplate: TemplateValue {
   public let maxLines: Field<Expression<Int>>? // constraint: number >= 0
   public let minHiddenLines: Field<Expression<Int>>? // constraint: number >= 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
-  public let ranges: Field<[RangeTemplate]>? // at least 1 elements
+  public let ranges: Field<[RangeTemplate]>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectable: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -882,7 +882,7 @@ public final class DivTextTemplate: TemplateValue {
     let fontWeightValue = parent?.fontWeight?.resolveOptionalValue(context: context) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
-    let imagesValue = parent?.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true) ?? .noValue
+    let imagesValue = parent?.images?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let letterSpacingValue = parent?.letterSpacing?.resolveOptionalValue(context: context) ?? .noValue
     let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -890,7 +890,7 @@ public final class DivTextTemplate: TemplateValue {
     let maxLinesValue = parent?.maxLines?.resolveOptionalValue(context: context, validator: ResolvedValue.maxLinesValidator) ?? .noValue
     let minHiddenLinesValue = parent?.minHiddenLines?.resolveOptionalValue(context: context, validator: ResolvedValue.minHiddenLinesValidator) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
+    let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectableValue = parent?.selectable?.resolveOptionalValue(context: context) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -1139,7 +1139,7 @@ public final class DivTextTemplate: TemplateValue {
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "images":
-        imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.imagesValidator, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
+        imagesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self).merged(with: imagesValue)
       case "letter_spacing":
         letterSpacingValue = deserialize(__dictValue).merged(with: letterSpacingValue)
       case "line_height":
@@ -1155,7 +1155,7 @@ public final class DivTextTemplate: TemplateValue {
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "ranges":
-        rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
+        rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self).merged(with: rangesValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selectable":
@@ -1245,7 +1245,7 @@ public final class DivTextTemplate: TemplateValue {
       case parent?.id?.link:
         idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.images?.link:
-        imagesValue = imagesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.imagesValidator, type: DivTextTemplate.ImageTemplate.self))
+        imagesValue = imagesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.ImageTemplate.self))
       case parent?.letterSpacing?.link:
         letterSpacingValue = letterSpacingValue.merged(with: deserialize(__dictValue))
       case parent?.lineHeight?.link:
@@ -1261,7 +1261,7 @@ public final class DivTextTemplate: TemplateValue {
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.ranges?.link:
-        rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivTextTemplate.RangeTemplate.self))
+        rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTextTemplate.RangeTemplate.self))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectable?.link:
@@ -1320,11 +1320,11 @@ public final class DivTextTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      imagesValue = imagesValue.merged(with: parent.images?.resolveOptionalValue(context: context, validator: ResolvedValue.imagesValidator, useOnlyLinks: true))
+      imagesValue = imagesValue.merged(with: parent.images?.resolveOptionalValue(context: context, useOnlyLinks: true))
       longtapActionsValue = longtapActionsValue.merged(with: parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
+      rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       textGradientValue = textGradientValue.merged(with: parent.textGradient?.resolveOptionalValue(context: context, useOnlyLinks: true))
       textShadowValue = textShadowValue.merged(with: parent.textShadow?.resolveOptionalValue(context: context, useOnlyLinks: true))

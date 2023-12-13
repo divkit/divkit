@@ -8,6 +8,7 @@ import com.yandex.div.core.images.DivImagePriority
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
@@ -94,21 +95,21 @@ class DivImagePreloader @Inject constructor(
         override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.items.forEach { visit(it, resolver) }
+                data.value.nonNullItems.forEach { visit(it, resolver) }
             }
         }
 
         override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.items.forEach { visit(it, resolver) }
+                data.value.nonNullItems.forEach { visit(it, resolver) }
             }
         }
 
         override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
             defaultVisit(data, resolver)
             if (visitContainers) {
-                data.value.items.forEach { visit(it, resolver) }
+                data.value.nonNullItems.forEach { visit(it, resolver) }
             }
         }
 

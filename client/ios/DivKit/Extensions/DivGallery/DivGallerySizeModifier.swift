@@ -15,9 +15,11 @@ struct DivGallerySizeModifier: DivSizeModifier {
     gallery: DivGalleryProtocol,
     direction: GalleryViewModel.Direction
   ) {
+    let items = gallery.nonNilItems
+    
     if direction == .vertical,
        gallery.getTransformedWidth(context).isIntrinsic,
-       gallery.items.allHorizontallyMatchParent {
+       items.allHorizontallyMatchParent {
       context.addWarning(
         message: "All items in vertical \(gallery.typeName) with wrap_content width has match_parent width"
       )
@@ -28,7 +30,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
 
     if direction == .horizontal,
        gallery.getTransformedHeight(context).isIntrinsic,
-       gallery.items.allVerticallyMatchParent {
+       items.allVerticallyMatchParent {
       context.addWarning(
         message: "All items in horizontal \(gallery.typeName) with wrap_content height has match_parent height"
       )

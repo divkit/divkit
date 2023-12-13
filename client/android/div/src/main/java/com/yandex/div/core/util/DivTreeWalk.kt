@@ -1,6 +1,7 @@
 package com.yandex.div.core.util
 
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
@@ -172,9 +173,9 @@ private fun Div.getItems(resolver: ExpressionResolver): List<Div> {
         is Div.Select -> emptyList()
         is Div.Video -> emptyList()
         is Div.Container -> value.buildItems(resolver)
-        is Div.Grid -> value.items
-        is Div.Gallery -> value.items
-        is Div.Pager -> value.items
+        is Div.Grid -> value.nonNullItems
+        is Div.Gallery -> value.nonNullItems
+        is Div.Pager -> value.nonNullItems
         is Div.Tabs -> value.items.map { tab -> tab.div }
         is Div.State -> value.states.mapNotNull { state -> state.div }
     }

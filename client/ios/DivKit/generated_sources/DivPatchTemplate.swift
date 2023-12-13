@@ -7,7 +7,7 @@ import Serialization
 public final class DivPatchTemplate: TemplateValue {
   public final class ChangeTemplate: TemplateValue {
     public let id: Field<String>?
-    public let items: Field<[DivTemplate]>? // at least 1 elements
+    public let items: Field<[DivTemplate]>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       do {
@@ -30,7 +30,7 @@ public final class DivPatchTemplate: TemplateValue {
 
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ChangeTemplate?) -> DeserializationResult<DivPatch.Change> {
       let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
-      let itemsValue = parent?.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+      let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
         itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
@@ -61,16 +61,16 @@ public final class DivPatchTemplate: TemplateValue {
         case "id":
           idValue = deserialize(__dictValue).merged(with: idValue)
         case "items":
-          itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
+          itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
         case parent?.id?.link:
           idValue = idValue.merged(with: deserialize(__dictValue))
         case parent?.items?.link:
-          itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
+          itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
         default: break
         }
       }
       if let parent = parent {
-        itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+        itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },

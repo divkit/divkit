@@ -40,7 +40,6 @@
       "items": {
         "$ref": "div-filter.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_filter"
     },
     "type": {

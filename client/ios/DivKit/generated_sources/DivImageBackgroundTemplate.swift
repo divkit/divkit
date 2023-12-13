@@ -10,7 +10,7 @@ public final class DivImageBackgroundTemplate: TemplateValue {
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let contentAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: center
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
-  public let filters: Field<[DivFilterTemplate]>? // at least 1 elements
+  public let filters: Field<[DivFilterTemplate]>?
   public let imageUrl: Field<Expression<URL>>?
   public let preloadRequired: Field<Expression<Bool>>? // default value: false
   public let scale: Field<Expression<DivImageScale>>? // default value: fill
@@ -56,7 +56,7 @@ public final class DivImageBackgroundTemplate: TemplateValue {
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
     let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context) ?? .noValue
-    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true) ?? .noValue
+    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
     let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context) ?? .noValue
@@ -109,7 +109,7 @@ public final class DivImageBackgroundTemplate: TemplateValue {
       case "content_alignment_vertical":
         contentAlignmentVerticalValue = deserialize(__dictValue).merged(with: contentAlignmentVerticalValue)
       case "filters":
-        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.filtersValidator, type: DivFilterTemplate.self).merged(with: filtersValue)
+        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).merged(with: filtersValue)
       case "image_url":
         imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
       case "preload_required":
@@ -123,7 +123,7 @@ public final class DivImageBackgroundTemplate: TemplateValue {
       case parent?.contentAlignmentVertical?.link:
         contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: deserialize(__dictValue))
       case parent?.filters?.link:
-        filtersValue = filtersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.filtersValidator, type: DivFilterTemplate.self))
+        filtersValue = filtersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self))
       case parent?.imageUrl?.link:
         imageUrlValue = imageUrlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
       case parent?.preloadRequired?.link:
@@ -134,7 +134,7 @@ public final class DivImageBackgroundTemplate: TemplateValue {
       }
     }
     if let parent = parent {
-      filtersValue = filtersValue.merged(with: parent.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true))
+      filtersValue = filtersValue.merged(with: parent.filters?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },

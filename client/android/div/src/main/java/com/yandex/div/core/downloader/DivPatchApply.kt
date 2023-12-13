@@ -10,6 +10,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -204,13 +205,16 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 )
 
             is DivGrid ->
-                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
+                currentDivValue.nonNullItems
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivGallery ->
-                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
+                currentDivValue.nonNullItems
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivPager ->
-                currentDivValue.items.pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
+                currentDivValue.nonNullItems
+                    .pathToChildWithId(idToFind, resolver, currentPath, builtByBuilder = false)
 
             is DivTabs -> {
                 if (currentDivValue.items.any { it.div.value().id == idToFind }) {
@@ -274,21 +278,33 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             }
 
             is DivGrid -> {
-                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                getPatchedDivCollection(
+                    currentDiv,
+                    currentDivValue.nonNullItems,
+                    pathIterator,
+                    resolver,
                     { Div.Grid(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
 
             is DivGallery -> {
-                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                getPatchedDivCollection(
+                    currentDiv,
+                    currentDivValue.nonNullItems,
+                    pathIterator,
+                    resolver,
                     { Div.Gallery(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )
             }
 
             is DivPager -> {
-                getPatchedDivCollection(currentDiv, currentDivValue.items, pathIterator, resolver,
+                getPatchedDivCollection(
+                    currentDiv,
+                    currentDivValue.nonNullItems,
+                    pathIterator,
+                    resolver,
                     { Div.Pager(currentDivValue.copyWithNewProperties(it)) },
                     { DivPatchApply(patch).applyPatch(currentDivValue, resolver) }
                 )

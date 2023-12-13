@@ -9,12 +9,16 @@ extension DivGrid: DivBlockModeling {
       actionsHolder: self
     )
   }
+  
+  var nonNilItems: [Div] {
+    items ?? []
+  }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let gridPath = context.parentPath + DivGrid.type
     let gridContext = context.modifying(parentPath: gridPath)
     let gridItemsContext = gridContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
-    let gridItems = items.enumerated().compactMap { tuple in
+    let gridItems = nonNilItems.enumerated().compactMap { tuple in
       let itemContext = gridItemsContext.modifying(
         parentPath: gridItemsContext.parentPath + tuple.offset
       )
@@ -27,7 +31,7 @@ extension DivGrid: DivBlockModeling {
         return nil
       }
     }
-    if items.count != gridItems.count {
+    if nonNilItems.count != gridItems.count {
       throw DivBlockModelingError(
         "Unable to form grid",
         path: gridPath,

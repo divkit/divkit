@@ -154,7 +154,6 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_ellipsis_ranges"
         },
         "images": {
@@ -162,7 +161,6 @@
           "items": {
             "$ref": "#/definitions/image"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_ellipsis_images"
         }
       },
@@ -288,7 +286,6 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_ranges"
         },
         "images": {
@@ -296,7 +293,6 @@
           "items": {
             "$ref": "#/definitions/image"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_text_images"
         },
         "ellipsis": {

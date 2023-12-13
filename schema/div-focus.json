@@ -7,7 +7,6 @@
       "items": {
         "$ref": "div-background.json"
       },
-      "minItems": 1,
       "$description": "translations.json#/div_focus_background"
     },
     "border": {

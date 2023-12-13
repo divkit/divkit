@@ -7,6 +7,7 @@ import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -123,7 +124,7 @@ class DivPagerBinderTest: DivBinderTest() {
 
         underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
-        verify(divView).bindViewToDiv(divPagerView.viewPager[0], divPager.items[DEFAULT_ITEM])
+        verify(divView).bindViewToDiv(divPagerView.viewPager[0], divPager.nonNullItems[DEFAULT_ITEM])
     }
 
     @Test

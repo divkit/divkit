@@ -33,6 +33,7 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.widget.makeUnspecifiedSpec
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.PageItemDecoration
@@ -83,9 +84,9 @@ internal class DivPagerBinder @Inject constructor(
 
         val pageTranslations = SparseArray<Float>()
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
-        var divItems = div.items
+        var divItems = div.nonNullItems
         if (div.infiniteScroll.evaluate(resolver)) {
-            divItems = ArrayList(div.items)
+            divItems = ArrayList(divItems)
             val firstItem = divItems.first()
             val lastItem = divItems.last()
             divItems.add(0, lastItem)

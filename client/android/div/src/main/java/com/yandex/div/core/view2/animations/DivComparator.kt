@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.animations
 
 import com.yandex.div.core.view2.divs.isWrapContainer
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -79,7 +80,7 @@ internal object DivComparator {
     private fun extractChildren(div: Div, resolver: ExpressionResolver): List<Div> {
         return when (div) {
             is Div.Container -> div.value.buildItems(resolver)
-            is Div.Grid -> div.value.items
+            is Div.Grid -> div.value.nonNullItems
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()
             is Div.Text -> emptyList()

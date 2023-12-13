@@ -23,7 +23,7 @@ public final class DivImage: DivBase {
   public let disappearActions: [DivDisappearAction]?
   public let doubletapActions: [DivAction]?
   public let extensions: [DivExtension]?
-  public let filters: [DivFilter]? // at least 1 elements
+  public let filters: [DivFilter]?
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Expression<Bool> // default value: false
@@ -120,9 +120,6 @@ public final class DivImage: DivBase {
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let filtersValidator: AnyArrayValueValidator<DivFilter> =
-    makeArrayValidator(minItems: 1)
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

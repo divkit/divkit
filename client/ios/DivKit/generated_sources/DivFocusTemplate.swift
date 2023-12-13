@@ -119,7 +119,7 @@ public final class DivFocusTemplate: TemplateValue {
     }
   }
 
-  public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
+  public let background: Field<[DivBackgroundTemplate]>?
   public let border: Field<DivBorderTemplate>?
   public let nextFocusIds: Field<NextFocusIdsTemplate>?
   public let onBlur: Field<[DivActionTemplate]>?
@@ -150,7 +150,7 @@ public final class DivFocusTemplate: TemplateValue {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivFocusTemplate?) -> DeserializationResult<DivFocus> {
-    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
+    let backgroundValue = parent?.background?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let nextFocusIdsValue = parent?.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let onBlurValue = parent?.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -184,7 +184,7 @@ public final class DivFocusTemplate: TemplateValue {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "background":
-        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
+        backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
         borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).merged(with: borderValue)
       case "next_focus_ids":
@@ -194,7 +194,7 @@ public final class DivFocusTemplate: TemplateValue {
       case "on_focus":
         onFocusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: onFocusValue)
       case parent?.background?.link:
-        backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self))
+        backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self))
       case parent?.border?.link:
         borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self))
       case parent?.nextFocusIds?.link:
@@ -207,7 +207,7 @@ public final class DivFocusTemplate: TemplateValue {
       }
     }
     if let parent = parent {
-      backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
+      backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, useOnlyLinks: true))
       nextFocusIdsValue = nextFocusIdsValue.merged(with: parent.nextFocusIds?.resolveOptionalValue(context: context, useOnlyLinks: true))
       onBlurValue = onBlurValue.merged(with: parent.onBlur?.resolveOptionalValue(context: context, useOnlyLinks: true))

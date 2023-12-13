@@ -61,7 +61,6 @@
           "items": {
             "$ref": "div.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_gallery_items"
         },
         "orientation": {
@@ -104,7 +103,6 @@
     }
   ],
   "required": [
-    "type",
-    "items"
+    "type"
   ]
 }

@@ -25,7 +25,7 @@ public final class DivGrid: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let items: [Div] // at least 1 elements
+  public let items: [Div]?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
@@ -87,9 +87,6 @@ public final class DivGrid: DivBase {
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeArrayValidator(minItems: 1)
-
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -116,7 +113,7 @@ public final class DivGrid: DivBase {
     focus: DivFocus?,
     height: DivSize?,
     id: String?,
-    items: [Div],
+    items: [Div]?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
     paddings: DivEdgeInsets?,
@@ -285,7 +282,7 @@ extension DivGrid: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
-    result["items"] = items.map { $0.toDictionary() }
+    result["items"] = items?.map { $0.toDictionary() }
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins.toDictionary()
     result["paddings"] = paddings.toDictionary()

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
@@ -22,7 +23,7 @@ internal class DivGridLayoutManager(
     override val childrenToRelayout = HashSet<View>()
 
     override val divItems
-        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.items
+        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
 
     private val midPadding
         get() = div.itemSpacing.evaluate(divView.expressionResolver).dpToPx(view.resources.displayMetrics)
@@ -119,7 +120,7 @@ internal class DivGridLayoutManager(
 
     override fun getDecoratedMeasuredWidth(child: View): Int {
         val position = _getPosition(child)
-        val item = div.items[position].value()
+        val item = div.nonNullItems[position].value()
 
         val isFixedWidth = item.width is DivSize.Fixed
         val isMultiSpan = spanCount > 1
@@ -129,7 +130,7 @@ internal class DivGridLayoutManager(
 
     override fun getDecoratedMeasuredHeight(child: View): Int {
         val position = _getPosition(child)
-        val item = div.items[position].value()
+        val item = div.nonNullItems[position].value()
 
         val isFixedHeight = item.height is DivSize.Fixed
         val isMultiSpan = spanCount > 1

@@ -129,7 +129,6 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_slider_ranges",
           "platforms": [
             "android",

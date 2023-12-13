@@ -26,6 +26,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     }
 
     return try modifyError({ DivBlockModelingError($0.message, path: pagerPath) }) {
+      let items = nonNilItems
       let gallery = try makeGalleryModel(
         context: itemContext,
         direction: resolveOrientation(expressionResolver).direction,

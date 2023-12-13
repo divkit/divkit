@@ -4,6 +4,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
@@ -50,7 +51,7 @@ internal class DivVideoActionHandler @Inject constructor(
         when (div) {
             is DivVideo -> return if (div.id == id) div else null
             is DivGallery -> {
-                div.items.forEach { item ->
+                div.nonNullItems.forEach { item ->
                     findDivVideoWithId(item.value(), id, resolver)?.let {
                         return it
                     }
@@ -66,7 +67,7 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivGrid -> {
-                div.items.forEach { item ->
+                div.nonNullItems.forEach { item ->
                     findDivVideoWithId(item.value(), id, resolver)?.let {
                         return it
                     }
@@ -74,7 +75,7 @@ internal class DivVideoActionHandler @Inject constructor(
                 return null
             }
             is DivPager -> {
-                div.items.forEach { item ->
+                div.nonNullItems.forEach { item ->
                     findDivVideoWithId(item.value(), id, resolver)?.let {
                         return it
                     }

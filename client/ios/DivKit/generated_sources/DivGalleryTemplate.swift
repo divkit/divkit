@@ -32,7 +32,7 @@ public final class DivGalleryTemplate: TemplateValue {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
   public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 8
-  public let items: Field<[DivTemplate]>? // at least 1 elements
+  public let items: Field<[DivTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: horizontal
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -53,49 +53,45 @@ public final class DivGalleryTemplate: TemplateValue {
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-        border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnCount: try dictionary.getOptionalExpressionField("column_count"),
-        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
-        crossContentAlignment: try dictionary.getOptionalExpressionField("cross_content_alignment"),
-        crossSpacing: try dictionary.getOptionalExpressionField("cross_spacing"),
-        defaultItem: try dictionary.getOptionalExpressionField("default_item"),
-        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
-        extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
-        focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
-        height: try dictionary.getOptionalField("height", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        itemSpacing: try dictionary.getOptionalExpressionField("item_spacing"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        orientation: try dictionary.getOptionalExpressionField("orientation"),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        restrictParentScroll: try dictionary.getOptionalExpressionField("restrict_parent_scroll"),
-        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
-        scrollMode: try dictionary.getOptionalExpressionField("scroll_mode"),
-        scrollbar: try dictionary.getOptionalExpressionField("scrollbar"),
-        selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
-        tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
-        transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
-        transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
-        transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
-        transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
-        transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalExpressionField("visibility"),
-        visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
-        visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
-        width: try dictionary.getOptionalField("width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-gallery_template." + field, representation: representation)
-    }
+    self.init(
+      parent: try dictionary.getOptionalField("type"),
+      accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
+      alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: try dictionary.getOptionalExpressionField("alpha"),
+      background: try dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: try dictionary.getOptionalField("border", templateToType: templateToType),
+      columnCount: try dictionary.getOptionalExpressionField("column_count"),
+      columnSpan: try dictionary.getOptionalExpressionField("column_span"),
+      crossContentAlignment: try dictionary.getOptionalExpressionField("cross_content_alignment"),
+      crossSpacing: try dictionary.getOptionalExpressionField("cross_spacing"),
+      defaultItem: try dictionary.getOptionalExpressionField("default_item"),
+      disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
+      height: try dictionary.getOptionalField("height", templateToType: templateToType),
+      id: try dictionary.getOptionalField("id"),
+      itemSpacing: try dictionary.getOptionalExpressionField("item_spacing"),
+      items: try dictionary.getOptionalArray("items", templateToType: templateToType),
+      margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
+      orientation: try dictionary.getOptionalExpressionField("orientation"),
+      paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
+      restrictParentScroll: try dictionary.getOptionalExpressionField("restrict_parent_scroll"),
+      rowSpan: try dictionary.getOptionalExpressionField("row_span"),
+      scrollMode: try dictionary.getOptionalExpressionField("scroll_mode"),
+      scrollbar: try dictionary.getOptionalExpressionField("scrollbar"),
+      selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+      tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
+      transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
+      transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
+      transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
+      transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
+      transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
+      visibility: try dictionary.getOptionalExpressionField("visibility"),
+      visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
+      visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
+      width: try dictionary.getOptionalField("width", templateToType: templateToType)
+    )
   }
 
   init(
@@ -194,7 +190,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -213,7 +209,7 @@ public final class DivGalleryTemplate: TemplateValue {
     let visibilityActionValue = parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
@@ -251,14 +247,6 @@ public final class DivGalleryTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
-    guard
-      let itemsNonNil = itemsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivGallery(
       accessibility: accessibilityValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
@@ -277,7 +265,7 @@ public final class DivGalleryTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       itemSpacing: itemSpacingValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -377,7 +365,7 @@ public final class DivGalleryTemplate: TemplateValue {
       case "item_spacing":
         itemSpacingValue = deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator).merged(with: itemSpacingValue)
       case "items":
-        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
+        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
       case "margins":
         marginsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: marginsValue)
       case "orientation":
@@ -449,7 +437,7 @@ public final class DivGalleryTemplate: TemplateValue {
       case parent?.itemSpacing?.link:
         itemSpacingValue = itemSpacingValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.itemSpacingValidator))
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
+        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
       case parent?.margins?.link:
         marginsValue = marginsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.orientation?.link:
@@ -497,7 +485,7 @@ public final class DivGalleryTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
@@ -510,7 +498,7 @@ public final class DivGalleryTemplate: TemplateValue {
       visibilityActionsValue = visibilityActionsValue.merged(with: parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
@@ -548,14 +536,6 @@ public final class DivGalleryTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
-    guard
-      let itemsNonNil = itemsValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivGallery(
       accessibility: accessibilityValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
@@ -574,7 +554,7 @@ public final class DivGalleryTemplate: TemplateValue {
       height: heightValue.value,
       id: idValue.value,
       itemSpacing: itemSpacingValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
@@ -667,7 +647,7 @@ public final class DivGalleryTemplate: TemplateValue {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       itemSpacing: merged.itemSpacing,
-      items: try merged.items?.resolveParent(templates: templates),
+      items: merged.items?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),

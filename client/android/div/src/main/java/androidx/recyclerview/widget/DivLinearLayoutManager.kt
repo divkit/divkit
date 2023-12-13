@@ -9,6 +9,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.gallery.ScrollPosition
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div2.DivGallery
 
@@ -22,7 +23,7 @@ internal class DivLinearLayoutManager(
     override val childrenToRelayout = HashSet<View>()
 
     override val divItems
-        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.items
+        get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.nonNullItems
 
     override fun toLayoutManager() = this
 

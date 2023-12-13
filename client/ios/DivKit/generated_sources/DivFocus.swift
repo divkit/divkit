@@ -47,14 +47,11 @@ public final class DivFocus {
     }
   }
 
-  public let background: [DivBackground]? // at least 1 elements
+  public let background: [DivBackground]?
   public let border: DivBorder
   public let nextFocusIds: NextFocusIds?
   public let onBlur: [DivAction]?
   public let onFocus: [DivAction]?
-
-  static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
-    makeArrayValidator(minItems: 1)
 
   init(
     background: [DivBackground]? = nil,

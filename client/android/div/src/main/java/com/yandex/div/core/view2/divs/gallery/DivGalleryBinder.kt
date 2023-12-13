@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -62,7 +63,7 @@ internal class DivGalleryBinder @Inject constructor(
             adapter.applyPatch(view, divPatchCache, divView)
             adapter.closeAllSubscription()
             adapter.subscribeOnElements()
-            bindStates(view, div.items, divView, resolver)
+            bindStates(view, div.nonNullItems, divView, resolver)
             return
         }
 
@@ -89,7 +90,7 @@ internal class DivGalleryBinder @Inject constructor(
         val itemStateBinder =
             { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView, resolver) }
         view.adapter =
-            GalleryAdapter(div.items, divView, divBinder.get(), viewCreator, itemStateBinder, path)
+            GalleryAdapter(div.nonNullItems, divView, divBinder.get(), viewCreator, itemStateBinder, path)
 
         updateDecorations(view, div, divView, resolver)
     }

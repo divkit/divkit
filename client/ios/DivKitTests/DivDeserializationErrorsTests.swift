@@ -65,7 +65,7 @@ private let dictWithInvalidField: [String: Any] = [
   "states": [
     [
       "div": [
-        "type": "gallery",
+        "type": "tabs",
         "items": [] as [Any],
       ] as [String: Any],
       "state_id": 0,

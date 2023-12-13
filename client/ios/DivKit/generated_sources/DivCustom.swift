@@ -20,7 +20,7 @@ public final class DivCustom: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let items: [Div]? // at least 1 elements
+  public let items: [Div]?
   public let margins: DivEdgeInsets
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -65,9 +65,6 @@ public final class DivCustom: DivBase {
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeArrayValidator(minItems: 1)
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

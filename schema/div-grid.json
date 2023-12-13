@@ -35,7 +35,6 @@
           "items": {
             "$ref": "div.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_grid_items"
         },
         "column_count": {
@@ -52,7 +51,6 @@
     }
   ],
   "required": [
-    "items",
     "column_count",
     "type"
   ]

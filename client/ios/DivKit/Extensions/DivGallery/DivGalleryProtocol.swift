@@ -5,10 +5,14 @@ import CommonCorePublic
 import LayoutKit
 
 protocol DivGalleryProtocol: DivBase {
-  var items: [Div] { get }
+  var items: [Div]? { get }
 }
 
 extension DivGalleryProtocol {
+  var nonNilItems: [Div] {
+    items ?? []
+  }
+
   func makeGalleryModel(
     context: DivBlockModelingContext,
     direction: GalleryViewModel.Direction,
@@ -22,7 +26,7 @@ extension DivGalleryProtocol {
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     let childrenContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
-    var children: [GalleryViewModel.Item] = items.makeBlocks(
+    var children: [GalleryViewModel.Item] = nonNilItems.makeBlocks(
       context: childrenContext,
       sizeModifier: DivGallerySizeModifier(
         context: context,

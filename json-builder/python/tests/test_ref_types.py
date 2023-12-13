@@ -7,7 +7,6 @@ from pydivkit import (
     DivAction,
     DivBorder,
     DivContainer,
-    DivGallery,
     DivGifImage,
     DivImage,
     DivText,
@@ -70,17 +69,6 @@ def test_union_type():
 
     images = ImageItems(image_items=[DivImage(image_url="https://image.url")])
     assert "card" in make_div(images)
-
-
-def test_ref_collections_error_simple_type():
-    with pytest.raises(TypeError):
-        class ImageItems(DivGallery):
-            image_items: str = Field()
-            items = [
-                DivGallery(
-                    items=Ref(image_items),
-                ),
-            ]
 
 
 def test_optional_expr():

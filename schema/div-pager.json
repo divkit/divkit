@@ -37,7 +37,6 @@
           "items": {
             "$ref": "div.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_pager_items"
         },
         "orientation": {
@@ -73,7 +72,6 @@
   ],
   "required": [
     "type",
-    "items",
     "layout_mode"
   ]
 }

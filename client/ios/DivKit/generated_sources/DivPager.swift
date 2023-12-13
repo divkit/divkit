@@ -27,7 +27,7 @@ public final class DivPager: DivBase {
   public let id: String?
   public let infiniteScroll: Expression<Bool> // default value: false
   public let itemSpacing: DivFixedSize // default value: DivFixedSize(value: .value(0))
-  public let items: [Div] // at least 1 elements
+  public let items: [Div]?
   public let layoutMode: DivPagerLayoutMode
   public let margins: DivEdgeInsets
   public let orientation: Expression<Orientation> // default value: horizontal
@@ -95,9 +95,6 @@ public final class DivPager: DivBase {
   static let defaultItemValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeArrayValidator(minItems: 1)
-
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -120,7 +117,7 @@ public final class DivPager: DivBase {
     id: String?,
     infiniteScroll: Expression<Bool>?,
     itemSpacing: DivFixedSize?,
-    items: [Div],
+    items: [Div]?,
     layoutMode: DivPagerLayoutMode,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
@@ -279,7 +276,7 @@ extension DivPager: Serializable {
     result["id"] = id
     result["infinite_scroll"] = infiniteScroll.toValidSerializationValue()
     result["item_spacing"] = itemSpacing.toDictionary()
-    result["items"] = items.map { $0.toDictionary() }
+    result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toDictionary()
     result["margins"] = margins.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()

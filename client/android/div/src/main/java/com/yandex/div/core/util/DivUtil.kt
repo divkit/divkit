@@ -13,6 +13,7 @@ import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAnimationInterpolator
@@ -132,8 +133,12 @@ internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Bo
         }
     }
     return when (this) {
-        is Div.Container -> value.buildItems(resolver).map { it.containsStateInnerTransitions(resolver) }.contains(true)
-        is Div.Grid -> value.items.map { it.containsStateInnerTransitions(resolver) }.contains(true)
+        is Div.Container -> value.buildItems(resolver)
+            .map { it.containsStateInnerTransitions(resolver) }
+            .contains(true)
+        is Div.Grid -> value.nonNullItems
+            .map { it.containsStateInnerTransitions(resolver) }
+            .contains(true)
         is Div.Text -> false
         is Div.Image -> false
         is Div.GifImage -> false

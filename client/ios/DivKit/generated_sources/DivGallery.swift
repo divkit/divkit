@@ -48,7 +48,7 @@ public final class DivGallery: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 8
-  public let items: [Div] // at least 1 elements
+  public let items: [Div]?
   public let margins: DivEdgeInsets
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets
@@ -146,9 +146,6 @@ public final class DivGallery: DivBase {
   static let itemSpacingValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let itemsValidator: AnyArrayValueValidator<Div> =
-    makeArrayValidator(minItems: 1)
-
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -173,7 +170,7 @@ public final class DivGallery: DivBase {
     height: DivSize?,
     id: String?,
     itemSpacing: Expression<Int>?,
-    items: [Div],
+    items: [Div]?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
@@ -345,7 +342,7 @@ extension DivGallery: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["item_spacing"] = itemSpacing.toValidSerializationValue()
-    result["items"] = items.map { $0.toDictionary() }
+    result["items"] = items?.map { $0.toDictionary() }
     result["margins"] = margins.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings.toDictionary()

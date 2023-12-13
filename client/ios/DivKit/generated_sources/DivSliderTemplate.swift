@@ -295,7 +295,7 @@ public final class DivSliderTemplate: TemplateValue {
   public let maxValue: Field<Expression<Int>>? // default value: 100
   public let minValue: Field<Expression<Int>>? // default value: 0
   public let paddings: Field<DivEdgeInsetsTemplate>?
-  public let ranges: Field<[RangeTemplate]>? // at least 1 elements
+  public let ranges: Field<[RangeTemplate]>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let secondaryValueAccessibility: Field<DivAccessibilityTemplate>?
   public let selectedActions: Field<[DivActionTemplate]>?
@@ -473,7 +473,7 @@ public final class DivSliderTemplate: TemplateValue {
     let maxValueValue = parent?.maxValue?.resolveOptionalValue(context: context) ?? .noValue
     let minValueValue = parent?.minValue?.resolveOptionalValue(context: context) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
+    let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let secondaryValueAccessibilityValue = parent?.secondaryValueAccessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -679,7 +679,7 @@ public final class DivSliderTemplate: TemplateValue {
       case "paddings":
         paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).merged(with: paddingsValue)
       case "ranges":
-        rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivSliderTemplate.RangeTemplate.self).merged(with: rangesValue)
+        rangesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSliderTemplate.RangeTemplate.self).merged(with: rangesValue)
       case "row_span":
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "secondary_value_accessibility":
@@ -759,7 +759,7 @@ public final class DivSliderTemplate: TemplateValue {
       case parent?.paddings?.link:
         paddingsValue = paddingsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self))
       case parent?.ranges?.link:
-        rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.rangesValidator, type: DivSliderTemplate.RangeTemplate.self))
+        rangesValue = rangesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSliderTemplate.RangeTemplate.self))
       case parent?.rowSpan?.link:
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.secondaryValueAccessibility?.link:
@@ -819,7 +819,7 @@ public final class DivSliderTemplate: TemplateValue {
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
+      rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, useOnlyLinks: true))
       secondaryValueAccessibilityValue = secondaryValueAccessibilityValue.merged(with: parent.secondaryValueAccessibility?.resolveOptionalValue(context: context, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       thumbSecondaryStyleValue = thumbSecondaryStyleValue.merged(with: parent.thumbSecondaryStyle?.resolveOptionalValue(context: context, useOnlyLinks: true))

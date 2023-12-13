@@ -4,9 +4,9 @@ extension Div {
   var children: [Div] {
     switch self {
     case let .divContainer(div): return div.nonNilItems
-    case let .divGrid(div): return div.items
-    case let .divGallery(div): return div.items
-    case let .divPager(div): return div.items
+    case let .divGrid(div): return div.nonNilItems
+    case let .divGallery(div): return div.nonNilItems
+    case let .divPager(div): return div.nonNilItems
     case let .divTabs(div): return div.items.map(\.div)
     case let .divCustom(div): return div.items ?? []
     case let .divState(div): return div.states.compactMap(\.div)

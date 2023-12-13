@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.internal.core.DivVisitor
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivSize
@@ -19,13 +20,15 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
     override fun defaultVisit(data: Div, resolver: ExpressionResolver) = true
 
     override fun visit(data: Div.Grid, resolver: ExpressionResolver): Boolean {
-        val columnCount = data.value.columnCount.evaluate(resolver).toIntSafely()
+        val grid = data.value
+        val columnCount = grid.columnCount.evaluate(resolver).toIntSafely()
         val heights = IntArray(columnCount)
         var column: Int
         var matchParentWidthCount = 0
         var matchParentHeightCount = 0
 
-        data.value.items.forEach {
+        val items = grid.nonNullItems
+        items.forEach {
             val minHeight = heights.minOrNull() ?: 0
             column = heights.indexOf(minHeight)
             for (i in heights.indices) {
@@ -46,8 +49,8 @@ internal class DivValidator @Inject constructor() : DivVisitor<Boolean>() {
             if (div.height is DivSize.MatchParent) matchParentHeightCount++
         }
 
-        if (data.value.width is DivSize.WrapContent && matchParentWidthCount == data.value.items.size) return false
-        if (data.value.height is DivSize.WrapContent && matchParentHeightCount == data.value.items.size) return false
+        if (grid.width is DivSize.WrapContent && matchParentWidthCount == items.size) return false
+        if (grid.height is DivSize.WrapContent && matchParentHeightCount == items.size) return false
 
         return heights.all { it == heights.first() } // the last row filled by cells
     }

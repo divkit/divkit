@@ -7,19 +7,13 @@ import Serialization
 public final class DivText: DivBase {
   public final class Ellipsis {
     public let actions: [DivAction]?
-    public let images: [Image]? // at least 1 elements
-    public let ranges: [Range]? // at least 1 elements
+    public let images: [Image]?
+    public let ranges: [Range]?
     public let text: Expression<String>
 
     public func resolveText(_ resolver: ExpressionResolver) -> String? {
       resolver.resolveStringBasedValue(expression: text, initializer: { $0 })
     }
-
-    static let imagesValidator: AnyArrayValueValidator<DivText.Image> =
-      makeArrayValidator(minItems: 1)
-
-    static let rangesValidator: AnyArrayValueValidator<DivText.Range> =
-      makeArrayValidator(minItems: 1)
 
     init(
       actions: [DivAction]? = nil,
@@ -220,7 +214,7 @@ public final class DivText: DivBase {
   public let fontWeight: Expression<DivFontWeight> // default value: regular
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let images: [Image]? // at least 1 elements
+  public let images: [Image]?
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let longtapActions: [DivAction]?
@@ -228,7 +222,7 @@ public final class DivText: DivBase {
   public let maxLines: Expression<Int>? // constraint: number >= 0
   public let minHiddenLines: Expression<Int>? // constraint: number >= 0
   public let paddings: DivEdgeInsets
-  public let ranges: [Range]? // at least 1 elements
+  public let ranges: [Range]?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectable: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]?
@@ -352,9 +346,6 @@ public final class DivText: DivBase {
   static let fontSizeValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  static let imagesValidator: AnyArrayValueValidator<DivText.Image> =
-    makeArrayValidator(minItems: 1)
-
   static let lineHeightValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
@@ -363,9 +354,6 @@ public final class DivText: DivBase {
 
   static let minHiddenLinesValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let rangesValidator: AnyArrayValueValidator<DivText.Range> =
-    makeArrayValidator(minItems: 1)
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

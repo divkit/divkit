@@ -9,7 +9,7 @@ public final class DivImageBackground {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
-  public let filters: [DivFilter]? // at least 1 elements
+  public let filters: [DivFilter]?
   public let imageUrl: Expression<URL>
   public let preloadRequired: Expression<Bool> // default value: false
   public let scale: Expression<DivImageScale> // default value: fill
@@ -40,9 +40,6 @@ public final class DivImageBackground {
 
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
-
-  static let filtersValidator: AnyArrayValueValidator<DivFilter> =
-    makeArrayValidator(minItems: 1)
 
   init(
     alpha: Expression<Double>? = nil,

@@ -24,7 +24,7 @@ public final class DivPagerTemplate: TemplateValue {
   public let id: Field<String>?
   public let infiniteScroll: Field<Expression<Bool>>? // default value: false
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(0))
-  public let items: Field<[DivTemplate]>? // at least 1 elements
+  public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<DivPagerLayoutModeTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: horizontal
@@ -174,7 +174,7 @@ public final class DivPagerTemplate: TemplateValue {
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let infiniteScrollValue = parent?.infiniteScroll?.resolveOptionalValue(context: context) ?? .noValue
     let itemSpacingValue = parent?.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context) ?? .noValue
@@ -227,14 +227,10 @@ public final class DivPagerTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
     if case .noValue = layoutModeValue {
       errors.append(.requiredFieldIsMissing(field: "layout_mode"))
     }
     guard
-      let itemsNonNil = itemsValue.value,
       let layoutModeNonNil = layoutModeValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
@@ -255,7 +251,7 @@ public final class DivPagerTemplate: TemplateValue {
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
       itemSpacing: itemSpacingValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       layoutMode: layoutModeNonNil,
       margins: marginsValue.value,
       orientation: orientationValue.value,
@@ -347,7 +343,7 @@ public final class DivPagerTemplate: TemplateValue {
       case "item_spacing":
         itemSpacingValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: itemSpacingValue)
       case "items":
-        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
+        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
       case "layout_mode":
         layoutModeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPagerLayoutModeTemplate.self).merged(with: layoutModeValue)
       case "margins":
@@ -413,7 +409,7 @@ public final class DivPagerTemplate: TemplateValue {
       case parent?.itemSpacing?.link:
         itemSpacingValue = itemSpacingValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
+        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
       case parent?.layoutMode?.link:
         layoutModeValue = layoutModeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPagerLayoutModeTemplate.self))
       case parent?.margins?.link:
@@ -460,7 +456,7 @@ public final class DivPagerTemplate: TemplateValue {
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
       itemSpacingValue = itemSpacingValue.merged(with: parent.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true))
       layoutModeValue = layoutModeValue.merged(with: parent.layoutMode?.resolveValue(context: context, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
@@ -509,14 +505,10 @@ public final class DivPagerTemplate: TemplateValue {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
     if case .noValue = layoutModeValue {
       errors.append(.requiredFieldIsMissing(field: "layout_mode"))
     }
     guard
-      let itemsNonNil = itemsValue.value,
       let layoutModeNonNil = layoutModeValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
@@ -537,7 +529,7 @@ public final class DivPagerTemplate: TemplateValue {
       id: idValue.value,
       infiniteScroll: infiniteScrollValue.value,
       itemSpacing: itemSpacingValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       layoutMode: layoutModeNonNil,
       margins: marginsValue.value,
       orientation: orientationValue.value,
@@ -624,7 +616,7 @@ public final class DivPagerTemplate: TemplateValue {
       id: merged.id,
       infiniteScroll: merged.infiniteScroll,
       itemSpacing: merged.itemSpacing?.tryResolveParent(templates: templates),
-      items: try merged.items?.resolveParent(templates: templates),
+      items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: try merged.layoutMode?.resolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,

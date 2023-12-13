@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -50,14 +51,15 @@ internal class DivGridBinder @Inject constructor(
         )
         view.observeContentAlignment(div.contentAlignmentHorizontal, div.contentAlignmentVertical, resolver)
 
+        val items = div.nonNullItems
         if (oldDiv != null) {
-            for (i in div.items.size..oldDiv.items.lastIndex) {
+            for (i in items.size..oldDiv.nonNullItems.lastIndex) {
                 divView.unbindViewFromDiv(view.getChildAt(i))
             }
         }
         var viewsPositionDiff = 0
-        for (gridIndex in div.items.indices) {
-            val childDivValue = div.items[gridIndex].value()
+        for (gridIndex in items.indices) {
+            val childDivValue = items[gridIndex].value()
             val childView = view.getChildAt(gridIndex + viewsPositionDiff)
             val childDivId = childDivValue.id
             // applying div patch
@@ -81,16 +83,16 @@ internal class DivGridBinder @Inject constructor(
                 }
             }
             childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            divBinder.get().bind(childView, div.items[gridIndex], divView, path)
+            divBinder.get().bind(childView, items[gridIndex], divView, path)
             bindLayoutParams(childView, childDivValue, resolver)
             if (childDivValue.hasSightActions) {
-                divView.bindViewToDiv(childView, div.items[gridIndex])
+                divView.bindViewToDiv(childView, items[gridIndex])
             } else {
                 divView.unbindViewFromDiv(childView)
             }
         }
 
-        view.trackVisibilityActions(div.items, oldDiv?.items, divView)
+        view.trackVisibilityActions(items, oldDiv?.items, divView)
     }
 
     private fun DivGridLayout.observeContentAlignment(
@@ -143,10 +145,11 @@ internal class DivGridBinder @Inject constructor(
 
     fun setDataWithoutBinding(view: DivGridLayout, div: DivGrid, resolver: ExpressionResolver) {
         view.div = div
-        for (gridIndex in div.items.indices) {
+        val items = div.nonNullItems
+        for (gridIndex in items.indices) {
             divBinder.get().setDataWithoutBinding(
                 view.getChildAt(gridIndex),
-                div.items[gridIndex],
+                items[gridIndex],
                 resolver
             )
         }

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.internal.core.buildItems
+import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
@@ -109,9 +110,9 @@ internal object DivPathUtils {
             }
             is Div.Tabs -> value.items.map { it.div }.findRecursively(divId, resolver)
             is Div.Container -> value.buildItems(resolver).findRecursively(divId, resolver)
-            is Div.Grid -> value.items.findRecursively(divId, resolver)
-            is Div.Gallery -> value.items.findRecursively(divId, resolver)
-            is Div.Pager -> value.items.findRecursively(divId, resolver)
+            is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver)
+            is Div.Gallery -> value.nonNullItems.findRecursively(divId, resolver)
+            is Div.Pager -> value.nonNullItems.findRecursively(divId, resolver)
             is Div.Custom -> value.items?.findRecursively(divId, resolver)
             is Div.Text -> null
             is Div.Image -> null

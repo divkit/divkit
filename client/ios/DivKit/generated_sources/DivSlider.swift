@@ -93,7 +93,7 @@ public final class DivSlider: DivBase {
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
   public let paddings: DivEdgeInsets
-  public let ranges: [Range]? // at least 1 elements
+  public let ranges: [Range]?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let secondaryValueAccessibility: DivAccessibility
   public let selectedActions: [DivAction]?
@@ -155,9 +155,6 @@ public final class DivSlider: DivBase {
 
   static let columnSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
-
-  static let rangesValidator: AnyArrayValueValidator<DivSlider.Range> =
-    makeArrayValidator(minItems: 1)
 
   static let rowSpanValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })

@@ -26,7 +26,7 @@ public final class DivGridTemplate: TemplateValue {
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
-  public let items: Field<[DivTemplate]>? // at least 1 elements
+  public let items: Field<[DivTemplate]>?
   public let longtapActions: Field<[DivActionTemplate]>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let paddings: Field<DivEdgeInsetsTemplate>?
@@ -184,7 +184,7 @@ public final class DivGridTemplate: TemplateValue {
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
-    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let itemsValue = parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -240,12 +240,8 @@ public final class DivGridTemplate: TemplateValue {
     if case .noValue = columnCountValue {
       errors.append(.requiredFieldIsMissing(field: "column_count"))
     }
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
     guard
-      let columnCountNonNil = columnCountValue.value,
-      let itemsNonNil = itemsValue.value
+      let columnCountNonNil = columnCountValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
@@ -269,7 +265,7 @@ public final class DivGridTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -369,7 +365,7 @@ public final class DivGridTemplate: TemplateValue {
       case "id":
         idValue = deserialize(__dictValue).merged(with: idValue)
       case "items":
-        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
+        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: itemsValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -439,7 +435,7 @@ public final class DivGridTemplate: TemplateValue {
       case parent?.id?.link:
         idValue = idValue.merged(with: deserialize(__dictValue))
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
+        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
       case parent?.margins?.link:
@@ -485,7 +481,7 @@ public final class DivGridTemplate: TemplateValue {
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, useOnlyLinks: true))
       longtapActionsValue = longtapActionsValue.merged(with: parent.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true))
@@ -539,12 +535,8 @@ public final class DivGridTemplate: TemplateValue {
     if case .noValue = columnCountValue {
       errors.append(.requiredFieldIsMissing(field: "column_count"))
     }
-    if case .noValue = itemsValue {
-      errors.append(.requiredFieldIsMissing(field: "items"))
-    }
     guard
-      let columnCountNonNil = columnCountValue.value,
-      let itemsNonNil = itemsValue.value
+      let columnCountNonNil = columnCountValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
@@ -568,7 +560,7 @@ public final class DivGridTemplate: TemplateValue {
       focus: focusValue.value,
       height: heightValue.value,
       id: idValue.value,
-      items: itemsNonNil,
+      items: itemsValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       paddings: paddingsValue.value,
@@ -659,7 +651,7 @@ public final class DivGridTemplate: TemplateValue {
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
-      items: try merged.items?.resolveParent(templates: templates),
+      items: merged.items?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       paddings: merged.paddings?.tryResolveParent(templates: templates),

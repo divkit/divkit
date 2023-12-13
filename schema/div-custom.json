@@ -18,7 +18,6 @@
           "items": {
             "$ref": "div.json"
           },
-          "minItems": 1,
           "$description": "translations.json#/div_custom_items"
         },
         "custom_type": {

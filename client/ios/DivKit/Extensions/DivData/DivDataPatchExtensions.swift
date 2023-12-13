@@ -130,7 +130,7 @@ extension DivContainer {
 
 extension DivGallery {
   fileprivate func applyPatch(_ patch: DivPatch) -> DivGallery {
-    let patchedItems = items.flatMap { $0.applyMultipleItemsPatch(patch) }
+    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
     return DivGallery(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
@@ -174,7 +174,7 @@ extension DivGallery {
 
 extension DivGrid {
   fileprivate func applyPatch(_ patch: DivPatch) -> DivGrid {
-    let patchedItems = items.flatMap { $0.applyMultipleItemsPatch(patch) }
+    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
     return DivGrid(
       accessibility: accessibility,
       action: action,
@@ -217,7 +217,7 @@ extension DivGrid {
 
 extension DivPager {
   fileprivate func applyPatch(_ patch: DivPatch) -> DivPager {
-    let patchedItems = items.flatMap { $0.applyMultipleItemsPatch(patch) }
+    let patchedItems = nonNilItems.flatMap { $0.applyMultipleItemsPatch(patch) }
     return DivPager(
       accessibility: accessibility,
       alignmentHorizontal: alignmentHorizontal,
