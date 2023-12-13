@@ -45,7 +45,8 @@ internal class DivPatchManager @Inject constructor(
         return DivData(
             logId = oldDivData.logId,
             states = states,
-            variableTriggers = oldDivData.variableTriggers
+            variableTriggers = oldDivData.variableTriggers,
+            timers = oldDivData.timers
         )
     }
 
