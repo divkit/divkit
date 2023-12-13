@@ -9,4 +9,6 @@ interface ViewPool {
     fun unregister(tag: String)
 
     fun <T : View> obtain(tag: String): T
+
+    fun changeCapacity(tag: String, newCapacity: Int)
 }

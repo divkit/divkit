@@ -8,10 +8,11 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.getOrThrow
 import com.yandex.div.internal.util.removeOrThrow
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
-import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
+import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 internal class AdvanceViewPool(
     private val profiler: ViewPoolProfiler?,
@@ -19,7 +20,7 @@ internal class AdvanceViewPool(
     private val viewCreator: ViewCreator
 ) : ViewPool {
 
-    private val viewFactories: MutableMap<String, ViewFactory<out View>> = ArrayMap()
+    private val viewFactories: MutableMap<String, Channel<out View>> = ArrayMap()
 
     @AnyThread
     override fun <T : View> register(tag: String, factory: ViewFactory<T>, capacity: Int) {
@@ -28,11 +29,7 @@ internal class AdvanceViewPool(
                 Assert.fail("Factory is already registered")
                 return
             }
-            viewFactories[tag] = if (capacity == 0) {
-                factory.attachProfiler(tag, profiler, sessionProfiler)
-            } else {
-                Channel(tag, profiler, sessionProfiler, factory, viewCreator, capacity)
-            }
+            viewFactories[tag] = Channel(tag, profiler, sessionProfiler, factory, viewCreator, capacity)
         }
     }
 
@@ -46,9 +43,7 @@ internal class AdvanceViewPool(
             viewFactories.removeOrThrow(tag)
         }
 
-        if (viewFactory is Channel) {
-            viewFactory.stop()
-        }
+        viewFactory.stop()
     }
 
     @AnyThread
@@ -61,23 +56,36 @@ internal class AdvanceViewPool(
         return viewFactory.createView() as T
     }
 
+    @AnyThread
+    override fun changeCapacity(tag: String, newCapacity: Int) {
+        synchronized(viewFactories) {
+            viewFactories.getOrThrow(tag, "Factory is not registered").apply {
+                capacity = newCapacity
+            }
+        }
+    }
+
     internal class Channel<T : View>(
         val viewName: String,
         private val profiler: ViewPoolProfiler?,
         private val sessionProfiler: PerformanceDependentSessionProfiler,
         private val viewFactory: ViewFactory<T>,
         private val viewCreator: ViewCreator,
-        capacity: Int
+        initCapacity: Int
     ) : ViewFactory<T> {
         override fun createView(): T = extractView()
 
-        private val viewQueue: BlockingQueue<T> = ArrayBlockingQueue(capacity, false)
+        private val viewQueue: BlockingQueue<T> = LinkedBlockingQueue()
+        private var realQueueSize = AtomicInteger(initCapacity)
         private val stopped = AtomicBoolean(false)
 
         val notEmpty: Boolean = viewQueue.isNotEmpty()
 
+        @Volatile
+        var capacity = initCapacity
+
         init {
-            for (i in 0 until capacity) {
+            for (i in 0 until initCapacity) {
                 viewCreator.request(this, 0)
             }
         }
@@ -92,6 +100,7 @@ internal class AdvanceViewPool(
                 profiler?.onViewObtainedWithBlock(viewName, duration)
                 sessionProfiler.onViewObtained(viewName, duration, viewQueue.size, true)
             } else {
+                realQueueSize.decrementAndGet()
                 profiler?.onViewObtainedWithoutBlock(duration)
                 sessionProfiler.onViewObtained(viewName, duration, viewQueue.size, false)
             }
@@ -103,7 +112,9 @@ internal class AdvanceViewPool(
         private fun extractViewBlocked(): T {
             return try {
                 viewCreator.promote(this)
-                viewQueue.poll(MAX_WAITING_TIME, TimeUnit.MILLISECONDS) ?: viewFactory.createView()
+                viewQueue.poll(MAX_WAITING_TIME, TimeUnit.MILLISECONDS)?.also {
+                    realQueueSize.decrementAndGet()
+                } ?: viewFactory.createView()
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()
                 viewFactory.createView()
@@ -111,9 +122,11 @@ internal class AdvanceViewPool(
         }
 
         private fun requestViewCreation() {
+            if (capacity <= realQueueSize.get()) return
             val duration = profile {
                 val priority = viewQueue.size
                 viewCreator.request(this, priority)
+                realQueueSize.incrementAndGet()
             }
             profiler?.onViewRequested(duration)
         }
@@ -144,18 +157,6 @@ internal class AdvanceViewPool(
             val start = System.nanoTime()
             section()
             return System.nanoTime() - start
-        }
-
-        private fun <T : View> ViewFactory<T>.attachProfiler(
-            viewName: String, profiler: ViewPoolProfiler?, sessionProfiler: PerformanceDependentSessionProfiler
-        ): ViewFactory<T> {
-            return ViewFactory {
-                var view: T? = null
-                val duration = profile { view = createView() }
-                profiler?.onViewObtainedWithBlock(viewName, duration)
-                sessionProfiler.onViewObtained(viewName, duration, 0, true)
-                view!!
-            }
         }
     }
 }

@@ -49,11 +49,37 @@ internal class DivViewCreator @Inject constructor(
     repository: ViewPreCreationProfileRepository
 ) : DivVisitor<View>() {
 
-    init {
-        val optimizedProfile = viewPreCreationProfile.id?.let { runBlocking { repository.get(it) } }
+    var viewPreCreationProfile = viewPreCreationProfile.id?.let {
+        runBlocking { repository.get(it) }
+    } ?: viewPreCreationProfile
+        set(value) {
+            with(viewPool) {
+                with(value) {
+                    changeCapacity(TAG_TEXT, text.capacity)
+                    changeCapacity(TAG_IMAGE, image.capacity)
+                    changeCapacity(TAG_GIF_IMAGE, gifImage.capacity)
+                    changeCapacity(TAG_OVERLAP_CONTAINER, overlapContainer.capacity)
+                    changeCapacity(TAG_LINEAR_CONTAINER, linearContainer.capacity)
+                    changeCapacity(TAG_WRAP_CONTAINER, wrapContainer.capacity)
+                    changeCapacity(TAG_GRID, grid.capacity)
+                    changeCapacity(TAG_GALLERY, gallery.capacity)
+                    changeCapacity(TAG_PAGER, pager.capacity)
+                    changeCapacity(TAG_TABS, tab.capacity)
+                    changeCapacity(TAG_STATE, state.capacity)
+                    changeCapacity(TAG_CUSTOM, custom.capacity)
+                    changeCapacity(TAG_INDICATOR, indicator.capacity)
+                    changeCapacity(TAG_SLIDER, slider.capacity)
+                    changeCapacity(TAG_INPUT, input.capacity)
+                    changeCapacity(TAG_SELECT, select.capacity)
+                    changeCapacity(TAG_VIDEO, video.capacity)
+                }
+            }
+            field = value
+        }
 
+    init {
         with(viewPool) {
-            with(optimizedProfile ?: viewPreCreationProfile) {
+            with(this@DivViewCreator.viewPreCreationProfile) {
                 register(TAG_TEXT, { DivLineHeightTextView(context) }, text.capacity)
                 register(TAG_IMAGE, { DivImageView(context) }, image.capacity)
                 register(TAG_GIF_IMAGE, { DivGifImageView(context) }, gifImage.capacity)

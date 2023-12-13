@@ -35,6 +35,7 @@ import com.yandex.div.core.tooltip.DivTooltipController;
 import com.yandex.div.core.view2.Div2Builder;
 import com.yandex.div.core.view2.DivBinder;
 import com.yandex.div.core.view2.DivImagePreloader;
+import com.yandex.div.core.view2.DivViewCreator;
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
@@ -65,6 +66,9 @@ public interface Div2Component {
 
     @NonNull
     DivBinder getDivBinder();
+
+    @NonNull
+    DivViewCreator getDivViewCreator();
 
     @NonNull
     DivImagePreloader getImagePreloader();

@@ -20,6 +20,7 @@ import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository
 
@@ -60,6 +61,12 @@ class Div2Context @MainThread private constructor(
 
     val viewPreCreationProfileRepository: ViewPreCreationProfileRepository
         get() = div2Component.viewPreCreationProfileRepository
+
+    var viewPreCreationProfile: ViewPreCreationProfile
+        get() = div2Component.divViewCreator.viewPreCreationProfile
+        set(value) {
+            div2Component.divViewCreator.viewPreCreationProfile = value
+        }
 
     private var inflater: LayoutInflater? = null
 

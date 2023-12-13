@@ -20,4 +20,6 @@ internal class PseudoViewPool : ViewPool {
         @Suppress("UNCHECKED_CAST")
         return factoryMap.getOrThrow(tag).createView() as T
     }
+
+    override fun changeCapacity(tag: String, newCapacity: Int) = Unit
 }
