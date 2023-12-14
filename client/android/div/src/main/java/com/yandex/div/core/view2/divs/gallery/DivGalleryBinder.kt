@@ -11,8 +11,6 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.state.DivPathUtils.compactPathList
-import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
@@ -26,13 +24,11 @@ import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.DivPatchableAdapter
 import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.ReleasingViewPool
+import com.yandex.div.core.view2.divs.bindStates
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
-import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
@@ -63,7 +59,7 @@ internal class DivGalleryBinder @Inject constructor(
             adapter.applyPatch(view, divPatchCache, divView)
             adapter.closeAllSubscription()
             adapter.subscribeOnElements()
-            bindStates(view, div.nonNullItems, divView, resolver)
+            view.bindStates(divView.rootDiv(), divView, resolver, divBinder.get())
             return
         }
 
@@ -87,54 +83,13 @@ internal class DivGalleryBinder @Inject constructor(
 
         view.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-        val itemStateBinder =
-            { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView, resolver) }
+        val itemStateBinder = { itemView: View, div: Div ->
+            itemView.bindStates(divView.rootDiv(), divView, resolver, divBinder.get())
+        }
         view.adapter =
             GalleryAdapter(div.nonNullItems, divView, divBinder.get(), viewCreator, itemStateBinder, path)
 
         updateDecorations(view, div, divView, resolver)
-    }
-
-    /**
-     * Binds all descendants of [view] which are [DivStateLayout]s corresponding to DivStates in [divs]
-     */
-    private fun bindStates(
-        view: View,
-        divs: List<Div>,
-        divView: Div2View,
-        resolver: ExpressionResolver,
-    ) {
-        val viewsToBind = mutableListOf<DivStateLayout>()
-        val divStateVisitor = object : DivViewVisitor() {
-            override fun visit(view: DivStateLayout) {
-                viewsToBind.add(view)
-            }
-        }
-        divStateVisitor.visitViewTree(view)
-
-        val viewsByPath = mutableMapOf<DivStatePath, MutableList<DivStateLayout>>()
-        viewsToBind.forEach { viewToBind ->
-            viewToBind.path?.let { path ->
-                viewsByPath.getOrPut(path) { mutableListOf() } += viewToBind
-            }
-        }
-        val paths = viewsToBind.mapNotNull { it.path }
-        val compactPaths = compactPathList(paths)
-
-        compactPaths.forEach { path ->
-            val divByPath = divs.firstNotNullOfOrNull { item ->
-                item.findDivState(path, resolver)
-            }
-            val views = viewsByPath[path]
-
-            if (divByPath != null && views != null) {
-                val binder = divBinder.get()
-                val parentState = path.parentState()
-                views.forEach { view ->
-                    binder.bind(view, divByPath, divView, parentState)
-                }
-            }
-        }
     }
 
     private fun updateDecorations(

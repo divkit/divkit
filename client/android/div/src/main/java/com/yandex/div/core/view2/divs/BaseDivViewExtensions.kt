@@ -21,12 +21,19 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.state.DivPathUtils
+import com.yandex.div.core.state.DivPathUtils.findDivState
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
+import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
+import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -662,6 +669,46 @@ internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) =
     applyHeight(div, resolver)
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
+}
+
+/**
+ * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]
+ */
+internal fun View.bindStates(
+    div: Div?,
+    divView: Div2View,
+    resolver: ExpressionResolver,
+    binder: DivBinder,
+) {
+    if (div == null) return
+    val viewsToBind = mutableListOf<DivStateLayout>()
+    val divStateVisitor = object : DivViewVisitor() {
+        override fun visit(view: DivStateLayout) {
+            viewsToBind.add(view)
+        }
+    }
+    divStateVisitor.visitViewTree(this)
+
+    val viewsByPath = mutableMapOf<DivStatePath, MutableList<DivStateLayout>>()
+    viewsToBind.forEach { viewToBind ->
+        viewToBind.path?.let { path ->
+            viewsByPath.getOrPut(path) { mutableListOf() } += viewToBind
+        }
+    }
+    val paths = viewsToBind.mapNotNull { it.path }
+    val compactPaths = DivPathUtils.compactPathList(paths)
+
+    compactPaths.forEach { path ->
+        val divByPath = div.findDivState(path, resolver)
+        val views = viewsByPath[path]
+
+        if (divByPath != null && views != null) {
+            val parentState = path.parentState()
+            views.forEach { view ->
+                binder.bind(view, divByPath, divView, parentState)
+            }
+        }
+    }
 }
 
 internal fun DivImageScale.toImageScale(): AspectImageView.Scale {

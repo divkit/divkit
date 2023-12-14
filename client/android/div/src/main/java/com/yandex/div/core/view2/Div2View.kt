@@ -579,6 +579,8 @@ class Div2View private constructor(
         return states.firstOrNull { it.stateId == stateId }
     }
 
+    internal fun rootDiv() = divData?.state()?.div
+
     private fun forceSwitchToState(stateId: Long, temporary: Boolean): Boolean {
         this.stateId = stateId
 
