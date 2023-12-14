@@ -1,4 +1,11 @@
 {
-    "lang": "kotlinDsl",
-    "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.dsl.model\n\nimport java.net.URI\nimport com.fasterxml.jackson.annotation.*\nimport com.yandex.div.dsl.*\nimport com.yandex.div.dsl.context.*\nimport com.yandex.div.dsl.type.*\nimport com.yandex.div.dsl.util.*\n"
+  "lang": "divan",
+  "header": "@file:Suppress(\n    \"unused\",\n    \"UNUSED_PARAMETER\",\n)\n\npackage divkit.dsl\n\nimport com.fasterxml.jackson.annotation.JsonAnyGetter\nimport com.fasterxml.jackson.annotation.JsonIgnore\nimport com.fasterxml.jackson.annotation.JsonValue\nimport divkit.dsl.annotation.*\nimport divkit.dsl.core.*\nimport divkit.dsl.scope.*\nimport kotlin.Any\nimport kotlin.String\nimport kotlin.Suppress\nimport kotlin.collections.List\nimport kotlin.collections.Map\n",
+  "kotlinAnnotations": {
+    "topLevelDefinitions": ["@Generated"]
+  },
+  "supertypeEntities": [
+    "div"
+  ],
+  "removePrefix": "div"
 }

@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.21"
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
     }
 }
@@ -47,10 +47,10 @@ test {
 }
 
 def versions = [
-    jackson: "2.14.0",
+    jackson: "2.16.0",
     jsonAssert: "1.5.1",
-    junit5: "5.9.1",
-    kotlin: "1.7.20"
+    junit5: "5.10.1",
+    kotlin: "1.9.21"
 ]
 
 dependencies {
