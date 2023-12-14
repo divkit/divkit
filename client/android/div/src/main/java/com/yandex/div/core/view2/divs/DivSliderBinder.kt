@@ -33,6 +33,7 @@ internal class DivSliderBinder @Inject constructor(
         private val typefaceProvider: DivTypefaceProvider,
         private val variableBinder: TwoWayIntegerVariableBinder,
         private val errorCollectors: ErrorCollectors,
+        private val horizontalInterceptionAngle: Float,
         @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
 ) : DivViewBinder<DivSlider, DivSliderView> {
 
@@ -46,6 +47,8 @@ internal class DivSliderBinder @Inject constructor(
         val expressionResolver = divView.expressionResolver
 
         baseBinder.bindView(view, div, oldDiv, divView)
+
+        view.interceptionAngle = horizontalInterceptionAngle
 
         view.addSubscription(
             div.minValue.observeAndGet(expressionResolver) { minValue ->
