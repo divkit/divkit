@@ -88,18 +88,62 @@ final class DivVariableSorageTest: XCTestCase {
     XCTAssertEqual([:], storage.allValues)
   }
 
-  func test_putVaraible_SendsUpdateEvent() {
+  func test_putVaraible_SendsUpdateEvent_WhenVariableAdded() {
     storage.put(name: "string_var", value: .string("string value"))
 
     XCTAssertEqual(["string_var"], event?.changedVariables)
     XCTAssertEqual([:], event?.oldValues)
   }
 
-  func test_putVaraibles_SendsUpdateEvent() {
+  func test_putVaraible_SendsUpdateEvent_WhenVariableChanged() {
+    storage.put(variables)
+    event = nil
+
+    storage.put(name: "string_var", value: .string("new value"))
+
+    XCTAssertEqual(["string_var"], event?.changedVariables)
+    XCTAssertEqual(variables, event?.oldValues)
+  }
+
+  func test_putVaraible_DoesNotSendUpdateEvent_WhenVariableWasNotChanged() {
+    storage.put(variables)
+    event = nil
+
+    storage.put(name: "string_var", value: .string("value"))
+
+    XCTAssertNil(event)
+  }
+
+  func test_putVaraibles_SendsUpdateEvent_WhenVariablesAdded() {
     storage.put(variables)
 
     XCTAssertEqual(Set(variables.keys), event?.changedVariables)
     XCTAssertEqual([:], event?.oldValues)
+  }
+
+  func test_putVaraible_SendsUpdateEvent_ForChangedVariablesOnly() {
+    storage.put(variables)
+    event = nil
+
+    storage.put([
+      "string_var": .string("value"),
+      "int_var": .integer(200),
+    ])
+
+    XCTAssertEqual(["int_var"], event?.changedVariables)
+    XCTAssertEqual(variables, event?.oldValues)
+  }
+
+  func test_putVaraibles_DoesNotSendUpdateEvent_WhenVariablesWasNotChanged() {
+    storage.put(variables)
+    event = nil
+
+    storage.put([
+      "string_var": .string("value"),
+      "int_var": .integer(100),
+    ])
+
+    XCTAssertNil(event)
   }
 
   func test_update_SendsUpdateEvent() {
@@ -116,6 +160,62 @@ final class DivVariableSorageTest: XCTestCase {
     event = nil
 
     storage.update(name: "string_var", value: .string("value"))
+
+    XCTAssertNil(event)
+  }
+
+  func test_replaceAll_ReplacesAllVariables() {
+    storage.put(variables)
+    event = nil
+
+    let newVariables: DivVariables = [
+      "string_var": .string("new value"),
+      "new_var": .string("value"),
+    ]
+    storage.replaceAll(newVariables)
+
+    XCTAssertEqual(newVariables, storage.allValues)
+  }
+
+  func test_replaceAll_SendsUpdateEvent() {
+    storage.put(variables)
+    event = nil
+
+    storage.replaceAll([
+      "string_var": .string("new value"),
+      "new_var": .string("value"),
+    ])
+
+    XCTAssertEqual(
+      ["string_var", "int_var", "number_var", "bool_var", "url_var", "new_var"],
+      event?.changedVariables
+    )
+    XCTAssertEqual(variables, event?.oldValues)
+  }
+
+  func test_replaceAll_SendsUpdateEvent_ForChangedVariablesOnly() {
+    storage.put(variables)
+    event = nil
+
+    storage.replaceAll([
+      "string_var": .string("value"),
+      "int_var": .integer(200),
+      "number_var": .number(123.34),
+      "new_var": .string("value"),
+    ])
+
+    XCTAssertEqual(
+      ["int_var", "bool_var", "url_var", "new_var"],
+      event?.changedVariables
+    )
+    XCTAssertEqual(variables, event?.oldValues)
+  }
+
+  func test_replaceAll_DoesNotSendUpdateEvent_WhenVariablesWasNotChanged() {
+    storage.put(variables)
+    event = nil
+
+    storage.replaceAll(variables)
 
     XCTAssertNil(event)
   }

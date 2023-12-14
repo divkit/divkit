@@ -72,7 +72,9 @@ public final class DivVariableStorage {
     lock.write {
       let oldValues = allValues
       values[name] = value
-      notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
+      if oldValues[name] != value {
+        notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
+      }
     }
   }
 
@@ -87,7 +89,15 @@ public final class DivVariableStorage {
       let oldValues = allValues
       values = values + variables
       if notifyObservers {
-        notify(ChangeEvent(changedVariables: Set(variables.map { $0.key }), oldValues: oldValues))
+        var changedVariables = Set<DivVariableName>()
+        for (name, value) in variables {
+          if oldValues[name] != value {
+            changedVariables.insert(name)
+          }
+        }
+        if !changedVariables.isEmpty {
+          notify(ChangeEvent(changedVariables: changedVariables, oldValues: oldValues))
+        }
       }
     }
   }
