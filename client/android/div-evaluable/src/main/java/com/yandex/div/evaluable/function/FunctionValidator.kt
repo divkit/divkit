@@ -1,7 +1,9 @@
 package com.yandex.div.evaluable.function
 
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
+import com.yandex.div.evaluable.toMessageFormat
 
 internal object FunctionValidator {
 
@@ -62,4 +64,29 @@ private fun Function.conflictsWith(other: Function): Boolean {
     } else {
         return false
     }
+}
+
+internal fun Function.withArgumentsValidation(args: List<EvaluableType>): Function {
+    when (val result = matchesArguments(args)) {
+        is Function.MatchResult.Ok -> return this
+
+        is Function.MatchResult.TooFewArguments -> {
+            throw EvaluableException("Too few arguments passed to function '$name': expected ${result.expected}, got ${result.actual}.")
+        }
+
+        is Function.MatchResult.TooManyArguments -> {
+            throw EvaluableException("Too many arguments passed to function '$name': expected ${result.expected}, got ${result.actual}.")
+        }
+
+        is Function.MatchResult.ArgTypeMismatch -> {
+            throw EvaluableException("Call of function '$name' has argument type mismatch: expected ${result.expected}, got ${result.actual}.")
+        }
+    }
+}
+
+internal fun getFunctionArgumentsException(name: String, args: List<EvaluableType>): Exception {
+    if (args.isEmpty()) {
+        return EvaluableException("Non empty argument list is required for function '$name'.")
+    }
+    return EvaluableException("Function '${name}' has no matching override for given argument types: ${args.toMessageFormat()}.")
 }

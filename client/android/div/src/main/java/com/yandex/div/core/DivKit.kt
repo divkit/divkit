@@ -7,7 +7,7 @@ import com.yandex.div.BuildConfig
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.dagger.DaggerDivKitComponent
 import com.yandex.div.core.dagger.DivKitComponent
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.Assert
@@ -80,7 +80,7 @@ class DivKit private constructor(
         @AnyThread
         fun warmUpStatics() {
             // Bootstraps all built in expression functions.
-            BuiltinFunctionProvider
+            GeneratedBuiltinFunctionProvider.warmUp()
         }
 
         @JvmStatic
