@@ -12,16 +12,13 @@ final class FunctionProviderTests: XCTestCase {
       cardId: cardId,
       variables: [DivVariableName(rawValue: "variable"): .string("value1")]
     )
-    let variableValueProvider = makeVariableValueProvider(
-      cardId: cardId,
-      variablesStorage: variablesStorage
-    )
     let prototypesData: (String, [String: AnyHashable]) = ("it.", ["variable": "value2"])
     let prototypesStorage = PrototypesValueStorage()
     prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
     let functionsProvider = makeFunctionsProvider(
+      cardId: cardId,
+      variablesStorage: variablesStorage,
       variableTracker: { self.trackedResult = Array($0.map(\.rawValue)) },
-      variableValueProvider: variableValueProvider,
       persistentValuesStorage: DivPersistentValuesStorage(),
       prototypesStorage: prototypesStorage
     )
