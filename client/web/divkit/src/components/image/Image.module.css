@@ -50,6 +50,10 @@
     visibility: hidden;
 }
 
+.image[data-lottie="true"] .image__image {
+    display: none;
+}
+
 @keyframes divkit-image-appearance {
     from {
         opacity: var(--divkit-appearance-fade-start);
