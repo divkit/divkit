@@ -176,58 +176,6 @@
                                 editor.dispose();
                             }
                         }
-                    },
-                    uploadFile(file: File) {
-                        const name = file.name.toLowerCase();
-                        let type: string;
-
-                        if (name.endsWith('.png')) {
-                            type = 'image/png';
-                        } else if (name.endsWith('.jpg') || name.endsWith('.jpeg')) {
-                            type = 'image/jpg';
-                        } else if (name.endsWith('.svg')) {
-                            type = 'image/svg+xml';
-                        } else if (name.endsWith('.gif')) {
-                            type = 'image/gif';
-                        } else if (name.endsWith('.json')) {
-                            type = 'application/json';
-                        } else {
-                            return Promise.reject(new Error('Unknown image'));
-                        }
-
-                        return new Promise((resolve, reject) => {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(file);
-                            reader.onload = () => {
-                                const request = fetch('/api/uploadFile', {
-                                    method: 'POST',
-                                    body: JSON.stringify({
-                                        imageData: (reader.result as string).split(',')[1],
-                                        contentType: type
-                                    }),
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    }
-                                })
-                                    .then(res => {
-                                        if (!res.ok) {
-                                            throw new Error('Requst failed');
-                                        }
-                                        return res.json();
-                                    })
-                                    .then(json => {
-                                        if (!json.ok) {
-                                            throw new Error('Something went wrong');
-                                        }
-                                        return json.url;
-                                    });
-
-                                resolve(request);
-                            };
-                            reader.onerror = error => {
-                                reject(error);
-                            };
-                        });
                     }
                 }
             });
