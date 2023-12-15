@@ -57,9 +57,7 @@
     let sizeVal = '';
 
     $: if (json) {
-        itemSpacing = '';
         padding = '';
-        sizeVal = '';
     }
 
     $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
