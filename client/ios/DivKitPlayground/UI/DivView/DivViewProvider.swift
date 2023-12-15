@@ -10,8 +10,7 @@ final class DivViewProvider {
 
   init(layoutDirection: UIUserInterfaceLayoutDirection = .system) {
     self.layoutDirection = layoutDirection
-    let variablesStorage = DivVariablesStorage()
-    let jsonProvider = PlaygroundJsonProvider(variablesStorage: variablesStorage)
+    let jsonProvider = PlaygroundJsonProvider()
     let urlHandler = PlaygroundUrlHandler(
       loadJsonUrl: { url in
         jsonProvider.load(url: url)
@@ -20,7 +19,7 @@ final class DivViewProvider {
     divKitComponents = AppComponents.makeDivKitComponents(
       layoutDirection: layoutDirection,
       urlHandler: urlHandler,
-      variablesStorage: variablesStorage
+      variableStorage: jsonProvider.paletteVariableStorage
     )
     self.jsonProvider = jsonProvider
   }

@@ -13,7 +13,7 @@ enum AppComponents {
     layoutDirection: UserInterfaceLayoutDirection = .system,
     reporter: DivReporter? = nil,
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
-    variablesStorage: DivVariablesStorage = DivVariablesStorage()
+    variableStorage: DivVariableStorage? = nil
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)
@@ -21,6 +21,7 @@ enum AppComponents {
       factory: LottieAnimationFactory(),
       requester: requester
     )
+    let variablesStorage = DivVariablesStorage(outerStorage: variableStorage)
     let sizeProviderExtensionHandler = SizeProviderExtensionHandler(
       variablesStorage: variablesStorage
     )

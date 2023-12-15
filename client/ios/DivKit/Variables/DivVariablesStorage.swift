@@ -123,6 +123,7 @@ public final class DivVariablesStorage {
     set(cardId: cardId, variables: resultVariables)
   }
 
+  /// Deprecated. Use ``DivVariableStorage`` for global variables.
   public func set(
     variables: DivVariables,
     triggerUpdate: Bool
@@ -130,6 +131,7 @@ public final class DivVariablesStorage {
     globalStorage.replaceAll(variables, notifyObservers: triggerUpdate)
   }
 
+  /// Deprecated. Use ``DivVariableStorage`` for global variables.
   public func append(
     variables: DivVariables,
     triggerUpdate: Bool

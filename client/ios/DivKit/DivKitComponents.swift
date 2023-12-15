@@ -86,7 +86,7 @@ public final class DivKitComponents {
   /// players.
   ///   - urlHandler: An optional ``DivUrlHandler`` object that allows you to implement custom
   /// action handling for specific URLs.
-  ///   - urlOpener: Deprecated. This parameter is deprecated, use ``DivUrlHandler`` instead
+  ///   - urlOpener: Deprecated. This parameter is deprecated, use ``DivUrlHandler`` instead.
   ///   - variablesStorage: A ``DivVariablesStorage`` object that handles the storage and retrieval
   /// of variables.
   public init(
@@ -103,13 +103,11 @@ public final class DivKitComponents {
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     tooltipManager: TooltipManager? = nil,
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    // remove in next major release
     trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    // remove in next major release
-    updateCardAction: UpdateCardAction? = nil, // remove in next major release
+    updateCardAction: UpdateCardAction? = nil,
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler? = nil,
-    urlOpener: @escaping UrlOpener = { _ in }, // remove in next major release
+    urlOpener: @escaping UrlOpener = { _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()

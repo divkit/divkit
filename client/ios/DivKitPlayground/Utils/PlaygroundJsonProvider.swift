@@ -4,24 +4,22 @@ import Foundation
 
 struct PlaygroundJsonProvider {
   typealias Json = [String: Any]
+
   @ObservableProperty
   private(set) var json: Json = [:]
-  private let variablesStorage: DivVariablesStorage
 
-  public init(variablesStorage: DivVariablesStorage) {
-    self.variablesStorage = variablesStorage
-  }
+  let paletteVariableStorage = DivVariableStorage()
 
-  public func load(url: URL) {
+  func load(url: URL) {
     guard let json = try? Data(contentsOf: url).asJsonDictionary() else {
       self.json = [:]
       return
     }
-    let palette = Palette(json: try! json.getOptionalField("palette") ?? [:])
-    variablesStorage.set(
-      variables: palette.makeVariables(theme: UserPreferences.playgroundTheme),
-      triggerUpdate: false
-    )
+    
+    let paletteVaraibles = Palette(json: try! json.getOptionalField("palette") ?? [:])
+      .makeVariables(theme: UserPreferences.playgroundTheme)
+    paletteVariableStorage.replaceAll(paletteVaraibles)
+    
     self.json = json
   }
 }
