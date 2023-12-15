@@ -50,19 +50,21 @@
     $: elapsedVariableName = json.elapsed_time_variable;
     $: elapsedVariable = elapsedVariableName && rootCtx.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
 
+    function variableListener(val: number): void {
+        if (isSelfVariableSet) {
+            isSelfVariableSet = false;
+            return;
+        }
+        if (videoElem) {
+            videoElem.currentTime = Number(val) / 1000;
+        }
+    }
+
     $: if (elapsedVariable) {
         if (elapsedVariableUnsubscriber) {
             elapsedVariableUnsubscriber();
         }
-        elapsedVariableUnsubscriber = elapsedVariable.subscribe(val => {
-            if (isSelfVariableSet) {
-                isSelfVariableSet = false;
-                return;
-            }
-            if (videoElem) {
-                videoElem.currentTime = Number(val) / 1000;
-            }
-        });
+        elapsedVariableUnsubscriber = elapsedVariable.subscribe(variableListener);
     }
 
     $: jsonSource = rootCtx.getDerivedFromVars(json.video_sources);
