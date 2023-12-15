@@ -177,7 +177,7 @@ public final class GalleryView: BlockView {
           withPagingEnabled: true,
           isHorizontal: model.direction.isHorizontal
         )
-        contentPager.setInitialOffset(layout.pageOrigins.first!)
+        contentPager.setInitialOffset(layout.pageOrigins.first ?? .zero)
       }
       if let contentPager = contentPager {
         configure(contentPager)

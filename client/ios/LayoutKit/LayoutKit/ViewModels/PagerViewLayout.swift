@@ -141,7 +141,7 @@ extension GalleryViewModel {
     fitting size: CGSize?,
     pageIndex: Int
   ) -> CGSize {
-    let lastFrame = frames.last!
+    guard let lastFrame = frames.last else { return .zero }
     let neigbourFrames = frames[max(0, pageIndex - 1)...min(frames.count - 1, pageIndex + 1)]
     switch direction {
     case .horizontal:

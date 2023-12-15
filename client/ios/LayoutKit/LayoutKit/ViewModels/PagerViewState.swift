@@ -27,7 +27,7 @@ extension PagerViewState {
   public func synchronized(with model: GalleryViewModel) -> PagerViewState {
     PagerViewState(
       numberOfPages: model.itemsCountWithoutInfinite,
-      currentPage: clamp(Int(currentPage), min: 0, max: model.itemsCountWithoutInfinite - 1)
+      currentPage: clamp(Int(currentPage), min: 0, max: max(0, model.itemsCountWithoutInfinite - 1))
     )
   }
 }
