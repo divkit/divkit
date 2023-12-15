@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-    import { afterUpdate, getContext, onDestroy } from 'svelte';
+    import { getContext, onDestroy } from 'svelte';
 
     import css from './Image.module.css';
 
@@ -43,7 +43,6 @@
     let img: HTMLImageElement;
     let state = STATE_LOADING;
     let isEmpty = false;
-    let isLottie = false;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
 
     let hasError = false;
@@ -196,7 +195,6 @@
     };
 
     $: style = {
-        display: isLottie ? 'none' : undefined,
         // Image preview shows, if loading of original image is failed
         'background-image': backgroundImage,
         'background-color': backgroundImage ? undefined : placeholderColor,
@@ -225,16 +223,6 @@
             state = STATE_ERROR;
         }
     }
-
-    afterUpdate(() => {
-        if (!img) {
-            return;
-        }
-        const node = img.closest('.' + css.image);
-        if (node && node.getAttribute('data-lottie')) {
-            isLottie = true;
-        }
-    });
 
     onDestroy(() => {
         rootCtx.removeSvgFilter(tintColor, tintMode);
