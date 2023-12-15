@@ -1,3 +1,26 @@
+## 29.0.0 (December 18, 2023)
+
+* Breaking change: expressions are now executed without waiting for all variables in them.
+* Breaking change. The type `Variable` and other related types (such as `StringVariable`) are now classes, not interfaces. In most cases, all the code will work the same way, but in rare cases it may break something. Also note that it is now possible to check variable type with the `instanceof`, which works as a type-guard in TypeScript (`getValue()` will return a value with the correct type). Previously, this was not possible because only `getType` existed, and TypeScript would not use it as a type-guard.
+* Breaking change: private methods in DivKit instance was removed. This methods was not typed and was not documented.
+* Breaking change: added arrows for `pager` on the `desktop` platform. There are new customization options for these arrows. Also note that the `platform` can be configured using the `render` method.
+* Breaking change: the internal implementation of the `lottie` extension has been changed. This was required to fix the issue with simultaneous display of fallback `gif` with `lottie` itself. If you are providing a similar extension created from scratch, you may need to change it a bit.
+* Added try operator `!:` for expressions.
+* Undeclared variables would not cause expressions to fail (even without getting their values) (revert change from version 23.4.0). The error would still occur if the expression actually evaluated an undeclared variable.
+* Fixed the behavior of `match_parent` inside the `container` with the size of `wrap_content` and `orientation` = `overlap`.
+* Added `len` function for array variables.
+* Fixed an issue with the expressions support inside `transition_change` property.
+* Fixed an SSR error that occured when rendering a card with a list of timers.
+* Empty containers (without `items`) is now allowed.
+* Added support for patches in `tabs` and `states` (note that patches require exactly one element for each change, unlike other types of components).
+* `text` component with an empty `text` property is now allowed.
+* Fixed an issue with whitespace near brackets `()` in expressions.
+* Added a new experimental method `setData`. This method allows you to quickly redraw the DivKit card using a new json, much more efficiently than directly destroying and recreating it again.
+* Fixed possible errors in integer calculation for the functions `getArrayInteger`, `getIntegerFromArray`, `getArrayOptInteger`, `getOptIntegerFromArray`, `getDictInteger`, `getIntegerFromDict`, `getDictOptInteger`, `getOptIntegerFromDict`, `copySign`.
+* Fixed an issue with a `separators` in `container` in the `ssr` mode.
+* Empty `grid`, `gallery` and `pager` are now allowed.
+
+
 ## 28.12.0 (November 27, 2023)
 
 * Added `scrollbar` property support in `gallery`.
