@@ -1,0 +1,52 @@
+{
+  "description": "Gradient color with ranges",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "card": {
+    "log_id": "text",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "ranges": [
+            {
+              "end": 4,
+              "start": 0,
+              "text_color": "#222222"
+            }
+          ],
+          "text": "Test text",
+          "text_gradient": {
+            "colors": [
+              "#D11DA5",
+              "#7247FF"
+            ],
+            "type": "gradient"
+          },
+          "text_alignment_vertical": "center",
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "bottom": 16,
+            "right": 16
+          },
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "bottom": 16,
+            "right": 16
+          },
+          "border": {
+            "corner_radius": 8,
+            "stroke": {
+              "color": "#0000FF"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

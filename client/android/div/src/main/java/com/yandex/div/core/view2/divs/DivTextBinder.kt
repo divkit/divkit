@@ -11,7 +11,6 @@ import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
 import android.util.DisplayMetrics
@@ -45,6 +44,7 @@ import com.yandex.div.internal.spannable.ImagePlaceholderSpan
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
+import com.yandex.div.internal.spannable.TextColorSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
 import com.yandex.div.internal.util.checkHyphenationSupported
 import com.yandex.div.internal.widget.EllipsizedTextView
@@ -689,7 +689,7 @@ internal class DivTextBinder @Inject constructor(
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.textColor?.evaluate(resolver)?.let {
-                setSpan(ForegroundColorSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                setSpan(TextColorSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.letterSpacing?.evaluate(resolver)?.let {
                 val fontSize = range.fontSize?.evaluate(resolver) ?: fontSize
