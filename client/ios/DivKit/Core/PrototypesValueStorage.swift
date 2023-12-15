@@ -2,14 +2,9 @@ import Foundation
 
 final class PrototypesValueStorage {
   private final class Node {
-    let value: Character?
     var children: [Character: Node] = [:]
     var data: [String: AnyHashable] = [:]
     var isEndOfWord: Bool = false
-
-    init(value: Character? = nil) {
-      self.value = value
-    }
   }
 
   private let root = Node()
@@ -21,7 +16,7 @@ final class PrototypesValueStorage {
       if let child = node.children[char] {
         node = child
       } else {
-        let newNode = Node(value: char)
+        let newNode = Node()
         node.children[char] = newNode
         node = newNode
       }
@@ -49,5 +44,24 @@ final class PrototypesValueStorage {
     }
 
     return result
+  }
+}
+
+extension PrototypesValueStorage {
+  func copy() -> PrototypesValueStorage {
+    let copiedStorage = PrototypesValueStorage()
+    copyNode(from: root, to: copiedStorage.root)
+    return copiedStorage
+  }
+
+  private func copyNode(from sourceNode: Node, to destinationNode: Node) {
+    destinationNode.data = sourceNode.data
+    destinationNode.isEndOfWord = sourceNode.isEndOfWord
+
+    for (char, childNode) in sourceNode.children {
+      let newChildNode = Node()
+      destinationNode.children[char] = newChildNode
+      copyNode(from: childNode, to: newChildNode)
+    }
   }
 }

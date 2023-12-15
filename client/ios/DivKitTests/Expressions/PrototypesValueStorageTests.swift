@@ -33,6 +33,14 @@ final class PrototypesValueStorageTests: XCTestCase {
     prototypesValueStorage.insert(prefix: "ab", data: dataAB)
     XCTAssertEqual(prototypesValueStorage.findValue(expression: "abc"), "value2")
   }
+
+  func test_copyingPrototypesStorage() throws {
+    let storage = PrototypesValueStorage()
+    let storageCopy = storage.copy()
+    storageCopy.insert(prefix: "a.", data: ["b": "c"])
+    XCTAssertNil(storage.findValue(expression: "a.b"))
+    XCTAssertEqual(storageCopy.findValue(expression: "a.b"), "c")
+  }
 }
 
 let prototypeData: [String: AnyHashable] = [

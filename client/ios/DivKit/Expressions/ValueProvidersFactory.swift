@@ -15,8 +15,9 @@ func makeVariableValueProvider(
 }
 
 func makeFunctionsProvider(
+  cardId: DivCardID,
+  variablesStorage: DivVariablesStorage,
   variableTracker: @escaping ExpressionResolver.VariableTracker,
-  variableValueProvider: @escaping AnyCalcExpression.ValueProvider,
   persistentValuesStorage: DivPersistentValuesStorage,
   prototypesStorage: PrototypesValueStorage? = nil
 ) -> FunctionsProvider {
@@ -26,7 +27,10 @@ func makeFunctionsProvider(
         return value
       }
       variableTracker([DivVariableName(rawValue: $0)])
-      return variableValueProvider($0)
+      return variablesStorage.getVariableValue(
+        cardId: cardId,
+        name: DivVariableName(rawValue: $0)
+      )
     },
     persistentValuesStorage: persistentValuesStorage
   )

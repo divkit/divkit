@@ -184,8 +184,9 @@ public struct DivBlockModelingContext {
       variablesStorage: variablesStorage
     )
     functionsProvider = makeFunctionsProvider(
+      cardId: cardId,
+      variablesStorage: variablesStorage,
       variableTracker: variableTracker,
-      variableValueProvider: variableValueProvider,
       persistentValuesStorage: persistentValuesStorage
     )
     expressionResolver = makeExpressionResolver(
@@ -262,9 +263,12 @@ extension DivBlockModelingContext {
     let expressionResolver: ExpressionResolver
     let parentPath = parentPath ?? self.parentPath
     let errorsStorage = errorsStorage ?? self.errorsStorage
-    let prototypesStorage = self.prototypesStorage
+    let prototypesStorage: PrototypesValueStorage
     if let prototypesData {
+      prototypesStorage = self.prototypesStorage.copy()
       prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
+    } else {
+      prototypesStorage = self.prototypesStorage
     }
     let variableValueProvider: AnyCalcExpression.ValueProvider
     let functionsProvider: FunctionsProvider
@@ -279,8 +283,9 @@ extension DivBlockModelingContext {
         prototypesStorage: prototypesStorage
       )
       functionsProvider = makeFunctionsProvider(
+        cardId: cardId,
+        variablesStorage: variablesStorage,
         variableTracker: variableTracker,
-        variableValueProvider: variableValueProvider,
         persistentValuesStorage: persistentValuesStorage,
         prototypesStorage: prototypesStorage
       )
