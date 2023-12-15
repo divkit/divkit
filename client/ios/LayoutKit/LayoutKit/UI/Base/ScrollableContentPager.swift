@@ -12,7 +12,6 @@ public final class ScrollableContentPager: NSObject {
     withPagingEnabled pagingEnabled: Bool,
     isHorizontal: Bool
   ) {
-    precondition(!pageOrigins.isEmpty)
     indexedPageOrigins = zip(pageOrigins, pageOrigins.indices).map { (origin: $0.0, index: $0.1) }
     isPagingEnabled = pagingEnabled
     self.isHorizontal = isHorizontal
