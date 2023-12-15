@@ -3,9 +3,18 @@ package com.yandex.div.evaluable.function
 import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
 
+@Deprecated(
+    "Use `GeneratedBuiltinFunctionProvider` instead",
+    ReplaceWith(
+        "GeneratedBuiltinFunctionProvider",
+        "com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider"
+    )
+)
 object BuiltinFunctionProvider : FunctionProvider {
 
     private val registry = FunctionRegistry()
+    internal val exposedFunctions
+        get() = registry.exposedFunctions
 
     init {
         // Arithmetic functions

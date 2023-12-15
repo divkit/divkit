@@ -6,7 +6,7 @@ import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.internal.parser.*
 import com.yandex.div.json.ParsingErrorLogger
@@ -66,7 +66,7 @@ class ExpressionResolverImplTest {
     private val evaluationContext = EvaluationContext(
         variableProvider = { externalVariables.getMutableVariable(it)?.getValue() },
         storedValueProvider = mock(),
-        functionProvider = BuiltinFunctionProvider,
+        functionProvider = GeneratedBuiltinFunctionProvider,
         warningSender = { _, _ -> }
     )
 

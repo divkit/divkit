@@ -9,6 +9,33 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+def generatorOutputDir = "build/generated/sources/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir(generatorOutputDir)
+        }
+    }
+    generator {
+        java {
+            srcDir("src/main/java")
+            srcDir("src/generator/java")
+        }
+    }
+}
+
+def generateFunctionProvider = task "generateFunctionProvider"(type: JavaExec) {
+    classpath = sourceSets.generator.runtimeClasspath
+    main = "com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator"
+    workingDir(generatorOutputDir)
+    outputs.dir(generatorOutputDir)
+}
+
+tasks.named("compileKotlin").configure {
+    dependsOn(generateFunctionProvider)
+}
+
 task "test${testVariant.capitalize()}UnitTest" {
     dependsOn test
 }
@@ -34,6 +61,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
     implementation "javax.inject:javax.inject:$versions.javax"
     compileOnly "org.json:json:$versions.json"
+
+    generatorImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    generatorImplementation "javax.inject:javax.inject:$versions.javax"
+    generatorCompileOnly "org.json:json:$versions.json"
+    generatorImplementation "com.squareup:kotlinpoet:$versions.kotlinpoet"
 
     testImplementation "org.json:json:$versions.json"
     testImplementation "junit:junit:$versions.junit"

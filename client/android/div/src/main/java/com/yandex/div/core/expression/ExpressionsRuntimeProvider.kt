@@ -17,7 +17,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections
@@ -119,7 +119,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             storedValueProvider = { storedValueName ->
                 storedValuesController.getStoredValue(storedValueName, errorCollector)?.getValue()
             },
-            functionProvider = BuiltinFunctionProvider,
+            functionProvider = GeneratedBuiltinFunctionProvider,
             warningSender = { expressionContext, message ->
                 val rawExpr = expressionContext.evaluable.rawExpr
                 val warning = "Warning occurred while evaluating '$rawExpr': $message"
