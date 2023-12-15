@@ -64,8 +64,13 @@ internal open class SuperLineHeightEditText constructor(context: Context) : AppC
         }
 
         val maxHeight = extractMaxHeight(heightMeasureSpec)
+        var resultHeight = minOf(
+            maxHeight,
+            fixedLineHeight * visibleLineCount + paddingTop + paddingBottom
+        )
+        resultHeight = maxOf(minimumHeight, resultHeight)
         val fixedHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-            minOf(maxHeight, fixedLineHeight * visibleLineCount + paddingTop + paddingBottom),
+            resultHeight,
             MeasureSpec.getMode(measuredHeightAndState)
         )
         setMeasuredDimension(measuredWidthAndState, fixedHeightMeasureSpec)
