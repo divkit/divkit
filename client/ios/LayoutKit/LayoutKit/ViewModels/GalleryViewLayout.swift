@@ -130,7 +130,9 @@ extension GalleryViewModel {
   }
 
   fileprivate func contentSize(for frames: [CGRect], fitting size: CGSize?) -> CGSize {
-    let lastFrame = frames.last!
+    guard let lastFrame = frames.last else {
+      return .zero
+    }
     switch direction {
     case .horizontal:
       let rightGap = lastGap(forSize: size)

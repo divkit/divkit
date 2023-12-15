@@ -45,8 +45,6 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     heightTrait: LayoutTrait = .intrinsic,
     children: [Child]
   ) {
-    precondition(!children.isEmpty)
-
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.children = children
