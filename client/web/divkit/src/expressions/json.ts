@@ -3,7 +3,7 @@ import type { VariableValue } from './variable';
 import { uniq } from '../utils/uniq';
 import { parse } from './expressions';
 import { evalExpression, VariablesMap } from './eval';
-import { containsUnsetVariables, dateToString, gatherVarsFromAst, stringifyColor } from './utils';
+import { dateToString, gatherVarsFromAst, stringifyColor } from './utils';
 import { LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
 import { MAX_INT32, MIN_INT32 } from './const';
@@ -22,10 +22,6 @@ class ExpressionBinding {
      * @param logError
      */
     apply(variables: VariablesMap, logError: LogError): VariableValue | string | undefined {
-        if (containsUnsetVariables(this.ast, variables)) {
-            return undefined;
-        }
-
         try {
             const res = evalExpression(variables, this.ast);
             res.warnings.forEach(logError);
