@@ -189,8 +189,7 @@ final class CalcExpression: CustomStringConvertible {
   /// Returns an opaque struct that cannot be evaluated but can be queried
   /// for symbols or used to construct an executable CalcExpression instance
   static func parse(_ expression: String) -> ParsedCalcExpression {
-    var characters = Substring.UnicodeScalarView(expression.unicodeScalars)
-    return parse(&characters)
+    parse(UnicodeScalarView(expression.unicodeScalars))
   }
 
   /// Parse an expression directly from the provided UnicodeScalarView,
@@ -199,11 +198,11 @@ final class CalcExpression: CustomStringConvertible {
   /// inside another string, e.g. for implementing string interpolation.
   /// If no delimiter string is specified, the method will throw an error
   /// if it encounters an unexpected token, but won't consume it
-  static func parse(
-    _ input: inout Substring.UnicodeScalarView,
+  private static func parse(
+    _ input: UnicodeScalarView,
     upTo delimiters: String...
   ) -> ParsedCalcExpression {
-    var unicodeScalarView = UnicodeScalarView(input)
+    var unicodeScalarView = input
     let start = unicodeScalarView
     var subexpression: Subexpression
     do {
@@ -212,7 +211,6 @@ final class CalcExpression: CustomStringConvertible {
       let expression = String(start.prefix(upTo: unicodeScalarView.startIndex))
       subexpression = .error(error as! Error, expression)
     }
-    input = Substring.UnicodeScalarView(unicodeScalarView)
     return ParsedCalcExpression(root: subexpression)
   }
 
