@@ -18,32 +18,30 @@ extension DivContainer {
   }
 
   func makeChildren<T>(
-    containerContext: DivBlockModelingContext,
+    context: DivBlockModelingContext,
     mappedBy modificator: (Div, Block, DivBlockModelingContext) throws -> T
   ) throws -> [T] {
     guard let dataSource else {
       throw DivBlockModelingError(
         "DivContainer has no items and itemBuilder property",
-        path: containerContext.parentPath,
-        causes: containerContext.errorsStorage.errors
+        path: context.parentPath
       )
     }
-    let resolver = containerContext.expressionResolver
-    let childrenContext = containerContext.modifying(errorsStorage: DivErrorsStorage(errors: []))
-    let children: [T]
+    
     switch dataSource {
     case let .divs(items):
-      let orientation = resolveOrientation(resolver)
+      let expressionResolver = context.expressionResolver
+      let orientation = resolveOrientation(expressionResolver)
       let filtredItems = items.filter {
-        guard resolveLayoutMode(resolver) == .wrap else { return true }
+        guard resolveLayoutMode(expressionResolver) == .wrap else { return true }
         if orientation == .vertical, $0.isHorizontallyMatchParent {
-          childrenContext.addWarning(
+          context.addWarning(
             message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
           )
           return false
         }
         if orientation == .horizontal, $0.isVerticallyMatchParent {
-          childrenContext.addWarning(
+          context.addWarning(
             message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
           )
           return false
@@ -51,24 +49,20 @@ extension DivContainer {
         return true
       }
 
-      children = try filtredItems.makeBlocks(
-        context: childrenContext,
+      return try filtredItems.makeBlocks(
+        context: context,
         sizeModifier: DivContainerSizeModifier(
-          context: childrenContext,
+          context: context,
           container: self,
           orientation: orientation
         ),
         mappedBy: modificator
       )
     case let .itemBuilder(itemBuilder):
-      children = try itemBuilder.makeBlocks(
-        context: childrenContext,
+      return try itemBuilder.makeBlocks(
+        context: context,
         mappedBy: modificator
       )
     }
-
-    containerContext.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
-
-    return children
   }
 }

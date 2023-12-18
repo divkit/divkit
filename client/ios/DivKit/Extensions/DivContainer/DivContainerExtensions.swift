@@ -66,7 +66,7 @@ extension DivContainer: DivBlockModeling {
     )
 
     let children = try makeChildren(
-      containerContext: context,
+      context: context,
       mappedBy: { div, block, context in
         LayeredBlock.Child(
           content: block,
@@ -118,7 +118,7 @@ extension DivContainer: DivBlockModeling {
       defaultCrossAlignment = ContainerBlock.CrossAlignment.leading
     }
     let children: [ContainerBlock.Child] = try makeChildren(
-      containerContext: context,
+      context: context,
       mappedBy: { div, block, context in
         ContainerBlock.Child(
           content: block,

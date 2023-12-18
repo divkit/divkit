@@ -25,9 +25,8 @@ extension DivGalleryProtocol {
     scrollbar: GalleryViewModel.Scrollbar = .none
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
-    let childrenContext = context.modifying(errorsStorage: DivErrorsStorage(errors: []))
     var children: [GalleryViewModel.Item] = nonNilItems.makeBlocks(
-      context: childrenContext,
+      context: context,
       sizeModifier: DivGallerySizeModifier(
         context: context,
         gallery: self,
@@ -50,8 +49,6 @@ extension DivGalleryProtocol {
        let first = children.first {
       children = [last] + children + [first]
     }
-
-    context.errorsStorage.add(contentsOf: childrenContext.errorsStorage)
 
     let metrics = try makeMetrics(
       spacing: spacing,
