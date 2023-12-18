@@ -1,7 +1,7 @@
 @testable import DivKit
 
 func makeDivData(
-  logId: String,
+  logId: String = DivKitTests.cardId.rawValue,
   states: [DivData.State]
 ) -> DivData {
   DivData(
@@ -11,6 +11,12 @@ func makeDivData(
     transitionAnimationSelector: nil,
     variableTriggers: nil,
     variables: nil
+  )
+}
+
+func makeDivData(_ div: Div) -> DivData {
+  makeDivData(
+    states: [.init(div: div, stateId: 0)]
   )
 }
 

@@ -27,7 +27,7 @@
 		52DED04F29F7349000D64519 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 52DED04E29F7349000D64519 /* DivKit */; };
 		52DED05129F7349000D64519 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52DED05029F7349000D64519 /* DivKitExtensions */; };
 		52DED05329F734B900D64519 /* ShimmerStyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DED03C29F6E3D500D64519 /* ShimmerStyleTests.swift */; };
-		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
+		52EEC66E293E64C90030FB11 /* DivBlockModelingContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextTests.swift */; };
 		65509D272A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */; };
 		65509D292A98EA9200F75699 /* PhoneMaskFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
@@ -287,7 +287,7 @@
 		52CD806A2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+ViewVisibilityCallCount.swift"; sourceTree = "<group>"; };
 		52DED03C29F6E3D500D64519 /* ShimmerStyleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerStyleTests.swift; sourceTree = "<group>"; };
 		52DED04729F7346900D64519 /* DivKitExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextErrorsTests.swift; sourceTree = "<group>"; };
+		52EEC66D293E64C90030FB11 /* DivBlockModelingContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextTests.swift; sourceTree = "<group>"; };
 		65509D262A98EA4F00F75699 /* FixedLengthMaskFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedLengthMaskFormatterTests.swift; sourceTree = "<group>"; };
 		65509D282A98EA9200F75699 /* PhoneMaskFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneMaskFormatterTests.swift; sourceTree = "<group>"; };
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
@@ -887,7 +887,7 @@
 				8C7B1BE72865C01C0036EF4C /* Templates */,
 				E986A85A293DE77000D19572 /* Timers */,
 				8C7B1BE42865C01C0036EF4C /* Variables */,
-				52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */,
+				52EEC66D293E64C90030FB11 /* DivBlockModelingContextTests.swift */,
 				8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */,
 				8C7B1B6C2865C01C0036EF4C /* DivBuilders.swift */,
 				7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */,
@@ -1606,7 +1606,7 @@
 				52CD80672A7122AA00B828B0 /* DivBaseExtensionsTests.swift in Sources */,
 				8C23F43F29DDB3810069F3F7 /* EntityProtocol.swift in Sources */,
 				8C22BBBB2B037BA20076BAEB /* EnumWithDefaultType.swift in Sources */,
-				52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */,
+				52EEC66E293E64C90030FB11 /* DivBlockModelingContextTests.swift in Sources */,
 				8C23F42729DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift in Sources */,
 				8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */,
 				8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */,

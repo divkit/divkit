@@ -44,12 +44,20 @@ final class DivDataExtensionsTests: XCTestCase {
     XCTAssertTrue(block == expectedBlock)
   }
 
-  func test_PathContainsRoot() throws {
-    let block = try dataWithDivWithAction
+  func test_ActionPathContainsCardId() throws {
+    let block = try makeDivData(.divText(divWithAction))
       .makeBlock(context: .default)
       .withoutStateBlock() as? DecoratingBlock
-    let expectedActionPath = UIElementPath.root + divWithAction.action!.logId
-    XCTAssertEqual(block?.actions?.first.path, expectedActionPath)
+    XCTAssertEqual(block?.actions?.first.path, UIElementPath.root + "action_log_id")
+  }
+
+  func test_ActionPathContainsExternalCardLogId() throws {
+    let context = DivBlockModelingContext()
+      .modifying(cardLogId: "external_card_log_id")
+    let block = try makeDivData(.divText(divWithAction))
+      .makeBlock(context: context)
+      .withoutStateBlock() as? DecoratingBlock
+    XCTAssertEqual(block?.actions?.first.path, UIElementPath("external_card_log_id") + "action_log_id")
   }
 
   func test_GalleryPathContainsRoot() throws {
@@ -89,7 +97,6 @@ final class DivDataExtensionsTests: XCTestCase {
 }
 
 private let data = makeDivData(
-  logId: DivKitTests.cardLogId,
   states: [
     .init(div: .divText(DivText(text: .value("0" as CFString))), stateId: 0),
     .init(div: .divText(DivText(text: .value("1" as CFString))), stateId: 1),
@@ -102,11 +109,6 @@ private let divWithAction = DivText(
   text: .value("0" as CFString)
 )
 
-private let dataWithDivWithAction = makeDivData(
-  logId: DivKitTests.cardLogId,
-  states: [.init(div: .divText(divWithAction), stateId: 0)]
-)
-
 private let gallery = makeDivGallery(
   items: [
     .divText(DivText(
@@ -116,10 +118,7 @@ private let gallery = makeDivGallery(
   ]
 )
 
-private let dataWithGallery = makeDivData(
-  logId: DivKitTests.cardLogId,
-  states: [.init(div: .divGallery(gallery), stateId: 0)]
-)
+private let dataWithGallery = makeDivData(.divGallery(gallery))
 
 extension Block {
   fileprivate func withoutStateBlock() -> Block {

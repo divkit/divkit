@@ -6,15 +6,26 @@ import CommonCorePublic
 import LayoutKit
 
 final class DivActionExtensionsTests: XCTestCase {
+  func test_AddsCardLogIdToActionPath() {
+    let divAction = DivAction(
+      logId: logId,
+      url: testURL
+    )
+    let action = divAction.uiAction(
+      context: .default.modifying(cardLogId: "card_log_id")
+    )
+    XCTAssertEqual(action.path, UIElementPath("card_log_id") + logId)
+  }
+  
   func test_WhenHasURL_BuildsActionWithIt() {
     let divAction = DivAction(
       logId: logId,
       url: testURL
     )
-    let action = divAction.uiAction(context: context)
+    let action = divAction.uiAction(context: .default)
     let expectedAction = UserInterfaceAction(
       payload: divAction.makeDivActionPayload(),
-      path: expectedPath
+      path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
   }
@@ -27,18 +38,18 @@ final class DivActionExtensionsTests: XCTestCase {
         DivAction.MenuItem(action: menuItemDivAction, text: .value("url")),
       ]
     )
-    let action = divAction.uiAction(context: context)
+    let action = divAction.uiAction(context: .default)
     let expectedAction = UserInterfaceAction(
       menu: Menu(items: [
         Menu.Item(
           action: UserInterfaceAction(
             payloads: [menuItemDivAction.makeDivActionPayload()],
-            path: expectedPath
+            path: .root + logId
           ),
           text: "url"
         ),
       ])!,
-      path: expectedPath
+      path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
   }
@@ -48,10 +59,10 @@ final class DivActionExtensionsTests: XCTestCase {
       logId: logId,
       payload: testPayload
     )
-    let action = divAction.uiAction(context: context)
+    let action = divAction.uiAction(context: .default)
     let expectedAction = UserInterfaceAction(
       payload: divAction.makeDivActionPayload(),
-      path: expectedPath
+      path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
   }
@@ -62,26 +73,24 @@ final class DivActionExtensionsTests: XCTestCase {
       payload: testPayload,
       url: testURL
     )
-    let action = divAction.uiAction(context: context)
+    let action = divAction.uiAction(context: .default)
     let expectedAction = UserInterfaceAction(
       payload: divAction.makeDivActionPayload(),
-      path: expectedPath
+      path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
   }
 
   func test_WhenPayloadIsMissing_BuildsDivAction() {
     let divAction = DivAction(logId: logId)
-    let action = divAction.uiAction(context: context)
+    let action = divAction.uiAction(context: .default)
     let expectedAction = UserInterfaceAction(
       payload: divAction.makeDivActionPayload(),
-      path: expectedPath
+      path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
   }
 }
-
-private let context = DivBlockModelingContext.default
 
 private let logId = "test/log_id"
 
@@ -91,8 +100,6 @@ private let testPayload: [String: Any] = [
   "string_key": "string_value",
   "number_key": 42,
 ]
-
-private let expectedPath: UIElementPath = .root + logId
 
 extension DivAction {
   fileprivate func makeDivActionPayload() -> UserInterfaceAction.Payload {

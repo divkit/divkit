@@ -7,8 +7,7 @@ import NetworkingPublic
 import Serialization
 
 final class DivKitTests: XCTestCase {
-  static let cardId = DivCardID(rawValue: cardLogId)
-  static let cardLogId = "test_card_id"
+  static let cardId = DivCardID(rawValue: "test_card_id")
 }
 
 extension TemplateValue where ResolvedValue: DivBlockModeling {
@@ -49,14 +48,16 @@ extension DivBlockModelingContext {
 
   init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
+    extensionHandlers: [DivExtensionHandler] = [],
     scheduler: Scheduling? = nil
   ) {
     self.init(
       cardId: DivKitTests.cardId,
-      cardLogId: DivKitTests.cardLogId,
+      cardLogId: DivKitTests.cardId.rawValue,
       stateManager: DivStateManager(),
       blockStateStorage: blockStateStorage,
       imageHolderFactory: FakeImageHolderFactory(),
+      extensionHandlers: extensionHandlers,
       scheduler: scheduler,
       persistentValuesStorage: DivPersistentValuesStorage()
     )
