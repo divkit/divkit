@@ -6,14 +6,14 @@ import Serialization
 
 public final class DivVideo: DivBase {
   public static let type: String = "video"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let aspect: DivAspect?
   public let autostart: Expression<Bool> // default value: false
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let bufferingActions: [DivAction]?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
@@ -24,9 +24,9 @@ public final class DivVideo: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let muted: Expression<Bool> // default value: false
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let pauseActions: [DivAction]?
   public let playerSettingsPayload: [String: Any]?
   public let preview: Expression<String>?
@@ -36,7 +36,7 @@ public final class DivVideo: DivBase {
   public let scale: Expression<DivVideoScale> // default value: fit
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -148,14 +148,14 @@ public final class DivVideo: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.aspect = aspect
     self.autostart = autostart ?? .value(false)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.bufferingActions = bufferingActions
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
@@ -166,9 +166,9 @@ public final class DivVideo: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.muted = muted ?? .value(false)
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.pauseActions = pauseActions
     self.playerSettingsPayload = playerSettingsPayload
     self.preview = preview
@@ -178,7 +178,7 @@ public final class DivVideo: DivBase {
     self.scale = scale ?? .value(.fit)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -295,14 +295,14 @@ extension DivVideo: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["aspect"] = aspect?.toDictionary()
     result["autostart"] = autostart.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["buffering_actions"] = bufferingActions?.map { $0.toDictionary() }
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
@@ -313,9 +313,9 @@ extension DivVideo: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["muted"] = muted.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["pause_actions"] = pauseActions?.map { $0.toDictionary() }
     result["player_settings_payload"] = playerSettingsPayload
     result["preview"] = preview?.toValidSerializationValue()
@@ -325,7 +325,7 @@ extension DivVideo: Serializable {
     result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

@@ -59,17 +59,25 @@ extension DivBase {
       .getState(context.parentPath) ?? .default
     let background = getBackground(focusState)
     let border = getBorder(focusState)
-    let anchorPoint = transform.resolveAnchorPoint(expressionResolver)
-
+    
+    let boundary: BoundaryTrait
+    if !clipToBounds {
+      boundary = .noClip
+    } else if let border {
+      boundary = .clipCorner(border.resolveCornerRadii(expressionResolver))
+    } else {
+      boundary = .clips
+    }
+    
     block = try applyBackground(
       background,
       to: block,
       context: context
     )
     .addingDecorations(
-      boundary: clipToBounds ? .clipCorner(border.resolveCornerRadii(expressionResolver)) : .noClip,
-      border: border.resolveBorder(expressionResolver),
-      shadow: border.resolveShadow(expressionResolver),
+      boundary: boundary,
+      border: border?.resolveBorder(expressionResolver),
+      shadow: border?.resolveShadow(expressionResolver),
       visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
       lastVisibleBounds: visibilityActions.isEmpty ? nil : Property<CGRect>(
         getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
@@ -83,20 +91,23 @@ extension DivBase {
       scheduler: context.scheduler,
       tooltips: tooltips.makeTooltips(context: context)
     )
-    .addingTransform(
-      transform: transform.resolveRotation(expressionResolver)
-        .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
-      anchorPoint: anchorPoint
-    )
+    
+    if let transform {
+      block = block.addingTransform(
+        transform: transform.resolveRotation(expressionResolver)
+          .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
+        anchorPoint: transform.resolveAnchorPoint(expressionResolver)
+      )
+    }
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        boundary: transform.resolveRotation(expressionResolver).flatMap { _ in .noClip } ??
-          border.resolveShadow(expressionResolver).flatMap { _ in .noClip },
+        boundary: transform?.resolveRotation(expressionResolver).flatMap { _ in .noClip } ??
+          border?.resolveShadow(expressionResolver).flatMap { _ in .noClip },
         alpha: CGFloat(resolveAlpha(expressionResolver)),
-        accessibilityElement: customA11yElement ?? accessibility.resolve(context, id: id)
+        accessibilityElement: customA11yElement ?? accessibility?.resolve(context, id: id)
       )
 
     return applyExtensionHandlersAfterBaseProperties(
@@ -114,7 +125,7 @@ extension DivBase {
     return focusedBackground
   }
 
-  private func getBorder(_ focusState: FocusViewState) -> DivBorder {
+  private func getBorder(_ focusState: FocusViewState) -> DivBorder? {
     guard focusState.isFocused else {
       return border
     }

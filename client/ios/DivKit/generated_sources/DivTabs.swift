@@ -173,12 +173,12 @@ public final class DivTabs: DivBase {
   }
 
   public static let type: String = "tabs"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let dynamicHeight: Expression<Bool> // default value: false
@@ -188,8 +188,8 @@ public final class DivTabs: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let items: [Item] // at least 1 elements
-  public let margins: DivEdgeInsets
-  public let paddings: DivEdgeInsets
+  public let margins: DivEdgeInsets?
+  public let paddings: DivEdgeInsets?
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
@@ -197,10 +197,10 @@ public final class DivTabs: DivBase {
   public let separatorColor: Expression<Color> // default value: #14000000
   public let separatorPaddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
   public let switchTabsByContentSwipeEnabled: Expression<Bool> // default value: true
-  public let tabTitleStyle: TabTitleStyle
+  public let tabTitleStyle: TabTitleStyle?
   public let titlePaddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -314,12 +314,12 @@ public final class DivTabs: DivBase {
     visibilityActions: [DivVisibilityAction]?,
     width: DivSize?
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.dynamicHeight = dynamicHeight ?? .value(false)
@@ -329,8 +329,8 @@ public final class DivTabs: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
-    self.margins = margins ?? DivEdgeInsets()
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.margins = margins
+    self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
@@ -338,10 +338,10 @@ public final class DivTabs: DivBase {
     self.separatorColor = separatorColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.separatorPaddings = separatorPaddings ?? DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
     self.switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?? .value(true)
-    self.tabTitleStyle = tabTitleStyle ?? DivTabs.TabTitleStyle()
+    self.tabTitleStyle = tabTitleStyle
     self.titlePaddings = titlePaddings ?? DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -449,12 +449,12 @@ extension DivTabs: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["dynamic_height"] = dynamicHeight.toValidSerializationValue()
@@ -464,8 +464,8 @@ extension DivTabs: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
-    result["paddings"] = paddings.toDictionary()
+    result["margins"] = margins?.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
@@ -473,10 +473,10 @@ extension DivTabs: Serializable {
     result["separator_color"] = separatorColor.toValidSerializationValue()
     result["separator_paddings"] = separatorPaddings.toDictionary()
     result["switch_tabs_by_content_swipe_enabled"] = switchTabsByContentSwipeEnabled.toValidSerializationValue()
-    result["tab_title_style"] = tabTitleStyle.toDictionary()
+    result["tab_title_style"] = tabTitleStyle?.toDictionary()
     result["title_paddings"] = titlePaddings.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

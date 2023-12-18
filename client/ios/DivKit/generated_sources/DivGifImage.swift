@@ -6,7 +6,7 @@ import Serialization
 
 public final class DivGifImage: DivBase {
   public static let type: String = "gif"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
   public let actions: [DivAction]?
@@ -15,7 +15,7 @@ public final class DivGifImage: DivBase {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let aspect: DivAspect?
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
@@ -27,8 +27,8 @@ public final class DivGifImage: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
   public let longtapActions: [DivAction]?
-  public let margins: DivEdgeInsets
-  public let paddings: DivEdgeInsets
+  public let margins: DivEdgeInsets?
+  public let paddings: DivEdgeInsets?
   public let placeholderColor: Expression<Color> // default value: #14000000
   public let preloadRequired: Expression<Bool> // default value: false
   public let preview: Expression<String>?
@@ -36,7 +36,7 @@ public final class DivGifImage: DivBase {
   public let scale: Expression<DivImageScale> // default value: fill
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -151,7 +151,7 @@ public final class DivGifImage: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.action = action
     self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
@@ -160,7 +160,7 @@ public final class DivGifImage: DivBase {
     self.alpha = alpha ?? .value(1.0)
     self.aspect = aspect
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.center)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
@@ -172,8 +172,8 @@ public final class DivGifImage: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.longtapActions = longtapActions
-    self.margins = margins ?? DivEdgeInsets()
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.margins = margins
+    self.paddings = paddings
     self.placeholderColor = placeholderColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.preloadRequired = preloadRequired ?? .value(false)
     self.preview = preview
@@ -181,7 +181,7 @@ public final class DivGifImage: DivBase {
     self.scale = scale ?? .value(.fill)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -296,7 +296,7 @@ extension DivGifImage: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["action"] = action?.toDictionary()
     result["action_animation"] = actionAnimation.toDictionary()
     result["actions"] = actions?.map { $0.toDictionary() }
@@ -305,7 +305,7 @@ extension DivGifImage: Serializable {
     result["alpha"] = alpha.toValidSerializationValue()
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
@@ -317,8 +317,8 @@ extension DivGifImage: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
-    result["paddings"] = paddings.toDictionary()
+    result["margins"] = margins?.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["placeholder_color"] = placeholderColor.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["preview"] = preview?.toValidSerializationValue()
@@ -326,7 +326,7 @@ extension DivGifImage: Serializable {
     result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

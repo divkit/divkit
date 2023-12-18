@@ -19,7 +19,7 @@ public final class DivContainer: DivBase {
   }
 
   public final class Separator {
-    public let margins: DivEdgeInsets
+    public let margins: DivEdgeInsets?
     public let showAtEnd: Expression<Bool> // default value: false
     public let showAtStart: Expression<Bool> // default value: false
     public let showBetween: Expression<Bool> // default value: true
@@ -44,7 +44,7 @@ public final class DivContainer: DivBase {
       showBetween: Expression<Bool>? = nil,
       style: DivDrawable
     ) {
-      self.margins = margins ?? DivEdgeInsets()
+      self.margins = margins
       self.showAtEnd = showAtEnd ?? .value(false)
       self.showAtStart = showAtStart ?? .value(false)
       self.showBetween = showBetween ?? .value(true)
@@ -53,7 +53,7 @@ public final class DivContainer: DivBase {
   }
 
   public static let type: String = "container"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
   public let actions: [DivAction]?
@@ -62,7 +62,7 @@ public final class DivContainer: DivBase {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let aspect: DivAspect?
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let clipToBounds: Expression<Bool> // default value: true
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivContentAlignmentHorizontal> // default value: start
@@ -78,14 +78,14 @@ public final class DivContainer: DivBase {
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
   public let lineSeparator: Separator?
   public let longtapActions: [DivAction]?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: vertical
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let separator: Separator?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -194,7 +194,7 @@ public final class DivContainer: DivBase {
     visibilityActions: [DivVisibilityAction]?,
     width: DivSize?
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.action = action
     self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
@@ -203,7 +203,7 @@ public final class DivContainer: DivBase {
     self.alpha = alpha ?? .value(1.0)
     self.aspect = aspect
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.clipToBounds = clipToBounds ?? .value(true)
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.start)
@@ -219,14 +219,14 @@ public final class DivContainer: DivBase {
     self.layoutMode = layoutMode ?? .value(.noWrap)
     self.lineSeparator = lineSeparator
     self.longtapActions = longtapActions
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.orientation = orientation ?? .value(.vertical)
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.separator = separator
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -347,7 +347,7 @@ extension DivContainer: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["action"] = action?.toDictionary()
     result["action_animation"] = actionAnimation.toDictionary()
     result["actions"] = actions?.map { $0.toDictionary() }
@@ -356,7 +356,7 @@ extension DivContainer: Serializable {
     result["alpha"] = alpha.toValidSerializationValue()
     result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["clip_to_bounds"] = clipToBounds.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
@@ -372,14 +372,14 @@ extension DivContainer: Serializable {
     result["layout_mode"] = layoutMode.toValidSerializationValue()
     result["line_separator"] = lineSeparator?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["separator"] = separator?.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
@@ -416,7 +416,7 @@ extension DivContainer.Separator: Equatable {
 extension DivContainer.Separator: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["show_at_end"] = showAtEnd.toValidSerializationValue()
     result["show_at_start"] = showAtStart.toValidSerializationValue()
     result["show_between"] = showBetween.toValidSerializationValue()

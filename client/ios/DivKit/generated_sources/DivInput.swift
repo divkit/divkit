@@ -30,12 +30,12 @@ public final class DivInput: DivBase {
   }
 
   public static let type: String = "input"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
@@ -52,11 +52,11 @@ public final class DivInput: DivBase {
   public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let mask: DivInputMask?
   public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectAllOnFocus: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]?
@@ -65,7 +65,7 @@ public final class DivInput: DivBase {
   public let textColor: Expression<Color> // default value: #FF000000
   public let textVariable: String
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -228,12 +228,12 @@ public final class DivInput: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -250,11 +250,11 @@ public final class DivInput: DivBase {
     self.keyboardType = keyboardType ?? .value(.multiLineText)
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.mask = mask
     self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
@@ -263,7 +263,7 @@ public final class DivInput: DivBase {
     self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -393,12 +393,12 @@ extension DivInput: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
@@ -415,11 +415,11 @@ extension DivInput: Serializable {
     result["keyboard_type"] = keyboardType.toValidSerializationValue()
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["mask"] = mask?.toDictionary()
     result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["select_all_on_focus"] = selectAllOnFocus.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
@@ -428,7 +428,7 @@ extension DivInput: Serializable {
     result["text_color"] = textColor.toValidSerializationValue()
     result["text_variable"] = textVariable
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

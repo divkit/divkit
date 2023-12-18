@@ -6,7 +6,7 @@ import Serialization
 
 public final class DivGrid: DivBase {
   public static let type: String = "grid"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
   public let actions: [DivAction]?
@@ -14,7 +14,7 @@ public final class DivGrid: DivBase {
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnCount: Expression<Int> // constraint: number >= 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
@@ -27,12 +27,12 @@ public final class DivGrid: DivBase {
   public let id: String?
   public let items: [Div]?
   public let longtapActions: [DivAction]?
-  public let margins: DivEdgeInsets
-  public let paddings: DivEdgeInsets
+  public let margins: DivEdgeInsets?
+  public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -130,7 +130,7 @@ public final class DivGrid: DivBase {
     visibilityActions: [DivVisibilityAction]?,
     width: DivSize?
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.action = action
     self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
@@ -138,7 +138,7 @@ public final class DivGrid: DivBase {
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.start)
@@ -151,12 +151,12 @@ public final class DivGrid: DivBase {
     self.id = id
     self.items = items
     self.longtapActions = longtapActions
-    self.margins = margins ?? DivEdgeInsets()
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.margins = margins
+    self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -263,7 +263,7 @@ extension DivGrid: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["action"] = action?.toDictionary()
     result["action_animation"] = actionAnimation.toDictionary()
     result["actions"] = actions?.map { $0.toDictionary() }
@@ -271,7 +271,7 @@ extension DivGrid: Serializable {
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_count"] = columnCount.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
@@ -284,12 +284,12 @@ extension DivGrid: Serializable {
     result["id"] = id
     result["items"] = items?.map { $0.toDictionary() }
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
-    result["paddings"] = paddings.toDictionary()
+    result["margins"] = margins?.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

@@ -191,7 +191,7 @@ public final class DivText: DivBase {
   }
 
   public static let type: String = "text"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let action: DivAction?
   public let actionAnimation: DivAnimation // default value: DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
   public let actions: [DivAction]?
@@ -200,7 +200,7 @@ public final class DivText: DivBase {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let autoEllipsize: Expression<Bool>?
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let doubletapActions: [DivAction]?
@@ -218,10 +218,10 @@ public final class DivText: DivBase {
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let longtapActions: [DivAction]?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let maxLines: Expression<Int>? // constraint: number >= 0
   public let minHiddenLines: Expression<Int>? // constraint: number >= 0
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let ranges: [Range]?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectable: Expression<Bool> // default value: false
@@ -234,7 +234,7 @@ public final class DivText: DivBase {
   public let textGradient: DivTextGradient?
   public let textShadow: DivShadow?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -416,7 +416,7 @@ public final class DivText: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.action = action
     self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
@@ -425,7 +425,7 @@ public final class DivText: DivBase {
     self.alpha = alpha ?? .value(1.0)
     self.autoEllipsize = autoEllipsize
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.doubletapActions = doubletapActions
@@ -443,10 +443,10 @@ public final class DivText: DivBase {
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.longtapActions = longtapActions
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.maxLines = maxLines
     self.minHiddenLines = minHiddenLines
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.ranges = ranges
     self.rowSpan = rowSpan
     self.selectable = selectable ?? .value(false)
@@ -459,7 +459,7 @@ public final class DivText: DivBase {
     self.textGradient = textGradient
     self.textShadow = textShadow
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -609,7 +609,7 @@ extension DivText: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["action"] = action?.toDictionary()
     result["action_animation"] = actionAnimation.toDictionary()
     result["actions"] = actions?.map { $0.toDictionary() }
@@ -618,7 +618,7 @@ extension DivText: Serializable {
     result["alpha"] = alpha.toValidSerializationValue()
     result["auto_ellipsize"] = autoEllipsize?.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
@@ -636,10 +636,10 @@ extension DivText: Serializable {
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["max_lines"] = maxLines?.toValidSerializationValue()
     result["min_hidden_lines"] = minHiddenLines?.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selectable"] = selectable.toValidSerializationValue()
@@ -652,7 +652,7 @@ extension DivText: Serializable {
     result["text_gradient"] = textGradient?.toDictionary()
     result["text_shadow"] = textShadow?.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

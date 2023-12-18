@@ -23,6 +23,7 @@ struct RegressionTestView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: 220)
         .background(Color(red: 0xF2 / 255, green: 0xF2 / 255, blue: 0xF2 / 255))
+        .accessibilityHidden(true)
       }
     }
   }

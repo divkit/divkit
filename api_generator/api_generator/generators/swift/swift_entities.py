@@ -438,8 +438,7 @@ class SwiftProperty(Property):
 
     @property
     def should_be_optional(self) -> bool:
-        prop_type = cast(SwiftPropertyType, self.property_type)
-        return self.optional and (self.default_value is None) and prop_type.empty_constructor is None
+        return self.optional and self.default_value is None
 
     def declaration(self, access_level: SwiftAccessLevel) -> Text:
         if isinstance(self.property_type, StaticString):
@@ -602,9 +601,7 @@ class SwiftProperty(Property):
 
     @property
     def parsed_value_is_optional(self) -> bool:
-        return self.optional or \
-            self.default_value is not None or \
-            cast(SwiftPropertyType, self.property_type).empty_constructor is not None
+        return self.optional or self.default_value is not None
 
     def deserialization_expression(self, in_value_resolving: bool) -> str:
         mode = SwiftProperty.SwiftMode(GenerationMode.TEMPLATE, self.supports_expressions)
@@ -636,12 +633,9 @@ class SwiftProperty(Property):
 
     def add_default_value_to(self, declaration: str, public_default_value: bool = False) -> str:
         prop_type = cast(SwiftPropertyType, self.property_type)
-        empty_dict_deserialization = prop_type.empty_constructor
         if self.default_value is not None:
             default_value_declaration_to_use = prop_type.internal_declaration(self.default_value) \
                 if not public_default_value else f'Self.{self.static_default_value_name}'
-        elif empty_dict_deserialization is not None:
-            default_value_declaration_to_use = empty_dict_deserialization
         else:
             return declaration
 
@@ -680,13 +674,6 @@ class SwiftProperty(Property):
 
 
 class SwiftPropertyType(PropertyType):
-    @property
-    def empty_constructor(self) -> Optional[str]:
-        if isinstance(self, Object) and isinstance(self.object, Entity) and \
-                self.object.all_properties_are_optional_except_default_values:
-            return f'{self.object.prefixed_declaration}()'
-        return None
-
     def declaration(self, mode: SwiftProperty.SwiftMode) -> str:
         return self._declaration(prefixed=False, mode=mode)
 

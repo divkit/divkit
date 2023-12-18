@@ -28,7 +28,7 @@ extension Div {
   func resolveA11yDescription(_ context: DivBlockModelingContext) -> String? {
     let expressionResolver = context.expressionResolver
     let accessibility = value.accessibility
-    guard accessibility.resolveMode(expressionResolver) != .exclude else {
+    guard accessibility?.resolveMode(expressionResolver) != .exclude else {
       return nil
     }
     switch self {
@@ -47,14 +47,14 @@ extension Div {
          .divSlider,
          .divVideo,
          .divState:
-      return accessibility.resolveDescription(expressionResolver)
+      return accessibility?.resolveDescription(expressionResolver)
     case let .divText(divText):
       let handlerDescription = context
         .getExtensionHandlers(for: divText)
         .compactMap { $0.accessibilityElement?.strings.label }
         .reduce(nil) { $0?.appending(" " + $1) ?? $1 }
       return handlerDescription ??
-        divText.accessibility.resolveDescription(expressionResolver) ??
+        divText.accessibility?.resolveDescription(expressionResolver) ??
         divText.resolveText(expressionResolver) as String?
     }
   }

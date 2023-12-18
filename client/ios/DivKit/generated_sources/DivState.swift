@@ -28,12 +28,12 @@ public final class DivState: DivBase {
   }
 
   public static let type: String = "state"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let defaultStateId: Expression<String>?
   public let disappearActions: [DivDisappearAction]?
@@ -42,14 +42,14 @@ public final class DivState: DivBase {
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let margins: DivEdgeInsets
-  public let paddings: DivEdgeInsets
+  public let margins: DivEdgeInsets?
+  public let paddings: DivEdgeInsets?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let stateIdVariable: String?
   public let states: [State] // at least 1 elements
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionAnimationSelector: Expression<DivTransitionSelector> // default value: state_change
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
@@ -140,12 +140,12 @@ public final class DivState: DivBase {
     visibilityActions: [DivVisibilityAction]?,
     width: DivSize?
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.defaultStateId = defaultStateId
     self.disappearActions = disappearActions
@@ -154,14 +154,14 @@ public final class DivState: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
-    self.margins = margins ?? DivEdgeInsets()
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.margins = margins
+    self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.stateIdVariable = stateIdVariable
     self.states = states
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionAnimationSelector = transitionAnimationSelector ?? .value(.stateChange)
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
@@ -261,12 +261,12 @@ extension DivState: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["default_state_id"] = defaultStateId?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
@@ -275,14 +275,14 @@ extension DivState: Serializable {
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
-    result["margins"] = margins.toDictionary()
-    result["paddings"] = paddings.toDictionary()
+    result["margins"] = margins?.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["state_id_variable"] = stateIdVariable
     result["states"] = states.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_animation_selector"] = transitionAnimationSelector.toValidSerializationValue()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()

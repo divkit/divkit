@@ -41,14 +41,15 @@ extension DivTabs: DivBlockModeling {
       tabsContext.errorsStorage.add(contentsOf: tabsItemContext.errorsStorage)
     }
 
-    let expressionResolver = context.expressionResolver
+    let titleStyle = tabTitleStyle ?? DivTabs.TabTitleStyle()
     let listModel = TabListViewModel(
       tabTitles: tabs.map { $0.title },
-      titleStyle: tabTitleStyle.resolve(context),
+      titleStyle: titleStyle.resolve(context),
       layoutDirection: context.layoutDirection,
       listPaddings: titlePaddings.resolve(context)
     )
 
+    let expressionResolver = context.expressionResolver
     let contentsModel = try TabContentsViewModel(
       pages: tabs.map { $0.page },
       pagesHeight: resolveDynamicHeight(expressionResolver)

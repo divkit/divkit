@@ -15,10 +15,10 @@ public final class DivNinePatchBackground {
 
   init(
     imageUrl: Expression<URL>,
-    insets: DivAbsoluteEdgeInsets? = nil
+    insets: DivAbsoluteEdgeInsets
   ) {
     self.imageUrl = imageUrl
-    self.insets = insets ?? DivAbsoluteEdgeInsets()
+    self.insets = insets
   }
 }
 

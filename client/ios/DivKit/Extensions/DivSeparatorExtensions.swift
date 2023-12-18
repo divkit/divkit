@@ -18,6 +18,7 @@ extension DivSeparator: DivBlockModeling {
     let needsBeWrappedInContainer: Bool
     let trait: LayoutTrait
 
+    let delimiterStyle = delimiterStyle ?? DivSeparator.DelimiterStyle()
     let delimiterOrientation = delimiterStyle.resolveOrientation(
       context.expressionResolver
     )

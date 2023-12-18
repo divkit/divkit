@@ -31,12 +31,12 @@ public final class DivGallery: DivBase {
   }
 
   public static let type: String = "gallery"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnCount: Expression<Int>? // constraint: number > 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let crossContentAlignment: Expression<CrossContentAlignment> // default value: start
@@ -49,16 +49,16 @@ public final class DivGallery: DivBase {
   public let id: String?
   public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 8
   public let items: [Div]?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let orientation: Expression<Orientation> // default value: horizontal
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let restrictParentScroll: Expression<Bool> // default value: false
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let scrollMode: Expression<ScrollMode> // default value: default
   public let scrollbar: Expression<Scrollbar> // default value: none
   public let selectedActions: [DivAction]?
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -190,12 +190,12 @@ public final class DivGallery: DivBase {
     visibilityActions: [DivVisibilityAction]?,
     width: DivSize?
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.crossContentAlignment = crossContentAlignment ?? .value(.start)
@@ -208,16 +208,16 @@ public final class DivGallery: DivBase {
     self.id = id
     self.itemSpacing = itemSpacing ?? .value(8)
     self.items = items
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.orientation = orientation ?? .value(.horizontal)
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.restrictParentScroll = restrictParentScroll ?? .value(false)
     self.rowSpan = rowSpan
     self.scrollMode = scrollMode ?? .value(.default)
     self.scrollbar = scrollbar ?? .value(.none)
     self.selectedActions = selectedActions
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -325,12 +325,12 @@ extension DivGallery: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_count"] = columnCount?.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["cross_content_alignment"] = crossContentAlignment.toValidSerializationValue()
@@ -343,16 +343,16 @@ extension DivGallery: Serializable {
     result["id"] = id
     result["item_spacing"] = itemSpacing.toValidSerializationValue()
     result["items"] = items?.map { $0.toDictionary() }
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["restrict_parent_scroll"] = restrictParentScroll.toValidSerializationValue()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["scroll_mode"] = scrollMode.toValidSerializationValue()
     result["scrollbar"] = scrollbar.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

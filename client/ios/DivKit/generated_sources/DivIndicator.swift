@@ -13,7 +13,7 @@ public final class DivIndicator: DivBase {
   }
 
   public static let type: String = "indicator"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let activeItemColor: Expression<Color> // default value: #ffdc60
   public let activeItemSize: Expression<Double> // constraint: number > 0; default value: 1.3
   public let activeShape: DivRoundedRectangleShape?
@@ -22,7 +22,7 @@ public final class DivIndicator: DivBase {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animation: Expression<Animation> // default value: scale
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
@@ -33,16 +33,16 @@ public final class DivIndicator: DivBase {
   public let inactiveMinimumShape: DivRoundedRectangleShape?
   public let inactiveShape: DivRoundedRectangleShape?
   public let itemsPlacement: DivIndicatorItemPlacement?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let pagerId: String?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]?
   public let shape: DivShape // default value: .divRoundedRectangleShape(DivRoundedRectangleShape())
   public let spaceBetweenCenters: DivFixedSize // default value: DivFixedSize(value: .value(15))
   public let tooltips: [DivTooltip]?
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -154,7 +154,7 @@ public final class DivIndicator: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.activeItemColor = activeItemColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
     self.activeItemSize = activeItemSize ?? .value(1.3)
     self.activeShape = activeShape
@@ -163,7 +163,7 @@ public final class DivIndicator: DivBase {
     self.alpha = alpha ?? .value(1.0)
     self.animation = animation ?? .value(.scale)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
@@ -174,16 +174,16 @@ public final class DivIndicator: DivBase {
     self.inactiveMinimumShape = inactiveMinimumShape
     self.inactiveShape = inactiveShape
     self.itemsPlacement = itemsPlacement
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.pagerId = pagerId
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.shape = shape ?? .divRoundedRectangleShape(DivRoundedRectangleShape())
     self.spaceBetweenCenters = spaceBetweenCenters ?? DivFixedSize(value: .value(15))
     self.tooltips = tooltips
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -297,7 +297,7 @@ extension DivIndicator: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["active_item_color"] = activeItemColor.toValidSerializationValue()
     result["active_item_size"] = activeItemSize.toValidSerializationValue()
     result["active_shape"] = activeShape?.toDictionary()
@@ -306,7 +306,7 @@ extension DivIndicator: Serializable {
     result["alpha"] = alpha.toValidSerializationValue()
     result["animation"] = animation.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
@@ -317,16 +317,16 @@ extension DivIndicator: Serializable {
     result["inactive_minimum_shape"] = inactiveMinimumShape?.toDictionary()
     result["inactive_shape"] = inactiveShape?.toDictionary()
     result["items_placement"] = itemsPlacement?.toDictionary()
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["minimum_item_size"] = minimumItemSize.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["pager_id"] = pagerId
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["shape"] = shape.toDictionary()
     result["space_between_centers"] = spaceBetweenCenters.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

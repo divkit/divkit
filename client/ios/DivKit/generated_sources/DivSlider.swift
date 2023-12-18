@@ -7,7 +7,7 @@ import Serialization
 public final class DivSlider: DivBase {
   public final class Range {
     public let end: Expression<Int>?
-    public let margins: DivEdgeInsets
+    public let margins: DivEdgeInsets?
     public let start: Expression<Int>?
     public let trackActiveStyle: DivDrawable?
     public let trackInactiveStyle: DivDrawable?
@@ -28,7 +28,7 @@ public final class DivSlider: DivBase {
       trackInactiveStyle: DivDrawable? = nil
     ) {
       self.end = end
-      self.margins = margins ?? DivEdgeInsets()
+      self.margins = margins
       self.start = start
       self.trackActiveStyle = trackActiveStyle
       self.trackInactiveStyle = trackInactiveStyle
@@ -77,25 +77,25 @@ public final class DivSlider: DivBase {
   }
 
   public static let type: String = "slider"
-  public let accessibility: DivAccessibility
+  public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let disappearActions: [DivDisappearAction]?
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
-  public let margins: DivEdgeInsets
+  public let margins: DivEdgeInsets?
   public let maxValue: Expression<Int> // default value: 100
   public let minValue: Expression<Int> // default value: 0
-  public let paddings: DivEdgeInsets
+  public let paddings: DivEdgeInsets?
   public let ranges: [Range]?
   public let rowSpan: Expression<Int>? // constraint: number >= 0
-  public let secondaryValueAccessibility: DivAccessibility
+  public let secondaryValueAccessibility: DivAccessibility?
   public let selectedActions: [DivAction]?
   public let thumbSecondaryStyle: DivDrawable?
   public let thumbSecondaryTextStyle: TextStyle?
@@ -108,7 +108,7 @@ public final class DivSlider: DivBase {
   public let tooltips: [DivTooltip]?
   public let trackActiveStyle: DivDrawable
   public let trackInactiveStyle: DivDrawable
-  public let transform: DivTransform
+  public let transform: DivTransform?
   public let transitionChange: DivChangeTransition?
   public let transitionIn: DivAppearanceTransition?
   public let transitionOut: DivAppearanceTransition?
@@ -204,25 +204,25 @@ public final class DivSlider: DivBase {
     visibilityActions: [DivVisibilityAction]? = nil,
     width: DivSize? = nil
   ) {
-    self.accessibility = accessibility ?? DivAccessibility()
+    self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.columnSpan = columnSpan
     self.disappearActions = disappearActions
     self.extensions = extensions
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
-    self.margins = margins ?? DivEdgeInsets()
+    self.margins = margins
     self.maxValue = maxValue ?? .value(100)
     self.minValue = minValue ?? .value(0)
-    self.paddings = paddings ?? DivEdgeInsets()
+    self.paddings = paddings
     self.ranges = ranges
     self.rowSpan = rowSpan
-    self.secondaryValueAccessibility = secondaryValueAccessibility ?? DivAccessibility()
+    self.secondaryValueAccessibility = secondaryValueAccessibility
     self.selectedActions = selectedActions
     self.thumbSecondaryStyle = thumbSecondaryStyle
     self.thumbSecondaryTextStyle = thumbSecondaryTextStyle
@@ -235,7 +235,7 @@ public final class DivSlider: DivBase {
     self.tooltips = tooltips
     self.trackActiveStyle = trackActiveStyle
     self.trackInactiveStyle = trackInactiveStyle
-    self.transform = transform ?? DivTransform()
+    self.transform = transform
     self.transitionChange = transitionChange
     self.transitionIn = transitionIn
     self.transitionOut = transitionOut
@@ -355,25 +355,25 @@ extension DivSlider: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["accessibility"] = accessibility.toDictionary()
+    result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["disappear_actions"] = disappearActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["id"] = id
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["max_value"] = maxValue.toValidSerializationValue()
     result["min_value"] = minValue.toValidSerializationValue()
-    result["paddings"] = paddings.toDictionary()
+    result["paddings"] = paddings?.toDictionary()
     result["ranges"] = ranges?.map { $0.toDictionary() }
     result["row_span"] = rowSpan?.toValidSerializationValue()
-    result["secondary_value_accessibility"] = secondaryValueAccessibility.toDictionary()
+    result["secondary_value_accessibility"] = secondaryValueAccessibility?.toDictionary()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["thumb_secondary_style"] = thumbSecondaryStyle?.toDictionary()
     result["thumb_secondary_text_style"] = thumbSecondaryTextStyle?.toDictionary()
@@ -386,7 +386,7 @@ extension DivSlider: Serializable {
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["track_active_style"] = trackActiveStyle.toDictionary()
     result["track_inactive_style"] = trackInactiveStyle.toDictionary()
-    result["transform"] = transform.toDictionary()
+    result["transform"] = transform?.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()
@@ -445,7 +445,7 @@ extension DivSlider.Range: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["end"] = end?.toValidSerializationValue()
-    result["margins"] = margins.toDictionary()
+    result["margins"] = margins?.toDictionary()
     result["start"] = start?.toValidSerializationValue()
     result["track_active_style"] = trackActiveStyle?.toDictionary()
     result["track_inactive_style"] = trackInactiveStyle?.toDictionary()

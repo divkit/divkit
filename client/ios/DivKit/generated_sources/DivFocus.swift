@@ -48,7 +48,7 @@ public final class DivFocus {
   }
 
   public let background: [DivBackground]?
-  public let border: DivBorder
+  public let border: DivBorder?
   public let nextFocusIds: NextFocusIds?
   public let onBlur: [DivAction]?
   public let onFocus: [DivAction]?
@@ -61,7 +61,7 @@ public final class DivFocus {
     onFocus: [DivAction]? = nil
   ) {
     self.background = background
-    self.border = border ?? DivBorder()
+    self.border = border
     self.nextFocusIds = nextFocusIds
     self.onBlur = onBlur
     self.onFocus = onFocus
@@ -93,7 +93,7 @@ extension DivFocus: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["background"] = background?.map { $0.toDictionary() }
-    result["border"] = border.toDictionary()
+    result["border"] = border?.toDictionary()
     result["next_focus_ids"] = nextFocusIds?.toDictionary()
     result["on_blur"] = onBlur?.map { $0.toDictionary() }
     result["on_focus"] = onFocus?.map { $0.toDictionary() }

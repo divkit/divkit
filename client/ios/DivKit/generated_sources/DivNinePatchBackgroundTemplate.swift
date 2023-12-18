@@ -34,7 +34,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivNinePatchBackgroundTemplate?) -> DeserializationResult<DivNinePatchBackground> {
     let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
-    let insetsValue = parent?.insets?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
+    let insetsValue = parent?.insets?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
       insetsValue.errorsOrWarnings?.map { .nestedObjectError(field: "insets", error: $0) }
@@ -42,14 +42,18 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
     if case .noValue = imageUrlValue {
       errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
+    if case .noValue = insetsValue {
+      errors.append(.requiredFieldIsMissing(field: "insets"))
+    }
     guard
-      let imageUrlNonNil = imageUrlValue.value
+      let imageUrlNonNil = imageUrlValue.value,
+      let insetsNonNil = insetsValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNinePatchBackground(
       imageUrl: imageUrlNonNil,
-      insets: insetsValue.value
+      insets: insetsNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -74,7 +78,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
       }
     }
     if let parent = parent {
-      insetsValue = insetsValue.merged(with: parent.insets?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      insetsValue = insetsValue.merged(with: parent.insets?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
@@ -83,14 +87,18 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
     if case .noValue = imageUrlValue {
       errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
+    if case .noValue = insetsValue {
+      errors.append(.requiredFieldIsMissing(field: "insets"))
+    }
     guard
-      let imageUrlNonNil = imageUrlValue.value
+      let imageUrlNonNil = imageUrlValue.value,
+      let insetsNonNil = insetsValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivNinePatchBackground(
       imageUrl: imageUrlNonNil,
-      insets: insetsValue.value
+      insets: insetsNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -115,7 +123,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
     return DivNinePatchBackgroundTemplate(
       parent: nil,
       imageUrl: merged.imageUrl,
-      insets: merged.insets?.tryResolveParent(templates: templates)
+      insets: try merged.insets?.resolveParent(templates: templates)
     )
   }
 }
