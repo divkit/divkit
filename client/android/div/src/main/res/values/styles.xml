@@ -63,7 +63,6 @@
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="colorAccent">@android:color/black</item>
         <item name="divTextStyle">@style/Div.Text</item>
-        <item name="divGalleryStyle">@style/Div.Gallery</item>
         <item name="divImageStyle">@style/Div.Image</item>
         <item name="divTabIndicatorLayoutStyle">@style/Div.Tabs.IndicatorTabLayout</item>
     </style>
