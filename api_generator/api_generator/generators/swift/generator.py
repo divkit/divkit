@@ -19,8 +19,7 @@ from ...schema.modeling.entities import (
     Declarable,
     Property,
     String,
-    RawArray,
-    SwiftGeneratorProperties
+    RawArray
 )
 from ...schema.modeling.text import Text, EMPTY
 from ...config import Config, GenerationMode, GeneratedLanguage
@@ -231,8 +230,7 @@ class SwiftGenerator(Generator):
                 result += prop.declaration(self._access_level).indented()
             result += EMPTY
 
-        if isinstance(entity.generator_properties, SwiftGeneratorProperties) \
-                and entity.generator_properties.public_default_values:
+        if entity.generator_properties.public_default_values:
             result += Text(entity.default_values_static_declaration).indented()
             result += EMPTY
 
@@ -269,8 +267,8 @@ class SwiftGenerator(Generator):
 
     def __declaration_as_protocol(self, entity: SwiftEntity) -> Text:
         super_protocol = ''
-        if entity.swift_super_protocol is not None:
-            super_protocol = f': {entity.swift_super_protocol}'
+        if entity.generator_properties.super_protocol is not None:
+            super_protocol = f': {entity.generator_properties.super_protocol}'
         access_modifier = self._access_level.value
         result = Text(f'{access_modifier}protocol {utils.capitalize_camel_case(entity.name)}{super_protocol} {{')
         props = entity.instance_properties_swift

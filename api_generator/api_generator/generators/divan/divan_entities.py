@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, cast, Dict, Optional
+from typing import List, cast, Dict
 
 from ...schema.modeling.entities import (
     Entity,
@@ -149,11 +149,10 @@ class DivanEntity(Entity):
         for prop in self.properties:
             prop.__class__ = DivanProperty
             cast(DivanProperty, prop).update_base()
-        self.generator_properties: Optional[DivanGeneratorProperties] = self.generator_properties
-        if self.generator_properties is not None:
-            forced_property_order = self.generator_properties.forced_properties_order
-            if forced_property_order:
-                self.apply_property_reorder()
+        self.generator_properties: DivanGeneratorProperties = self.generator_properties
+        forced_property_order = self.generator_properties.forced_properties_order
+        if forced_property_order:
+            self.apply_property_reorder()
 
     @property
     def supertype_declaration(self) -> str:

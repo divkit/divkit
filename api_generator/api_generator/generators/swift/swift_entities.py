@@ -89,6 +89,9 @@ class SwiftEntity(Entity):
         for prop in self.properties:
             prop.__class__ = SwiftProperty
 
+    def update_base(self):
+        self.generator_properties: SwiftGeneratorProperties = self.generator_properties
+
     @property
     def has_static_type(self) -> bool:
         return any(p.name == 'type' and isinstance(p.property_type, StaticString) for p in self.properties)
@@ -96,12 +99,6 @@ class SwiftEntity(Entity):
     @property
     def has_parent_property(self) -> bool:
         return self.has_static_type
-
-    @property
-    def swift_super_protocol(self) -> Optional[str]:
-        if not isinstance(self.generator_properties, SwiftGeneratorProperties):
-            return None
-        return cast(SwiftGeneratorProperties, self.generator_properties).super_protocol
 
     @property
     def properties_swift(self) -> List[SwiftProperty]:
@@ -157,9 +154,7 @@ class SwiftEntity(Entity):
                 if prop.parsed_value_is_optional:
                     nullability = '' if prop.should_be_optional else '?'
                     generate_optional_args = True
-                    if isinstance(self.generator_properties, SwiftGeneratorProperties):
-                        properties = cast(SwiftGeneratorProperties, self.generator_properties)
-                        generate_optional_args = properties.generate_optional_args
+                    generate_optional_args = self.generator_properties.generate_optional_args
                     optionality = ' = nil' if generate_optional_args else ''
                 else:
                     nullability = ''
@@ -175,8 +170,7 @@ class SwiftEntity(Entity):
             if self.generation_mode.is_template:
                 res = decl
             else:
-                public_default_value = self.generator_properties.public_default_values if isinstance(
-                    self.generator_properties, SwiftGeneratorProperties) else False
+                public_default_value = self.generator_properties.public_default_values
                 res = prop.add_default_value_to(decl, public_default_value)
             result += Text(indent_width=2, init_lines=res)
         result += '}'

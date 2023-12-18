@@ -36,11 +36,9 @@ def _build_generator_properties(
         config: Config.GenerationConfig,
         mode: GenerationMode,
         properties_list: List[Property],
-) -> Optional[GeneratorProperties]:
-    generator_properties: Dict[str, Any] = dictionary.get("codegen", None)
+) -> GeneratorProperties:
+    generator_properties: Dict[str, Any] = dictionary.get("codegen", {})
     generator_properties_location = location + "codegen"
-    if generator_properties is None:
-        return None
     if not isinstance(generator_properties, Dict):
         raise GenericError(
             location=generator_properties_location,
@@ -91,11 +89,9 @@ def _build_documentation_generator_properties(
         dictionary: Dict[str, Any],
         location: ElementLocation,
         mode: GenerationMode,
-) -> Optional[DocumentationGeneratorProperties]:
-    generator_properties: Dict[str, Any] = dictionary.get("codegen", None)
+) -> DocumentationGeneratorProperties:
+    generator_properties: Dict[str, Any] = dictionary.get("codegen", {})
     generator_properties_location = location + "codegen"
-    if generator_properties is None:
-        return None
 
     if not isinstance(generator_properties, Dict):
         raise GenericError(
@@ -103,9 +99,7 @@ def _build_documentation_generator_properties(
             text='Must have format {String : Any}'
         )
     lang_value = GeneratedLanguage.DOCUMENTATION.value
-    specific_properties: Dict[str, Any] = generator_properties.get(lang_value, None)
-    if specific_properties is None:
-        return None
+    specific_properties: Dict[str, Any] = generator_properties.get(lang_value, {})
     if not isinstance(specific_properties, Dict):
         raise GenericError(
             location=generator_properties_location + lang_value,
@@ -322,7 +316,7 @@ class Entity(Declarable):
             inner_type.parent = self
         self.__resolve_property_objects()
 
-        self.generator_properties: Optional[GeneratorProperties] = _build_generator_properties(
+        self.generator_properties: GeneratorProperties = _build_generator_properties(
             dictionary,
             location,
             config,
