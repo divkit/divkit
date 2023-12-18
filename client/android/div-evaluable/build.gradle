@@ -36,6 +36,10 @@ tasks.named("compileKotlin").configure {
     dependsOn(generateFunctionProvider)
 }
 
+tasks.named("sourcesJar").configure {
+    dependsOn(generateFunctionProvider)
+}
+
 task "test${testVariant.capitalize()}UnitTest" {
     dependsOn test
 }
