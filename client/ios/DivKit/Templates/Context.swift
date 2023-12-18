@@ -1,6 +1,7 @@
 public struct TemplatesContext {
   @usableFromInline
   let templates: [TemplateName: Any]
+  @usableFromInline
   let templateToType: [TemplateName: String]
   @usableFromInline
   var templateData: [String: Any]

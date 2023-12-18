@@ -140,32 +140,6 @@ extension Dictionary where Key == String, Value == Any {
 }
 
 extension TemplatesContext {
-  @usableFromInline
-  func deserializeTemplate<T: TemplateValue>(
-    _ dict: [String: Any],
-    type: T.Type
-  ) -> DeserializationResult<T.ResolvedValue> {
-    let deserializer = makeTemplateDeserializer(
-      templates: templates,
-      templateToType: templateToType,
-      type: type
-    )
-    return deserializer(dict)
-  }
-
-  @inlinable
-  func getArray<T: TemplateValue>(
-    _ key: String,
-    validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
-    type: T.Type
-  ) throws -> [T.ResolvedValue] {
-    try templateData.getArray(
-      key,
-      transform: { deserializeTemplate($0, type: type).value },
-      validator: validator
-    )
-  }
-
   @inlinable
   func getArray<T: TemplateValue>(
     _ key: String,
@@ -174,7 +148,11 @@ extension TemplatesContext {
   ) -> DeserializationResult<[T.ResolvedValue]> {
     templateData.getArray(
       key,
-      transform: { deserializeTemplate($0, type: type) },
+      transform: makeTemplateDeserializer(
+        templates: templates,
+        templateToType: templateToType,
+        type: type
+      ),
       validator: validator
     )
   }
