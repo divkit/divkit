@@ -712,21 +712,28 @@
     }
 
     $: if (json && currentNode && !isDeepEqual(json.extensions, prevExtensionsVal)) {
-        unmountExtensions();
+        let exts = prevExtensionsVal = json.extensions;
 
-        if (Array.isArray(json.extensions)) {
-            const ctx = rootCtx.getExtensionContext();
-            extensions = json.extensions.map(it => {
-                const instance = rootCtx.getExtension(it.id, it.params);
+        tick().then(() => {
+            if (exts !== prevExtensionsVal || !currentNode) {
+                return;
+            }
 
-                if (instance) {
-                    instance.mountView?.(currentNode, ctx);
-                }
+            unmountExtensions();
 
-                return instance;
-            }).filter(Truthy);
-        }
-        prevExtensionsVal = json.extensions;
+            if (Array.isArray(json.extensions)) {
+                const ctx = rootCtx.getExtensionContext();
+                extensions = json.extensions.map(it => {
+                    const instance = rootCtx.getExtension(it.id, it.params);
+
+                    if (instance) {
+                        instance.mountView?.(currentNode, ctx);
+                    }
+
+                    return instance;
+                }).filter(Truthy);
+            }
+        });
     }
 
     function updateDevtool(): void {

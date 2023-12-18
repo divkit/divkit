@@ -23,7 +23,6 @@ import {
 import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
 import { Variable as VariableInstance, variableToValue } from './variable';
-import { walk } from './walk';
 import { toBigInt } from './bigint';
 import { wrapError } from '../utils/wrapError';
 
