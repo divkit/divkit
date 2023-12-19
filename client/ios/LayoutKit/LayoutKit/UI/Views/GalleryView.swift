@@ -32,7 +32,7 @@ public final class GalleryView: BlockView {
 
   private var model: GalleryViewModel!
   private var layout: GalleryViewLayouting!
-  private var state: GalleryViewState!
+  private(set) var state: GalleryViewState!
   private var layoutFactory: LayoutFactory!
   private var deferredStateSetting = DeferredStateSetting.idle
   private var scrollStartOffset: CGFloat = 0

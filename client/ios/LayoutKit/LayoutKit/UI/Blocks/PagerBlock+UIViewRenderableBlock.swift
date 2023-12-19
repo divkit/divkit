@@ -55,15 +55,11 @@ private final class PagerView: BlockView {
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
 
-    let currentPage = state.currentPage + CGFloat(model.infiniteCorrection)
-    let galleryState = GalleryViewState(
-      contentPageIndex: currentPage,
-      itemsCount: model.items.count
-    )
+    let galleryState = makeGalleryViewState(oldState: galleryView.state, model: model, state: state)
     let layoutFactory: GalleryView.LayoutFactory = { model, boundsSize in
       PagerViewLayout(
         model: model,
-        pageIndex: Int(round(currentPage)),
+        pageIndex: Int(round(galleryState.contentPosition.pageIndex ?? 1)),
         layoutMode: layoutMode,
         boundsSize: boundsSize
       )
@@ -135,10 +131,10 @@ private final class PagerView: BlockView {
 }
 
 extension PagerView: ElementStateObserver {
-  func elementStateChanged(_ state: ElementState, forPath _: UIElementPath) {
+  func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     guard let galleryState = state as? GalleryViewState,
           let pageIndex = galleryState.contentPosition.pageIndex else {
-      assertionFailure()
+      observer?.elementStateChanged(state, forPath: path)
       return
     }
 
@@ -159,4 +155,25 @@ extension PagerView: VisibleBoundsTrackingContainer {
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
     [galleryView]
   }
+}
+
+private func makeGalleryViewState(
+  oldState: GalleryViewState?,
+  model: GalleryViewModel,
+  state: PagerViewState
+) -> GalleryViewState {
+  let pagerPosition = state.currentPage + CGFloat(model.infiniteCorrection)
+  let position: GalleryViewState.Position
+  if let oldState, oldState.isScrolling, case let .paging(galleryPage) = oldState.contentPosition,
+     abs(galleryPage - pagerPosition) < 1 {
+    position = oldState.contentPosition
+  } else {
+    position = .paging(index: CGFloat(pagerPosition))
+  }
+
+  return GalleryViewState(
+    contentPosition: position,
+    itemsCount: model.items.count,
+    isScrolling: oldState?.isScrolling ?? false
+  )
 }
