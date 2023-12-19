@@ -10,6 +10,11 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
 
     private var borderDrawer: DivBorderDrawer? = null
     override var isDrawing = false
+    override var needClipping = true
+        set(value) {
+            borderDrawer?.needClipping = value
+            field = value
+        }
 
     override fun getDivBorderDrawer() = borderDrawer
 
@@ -31,12 +36,13 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
             borderDrawer != null -> this.borderDrawer?.setBorder(resolver, border)
             border.isConstantlyEmpty() -> view.apply {
                 elevation = DivBorderDrawer.NO_ELEVATION
-                clipToOutline = true
+                clipToOutline = needClipping
                 outlineProvider = ViewOutlineProvider.BOUNDS
             }
             else -> {
                 borderDrawer = DivBorderDrawer(view.resources.displayMetrics, view, resolver, border)
             }
         }
+        borderDrawer?.needClipping = needClipping
     }
 }

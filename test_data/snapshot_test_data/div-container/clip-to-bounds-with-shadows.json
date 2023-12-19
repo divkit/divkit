@@ -1,7 +1,8 @@
 {
   "description": "Container with no clipToBounds and items with shadow",
   "platforms": [
-    "ios"
+    "ios",
+    "android"
   ],
   "templates": {
     "item": {

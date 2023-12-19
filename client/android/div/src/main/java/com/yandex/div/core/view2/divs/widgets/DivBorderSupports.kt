@@ -9,6 +9,8 @@ internal interface DivBorderSupports {
 
     var isDrawing: Boolean
 
+    var needClipping: Boolean
+
     fun getDivBorderDrawer(): DivBorderDrawer?
 
     // This code is pretty hot since it's executed during binding for most of divs, so avoid creating

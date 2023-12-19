@@ -24,6 +24,10 @@ class DivViewWrapperTest {
             get() = false
             set(value) {}
 
+        override var needClipping: Boolean
+            get() = true
+            set(value) {}
+
         override fun getDivBorderDrawer(): DivBorderDrawer = divBorderDrawer
 
         override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) { }

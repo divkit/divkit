@@ -50,6 +50,13 @@ internal class DivBorderDrawer(
     private var hasBorder = false
     private var hasCustomShadow = false
     private var hasShadow = false
+    var needClipping = true
+        set(value) {
+            if (field == value) return
+            field = value
+            invalidateOutline()
+            view.invalidate()
+        }
 
     override val subscriptions = mutableListOf<Disposable>()
 
@@ -172,12 +179,12 @@ internal class DivBorderDrawer(
                 )
             }
         }
-        view.clipToOutline = true
+        view.clipToOutline = needClipping
     }
 
     private fun isNeedUseCanvasClipping(): Boolean {
-        return hasCustomShadow ||
-            (!hasShadow && (hasDifferentCornerRadii || hasBorder || view.isInTransientHierarchy()))
+        return needClipping && (hasCustomShadow ||
+            (!hasShadow && (hasDifferentCornerRadii || hasBorder || view.isInTransientHierarchy())))
     }
 
     private fun clampCornerRadius(cornerRadius: Float, width: Float, height: Float) : Float {

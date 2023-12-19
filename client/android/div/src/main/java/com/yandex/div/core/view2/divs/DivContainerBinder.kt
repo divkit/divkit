@@ -68,6 +68,8 @@ internal class DivContainerBinder @Inject constructor(
 
         val resolver = divView.expressionResolver
 
+        view.observeClipToBounds(div, resolver)
+
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.observeAspectRatio(resolver, div.aspect)
@@ -216,6 +218,23 @@ internal class DivContainerBinder @Inject constructor(
         })
         observeContentAlignment(div, resolver) { gravity = it }
         div.separator?.let { observeSeparator(it, resolver) }
+    }
+
+    private fun ViewGroup.observeClipToBounds(
+        div: DivContainer,
+        resolver: ExpressionResolver
+    ) {
+        if (this !is DivHolderView<*>) return
+        val applyClipToBounds = { clip: Boolean ->
+            needClipping = clip
+            val parent = parent
+            if (!clip && parent is ViewGroup) {
+                parent.clipChildren = false
+            }
+        }
+        addSubscription(div.clipToBounds.observeAndGet(resolver) {
+            applyClipToBounds(it)
+        })
     }
 
     private fun ExpressionSubscriber.observeContentAlignment(

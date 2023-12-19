@@ -92,6 +92,12 @@ internal class DivViewWrapper @JvmOverloads constructor(
         get() = (child as? DivBorderSupports)?.isDrawing == true
         set(value) {(child as? DivBorderSupports)?.isDrawing = value}
 
+    override var needClipping
+        get() = (child as? DivBorderSupports)?.needClipping ?: true
+        set(value) {
+            (child as? DivBorderSupports)?.needClipping = value
+        }
+
     override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
 
     override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver) {
