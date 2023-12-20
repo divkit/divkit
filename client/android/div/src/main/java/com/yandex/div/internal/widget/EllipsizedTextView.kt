@@ -278,7 +278,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val DEFAULT_ELLIPSIS = "\u2026"
+        const val DEFAULT_ELLIPSIS = "\u2026"
         private const val ELLIPSIS_WIDTH_UNKNOWN = -1.0f
         const val NOT_SET = -1
 

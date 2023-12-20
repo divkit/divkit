@@ -5,7 +5,6 @@ import android.text.Layout
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.view.View
-import com.yandex.div.core.view2.divs.DivBackgroundSpan
 import com.yandex.div.json.expressions.ExpressionResolver
 
 internal class DivTextRangesBackgroundHelper(

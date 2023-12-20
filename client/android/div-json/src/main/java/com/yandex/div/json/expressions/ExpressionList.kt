@@ -86,11 +86,11 @@ internal class MutableExpressionList<T : Any>(
     }
 
     private fun tryResolve(resolver: ExpressionResolver): List<T> {
-        val valuesList = expressions.map { it.evaluate(resolver) }
-        if (!listValidator.isValid(valuesList)) {
-            throw invalidValue(key, valuesList)
+        val values = expressions.map { it.evaluate(resolver) }
+        if (!listValidator.isValid(values)) {
+            throw invalidValue(key, values)
         }
-        return valuesList
+        return values
     }
 
     override fun observe(resolver: ExpressionResolver, callback: (List<T>) -> Unit): Disposable {

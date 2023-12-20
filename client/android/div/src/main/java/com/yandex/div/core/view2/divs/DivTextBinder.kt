@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Paint
 import android.text.Layout
 import android.text.Spannable
@@ -18,7 +19,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.text.getSpans
 import androidx.core.view.ViewCompat
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -26,8 +26,7 @@ import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.util.observeRadialGradientCenter
-import com.yandex.div.core.util.observeRadialGradientRadius
+import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -50,27 +49,25 @@ import com.yandex.div.internal.spannable.TextColorSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
 import com.yandex.div.internal.util.checkHyphenationSupported
 import com.yandex.div.internal.widget.EllipsizedTextView
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
-import com.yandex.div2.DivRadialGradientFixedCenter
 import com.yandex.div2.DivRadialGradientRadius
-import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivShadow
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
-import com.yandex.div2.DivTextRangeBackground
-import com.yandex.div2.DivTextRangeBorder
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -93,72 +90,56 @@ internal class DivTextBinder @Inject constructor(
         val oldDiv = view.div
         if (div == oldDiv) return
 
-        val expressionResolver = divView.expressionResolver
-
         baseBinder.bindView(view, div, oldDiv, divView)
-
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
-        view.observeTypeface(div, expressionResolver)
-        view.observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
-        view.observeFontSize(expressionResolver, div)
-        view.observeLineHeight(expressionResolver, div)
-        view.observeTextColor(div, expressionResolver)
-        view.addSubscription(
-            div.underline.observeAndGet(expressionResolver) { underline -> view.applyUnderline(underline) }
-        )
-        view.addSubscription(
-            div.strike.observeAndGet(expressionResolver) { strike -> view.applyStrike(strike) }
-        )
-        view.observeMaxLines(expressionResolver, div.maxLines, div.minHiddenLines)
-        view.observeText(divView, expressionResolver, div)
-        view.observeEllipsis(divView, expressionResolver, div)
-        view.observeAutoEllipsize(expressionResolver, div.autoEllipsize)
-        view.observeTextGradient(expressionResolver, div.textGradient)
-        view.observeTextShadow(expressionResolver, div)
-        view.addSubscription(
-            div.selectable.observeAndGet(expressionResolver) { selectable -> view.applySelectable(selectable) }
-        )
+        val expressionResolver = divView.expressionResolver
+        view.bindTypeface(div, oldDiv, expressionResolver)
+        view.bindTextAlignment(div, oldDiv, expressionResolver)
+        view.bindFontSize(div, oldDiv, expressionResolver)
+        view.bindLineHeight(div, oldDiv, expressionResolver)
+        view.bindTextColor(div, oldDiv, expressionResolver)
+        view.bindUnderline(div, oldDiv, expressionResolver)
+        view.bindStrikethrough(div, oldDiv, expressionResolver)
+        view.bindMaxLines(div, oldDiv, expressionResolver)
+        view.bindText(divView, div, oldDiv, expressionResolver)
+        view.bindEllipsis(divView, div, oldDiv, expressionResolver)
+        view.bindAutoEllipsize(div, oldDiv, expressionResolver)
+        view.bindTextGradient(div, oldDiv, expressionResolver)
+        view.bindTextShadow(div, oldDiv, expressionResolver)
+        view.bindSelectable(div, oldDiv, expressionResolver)
         view.updateFocusableState(div)
     }
 
-    private fun TextView.applyHyphenation(resolver: ExpressionResolver, div: DivText) {
-        if (!checkHyphenationSupported()) {
-            return
-        }
-        val oldHyphenFreq = hyphenationFrequency
-        val newHyphenFreq = when {
-            !isHyphenationEnabled -> Layout.HYPHENATION_FREQUENCY_NONE
-            TextUtils.indexOf(
-                div.text.evaluate(resolver),
-                SOFT_HYPHEN,
-                0,
-                min(div.text.evaluate(resolver).length, LONGEST_WORD_BREAK)
-            ) > 0 -> {
-                // This enables word break not only on soft hyphens, but on dashes and hyphens.
-                // See all characters that lead to word break https://cs.android.com/android/platform/superproject/+/master:frameworks/minikin/libs/minikin/Hyphenator.cpp;l=146
-                Layout.HYPHENATION_FREQUENCY_NORMAL
-            }
+    //region Text Alignment
 
-            else -> Layout.HYPHENATION_FREQUENCY_NONE
-        }
-        if (oldHyphenFreq != newHyphenFreq) {
-            hyphenationFrequency = newHyphenFreq
-        }
-    }
-
-    private fun DivLineHeightTextView.observeTextAlignment(
-        horizontalAlignment: Expression<DivAlignmentHorizontal>,
-        verticalAlignment: Expression<DivAlignmentVertical>,
+    private fun DivLineHeightTextView.bindTextAlignment(
+        newDiv: DivText,
+        oldDiv: DivText?,
         resolver: ExpressionResolver
     ) {
-        applyTextAlignment(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
+        if (newDiv.textAlignmentHorizontal.equalsToConstant(oldDiv?.textAlignmentHorizontal)
+            && newDiv.textAlignmentVertical.equalsToConstant(oldDiv?.textAlignmentVertical)) {
+            return
+        }
+
+        applyTextAlignment(
+            newDiv.textAlignmentHorizontal.evaluate(resolver),
+            newDiv.textAlignmentVertical.evaluate(resolver)
+        )
+
+        if (newDiv.textAlignmentHorizontal.isConstant() && newDiv.textAlignmentVertical.isConstant()) {
+            return
+        }
 
         val callback = { _: Any ->
-            applyTextAlignment(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
+            applyTextAlignment(
+                newDiv.textAlignmentHorizontal.evaluate(resolver),
+                newDiv.textAlignmentVertical.evaluate(resolver)
+            )
         }
-        addSubscription(horizontalAlignment.observe(resolver, callback))
-        addSubscription(verticalAlignment.observe(resolver, callback))
+        addSubscription(newDiv.textAlignmentHorizontal.observe(resolver, callback))
+        addSubscription(newDiv.textAlignmentVertical.observe(resolver, callback))
     }
 
     private fun TextView.applyTextAlignment(
@@ -176,27 +157,39 @@ internal class DivTextBinder @Inject constructor(
         }
     }
 
-    private fun DivLineHeightTextView.observeMaxLines(
-        resolver: ExpressionResolver,
-        maxLines: Expression<Long>?,
-        minHiddenLines: Expression<Long>?
-    ) {
-        applyMaxLines(resolver, maxLines, minHiddenLines)
+    //endregion
 
-        val callback = { _: Any -> applyMaxLines(resolver, maxLines, minHiddenLines) }
-        addSubscription(div?.maxLines?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(div?.minHiddenLines?.observe(resolver, callback) ?: Disposable.NULL)
+    //region Max Lines
+
+    private fun DivLineHeightTextView.bindMaxLines(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
+    ) {
+        if (newDiv.maxLines.equalsToConstant(oldDiv?.maxLines)
+            && newDiv.minHiddenLines.equalsToConstant(oldDiv?.minHiddenLines)) {
+            return
+        }
+
+        applyMaxLines(newDiv.maxLines?.evaluate(resolver), newDiv.minHiddenLines?.evaluate(resolver))
+
+        if (newDiv.maxLines.isConstantOrNull() && newDiv.minHiddenLines.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyMaxLines(newDiv.maxLines?.evaluate(resolver), newDiv.minHiddenLines?.evaluate(resolver))
+        }
+        addSubscription(newDiv.maxLines?.observe(resolver, callback))
+        addSubscription(newDiv.minHiddenLines?.observe(resolver, callback))
     }
 
     private fun DivLineHeightTextView.applyMaxLines(
-        resolver: ExpressionResolver,
-        maxLinesExpr: Expression<Long>?,
-        minHiddenLinesExpr: Expression<Long>?
+        maxLines: Long?,
+        minHiddenLines: Long?
     ) {
         adaptiveMaxLines?.reset()
 
-        val maxLines = maxLinesExpr?.evaluate(resolver)
-        val minHiddenLines = minHiddenLinesExpr?.evaluate(resolver)
         if (maxLines != null && minHiddenLines != null) {
             adaptiveMaxLines = AdaptiveMaxLines(this).also {
                 it.apply(AdaptiveMaxLines.Params(
@@ -209,31 +202,76 @@ internal class DivTextBinder @Inject constructor(
         }
     }
 
-    private fun DivLineHeightTextView.observeFontSize(resolver: ExpressionResolver, div: DivText) {
-        applyFontSize(resolver, div)
+    //endregion
 
-        val callback = { _: Any -> applyFontSize(resolver, div) }
-        addSubscription(div.fontSize.observe(resolver, callback))
-        addSubscription(div.letterSpacing.observe(resolver, callback))
-    }
+    //region Font Size
 
-    private fun DivLineHeightTextView.applyFontSize(resolver: ExpressionResolver, div: DivText) {
-        val fontSize = div.fontSize.evaluate(resolver).toIntSafely()
-        applyFontSize(fontSize, div.fontSizeUnit.evaluate(resolver))
-        applyLetterSpacing(div.letterSpacing.evaluate(resolver), fontSize)
-    }
-
-    private fun DivLineHeightTextView.observeTypeface(
-        div: DivText,
-        resolver: ExpressionResolver,
+    private fun DivLineHeightTextView.bindFontSize(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
     ) {
-        applyTypeface(div.fontFamily?.evaluate(resolver), div.fontWeight.evaluate(resolver))
+        if (newDiv.fontSize.equalsToConstant(oldDiv?.fontSize)
+            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)
+            && newDiv.letterSpacing.equalsToConstant(oldDiv?.letterSpacing)) {
+            return
+        }
+
+        applyFontSize(
+            newDiv.fontSize.evaluate(resolver),
+            newDiv.fontSizeUnit.evaluate(resolver),
+            newDiv.letterSpacing.evaluate(resolver)
+        )
+
+        if (newDiv.fontSize.isConstant()
+            && newDiv.fontSizeUnit.isConstant()
+            && newDiv.letterSpacing.isConstant()) {
+            return
+        }
 
         val callback = { _: Any ->
-            applyTypeface(div.fontFamily?.evaluate(resolver), div.fontWeight.evaluate(resolver))
+            applyFontSize(
+                newDiv.fontSize.evaluate(resolver),
+                newDiv.fontSizeUnit.evaluate(resolver),
+                newDiv.letterSpacing.evaluate(resolver)
+            )
         }
-        div.fontFamily?.observe(resolver, callback)?.let { addSubscription(it) }
-        addSubscription(div.fontWeight.observe(resolver, callback))
+        addSubscription(newDiv.fontSize.observe(resolver, callback))
+        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
+        addSubscription(newDiv.letterSpacing.observe(resolver, callback))
+    }
+
+    private fun TextView.applyFontSize(size: Long, unit: DivSizeUnit, letterSpacing: Double) {
+        val fontSize = size.toIntSafely()
+        applyFontSize(fontSize, unit)
+        applyLetterSpacing(letterSpacing, fontSize)
+    }
+
+    //endregion
+
+    //region Typeface
+
+    private fun DivLineHeightTextView.bindTypeface(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.fontFamily.equalsToConstant(oldDiv?.fontFamily)
+            && newDiv.fontWeight.equalsToConstant(oldDiv?.fontWeight)) {
+            return
+        }
+
+        applyTypeface(newDiv.fontFamily?.evaluate(resolver), newDiv.fontWeight.evaluate(resolver))
+
+        if (newDiv.fontFamily.isConstantOrNull() && newDiv.fontWeight.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyTypeface(newDiv.fontFamily?.evaluate(resolver), newDiv.fontWeight.evaluate(resolver))
+        }
+        addSubscription(newDiv.fontFamily?.observe(resolver, callback))
+        addSubscription(newDiv.fontWeight.observe(resolver, callback))
     }
 
     private fun TextView.applyTypeface(
@@ -243,213 +281,374 @@ internal class DivTextBinder @Inject constructor(
         typeface = typefaceResolver.getTypeface(fontFamily, fontWeight)
     }
 
-    private fun DivLineHeightTextView.observeLineHeight(resolver: ExpressionResolver, div: DivText) {
-        val lineHeightExpr = div.lineHeight
-        if (lineHeightExpr == null) {
-            applyLineHeight(null, div.fontSizeUnit.evaluate(resolver))
+    //endregion
+
+    //region Line Height
+
+    private fun DivLineHeightTextView.bindLineHeight(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight)
+            && newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit)) {
+            return
+        }
+
+        applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
+
+        if (newDiv.lineHeight.isConstantOrNull() && newDiv.fontSizeUnit.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyLineHeight(newDiv.lineHeight?.evaluate(resolver), newDiv.fontSizeUnit.evaluate(resolver))
+        }
+        addSubscription(newDiv.lineHeight?.observe(resolver, callback))
+        addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
+    }
+
+    //endregion
+
+    //region Text Color
+
+    private fun DivLineHeightTextView.bindTextColor(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.textColor.equalsToConstant(oldDiv?.textColor)
+            && newDiv.focusedTextColor.equalsToConstant(oldDiv?.focusedTextColor)) {
+            return
+        }
+
+        applyTextColor(newDiv.textColor.evaluate(resolver), newDiv.focusedTextColor?.evaluate(resolver))
+
+        if (newDiv.textColor.isConstant() && newDiv.focusedTextColor.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyTextColor(newDiv.textColor.evaluate(resolver), newDiv.focusedTextColor?.evaluate(resolver))
+        }
+        addSubscription(newDiv.textColor.observe(resolver, callback))
+        addSubscription(newDiv.focusedTextColor?.observe(resolver, callback))
+    }
+
+    private fun TextView.applyTextColor(textColor: Int, focusedTextColor: Int?) {
+        setTextColor(
+            ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()),  // TODO: use static constant
+                intArrayOf(focusedTextColor ?: textColor, textColor),
+            )
+        )
+    }
+
+    //endregion
+
+    //region Underline
+
+    private fun DivLineHeightTextView.bindUnderline(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.underline.equalsToConstant(oldDiv?.underline)) {
+            return
+        }
+
+        applyUnderline(newDiv.underline.evaluate(resolver))
+
+        if (newDiv.underline.isConstant()) {
             return
         }
 
         addSubscription(
-            lineHeightExpr.observeAndGet(resolver) { lineHeight -> applyLineHeight(lineHeight, div.fontSizeUnit.evaluate(resolver)) }
+            newDiv.underline.observe(resolver) { underline -> applyUnderline(underline) }
         )
     }
 
-    private fun TextView.observeTextColor(
-        div: DivText,
-        expressionResolver: ExpressionResolver
-    ) {
-        var defaultColor = div.textColor.evaluate(expressionResolver)
-        var focusedColor = div.focusedTextColor?.evaluate(expressionResolver)
-
-        val updateTextColor = {
-            setTextColor(
-                ColorStateList(
-                    arrayOf(
-                        intArrayOf(android.R.attr.state_focused),
-                        intArrayOf(),
-                    ),
-                    intArrayOf(
-                        focusedColor ?: defaultColor,
-                        defaultColor,
-                    ),
-                )
-            )
-        }
-
-        updateTextColor()
-
-        div.textColor.observe(expressionResolver) { newUnfocusedColor ->
-            defaultColor = newUnfocusedColor
-            updateTextColor()
-        }
-
-        div.focusedTextColor?.observe(expressionResolver) { newFocusedColor ->
-            focusedColor = newFocusedColor
-            updateTextColor()
-        }
-    }
-
     private fun TextView.applyUnderline(underline: DivLineStyle) {
-        when(underline) {
+        when (underline) {
             DivLineStyle.SINGLE -> paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
             DivLineStyle.NONE -> paintFlags = paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
             else -> Unit
         }
     }
 
-    private fun TextView.applyStrike(strike: DivLineStyle) {
-        when(strike) {
+    //endregion
+
+    //region Strikethrough
+
+    private fun DivLineHeightTextView.bindStrikethrough(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.strike.equalsToConstant(oldDiv?.strike)) {
+            return
+        }
+
+        applyStrikethrough(newDiv.strike.evaluate(resolver))
+
+        if (newDiv.strike.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.strike.observe(resolver) { strikethrough -> applyStrikethrough(strikethrough) }
+        )
+    }
+
+    private fun TextView.applyStrikethrough(strikethrough: DivLineStyle) {
+        when (strikethrough) {
             DivLineStyle.SINGLE -> paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             DivLineStyle.NONE -> paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             else -> Unit
         }
     }
 
+    //endregion
+
+    //region Selectable
+
+    private fun DivLineHeightTextView.bindSelectable(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.selectable.equalsToConstant(oldDiv?.selectable)) {
+            return
+        }
+
+        applySelectable(newDiv.selectable.evaluate(resolver))
+
+        if (newDiv.selectable.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.selectable.observe(resolver) { selectable -> applySelectable(selectable) }
+        )
+    }
+
     private fun TextView.applySelectable(selectable: Boolean) {
         setTextIsSelectable(selectable)
     }
 
-    private fun DivLineHeightTextView.observeTextGradient(
-        resolver: ExpressionResolver,
-        textGradient: DivTextGradient?
-    ) {
-        applyTextGradientColor(resolver, textGradient)
-        if (textGradient == null) return
+    //endregion
 
-        val callback = { _: Any -> applyTextGradientColor(resolver, textGradient) }
-        when (val gradient = textGradient.value()) {
-            is DivLinearGradient -> {
-                addSubscription(gradient.angle.observe(resolver, callback))
-            }
-            is DivRadialGradient -> {
-                observeRadialGradientRadius(gradient.radius, resolver, callback)
-                observeRadialGradientCenter(gradient.centerX, resolver, callback)
-                observeRadialGradientCenter(gradient.centerY, resolver, callback)
-            }
+    //region Text Gradient
+
+    private fun DivLineHeightTextView.bindTextGradient(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver,
+    ) {
+        when (val textGradient = newDiv.textGradient) {
+            null -> Unit
+            is DivTextGradient.Linear -> bindLinearTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
+            is DivTextGradient.Radial -> bindRadialTextGradient(textGradient.value, oldDiv?.textGradient, resolver)
         }
     }
 
-    private fun TextView.applyTextGradientColor(
+    private fun DivLineHeightTextView.bindLinearTextGradient(
+        newTextGradient: DivLinearGradient,
+        oldTextGradient: DivTextGradient?,
         resolver: ExpressionResolver,
-        gradient: DivTextGradient?
     ) {
-        val metrics = resources.displayMetrics
+        if (oldTextGradient is DivTextGradient.Linear
+            && newTextGradient.angle.equalsToConstant(oldTextGradient.value.angle)
+            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)) {
+            return
+        }
+
+        applyLinearTextGradientColor(
+            newTextGradient.angle.evaluate(resolver),
+            newTextGradient.colors.evaluate(resolver)
+        )
+
+        if (newTextGradient.angle.isConstant() && newTextGradient.colors.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyLinearTextGradientColor(
+                newTextGradient.angle.evaluate(resolver),
+                newTextGradient.colors.evaluate(resolver)
+            )
+        }
+        addSubscription(newTextGradient.angle.observe(resolver, callback))
+        addSubscription(newTextGradient.colors.observe(resolver, callback))
+    }
+
+    private fun TextView.applyLinearTextGradientColor(
+        angle: Long,
+        colors: List<Int>
+    ) {
         doOnActualLayout {
-            this.paint.shader = when (val gradientBackground = gradient?.value()) {
-                is DivLinearGradient -> LinearGradientDrawable.createLinearGradient(
-                    angle = gradientBackground.angle.evaluate(resolver).toFloat(),
-                    colors = gradientBackground.colors.evaluate(resolver).toIntArray(),
+            this.paint.shader = LinearGradientDrawable.createLinearGradient(
+                    angle = angle.toFloat(),
+                    colors = colors.toIntArray(),
                     width = width,
                     height = height
-                )
-                is DivRadialGradient -> RadialGradientDrawable.createRadialGradient(
-                    radius = gradientBackground.radius.toRadialGradientDrawableRadius(metrics, resolver)!!,
-                    centerX = gradientBackground.centerX.toRadialGradientDrawableCenter(metrics, resolver)!!,
-                    centerY = gradientBackground.centerY.toRadialGradientDrawableCenter(metrics, resolver)!!,
-                    colors = gradientBackground.colors.evaluate(resolver).toIntArray(),
+            )
+        }
+    }
+
+    private fun DivLineHeightTextView.bindRadialTextGradient(
+        newTextGradient: DivRadialGradient,
+        oldTextGradient: DivTextGradient?,
+        resolver: ExpressionResolver,
+    ) {
+        // TODO: compare radius and center in a proper way
+        if (oldTextGradient is DivTextGradient.Radial
+            && newTextGradient.radius == oldTextGradient.value.radius
+            && newTextGradient.centerX == oldTextGradient.value.centerX
+            && newTextGradient.centerY == oldTextGradient.value.centerY
+            && newTextGradient.colors.equalsToConstant(oldTextGradient.value.colors)) {
+            return
+        }
+
+        val displayMetrics = resources.displayMetrics
+        applyRadialTextGradientColor(
+            newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
+            newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
+            newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
+            newTextGradient.colors.evaluate(resolver)
+        )
+
+        if (newTextGradient.colors.isConstant()) {
+            return
+        }
+
+        addSubscription(newTextGradient.colors.observe(resolver) { colors ->
+            applyRadialTextGradientColor(
+                newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
+                newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
+                newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
+                colors
+            )
+        })
+    }
+
+    private fun TextView.applyRadialTextGradientColor(
+        radius: RadialGradientDrawable.Radius,
+        centerX: RadialGradientDrawable.Center,
+        centerY: RadialGradientDrawable.Center,
+        colors: List<Int>
+    ) {
+        doOnActualLayout {
+            this.paint.shader = RadialGradientDrawable.createRadialGradient(
+                    radius = radius,
+                    centerX = centerX,
+                    centerY = centerY,
+                    colors = colors.toIntArray(),
                     width = width,
                     height = height
-                )
-                else -> null
-            }
+            )
         }
     }
 
     private fun DivRadialGradientRadius.toRadialGradientDrawableRadius(
         metrics: DisplayMetrics,
         resolver: ExpressionResolver
-    ) = when (val radius = this.value()) {
-        is DivFixedSize -> RadialGradientDrawable.Radius.Fixed(
-            radius.value.evaluate(resolver).dpToPxF(metrics)
-        )
-        is DivRadialGradientRelativeRadius -> RadialGradientDrawable.Radius.Relative(
-            when (radius.value.evaluate(resolver)) {
-                DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
-                DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
-                DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
-                DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
+    ): RadialGradientDrawable.Radius {
+        return when (this) {
+            is DivRadialGradientRadius.FixedSize -> {
+                RadialGradientDrawable.Radius.Fixed(
+                    value.value.evaluate(resolver).dpToPxF(metrics)
+                )
             }
-        )
-        else -> null
+
+            is DivRadialGradientRadius.Relative -> {
+                RadialGradientDrawable.Radius.Relative(
+                    when (value.value.evaluate(resolver)) {
+                        DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
+                        DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
+                        DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
+                        DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
+                    }
+                )
+            }
+        }
     }
 
     private fun DivRadialGradientCenter.toRadialGradientDrawableCenter(
         metrics: DisplayMetrics,
         resolver: ExpressionResolver
-    ) = when (val center = this.value()) {
-        is DivRadialGradientFixedCenter -> RadialGradientDrawable.Center.Fixed(
-            center.value.evaluate(resolver).dpToPxF(metrics)
-        )
-        is DivRadialGradientRelativeCenter -> RadialGradientDrawable.Center.Relative(
-            center.value.evaluate(resolver).toFloat()
-        )
-        else -> null
+    ): RadialGradientDrawable.Center {
+        return when (this) {
+            is DivRadialGradientCenter.Fixed -> {
+                RadialGradientDrawable.Center.Fixed(
+                    value.value.evaluate(resolver).dpToPxF(metrics)
+                )
+            }
+
+            is DivRadialGradientCenter.Relative -> {
+                RadialGradientDrawable.Center.Relative(
+                    value.value.evaluate(resolver).toFloat()
+                )
+            }
+        }
     }
 
-    private fun DivLineHeightTextView.observeText(
-        divView: Div2View,
-        resolver: ExpressionResolver,
-        div: DivText
-    ) {
-        if (div.ranges == null && div.images == null) {
-            observeTextOnly(resolver, div)
-            return
-        }
+    //endregion
 
-        applyText(divView, resolver, div)
-        applyHyphenation(resolver, div)
+    //region Text
+
+    private fun DivLineHeightTextView.bindText(
+        divView: Div2View,
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
+    ) {
+        if (newDiv.ranges == null && newDiv.images == null) {
+            bindPlainText(newDiv, oldDiv, resolver)
+        } else {
+            bindRichText(divView, newDiv, resolver)
+        }
+    }
+
+    private fun DivLineHeightTextView.bindRichText(
+        divView: Div2View,
+        newDiv: DivText,
+        resolver: ExpressionResolver
+    ) {
+        applyRichText(divView, resolver, newDiv)
+        applyHyphenation(newDiv.text.evaluate(resolver))
 
         addSubscription(
-            div.text.observe(resolver) {
-                applyText(divView, resolver, div)
-                applyHyphenation(resolver, div)
+            newDiv.text.observe(resolver) { text ->
+                applyRichText(divView, resolver, newDiv)
+                applyHyphenation(text)
             }
         )
 
-        val callback = { _: Any -> applyText(divView, resolver, div) }
-        div.ranges?.forEach { range ->
+        val callback = { _: Any -> applyRichText(divView, resolver, newDiv) }
+        newDiv.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end.observe(resolver, callback))
-            addSubscription(range.fontSize?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
-            addSubscription(range.fontWeight?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.letterSpacing?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.lineHeight?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.strike?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.textColor?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.topOffset?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.underline?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.fontWeight?.observe(resolver, callback))
+            addSubscription(range.letterSpacing?.observe(resolver, callback))
+            addSubscription(range.lineHeight?.observe(resolver, callback))
+            addSubscription(range.strike?.observe(resolver, callback))
+            addSubscription(range.textColor?.observe(resolver, callback))
+            addSubscription(range.topOffset?.observe(resolver, callback))
+            addSubscription(range.underline?.observe(resolver, callback))
         }
-        div.images?.forEach { image ->
+        newDiv.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
             addSubscription(image.url.observe(resolver, callback))
-            addSubscription(image.tintColor?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(image.tintColor?.observe(resolver, callback))
             addSubscription(image.width.value.observe(resolver, callback))
             addSubscription(image.width.unit.observe(resolver, callback))
         }
     }
 
-    /**
-     * Used in most common case, where there is no [DivText.ranges] or [DivText.images]
-     * to bind [DivText.text] as quick as possible.
-     */
-    private fun DivLineHeightTextView.observeTextOnly(
-        resolver: ExpressionResolver,
-        div: DivText
-    ) {
-        applyTextOnly(resolver, div)
-        applyHyphenation(resolver, div)
-
-        addSubscription(
-            div.text.observe(resolver) {
-                applyTextOnly(resolver, div)
-                applyHyphenation(resolver, div)
-            }
-        )
-    }
-
-    private fun TextView.applyText(
+    private fun TextView.applyRichText(
         divView: Div2View,
         resolver: ExpressionResolver,
         div: DivText
@@ -471,122 +670,260 @@ internal class DivTextBinder @Inject constructor(
         ranger.run()
     }
 
-    private fun TextView.applyTextOnly(
-        resolver: ExpressionResolver,
-        div: DivText
+    /**
+     * Used in most common case, where there is no [DivText.ranges] or [DivText.images]
+     * to bind [DivText.text] as quick as possible.
+     */
+    private fun DivLineHeightTextView.bindPlainText(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
     ) {
-        text = div.text.evaluate(resolver)
+        if (newDiv.text.equalsToConstant(oldDiv?.text)) {
+            return
+        }
+
+        applyPlainText(newDiv.text.evaluate(resolver))
+        applyHyphenation(newDiv.text.evaluate(resolver))
+
+        if (newDiv.text.isConstant() && newDiv.text.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.text.observe(resolver) { text ->
+                applyPlainText(text)
+                applyHyphenation(text)
+            }
+        )
     }
 
-    private fun DivLineHeightTextView.observeEllipsis(
-        divView: Div2View,
-        resolver: ExpressionResolver,
-        div: DivText
-    ) {
-        applyEllipsis(divView, resolver, div)
+    private fun TextView.applyPlainText(text: String) {
+        this.text = text
+    }
 
-        val ellipsis = div.ellipsis ?: return
-        val callback = { _: Any -> applyEllipsis(divView, resolver, div) }
+    private fun TextView.applyHyphenation(text: String) {
+        if (!checkHyphenationSupported()) {
+            return
+        }
+        val oldHyphenFreq = hyphenationFrequency
+        val newHyphenFreq = when {
+            !isHyphenationEnabled -> Layout.HYPHENATION_FREQUENCY_NONE
+            TextUtils.indexOf(
+                text,
+                SOFT_HYPHEN,
+                0,
+                min(text.length, LONGEST_WORD_BREAK)
+            ) > 0 -> {
+                // This enables word break not only on soft hyphens, but on dashes and hyphens.
+                // See all characters that lead to word break https://cs.android.com/android/platform/superproject/+/master:frameworks/minikin/libs/minikin/Hyphenator.cpp;l=146
+                Layout.HYPHENATION_FREQUENCY_NORMAL
+            }
+
+            else -> Layout.HYPHENATION_FREQUENCY_NONE
+        }
+        if (oldHyphenFreq != newHyphenFreq) {
+            hyphenationFrequency = newHyphenFreq
+        }
+    }
+
+    //endregion
+
+    //region Ellipsis
+
+    private fun DivLineHeightTextView.bindEllipsis(
+        divView: Div2View,
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
+    ) {
+        val ellipsis = newDiv.ellipsis
+        if (ellipsis?.ranges == null && ellipsis?.images == null && ellipsis?.actions == null) {
+            bindPlainEllipsis(newDiv.ellipsis, oldDiv?.ellipsis, resolver)
+        } else {
+            bindRichEllipsis(divView, newDiv, resolver)
+        }
+    }
+
+    private fun DivLineHeightTextView.bindPlainEllipsis(
+        newEllipsis: DivText.Ellipsis?,
+        oldEllipsis: DivText.Ellipsis?,
+        resolver: ExpressionResolver
+    ) {
+        if (newEllipsis?.text.equalsToConstant(oldEllipsis?.text)) {
+            return
+        }
+
+        applyPlainEllipsis(newEllipsis?.text?.evaluate(resolver))
+
+        if (newEllipsis?.text.isConstantOrNull() && newEllipsis?.text.isConstantOrNull()) {
+            return
+        }
+
+        addSubscription(
+            newEllipsis?.text?.observe(resolver) { ellipsis -> applyPlainEllipsis(ellipsis) }
+        )
+    }
+
+    private fun DivLineHeightTextView.applyPlainEllipsis(ellipsis: String?) {
+        this.ellipsis = ellipsis ?: EllipsizedTextView.DEFAULT_ELLIPSIS
+    }
+
+    private fun DivLineHeightTextView.bindRichEllipsis(
+        divView: Div2View,
+        newDiv: DivText,
+        resolver: ExpressionResolver
+    ) {
+        applyRichEllipsis(divView, newDiv, resolver)
+
+        val ellipsis = newDiv.ellipsis ?: return
+
+        val callback = { _: Any -> applyRichEllipsis(divView, newDiv, resolver) }
         addSubscription(ellipsis.text.observe(resolver, callback))
         ellipsis.ranges?.forEach { range ->
             addSubscription(range.start.observe(resolver, callback))
             addSubscription(range.end.observe(resolver, callback))
-            addSubscription(range.fontSize?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.fontSize?.observe(resolver, callback))
             addSubscription(range.fontSizeUnit.observe(resolver, callback))
-            addSubscription(range.fontWeight?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.letterSpacing?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.lineHeight?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.strike?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.textColor?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.topOffset?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.underline?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.fontWeight?.observe(resolver, callback))
+            addSubscription(range.letterSpacing?.observe(resolver, callback))
+            addSubscription(range.lineHeight?.observe(resolver, callback))
+            addSubscription(range.strike?.observe(resolver, callback))
+            addSubscription(range.textColor?.observe(resolver, callback))
+            addSubscription(range.topOffset?.observe(resolver, callback))
+            addSubscription(range.underline?.observe(resolver, callback))
             when (val background = range.background?.value()) {
                 is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
             }
-            addSubscription(range.border?.stroke?.color?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(range.border?.stroke?.width?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.border?.stroke?.color?.observe(resolver, callback))
+            addSubscription(range.border?.stroke?.width?.observe(resolver, callback))
         }
         ellipsis.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
             addSubscription(image.url.observe(resolver, callback))
-            addSubscription(image.tintColor?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(image.tintColor?.observe(resolver, callback))
             addSubscription(image.width.value.observe(resolver, callback))
             addSubscription(image.width.unit.observe(resolver, callback))
         }
     }
 
-    private fun EllipsizedTextView.applyEllipsis(
+    private fun EllipsizedTextView.applyRichEllipsis(
         divView: Div2View,
-        resolver: ExpressionResolver,
-        div: DivText
+        newDiv: DivText,
+        resolver: ExpressionResolver
     ) {
-        val divEllipsis = div.ellipsis ?: return
+        val ellipsis = newDiv.ellipsis
+        if (ellipsis == null) {
+            this.ellipsis = EllipsizedTextView.DEFAULT_ELLIPSIS
+            return
+        }
+
         val ranger = DivTextRanger(
             divView,
             this,
             resolver,
-            divEllipsis.text.evaluate(resolver),
-            div.fontSize.evaluate(resolver),
-            div.fontFamily?.evaluate(resolver),
-            divEllipsis.ranges,
-            divEllipsis.actions,
-            divEllipsis.images
+            ellipsis.text.evaluate(resolver),
+            newDiv.fontSize.evaluate(resolver),
+            newDiv.fontFamily?.evaluate(resolver),
+            ellipsis.ranges,
+            ellipsis.actions,
+            ellipsis.images
         )
         ranger.onTextChanged { text ->
-            ellipsis = text
+            this.ellipsis = text
         }
         ranger.run()
     }
 
-    private fun DivLineHeightTextView.observeTextShadow(
-        resolver: ExpressionResolver,
-        div: DivText
+    //endregion
+
+    //region Text Shadow
+
+    private fun DivLineHeightTextView.bindTextShadow(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
     ) {
-        applyTextShadow(resolver, div)
-
-        val shadow = div.textShadow ?: return
-        val callback = { _: Any? -> applyTextShadow(resolver, div) }
-
-        addSubscription(shadow.alpha.observe(resolver, callback))
-        addSubscription(shadow.color.observe(resolver, callback))
-        addSubscription(shadow.blur.observe(resolver, callback))
-        addSubscription(shadow.offset.x.value.observe(resolver, callback))
-        addSubscription(shadow.offset.x.unit.observe(resolver, callback))
-        addSubscription(shadow.offset.y.value.observe(resolver, callback))
-        addSubscription(shadow.offset.y.unit.observe(resolver, callback))
-    }
-
-    private fun DivLineHeightTextView.applyTextShadow(
-        resolver: ExpressionResolver,
-        div: DivText
-    ) {
-        val shadow = div.textShadow ?: return
-        val metrics = resources.displayMetrics
-        val shadowParams = shadow.getShadowParams(resolver, metrics, div.textColor.evaluate(resolver))
-
-        (parent as? DivViewWrapper)?.let {
-            it.clipChildren = false
-            it.clipToPadding = false
-        }
-        clipToOutline = false
-
-        with(shadowParams) {
-            setShadowLayer(radius, offsetX, offsetY, color)
-        }
-    }
-
-    private fun DivLineHeightTextView.observeAutoEllipsize(
-        resolver: ExpressionResolver,
-        autoEllipsizeExpr: Expression<Boolean>?
-    ) {
-        if (autoEllipsizeExpr == null) {
-            autoEllipsize = false
+        if (newDiv.textShadow?.alpha.equalsToConstant(oldDiv?.textShadow?.alpha)
+            && newDiv.textShadow?.blur.equalsToConstant(oldDiv?.textShadow?.blur)
+            && newDiv.textShadow?.color.equalsToConstant(oldDiv?.textShadow?.color)
+            && newDiv.textShadow?.offset?.x?.value.equalsToConstant(oldDiv?.textShadow?.offset?.x?.value)
+            && newDiv.textShadow?.offset?.x?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.x?.unit)
+            && newDiv.textShadow?.offset?.y?.value.equalsToConstant(oldDiv?.textShadow?.offset?.y?.value)
+            && newDiv.textShadow?.offset?.y?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.y?.unit)) {
             return
         }
 
-        autoEllipsize = autoEllipsizeExpr.evaluate(resolver)
+        val shadow = newDiv.textShadow
+        val displayMetrics = resources.displayMetrics
+        applyTextShadow(shadow?.getShadowParams(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
+
+        if (newDiv.textShadow?.alpha.isConstantOrNull()
+            && newDiv.textShadow?.blur.isConstantOrNull()
+            && newDiv.textShadow?.color.isConstantOrNull()
+            && newDiv.textShadow?.offset?.x?.value.isConstantOrNull()
+            && newDiv.textShadow?.offset?.x?.unit.isConstantOrNull()
+            && newDiv.textShadow?.offset?.y?.value.isConstantOrNull()
+            && newDiv.textShadow?.offset?.y?.unit.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyTextShadow(shadow?.getShadowParams(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
+        }
+
+        addSubscription(shadow?.alpha?.observe(resolver, callback))
+        addSubscription(shadow?.color?.observe(resolver, callback))
+        addSubscription(shadow?.blur?.observe(resolver, callback))
+        addSubscription(shadow?.offset?.x?.value?.observe(resolver, callback))
+        addSubscription(shadow?.offset?.x?.unit?.observe(resolver, callback))
+        addSubscription(shadow?.offset?.y?.value?.observe(resolver, callback))
+        addSubscription(shadow?.offset?.y?.unit?.observe(resolver, callback))
     }
 
+    private fun TextView.applyTextShadow(shadowParams: ShadowParams?) {
+        if (shadowParams == null) {
+            (parent as? DivViewWrapper)?.let {
+                it.clipChildren = true
+                it.clipToPadding = true
+            }
+            clipToOutline = true
+            setShadowLayer(0.0f, 0.0f, 0.0f, Color.TRANSPARENT)
+        } else {
+            (parent as? DivViewWrapper)?.let {
+                it.clipChildren = false
+                it.clipToPadding = false
+            }
+            clipToOutline = false
+            with(shadowParams) {
+                setShadowLayer(radius, offsetX, offsetY, color)
+            }
+        }
+    }
+
+    //endregion
+
+    //region Auto Ellipsize
+
+    private fun DivLineHeightTextView.bindAutoEllipsize(
+        newDiv: DivText,
+        oldDiv: DivText?,
+        resolver: ExpressionResolver
+    ) {
+        if (newDiv.autoEllipsize.equalsToConstant(oldDiv?.autoEllipsize)) {
+            return
+        }
+
+        applyAutoEllipsize(newDiv.autoEllipsize?.evaluate(resolver) ?: false)
+    }
+
+    private fun DivLineHeightTextView.applyAutoEllipsize(ellipsize: Boolean) {
+        autoEllipsize = ellipsize
+    }
+
+    //endregion
+
+    // TODO: refactor to SpannedTextBuilder scoped by div context.
     private inner class DivTextRanger(
         private val divView: Div2View,
         private val textView: TextView,
@@ -699,14 +1036,14 @@ internal class DivTextBinder @Inject constructor(
                 setSpan(LetterSpacingSpan(letterSpacingEm), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
             range.strike?.let {
-                when(it.evaluate(resolver)) {
+                when (it.evaluate(resolver)) {
                     DivLineStyle.SINGLE -> setSpan(StrikethroughSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     DivLineStyle.NONE -> setSpan(NoStrikethroughSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     else -> Unit
                 }
             }
             range.underline?.let {
-                when(it.evaluate(resolver)) {
+                when (it.evaluate(resolver)) {
                     DivLineStyle.SINGLE -> setSpan(UnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     DivLineStyle.NONE -> setSpan(NoUnderlineSpan(), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
                     else -> Unit
@@ -755,7 +1092,7 @@ internal class DivTextBinder @Inject constructor(
             bitmap: Bitmap
         ): BitmapImageSpan {
             val imageHeight = range.height.toPx(metrics, resolver)
-            val offsetY = if (!isEmpty()) {
+            val offsetY = if (isNotEmpty()) {
                 val start = range.start.evaluate(resolver).toIntSafely()
                 val charIndex = if (start == 0) 0 else start - 1
                 val sizeSpans = getSpans(charIndex, charIndex + 1, AbsoluteSizeSpan::class.java)
@@ -827,12 +1164,5 @@ internal class DivTextBinder @Inject constructor(
         }.color
 
         return ShadowParams(offsetX, offsetY, radius, color)
-    }
-}
-
-internal class DivBackgroundSpan(val border: DivTextRangeBorder?,
-                        val background: DivTextRangeBackground?) : UnderlineSpan() {
-    override fun updateDrawState(ds: TextPaint) {
-        ds.isUnderlineText = false
     }
 }
