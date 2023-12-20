@@ -1,9 +1,10 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
@@ -11,7 +12,10 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
+import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isBranch
+import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.Div2View
@@ -31,9 +35,15 @@ import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
+import com.yandex.div2.DivContentAlignmentVertical
+import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
@@ -45,6 +55,8 @@ private const val INCORRECT_CHILD_SIZE =
 private const val INCORRECT_SIZE_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
     "Container with wrap layout mode contains child%s with match_parent size along the cross axis."
 
+private const val NO_PATCH_SHIFT = -2
+
 @DivScope
 internal class DivContainerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
@@ -55,32 +67,28 @@ internal class DivContainerBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivContainer, ViewGroup> {
 
+    private val tempRect = Rect()
+
     override fun bindView(view: ViewGroup, div: DivContainer, divView: Div2View, path: DivStatePath) {
         @Suppress("UNCHECKED_CAST")
         val divHolderView = view as DivHolderView<DivContainer>
         val oldDiv = divHolderView.div
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
-        if (div == oldDiv) {
-            // todo MORDAANDROID-636
-            // return
-        }
+        baseBinder.bindView(view, div, oldDiv, divView)
+        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
         val resolver = divView.expressionResolver
-
-        view.observeClipToBounds(div, resolver)
-
-        baseBinder.bindView(view, div, oldDiv, divView)
+        val subscriber = divView.expressionSubscriber
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         view.observeAspectRatio(resolver, div.aspect)
 
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-
         when (view) {
-            is DivLinearLayout -> view.bindProperties(div, resolver)
-            is DivWrapLayout -> view.bindProperties(div, resolver)
+            is DivLinearLayout -> view.bindProperties(div, oldDiv, resolver)
+            is DivWrapLayout -> view.bindProperties(div, oldDiv, resolver)
         }
+
+        view.bindClipChildren(div, oldDiv, resolver)
 
         for (childView in view.children) {
             divView.unbindViewFromDiv(childView)
@@ -92,6 +100,7 @@ internal class DivContainerBinder @Inject constructor(
                 div === oldDiv -> it
                 DivComparator.areValuesReplaceable(oldDiv, div, resolver) &&
                     DivComparator.areChildrenReplaceable(it, items, resolver) -> it
+
                 else -> {
                     view.replaceWithReuse(it, items, divView)
                     null
@@ -99,50 +108,36 @@ internal class DivContainerBinder @Inject constructor(
             }
         }
 
+        view.validateChildren(div, resolver, errorCollector)
+        view.dispatchBinding(divView, div, oldDiv, path, resolver, subscriber)
+
         items.forEachIndexed { i, item ->
             if (item.value().hasSightActions) {
                 divView.bindViewToDiv(view.getChildAt(i), item)
             }
         }
+        view.trackVisibilityActions(items, oldItems, divView)
+    }
 
+    private fun ViewGroup.validateChildren(
+        div: DivContainer,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
+        val items = div.buildItems(resolver)
         var childrenWithIncorrectWidth = 0
         var childrenWithIncorrectHeight = 0
 
-        var viewsPositionDiff = 0
-        val binder = divBinder.get()
-        items.forEachIndexed { containerIndex, item ->
+        items.forEach { item ->
             val childDivValue = item.value()
-            val childView = view.getChildAt(containerIndex + viewsPositionDiff)
 
-            if (view is DivWrapLayout) {
+            if (this is DivWrapLayout) {
                 div.checkCrossAxisSize(childDivValue, resolver, errorCollector)
             } else {
                 if (div.hasIncorrectWidth(childDivValue)) childrenWithIncorrectWidth++
                 if (div.hasIncorrectHeight(childDivValue, resolver)) childrenWithIncorrectHeight++
             }
-
-            // applying div patch
-            childDivValue.id?.let { id ->
-                val patchViewsToAdd = divPatchManager.createViewsForId(divView, id) ?: return@let
-                val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, id) ?: return@let
-                view.removeViewAt(containerIndex + viewsPositionDiff)
-                patchViewsToAdd.forEachIndexed { patchIndex, patchView ->
-                    val patchDivValue = patchDivs[patchIndex].value()
-                    view.addView(patchView, containerIndex + viewsPositionDiff + patchIndex)
-                    observeChildViewAlignment(div, patchDivValue, patchView, resolver, divHolderView)
-                    if (patchDivValue.hasSightActions) {
-                        divView.bindViewToDiv(patchView, patchDivs[patchIndex])
-                    }
-                }
-                viewsPositionDiff += patchViewsToAdd.size - 1
-                return@forEachIndexed
-            }
-
-            binder.bind(childView, item, divView, path)
-            observeChildViewAlignment(div, childDivValue, childView, resolver, divHolderView)
         }
-
-        view.trackVisibilityActions(items, oldItems, divView)
 
         val widthAllChildrenAreIncorrect = childrenWithIncorrectWidth == items.size
         val widthHasMatchParentChild = childrenWithIncorrectWidth > 0
@@ -158,6 +153,57 @@ internal class DivContainerBinder @Inject constructor(
         if (hasIncorrectSize) {
             addIncorrectChildSizeWarning(errorCollector)
         }
+    }
+
+    private fun ViewGroup.dispatchBinding(
+        divView: Div2View,
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        path: DivStatePath,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        val binder = divBinder.get()
+        val items = newDiv.buildItems(resolver)
+        var shift = 0
+        items.forEachIndexed { index, item ->
+            val childView = getChildAt(index + shift)
+            val oldChildDiv = (childView as? DivHolderView<DivBase>)?.div
+
+            val patchShift = applyPatchToChild(divView, newDiv, oldDiv, item.value(), index + shift, resolver, subscriber)
+            if (patchShift > NO_PATCH_SHIFT) {
+                shift += patchShift
+            } else {
+                binder.bind(childView, item, divView, path)
+                childView.bindChildAlignment(newDiv, oldDiv, item.value(), oldChildDiv, resolver, subscriber)
+            }
+        }
+    }
+
+    private fun ViewGroup.applyPatchToChild(
+        divView: Div2View,
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        childDiv: DivBase,
+        childIndex: Int,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ): Int {
+        childDiv.id?.let { id ->
+            val patchViewsToAdd = divPatchManager.createViewsForId(divView, id) ?: return NO_PATCH_SHIFT
+            val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, id) ?: return NO_PATCH_SHIFT
+            removeViewAt(childIndex)
+            patchViewsToAdd.forEachIndexed { patchIndex, patchView ->
+                val patchDivValue = patchDivs[patchIndex].value()
+                addView(patchView, childIndex + patchIndex)
+                patchView.bindChildAlignment(newDiv, oldDiv, patchDivValue, null, resolver, subscriber)
+                if (patchDivValue.hasSightActions) {
+                    divView.bindViewToDiv(patchView, patchDivs[patchIndex])
+                }
+            }
+            return patchViewsToAdd.size - 1
+        }
+        return NO_PATCH_SHIFT
     }
 
     private fun ViewGroup.replaceWithReuse(oldItems: List<Div>, newItems: List<Div>, divView: Div2View) {
@@ -209,151 +255,235 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
-    private fun DivLinearLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
-        addSubscription(div.orientation.observeAndGet(resolver) {
-            orientation = if (div.isHorizontal(resolver)) {
-                LinearLayoutCompat.HORIZONTAL
-            } else {
-                LinearLayoutCompat.VERTICAL
-            }
-        })
-        observeContentAlignment(div, resolver) { gravity = it }
-        div.separator?.let { observeSeparator(it, resolver) }
+    private fun <T> T.bindClipChildren(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver
+    ) where T : ViewGroup, T : DivHolderView<*> {
+        if (newDiv.clipToBounds.equalsToConstant(oldDiv?.clipToBounds)) {
+            return
+        }
+
+        applyClipChildren(newDiv.clipToBounds.evaluate(resolver))
+
+        if (newDiv.clipToBounds.isConstant()) {
+            return
+        }
+
+        addSubscription(newDiv.clipToBounds.observe(resolver) { clip -> applyClipChildren(clip) })
     }
 
-    private fun ViewGroup.observeClipToBounds(
-        div: DivContainer,
+    private fun <T> T.applyClipChildren(clip: Boolean) where T : ViewGroup, T : DivHolderView<*> {
+        needClipping = clip
+        val parent = parent
+        if (!clip && parent is ViewGroup) {
+            parent.clipChildren = false
+        }
+    }
+
+    private fun DivLinearLayout.bindProperties(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
         resolver: ExpressionResolver
     ) {
-        if (this !is DivHolderView<*>) return
-        val applyClipToBounds = { clip: Boolean ->
-            needClipping = clip
-            val parent = parent
-            if (!clip && parent is ViewGroup) {
-                parent.clipChildren = false
-            }
+        bindOrientation(newDiv, oldDiv, resolver) { orientation ->
+            this.orientation = orientation.toOrientationMode()
         }
-        addSubscription(div.clipToBounds.observeAndGet(resolver) {
-            applyClipToBounds(it)
-        })
+        bindContentAlignment(newDiv, oldDiv, resolver) { horizontalAlignment, verticalAlignment ->
+            gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
+        }
+        bindSeparator(newDiv, oldDiv, resolver)
     }
 
-    private fun ExpressionSubscriber.observeContentAlignment(
-        div: DivContainer,
-        resolver: ExpressionResolver,
-        applyGravity: (Int) -> Unit
-    ) {
-        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-            applyGravity(evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver)))
-        })
-        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-            applyGravity(evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it))
-        })
-    }
-
-    private fun DivLinearLayout.observeSeparator(
-        separator: DivContainer.Separator,
+    private fun DivLinearLayout.bindSeparator(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
         resolver: ExpressionResolver
     ) {
-        observeSeparatorShowMode(separator, resolver) { showDividers = it }
-        observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
-        observeSeparatorMargins(this, separator.margins, resolver) {
-            left, top, right, bottom -> setDividerMargins(left, top, right, bottom)
+        bindSeparatorShowMode(newDiv.separator, oldDiv?.separator, resolver) { separator, _ ->
+            showDividers = separator.toSeparatorMode(resolver)
+        }
+        bindSeparatorStyle(newDiv.separator, oldDiv?.separator, resolver) { style, _ ->
+            dividerDrawable = style?.toDrawable(resources.displayMetrics, resolver)
+        }
+        bindSeparatorMargins(newDiv.separator, oldDiv?.separator, resolver) { margins, _ ->
+            val rect = margins.toRect(resources, resolver)
+            setDividerMargins(rect.left, rect.top, rect.right, rect.bottom)
         }
     }
 
-    private fun DivWrapLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
-        addSubscription(div.orientation.observeAndGet(resolver) {
-            wrapDirection =
-                if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
-        })
-        observeContentAlignment(div, resolver) { gravity = it }
-
-        div.separator?.let { separator ->
-            observeSeparatorShowMode(separator, resolver) { showSeparators = it }
-            observeSeparatorDrawable(this, separator, resolver) { separatorDrawable = it }
-            observeSeparatorMargins(this, separator.margins, resolver)  {
-                left, top, right, bottom -> setSeparatorMargins(left, top, right, bottom)
-            }
-        }
-        div.lineSeparator?.let { separator ->
-            observeSeparatorShowMode(separator, resolver) { showLineSeparators = it }
-            observeSeparatorDrawable(this, separator, resolver) { lineSeparatorDrawable = it }
-            observeSeparatorMargins(this, separator.margins, resolver) {
-                left, top, right, bottom -> setLineSeparatorMargins(left, top, right, bottom)
-            }
-        }
-    }
-
-    private fun ExpressionSubscriber.observeSeparatorShowMode(
-        separator: DivContainer.Separator,
-        resolver: ExpressionResolver,
-        applySeparatorShowMode: (Int) -> Unit
+    private fun DivWrapLayout.bindProperties(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver
     ) {
+        bindOrientation(newDiv, oldDiv, resolver) { orientation ->
+            wrapDirection = orientation.toWrapDirection()
+        }
+        bindContentAlignment(newDiv, oldDiv, resolver) { horizontalAlignment, verticalAlignment ->
+            gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
+        }
+        bindSeparator(newDiv, oldDiv, resolver)
+        bindLineSeparator(newDiv, oldDiv, resolver)
+    }
+
+    private inline fun <T> T.bindOrientation(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver,
+        crossinline applyOrientation: (orientation: DivContainer.Orientation) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+        if (newDiv.orientation.equalsToConstant(oldDiv?.orientation)) {
+            return
+        }
+
+        applyOrientation(newDiv.orientation.evaluate(resolver))
+
+        if (newDiv.orientation.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.orientation.observe(resolver) { orientation -> applyOrientation(orientation) }
+        )
+    }
+
+    private fun DivWrapLayout.applyOrientation(orientation: DivContainer.Orientation) {
+        wrapDirection = if (orientation == DivContainer.Orientation.HORIZONTAL) {
+            WrapDirection.ROW
+        } else {
+            WrapDirection.COLUMN
+        }
+    }
+
+    private inline fun <T> T.bindContentAlignment(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver,
+        crossinline applyContentAlignment: (DivContentAlignmentHorizontal, DivContentAlignmentVertical) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+        if (newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
+            && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)) {
+            return
+        }
+
+        applyContentAlignment(
+            newDiv.contentAlignmentHorizontal.evaluate(resolver),
+            newDiv.contentAlignmentVertical.evaluate(resolver)
+        )
+
+        if (newDiv.contentAlignmentHorizontal.isConstant() && newDiv.contentAlignmentVertical.isConstant()) {
+            return
+        }
+
         val callback = { _: Any ->
-            var showSeparators = ShowSeparatorsMode.NONE
-            if (separator.showAtStart.evaluate(resolver)) {
-                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_AT_START
-            }
-            if (separator.showBetween.evaluate(resolver)) {
-                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_BETWEEN
-            }
-            if (separator.showAtEnd.evaluate(resolver)) {
-                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_AT_END
-            }
-            applySeparatorShowMode(showSeparators)
+            applyContentAlignment(
+                newDiv.contentAlignmentHorizontal.evaluate(resolver),
+                newDiv.contentAlignmentVertical.evaluate(resolver)
+            )
         }
-        addSubscription(separator.showAtStart.observe(resolver, callback))
-        addSubscription(separator.showBetween.observe(resolver, callback))
-        addSubscription(separator.showAtEnd.observe(resolver, callback))
-        callback(Unit)
+        addSubscription(newDiv.contentAlignmentHorizontal.observe(resolver, callback))
+        addSubscription(newDiv.contentAlignmentVertical.observe(resolver, callback))
     }
 
-    private fun ExpressionSubscriber.observeSeparatorDrawable(
-        view: ViewGroup,
-        separator: DivContainer.Separator,
-        resolver: ExpressionResolver,
-        applyDrawable: (Drawable?) -> Unit
+    private fun DivWrapLayout.bindSeparator(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver
     ) {
-        val metrics = view.resources.displayMetrics
-        applyDrawable(separator.style.toDrawable(metrics, resolver))
-        observeDrawable(separator.style, resolver) {
-            applyDrawable(separator.style.toDrawable(metrics, resolver))
+        bindSeparatorShowMode(newDiv.separator, oldDiv?.separator, resolver) { separator, _ ->
+            showSeparators = separator.toSeparatorMode(resolver)
+        }
+        bindSeparatorStyle(newDiv.separator, oldDiv?.separator, resolver) { style, _ ->
+            separatorDrawable = style?.toDrawable(resources.displayMetrics, resolver)
+        }
+        bindSeparatorMargins(newDiv.separator, oldDiv?.separator, resolver) { margins, _ ->
+            val rect = margins.toRect(resources, resolver)
+            setSeparatorMargins(rect.left, rect.top, rect.right, rect.bottom)
         }
     }
 
-    private fun ExpressionSubscriber.observeSeparatorMargins(
-        view: View,
-        margins: DivEdgeInsets,
-        resolver: ExpressionResolver,
-        applyMargins: (left: Int, top: Int, right: Int, bottom: Int) -> Unit
+    private fun DivWrapLayout.bindLineSeparator(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        resolver: ExpressionResolver
     ) {
-        val metrics = view.resources.displayMetrics
-        val callback = { _: Any? ->
-            val sizeUnit = margins.unit.evaluate(resolver)
-            var left = 0
-            var right = 0
-            if (margins.start != null || margins.end != null) {
-                val layoutDirection = view.resources.configuration.layoutDirection
-                if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-                    left = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
-                    right = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
-                } else {
-                    left = margins.end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
-                    right = margins.start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
-                }
-            } else {
-                left = margins.left.evaluate(resolver).unitToPx(metrics, sizeUnit)
-                right = margins.right.evaluate(resolver).unitToPx(metrics, sizeUnit)
-            }
-            val top = margins.top.evaluate(resolver).unitToPx(metrics, sizeUnit)
-            val bottom = margins.bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
+        bindSeparatorShowMode(newDiv.lineSeparator, oldDiv?.lineSeparator, resolver) { separator, _ ->
+            showLineSeparators = separator.toSeparatorMode(resolver)
+        }
+        bindSeparatorStyle(newDiv.lineSeparator, oldDiv?.lineSeparator, resolver) { style, _ ->
+            lineSeparatorDrawable = style?.toDrawable(resources.displayMetrics, resolver)
+        }
+        bindSeparatorMargins(newDiv.lineSeparator, oldDiv?.lineSeparator, resolver) { margins, _ ->
+            val rect = margins.toRect(resources, resolver)
+            setLineSeparatorMargins(rect.left, rect.top, rect.right, rect.bottom)
+        }
+    }
 
-            applyMargins(left, top, right, bottom)
+    private inline fun <T> T.bindSeparatorShowMode(
+        newSeparator: DivContainer.Separator?,
+        oldSeparator: DivContainer.Separator?,
+        resolver: ExpressionResolver,
+        crossinline applySeparatorShowMode: (DivContainer.Separator?, ExpressionResolver) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+        if (newSeparator?.showAtStart.equalsToConstant(oldSeparator?.showAtStart)
+            && newSeparator?.showBetween.equalsToConstant(oldSeparator?.showBetween)
+            && newSeparator?.showAtEnd.equalsToConstant(oldSeparator?.showAtEnd)) {
+            return
         }
 
-        callback(null)
-        addSubscription(margins.unit.observe(resolver, callback))
+        applySeparatorShowMode(newSeparator, resolver)
+
+        if (newSeparator?.showAtStart.isConstantOrNull()
+            && newSeparator?.showBetween.isConstantOrNull()
+            && newSeparator?.showAtEnd.isConstantOrNull()) {
+            return
+        }
+
+        val callback: (Any) -> Unit = { applySeparatorShowMode(newSeparator, resolver) }
+        addSubscription(newSeparator?.showAtStart?.observe(resolver, callback) ?: Disposable.NULL)
+        addSubscription(newSeparator?.showBetween?.observe(resolver, callback) ?: Disposable.NULL)
+        addSubscription(newSeparator?.showAtEnd?.observe(resolver, callback) ?: Disposable.NULL)
+    }
+
+    private inline fun <T> T.bindSeparatorStyle(
+        newSeparator: DivContainer.Separator?,
+        oldSeparator: DivContainer.Separator?,
+        resolver: ExpressionResolver,
+        crossinline applySeparatorStyle: (DivDrawable?, ExpressionResolver) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+        if (newSeparator?.style.equalsToConstant(oldSeparator?.style)) {
+            return
+        }
+
+        applySeparatorStyle(newSeparator?.style, resolver)
+
+        if (newSeparator?.style?.isConstant() != false) {
+            return
+        }
+
+        val callback: (Any) -> Unit = { applySeparatorStyle(newSeparator.style, resolver) }
+        observeDrawable(newSeparator.style, resolver, callback)
+    }
+
+    private inline fun <T> T.bindSeparatorMargins(
+        newSeparator: DivContainer.Separator?,
+        oldSeparator: DivContainer.Separator?,
+        resolver: ExpressionResolver,
+        crossinline applySeparatorMargins: (DivEdgeInsets?, ExpressionResolver) -> Unit
+    ) where T : ViewGroup, T : DivHolderView<DivContainer> {
+        if (newSeparator?.margins.equalsToConstant(oldSeparator?.margins)) {
+            return
+        }
+
+        applySeparatorMargins(newSeparator?.margins, resolver)
+
+        val margins = newSeparator?.margins
+        if (margins?.isConstant() != false) {
+            return
+        }
+
+        val callback = { _: Any -> applySeparatorMargins(margins, resolver) }
         addSubscription(margins.top.observe(resolver, callback))
         addSubscription(margins.bottom.observe(resolver, callback))
         if (margins.start != null || margins.end != null) {
@@ -365,6 +495,7 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
+    @Deprecated(message = "use View.bindChildAlignment(DivContainer, DivContainer?, DivBase, DivBase?, ExpressionResolver, ExpressionSubscriber) instead")
     private fun observeChildViewAlignment(
         div: DivContainer,
         childDivValue: DivBase,
@@ -401,6 +532,59 @@ internal class DivContainerBinder @Inject constructor(
         )
 
         applyAlignments(childView)
+    }
+
+    private fun View.bindChildAlignment(
+        newDiv: DivContainer,
+        oldDiv: DivContainer?,
+        newChildDiv: DivBase,
+        oldChildDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
+            && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)
+            && newChildDiv.alignmentHorizontal.equalsToConstant(oldChildDiv?.alignmentHorizontal)
+            && newChildDiv.alignmentVertical.equalsToConstant(oldChildDiv?.alignmentVertical)) {
+            return
+        }
+
+        applyChildAlignment(newDiv, newChildDiv, resolver)
+
+        if (newDiv.contentAlignmentHorizontal.isConstant()
+            && newDiv.contentAlignmentVertical.isConstant()
+            && newChildDiv.alignmentHorizontal.isConstantOrNull()
+            && newChildDiv.alignmentVertical.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any -> applyChildAlignment(newDiv, newChildDiv, resolver) }
+        subscriber.addSubscription(newDiv.contentAlignmentHorizontal.observe(resolver, callback))
+        subscriber.addSubscription(newDiv.contentAlignmentVertical.observe(resolver, callback))
+        subscriber.addSubscription(newChildDiv.alignmentHorizontal?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newChildDiv.alignmentVertical?.observe(resolver, callback) ?: Disposable.NULL)
+    }
+
+    private fun View.applyChildAlignment(
+        div: DivContainer,
+        childDiv: DivBase,
+        resolver: ExpressionResolver,
+    ) {
+        val childAlignmentHorizontal = childDiv.alignmentHorizontal
+        val alignmentHorizontal = when {
+            childAlignmentHorizontal != null -> childAlignmentHorizontal.evaluate(resolver)
+            div.isWrapContainer(resolver) -> null
+            else -> div.contentAlignmentHorizontal.evaluate(resolver).toAlignmentHorizontal()
+        }
+
+        val childAlignmentVertical = childDiv.alignmentVertical
+        val alignmentVertical = when {
+            childAlignmentVertical != null -> childAlignmentVertical.evaluate(resolver)
+            div.isWrapContainer(resolver) -> null
+            else -> div.contentAlignmentVertical.evaluate(resolver).toAlignmentVertical()
+        }
+
+        applyAlignment(alignmentHorizontal, alignmentVertical)
     }
 
     private fun DivContainer.checkCrossAxisSize(
@@ -447,5 +631,66 @@ internal class DivContainerBinder @Inject constructor(
         div.buildItems(resolver).forEachIndexed { index, item ->
             binder.setDataWithoutBinding(view.getChildAt(index), item, resolver)
         }
+    }
+
+    private fun DivEdgeInsets?.toRect(resources: Resources, resolver: ExpressionResolver): Rect {
+        if (this == null) {
+            tempRect.set(0, 0, 0, 0)
+            return tempRect
+        }
+
+        val metrics = resources.displayMetrics
+        val sizeUnit = unit.evaluate(resolver)
+
+        if (start != null || end != null) {
+            val layoutDirection = resources.configuration.layoutDirection
+            if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                tempRect.left = start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                tempRect.right = end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            } else {
+                tempRect.left = end?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+                tempRect.right = start?.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            }
+        } else {
+            tempRect.left = left.evaluate(resolver).unitToPx(metrics, sizeUnit)
+            tempRect.right = right.evaluate(resolver).unitToPx(metrics, sizeUnit)
+        }
+        tempRect.top = top.evaluate(resolver).unitToPx(metrics, sizeUnit)
+        tempRect.bottom = bottom.evaluate(resolver).unitToPx(metrics, sizeUnit)
+
+        return tempRect
+    }
+
+    private fun DivContainer.Orientation.toOrientationMode(): Int {
+        return when (this) {
+            DivContainer.Orientation.HORIZONTAL -> LinearLayout.HORIZONTAL
+            else -> LinearLayout.VERTICAL
+        }
+    }
+
+    @WrapDirection
+    private fun DivContainer.Orientation.toWrapDirection(): Int {
+        return when (this) {
+            DivContainer.Orientation.HORIZONTAL -> WrapDirection.ROW
+            else -> WrapDirection.COLUMN
+        }
+    }
+
+    private fun DivContainer.Separator?.toSeparatorMode(resolver: ExpressionResolver): Int {
+        if (this == null) {
+            return ShowSeparatorsMode.NONE
+        }
+
+        var separatorMode = ShowSeparatorsMode.NONE
+        if (showAtStart.evaluate(resolver)) {
+            separatorMode = separatorMode or ShowSeparatorsMode.SHOW_AT_START
+        }
+        if (showBetween.evaluate(resolver)) {
+            separatorMode = separatorMode or ShowSeparatorsMode.SHOW_BETWEEN
+        }
+        if (showAtEnd.evaluate(resolver)) {
+            separatorMode = separatorMode or ShowSeparatorsMode.SHOW_AT_END
+        }
+        return separatorMode
     }
 }
