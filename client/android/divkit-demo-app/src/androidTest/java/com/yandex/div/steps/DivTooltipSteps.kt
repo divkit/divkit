@@ -59,6 +59,10 @@ internal class DivTooltipAssertions {
     fun statusIsClicked(): Unit = step("Check status is clicked") {
         onView(withText("clicked")).check(matches(isDisplayed()))
     }
+
+    fun disappearActionHandled(): Unit = step("Check disappear action is handled") {
+        onView(withText("disappear_work")).check(matches(isDisplayed()))
+    }
 }
 
 private fun tooltip() = onView(withText("tooltip_text")).inRoot(isPlatformPopup())

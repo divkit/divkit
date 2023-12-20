@@ -52,6 +52,7 @@ class DivTooltipTest {
             assert {
                 noTooltipsDisplayed()
                 statusIsClicked()
+                disappearActionHandled()
             }
         }
     }

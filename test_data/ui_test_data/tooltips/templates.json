@@ -63,6 +63,15 @@
               "visibility_duration": 0,
               "visibility_percentage": 100
             }
+          ],
+          "disappear_actions": [
+            {
+              "log_id": "tooltip_disappear_action",
+              "log_limit": 0,
+              "disappear_duration": 0,
+              "visibility_percentage": 20,
+              "url": "div-action://set_state?state_id=0/status_disappear_work/disappear_work"
+            }
           ]
         }
       }

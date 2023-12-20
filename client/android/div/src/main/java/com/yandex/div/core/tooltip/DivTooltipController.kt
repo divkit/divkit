@@ -156,6 +156,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
             setOnDismissListener {
                 tooltips.remove(divTooltip.id)
                 stopVisibilityTracking(div2View, divTooltip.div)
+                divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipView]?.let {
+                    divVisibilityActionTracker.trackDetachedView(div2View, tooltipView, it)
+                }
                 tooltipRestrictor.tooltipShownCallback?.onDivTooltipDismissed(div2View, anchor, divTooltip)
             }
             setDismissOnTouchOutside()

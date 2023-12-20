@@ -130,6 +130,33 @@
                 }
               }
             ]
+          },
+          {
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "type": "state",
+            "alignment_horizontal": "center",
+            "id": "status_disappear_work",
+            "states": [
+              {
+                "state_id": "disappear_not_work",
+                "div": {
+                  "type": "status",
+                  "text": "disappear_not_work"
+                }
+              },
+              {
+                "state_id": "disappear_work",
+                "div": {
+                  "type": "status",
+                  "text": "disappear_work"
+                }
+              }
+            ]
           }
         ]
       }

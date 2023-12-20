@@ -37,8 +37,9 @@ internal class DivVisibilityActionTracker @Inject constructor(
     private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
     private val previousVisibilityPercentages = WeakHashMap<View, Int>()
 
+    private val divWithWaitingDisappearActions = WeakHashMap<View, Div>()
     // Actions that was more visible than its disappear trigger percent, so they can be triggered for disappearing
-    private val appearedForDisappearActions = WeakHashMap<View, Div>()
+    private val appearedForDisappearActions = WeakHashMap<View, MutableSet<DivDisappearAction>>()
 
     private var hasPostedUpdateVisibilityTask = false
     private val updateVisibilityTask = Runnable {
@@ -46,7 +47,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         hasPostedUpdateVisibilityTask = false
     }
 
-    fun getActionsWaitingForDisappear() = appearedForDisappearActions.toMap()
+    fun getDivWithWaitingDisappearActions() = divWithWaitingDisappearActions.toMap()
 
     @AnyThread
     fun updateVisibleViews(viewList: List<View>) {
@@ -157,21 +158,22 @@ internal class DivVisibilityActionTracker @Inject constructor(
             result
         }
 
-        var viewAppearedForDisappear = appearedForDisappearActions.containsKey(view)
-
         visibilityActions.groupBy { action: DivSightAction ->
             action.duration.evaluate(scope.expressionResolver)
         }.forEach { entry: Map.Entry<Long, List<DivSightAction>> ->
             val (delayMs, actions) = entry
 
-            if (!viewAppearedForDisappear &&
-                actions.any {
-                    it is DivDisappearAction &&
-                        visibilityPercentage > it.visibilityPercentage.evaluate(scope.expressionResolver)
+            var haveWaitingDisappearActions = false
+            actions.filterIsInstance<DivDisappearAction>().forEach {
+                val actionPercentage = it.visibilityPercentage.evaluate(scope.expressionResolver)
+                val needWaiting = visibilityPercentage > actionPercentage
+                haveWaitingDisappearActions = haveWaitingDisappearActions || needWaiting
+                if (needWaiting) {
+                    appearedForDisappearActions.getOrPut(view) { mutableSetOf() }.apply { add(it) }
                 }
-            ) {
-                appearedForDisappearActions[view] = div
-                viewAppearedForDisappear = true
+            }
+            if (haveWaitingDisappearActions) {
+                divWithWaitingDisappearActions[view] = div
             }
 
             val actionsToBeTracked = actions.filterTo(ArrayList(actions.size)) { action ->
@@ -197,7 +199,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
                 visibilityPercentage >= action.visibilityPercentage.evaluate(scope.expressionResolver)
             }
             is DivDisappearAction -> {
-                appearedForDisappearActions.containsKey(view) &&
+                (appearedForDisappearActions[view]?.contains(action) ?: false) &&
                     visibilityPercentage <= action.visibilityPercentage.evaluate(scope.expressionResolver)
             }
             else -> {
@@ -238,7 +240,13 @@ internal class DivVisibilityActionTracker @Inject constructor(
          * individual actions while still execute the rest of it as a bulk. */
         handler.postDelayed(delayInMillis = delayMs, token = logIds) {
             KLog.e(TAG) { "dispatchActions: id=${logIds.keys.joinToString()}" }
-            appearedForDisappearActions.remove(view)
+            appearedForDisappearActions[view]?.let { waitingActions ->
+                actions.filterIsInstance<DivDisappearAction>().forEach(waitingActions::remove)
+                if (waitingActions.isEmpty()) {
+                    appearedForDisappearActions.remove(view)
+                    divWithWaitingDisappearActions.remove(view)
+                }
+            }
             visibilityActionDispatcher.dispatchActions(scope, view, logIds.values.toTypedArray())
         }
     }
@@ -248,8 +256,13 @@ internal class DivVisibilityActionTracker @Inject constructor(
         trackedTokens.remove(compositeLogId) { emptyToken ->
             handler.removeCallbacksAndMessages(emptyToken)
         }
-        if (action is DivDisappearAction && view != null) {
-            appearedForDisappearActions.remove(view)
+        val waitingActions = appearedForDisappearActions[view]
+        if (action is DivDisappearAction && view != null && waitingActions != null) {
+            waitingActions.remove(action)
+            if (waitingActions.isEmpty()) {
+                appearedForDisappearActions.remove(view)
+                divWithWaitingDisappearActions.remove(view)
+            }
         }
     }
 

@@ -267,7 +267,7 @@ internal class DivGalleryBinder @Inject constructor(
 
             // Find and track recycled views containing DisappearActions that are waiting for disappear
             with(visibilityActionTracker) {
-                getActionsWaitingForDisappear().filter { it.key !in recycler.children }.forEach { (view, div) ->
+                getDivWithWaitingDisappearActions().filter { it.key !in recycler.children }.forEach { (view, div) ->
                     trackDetachedView(divView, view, div)
                 }
             }
