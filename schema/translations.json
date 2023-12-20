@@ -49,7 +49,7 @@
   },
   "div_action_base_is_enabled": {
     "en": "This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).",
-    "ru": "Параметр позволяет отключить экшен по каким-либо причинам. Экшен, при отключении, перестает реагировать на связанное с ним событие (клик, изменение видимости и прочее)."
+    "ru": "Параметр отключает действие. Отключенное действие не реагирует на связанное с ним событие (клик, изменение видимости и т. д.)."
   },
   "div_action_base_log_id": {
     "en": "Logging ID.",
@@ -1325,7 +1325,7 @@
   },
   "div_scrollbar": {
     "en": "Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>",
-    "ru": "Поведение скроллбара. По умолчанию скрыт. На разных платформах скроллбар может занимать разное место, так как это настройка пользователя, учитывайте это в размерах. <li>`none` — скроллбар скрыт.</li><li>`auto` — скроллбар показывается, если не хватает места и на текущей платформе это необходимо.</li>"
+    "ru": "Поведение скроллбара. По умолчанию скрыт. В зависимости от платформы и настроек пользователя, скроллбар может иметь разные ширину и высоту. Учитывайте это при выборе размеров галереи. <li>`none` — скроллбар скрыт.</li><li>`auto` — скроллбар отображается, если не хватает места и его отображение необходимо на текущей платформе.</li>"
   },
   "div_select": {
     "en": "List of options with only one to be selected.",
