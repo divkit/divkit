@@ -48,6 +48,7 @@ final class DivDataExtensionsTests: XCTestCase {
     let block = try makeDivData(.divText(divWithAction))
       .makeBlock(context: .default)
       .withoutStateBlock() as? DecoratingBlock
+
     XCTAssertEqual(block?.actions?.first.path, UIElementPath.root + "action_log_id")
   }
 
@@ -57,16 +58,20 @@ final class DivDataExtensionsTests: XCTestCase {
     let block = try makeDivData(.divText(divWithAction))
       .makeBlock(context: context)
       .withoutStateBlock() as? DecoratingBlock
-    XCTAssertEqual(block?.actions?.first.path, UIElementPath("external_card_log_id") + "action_log_id")
+
+    XCTAssertEqual(
+      block?.actions?.first.path,
+      UIElementPath("external_card_log_id") + "action_log_id"
+    )
   }
 
   func test_GalleryPathContainsRoot() throws {
-    let block = try dataWithGallery
+    let block = try makeDivData(.divGallery(gallery))
       .makeBlock(context: .default)
-      .withoutStateBlock() as? DecoratingBlock
-    let galleryBlock = block?.child as? GalleryBlock
-    let expectedPath = UIElementPath.root + "0" + DivGallery.type
-    XCTAssertEqual(galleryBlock?.model.path, expectedPath)
+      .withoutStateBlock() as! WrapperBlock
+    let galleryBlock = block.child as! GalleryBlock
+
+    XCTAssertEqual(galleryBlock.model.path, UIElementPath.root + 0 + "gallery")
   }
 
   func test_WhenStateChanges_ReportsVisibilityForNewState() throws {
@@ -117,8 +122,6 @@ private let gallery = makeDivGallery(
     )),
   ]
 )
-
-private let dataWithGallery = makeDivData(.divGallery(gallery))
 
 extension Block {
   fileprivate func withoutStateBlock() -> Block {

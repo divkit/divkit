@@ -33,17 +33,17 @@ final class DivContainerExtensionsTests: XCTestCase {
   func test_AddsIndexedParentPathToItems() throws {
     let block = try makeBlock(
       fromFile: "item_with_action"
-    ) as? WrapperBlock
+    ) as! WrapperBlock
 
-    let container = block?.child as? ContainerBlock
-    let wrappedContainer = container?.children.first?.content as? WrapperBlock
-    let gallery: GalleryBlock? = wrappedContainer?.child as? GalleryBlock
+    let container = block.child as! ContainerBlock
+    let wrappedContainer = container.children[0].content as! WrapperBlock
+    let gallery = wrappedContainer.child as! GalleryBlock
 
     // We are using "container" const instead of DivContainer.type to emphasise its importance for
     // analytics.
     // DivContainer.type changes can brake analytic reports.
     XCTAssertEqual(
-      gallery?.model.path,
+      gallery.model.path,
       UIElementPath.root + "container" + 0 + "gallery"
     )
   }

@@ -54,23 +54,23 @@ extension DivBase {
     // and alpha should be applied to block with border and shadow.
     var visibilityActions = makeVisibilityActions(context: context)
     visibilityActions += makeDisappearActions(context: context)
+    let hasVisibilityActions = !visibilityActions.isEmpty
 
     let focusState: FocusViewState = context.blockStateStorage
       .getState(context.parentPath) ?? .default
-    let background = getBackground(focusState)
     let border = getBorder(focusState)
-    
-    let boundary: BoundaryTrait
+
+    let boundary: BoundaryTrait?
     if !clipToBounds {
       boundary = .noClip
     } else if let border {
       boundary = .clipCorner(border.resolveCornerRadii(expressionResolver))
     } else {
-      boundary = .clips
+      boundary = nil
     }
-    
+
     block = try applyBackground(
-      background,
+      getBackground(focusState),
       to: block,
       context: context
     )
@@ -78,8 +78,8 @@ extension DivBase {
       boundary: boundary,
       border: border?.resolveBorder(expressionResolver),
       shadow: border?.resolveShadow(expressionResolver),
-      visibilityActions: visibilityActions.isEmpty ? nil : visibilityActions,
-      lastVisibleBounds: visibilityActions.isEmpty ? nil : Property<CGRect>(
+      visibilityActions: hasVisibilityActions ? visibilityActions : nil,
+      lastVisibleBounds: hasVisibilityActions ? Property<CGRect>(
         getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
         setter: {
           context.lastVisibleBoundsCache.updateLastVisibleBounds(
@@ -87,8 +87,8 @@ extension DivBase {
             bounds: $0
           )
         }
-      ),
-      scheduler: context.scheduler,
+      ) : nil,
+      scheduler: hasVisibilityActions ? context.scheduler : nil,
       tooltips: tooltips.makeTooltips(context: context)
     )
     
@@ -99,6 +99,13 @@ extension DivBase {
         anchorPoint: transform.resolveAnchorPoint(expressionResolver)
       )
     }
+    
+    let accessibilityElement: AccessibilityElement
+    if let customA11yElement {
+      accessibilityElement = customA11yElement
+    } else {
+      accessibilityElement = (accessibility ?? DivAccessibility()).resolve(context, id: id)
+    }
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder)
@@ -107,7 +114,7 @@ extension DivBase {
         boundary: transform?.resolveRotation(expressionResolver).flatMap { _ in .noClip } ??
           border?.resolveShadow(expressionResolver).flatMap { _ in .noClip },
         alpha: CGFloat(resolveAlpha(expressionResolver)),
-        accessibilityElement: customA11yElement ?? accessibility?.resolve(context, id: id)
+        accessibilityElement: accessibilityElement
       )
 
     return applyExtensionHandlersAfterBaseProperties(
@@ -121,16 +128,14 @@ extension DivBase {
     guard focusState.isFocused else {
       return background
     }
-    let focusedBackground = focus?.background ?? background
-    return focusedBackground
+    return focus?.background ?? background
   }
 
   private func getBorder(_ focusState: FocusViewState) -> DivBorder? {
     guard focusState.isFocused else {
       return border
     }
-    let focusedBorder = focus?.border ?? border
-    return focusedBorder
+    return focus?.border ?? border
   }
 
   func resolveAlignment(
