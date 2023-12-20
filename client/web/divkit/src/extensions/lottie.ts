@@ -48,6 +48,26 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
             this.params = params;
         }
 
+        private loadData(): Promise<object> {
+            if (this.params.lottie_json) {
+                return Promise.resolve(this.params.lottie_json);
+            }
+
+            const url = this.params.lottie_url;
+            if (url) {
+                return fetch(url)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error('Response is not ok');
+                        }
+
+                        return res.json();
+                    });
+            }
+
+            return Promise.reject('Missing data');
+        }
+
         mountView(node: HTMLElement, context: DivExtensionContext): void {
             if (!this.params.lottie_url && !this.params.lottie_json) {
                 return;
@@ -62,20 +82,13 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
 
             // create wrapper for an animation, because "lottie-web" destroys container on "destroy" call,
             // and gif node itself cannot be used
-            this.wrapper = document.createElement('div');
+            const wrapper = this.wrapper = document.createElement('div');
             this.wrapper.style.width = '100%';
             this.wrapper.style.height = '100%';
             node.appendChild(this.wrapper);
 
             const repeatCount = Number(this.params.repeat_count || -1);
-            const animItem = this.animItem = loadAnimation({
-                container: this.wrapper,
-                path: this.params.lottie_url,
-                animationData: this.params.lottie_json,
-                renderer: 'svg',
-                loop: true
-            });
-            this.animItem.addEventListener('data_failed', () => {
+            const onError = () => {
                 this.animItem?.destroy();
                 // reveal back gif contents
                 children.forEach(element => {
@@ -92,24 +105,33 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                     url: this.params.lottie_url
                 };
                 context.logError(err);
-            });
-            if (this.params.repeat_mode === 'reverse' || repeatCount !== -1) {
-                let direction = 1;
-                let count = 0;
-                animItem.addEventListener('loopComplete', () => {
-                    ++count;
-                    if (repeatCount !== -1 && count === repeatCount) {
-                        animItem.stop();
-                        animItem.goToAndStop(animItem.totalFrames, true);
-                    } else {
-                        if (this.params.repeat_mode === 'reverse') {
-                            direction *= -1;
-                            animItem.setDirection(direction);
-                        }
-                        animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
-                    }
+            };
+            this.loadData().then(json => {
+                const animItem = this.animItem = loadAnimation({
+                    container: wrapper,
+                    animationData: json,
+                    renderer: 'svg',
+                    loop: true
                 });
-            }
+                this.animItem.addEventListener('data_failed', onError);
+                if (this.params.repeat_mode === 'reverse' || repeatCount !== -1) {
+                    let direction = 1;
+                    let count = 0;
+                    animItem.addEventListener('loopComplete', () => {
+                        ++count;
+                        if (repeatCount !== -1 && count === repeatCount) {
+                            animItem.stop();
+                            animItem.goToAndStop(animItem.totalFrames, true);
+                        } else {
+                            if (this.params.repeat_mode === 'reverse') {
+                                direction *= -1;
+                                animItem.setDirection(direction);
+                            }
+                            animItem.goToAndPlay(direction === 1 ? 0 : animItem.totalFrames, true);
+                        }
+                    });
+                }
+            }).catch(onError);
         }
 
         unmountView(node: HTMLElement, _context: DivExtensionContext): void {
