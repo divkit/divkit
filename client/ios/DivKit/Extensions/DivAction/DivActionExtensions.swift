@@ -4,7 +4,10 @@ import LayoutKit
 extension DivAction: DivActionBase {}
 
 extension DivAction {
-  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction {
+  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
+    guard resolveIsEnabled(context.expressionResolver) else {
+      return nil
+    }
     let payload: UserInterfaceAction.Payload
     if let menuPayload = makeMenuPayload(context: context) {
       payload = menuPayload
@@ -29,7 +32,7 @@ extension DivAction {
 
     let items: [Menu.Item] = menuItems.compactMap { item in
       if let actions = item.actions {
-        let uiActions = actions.map { $0.uiAction(context: context) }
+        let uiActions = actions.compactMap { $0.uiAction(context: context) }
         if !uiActions.isEmpty {
           return Menu.Item(
             actions: uiActions,
@@ -54,6 +57,6 @@ extension DivAction {
 
 extension Array where Element == DivAction {
   func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
-    map { $0.uiAction(context: context) }
+    compactMap { $0.uiAction(context: context) }
   }
 }

@@ -14,7 +14,7 @@ final class DivActionExtensionsTests: XCTestCase {
     let action = divAction.uiAction(
       context: .default.modifying(cardLogId: "card_log_id")
     )
-    XCTAssertEqual(action.path, UIElementPath("card_log_id") + logId)
+    XCTAssertEqual(action?.path, UIElementPath("card_log_id") + logId)
   }
   
   func test_WhenHasURL_BuildsActionWithIt() {
@@ -89,6 +89,18 @@ final class DivActionExtensionsTests: XCTestCase {
       path: .root + logId
     )
     XCTAssertEqual(action, expectedAction)
+  }
+
+  func test_IsEnabledIsFalse() {
+    let divAction = DivAction(
+      isEnabled: .value(false),
+      logId: logId,
+      url: testURL
+    )
+    let action = divAction.uiAction(
+      context: .default.modifying(cardLogId: "card_log_id")
+    )
+    XCTAssertNil(action)
   }
 }
 

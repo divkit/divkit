@@ -4,8 +4,11 @@ import CommonCorePublic
 import LayoutKit
 
 extension DivDisappearAction {
-  func makeDisappearAction(context: DivBlockModelingContext) -> VisibilityAction {
+  func makeDisappearAction(context: DivBlockModelingContext) -> VisibilityAction? {
     let expressionResolver = context.expressionResolver
+    guard resolveIsEnabled(expressionResolver) else {
+      return nil
+    }
     let logLimitValue = resolveLogLimit(expressionResolver)
     let path = context.parentPath + logId
     return VisibilityAction(

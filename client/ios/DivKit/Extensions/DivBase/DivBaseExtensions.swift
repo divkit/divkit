@@ -156,13 +156,14 @@ extension DivBase {
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
     (visibilityActions ?? visibilityAction.asArray())
-      .map { $0.makeVisibilityAction(context: context) }
+      .compactMap { $0.makeVisibilityAction(context: context) }
   }
 
   private func makeDisappearActions(
     context: DivBlockModelingContext
   ) -> [VisibilityAction] {
-    disappearActions?.map { $0.makeDisappearAction(context: context) } ?? []
+    disappearActions?
+      .compactMap { $0.makeDisappearAction(context: context) } ?? []
   }
 
   private func applyTransitioningAnimations(
