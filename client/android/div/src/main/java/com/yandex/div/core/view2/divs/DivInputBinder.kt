@@ -10,6 +10,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.mask.BaseInputMask
 import com.yandex.div.core.util.mask.CurrencyInputMask
 import com.yandex.div.core.util.mask.DEFAULT_MASK_DATA
@@ -63,7 +64,7 @@ internal class DivInputBinder @Inject constructor(
             isFocusableInTouchMode = true
             textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
 
-            observeBackground(div, divView, expressionResolver)
+            observeBackground(divView, div, oldDiv, expressionResolver)
 
             observeFontSize(div, expressionResolver)
             observeTypeface(div, expressionResolver)
@@ -113,28 +114,30 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeBackground(
-        div: DivInput,
         divView: Div2View,
+        newDiv: DivInput,
+        oldDiv: DivInput?,
         resolver: ExpressionResolver
     ) {
-        val nativeBackgroundColorVariable = div.nativeInterface?.color ?: return
+        val nativeBackgroundColorVariable = newDiv.nativeInterface?.color ?: return
         val drawable = nativeBackground ?: return
 
         val callback = { color: Int ->
-            applyNativeBackgroundColor(color, div, divView, resolver, drawable)
+            applyNativeBackgroundColor(color, newDiv, oldDiv, divView, resolver, drawable)
         }
         addSubscription(nativeBackgroundColorVariable.observeAndGet(resolver, callback))
     }
 
     private fun View.applyNativeBackgroundColor(
         color: Int,
-        div: DivInput,
+        newDiv: DivInput,
+        oldDiv: DivInput?,
         divView: Div2View,
         resolver: ExpressionResolver,
         nativeBackground: Drawable
     ) {
         nativeBackground.setTint(color)
-        baseBinder.bindBackground(this, div, divView, resolver, nativeBackground)
+        baseBinder.bindBackground(divView, this, newDiv, oldDiv, resolver, expressionSubscriber, nativeBackground)
     }
 
     private fun DivInputView.observeFontSize(div: DivInput, resolver: ExpressionResolver) {

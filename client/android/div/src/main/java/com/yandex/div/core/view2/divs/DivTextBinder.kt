@@ -26,6 +26,8 @@ import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.observeRadialGradientCenter
+import com.yandex.div.core.util.observeRadialGradientRadius
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -321,9 +323,9 @@ internal class DivTextBinder @Inject constructor(
                 addSubscription(gradient.angle.observe(resolver, callback))
             }
             is DivRadialGradient -> {
-                gradient.centerX.observe(resolver, this, callback)
-                gradient.centerY.observe(resolver, this, callback)
-                gradient.radius.observe(resolver, this, callback)
+                observeRadialGradientRadius(gradient.radius, resolver, callback)
+                observeRadialGradientCenter(gradient.centerX, resolver, callback)
+                observeRadialGradientCenter(gradient.centerY, resolver, callback)
             }
         }
     }

@@ -12,6 +12,7 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.isBranch
+import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -313,8 +314,12 @@ internal class DivContainerBinder @Inject constructor(
         separator: DivContainer.Separator,
         resolver: ExpressionResolver,
         applyDrawable: (Drawable?) -> Unit
-    ) = observeDrawable(resolver, separator.style) {
-        applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
+    ) {
+        val metrics = view.resources.displayMetrics
+        applyDrawable(separator.style.toDrawable(metrics, resolver))
+        observeDrawable(separator.style, resolver) {
+            applyDrawable(separator.style.toDrawable(metrics, resolver))
+        }
     }
 
     private fun ExpressionSubscriber.observeSeparatorMargins(

@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -110,7 +111,7 @@ internal class DivGridBinder @Inject constructor(
     }
 
     private fun bindLayoutParams(childView: View, childDiv: DivBase, resolver: ExpressionResolver) {
-        baseBinder.bindLayoutParams(childView, childDiv, null, resolver)
+        baseBinder.bindLayoutParams(childView, childDiv, null, resolver, childView.expressionSubscriber)
 
         childView.applyGridLayoutParams(resolver, childDiv)
 

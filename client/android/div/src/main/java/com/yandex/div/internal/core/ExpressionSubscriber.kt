@@ -7,8 +7,8 @@ interface ExpressionSubscriber : Releasable {
 
     val subscriptions: MutableList<Disposable>
 
-    fun addSubscription(subscription: Disposable) {
-        if (subscription !== Disposable.NULL) {
+    fun addSubscription(subscription: Disposable?) {
+        if (subscription != null && subscription !== Disposable.NULL) {
             subscriptions += subscription
         }
     }

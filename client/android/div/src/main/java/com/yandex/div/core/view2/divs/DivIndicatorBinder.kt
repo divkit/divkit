@@ -1,6 +1,9 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
+import com.yandex.div.core.util.observeFixedSize
+import com.yandex.div.core.util.observeRoundedRectangleShape
+import com.yandex.div.core.util.observeShape
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
@@ -8,6 +11,8 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivBase
+import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
 import com.yandex.div2.DivRoundedRectangleShape
@@ -44,10 +49,10 @@ internal class DivIndicatorBinder @Inject constructor(
         addSubscription(indicator.activeItemSize.observe(resolver, callback))
         addSubscription(indicator.inactiveItemColor.observe(resolver, callback))
         addSubscription(indicator.minimumItemSize.observe(resolver, callback))
-        observeShape(resolver, indicator.shape, callback)
-        indicator.activeShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
-        indicator.inactiveShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
-        indicator.inactiveMinimumShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
+        observeShape(indicator.shape, resolver, callback)
+        observeRoundedRectangleShape(indicator.activeShape, resolver, callback)
+        observeRoundedRectangleShape(indicator.inactiveShape, resolver, callback)
+        observeRoundedRectangleShape(indicator.inactiveMinimumShape, resolver, callback)
 
         when(val itemsPlacement = indicator.itemsPlacementCompat) {
             is DivIndicatorItemPlacement.Default -> {
@@ -61,7 +66,23 @@ internal class DivIndicatorBinder @Inject constructor(
             }
         }
 
-        baseBinder.observeWidthAndHeightSubscription(resolver, this, indicator, callback)
+        observeWidthAndHeightSubscription(indicator, resolver, callback)
+    }
+
+    private fun DivPagerIndicatorView.observeWidthAndHeightSubscription(
+        div: DivBase,
+        resolver: ExpressionResolver,
+        callback: (Any) -> Unit
+    ) {
+        val width = div.width.value()
+        if (width is DivFixedSize) {
+            observeFixedSize(width, resolver, callback)
+        }
+
+        val height = div.height.value()
+        if (height is DivFixedSize) {
+            observeFixedSize(height, resolver, callback)
+        }
     }
 
     private fun DivPagerIndicatorView.applyStyle(resolver: ExpressionResolver, indicator: DivIndicator) {

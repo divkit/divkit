@@ -15,7 +15,6 @@ import android.widget.TextView
 import androidx.annotation.MainThread
 import androidx.core.graphics.withTranslation
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
@@ -72,64 +71,39 @@ import com.yandex.div2.DivIndicatorItemPlacement
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
-import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientFixedCenter
-import com.yandex.div2.DivRadialGradientRadius
-import com.yandex.div2.DivRadialGradientRelativeCenter
-import com.yandex.div2.DivRadialGradientRelativeRadius
-import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivStroke
+import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.roundToInt
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
+    if (insets == null) {
+        setPadding(0, 0, 0, 0)
+        return
+    }
+
     val metrics = resources.displayMetrics
-    when(insets?.unit?.evaluate(resolver)) {
-        DivSizeUnit.DP -> {
-            if (insets.start != null || insets.end != null) {
-                setPaddingRelative(
-                        insets.start?.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
-                        insets.end?.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics)
-                )
-            } else {
-                setPadding(
-                        insets.left.evaluate(resolver).dpToPx(metrics), insets.top.evaluate(resolver).dpToPx(metrics),
-                        insets.right.evaluate(resolver).dpToPx(metrics), insets.bottom.evaluate(resolver).dpToPx(metrics))
-            }
-        }
-        DivSizeUnit.SP -> {
-            if (insets.start != null || insets.end != null) {
-                setPaddingRelative(
-                        insets.start?.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
-                        insets.end?.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics)
-                )
-            } else {
-                setPadding(
-                        insets.left.evaluate(resolver).spToPx(metrics), insets.top.evaluate(resolver).spToPx(metrics),
-                        insets.right.evaluate(resolver).spToPx(metrics), insets.bottom.evaluate(resolver).spToPx(metrics))
-            }
-        }
-        DivSizeUnit.PX -> {
-            if (insets.start != null || insets.end != null) {
-                setPaddingRelative(
-                        insets.start?.evaluate(resolver)?.toIntSafely() ?: 0,
-                        insets.top.evaluate(resolver).toIntSafely(),
-                        insets.end?.evaluate(resolver)?.toIntSafely() ?: 0,
-                        insets.bottom.evaluate(resolver).toIntSafely()
-                )
-            } else {
-                setPadding(
-                        insets.left.evaluate(resolver).toIntSafely(), insets.top.evaluate(resolver).toIntSafely(),
-                        insets.right.evaluate(resolver).toIntSafely(), insets.bottom.evaluate(resolver).toIntSafely()
-                )
-            }
-        }
+    val unit = insets.unit.evaluate(resolver)
+    if (insets.start != null || insets.end != null) {
+        setPaddingRelative(
+            insets.start?.evaluate(resolver)?.toPx(unit, metrics) ?: 0,
+            insets.top.evaluate(resolver).toPx(unit, metrics),
+            insets.end?.evaluate(resolver)?.toPx(unit, metrics) ?: 0,
+            insets.bottom.evaluate(resolver).toPx(unit, metrics)
+        )
+    } else {
+        setPadding(
+            insets.left.evaluate(resolver).toPx(unit, metrics),
+            insets.top.evaluate(resolver).toPx(unit, metrics),
+            insets.right.evaluate(resolver).toPx(unit, metrics),
+            insets.bottom.evaluate(resolver).toPx(unit, metrics))
     }
 }
 
@@ -192,6 +166,14 @@ internal fun DivSize?.toLayoutParamsSize(
     }
 }
 
+internal fun Long.toPx(unit: DivSizeUnit, metrics: DisplayMetrics): Int {
+    return when (unit) {
+        DivSizeUnit.DP -> dpToPx(metrics)
+        DivSizeUnit.SP -> spToPx(metrics)
+        DivSizeUnit.PX -> toIntSafely()
+    }
+}
+
 internal fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
@@ -242,7 +224,7 @@ internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
         layoutParams.height = height
         requestLayout()
     }
-    applyTransform(div, resolver)
+    applyTransform(div.transform, resolver)
 }
 
 internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
@@ -276,7 +258,7 @@ internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
         layoutParams.width = width
         requestLayout()
     }
-    applyTransform(div, resolver)
+    applyTransform(div.transform, resolver)
 }
 
 internal fun View.applyMinWidth(minWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
@@ -296,8 +278,8 @@ internal fun View.applyHorizontalWeightValue(value: Float) {
 }
 
 internal fun DivSize.getWeight(resolver: ExpressionResolver) = when (this) {
-    is DivSize.MatchParent -> value.weight?.evaluate(resolver)?.toFloat() ?: 0f
-    else -> 0f
+    is DivSize.MatchParent -> value.weight?.evaluate(resolver)?.toFloat() ?: DivLayoutParams.DEFAULT_WEIGHT
+    else -> DivLayoutParams.DEFAULT_WEIGHT
 }
 
 internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
@@ -310,18 +292,24 @@ internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, re
 }
 
 internal fun View.applyTransform(
-    div: DivBase,
+    transform: DivTransform,
     resolver: ExpressionResolver,
 ) {
-    rotation = div.transform.rotation?.evaluate(resolver)?.toFloat() ?: 0f
+    val rotation = transform.rotation?.evaluate(resolver)?.toFloat()
+    if (rotation == null) {
+        this.rotation = 0.0f
+        return
+    }
+    this.rotation = rotation
+
     if (width == 0 && height == 0) {
         doOnPreDraw {
-            pivotX = getPivotValue(width, div.transform.pivotX, resolver)
-            pivotY = getPivotValue(height, div.transform.pivotY, resolver)
+            pivotX = getPivotValue(width, transform.pivotX, resolver)
+            pivotY = getPivotValue(height, transform.pivotY, resolver)
         }
     } else {
-        pivotX = getPivotValue(width, div.transform.pivotX, resolver)
-        pivotY = getPivotValue(height, div.transform.pivotY, resolver)
+        pivotX = getPivotValue(width, transform.pivotX, resolver)
+        pivotY = getPivotValue(height, transform.pivotY, resolver)
     }
 }
 
@@ -512,38 +500,6 @@ internal fun DivBlendMode.toPorterDuffMode(): PorterDuff.Mode {
     }
 }
 
-internal fun DivRadialGradientRadius.observe(
-    resolver: ExpressionResolver,
-    subscriber: ExpressionSubscriber,
-    callback: (Any) -> Unit
-) {
-    when (val divRadius = this.value()) {
-        is DivFixedSize -> {
-            subscriber.addSubscription(divRadius.unit.observe(resolver, callback))
-            subscriber.addSubscription(divRadius.value.observe(resolver, callback))
-        }
-        is DivRadialGradientRelativeRadius -> {
-            subscriber.addSubscription(divRadius.value.observe(resolver, callback))
-        }
-    }
-}
-
-internal fun DivRadialGradientCenter.observe(
-    resolver: ExpressionResolver,
-    subscriber: ExpressionSubscriber,
-    callback: (Any) -> Unit
-) {
-    when (val divCenter = this.value()) {
-        is DivRadialGradientFixedCenter -> {
-            subscriber.addSubscription(divCenter.unit.observe(resolver, callback))
-            subscriber.addSubscription(divCenter.value.observe(resolver, callback))
-        }
-        is DivRadialGradientRelativeCenter -> {
-            subscriber.addSubscription(divCenter.value.observe(resolver, callback))
-        }
-    }
-}
-
 internal fun View.applyDivActions(
     divView: Div2View,
     action: DivAction?,
@@ -616,18 +572,6 @@ internal fun TextView.applyLetterSpacing(letterSpacing: Double, fontSize: Int) {
 internal fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
     tag = divId
     id = viewId
-}
-
-internal fun View.applyDescriptionAndHint(contentDescription: String?, hint: String?) {
-    this.contentDescription = when {
-        contentDescription == null -> hint
-        hint == null -> contentDescription
-        else -> "$contentDescription\n$hint"
-    }
-}
-
-internal fun View.applyAccessibilityStateDescription(stateDescription: String?) {
-    ViewCompat.setStateDescription(this, stateDescription)
 }
 
 internal inline fun <T> Any?.applyIfNotEquals(second: T, applyRef: () -> Unit) {
@@ -790,71 +734,6 @@ internal fun DivBorder?.isConstantlyEmpty(): Boolean {
     if (hasShadow != Expression.constant(false)) return false
     if (shadow != null) return false
     return stroke == null
-}
-
-internal fun ExpressionSubscriber.observeDrawable(
-    resolver: ExpressionResolver,
-    drawable: DivDrawable,
-    applyDrawable: (DivDrawable) -> Unit
-) {
-    applyDrawable(drawable)
-
-    val callback = { _: Any -> applyDrawable(drawable) }
-    when (drawable) {
-        is DivDrawable.Shape -> {
-            val shapeDrawable = drawable.value
-            addSubscription(shapeDrawable.color.observe(resolver, callback))
-            observeStroke(resolver, shapeDrawable.stroke, callback)
-            observeShape(resolver, shapeDrawable.shape, callback)
-        }
-    }
-}
-
-internal fun ExpressionSubscriber.observeShape(
-    resolver: ExpressionResolver,
-    shape: DivShape,
-    callback: (Any) -> Unit
-) {
-    when (shape) {
-        is DivShape.RoundedRectangle -> {
-            observeRoundedRectangleShape(resolver, shape.value, callback)
-        }
-        is DivShape.Circle -> {
-            shape.value.let {
-                addSubscription(it.radius.value.observe(resolver, callback))
-                addSubscription(it.radius.unit.observe(resolver, callback))
-                it.backgroundColor?.observe(resolver, callback)?.let { color -> addSubscription(color) }
-                observeStroke(resolver, it.stroke, callback)
-            }
-        }
-    }
-}
-
-internal fun ExpressionSubscriber.observeRoundedRectangleShape (
-    resolver: ExpressionResolver,
-    shape: DivRoundedRectangleShape,
-    callback: (Any) -> Unit
-) {
-    addSubscription(shape.itemWidth.value.observe(resolver, callback))
-    addSubscription(shape.itemWidth.unit.observe(resolver, callback))
-    addSubscription(shape.itemHeight.value.observe(resolver, callback))
-    addSubscription(shape.itemHeight.unit.observe(resolver, callback))
-    addSubscription(shape.cornerRadius.value.observe(resolver, callback))
-    addSubscription(shape.cornerRadius.unit.observe(resolver, callback))
-    shape.backgroundColor?.observe(resolver, callback)?.let { addSubscription(it) }
-    observeStroke(resolver, shape.stroke, callback)
-}
-
-private fun ExpressionSubscriber.observeStroke (
-    resolver: ExpressionResolver,
-    stroke: DivStroke?,
-    callback: (Any) -> Unit
-) {
-    stroke?.let {
-        addSubscription(it.color.observe(resolver, callback))
-        addSubscription(it.width.observe(resolver, callback))
-        addSubscription(it.unit.observe(resolver, callback))
-    }
 }
 
 internal fun DivDrawable.toDrawable(

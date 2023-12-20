@@ -37,7 +37,7 @@ internal class DivCustomBinder @Inject constructor(
         }
 
         baseBinder.bindView(view, div, null, divView)
-        baseBinder.bindId(view, divView, null)
+        baseBinder.bindId(divView, view, null)
 
         if (divCustomContainerViewAdapter?.isCustomTypeSupported(div.customType) == true) {
             bind(view, customView, div, divView,
@@ -71,7 +71,7 @@ internal class DivCustomBinder @Inject constructor(
         }
 
         bindView(customView)
-        baseBinder.bindId(customView, divView, div.id)
+        baseBinder.bindId(divView, customView, div.id)
 
         if (oldCustomView != customView) {
             replaceInParent(previousWrapper, customView, divView)
@@ -87,7 +87,7 @@ internal class DivCustomBinder @Inject constructor(
         previousCustomView: View?
     ) {
         divCustomViewFactory.create(div, divView) { newCustomView ->
-            baseBinder.bindId(newCustomView, divView, div.id)
+            baseBinder.bindId(divView, newCustomView, div.id)
             if (newCustomView != previousCustomView) {
                 replaceInParent(previousViewGroup, newCustomView, divView)
                 extensionController.bindView(divView, newCustomView, div)

@@ -37,11 +37,11 @@ sealed interface ExpressionList<T : Any> {
 }
 
 class ConstantExpressionList<T : Any>(
-    private val valuesList: List<T>,
+    internal val values: List<T>,
 ) : ExpressionList<T> {
 
     override fun evaluate(resolver: ExpressionResolver): List<T> {
-        return valuesList
+        return values
     }
 
     override fun observe(resolver: ExpressionResolver, callback: (List<T>) -> Unit): Disposable {
@@ -52,12 +52,12 @@ class ConstantExpressionList<T : Any>(
         resolver: ExpressionResolver,
         callback: (List<T>) -> Unit
     ): Disposable {
-        callback(valuesList)
+        callback(values)
         return Disposable.NULL
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is ConstantExpressionList<*> && valuesList == other.valuesList
+        return other is ConstantExpressionList<*> && values == other.values
     }
 }
 

@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
@@ -104,8 +105,9 @@ internal class DivSliderBinder @Inject constructor(
     }
 
     private fun DivSliderView.observeThumbStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable) {
-        observeDrawable(resolver, thumbStyle) { style ->
-            applyThumbStyle(resolver, style)
+        applyThumbStyle(resolver, thumbStyle)
+        observeDrawable(thumbStyle, resolver) {
+            applyThumbStyle(resolver, thumbStyle)
         }
     }
 
@@ -113,9 +115,14 @@ internal class DivSliderBinder @Inject constructor(
         thumbDrawable = thumbStyle.toDrawable(resources.displayMetrics, resolver)
     }
 
-    private fun DivSliderView.observeThumbSecondaryStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable) {
-        observeDrawable(resolver, thumbStyle) { style ->
-            applyThumbSecondaryStyle(resolver, style)
+    private fun DivSliderView.observeThumbSecondaryStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable?) {
+        if (thumbStyle == null) {
+            return
+        }
+
+        applyThumbSecondaryStyle(resolver, thumbStyle)
+        observeDrawable(thumbStyle, resolver) {
+            applyThumbSecondaryStyle(resolver, thumbStyle)
         }
     }
 
@@ -212,8 +219,9 @@ internal class DivSliderBinder @Inject constructor(
     }
 
     private fun DivSliderView.observeTrackActiveStyle(resolver: ExpressionResolver, trackStyle: DivDrawable) {
-        observeDrawable(resolver, trackStyle) { style ->
-            applyTrackActiveStyle(resolver, style)
+        applyTrackActiveStyle(resolver, trackStyle)
+        observeDrawable(trackStyle, resolver) {
+            applyTrackActiveStyle(resolver, trackStyle)
         }
     }
 
@@ -222,8 +230,9 @@ internal class DivSliderBinder @Inject constructor(
     }
 
     private fun DivSliderView.observeTrackInactiveStyle(resolver: ExpressionResolver, trackStyle: DivDrawable) {
-        observeDrawable(resolver, trackStyle) { style ->
-            applyTrackInactiveStyle(resolver, style)
+        applyTrackInactiveStyle(resolver, trackStyle)
+        observeDrawable(trackStyle, resolver) {
+            applyTrackInactiveStyle(resolver, trackStyle)
         }
     }
 
@@ -237,10 +246,9 @@ internal class DivSliderBinder @Inject constructor(
     }
 
     private fun DivSliderView.observeTickMarkActiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
-        tickMarkStyle?.let {
-            observeDrawable(resolver, it) { style ->
-                applyTickMarkActiveStyle(resolver, style)
-            }
+        applyTickMarkActiveStyle(resolver, tickMarkStyle)
+        observeDrawable(tickMarkStyle, resolver) {
+            applyTickMarkActiveStyle(resolver, tickMarkStyle)
         }
     }
 
@@ -250,10 +258,9 @@ internal class DivSliderBinder @Inject constructor(
     }
 
     private fun DivSliderView.observeTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
-        tickMarkStyle?.let {
-            observeDrawable(resolver, tickMarkStyle) { style ->
-                applyTickMarkInactiveStyle(resolver, style)
-            }
+        applyTickMarkInactiveStyle(resolver, tickMarkStyle)
+        observeDrawable(tickMarkStyle, resolver) {
+            applyTickMarkInactiveStyle(resolver, tickMarkStyle)
         }
     }
 
@@ -327,12 +334,19 @@ internal class DivSliderBinder @Inject constructor(
                 }
             }
 
-            observeDrawable(resolver, divRange.trackActiveStyle ?: div.trackActiveStyle) {
-                updateAfter { range.activeTrackDrawable = it.toDrawable(metrics, resolver) }
+            val trackActiveStyle = divRange.trackActiveStyle ?: div.trackActiveStyle
+            val applyActiveTrackStyle = { _: Any ->
+                updateAfter { range.activeTrackDrawable = trackActiveStyle.toDrawable(metrics, resolver) }
             }
-            observeDrawable(resolver, divRange.trackInactiveStyle ?: div.trackInactiveStyle) {
-                updateAfter { range.inactiveTrackDrawable = it.toDrawable(metrics, resolver) }
+            applyActiveTrackStyle(Unit)
+            observeDrawable(trackActiveStyle, resolver, applyActiveTrackStyle)
+
+            val trackInactiveStyle = divRange.trackInactiveStyle ?: div.trackInactiveStyle
+            val applyInactiveTrackStyle = { _: Any ->
+                updateAfter { range.inactiveTrackDrawable = trackInactiveStyle.toDrawable(metrics, resolver) }
             }
+            applyInactiveTrackStyle(Unit)
+            observeDrawable(trackInactiveStyle, resolver, applyInactiveTrackStyle)
         }
     }
 

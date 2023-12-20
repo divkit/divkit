@@ -52,7 +52,7 @@ class DivBaseBinderTest {
 
         baseBinder.bindView(view, div, oldDiv, divView)
 
-        verify(view).setPadding(any(), any(), any(), any())
+        verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
     }
 
@@ -66,7 +66,7 @@ class DivBaseBinderTest {
 
         baseBinder.bindView(view, div, oldDiv, divView)
 
-        verify(view).setPadding(any(), any(), any(), any())
+        verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
     }
 

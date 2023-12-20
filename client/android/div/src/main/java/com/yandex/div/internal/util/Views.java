@@ -11,15 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.DimenRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.IntDef;
-import androidx.annotation.IntRange;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import com.yandex.div.core.util.SafeAlertDialog;
 import com.yandex.div.internal.Assert;
 
@@ -108,24 +104,6 @@ public class Views {
         view.getLocationInWindow(HIT_TEST_ARRAY);
         return rawX >= HIT_TEST_ARRAY[0] && rawX <= HIT_TEST_ARRAY[0] + view.getWidth() &&
                 rawY >= HIT_TEST_ARRAY[1] && rawY <= HIT_TEST_ARRAY[1] + view.getHeight();
-    }
-
-    public static void setWidth(@NonNull View view,
-                                @IntRange(from = ViewGroup.LayoutParams.WRAP_CONTENT) int width) {
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params != null) {
-            params.width = width;
-            view.setLayoutParams(params);
-        }
-    }
-
-    public static void setHeight(@NonNull View view,
-                                 @IntRange(from = ViewGroup.LayoutParams.WRAP_CONTENT) int height) {
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params != null) {
-            params.height = height;
-            view.setLayoutParams(params);
-        }
     }
 
     public static void setPadding(@NonNull View view, @DimenRes int res, @ViewSideFlags int viewSideFlags) {

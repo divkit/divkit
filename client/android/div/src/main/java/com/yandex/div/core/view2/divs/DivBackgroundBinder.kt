@@ -17,6 +17,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.applyFilters
@@ -30,14 +31,10 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivFilter
-import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivImageScale
-import com.yandex.div2.DivLinearGradient
-import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeRadius
-import com.yandex.div2.DivSolidBackground
 import javax.inject.Inject
 
 @DivScope
@@ -157,39 +154,7 @@ internal class DivBackgroundBinder @Inject constructor(
         callback: (Any) -> Unit
     ) {
         backgroundList?.forEach { background ->
-            when (val divBackground = background.value()) {
-                is DivSolidBackground -> subscriber.addSubscription(divBackground.color.observe(resolver, callback))
-
-                is DivLinearGradient -> {
-                    subscriber.addSubscription(divBackground.angle.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.colors.observe(resolver, callback))
-                }
-
-                is DivRadialGradient -> {
-                    divBackground.centerX.observe(resolver, subscriber, callback)
-                    divBackground.centerY.observe(resolver, subscriber, callback)
-                    divBackground.radius.observe(resolver, subscriber, callback)
-                    subscriber.addSubscription(divBackground.colors.observe(resolver, callback))
-                }
-
-                is DivImageBackground -> {
-                    subscriber.addSubscription(divBackground.alpha.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.imageUrl.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.contentAlignmentHorizontal.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.contentAlignmentVertical.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.preloadRequired.observe(resolver, callback))
-                    subscriber.addSubscription(divBackground.scale.observe(resolver, callback))
-
-                    for (filter in divBackground.filters ?: emptyList()) {
-                        when (filter) {
-                            is DivFilter.Blur -> {
-                                subscriber.addSubscription(filter.value.radius.observe(resolver, callback))
-                            }
-                            else -> Unit
-                        }
-                    }
-                }
-            }
+            subscriber.observeBackground(background, resolver, callback)
         }
     }
 

@@ -5,34 +5,36 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.view.ViewCompat
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
+import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
-import com.yandex.div.core.view2.DivAccessibilityVisitor
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivBorder
-import com.yandex.div2.DivEdgeInsets
-import com.yandex.div2.DivFixedSize
-import com.yandex.div2.DivFocus
+import com.yandex.div2.DivPivot
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
 
@@ -57,405 +59,526 @@ internal class DivBaseBinder @Inject constructor(
             view.defaultFocusHighlightEnabled = false
         }
 
-        div.id.applyIfNotEquals(oldDiv?.id) {
-            bindId(view, divView, div.id)
-        }
+        view.bindId(divView, div, oldDiv)
+        view.bindLayoutParams(div, oldDiv, resolver, subscriber)
+        view.bindAccessibility(divView, div, oldDiv, resolver, subscriber)
+        view.bindAlpha(div, oldDiv, resolver, subscriber)
 
-        bindLayoutParams(view, div, oldDiv, resolver)
-        view.observePadding(div.paddings, resolver, subscriber)
+        view.bindBackground(divView, div, resolver, subscriber)
+        view.bindBorder(divView, div, resolver)
+        view.bindPaddings(div, oldDiv, resolver, subscriber)
 
-        view.observeAccessibility(divView, div, resolver, subscriber)
-        view.observeAlpha(div.alpha, resolver, subscriber)
-
-        view.observeBackground(divView, div.background, div.focus?.background, resolver, subscriber)
-
-        listOf(div.border, div.focus?.border)
-            .applyIfNotEquals(listOf(oldDiv?.border, oldDiv?.focus?.border)) {
-                view.bindBorder(divView, div.border, div.focus?.border, resolver)
-            }
-
-        div.focus?.nextFocusIds.applyIfNotEquals(oldDiv?.focus?.nextFocusIds) {
-            view.observeNextViewId(divView, div.focus?.nextFocusIds, resolver, subscriber)
-        }
+        view.bindNextFocus(divView, div, oldDiv, resolver, subscriber)
+        view.bindFocusActions(divView, resolver, div.focus?.onFocus, div.focus?.onBlur)
+        view.bindVisibility(divView, div, oldDiv, resolver, subscriber)
+        view.bindTransform(div, oldDiv, resolver, subscriber)
 
         div.tooltips?.let {
             tooltipController.mapTooltip(view, it)
         }
 
-        listOf(div.focus?.onFocus, div.focus?.onBlur)
-            .applyIfNotEquals(listOf(oldDiv?.focus?.onFocus, oldDiv?.focus?.onBlur)) {
-                view.bindFocusActions(divView, resolver, div.focus?.onFocus, div.focus?.onBlur)
-            }
-
         // DivAccessibilityBinder is responsible for focus setup, so changing isFocusable only if binder is disabled
-        if(!divAccessibilityBinder.enabled) {
+        if (!divAccessibilityBinder.enabled) {
             view.applyFocusableState(div)
         }
-        view.observeVisibility(div, resolver, subscriber, divView, oldDiv)
-        view.observeTransform(div, resolver, subscriber)
     }
 
-    fun bindId(view: View, divView: Div2View, id: String?) {
-        val viewId = divView.viewComponent.viewIdProvider.getViewId(id)
-        view.applyId(id, viewId)
+    //region Id
+
+    internal fun bindId(divView: Div2View, target: View, id: String?) {
+        val viewId = if (id == null) View.NO_ID else divView.viewComponent.viewIdProvider.getViewId(id)
+        target.applyId(id, viewId)
     }
 
-    fun bindLayoutParams(view: View, div: DivBase, oldDiv: DivBase?, resolver: ExpressionResolver) {
-        if (view.layoutParams == null) {
-            KAssert.fail { "LayoutParams should be initialized before view binding" }
-            view.layoutParams = MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+    private fun View.bindId(divView: Div2View, newDiv: DivBase, oldDiv: DivBase?) {
+        if (newDiv.id == oldDiv?.id) {
+            return
         }
 
-        val subscriber = view.expressionSubscriber
-
-        view.observeWidth(div, resolver, subscriber)
-        view.observeHeight(div, resolver, subscriber)
-        view.observeAlignment(div, oldDiv, resolver, subscriber)
-
-        view.observeMargins(div.margins, resolver, subscriber)
+        val viewId = divView.viewComponent.viewIdProvider.getViewId(newDiv.id)
+        applyId(newDiv.id, viewId)
     }
 
-    fun bindBackground(
-        view: View,
-        div: DivBase,
-        divView: Div2View,
-        resolver: ExpressionResolver,
-        additionalLayer: Drawable?
-    ) {
-        view.observeBackground(
-            divView,
-            div.background,
-            div.focus?.background,
-            resolver,
-            view.expressionSubscriber,
-            additionalLayer
-        )
-        view.applyPaddings(div.paddings, resolver)
-    }
+    //endregion
 
-    fun observeWidthAndHeightSubscription(
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber,
-        div: DivBase,
-        callback: (Long) -> Unit) {
-        if (div.width is DivSize.Fixed) {
-            subscriber.addSubscription(
-                (div.width.value() as DivFixedSize).value.observe(resolver, callback))
-        }
-        if (div.height is DivSize.Fixed) {
-            subscriber.addSubscription(
-                (div.height.value() as DivFixedSize).value.observe(resolver, callback))
-        }
-    }
+    //region Layout Params
 
-    private fun View.observeWidth(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
-        applyWidth(div, resolver)
-        val width = div.width
-        applyHorizontalWeightValue(width.getWeight(resolver))
-
-        applyMinWidth(width.minSize, resolver)
-        applyMaxWidth(width.maxSize, resolver)
-
-        when (width) {
-            is DivSize.Fixed -> {
-                subscriber.addSubscription(width.value.value.observe(resolver) { applyWidth(div, resolver) })
-                subscriber.addSubscription(width.value.unit.observe(resolver) { applyWidth(div, resolver) })
-            }
-            is DivSize.MatchParent -> {
-                width.value.weight?.observe(resolver) {
-                    applyHorizontalWeightValue(it.toFloat())
-                }?.let { subscriber.addSubscription(it) }
-            }
-            is DivSize.WrapContent -> {
-                subscriber.addSubscription(width.minSize?.value?.observe(resolver) {
-                    applyMinWidth(width.minSize, resolver)
-                } ?: Disposable.NULL)
-                subscriber.addSubscription(width.minSize?.unit?.observe(resolver) {
-                    applyMinWidth(width.minSize, resolver)
-                } ?: Disposable.NULL)
-
-                subscriber.addSubscription(width.maxSize?.value?.observe(resolver) {
-                    applyMaxWidth(width.maxSize, resolver)
-                } ?: Disposable.NULL)
-                subscriber.addSubscription(width.maxSize?.unit?.observe(resolver) {
-                    applyMaxWidth(width.maxSize, resolver)
-                } ?: Disposable.NULL)
-            }
-            else -> Unit
-        }
-    }
-
-    private fun View.observeHeight(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
-        applyHeight(div, resolver)
-        val height = div.height
-        applyVerticalWeightValue(height.getWeight(resolver))
-
-        applyMinHeight(height.minSize, resolver)
-        applyMaxHeight(height.maxSize, resolver)
-
-        when (height) {
-            is DivSize.Fixed -> {
-                subscriber.addSubscription(height.value.value.observe(resolver) { applyHeight(div, resolver) })
-                subscriber.addSubscription(height.value.unit.observe(resolver) { applyHeight(div, resolver) })
-            }
-            is DivSize.MatchParent -> {
-                height.value.weight?.observe(resolver) {
-                    applyVerticalWeightValue(it.toFloat())
-                }?.let { subscriber.addSubscription(it) }
-            }
-            is DivSize.WrapContent -> {
-                subscriber.addSubscription(height.minSize?.value?.observe(resolver) {
-                    applyMinHeight(height.minSize, resolver)
-                } ?: Disposable.NULL)
-                subscriber.addSubscription(height.minSize?.unit?.observe(resolver) {
-                    applyMinHeight(height.minSize, resolver)
-                } ?: Disposable.NULL)
-
-                subscriber.addSubscription(height.maxSize?.value?.observe(resolver) {
-                    applyMaxHeight(height.maxSize, resolver)
-                } ?: Disposable.NULL)
-                subscriber.addSubscription(height.maxSize?.unit?.observe(resolver) {
-                    applyMaxHeight(height.maxSize, resolver)
-                } ?: Disposable.NULL)
-            }
-            else -> Unit
-        }
-    }
-
-    private fun View.observeAlignment(
-        div: DivBase,
+    internal fun bindLayoutParams(
+        target: View,
+        newDiv: DivBase,
         oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        val horizontalAlignment = div.alignmentHorizontal
-        val verticalAlignment = div.alignmentVertical
+        target.bindLayoutParams(newDiv, oldDiv, resolver, subscriber)
+    }
 
-        listOf(horizontalAlignment, verticalAlignment)
-            .applyIfNotEquals(listOf(oldDiv?.alignmentHorizontal, oldDiv?.alignmentVertical)) {
-                applyAlignment(horizontalAlignment?.evaluate(resolver), verticalAlignment?.evaluate(resolver))
-            }
+    private fun View.bindLayoutParams(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (layoutParams == null) {
+            KAssert.fail { "LayoutParams should be initialized before view binding" }
+            layoutParams = MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        }
+
+        bindWidth(newDiv, oldDiv, resolver, subscriber)
+        bindHeight(newDiv, oldDiv, resolver, subscriber)
+        bindMargins(newDiv, oldDiv, resolver, subscriber)
+        bindAlignment(newDiv, oldDiv, resolver, subscriber)
+    }
+
+    private fun View.bindWidth(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.width.equalsToConstant(oldDiv?.width)) {
+            return
+        }
+
+        applyWidth(newDiv, resolver)
+        applyHorizontalWeightValue(newDiv.width.getWeight(resolver))
+        applyMinWidth(newDiv.width.minSize, resolver)
+        applyMaxWidth(newDiv.width.maxSize, resolver)
+
+        if (newDiv.width.isConstant()) {
+            return
+        }
+
+        subscriber.observeSize(newDiv.width, resolver) {
+            applyWidth(newDiv, resolver)
+            applyHorizontalWeightValue(newDiv.width.getWeight(resolver))
+            applyMinWidth(newDiv.width.minSize, resolver)
+            applyMaxWidth(newDiv.width.maxSize, resolver)
+        }
+    }
+
+    private fun View.bindHeight(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.height.equalsToConstant(oldDiv?.height)) {
+            return
+        }
+
+        applyHeight(newDiv, resolver)
+        applyVerticalWeightValue(newDiv.height.getWeight(resolver))
+        applyMinHeight(newDiv.height.minSize, resolver)
+        applyMaxHeight(newDiv.height.maxSize, resolver)
+
+        if (newDiv.height.isConstant()) {
+            return
+        }
+
+        subscriber.observeSize(newDiv.height, resolver) {
+            applyHeight(newDiv, resolver)
+            applyVerticalWeightValue(newDiv.height.getWeight(resolver))
+            applyMinHeight(newDiv.height.minSize, resolver)
+            applyMaxHeight(newDiv.height.maxSize, resolver)
+        }
+    }
+
+
+    private fun View.bindMargins(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.margins.equalsToConstant(oldDiv?.margins)) {
+            return
+        }
+
+        applyMargins(newDiv.margins, resolver)
+
+        if (newDiv.margins.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any -> applyMargins(newDiv.margins, resolver) }
+        subscriber.addSubscription(newDiv.margins.top.observe(resolver, callback))
+        subscriber.addSubscription(newDiv.margins.bottom.observe(resolver, callback))
+        if (newDiv.margins.start != null || newDiv.margins.end != null) {
+            subscriber.addSubscription(newDiv.margins.start?.observe(resolver, callback) ?: Disposable.NULL)
+            subscriber.addSubscription(newDiv.margins.end?.observe(resolver, callback) ?: Disposable.NULL)
+        } else {
+            subscriber.addSubscription(newDiv.margins.left.observe(resolver, callback))
+            subscriber.addSubscription(newDiv.margins.right.observe(resolver, callback))
+        }
+    }
+
+    private fun View.bindAlignment(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.alignmentHorizontal.equalsToConstant(oldDiv?.alignmentHorizontal)
+            && newDiv.alignmentVertical.equalsToConstant(oldDiv?.alignmentVertical)) {
+            return
+        }
+
+        applyAlignment(
+            newDiv.alignmentHorizontal?.evaluate(resolver),
+            newDiv.alignmentVertical?.evaluate(resolver)
+        )
+
+        if (newDiv.alignmentHorizontal.isConstantOrNull() && newDiv.alignmentVertical.isConstantOrNull()) {
+            return
+        }
 
         val callback = { _: Any ->
-            applyAlignment(horizontalAlignment?.evaluate(resolver), verticalAlignment?.evaluate(resolver))
+            applyAlignment(
+                newDiv.alignmentHorizontal?.evaluate(resolver),
+                newDiv.alignmentVertical?.evaluate(resolver)
+            )
         }
-        subscriber.addSubscription(horizontalAlignment?.observe(resolver, callback) ?: Disposable.NULL)
-        subscriber.addSubscription(verticalAlignment?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newDiv.alignmentHorizontal?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newDiv.alignmentVertical?.observe(resolver, callback) ?: Disposable.NULL)
     }
 
-    private fun View.observePadding(
-        paddings: DivEdgeInsets,
+    //endregion
+
+    //region Paddings
+
+    private fun View.bindPaddings(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        val padding = if (this is DivPagerView) DivEdgeInsets() else paddings
-        applyPaddings(padding, resolver)
+        if (this is DivPagerView || newDiv.paddings.equalsToConstant(oldDiv?.paddings)) {
+            return
+        }
 
-        val callback = { _: Any -> applyPaddings(padding, resolver) }
-        subscriber.addSubscription(padding.top.observe(resolver, callback))
-        subscriber.addSubscription(padding.bottom.observe(resolver, callback))
-        if (paddings.start != null || paddings.end != null) {
-            subscriber.addSubscription(padding.start?.observe(resolver, callback) ?: Disposable.NULL)
-            subscriber.addSubscription(padding.end?.observe(resolver, callback) ?: Disposable.NULL)
+        applyPaddings(newDiv.paddings, resolver)
+
+        if (newDiv.paddings.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any -> applyPaddings(newDiv.paddings, resolver) }
+        subscriber.addSubscription(newDiv.paddings.top.observe(resolver, callback))
+        subscriber.addSubscription(newDiv.paddings.bottom.observe(resolver, callback))
+        if (newDiv.paddings.start != null || newDiv.paddings.end != null) {
+            subscriber.addSubscription(newDiv.paddings.start?.observe(resolver, callback) ?: Disposable.NULL)
+            subscriber.addSubscription(newDiv.paddings.end?.observe(resolver, callback) ?: Disposable.NULL)
         } else {
-            subscriber.addSubscription(padding.left.observe(resolver, callback))
-            subscriber.addSubscription(padding.right.observe(resolver, callback))
+            subscriber.addSubscription(newDiv.paddings.left.observe(resolver, callback))
+            subscriber.addSubscription(newDiv.paddings.right.observe(resolver, callback))
         }
     }
 
-    private fun View.observeMargins(
-        margins: DivEdgeInsets?,
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) {
-        applyMargins(margins, resolver)
+    //endregion
 
-        if (margins == null) return
+    //region Accessibility
 
-        val callback = { _: Any -> applyMargins(margins, resolver) }
-        subscriber.addSubscription(margins.top.observe(resolver, callback))
-        subscriber.addSubscription(margins.bottom.observe(resolver, callback))
-        if (margins.start != null || margins.end != null) {
-            subscriber.addSubscription(margins.start?.observe(resolver, callback) ?: Disposable.NULL)
-            subscriber.addSubscription(margins.end?.observe(resolver, callback) ?: Disposable.NULL)
-        } else {
-            subscriber.addSubscription(margins.left.observe(resolver, callback))
-            subscriber.addSubscription(margins.right.observe(resolver, callback))
-        }
-    }
-
-    private fun View.observeAccessibility(
+    private fun View.bindAccessibility(
         divView: Div2View,
-        div: DivBase,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        val accessibility = div.accessibility
+        bindAccessibilityType(newDiv, oldDiv)
+        bindAccessibilityDescriptionAndHint(newDiv, oldDiv, resolver, subscriber)
+        bindAccessibilityMode(divView, newDiv, oldDiv, resolver, subscriber)
+        bindAccessibilityStateDescription(newDiv, oldDiv, resolver, subscriber)
+        //TODO: bind 'muteAfterAction' property
+    }
 
-        applyDescriptionAndHint(accessibility.description?.evaluate(resolver), accessibility.hint?.evaluate(resolver))
-        subscriber.addSubscription(
-            accessibility.description?.observe(resolver) { description ->
-                applyDescriptionAndHint(description, accessibility.hint?.evaluate(resolver))
-            } ?: Disposable.NULL
-        )
-        subscriber.addSubscription(
-                accessibility.hint?.observe(resolver) { hint ->
-                    applyDescriptionAndHint(accessibility.description?.evaluate(resolver), hint)
-                } ?: Disposable.NULL
-        )
+    private fun View.bindAccessibilityType(
+        newDiv: DivBase,
+        oldDiv: DivBase?
+    ) {
+        if (newDiv.accessibility.type == oldDiv?.accessibility?.type) {
+            return
+        }
 
-        applyAccessibilityStateDescription(accessibility.stateDescription?.evaluate(resolver))
-        subscriber.addSubscription(
-            accessibility.stateDescription?.observe(resolver) { description ->
-                applyAccessibilityStateDescription(description)
-            } ?: Disposable.NULL
-        )
+        applyAccessibilityType(newDiv, newDiv.accessibility.type)
+    }
 
-        applyAccessibilityMode(accessibility.mode.evaluate(resolver), divView)
-        val accessibilityVisitor = DivAccessibilityVisitor(divAccessibilityBinder, divView, resolver)
-        subscriber.addSubscription(
-                accessibility.mode.observe(resolver) {
-                    applyAccessibilityMode(it, divView)
-                    accessibilityVisitor.visitViewTree(this)
-                })
-
-        accessibility.type?.let { type ->
+    private fun View.applyAccessibilityType(div: DivBase, type: DivAccessibility.Type?) {
+        if (type == null) {
+            divAccessibilityBinder.bindTypeAutomatically(this, div)
+        } else {
             divAccessibilityBinder.bindType(this, type)
-        } ?: divAccessibilityBinder.bindTypeAutomatically(this, div)
+        }
     }
 
-    private fun View.applyAccessibilityMode(mode: DivAccessibility.Mode, divView: Div2View) {
-        divAccessibilityBinder.bindAccessibilityMode(
-                this, divView, mode
-        )
-    }
-
-    private fun View.observeAlpha(
-        alphaExpr: Expression<Double>,
+    private fun View.bindAccessibilityDescriptionAndHint(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        subscriber.addSubscription(alphaExpr.observeAndGet(resolver) { alpha -> applyAlpha(alpha) })
+        if (newDiv.accessibility.description.equalsToConstant(oldDiv?.accessibility?.description)
+            && newDiv.accessibility.hint.equalsToConstant(oldDiv?.accessibility?.hint)) {
+            return
+        }
+
+        applyAccessibilityDescriptionAndHint(
+            newDiv.accessibility.description?.evaluate(resolver),
+            newDiv.accessibility.hint?.evaluate(resolver)
+        )
+
+        if (newDiv.accessibility.description.isConstantOrNull()
+            && newDiv.accessibility.hint.isConstantOrNull()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyAccessibilityDescriptionAndHint(
+                newDiv.accessibility.description?.evaluate(resolver),
+                newDiv.accessibility.hint?.evaluate(resolver)
+            )
+        }
+        subscriber.addSubscription(newDiv.accessibility.description?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newDiv.accessibility.hint?.observe(resolver, callback) ?: Disposable.NULL)
     }
+
+    private fun View.applyAccessibilityDescriptionAndHint(contentDescription: String?, hint: String?) {
+        this.contentDescription = when {
+            contentDescription == null -> hint
+            hint == null -> contentDescription
+            else -> "$contentDescription\n$hint"
+        }
+    }
+
+    private fun View.bindAccessibilityMode(
+        divView: Div2View,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.accessibility.mode.equalsToConstant(oldDiv?.accessibility?.mode)) {
+            return
+        }
+
+        applyAccessibilityMode(divView, newDiv.accessibility.mode.evaluate(resolver))
+
+        if (newDiv.accessibility.mode.isConstant()) {
+            return
+        }
+
+        subscriber.addSubscription(
+            newDiv.accessibility.mode.observe(resolver) { mode -> applyAccessibilityMode(divView, mode) }
+        )
+    }
+
+    private fun View.applyAccessibilityMode(divView: Div2View, mode: DivAccessibility.Mode) {
+        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode)
+    }
+
+    private fun View.bindAccessibilityStateDescription(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.accessibility.stateDescription.equalsToConstant(oldDiv?.accessibility?.stateDescription)) {
+            return
+        }
+
+        applyAccessibilityStateDescription(newDiv.accessibility.stateDescription?.evaluate(resolver))
+
+        if (newDiv.accessibility.stateDescription.isConstantOrNull()) {
+            return
+        }
+
+        subscriber.addSubscription(
+            newDiv.accessibility.stateDescription?.observe(resolver) { stateDescription ->
+                applyAccessibilityStateDescription(stateDescription)
+            } ?: Disposable.NULL
+        )
+    }
+
+    private fun View.applyAccessibilityStateDescription(stateDescription: String?) {
+        ViewCompat.setStateDescription(this, stateDescription)
+    }
+
+    //endregion
+
+    //region Alpha
+
+    private fun View.bindAlpha(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        if (newDiv.alpha.equalsToConstant(oldDiv?.alpha)) {
+            return
+        }
+
+        applyAlpha(newDiv.alpha.evaluate(resolver))
+
+        if (newDiv.alpha.isConstant()) {
+            return
+        }
+
+        subscriber.addSubscription(
+            newDiv.alpha.observe(resolver) { alpha -> applyAlpha(alpha) }
+        )
+    }
+
+    //endregion
+
+    //region Border
 
     private fun View.bindBorder(
         divView: Div2View,
-        border: DivBorder,
-        focusedBorder: DivBorder?,
+        newDiv: DivBase,
         resolver: ExpressionResolver
     ) {
-        divFocusBinder.bindDivBorder(this, divView, resolver, focusedBorder, border)
+        divFocusBinder.bindDivBorder(this, divView, resolver, newDiv.focus?.border, newDiv.border)
     }
 
-    private fun View.observeBackground(
+    //endregion
+
+    //region Background
+
+    internal fun bindBackground(
         divView: Div2View,
-        defaultBackgroundList: List<DivBackground>?,
-        focusedBackgroundList: List<DivBackground>?,
+        target: View,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
-    ) = divBackgroundBinder.bindBackground(this, divView, defaultBackgroundList, focusedBackgroundList, resolver,
-        subscriber, additionalLayer)
+    ) {
+        target.bindBackground(divView, newDiv, resolver, subscriber, additionalLayer)
+        target.bindPaddings(newDiv, oldDiv, resolver, subscriber)
+    }
 
-    private fun View.observeNextViewId(
+    private fun View.bindBackground(
         divView: Div2View,
-        nextFocusIds: DivFocus.NextFocusIds?,
+        newDiv: DivBase,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber,
+        additionalLayer: Drawable? = null
+    ) {
+        divBackgroundBinder.bindBackground(
+            this,
+            divView,
+            newDiv.background,
+            newDiv.focus?.background,
+            resolver,
+            subscriber,
+            additionalLayer
+        )
+    }
+
+    //endregion
+
+    //region Focus
+
+    private fun View.bindNextFocus(
+        divView: Div2View,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
         val viewIdProvider = divView.viewComponent.viewIdProvider
-        if (nextFocusIds != null) {
-            nextFocusIds.forward.let { forwardId ->
-                if (forwardId != null) {
-                    subscriber.addSubscription(
-                        forwardId.observeAndGet(resolver) { id -> nextFocusForwardId = viewIdProvider.getViewId(id) }
-                    )
-                } else {
-                    nextFocusForwardId = View.NO_ID
-                }
-            }
-
-            nextFocusIds.up.let { upId ->
-                if (upId != null) {
-                    subscriber.addSubscription(
-                        upId.observeAndGet(resolver) { id -> nextFocusUpId = viewIdProvider.getViewId(id) }
-                    )
-                } else {
-                    nextFocusUpId = View.NO_ID
-                }
-            }
-
-            nextFocusIds.right.let { rightId ->
-                if (rightId != null) {
-                    subscriber.addSubscription(
-                        rightId.observeAndGet(resolver) { id -> nextFocusRightId = viewIdProvider.getViewId(id) }
-                    )
-                } else {
-                    nextFocusRightId = View.NO_ID
-                }
-            }
-
-            nextFocusIds.down.let { downId ->
-                if (downId != null) {
-                    subscriber.addSubscription(downId.observeAndGet(
-                        resolver) { id -> nextFocusDownId = viewIdProvider.getViewId(id) }
-                    )
-                } else {
-                    nextFocusDownId = View.NO_ID
-                }
-            }
-
-            nextFocusIds.left.let { leftId ->
-                if (leftId != null) {
-                    subscriber.addSubscription(
-                        leftId.observeAndGet(resolver) { id -> nextFocusLeftId = viewIdProvider.getViewId(id) }
-                    )
-                } else {
-                    nextFocusLeftId = View.NO_ID
-                }
-            }
-        } else {
-            nextFocusForwardId = View.NO_ID
-            nextFocusUpId = View.NO_ID
-            nextFocusRightId = View.NO_ID
-            nextFocusDownId = View.NO_ID
-            nextFocusLeftId = View.NO_ID
+        bindNextFocusId(newDiv.focus?.nextFocusIds?.forward, oldDiv?.focus?.nextFocusIds?.forward, resolver, subscriber) { id ->
+            nextFocusForwardId = viewIdProvider.getViewId(id)
+        }
+        bindNextFocusId(newDiv.focus?.nextFocusIds?.left, oldDiv?.focus?.nextFocusIds?.left, resolver, subscriber) { id ->
+            nextFocusLeftId = viewIdProvider.getViewId(id)
+        }
+        bindNextFocusId(newDiv.focus?.nextFocusIds?.right, oldDiv?.focus?.nextFocusIds?.right, resolver, subscriber) { id ->
+            nextFocusRightId = viewIdProvider.getViewId(id)
+        }
+        bindNextFocusId(newDiv.focus?.nextFocusIds?.up, oldDiv?.focus?.nextFocusIds?.up, resolver, subscriber) { id ->
+            nextFocusUpId = viewIdProvider.getViewId(id)
+        }
+        bindNextFocusId(newDiv.focus?.nextFocusIds?.down, oldDiv?.focus?.nextFocusIds?.down, resolver, subscriber) { id ->
+            nextFocusDownId = viewIdProvider.getViewId(id)
         }
     }
 
-    private fun View.observeVisibility(
-        div: DivBase,
+    private inline fun View.bindNextFocusId(
+        newFocusId: Expression<String>?,
+        oldFocusId: Expression<String>?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
-        divView: Div2View,
-        oldDiv: DivBase?,
+        crossinline applyNextFocusId: (String?) -> Unit
     ) {
-        var isFirstApply = oldDiv == null
-        subscriber.addSubscription(div.visibility.observeAndGet(resolver) { visibility ->
-            if (visibility != DivVisibility.GONE) {
-                applyTransform(div, resolver)
-            }
-            applyVisibility(div, visibility, divView, resolver, isFirstApply)
-            isFirstApply = false
-        })
+        if (newFocusId.equalsToConstant(oldFocusId)) {
+            return
+        }
+
+        applyNextFocusId(newFocusId?.evaluate(resolver))
+
+        if (newFocusId.isConstantOrNull()) {
+            return
+        }
+
+        subscriber.addSubscription(
+            newFocusId?.observe(resolver) { id -> applyNextFocusId(id) } ?: Disposable.NULL
+        )
+    }
+
+    private fun View.bindFocusActions(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        onFocus: List<DivAction>?,
+        onBlur: List<DivAction>?
+    ) {
+        divFocusBinder.bindDivFocusActions(this, divView, resolver, onFocus, onBlur)
+    }
+
+    //endregion
+
+    //region Visibility
+
+    private fun View.bindVisibility(
+        divView: Div2View,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+
+        if (newDiv.visibility.equalsToConstant(oldDiv?.visibility)) {
+            return
+        }
+
+        applyVisibility(divView, newDiv, oldDiv, resolver)
+
+        if (newDiv.visibility.isConstant()) {
+            return
+        }
+
+        subscriber.addSubscription(
+            newDiv.visibility.observe(resolver) { applyVisibility(divView, newDiv, oldDiv, resolver) }
+        )
     }
 
     private fun View.applyVisibility(
-        div: DivBase,
-        divVisibility: DivVisibility,
         divView: Div2View,
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
-        firstApply: Boolean,
     ) {
         val divTransitionHandler = divView.divTransitionHandler
+        val firstApply = oldDiv == null
 
-        val newVisibility = when (divVisibility) {
+        val newVisibility = when (newDiv.visibility.evaluate(resolver)) {
             DivVisibility.VISIBLE -> View.VISIBLE
             DivVisibility.INVISIBLE -> View.INVISIBLE
             DivVisibility.GONE -> View.GONE
         }
 
-        if (divVisibility != DivVisibility.VISIBLE) {
+        if (newVisibility != View.VISIBLE) {
             clearAnimation()
         }
 
@@ -463,7 +586,7 @@ internal class DivBaseBinder @Inject constructor(
 
         var visibility = visibility
 
-        if (div.transitionTriggers?.allowsTransitionsOnVisibilityChange() != false) {
+        if (newDiv.transitionTriggers?.allowsTransitionsOnVisibilityChange() != false) {
             val currentChange = divTransitionHandler
                 .getLastChange(this)
 
@@ -475,15 +598,15 @@ internal class DivBaseBinder @Inject constructor(
                 (visibility == View.INVISIBLE || visibility == View.GONE)
                     && newVisibility == View.VISIBLE -> {
                     transitionBuilder.createAndroidTransition(
-                        div.transitionIn,
+                        newDiv.transitionIn,
                         Visibility.MODE_IN,
                         resolver
                     )
                 }
                 (newVisibility == View.INVISIBLE || newVisibility == View.GONE)
-                    && visibility == View.VISIBLE  && !firstApply-> {
+                    && visibility == View.VISIBLE  && !firstApply -> {
                     transitionBuilder.createAndroidTransition(
-                        div.transitionOut,
+                        newDiv.transitionOut,
                         Visibility.MODE_OUT,
                         resolver
                     )
@@ -510,24 +633,60 @@ internal class DivBaseBinder @Inject constructor(
         divView.trackChildrenVisibility()
     }
 
-    private fun View.observeTransform(
-        div: DivBase,
+    //endregion
+
+    //region Transform
+
+    private fun View.bindTransform(
+        newDiv: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber,
+        subscriber: ExpressionSubscriber
     ) {
-        div.transform.rotation?.observe(resolver) {
-            applyTransform(div, resolver)
-        }?.let { subscriber.addSubscription(it) }
+        if (newDiv.transform.equalsToConstant(oldDiv?.transform)) {
+            return
+        }
+
+        applyTransform(newDiv.transform, resolver)
+
+        if (newDiv.transform.isConstant()) {
+            return
+        }
+
+        subscriber.observeTransform(newDiv.transform, resolver) {
+            applyTransform(newDiv.transform, resolver)
+        }
     }
 
-    private fun View.bindFocusActions(
-        divView: Div2View,
+    private fun ExpressionSubscriber.observeTransform(
+        transform: DivTransform,
         resolver: ExpressionResolver,
-        onFocus: List<DivAction>?,
-        onBlur: List<DivAction>?
+        callback: (Any) -> Unit
     ) {
-        divFocusBinder.bindDivFocusActions(this, divView, resolver, onFocus, onBlur)
+        addSubscription(transform.rotation?.observe(resolver, callback) ?: Disposable.NULL)
+        when (val pivotX = transform.pivotX) {
+            is DivPivot.Fixed -> {
+                addSubscription(pivotX.value.value?.observe(resolver, callback) ?: Disposable.NULL)
+                addSubscription(pivotX.value.unit.observe(resolver, callback))
+            }
+
+            is DivPivot.Percentage -> {
+                addSubscription(pivotX.value.value?.observe(resolver, callback))
+            }
+        }
+        when (val pivotY = transform.pivotY) {
+            is DivPivot.Fixed -> {
+                addSubscription(pivotY.value.value?.observe(resolver, callback) ?: Disposable.NULL)
+                addSubscription(pivotY.value.unit.observe(resolver, callback))
+            }
+
+            is DivPivot.Percentage -> {
+                addSubscription(pivotY.value.value?.observe(resolver, callback))
+            }
+        }
     }
+
+    //endregion
 
     private fun View.applyFocusableState(div: DivBase) {
         isFocusable = div.focus != null
