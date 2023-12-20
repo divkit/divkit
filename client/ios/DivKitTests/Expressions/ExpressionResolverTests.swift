@@ -123,10 +123,6 @@ final class ExpressionResolverTests: XCTestCase {
   }
 }
 
-private func expression<T>(_ expression: String) -> Expression<T> {
-  .link(try! ExpressionLink<T>(rawValue: expression)!)
-}
-
 private func color(_ color: String) -> Color {
   Color.color(withHexString: color)!
 }

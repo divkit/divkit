@@ -193,7 +193,3 @@ private class FakeDivPatchDownloader: DivPatchProvider {
 }
 
 private let action = DivAction(logId: "1", url: .value(URL(string: "action://host")!))
-
-private func expression(_ expression: String) -> Expression<Bool> {
-  .link(try! ExpressionLink(rawValue: expression)!)
-}

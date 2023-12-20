@@ -64,6 +64,10 @@ extension DivBlockModelingContext {
   }
 }
 
+func expression<T>(_ expression: String) -> Expression<T> {
+  .link(try! ExpressionLink<T>(rawValue: expression)!)
+}
+
 final class FakeImageHolderFactory: DivImageHolderFactory {
   func make(_: URL?, _: ImagePlaceholder?) -> ImageHolder {
     FakeImageHolder()

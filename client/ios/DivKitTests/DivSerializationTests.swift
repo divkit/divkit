@@ -21,7 +21,7 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_StringExpression() {
     let menuItem = DivAction.MenuItem(
-      text: makeLink("Text: @{some_var}")
+      text: expression("Text: @{some_var}")
     )
     let dictionary = menuItem.toDictionary()
     XCTAssertEqual("Text: @{some_var}", dictionary["text"] as! String)
@@ -37,7 +37,7 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_CFStringExpression() {
     let text = DivText(
-      text: makeLink("Text: @{some_var}")
+      text: expression("Text: @{some_var}")
     )
     let dictionary = text.toDictionary()
     XCTAssertEqual("Text: @{some_var}", dictionary["text"] as! String)
@@ -54,7 +54,7 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_UrlExpression() {
     let image = DivImage(
-      imageUrl: makeLink("https://@{some_var}")
+      imageUrl: expression("https://@{some_var}")
     )
     let dictionary = image.toDictionary()
     XCTAssertEqual("https://@{some_var}", dictionary["image_url"] as! String)
@@ -70,7 +70,7 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_IntExpression() {
     let size = DivFixedSize(
-      value: makeLink("@{some_var}")
+      value: expression("@{some_var}")
     )
     let dictionary = size.toDictionary()
     XCTAssertEqual("@{some_var}", dictionary["value"] as! String)
@@ -95,7 +95,7 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_BooleanIntExpression() {
     let size = DivWrapContentSize(
-      constrained: makeLink("@{some_var}")
+      constrained: expression("@{some_var}")
     )
     let dictionary = size.toDictionary()
     XCTAssertEqual("@{some_var}", dictionary["constrained"] as! String)
@@ -108,9 +108,5 @@ final class DivSerializationTests: XCTestCase {
     )
     let dictionary = variable.toDictionary()
     XCTAssertEqual([1, "aba", 2.3], dictionary["value"] as! [AnyHashable])
-  }
-
-  private func makeLink<T>(_ rawValue: String) -> Expression<T> {
-    .link(try! ExpressionLink(rawValue: rawValue, validator: nil)!)
   }
 }

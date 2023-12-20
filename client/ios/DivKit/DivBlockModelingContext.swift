@@ -42,7 +42,7 @@ public struct DivBlockModelingContext {
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
   private(set) var sizeModifier: DivSizeModifier?
-  var prototypesStorage = PrototypesValueStorage()
+  private var prototypesStorage = PrototypesValueStorage()
 
   public init(
     cardId: DivCardID,
@@ -260,23 +260,26 @@ extension DivBlockModelingContext {
     sizeModifier: DivSizeModifier? = nil,
     prototypesData: (String, [String: AnyHashable])? = nil
   ) -> Self {
-    let expressionResolver: ExpressionResolver
-    let parentPath = parentPath ?? self.parentPath
-    let errorsStorage = errorsStorage ?? self.errorsStorage
-    let prototypesStorage: PrototypesValueStorage
-    if let prototypesData {
-      prototypesStorage = self.prototypesStorage.copy()
-      prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
-    } else {
-      prototypesStorage = self.prototypesStorage
+    var context = self
+    if let cardLogId {
+      context.cardLogId = cardLogId
     }
+    if let parentDivStatePath {
+      context.parentDivStatePath = parentDivStatePath
+    }
+    if let sizeModifier {
+      context.sizeModifier = sizeModifier
+    }
+
+    if parentPath == nil, errorsStorage == nil, prototypesData == nil {
+      return context
+    }
+
     let variableValueProvider: AnyCalcExpression.ValueProvider
     let functionsProvider: FunctionsProvider
-
-    if prototypesData == nil {
-      variableValueProvider = self.variableValueProvider
-      functionsProvider = self.functionsProvider
-    } else {
+    if let prototypesData {
+      let prototypesStorage = self.prototypesStorage.copy()
+      prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
       variableValueProvider = makeVariableValueProvider(
         cardId: cardId,
         variablesStorage: variablesStorage,
@@ -289,27 +292,27 @@ extension DivBlockModelingContext {
         persistentValuesStorage: persistentValuesStorage,
         prototypesStorage: prototypesStorage
       )
+      context.prototypesStorage = prototypesStorage
+      context.variableValueProvider = variableValueProvider
+      context.functionsProvider = functionsProvider
+    } else {
+      variableValueProvider = self.variableValueProvider
+      functionsProvider = self.functionsProvider
     }
 
-    expressionResolver = makeExpressionResolver(
+    let parentPath = parentPath ?? self.parentPath
+    let errorsStorage = errorsStorage ?? self.errorsStorage
+    context.expressionResolver = makeExpressionResolver(
       variableValueProvider: variableValueProvider,
       functionsProvider: functionsProvider,
       parentPath: parentPath,
       errorsStorage: errorsStorage,
       variableTracker: variableTracker
     )
+    context.parentPath = parentPath
+    context.errorsStorage = errorsStorage
 
-    return modified(self) {
-      $0.cardLogId = cardLogId ?? self.cardLogId
-      $0.parentPath = parentPath
-      $0.parentDivStatePath = parentDivStatePath ?? self.parentDivStatePath
-      $0.errorsStorage = errorsStorage
-      $0.sizeModifier = sizeModifier ?? self.sizeModifier
-      $0.expressionResolver = expressionResolver
-      $0.variableValueProvider = variableValueProvider
-      $0.functionsProvider = functionsProvider
-      $0.prototypesStorage = prototypesStorage
-    }
+    return context
   }
 
   func modifying(
