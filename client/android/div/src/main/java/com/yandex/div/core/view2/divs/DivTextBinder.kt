@@ -488,10 +488,10 @@ internal class DivTextBinder @Inject constructor(
     ) {
         doOnActualLayout {
             this.paint.shader = LinearGradientDrawable.createLinearGradient(
-                    angle = angle.toFloat(),
-                    colors = colors.toIntArray(),
-                    width = width,
-                    height = height
+                angle = angle.toFloat(),
+                colors = colors.toIntArray(),
+                width = realTextWidth,
+                height = height - paddingBottom - paddingTop
             )
         }
     }
@@ -540,15 +540,21 @@ internal class DivTextBinder @Inject constructor(
     ) {
         doOnActualLayout {
             this.paint.shader = RadialGradientDrawable.createRadialGradient(
-                    radius = radius,
-                    centerX = centerX,
-                    centerY = centerY,
-                    colors = colors.toIntArray(),
-                    width = width,
-                    height = height
+                radius = radius,
+                centerX = centerX,
+                centerY = centerY,
+                colors = colors.toIntArray(),
+                width = realTextWidth,
+                height = height - paddingBottom - paddingTop
             )
         }
     }
+
+    private val TextView.realTextWidth: Int
+        get() = minOf(
+            width - paddingRight - paddingLeft,
+            paint.measureText(text.toString()).toInt()
+        )
 
     private fun DivRadialGradientRadius.toRadialGradientDrawableRadius(
         metrics: DisplayMetrics,
