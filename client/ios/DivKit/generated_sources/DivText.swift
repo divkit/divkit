@@ -227,7 +227,7 @@ public final class DivText: DivBase {
   public let selectable: Expression<Bool> // default value: false
   public let selectedActions: [DivAction]?
   public let strike: Expression<DivLineStyle> // default value: none
-  public let text: Expression<CFString>
+  public let text: Expression<String>
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: start
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
@@ -313,8 +313,8 @@ public final class DivText: DivBase {
     resolver.resolveEnum(strike) ?? DivLineStyle.none
   }
 
-  public func resolveText(_ resolver: ExpressionResolver) -> CFString? {
-    resolver.resolveString(text, initializer: { $0 as CFString})
+  public func resolveText(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(text, initializer: { $0 })
   }
 
   public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
@@ -398,7 +398,7 @@ public final class DivText: DivBase {
     selectable: Expression<Bool>? = nil,
     selectedActions: [DivAction]? = nil,
     strike: Expression<DivLineStyle>? = nil,
-    text: Expression<CFString>,
+    text: Expression<String>,
     textAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     textAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     textColor: Expression<Color>? = nil,

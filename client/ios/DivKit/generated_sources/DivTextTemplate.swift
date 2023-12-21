@@ -665,7 +665,7 @@ public final class DivTextTemplate: TemplateValue {
   public let selectable: Field<Expression<Bool>>? // default value: false
   public let selectedActions: Field<[DivActionTemplate]>?
   public let strike: Field<Expression<DivLineStyle>>? // default value: none
-  public let text: Field<Expression<CFString>>?
+  public let text: Field<Expression<String>>?
   public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: start
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
@@ -784,7 +784,7 @@ public final class DivTextTemplate: TemplateValue {
     selectable: Field<Expression<Bool>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     strike: Field<Expression<DivLineStyle>>? = nil,
-    text: Field<Expression<CFString>>? = nil,
+    text: Field<Expression<String>>? = nil,
     textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     textColor: Field<Expression<Color>>? = nil,
@@ -1073,7 +1073,7 @@ public final class DivTextTemplate: TemplateValue {
     var selectableValue: DeserializationResult<Expression<Bool>> = parent?.selectable?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var strikeValue: DeserializationResult<Expression<DivLineStyle>> = parent?.strike?.value() ?? .noValue
-    var textValue: DeserializationResult<Expression<CFString>> = parent?.text?.value() ?? .noValue
+    var textValue: DeserializationResult<Expression<String>> = parent?.text?.value() ?? .noValue
     var textAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.textAlignmentHorizontal?.value() ?? .noValue
     var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue

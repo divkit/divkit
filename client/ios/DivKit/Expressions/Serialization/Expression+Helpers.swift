@@ -48,24 +48,10 @@ func deserialize<T: ValidSerializationValue>(
 }
 
 @inlinable
-func deserialize(
-  _ value: Any,
-  validator: AnyValueValidator<CFString>? = nil
-) -> DeserializationResult<Expression<CFString>> {
-  deserialize(
-    value,
-    transform: { (rawValue: String) in safeCFCast(rawValue as CFTypeRef) },
-    validator: validator,
-    customTypeName: "Expression<CFString>"
-  )
-}
-
-@inlinable
 func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
-  validator: AnyValueValidator<U>? = nil,
-  customTypeName: String? = nil
+  validator: AnyValueValidator<U>? = nil
 ) -> DeserializationResult<Expression<U>> {
   guard let result: Expression<U> = expressionTransform(
     value,
@@ -73,7 +59,7 @@ func deserialize<T: ValidSerializationValue, U>(
     validator: validator?.isValid
   ) else {
     return .failure(NonEmptyArray(.typeMismatch(
-      expected: customTypeName ?? "Expression<\(U.self)>",
+      expected: "Expression<\(U.self)>",
       representation: value
     )))
   }

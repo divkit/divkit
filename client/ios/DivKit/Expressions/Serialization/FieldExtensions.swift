@@ -142,25 +142,3 @@ extension Field {
     }
   }
 }
-
-extension Field where T == Expression<CFString> {
-  func resolveValue(
-    context: TemplatesContext,
-    validator: AnyValueValidator<CFString>? = nil
-  ) -> DeserializationResult<T> {
-    resolveExpression(
-      valueForLink: { safeValueForLink(
-        { try context.templateData.getField(
-          $0,
-          transform: { expressionTransform(
-            $0,
-            transform: { (rawValue: String) in safeCFCast(rawValue as CFTypeRef) },
-            validator: validator?.isValid
-          ) },
-          validator: nil
-        ) },
-        link: $0
-      ) }
-    )
-  }
-}

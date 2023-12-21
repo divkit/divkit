@@ -49,7 +49,7 @@ func divText(
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
     id: id,
-    text: .value(NSString(string: text)),
+    text: .value(text),
     width: width
   ))
 }

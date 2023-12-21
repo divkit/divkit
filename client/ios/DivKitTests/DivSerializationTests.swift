@@ -27,22 +27,6 @@ final class DivSerializationTests: XCTestCase {
     XCTAssertEqual("Text: @{some_var}", dictionary["text"] as! String)
   }
 
-  func test_Serialize_CFStringText() {
-    let text = DivText(
-      text: .value("Some text" as CFString)
-    )
-    let dictionary = text.toDictionary()
-    XCTAssertEqual("Some text", dictionary["text"] as! String)
-  }
-
-  func test_Serialize_CFStringExpression() {
-    let text = DivText(
-      text: expression("Text: @{some_var}")
-    )
-    let dictionary = text.toDictionary()
-    XCTAssertEqual("Text: @{some_var}", dictionary["text"] as! String)
-  }
-
   func test_Serialize_UrlValue() {
     let image = DivImage(
       imageUrl: .value(url("https://some/url?param=value"))

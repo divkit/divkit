@@ -36,8 +36,7 @@ PARENT_PROPERTY = Property(
     property_type=String(
         min_length=0,
         formatted=False,
-        regex=None,
-        enable_optimization=False
+        regex=None
     ),
     optional=True,
     is_deprecated=False,
@@ -469,8 +468,7 @@ class SwiftProperty(Property):
             initializer = ''
         elif isinstance(property_type, String):
             method = 'resolveString'
-            optimized = 'as CFString' if property_type.enable_optimization else ''
-            initializer = f'{initializer_prefix}{{ $0 {optimized}}}'
+            initializer = f'{initializer_prefix}{{ $0 }}'
         elif isinstance(property_type, Url):
             method = 'resolveUrl'
             initializer = ''
@@ -561,8 +559,7 @@ class SwiftProperty(Property):
             return None
         elif isinstance(self.property_type, String) and \
                 (self.property_type.min_length > 0 or self.property_type.regex is not None):
-            optimized = 'CFString' if self.property_type.enable_optimization else 'String'
-            validator_name = f'make{optimized}Validator'
+            validator_name = 'makeStringValidator'
             min_length = self.property_type.min_length
             validator_args = []
             if min_length > 0:
@@ -689,7 +686,7 @@ class SwiftPropertyType(PropertyType):
         elif isinstance(self, (Bool, BoolInt)):
             return 'Bool'
         elif isinstance(self, String):
-            return 'CFString' if self.enable_optimization else 'String'
+            return 'String'
         elif isinstance(self, StaticString):
             raise TypeError
         elif isinstance(self, Url):

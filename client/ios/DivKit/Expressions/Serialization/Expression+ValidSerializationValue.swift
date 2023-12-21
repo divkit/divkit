@@ -58,17 +58,6 @@ extension Expression where T == String {
   }
 }
 
-extension Expression where T == CFString {
-  func toValidSerializationValue() -> String {
-    switch self {
-    case let .value(value):
-      return String(value)
-    case let .link(link):
-      return link.rawValue
-    }
-  }
-}
-
 extension Expression where T == URL {
   func toValidSerializationValue() -> String {
     switch self {

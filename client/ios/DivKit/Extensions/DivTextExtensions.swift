@@ -60,7 +60,7 @@ extension DivText: DivBlockModeling {
     }
 
     let attributedString = makeAttributedString(
-      text: resolveText(expressionResolver) ?? ("" as CFString),
+      text: (resolveText(expressionResolver) ?? "") as CFString,
       typo: typo,
       ranges: ranges,
       actions: nil,
@@ -235,7 +235,7 @@ extension DivText: DivBlockModeling {
     return AccessibilityElement(
       traits: accessibility.type?.cast() ?? .none,
       strings: AccessibilityElement.Strings(
-        label: resolveText(expressionResolver) as String?,
+        label: resolveText(expressionResolver),
         hint: accessibility.resolveHint(expressionResolver),
         value: accessibility.resolveStateDescription(expressionResolver),
         identifier: id

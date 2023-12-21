@@ -92,8 +92,7 @@ def __resolve_string_field(name: str,
             regex = re.compile(pattern) if pattern is not None else None
             return String(min_length=dictionary.get('minLength', 0),
                           formatted=format_value == 'formatted_string',
-                          regex=regex,
-                          enable_optimization=dictionary.get('client_optimized', False)), []
+                          regex=regex), []
 
 
 def _entity_enumeration_build(entities: List[Dict[str, any]],

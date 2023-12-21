@@ -4,18 +4,6 @@ import BasePublic
 import Serialization
 
 extension Dictionary where Key == String, Value == Any {
-  func getOptionalExpressionField(
-    _ key: String
-  ) throws -> Field<Expression<CFString>>? {
-    Field.makeOptional(
-      valueGetter: (try? getOptionalField(
-        key,
-        transform: { expressionTransform($0, transform: { safeCFCast($0 as CFTypeRef) }) }
-      )).flatMap { $0 },
-      linkGetter: link(for: key)
-    )
-  }
-
   func getOptionalExpressionField<T: RawRepresentable>(
     _ key: String
   ) throws -> Field<Expression<T>>? {

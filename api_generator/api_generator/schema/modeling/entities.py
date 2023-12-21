@@ -858,7 +858,6 @@ class String(PropertyType):
     min_length: int
     formatted: bool
     regex: Optional[re.Pattern]
-    enable_optimization: bool
 
 
 @dataclass
