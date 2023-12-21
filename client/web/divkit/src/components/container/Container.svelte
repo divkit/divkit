@@ -91,6 +91,7 @@
     $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
     $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
     $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+    $: jsonClipToBounds = rootCtx.getDerivedFromVars(json.clip_to_bounds);
 
     function replaceItems(items: (DivBaseData | undefined)[]): void {
         json = {
@@ -259,7 +260,8 @@
         orientation,
         valign: contentVAlign,
         halign: contentHAlign,
-        wrap
+        wrap,
+        overflow: ($jsonClipToBounds === false || $jsonClipToBounds === 0) ? 'visible' : undefined
     };
 
     $: style = {

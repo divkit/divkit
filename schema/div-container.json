@@ -150,11 +150,7 @@
         "clip_to_bounds": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_clip_to_bounds",
-          "platforms": [
-            "ios",
-            "android"
-          ]
+          "$description": "translations.json#/div_clip_to_bounds"
         }
       }
     }

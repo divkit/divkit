@@ -7,6 +7,10 @@
     align-content: flex-start;
 }
 
+.container_overflow_visible {
+    overflow: visible;
+}
+
 .container_orientation_vertical {
     flex-direction: column;
 }

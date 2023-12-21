@@ -32,4 +32,5 @@ export interface DivContainerData extends DivBaseData, DivActionableData {
     separator?: ContainerSeparator;
     line_separator?: ContainerSeparator;
     aspect?: DivAspect;
+    clip_to_bounds?: BooleanInt;
 }
