@@ -3,31 +3,68 @@
 
 import XCTest
 
+import BaseUIPublic
+import CommonCorePublic
+
 final class DivContainerExtensionsTests: XCTestCase {
-  func test_WhenDivHasAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(fromFile: "with_action") as? DecoratingBlock
+  func test_Empty() throws {
+    let block = makeBlock(
+      divContainer(
+        items: []
+      )
+    )
 
-    XCTAssertEqual(block?.actions, Expected.actions)
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: []
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
   }
 
-  func test_WhenDivHasMultiActions_CreatesBlockWithIt() throws {
-    let block = try makeBlock(fromFile: "with_multi_actions") as? DecoratingBlock
+  func test_WithItems() throws {
+    let block = makeBlock(
+      divContainer(
+        items: [
+          divSeparator(),
+          divText(text: "Hello!"),
+        ]
+      )
+    )
 
-    XCTAssertEqual(block?.actions, Expected.multiActions)
-  }
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: SeparatorBlock(
+                color: color("#14000000")
+              ),
+              accessibilityElement: .default
+            ),
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "Hello!".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(label: "Hello!")
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
 
-  func test_WhenDivHasActionsWithMenu_CreatesBlockWithIt() throws {
-    let block = try makeBlock(fromFile: "with_multi_actions_with_menu") as? DecoratingBlock
-
-    XCTAssertEqual(block?.actions, Expected.menuAction)
-  }
-
-  func test_WhenDivHasSetStateAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(
-      fromFile: "with_set_state_action"
-    ) as? DecoratingBlock
-
-    XCTAssertEqual(block?.actions, Expected.setStateActions)
+    assertEqual(block, expectedBlock)
   }
 
   func test_AddsIndexedParentPathToItems() throws {

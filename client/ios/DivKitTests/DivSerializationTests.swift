@@ -13,10 +13,10 @@ final class DivSerializationTests: XCTestCase {
 
   func test_Serialize_StringValue() {
     let action = DivAction(
-      logId: "Some logId"
+      logId: "action_log_id"
     )
     let dictionary = action.toDictionary()
-    XCTAssertEqual(action.logId, dictionary["log_id"] as! String)
+    XCTAssertEqual("action_log_id", dictionary["log_id"] as! String)
   }
 
   func test_Serialize_StringExpression() {
@@ -44,12 +44,11 @@ final class DivSerializationTests: XCTestCase {
   }
 
   func test_Serialize_UrlValue() {
-    let url = URL(string: "https://some/url?param=value")!
     let image = DivImage(
-      imageUrl: .value(url)
+      imageUrl: .value(url("https://some/url?param=value"))
     )
     let dictionary = image.toDictionary()
-    XCTAssertEqual(url.absoluteString, dictionary["image_url"] as! String)
+    XCTAssertEqual("https://some/url?param=value", dictionary["image_url"] as! String)
   }
 
   func test_Serialize_UrlExpression() {

@@ -1,13 +1,134 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
 
+import BaseUIPublic
 import CommonCorePublic
-import DivKit
-import NetworkingPublic
 
 final class DivBaseExtensionsTests: XCTestCase {
   private let timer = TestTimerScheduler()
+
+  func test_WithId() throws {
+    let block = makeBlock(
+      divSeparator(
+        id: "id1"
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: SeparatorBlock(
+          color: color("#14000000")
+        ),
+        accessibilityElement: accessibility(identifier: "id1")
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithAccessibility() throws {
+    let block = makeBlock(
+      divSeparator(
+        accessibility: DivAccessibility(
+          description: .value("Accessibility description"),
+          type: .button
+        ),
+        id: "id1"
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: SeparatorBlock(
+          color: color("#14000000")
+        ),
+        accessibilityElement: accessibility(
+          traits: .button,
+          label: "Accessibility description",
+          identifier: "id1"
+        )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithActions() throws {
+    let actions = [
+      DivAction(
+        logId: "action1_log_id",
+        url: .value(url("https://some.url"))
+      ),
+      DivAction(
+        logId: "action2_log_id",
+        typed: .divActionSetVariable(DivActionSetVariable(
+          value: .integerValue(IntegerValue(value: .value(10))),
+          variableName: .value("var1")
+        ))
+      ),
+    ]
+
+    let block = makeBlock(
+      divContainer(
+        actions: actions,
+        items: []
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: []
+        ),
+        actions: NonEmptyArray(actions.compactMap { $0.uiAction(context: .default) }),
+        actionAnimation: .default,
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithVisibility_Gone() throws {
+    let block = makeBlock(
+      divSeparator(
+        visibility: .value(.gone)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: EmptyBlock.zeroSized,
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithVisibility_Invisible() throws {
+    let block = makeBlock(
+      divSeparator(
+        visibility: .value(.invisible)
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: SeparatorBlock(
+          color: color("#14000000")
+        ),
+        childAlpha: 0.0
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
 
   func test_WhenCreatesBlockAfterItBeingGone_ReportsVisibility() throws {
     try expectVisibilityActionsToRun(

@@ -1,35 +1,11 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
 
 import CommonCorePublic
-@testable import DivKit
 
 final class DivGridExtensionsTests: XCTestCase {
-  func test_WhenGridHasAction_AddsItToBlock() throws {
-    let block = try makeBlock(fromFile: "with-action") as? DecoratingBlock
-    let expectedAction = UserInterfaceAction(
-      payload: .divAction(
-        params: UserInterfaceAction.DivActionParams(
-          action: .object(
-            [
-              "log_id": .string("test_log_id"),
-              "url": .string("https://ya.ru"),
-              "payload": JSONObject.object(["key": .string("value")]),
-              "menu_items": .array([.object(["text": .string("menu")])]),
-              "is_enabled": .bool(true),
-            ]
-          ),
-          cardId: DivKitTests.cardId.rawValue,
-          source: .tap,
-          url: URL(string: "https://ya.ru")!
-        )
-      ),
-      path: .root + "test_log_id"
-    )
-    XCTAssertEqual(block?.actions, NonEmptyArray(expectedAction))
-  }
-
   func test_WhenGridHasHorizontalIncompatibleTraits_ThrowsError() throws {
     let expectedError = DivBlockModelingError(
       "Grid block error: cannot create horizontally resizable grid with intrinsic width trait",

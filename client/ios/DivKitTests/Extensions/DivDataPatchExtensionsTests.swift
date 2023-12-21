@@ -6,49 +6,49 @@ import CommonCorePublic
 
 final class DivDataPatchExtensionsTests: XCTestCase {
   func test_WhenNoSuitableChanges_DoesNothing() throws {
-    let originalData = makeData(
-      div: makeContainer(
+    let originalData = divData(
+      divContainer(
         items: [
-          makeText(id: "some_div", text: "Old text"),
-          makeSeparator(),
+          divText(id: "some_div", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
-      ("div_to_replace", makeSeparator())
+      ("div_to_replace", divSeparator())
     )
     XCTAssertEqual(patchedData, originalData)
   }
 
   func test_WhenReplacingRootDiv_ReplacesDiv() throws {
-    let originalData = makeData(
-      div: makeText(id: "div_to_replace", text: "Old text")
+    let originalData = divData(
+      divText(id: "div_to_replace", text: "Old text")
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", newDivText1)
     )
-    let expectedData = makeData(
-      div: newDivText1
+    let expectedData = divData(
+      newDivText1
     )
     XCTAssertEqual(patchedData, expectedData)
   }
 
   func test_WhenReplacingDivWithDifferentType_ReplacesDiv() throws {
-    let oridinalData = makeData(
-      div: makeText(id: "div_to_replace", text: "Old text")
+    let oridinalData = divData(
+      divText(id: "div_to_replace", text: "Old text")
     )
     let patchedData = oridinalData.applyPatch(
-      ("div_to_replace", makeSeparator())
+      ("div_to_replace", divSeparator())
     )
-    let expectedData = makeData(
-      div: makeSeparator()
+    let expectedData = divData(
+      divSeparator()
     )
     XCTAssertEqual(patchedData, expectedData)
   }
 
   func test_WhenDeletingRootDiv_DoesNothing() throws {
-    let originalData = makeData(
-      div: makeText(id: "div_to_delete", text: "Old text")
+    let originalData = divData(
+      divText(id: "div_to_delete", text: "Old text")
     )
     let patchedData = originalData.applyPatch(
       ("div_to_delete", nil)
@@ -57,8 +57,8 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingRootDivWithMultipleDivs_DoesNothing() throws {
-    let originalData = makeData(
-      div: makeText(id: "div_to_replace", text: "Old text")
+    let originalData = divData(
+      divText(id: "div_to_replace", text: "Old text")
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", [newDivText1, newDivText2])
@@ -67,24 +67,24 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingItemInContainer_ReplacesDiv() throws {
-    let originalData = makeData(
-      div: makeContainer(
+    let originalData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", newDivText1)
     )
-    let expectedData = makeData(
-      div: makeContainer(
+    let expectedData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -92,25 +92,25 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingItemsInContainer_ReplacesDivs() throws {
-    let originalData = makeData(
-      div: makeContainer(
+    let originalData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", [newDivText1, newDivText2])
     )
-    let expectedData = makeData(
-      div: makeContainer(
+    let expectedData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
           newDivText2,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -118,23 +118,23 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenDeletingItemInContainer_RemovesDiv() throws {
-    let originalData = makeData(
-      div: makeContainer(
+    let originalData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_delete", text: "Old text"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_delete", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makeContainer(
+    let expectedData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
-          makeSeparator(),
+          divSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -142,13 +142,13 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenHaveMultipleChanges_AppliesAll() throws {
-    let originalData = makeData(
-      div: makeContainer(
+    let originalData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeText(id: "div_to_delete", text: "Text to delete"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divText(id: "div_to_delete", text: "Text to delete"),
+          divSeparator(),
         ]
       )
     )
@@ -156,13 +156,13 @@ final class DivDataPatchExtensionsTests: XCTestCase {
       ("div_to_replace", [newDivText1, newDivText2]),
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makeContainer(
+    let expectedData = divData(
+      divContainer(
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
           newDivText2,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -170,25 +170,25 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingItemsInGallery_ReplacesDivs() throws {
-    let originalData = makeData(
-      div: makeGallery(
+    let originalData = divData(
+      divGallery(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", [newDivText1, newDivText2])
     )
-    let expectedData = makeData(
-      div: makeGallery(
+    let expectedData = divData(
+      divGallery(
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
           newDivText2,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -196,23 +196,23 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenDeletingItemInGallery_RemovesDiv() throws {
-    let originalData = makeData(
-      div: makeGallery(
+    let originalData = divData(
+      divGallery(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_delete", text: "Old text"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_delete", text: "Old text"),
+          divSeparator(),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makeGallery(
+    let expectedData = divData(
+      divGallery(
         items: [
-          makeSeparator(),
-          makeSeparator(),
+          divSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -220,13 +220,14 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingAndDeletingItemsInGrid_AppliesAll() throws {
-    let originalData = makeData(
-      div: makeGrid(
+    let originalData = divData(
+      divGrid(
+        columnCount: 1,
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeSeparator(id: "div_to_delete"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(id: "div_to_delete"),
+          divSeparator(),
         ]
       )
     )
@@ -234,13 +235,14 @@ final class DivDataPatchExtensionsTests: XCTestCase {
       ("div_to_replace", [newDivText1, newDivText2]),
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makeGrid(
+    let expectedData = divData(
+      divGrid(
+        columnCount: 1,
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
           newDivText2,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -248,13 +250,13 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingAndDeletingItemsInPager_AppliesAll() throws {
-    let originalData = makeData(
-      div: makePager(
+    let originalData = divData(
+      makePager(
         items: [
-          makeSeparator(),
-          makeText(id: "div_to_replace", text: "Old text"),
-          makeSeparator(id: "div_to_delete"),
-          makeSeparator(),
+          divSeparator(),
+          divText(id: "div_to_replace", text: "Old text"),
+          divSeparator(id: "div_to_delete"),
+          divSeparator(),
         ]
       )
     )
@@ -262,13 +264,13 @@ final class DivDataPatchExtensionsTests: XCTestCase {
       ("div_to_replace", [newDivText1, newDivText2]),
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makePager(
+    let expectedData = divData(
+      makePager(
         items: [
-          makeSeparator(),
+          divSeparator(),
           newDivText1,
           newDivText2,
-          makeSeparator(),
+          divSeparator(),
         ]
       )
     )
@@ -276,18 +278,18 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingStateDiv_ReplacesDiv() throws {
-    let originalData = makeData(
-      div: makeState(
+    let originalData = divData(
+      makeState(
         states: [
-          makeText(id: "div_to_replace", text: "Old text"),
+          divText(id: "div_to_replace", text: "Old text"),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", newDivText1)
     )
-    let expectedData = makeData(
-      div: makeState(
+    let expectedData = divData(
+      makeState(
         states: [
           newDivText1,
         ]
@@ -297,18 +299,18 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenDeletingStateDiv_KeepsEmptyState() throws {
-    let originalData = makeData(
-      div: makeState(
+    let originalData = divData(
+      makeState(
         states: [
-          makeText(id: "div_to_delete", text: "Old text"),
+          divText(id: "div_to_delete", text: "Old text"),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_delete", nil)
     )
-    let expectedData = makeData(
-      div: makeState(
+    let expectedData = divData(
+      makeState(
         states: [nil]
       )
     )
@@ -316,10 +318,10 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingStateDivWithMultipleDivs_DoesNothing() throws {
-    let originalData = makeData(
-      div: makeState(
+    let originalData = divData(
+      makeState(
         states: [
-          makeText(id: "div_to_replace", text: "Old text"),
+          divText(id: "div_to_replace", text: "Old text"),
         ]
       )
     )
@@ -330,18 +332,18 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenReplacingTabsDiv_ReplacesDiv() throws {
-    let originalData = makeData(
-      div: makeTabs(
+    let originalData = divData(
+      makeTabs(
         items: [
-          makeText(id: "div_to_replace", text: "Old text"),
+          divText(id: "div_to_replace", text: "Old text"),
         ]
       )
     )
     let patchedData = originalData.applyPatch(
       ("div_to_replace", newDivText1)
     )
-    let expectedData = makeData(
-      div: makeTabs(
+    let expectedData = divData(
+      makeTabs(
         items: [
           newDivText1,
         ]
@@ -351,10 +353,10 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 
   func test_WhenDeletingTabsDiv_DoesNothing() throws {
-    let originalData = makeData(
-      div: makeTabs(
+    let originalData = divData(
+      makeTabs(
         items: [
-          makeText(id: "div_to_delete", text: "Old text"),
+          divText(id: "div_to_delete", text: "Old text"),
         ]
       )
     )
@@ -365,70 +367,31 @@ final class DivDataPatchExtensionsTests: XCTestCase {
   }
 }
 
-private let newDivText1 = makeText(text: "New text 1")
-private let newDivText2 = makeText(text: "New text 2")
-
-private func makeData(div: Div) -> DivData {
-  makeDivData(
-    logId: "div",
-    states: [DivData.State(div: div, stateId: 0)]
-  )
-}
-
-private func makeContainer(items: [Div]) -> Div {
-  .divContainer(
-    makeDivContainer(items: items)
-  )
-}
-
-private func makeGallery(items: [Div]) -> Div {
-  .divGallery(
-    makeDivGallery(items: items)
-  )
-}
-
-private func makeGrid(items: [Div]) -> Div {
-  .divGrid(
-    makeDivGrid(columnCount: 1, items: items)
-  )
-}
+private let newDivText1 = divText(text: "New text 1")
+private let newDivText2 = divText(text: "New text 2")
 
 private func makePager(items: [Div]) -> Div {
-  .divPager(
-    makeDivPager(
-      items: items,
-      layoutMode: .divPageSize(DivPageSize(pageWidth: DivPercentageSize(value: .value(10))))
-    )
+  divPager(
+    items: items,
+    layoutMode: .divPageSize(DivPageSize(pageWidth: DivPercentageSize(value: .value(10))))
   )
-}
-
-private func makeSeparator(id: String? = nil) -> Div {
-  .divSeparator(DivSeparator(id: id))
 }
 
 private func makeState(states: [Div?]) -> Div {
-  .divState(
-    makeDivState(
-      divId: "state",
-      states: states.enumerated().map { index, div in
-        makeDivStateState(div: div, stateId: "state_\(index)")
-      }
-    )
+  divState(
+    divId: "state",
+    states: states.enumerated().map { index, div in
+      divStateState(div: div, stateId: "state_\(index)")
+    }
   )
 }
 
 private func makeTabs(items: [Div]) -> Div {
-  .divTabs(
-    makeDivTabs(
-      items: items.enumerated().map { index, div in
-        makeDivTabsItem(div: div, title: "Tab \(index)")
-      }
-    )
+  divTabs(
+    items: items.enumerated().map { index, div in
+      divTabsItem(div: div, title: "Tab \(index)")
+    }
   )
-}
-
-private func makeText(id: String? = nil, text: String) -> Div {
-  .divText(DivText(id: id, text: .value(NSString(string: text))))
 }
 
 extension DivData {

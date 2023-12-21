@@ -33,7 +33,7 @@ final class DivPersistentValuesStorageTests: XCTestCase {
     storage.set(value: value)
     XCTAssertEqual(
       storage.get(name: value.name),
-      Color.color(withHexString: value.value)
+      color(value.value)
     )
   }
 

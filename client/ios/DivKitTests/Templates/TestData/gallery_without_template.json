@@ -20,17 +20,17 @@
               "items": [
                 {
                   "type": "text",
-                  "text": "Заголовок карточки",
+                  "text": "Title",
                   "font_size": 16
                 },
                 {
                   "type": "text",
-                  "text": "Тело карточки",
+                  "text": "Lorem ipsum dolor sit amet",
                   "font_size": 12
                 },
                 {
                   "type": "image",
-                  "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "image_url": "https://image.url",
                   "width": {
                     "type": "fixed",
                     "value": 100
@@ -55,17 +55,17 @@
               "items": [
                 {
                   "type": "text",
-                  "text": "Заголовок карточки",
+                  "text": "Title",
                   "font_size": 16
                 },
                 {
                   "type": "text",
-                  "text": "Тело карточки",
+                  "text": "Lorem ipsum dolor sit amet",
                   "font_size": 12
                 },
                 {
                   "type": "image",
-                  "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "image_url": "https://image.url",
                   "width": {
                     "type": "fixed",
                     "value": 100
@@ -90,17 +90,17 @@
               "items": [
                 {
                   "type": "text",
-                  "text": "Заголовок карточки",
+                  "text": "Title",
                   "font_size": 16
                 },
                 {
                   "type": "text",
-                  "text": "Тело карточки",
+                  "text": "Lorem ipsum dolor sit amet",
                   "font_size": 12
                 },
                 {
                   "type": "image",
-                  "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                  "image_url": "https://image.url",
                   "width": {
                     "type": "fixed",
                     "value": 100

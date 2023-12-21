@@ -234,5 +234,5 @@ private let variables: DivVariables = [
   "int_var": .integer(100),
   "number_var": .number(123.34),
   "bool_var": .bool(true),
-  "url_var": .url(URL(string: "https://test.url")!),
+  "url_var": .url(url("https://test.url")),
 ]

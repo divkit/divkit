@@ -23,13 +23,13 @@ enum ExpectedEntities {
 
   static let withRequiredComplexProperty = EntityWithComplexProperty(
     property: EntityWithComplexProperty.Property(
-      value: .value(URL(string: "https://ya.ru")!)
+      value: .value(url("https://ya.ru"))
     )
   )
 
   static let withOptionalComplexProperty = EntityWithOptionalComplexProperty(
     property: EntityWithOptionalComplexProperty.Property(
-      value: .value(URL(string: "https://ya.ru")!)
+      value: .value(url("https://ya.ru"))
     )
   )
 

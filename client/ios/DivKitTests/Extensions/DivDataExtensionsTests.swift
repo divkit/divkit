@@ -45,9 +45,14 @@ final class DivDataExtensionsTests: XCTestCase {
   }
 
   func test_ActionPathContainsCardId() throws {
-    let block = try makeDivData(.divText(divWithAction))
-      .makeBlock(context: .default)
-      .withoutStateBlock() as? DecoratingBlock
+    let block = try divData(
+      divText(
+        actions: [DivAction(logId: "action_log_id")],
+        text: "0"
+      )
+    )
+    .makeBlock(context: .default)
+    .withoutStateBlock() as? DecoratingBlock
 
     XCTAssertEqual(block?.actions?.first.path, UIElementPath.root + "action_log_id")
   }
@@ -55,9 +60,14 @@ final class DivDataExtensionsTests: XCTestCase {
   func test_ActionPathContainsExternalCardLogId() throws {
     let context = DivBlockModelingContext()
       .modifying(cardLogId: "external_card_log_id")
-    let block = try makeDivData(.divText(divWithAction))
-      .makeBlock(context: context)
-      .withoutStateBlock() as? DecoratingBlock
+    let block = try divData(
+      divText(
+        actions: [DivAction(logId: "action_log_id")],
+        text: "0"
+      )
+    )
+    .makeBlock(context: context)
+    .withoutStateBlock() as? DecoratingBlock
 
     XCTAssertEqual(
       block?.actions?.first.path,
@@ -66,9 +76,18 @@ final class DivDataExtensionsTests: XCTestCase {
   }
 
   func test_GalleryPathContainsRoot() throws {
-    let block = try makeDivData(.divGallery(gallery))
-      .makeBlock(context: .default)
-      .withoutStateBlock() as! WrapperBlock
+    let block = try divData(
+      divGallery(
+        items: [
+          divText(
+            text: "0",
+            width: divFixedSize(10)
+          ),
+        ]
+      )
+    )
+    .makeBlock(context: .default)
+    .withoutStateBlock() as! WrapperBlock
     let galleryBlock = block.child as! GalleryBlock
 
     XCTAssertEqual(galleryBlock.model.path, UIElementPath.root + 0 + "gallery")
@@ -101,25 +120,11 @@ final class DivDataExtensionsTests: XCTestCase {
   }
 }
 
-private let data = makeDivData(
+private let data = divData(
   states: [
-    .init(div: .divText(DivText(text: .value("0" as CFString))), stateId: 0),
-    .init(div: .divText(DivText(text: .value("1" as CFString))), stateId: 1),
-    .init(div: .divText(DivText(text: .value("2" as CFString))), stateId: 2),
-  ]
-)
-
-private let divWithAction = DivText(
-  action: DivAction(logId: "action_log_id"),
-  text: .value("0" as CFString)
-)
-
-private let gallery = makeDivGallery(
-  items: [
-    .divText(DivText(
-      text: .value("0" as CFString),
-      width: .divFixedSize(.init(value: .value(10)))
-    )),
+    .init(div: divText(text: "0"), stateId: 0),
+    .init(div: divText(text: "1"), stateId: 1),
+    .init(div: divText(text: "2"), stateId: 2),
   ]
 )
 

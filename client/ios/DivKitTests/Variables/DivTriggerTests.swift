@@ -192,4 +192,4 @@ private class FakeDivPatchDownloader: DivPatchProvider {
   func cancelRequests() {}
 }
 
-private let action = DivAction(logId: "1", url: .value(URL(string: "action://host")!))
+private let action = DivAction(logId: "1", url: .value(url("action://host")))

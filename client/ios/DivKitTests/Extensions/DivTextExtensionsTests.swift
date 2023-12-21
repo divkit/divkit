@@ -1,30 +1,94 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
 
+import BaseUIPublic
 import CommonCorePublic
-import DivKit
 
 final class DivTextExtensionsTests: XCTestCase {
-  func test_WhenDivHasAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(fromFile: "with_action") as? DecoratingBlock
+  func test_WithText() {
+    let block = makeBlock(
+      divText(text: "Hello!")
+    )
 
-    XCTAssertEqual(block?.actions, Expected.actions)
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading
+        ),
+        accessibilityElement: accessibility(label: "Hello!")
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
   }
 
-  func test_WhenDivHasSetStateAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(
-      fromFile: "with_set_state_action"
-    ) as? DecoratingBlock
+  func test_WithAccessibility() throws {
+    let block = makeBlock(
+      divText(
+        accessibility: DivAccessibility(
+          description: .value("Accessibility description"),
+          type: .button
+        ),
+        id: "text_id",
+        text: "Hello!"
+      )
+    )
 
-    XCTAssertEqual(block?.actions, Expected.setStateActions)
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading,
+          accessibilityElement: accessibility(
+            traits: .staticText,
+            label: "Hello!"
+          )
+        ),
+        accessibilityElement: accessibility(
+          traits: .button,
+          label: "Accessibility description",
+          identifier: "text_id"
+        )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
   }
-}
 
-private func makeBlock(fromFile filename: String) throws -> Block {
-  try DivTextTemplate.make(
-    fromFile: filename,
-    subdirectory: "div-text",
-    context: .default
-  )
+  func test_WithAction() {
+    let block = makeBlock(
+      divText(
+        actions: [DivAction(
+          logId: "action_log_id",
+          url: .value(url("https://some.url"))
+        )],
+        text: "Hello!"
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading
+        ),
+        actions: NonEmptyArray(
+          uiAction(logId: "action_log_id", url: "https://some.url")
+        ),
+        actionAnimation: .default,
+        accessibilityElement: accessibility(label: "Hello!")
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
 }

@@ -46,21 +46,21 @@
           "items": [
             {
               "type": "gallery_item_template",
-              "title": "Заголовок карточки",
-              "body": "Тело карточки",
-              "image": "https://alicekit.s3.yandex.net/images_for_divs/chess.png"
+              "title": "Title",
+              "body": "Lorem ipsum dolor sit amet",
+              "image": "https://image.url"
             },
             {
               "type": "gallery_item_template",
-              "title": "Заголовок карточки",
-              "body": "Тело карточки",
-              "image": "https://alicekit.s3.yandex.net/images_for_divs/chess.png"
+              "title": "Title",
+              "body": "Lorem ipsum dolor sit amet",
+              "image": "https://image.url"
             },
             {
               "type": "gallery_item_template",
-              "title": "Заголовок карточки",
-              "body": "Тело карточки",
-              "image": "https://alicekit.s3.yandex.net/images_for_divs/chess.png"
+              "title": "Title",
+              "body": "Lorem ipsum dolor sit amet",
+              "image": "https://image.url"
             }
           ]
         }

@@ -3,19 +3,29 @@
 
 import XCTest
 
+import CommonCorePublic
+
 final class DivSeparatorExtensionsTests: XCTestCase {
-  func test_WhenDivHasAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(fromFile: "with_action") as? DecoratingBlock
+  func test_WithDelimiterStyle() throws {
+    let block = makeBlock(
+      divSeparator(
+        delimiterStyle: DivSeparator.DelimiterStyle(
+          color: .value(color("#AABBCCDD"))
+        )
+      )
+    )
 
-    XCTAssertEqual(block?.actions, Expected.actions)
-  }
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: SeparatorBlock(
+          color: color("#AABBCCDD")
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
 
-  func test_WhenDivHasSetStateAction_CreatesBlockWithIt() throws {
-    let block = try makeBlock(
-      fromFile: "with_set_state_action"
-    ) as? DecoratingBlock
-
-    XCTAssertEqual(block?.actions, Expected.setStateActions)
+    assertEqual(block, expectedBlock)
   }
 
   func test_WhenDivHasHorizontalOrientation_AndIntrinsicWidth_ThrowsError() throws {

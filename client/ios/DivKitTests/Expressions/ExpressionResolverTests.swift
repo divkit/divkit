@@ -8,9 +8,9 @@ final class ExpressionResolverTests: XCTestCase {
   private lazy var expressionResolver = ExpressionResolver(
     variables: [
       "string_var": .string("string value"),
-      "color_var": .color(Color.color(withHexString: "#AABBCC")!),
+      "color_var": .color(color("#AABBCC")),
       "enum_var": .string("first"),
-      "url_var": .url(URL(string: "https://some.url")!),
+      "url_var": .url(url("https://some.url")),
       "array_var": .array([1]),
     ],
     persistentValuesStorage: DivPersistentValuesStorage(),
@@ -121,14 +121,6 @@ final class ExpressionResolverTests: XCTestCase {
 
     XCTAssertTrue(usedVariables.contains("string_var"))
   }
-}
-
-private func color(_ color: String) -> Color {
-  Color.color(withHexString: color)!
-}
-
-private func url(_ url: String) -> URL {
-  URL(string: url)!
 }
 
 private enum TestEnum: String {

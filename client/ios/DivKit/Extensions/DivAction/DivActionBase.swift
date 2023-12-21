@@ -28,7 +28,7 @@ extension DivActionBase {
     let url = url?.rawValue.map { $0.adding(cardId: cardId.rawValue) }
     return .divAction(
       params: UserInterfaceAction.DivActionParams(
-        action: JSONObject.object(toDictionary().typedJSON()),
+        action: .object(toDictionary().typedJSON()),
         cardId: cardId.rawValue,
         source: source,
         url: url

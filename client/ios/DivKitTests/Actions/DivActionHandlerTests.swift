@@ -150,10 +150,6 @@ final class DivActionHandlerTests: XCTestCase {
 
 private let cardId: DivCardID = "test_card"
 
-private func url(_ string: String) -> URL {
-  URL(string: string)!
-}
-
 private final class MockActionLogger: DivActionLogger {
   private(set) var lastUrl: URL?
   private(set) var lastReferer: URL?

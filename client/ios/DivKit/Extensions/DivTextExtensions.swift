@@ -228,8 +228,8 @@ extension DivText: DivBlockModeling {
   private func resolveAccessibilityElement(
     _ expressionResolver: ExpressionResolver
   ) -> AccessibilityElement? {
-    guard let accessibility = accessibility,
-          accessibility.resolveDescription(expressionResolver) == nil else {
+    let accessibility = accessibility ?? DivAccessibility()
+    guard accessibility.resolveDescription(expressionResolver) == nil else {
       return nil
     }
     return AccessibilityElement(

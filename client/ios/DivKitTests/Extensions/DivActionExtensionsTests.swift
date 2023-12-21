@@ -6,122 +6,167 @@ import CommonCorePublic
 import LayoutKit
 
 final class DivActionExtensionsTests: XCTestCase {
-  func test_AddsCardLogIdToActionPath() {
-    let divAction = DivAction(
-      logId: logId,
-      url: testURL
-    )
-    let action = divAction.uiAction(
-      context: .default.modifying(cardLogId: "card_log_id")
-    )
-    XCTAssertEqual(action?.path, UIElementPath("card_log_id") + logId)
-  }
-  
-  func test_WhenHasURL_BuildsActionWithIt() {
-    let divAction = DivAction(
-      logId: logId,
-      url: testURL
-    )
-    let action = divAction.uiAction(context: .default)
-    let expectedAction = UserInterfaceAction(
-      payload: divAction.makeDivActionPayload(),
-      path: .root + logId
-    )
-    XCTAssertEqual(action, expectedAction)
+  func test_uiAction_AddsCardLogIdFromContext() {
+    let action = DivAction(
+      logId: "action_log_id"
+    ).uiAction(context: .default.modifying(cardLogId: "custom_card_log_id"))
+
+    XCTAssertEqual(action?.path, UIElementPath("custom_card_log_id") + "action_log_id")
   }
 
-  func test_WhenHasMenu_BuildsActionWithIt() {
-    let menuItemDivAction = DivAction(logId: logId, url: testURL)
-    let divAction = DivAction(
-      logId: logId,
-      menuItems: [
-        DivAction.MenuItem(action: menuItemDivAction, text: .value("url")),
-      ]
+  func test_uiAction_ReturnsNull_IfActionIsDisabled() {
+    let action = DivAction(
+      isEnabled: .value(false),
+      logId: "action_log_id",
+      url: .value(url("https://some.url"))
+    ).uiAction
+
+    XCTAssertNil(action)
+  }
+
+  func test_WithLogIdOnly() {
+    let action = DivAction(logId: "action_log_id").uiAction
+
+    let expectedAction = UserInterfaceAction(
+      payload: divActionPayload([
+        "log_id": .string("action_log_id"),
+        "is_enabled": .bool(true),
+      ]),
+      path: .root + "action_log_id"
     )
-    let action = divAction.uiAction(context: .default)
+
+    assertEqual(action, expectedAction)
+  }
+
+  func test_WithUrl() {
+    let action = DivAction(
+      logId: "action_log_id",
+      url: .value(url("https://some.url"))
+    ).uiAction
+
+    let expectedAction = UserInterfaceAction(
+      payload: divActionPayload(
+        [
+          "log_id": .string("action_log_id"),
+          "is_enabled": .bool(true),
+          "url": .string("https://some.url"),
+        ],
+        url: "https://some.url"
+      ),
+      path: .root + "action_log_id"
+    )
+
+    assertEqual(action, expectedAction)
+  }
+
+  func test_WithTyped() {
+    let action = DivAction(
+      logId: "action_log_id",
+      typed: .divActionSetVariable(DivActionSetVariable(
+        value: .integerValue(IntegerValue(value: .value(10))),
+        variableName: .value("var1")
+      ))
+    ).uiAction
+
+    let expectedAction = UserInterfaceAction(
+      payload: divActionPayload([
+        "log_id": .string("action_log_id"),
+        "is_enabled": .bool(true),
+        "typed": .object([
+          "type": .string("set_variable"),
+          "variable_name": .string("var1"),
+          "value": .object([
+            "type": .string("integer"),
+            "value": .number(10),
+          ]),
+        ]),
+      ]),
+      path: .root + "action_log_id"
+    )
+
+    assertEqual(action, expectedAction)
+  }
+
+  func test_WithMenu() {
+    let action = DivAction(
+      logId: "action_log_id",
+      menuItems: [
+        DivAction.MenuItem(
+          action: DivAction(
+            logId: "menu_item_log_id",
+            url: .value(url("https://some.url"))
+          ),
+          text: .value("Menu Item")
+        ),
+      ]
+    ).uiAction
+
     let expectedAction = UserInterfaceAction(
       menu: Menu(items: [
         Menu.Item(
-          action: UserInterfaceAction(
-            payloads: [menuItemDivAction.makeDivActionPayload()],
-            path: .root + logId
+          action: uiAction(
+            logId: "menu_item_log_id",
+            url: "https://some.url"
           ),
-          text: "url"
+          text: "Menu Item"
         ),
       ])!,
-      path: .root + logId
+      path: .root + "action_log_id"
     )
-    XCTAssertEqual(action, expectedAction)
+
+    assertEqual(action, expectedAction)
   }
 
-  func test_WhenHasPayload_BuildsActionWithIt() {
-    let divAction = DivAction(
-      logId: logId,
-      payload: testPayload
-    )
-    let action = divAction.uiAction(context: .default)
+  func test_WithPayload() {
+    let action = DivAction(
+      logId: "action_log_id",
+      payload: [
+        "string_key": "string_value",
+        "number_key": 42,
+      ]
+    ).uiAction
+
     let expectedAction = UserInterfaceAction(
-      payload: divAction.makeDivActionPayload(),
-      path: .root + logId
+      payload: divActionPayload([
+        "log_id": .string("action_log_id"),
+        "is_enabled": .bool(true),
+        "payload": .object([
+          "string_key": .string("string_value"),
+          "number_key": .number(42),
+        ]),
+      ]),
+      path: .root + "action_log_id"
     )
-    XCTAssertEqual(action, expectedAction)
+
+    assertEqual(action, expectedAction)
   }
 
-  func test_WhenHasMultiplePayloadAndUrl_BuildsActionWithIt() {
-    let divAction = DivAction(
-      logId: logId,
-      payload: testPayload,
-      url: testURL
-    )
-    let action = divAction.uiAction(context: .default)
+  func test_WithPayloadAndUrl() {
+    let action = DivAction(
+      logId: "action_log_id",
+      payload: [
+        "string_key": "string_value",
+        "number_key": 42,
+      ],
+      url: .value(url("https://some.url"))
+    ).uiAction
+
     let expectedAction = UserInterfaceAction(
-      payload: divAction.makeDivActionPayload(),
-      path: .root + logId
+      payload: divActionPayload(
+        [
+          "log_id": .string("action_log_id"),
+          "is_enabled": .bool(true),
+          "payload": .object([
+            "string_key": .string("string_value"),
+            "number_key": .number(42),
+          ]),
+          "url": .string("https://some.url"),
+        ],
+        url: "https://some.url"
+      ),
+      path: .root + "action_log_id"
     )
-    XCTAssertEqual(action, expectedAction)
-  }
 
-  func test_WhenPayloadIsMissing_BuildsDivAction() {
-    let divAction = DivAction(logId: logId)
-    let action = divAction.uiAction(context: .default)
-    let expectedAction = UserInterfaceAction(
-      payload: divAction.makeDivActionPayload(),
-      path: .root + logId
-    )
-    XCTAssertEqual(action, expectedAction)
-  }
-
-  func test_IsEnabledIsFalse() {
-    let divAction = DivAction(
-      isEnabled: .value(false),
-      logId: logId,
-      url: testURL
-    )
-    let action = divAction.uiAction(
-      context: .default.modifying(cardLogId: "card_log_id")
-    )
-    XCTAssertNil(action)
-  }
-}
-
-private let logId = "test/log_id"
-
-private let testURL = Expression.value(URL(string: "https://ya.ru")!)
-
-private let testPayload: [String: Any] = [
-  "string_key": "string_value",
-  "number_key": 42,
-]
-
-extension DivAction {
-  fileprivate func makeDivActionPayload() -> UserInterfaceAction.Payload {
-    .divAction(
-      params: UserInterfaceAction.DivActionParams(
-        action: .object(toDictionary().typedJSON()),
-        cardId: DivKitTests.cardId.rawValue,
-        source: .tap,
-        url: url?.rawValue
-      )
-    )
+    assertEqual(action, expectedAction)
   }
 }

@@ -7,6 +7,7 @@ import CommonCorePublic
 
 final class DivStateExtensionsTests: XCTestCase {
   private let timerScheduler = TestTimerScheduler()
+
   func test_WhenVisibilityWasTriggeredAndStateChanges_ReportsVisibilityAgain() throws {
     let context = DivBlockModelingContext(scheduler: timerScheduler)
 

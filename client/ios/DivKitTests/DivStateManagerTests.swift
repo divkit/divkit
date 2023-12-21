@@ -26,11 +26,11 @@ final class DivStateManagerTests: XCTestCase {
     let statePath = DivStatePath(rawValue: "root")
     stateManager.setBlockVisibility(
       statePath: statePath,
-      div: makeDivSeparator(
+      div: divSeparator(
         id: "blockId",
         transitionIn: transition,
         visibility: visibilityExpression
-      ),
+      ).value,
       isVisible: true
     )
 
@@ -45,10 +45,10 @@ final class DivStateManagerTests: XCTestCase {
     let statePath = DivStatePath(rawValue: "root")
     stateManager.setBlockVisibility(
       statePath: statePath,
-      div: makeDivSeparator(
+      div: divSeparator(
         id: "blockId",
         transitionIn: transition
-      ),
+      ).value,
       isVisible: false
     )
 
@@ -63,10 +63,10 @@ final class DivStateManagerTests: XCTestCase {
     let statePath = DivStatePath(rawValue: "root")
     stateManager.setBlockVisibility(
       statePath: statePath,
-      div: makeDivSeparator(
+      div: divSeparator(
         id: "blockId",
         visibility: visibilityExpression
-      ),
+      ).value,
       isVisible: false
     )
 
@@ -81,12 +81,12 @@ final class DivStateManagerTests: XCTestCase {
     let statePath = DivStatePath(rawValue: "root")
     stateManager.setBlockVisibility(
       statePath: statePath,
-      div: makeDivSeparator(
+      div: divSeparator(
         id: "blockId",
         transitionIn: transition,
         transitionTriggers: [.stateChange],
         visibility: visibilityExpression
-      ),
+      ).value,
       isVisible: false
     )
 
@@ -101,11 +101,11 @@ final class DivStateManagerTests: XCTestCase {
     let statePath = DivStatePath(rawValue: "root")
     stateManager.setBlockVisibility(
       statePath: statePath,
-      div: makeDivSeparator(
+      div: divSeparator(
         id: "blockId",
         transitionIn: transition,
         visibility: visibilityExpression
-      ),
+      ).value,
       isVisible: false
     )
 

@@ -8,7 +8,7 @@ final class DivActionIntentTests: XCTestCase {
   func test_Download() {
     switch makeIntent("div-action://download?url=https://download.url") {
     case let .download(patchUrl):
-      XCTAssertEqual(URL(string: "https://download.url")!, patchUrl)
+      XCTAssertEqual(url("https://download.url"), patchUrl)
     default:
       XCTFail("Invalid intent")
     }
