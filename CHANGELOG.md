@@ -1,3 +1,26 @@
+## 29.1.0
+
+# Android Client:
+* Supported `clip_to_bounds` property in `div-container`.
+* Optimized binding process of base div properties.
+* Optimized binding process of `div-text`.
+* Optimized binding process of `div-separator`.
+* Optimized binding process of `div-container`.
+* Fixed calling of disappear actions for tooltips.
+* Fixed parent's vertical scroll starting at `div-slider`.
+* Fixed state switching of `div-gallery` items.
+* Fixed incorrect height of `div-input`.
+* Fixed text color applying for ranges in `div-text`.
+
+# iOS Client:
+* Fixed `DivVariableStorage` change events.
+* Optimized `DivData` parsing.
+* Improved `DivBlockModelingContext` cloning.
+
+# Web Client:
+* Fixed rare cases with the `lottie` animations load errors.
+
+
 ## 29.0.0
 
 # JSON Schema:

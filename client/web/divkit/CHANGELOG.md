@@ -1,3 +1,8 @@
+## 29.1.0 (December 25, 2023)
+
+* Fixed rare cases with the `lottie` animations load errors.
+
+
 ## 29.0.0 (December 18, 2023)
 
 * Breaking change: expressions are now executed without waiting for all variables in them.
