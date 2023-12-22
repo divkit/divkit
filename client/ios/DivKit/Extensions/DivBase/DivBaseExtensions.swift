@@ -11,7 +11,7 @@ extension DivBase {
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
     options: BasePropertiesOptions = [],
-    customA11yElement: AccessibilityElement? = nil,
+    customA11yDescriptionProvider: (() -> String?)? = nil,
     clipToBounds: Bool = true
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
@@ -100,12 +100,12 @@ extension DivBase {
       )
     }
     
-    let accessibilityElement: AccessibilityElement
-    if let customA11yElement {
-      accessibilityElement = customA11yElement
-    } else {
-      accessibilityElement = (accessibility ?? DivAccessibility()).resolve(context, id: id)
-    }
+    let accessibilityElement = (accessibility ?? DivAccessibility())
+      .resolve(
+        expressionResolver,
+        id: id,
+        customDescriptionProvider: customA11yDescriptionProvider
+      )
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder)

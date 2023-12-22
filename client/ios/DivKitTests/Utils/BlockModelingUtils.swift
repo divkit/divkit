@@ -17,14 +17,16 @@ extension AccessibilityElement {
 func accessibility(
   traits: AccessibilityElement.Traits = .none,
   label: String? = nil,
-  identifier: String? = nil
+  identifier: String? = nil,
+  hideElementWithChildren: Bool = false
 ) -> AccessibilityElement {
   AccessibilityElement(
     traits: traits,
     strings: AccessibilityElement.Strings(
       label: label,
       identifier: identifier
-    )
+    ),
+    hideElementWithChildren: hideElementWithChildren
   )
 }
 

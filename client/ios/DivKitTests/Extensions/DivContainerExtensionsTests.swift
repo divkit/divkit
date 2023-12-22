@@ -9,9 +9,7 @@ import CommonCorePublic
 final class DivContainerExtensionsTests: XCTestCase {
   func test_Empty() throws {
     let block = makeBlock(
-      divContainer(
-        items: []
-      )
+      divContainer()
     )
 
     let expectedBlock = try StateBlock(
@@ -60,6 +58,78 @@ final class DivContainerExtensionsTests: XCTestCase {
           ]
         ),
         accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithMergeAccessibility() throws {
+    let block = makeBlock(
+      divContainer(
+        accessibility: DivAccessibility(
+          mode: .value(.merge),
+          type: .button
+        ),
+        items: [
+          divText(text: "Hello!"),
+          divText(
+            accessibility: DivAccessibility(mode: .value(.exclude)),
+            text: "Excluded item"
+          ),
+          divContainer(
+            items: [
+              divText(text: "Nested item"),
+            ]
+          ),
+        ]
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "Hello!".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(label: "Hello!")
+            ),
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "Excluded item".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(hideElementWithChildren: true)
+            ),
+            DecoratingBlock(
+              child: ContainerBlock(
+                layoutDirection: .vertical,
+                children: [
+                  DecoratingBlock(
+                    child: TextBlock(
+                      widthTrait: .resizable,
+                      text: "Nested item".withTypo(),
+                      verticalAlignment: .leading
+                    ),
+                    accessibilityElement: accessibility(label: "Nested item")
+                  ),
+                ]
+              ),
+              accessibilityElement: .default
+            ),
+          ]
+        ),
+        accessibilityElement: accessibility(
+          traits: .button,
+          label: "Hello! Nested item"
+        )
       ),
       ids: []
     )

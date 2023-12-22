@@ -9,15 +9,24 @@ import NetworkingPublic
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    try applyBaseProperties(
-      to: { try makeBaseBlock(context: context) },
+    let expressionResolver = context.expressionResolver
+    let lazyText = Lazy(getter: { [unowned self] in
+      resolveText(expressionResolver) ?? ""
+    })
+    return try applyBaseProperties(
+      to: { try makeBaseBlock(context: context, text: lazyText) },
       context: context,
       actionsHolder: self,
-      customA11yElement: resolveAccessibilityElement(context.expressionResolver)
+      customA11yDescriptionProvider: { [unowned self] in
+        accessibility?.resolveDescription(expressionResolver) ?? lazyText.value
+      }
     )
   }
 
-  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+  private func makeBaseBlock(
+    context: DivBlockModelingContext,
+    text: Lazy<String>
+  ) throws -> Block {
     let expressionResolver = context.expressionResolver
 
     let font = context.fontProvider.font(
@@ -60,7 +69,7 @@ extension DivText: DivBlockModeling {
     }
 
     let attributedString = makeAttributedString(
-      text: (resolveText(expressionResolver) ?? "") as CFString,
+      text: text.value as CFString,
       typo: typo,
       ranges: ranges,
       actions: nil,
@@ -223,25 +232,6 @@ extension DivText: DivBlockModeling {
         centerY: gradient.resolveCenterY(expressionResolver)
       ).map { .radial($0) }
     }
-  }
-
-  private func resolveAccessibilityElement(
-    _ expressionResolver: ExpressionResolver
-  ) -> AccessibilityElement? {
-    let accessibility = accessibility ?? DivAccessibility()
-    guard accessibility.resolveDescription(expressionResolver) == nil else {
-      return nil
-    }
-    return AccessibilityElement(
-      traits: accessibility.type?.cast() ?? .none,
-      strings: AccessibilityElement.Strings(
-        label: resolveText(expressionResolver),
-        hint: accessibility.resolveHint(expressionResolver),
-        value: accessibility.resolveStateDescription(expressionResolver),
-        identifier: id
-      ),
-      hideElementWithChildren: accessibility.resolveMode(expressionResolver).isExclude
-    )
   }
 }
 

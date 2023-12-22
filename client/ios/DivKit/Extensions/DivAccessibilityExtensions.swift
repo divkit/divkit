@@ -3,44 +3,41 @@ import CommonCorePublic
 
 extension DivAccessibility {
   func resolve(
-    _ context: DivBlockModelingContext,
-    id: String?
+    _ expressionResolver: ExpressionResolver,
+    id: String?,
+    customDescriptionProvider: (() -> String?)?
   ) -> AccessibilityElement {
-    let expressionResolver = context.expressionResolver
-    let mode = resolveMode(expressionResolver)
+    if resolveMode(expressionResolver) == .exclude {
+      return AccessibilityElement(
+        traits: .none,
+        strings: AccessibilityElement.Strings(label: nil),
+        hideElementWithChildren: true
+      )
+    }
+
+    let label: String?
+    if let customDescriptionProvider {
+      label = customDescriptionProvider()
+    } else if let description = resolveDescription(expressionResolver) {
+      label = description
+    } else {
+      label = type == nil ? nil : ""
+    }
+
     return AccessibilityElement(
-      traits: type?.cast() ?? .none,
+      traits: traits,
       strings: AccessibilityElement.Strings(
-        label: resolveDescription(context, mode: mode),
+        label: label,
         hint: resolveHint(expressionResolver),
         value: resolveStateDescription(expressionResolver),
         identifier: id
       ),
-      startsMediaSession: resolveMuteAfterAction(expressionResolver),
-      hideElementWithChildren: mode.isExclude
+      startsMediaSession: resolveMuteAfterAction(expressionResolver)
     )
   }
 
-  private func resolveDescription(
-    _ context: DivBlockModelingContext,
-    mode: Mode
-  ) -> String? {
-    if let description = resolveDescription(context.expressionResolver) {
-      return description
-    }
-    if mode == .merge {
-      return context.childrenA11yDescription
-    }
-    if type != nil {
-      return ""
-    }
-    return nil
-  }
-}
-
-extension DivAccessibility.Kind {
-  func cast() -> AccessibilityElement.Traits {
-    switch self {
+  private var traits: AccessibilityElement.Traits {
+    switch type {
     case .button:
       return .button
     case .header:
@@ -53,22 +50,11 @@ extension DivAccessibility.Kind {
       return .searchField
     case .tabBar:
       return .tabBar
-    case .none:
-      return .none
     case .list, .select:
       DivKitLogger.warning("Unsupported accessibility type")
       return .none
-    }
-  }
-}
-
-extension DivAccessibility.Mode {
-  var isExclude: Bool {
-    switch self {
-    case .exclude:
-      return true
-    case .default, .merge:
-      return false
+    case .none?, nil:
+      return .none
     }
   }
 }

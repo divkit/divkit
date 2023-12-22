@@ -7,10 +7,11 @@ extension DivContainer: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
-      context: context.modifying(
-        childrenA11yDescription: resolveChildrenA11yDescription(context)
-      ),
+      context: context,
       actionsHolder: self,
+      customA11yDescriptionProvider: { [unowned self] in
+        resolveAccessibilityDescription(context)
+      },
       clipToBounds: resolveClipToBounds(context.expressionResolver)
     )
   }
@@ -45,17 +46,6 @@ extension DivContainer: DivBlockModeling {
     }
 
     return block
-  }
-
-  private func resolveChildrenA11yDescription(_ context: DivBlockModelingContext) -> String? {
-    var result = ""
-    func traverse(div: Div) {
-      result = [result, div.resolveA11yDescription(context)].compactMap { $0 }
-        .joined(separator: " ")
-      div.children.forEach(traverse(div:))
-    }
-    nonNilItems.forEach(traverse)
-    return result.isEmpty ? nil : result
   }
 
   private func makeOverlapBlock(context: DivBlockModelingContext) throws -> LayeredBlock {

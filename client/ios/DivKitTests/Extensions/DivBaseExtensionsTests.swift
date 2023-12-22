@@ -73,10 +73,7 @@ final class DivBaseExtensionsTests: XCTestCase {
     ]
 
     let block = makeBlock(
-      divContainer(
-        actions: actions,
-        items: []
-      )
+      divContainer(actions: actions)
     )
 
     let expectedBlock = try StateBlock(

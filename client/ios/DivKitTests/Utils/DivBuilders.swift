@@ -73,13 +73,14 @@ func divSeparator(
 }
 
 func divContainer(
+  accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
   height: DivSize? = nil,
-  items: [Div],
+  items: [Div] = [],
   width: DivSize? = nil
 ) -> Div {
   .divContainer(DivContainer(
-    accessibility: nil,
+    accessibility: accessibility,
     action: nil,
     actionAnimation: nil,
     actions: actions,

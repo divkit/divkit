@@ -30,7 +30,6 @@ public struct DivBlockModelingContext {
   let debugParams: DebugParams
   let scheduler: Scheduling
   let playerFactory: PlayerFactory?
-  private(set) var childrenA11yDescription: String?
   private(set) weak var parentScrollView: ScrollView?
   public private(set) var errorsStorage: DivErrorsStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
@@ -64,7 +63,6 @@ public struct DivBlockModelingContext {
     playerFactory: PlayerFactory? = nil,
     debugParams: DebugParams = DebugParams(),
     scheduler: Scheduling? = nil,
-    childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil,
     errorsStorage: DivErrorsStorage? = nil,
     layoutDirection: UserInterfaceLayoutDirection = .leftToRight,
@@ -113,7 +111,6 @@ public struct DivBlockModelingContext {
       playerFactory: playerFactory,
       debugParams: debugParams,
       scheduler: scheduler,
-      childrenA11yDescription: childrenA11yDescription,
       parentScrollView: parentScrollView,
       errorsStorage: errorsStorage,
       layoutDirection: layoutDirection,
@@ -143,7 +140,6 @@ public struct DivBlockModelingContext {
     playerFactory: PlayerFactory?,
     debugParams: DebugParams,
     scheduler: Scheduling?,
-    childrenA11yDescription: String?,
     parentScrollView: ScrollView?,
     errorsStorage: DivErrorsStorage?,
     layoutDirection: UserInterfaceLayoutDirection,
@@ -168,7 +164,6 @@ public struct DivBlockModelingContext {
     self.playerFactory = playerFactory
     self.debugParams = debugParams
     self.scheduler = scheduler ?? TimerScheduler()
-    self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
     self.errorsStorage = errorsStorage ?? DivErrorsStorage(errors: [])
     self.layoutDirection = layoutDirection
@@ -313,14 +308,6 @@ extension DivBlockModelingContext {
     context.errorsStorage = errorsStorage
 
     return context
-  }
-
-  func modifying(
-    childrenA11yDescription: String?
-  ) -> Self {
-    modified(self) {
-      $0.childrenA11yDescription = childrenA11yDescription
-    }
   }
 }
 
