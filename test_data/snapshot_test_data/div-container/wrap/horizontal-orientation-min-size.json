@@ -1,0 +1,126 @@
+{
+  "description": "Horizontal container with layout_mode=wrap and min width and height",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "orientation": "horizontal",
+      "layout_mode": "wrap",
+      "width": {
+        "type": "wrap_content",
+        "min_size": {
+          "value": 260
+        }
+      },
+      "height": {
+        "type": "wrap_content",
+        "min_size": {
+          "value": 55
+        }
+      },
+      "border": {
+        "stroke": {
+          "color": "#FFCC00",
+          "width": 3
+        }
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "paddings": {
+        "top": 10,
+        "right": 10,
+        "bottom": 10,
+        "left": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 220
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 30
+                  },
+                  "text": "Content is smaller than min size"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 250
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "text": "Content with paddings is bigger than min size"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 270
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "text": "Content is bigger than min size"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -40,14 +40,14 @@ abstract class DivViewGroup @JvmOverloads constructor(
         val lp = child.lp
         val childWidthMeasureSpec = getChildMeasureSpec(
             parentWidthMeasureSpec,
-            paddingLeft + paddingRight,
+            horizontalPaddings,
             lp.width,
             child.minimumWidth,
             lp.maxWidth
         )
         val childHeightMeasureSpec = getChildMeasureSpec(
             parentHeightMeasureSpec,
-            paddingTop + paddingBottom,
+            verticalPaddings,
             lp.height,
             child.minimumHeight,
             lp.maxHeight
@@ -65,14 +65,14 @@ abstract class DivViewGroup @JvmOverloads constructor(
         val lp = child.lp
         val childWidthMeasureSpec = getChildMeasureSpec(
             parentWidthMeasureSpec,
-            paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed,
+            horizontalPaddings + lp.horizontalMargins + widthUsed,
             lp.width,
             child.minimumWidth,
             lp.maxWidth
         )
         val childHeightMeasureSpec = getChildMeasureSpec(
             parentHeightMeasureSpec,
-            paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed,
+            verticalPaddings + lp.verticalMargins + heightUsed,
             lp.height,
             child.minimumHeight,
             lp.maxHeight
@@ -83,6 +83,10 @@ abstract class DivViewGroup @JvmOverloads constructor(
     internal val horizontalGravity get() = gravity.toHorizontalGravity()
 
     internal val verticalGravity get() = gravity.toVerticalGravity()
+
+    internal val horizontalPaddings get() = paddingLeft + paddingRight
+
+    internal val verticalPaddings get() = paddingTop + paddingBottom
 
     override fun checkLayoutParams(p: LayoutParams?): Boolean = p is DivLayoutParams
 

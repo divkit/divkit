@@ -135,15 +135,13 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
         calculateLines(widthMeasureSpec, heightSpec)
 
         if (isRowDirection) {
-            determineCrossSize(heightSpec, verticalGravity, paddingTop + paddingBottom)
+            determineCrossSize(heightSpec, verticalGravity, verticalPaddings)
         } else {
-            determineCrossSize(widthMeasureSpec, horizontalGravity, paddingLeft + paddingRight)
+            determineCrossSize(widthMeasureSpec, horizontalGravity, horizontalPaddings)
         }
 
-        val calculatedMaxWidth =
-            if (isRowDirection) largestMainSize else sumOfCrossSize + paddingLeft + paddingRight
-        val calculatedMaxHeight =
-            if (isRowDirection) sumOfCrossSize + paddingTop + paddingBottom else largestMainSize
+        val calculatedMaxWidth = if (isRowDirection) largestMainSize else sumOfCrossSize + horizontalPaddings
+        val calculatedMaxHeight = if (isRowDirection) sumOfCrossSize + verticalPaddings else largestMainSize
 
         childState = getState(widthMode, childState, widthSize, calculatedMaxWidth,
             MEASURED_STATE_TOO_SMALL)
@@ -177,10 +175,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
         val mainMeasureSpec = if (isRowDirection) widthMeasureSpec else heightMeasureSpec
         val mainMode = MeasureSpec.getMode(mainMeasureSpec)
         val mainSize = MeasureSpec.getSize(mainMeasureSpec)
-        val parentHorizontalPaddings = paddingLeft + paddingRight
-        val parentVerticalPaddings = paddingTop + paddingBottom
-        val mainPaddings = edgeSeparatorsLength +
-            if (isRowDirection) parentHorizontalPaddings else parentVerticalPaddings
+        val mainPaddings = edgeSeparatorsLength + if (isRowDirection) horizontalPaddings else verticalPaddings
 
         var line = WrapLine(mainSize = mainPaddings)
 
@@ -193,8 +188,8 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
             }
 
             val item = child.lp
-            var horizontalPaddings = parentHorizontalPaddings + item.horizontalMargins
-            var verticalPaddings = parentVerticalPaddings + item.verticalMargins
+            var horizontalPaddings = horizontalPaddings + item.horizontalMargins
+            var verticalPaddings = verticalPaddings + item.verticalMargins
 
             if (isRowDirection) {
                 horizontalPaddings += edgeSeparatorsLength

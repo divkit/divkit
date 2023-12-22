@@ -1,0 +1,207 @@
+{
+  "description": "Horizontal container with elements with wrap_content size",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "orientation": "horizontal",
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      },
+      "margins": {
+        "bottom": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "test_container",
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "max_size": {
+                      "value": 150
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 70
+                    }
+                  },
+                  "text": "max width = 150, min height = 70"
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 150
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "max_size": {
+                      "value": 50
+                    }
+                  },
+                  "text": "min width = 150\nmax height = 50"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 150
+                    },
+                    "max_size": {
+                      "value": 200
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 100
+                    },
+                    "max_size": {
+                      "value": 120
+                    }
+                  },
+                  "text": "min width = 150, max width = 200\nmin height = 100, max height = 120"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 320
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 60
+                    }
+                  },
+                  "text": "min width = 320, min height = 60"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 320
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "min_size": {
+                      "value": 60
+                    }
+                  },
+                  "text": "min width = 320, min height = 60 with long text"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "max_size": {
+                      "value": 250
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content",
+                    "max_size": {
+                      "value": 40
+                    }
+                  },
+                  "text": "max width = 250, max height = 40 with long text"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
