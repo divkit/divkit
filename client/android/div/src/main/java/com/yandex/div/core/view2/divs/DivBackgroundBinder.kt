@@ -20,7 +20,6 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.observeBackground
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
@@ -69,7 +68,7 @@ internal class DivBackgroundBinder @Inject constructor(
                     (currentAdditionalLayer != additionalLayer)
 
                 if (backgroundChanged) {
-                    updateBackground(newDefaultDivBackground.toDrawable(this, divView, additionalLayer, resolver))
+                    updateBackground(newDefaultDivBackground.toDrawable(this, divView, additionalLayer))
 
                     setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
                     setTag(R.id.div_focused_background_list_tag, null)
@@ -101,13 +100,13 @@ internal class DivBackgroundBinder @Inject constructor(
 
                     stateList.addState(
                         intArrayOf(android.R.attr.state_focused),
-                        newFocusedDivBackground.toDrawable(this, divView, additionalLayer, resolver)
+                        newFocusedDivBackground.toDrawable(this, divView, additionalLayer)
                     )
 
                     if (defaultBackgroundList != null || additionalLayer != null) {
                         stateList.addState(
                             StateSet.WILD_CARD,
-                            newDefaultDivBackground.toDrawable(this, divView, additionalLayer, resolver))
+                            newDefaultDivBackground.toDrawable(this, divView, additionalLayer))
                     }
 
                     updateBackground(stateList)
@@ -161,15 +160,14 @@ internal class DivBackgroundBinder @Inject constructor(
     private fun List<DivBackgroundState>?.toDrawable(
         view: View,
         divView: Div2View,
-        additionalLayer: Drawable?,
-        resolver: ExpressionResolver,
+        additionalLayer: Drawable?
     ): Drawable? {
         additionalLayer?.mutate()
 
         this ?: return additionalLayer?.let { LayerDrawable(arrayOf(it)) }
 
         val listDrawable = mapNotNull {
-            it.toDrawable(divView, view, imageLoader, resolver).mutate()
+            it.toDrawable(divView, view, imageLoader).mutate()
         }.toMutableList()
         additionalLayer?.let { listDrawable.add(it) }
 
@@ -308,8 +306,7 @@ internal class DivBackgroundBinder @Inject constructor(
             fun getDivImageBackground(
                 divView: Div2View,
                 target: View,
-                imageLoader: DivImageLoader,
-                resolver: ExpressionResolver
+                imageLoader: DivImageLoader
             ): Drawable {
                 val scaleDrawable = ScalingDrawable()
 
@@ -317,11 +314,10 @@ internal class DivBackgroundBinder @Inject constructor(
                 val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
                     @UiThread
                     override fun onSuccess(cachedBitmap: CachedBitmap) {
-                        cachedBitmap.bitmap.applyFilters(
-                            target,
+                        target.applyBitmapFilters(
+                            divView,
+                            cachedBitmap.bitmap,
                             filters?.map { it.toDiv() },
-                            divView.div2Component,
-                            resolver
                         ) { scaleDrawable.setBitmap(it) }
                         scaleDrawable.alpha = (alpha * 255).toInt()
                         scaleDrawable.customScaleType = scale.toScaleType()
@@ -372,10 +368,9 @@ internal class DivBackgroundBinder @Inject constructor(
         fun toDrawable(
             divView: Div2View,
             target: View,
-            imageLoader: DivImageLoader,
-            resolver: ExpressionResolver,
+            imageLoader: DivImageLoader
         ): Drawable = when (this) {
-            is Image -> getDivImageBackground(divView, target, imageLoader, resolver)
+            is Image -> getDivImageBackground(divView, target, imageLoader)
             is NinePatch -> getNinePatchDrawable(divView, target, imageLoader)
             is Solid -> ColorDrawable(color)
             is LinearGradient -> LinearGradientDrawable(

@@ -41,6 +41,7 @@ import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.core.view2.errors.ErrorCollectors;
+import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository;
@@ -190,6 +191,9 @@ public interface Div2Component {
 
     @NonNull
     ErrorCollectors getErrorCollectors();
+
+    @NonNull
+    BitmapEffectHelper getBitmapEffectHelper();
 
     /**
      * Builder for Div2Component

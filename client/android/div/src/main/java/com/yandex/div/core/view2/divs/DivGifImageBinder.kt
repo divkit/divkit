@@ -53,7 +53,8 @@ internal class DivGifImageBinder @Inject constructor(
         baseBinder.bindView(view, div, oldDiv, divView)
 
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-        view.observeAspectRatio(expressionResolver, div.aspect)
+
+        view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
 
         view.addSubscription(
             div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }

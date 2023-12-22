@@ -7,22 +7,26 @@ import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.core.util.equalsToConstant
+import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivImageView
-import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.widget.AspectImageView
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImage
+import com.yandex.div2.DivImageScale
 import javax.inject.Inject
 
 @DivScope
@@ -37,107 +41,190 @@ internal class DivImageBinder @Inject constructor(
         val oldDiv = view.div
         if (div === oldDiv) return
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
-        val expressionResolver = divView.expressionResolver
-
         baseBinder.bindView(view, div, oldDiv, divView)
-
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
-        view.observeAspectRatio(expressionResolver, div.aspect)
-        view.addSubscription(
-            div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
-        )
-        view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
-        view.addSubscription(
-            div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, errorCollector, div) }
-        )
-        view.observePreview(divView, expressionResolver, errorCollector, div)
-        view.observeTint(expressionResolver, div.tintColor, div.tintMode)
-        view.observeFilters(div.filters, divView, view, expressionResolver)
+        val expressionResolver = divView.expressionResolver
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+
+        view.bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
+        view.bindImageScale(div, oldDiv, expressionResolver)
+        view.bindContentAlignment(div, oldDiv, expressionResolver)
+        view.bindPreview(divView, div, oldDiv, expressionResolver, errorCollector)
+        view.bindImage(divView, div, oldDiv, expressionResolver, errorCollector)
+        view.bindTint(div, oldDiv, expressionResolver)
+        view.bindFilters(divView, div, oldDiv, expressionResolver)
     }
 
-    private fun DivImageView.observeContentAlignment(
-        resolver: ExpressionResolver,
-        horizontalAlignment: Expression<DivAlignmentHorizontal>,
-        verticalAlignment: Expression<DivAlignmentVertical>
-    ) {
-        applyContentAlignment(resolver, horizontalAlignment, verticalAlignment)
+    //region Image Scale
 
-        val callback = { _: Any -> applyContentAlignment(resolver, horizontalAlignment, verticalAlignment) }
-        addSubscription(horizontalAlignment.observe(resolver, callback))
-        addSubscription(verticalAlignment.observe(resolver, callback))
+    private fun DivImageView.bindImageScale(
+        newDiv: DivImage,
+        oldDiv: DivImage?,
+        resolver: ExpressionResolver,
+    ) {
+        if (newDiv.scale.equalsToConstant(oldDiv?.scale)) {
+            return
+        }
+
+        applyImageScale(newDiv.scale.evaluate(resolver))
+
+        if (newDiv.scale.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.scale.observe(resolver) { scale -> applyImageScale(scale) }
+        )
+    }
+
+    private fun DivImageView.applyImageScale(scale: DivImageScale) {
+        imageScale = scale.toImageScale()
+    }
+
+    //endregion
+
+    //region Content Alignment
+
+    private fun DivImageView.bindContentAlignment(
+        newDiv: DivImage,
+        oldDiv: DivImage?,
+        resolver: ExpressionResolver
+    ) {
+        if (newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
+            && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)) {
+            return
+        }
+
+        applyContentAlignment(
+            newDiv.contentAlignmentHorizontal.evaluate(resolver),
+            newDiv.contentAlignmentVertical.evaluate(resolver)
+        )
+
+        if (newDiv.contentAlignmentHorizontal.isConstant() && newDiv.contentAlignmentVertical.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyContentAlignment(
+                newDiv.contentAlignmentHorizontal.evaluate(resolver),
+                newDiv.contentAlignmentVertical.evaluate(resolver)
+            )
+        }
+        addSubscription(newDiv.contentAlignmentHorizontal.observe(resolver, callback))
+        addSubscription(newDiv.contentAlignmentVertical.observe(resolver, callback))
     }
 
     private fun AspectImageView.applyContentAlignment(
-        resolver: ExpressionResolver,
-        horizontalAlignment: Expression<DivAlignmentHorizontal>,
-        verticalAlignment: Expression<DivAlignmentVertical>
+        horizontalAlignment: DivAlignmentHorizontal,
+        verticalAlignment: DivAlignmentVertical
     ) {
-        gravity = evaluateGravity(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
+        gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
     }
 
-    private fun DivImageView.observeFilters(
-        filters: List<DivFilter>?,
+    //endregion
+
+    //region Filters
+
+    private fun DivImageView.bindFilters(
         divView: Div2View,
-        subscriber: ExpressionSubscriber,
+        newDiv: DivImage,
+        oldDiv: DivImage?,
         resolver: ExpressionResolver,
     ) {
-        if (filters == null) return
-        val callback =  { _: Any -> applyFiltersAndSetBitmap(filters, divView, resolver) }
+        if (newDiv.filters?.size == oldDiv?.filters?.size) {
+            val filtersAreTheSame = newDiv.filters?.foldIndexed(initial = true) { index, result, newFilter ->
+                result && newFilter.equalsToConstant(oldDiv?.filters?.get(index))
+            } ?: true
+            if (filtersAreTheSame) {
+                return
+            }
+        }
 
-        for (filter in filters) {
+        applyFiltersAndSetBitmap(divView, newDiv.filters)
+
+        val allFiltersAreConstant = newDiv.filters?.all { filter -> filter.isConstant() }
+        if (allFiltersAreConstant != false) {
+            return
+        }
+
+        val callback = { _: Any -> applyFiltersAndSetBitmap(divView, newDiv.filters) }
+        newDiv.filters?.forEach { filter ->
             when (filter) {
-                is DivFilter.Blur -> {
-                    subscriber.addSubscription(filter.value.radius.observe(resolver, callback))
-                }
+                is DivFilter.Blur -> { addSubscription(filter.value.radius.observe(resolver, callback)) }
+                else -> Unit
             }
         }
     }
 
     private fun DivImageView.applyFiltersAndSetBitmap(
-        filters: List<DivFilter>?,
         divView: Div2View,
-        resolver: ExpressionResolver,
+        filters: List<DivFilter>?
     ) {
         val bitmap = currentBitmapWithoutFilters
-        if (bitmap != null) {
-            bitmap.applyFilters(this, filters, divView.div2Component, resolver) {
+        if (bitmap == null) {
+            setImageBitmap(null)
+        } else {
+            applyBitmapFilters(divView, bitmap, filters) {
                 setImageBitmap(it)
             }
-        } else {
-            setImageBitmap(null)
         }
     }
 
-    private fun DivImageView.observePreview(divView: Div2View,
-                                            resolver: ExpressionResolver,
-                                            errorCollector: ErrorCollector,
-                                            div: DivImage) {
-        div.preview?.let {
-            val callback = { newPreview: String ->
-                if (!isImageLoaded && newPreview != preview) {
-                    resetImageLoaded()
-                    applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
+    //endregion
+
+    //region Preview
+
+    private fun DivImageView.bindPreview(
+        divView: Div2View,
+        newDiv: DivImage,
+        oldDiv: DivImage?,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
+        if (isImageLoaded) {
+            return
+        }
+
+        if (newDiv.preview.equalsToConstant(oldDiv?.preview)
+            && newDiv.placeholderColor.equalsToConstant(oldDiv?.placeholderColor)) {
+            return
+        }
+
+        // Do not apply preview at this point. It will be done just before the start of image loading.
+
+        if (newDiv.preview.isConstantOrNull() && newDiv.placeholderColor.isConstant()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.preview?.observe(resolver) { newPreview ->
+                if (isImageLoaded || newPreview == preview) {
+                    return@observe
                 }
+                resetImageLoaded()
+                applyPreview(
+                    divView,
+                    newDiv,
+                    isHighPriorityShow(resolver, this, newDiv),
+                    resolver,
+                    errorCollector
+                )
             }
-
-            addSubscription(it.observeAndGet(resolver, callback))
-        }
+        )
     }
 
-    private fun DivImageView.applyPreview(divView: Div2View,
-                                          resolver: ExpressionResolver,
-                                          div: DivImage,
-                                          errorCollector: ErrorCollector,
-                                          synchronous: Boolean) {
-        val newPreview = div.preview?.evaluate(resolver).also { preview = it }
-
+    private fun DivImageView.applyPreview(
+        divView: Div2View,
+        div: DivImage,
+        synchronous: Boolean,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
         placeholderLoader.applyPlaceholder(
             this,
             errorCollector,
-            newPreview,
+            div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
             synchronous = synchronous,
             onSetPlaceholder = { drawable ->
@@ -148,22 +235,60 @@ internal class DivImageBinder @Inject constructor(
             onSetPreview = {
                 if (!isImageLoaded) {
                     currentBitmapWithoutFilters = it
-                    applyFiltersAndSetBitmap(div.filters, divView, resolver)
+                    applyFiltersAndSetBitmap(divView, div.filters)
                     previewLoaded()
-                    applyTint(resolver, div.tintColor, div.tintMode)
+                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                 }
             }
         )
     }
 
-    private fun DivImageView.applyImage(divView: Div2View,
-                                        resolver: ExpressionResolver,
-                                        errorCollector: ErrorCollector,
-                                        div: DivImage) {
-        val newImageUrl = div.imageUrl.evaluate(resolver)
+    //endregion
 
-        if (newImageUrl == imageUrl) {
-            applyTint(resolver, div.tintColor, div.tintMode)
+    //region Image
+
+    private fun DivImageView.bindImage(
+        divView: Div2View,
+        newDiv: DivImage,
+        oldDiv: DivImage?,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
+        if (newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)) {
+            return
+        }
+
+        applyImage(
+            divView = divView,
+            div = newDiv,
+            resolver = resolver,
+            errorCollector = errorCollector
+        )
+
+        if (newDiv.imageUrl.isConstantOrNull()) {
+            return
+        }
+
+        addSubscription(
+            newDiv.imageUrl.observe(resolver) {
+                applyImage(
+                    divView = divView,
+                    div = newDiv,
+                    resolver = resolver,
+                    errorCollector = errorCollector
+                )
+            }
+        )
+    }
+
+    private fun DivImageView.applyImage(
+        divView: Div2View,
+        div: DivImage,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector
+    ) {
+        val imageUrl = div.imageUrl.evaluate(resolver)
+        if (imageUrl == this.imageUrl) {
             return
         }
 
@@ -171,28 +296,28 @@ internal class DivImageBinder @Inject constructor(
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
         resetImageLoaded()
+        clearTint()
         loadReference?.cancel()
 
-        applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
+        applyPreview(divView, div, isHighPriorityShowPreview, resolver, errorCollector)
 
-        imageUrl = newImageUrl
-
+        this.imageUrl = imageUrl
         val reference = imageLoader.loadImage(
-            newImageUrl.toString(),
+            imageUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
                     currentBitmapWithoutFilters = cachedBitmap.bitmap
-                    applyFiltersAndSetBitmap(div.filters, divView, resolver)
+                    applyFiltersAndSetBitmap(divView, div.filters)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
-                    applyTint(resolver, div.tintColor, div.tintMode)
+                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                     invalidate()
                 }
 
                 override fun onError() {
                     super.onError()
-                    imageUrl = null
+                    this@applyImage.imageUrl = null
                 }
             }
         )
@@ -230,30 +355,39 @@ internal class DivImageBinder @Inject constructor(
         return !view.isImageLoaded && div.highPriorityPreviewShow.evaluate(resolver)
     }
 
-    private fun DivImageView.observeTint(
+    //endregion
+
+    //region Tint
+
+    private fun DivImageView.bindTint(
+        newDiv: DivImage,
+        oldDiv: DivImage?,
         resolver: ExpressionResolver,
-        tintColor: Expression<Int>?,
-        tintMode: Expression<DivBlendMode>
     ) {
-        if (tintColor == null) {
-            clearTint()
+        if (newDiv.tintColor.equalsToConstant(oldDiv?.tintColor)
+            && newDiv.tintMode.equalsToConstant(oldDiv?.tintMode)) {
             return
         }
 
-        val callback = { _: Any -> if (isImageLoaded || isImagePreview) applyTint(resolver, tintColor, tintMode) else clearTint() }
-        addSubscription(tintColor.observeAndGet(resolver, callback))
-        addSubscription(tintMode.observeAndGet(resolver, callback))
+        applyTint(newDiv.tintColor?.evaluate(resolver), newDiv.tintMode.evaluate(resolver))
+
+        if (newDiv.tintColor.isConstantOrNull() && newDiv.tintMode.isConstant()) {
+            return
+        }
+
+        val callback = { _: Any ->
+            applyTint(newDiv.tintColor?.evaluate(resolver), newDiv.tintMode.evaluate(resolver))
+        }
+        addSubscription(newDiv.tintColor?.observe(resolver, callback))
+        addSubscription(newDiv.tintMode.observe(resolver, callback))
     }
 
-    private fun ImageView.applyTint(
-        resolver: ExpressionResolver,
-        tintColor: Expression<Int>?,
-        tintMode: Expression<DivBlendMode>
+    private fun LoadableImageView.applyTint(
+        tintColor: Int?,
+        tintMode: DivBlendMode
     ) {
-        val color = tintColor?.evaluate(resolver)
-
-        if (color != null) {
-            setColorFilter(color, tintMode.evaluate(resolver).toPorterDuffMode())
+        if ((isImageLoaded || isImagePreview) && tintColor != null) {
+            setColorFilter(tintColor, tintMode.toPorterDuffMode())
         } else {
             clearTint()
         }
@@ -262,4 +396,6 @@ internal class DivImageBinder @Inject constructor(
     private fun ImageView.clearTint() {
         colorFilter = null
     }
+
+    //endregion
 }

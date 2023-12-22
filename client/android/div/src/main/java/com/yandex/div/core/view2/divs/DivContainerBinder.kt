@@ -81,7 +81,7 @@ internal class DivContainerBinder @Inject constructor(
         val subscriber = divView.expressionSubscriber
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
-        view.observeAspectRatio(resolver, div.aspect)
+        view.bindAspectRatio(div.aspect, oldDiv?. aspect, resolver)
 
         when (view) {
             is DivLinearLayout -> view.bindProperties(div, oldDiv, resolver)

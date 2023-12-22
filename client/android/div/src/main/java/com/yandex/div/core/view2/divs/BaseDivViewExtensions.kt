@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -18,11 +19,14 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -46,6 +50,8 @@ import com.yandex.div.internal.widget.SuperLineHeightTextView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.equalsToConstant
+import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -63,6 +69,7 @@ import com.yandex.div2.DivDimension
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivImageScale
@@ -81,6 +88,7 @@ import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -818,18 +826,64 @@ internal fun createCircle(
         )
     )
 
-internal fun View.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
-    if (this !is AspectView) return
-    if (aspect?.ratio == null) {
-        aspectRatio = AspectView.DEFAULT_ASPECT_RATIO
+internal fun View.bindAspectRatio(newAspect: DivAspect?, oldAspect: DivAspect?, resolver: ExpressionResolver) {
+    if (this !is AspectView) {
         return
     }
 
-    (this as? ExpressionSubscriber)?.addSubscription(
-        aspect.ratio.observeAndGet(resolver) { ratio ->
-            aspectRatio = ratio.toFloat()
+    if (newAspect?.ratio.equalsToConstant(oldAspect?.ratio)) {
+        return
+    }
+
+    applyAspectRatio(newAspect?.ratio?.evaluate(resolver))
+
+    if (newAspect?.ratio.isConstantOrNull() || this !is ExpressionSubscriber) {
+        return
+    }
+
+    addSubscription(newAspect?.ratio?.observe(resolver) { ratio -> applyAspectRatio(ratio) } ?: Disposable.NULL)
+}
+
+internal fun View.applyBitmapFilters(
+    divView: Div2View,
+    bitmap: Bitmap,
+    filters: List<DivFilter>?,
+    actionAfterFilters: (Bitmap) -> Unit
+) {
+    if (filters == null) {
+        actionAfterFilters(bitmap)
+        return
+    }
+
+    val resolver = divView.expressionResolver
+    val bitmapEffectHelper = divView.div2Component.bitmapEffectHelper
+
+    doOnActualLayout {
+        val scale = max(height / bitmap.height.toFloat(), width / bitmap.width.toFloat())
+        var result = Bitmap.createScaledBitmap(
+            /* src = */ bitmap,
+            /* dstWidth = */ (scale * bitmap.width).toInt(),
+            /* dstHeight = */ (scale * bitmap.height).toInt(),
+            /* filter = */ false
+        )
+        for (filter in filters) {
+            when (filter) {
+                is DivFilter.Blur -> {
+                    val radius = filter.value.radius.evaluate(resolver).toIntSafely().dpToPx(resources.displayMetrics)
+                    result = bitmapEffectHelper.blurBitmap(result, radius)
+                }
+
+                is DivFilter.RtlMirror -> if (isLayoutRtl()) {
+                    result = bitmapEffectHelper.mirrorBitmap(result)
+                }
+            }
         }
-    )
+        actionAfterFilters(result)
+    }
+}
+
+private fun AspectView.applyAspectRatio(ratio: Double?) {
+    aspectRatio = ratio?.toFloat() ?: AspectView.DEFAULT_ASPECT_RATIO
 }
 
 internal fun DivContentAlignmentHorizontal.toAlignmentHorizontal(): DivAlignmentHorizontal = when (this) {
