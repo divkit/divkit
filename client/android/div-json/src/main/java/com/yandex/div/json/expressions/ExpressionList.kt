@@ -56,6 +56,10 @@ class ConstantExpressionList<T : Any>(
         return Disposable.NULL
     }
 
+    override fun hashCode(): Int {
+        return values.hashCode() * 16
+    }
+
     override fun equals(other: Any?): Boolean {
         return other is ConstantExpressionList<*> && values == other.values
     }
@@ -122,6 +126,10 @@ internal class MutableExpressionList<T : Any>(
 
         value?.let { callback(it) }
         return disposable
+    }
+
+    override fun hashCode(): Int {
+        return expressions.hashCode() * 16
     }
 
     override fun equals(other: Any?): Boolean {

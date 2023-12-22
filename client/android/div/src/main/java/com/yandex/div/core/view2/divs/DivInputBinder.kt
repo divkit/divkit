@@ -53,7 +53,7 @@ internal class DivInputBinder @Inject constructor(
 
     override fun bindView(view: DivInputView, div: DivInput, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val expressionResolver = divView.expressionResolver
 

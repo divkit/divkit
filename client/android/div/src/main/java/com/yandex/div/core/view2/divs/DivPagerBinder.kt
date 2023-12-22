@@ -72,7 +72,7 @@ internal class DivPagerBinder @Inject constructor(
         }
         val resolver = divView.expressionResolver
         val oldDiv = view.div
-        if (div == oldDiv) {
+        if (div === oldDiv) {
             val adapter = view.viewPager.adapter as PagerAdapter
             if (!adapter.applyPatch(view.getRecyclerView(), divPatchCache, divView)) {
                 adapter.notifyItemRangeChanged(0, adapter.itemCount)

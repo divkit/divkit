@@ -43,7 +43,7 @@ internal class DivSliderBinder @Inject constructor(
     override fun bindView(view: DivSliderView, div: DivSlider, divView: Div2View) {
         val oldDiv = view.div
         errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val expressionResolver = divView.expressionResolver
 

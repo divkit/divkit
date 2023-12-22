@@ -35,7 +35,7 @@ internal class DivGridBinder @Inject constructor(
 
     override fun bindView(view: DivGridLayout, div: DivGrid, divView: Div2View, path: DivStatePath) {
         val oldDiv = view.div
-        if (div == oldDiv) {
+        if (div === oldDiv) {
             // todo MORDAANDROID-636
             // return
         }

@@ -88,7 +88,7 @@ internal class DivTextBinder @Inject constructor(
 
     override fun bindView(view: DivLineHeightTextView, div: DivText, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         baseBinder.bindView(view, div, oldDiv, divView)
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)

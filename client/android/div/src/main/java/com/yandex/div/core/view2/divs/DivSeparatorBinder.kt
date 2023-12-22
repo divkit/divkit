@@ -20,7 +20,7 @@ internal class DivSeparatorBinder @Inject constructor(
 
     override fun bindView(view: DivSeparatorView, div: DivSeparator, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         baseBinder.bindView(view, div, oldDiv, divView)
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)

@@ -73,7 +73,7 @@ internal class DivTabsBinder @Inject constructor(
     fun bindView(view: DivTabsLayout, div: DivTabs, divView: Div2View, divBinder: DivBinder, path: DivStatePath) {
         val oldDiv = view.div
         val resolver = divView.expressionResolver
-        if (oldDiv == div) {
+        if (oldDiv === div) {
             view.divTabsAdapter?.applyPatch(resolver, div)?.let {
                 view.div = it
                 return@bindView
@@ -139,7 +139,7 @@ internal class DivTabsBinder @Inject constructor(
         if (reusableAdapter != null) {
             reusableAdapter.path = path
             reusableAdapter.divTabsEventManager.div = div
-            if (oldDiv == div) {
+            if (oldDiv === div) {
                 // rebind tabs only
                 reusableAdapter.notifyStateChanged()
             } else {

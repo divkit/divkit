@@ -30,7 +30,7 @@ internal class DivIndicatorBinder @Inject constructor(
         }
 
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val expressionResolver = divView.expressionResolver
 

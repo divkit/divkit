@@ -102,7 +102,7 @@ internal class DivVideoBinder @Inject constructor(
 
         playerView.attach(player)
 
-        if (div == oldDiv) {
+        if (div === oldDiv) {
             view.observeElapsedTime(div, divView, player)
             view.observeMuted(div, divView, player)
             view.observeScale(div, divView, playerView)

@@ -82,7 +82,7 @@ internal class DivTreeWalk private constructor(
             return if (div == null) {
                 stack.removeLast()
                 nextDiv()
-            } else if (div == node.div || div.isLeaf || stack.size >= maxDepth) {
+            } else if (div === node.div || div.isLeaf || stack.size >= maxDepth) {
                 div
             } else {
                 stack.addLast(node(div, resolver))

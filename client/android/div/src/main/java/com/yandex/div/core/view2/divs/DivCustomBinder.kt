@@ -30,7 +30,7 @@ internal class DivCustomBinder @Inject constructor(
         val customView = view.customView
         val oldDiv = view.div
 
-        if (oldDiv == div) return
+        if (oldDiv === div) return
 
         if (customView != null && oldDiv != null) {
             extensionController.unbindView(divView, customView, oldDiv)

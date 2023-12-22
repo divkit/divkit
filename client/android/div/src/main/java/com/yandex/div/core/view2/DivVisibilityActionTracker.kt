@@ -78,7 +78,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             view.doOnHierarchyLayout(
                 action = {
                     // Prevent visibility tracking when data has changed
-                    if (scope.divData == originalDivData) {
+                    if (scope.divData === originalDivData) {
                         trackVisibilityActions(scope, view, div, visibilityActions)
                     }
 

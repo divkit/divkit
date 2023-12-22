@@ -24,7 +24,7 @@ internal class DivSelectBinder @Inject constructor(
 ) : DivViewBinder<DivSelect, DivSelectView> {
     override fun bindView(view: DivSelectView, div: DivSelect, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val expressionResolver = divView.expressionResolver
 

@@ -14,7 +14,7 @@ internal class ViewBindingProvider @Inject constructor() {
     private val observers = mutableListOf<(Binding) -> Unit>()
 
     fun update(tag: DivDataTag, data: DivData?) {
-        if (tag == current.tag && current.data == data) {
+        if (tag == current.tag && current.data === data) {
             return
         }
 

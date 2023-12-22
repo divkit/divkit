@@ -69,10 +69,7 @@ internal fun Div.canBeReused(other: Div, resolver: ExpressionResolver): Boolean 
     if (div is DivImage && otherDiv is DivImage) {
         return div.imageUrl.evaluate(resolver) == otherDiv.imageUrl.evaluate(resolver)
     }
-    if (div.background?.equals(otherDiv.background) != true) {
-        return false
-    }
-    return true
+    return div.background === otherDiv.background
 }
 
 internal val DivAnimationInterpolator.androidInterpolator: Interpolator

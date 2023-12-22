@@ -44,7 +44,7 @@ internal class DivGifImageBinder @Inject constructor(
 
     override fun bindView(view: DivGifImageView, div: DivGifImage, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 

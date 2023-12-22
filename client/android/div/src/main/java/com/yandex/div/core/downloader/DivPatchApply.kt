@@ -390,7 +390,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
     ): View? {
         when(currentView) {
             is DivRecyclerView -> {
-                if (currentView.div == divWithPatchedChild) {
+                if (currentView.div === divWithPatchedChild) {
                     val adapter = (currentView.adapter as? DivGalleryBinder.GalleryAdapter) ?: return currentView
                     currentView.div?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {
@@ -402,7 +402,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 }
             }
             is DivPagerView -> {
-                if (currentView.div == divWithPatchedChild) {
+                if (currentView.div === divWithPatchedChild) {
                     val adapter = (currentView.viewPager.getChildAt(0) as? RecyclerView)?.adapter ?: return currentView
                     currentView.div?.items?.forEachIndexed { i, child ->
                         if (child.value().id == patchedChildId) {

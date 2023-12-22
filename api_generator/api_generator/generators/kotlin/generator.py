@@ -58,14 +58,39 @@ class KotlinGenerator(Generator):
             result += '    }'
             result += EMPTY
             result += entity.value_resolving_declaration.indented(indent_width=4)
+        elif self._generate_equality and entity.instance_properties_kotlin:
+            result += EMPTY
+            result += '    private val hash = lazy(LazyThreadSafetyMode.NONE) {'
+            for prop in entity.instance_properties_kotlin:
+                ending = "+" if prop != entity.instance_properties_kotlin[-1] else ""
+                result += f'            {prop.declaration_name}.hashCode() {ending}'
+            result += '    }'
 
         if self.generate_serialization:
             result += EMPTY
             result += entity.serialization_declaration.indented(indent_width=4)
 
-        if not is_template and self._generate_equality and not entity.instance_properties:
+        if not is_template and self._generate_equality:
             result += EMPTY
-            result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
+            if entity.instance_properties:
+                result += '    override fun equals(other: Any?): Boolean {'
+                result += '        if (this === other) { return true }'
+                class_name = utils.capitalize_camel_case(entity.name)
+                result += f'        if (other !is {class_name}'
+                result += ('                || (this.hash.isInitialized() && other.hash.isInitialized() '
+                           '&& this.hash.value != other.hash.value)) {')
+                result += '            return false'
+                result += '        }'
+                result += EMPTY
+                for prop in entity.instance_properties_kotlin:
+                    prefix = "return " if prop == entity.instance_properties_kotlin[0] else "    "
+                    postfix = "&&" if prop != entity.instance_properties_kotlin[-1] else ""
+                    result += f'         {prefix}this.{prop.declaration_name} == other.{prop.declaration_name} {postfix}'
+                result += '    }'
+                result += EMPTY
+                result += '    override fun hashCode() = hash.value'
+            else:
+                result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
 
         if not is_template:
             patch = entity.copy_with_new_properties_declaration
@@ -105,10 +130,7 @@ class KotlinGenerator(Generator):
         result = Text()
         for annotation in self.kotlin_annotations.classes:
             result += annotation
-        data_prefix = 'data '
-        if entity.generation_mode.is_template or not self._generate_equality or not entity.instance_properties:
-            data_prefix = ''
-        prefix = f'{data_prefix}class {utils.capitalize_camel_case(entity.name)}'
+        prefix = f'class {utils.capitalize_camel_case(entity.name)}'
 
         interfaces = ['JSONSerializable'] if self.generate_serialization else []
         protocol_plus_super_entities = entity.protocol_plus_super_entities()
@@ -196,6 +218,16 @@ class KotlinGenerator(Generator):
             result += Text(indent_width=4, init_lines=decl)
         result += EMPTY
 
+        if not entity_enumeration.mode.is_template and self._generate_equality:
+            result += '    private val hash = lazy(LazyThreadSafetyMode.NONE) {'
+            result += '        when(this) {'
+            for i, decl in enumerate(entity_declarations, start=1):
+                naming = entity_enumeration.format_case_naming(decl)
+                result += f'            is {naming} -> {i * 31}'
+            result += '        } + this.value().hashCode()'
+            result += '    }'
+            result += EMPTY
+
         result += f'    fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
         result += '        return when (this) {'
         for decl in entity_declarations:
@@ -243,11 +275,16 @@ class KotlinGenerator(Generator):
         elif self._generate_equality:
             result += '    override fun equals(other: Any?): Boolean {'
             result += '        if (this === other) { return true }'
-            result += f'        if (other is {declaration_name}) {{'
-            result += '            return value().equals(other.value())'
+            result += f'        if (other !is {declaration_name}'
+            result += ('                || (this.hash.isInitialized() && other.hash.isInitialized() '
+                       '&& this.hash.value != other.hash.value)) {')
+            result += '            return false'
             result += '        }'
-            result += '        return false'
+            result += EMPTY
+            result += '        return this.value() == other.value()'
             result += '    }'
+            result += EMPTY
+            result += '    override fun hashCode() = hash.value'
             result += EMPTY
 
         if not self.generate_serialization:

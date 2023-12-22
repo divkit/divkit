@@ -35,7 +35,7 @@ internal class DivImageBinder @Inject constructor(
 
     override fun bindView(view: DivImageView, div: DivImage, divView: Div2View) {
         val oldDiv = view.div
-        if (div == oldDiv) return
+        if (div === oldDiv) return
 
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 

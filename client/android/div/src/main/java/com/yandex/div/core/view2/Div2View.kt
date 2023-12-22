@@ -223,7 +223,7 @@ class Div2View private constructor(
     fun setData(data: DivData?, tag: DivDataTag) = setData(data, divData, tag)
 
     fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean = synchronized(monitor) {
-        if (data == null || divData == data) {
+        if (data == null || divData === data) {
             return false
         }
         bindOnAttachRunnable?.cancel()
@@ -262,7 +262,7 @@ class Div2View private constructor(
         paths: List<DivStatePath>,
         temporary: Boolean
     ): Boolean = synchronized(monitor) {
-        if (data == null || divData == data) {
+        if (data == null || divData === data) {
             return false
         }
         bindOnAttachRunnable?.cancel()
@@ -681,7 +681,7 @@ class Div2View private constructor(
     }
 
     private fun prepareTransition(oldData: DivData?, newData: DivData, oldDiv: Div?, newDiv: Div?): Transition? {
-        if (oldDiv == newDiv) {
+        if (oldDiv === newDiv) {
             return null
         }
 
