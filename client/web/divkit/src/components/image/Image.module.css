@@ -21,6 +21,14 @@
     background-repeat: no-repeat;
 }
 
+.image_is-width-content .image__image {
+    width: auto;
+}
+
+.image_is-height-content .image__image {
+    height: auto;
+}
+
 .image_error .image__image {
     visibility: hidden;
 }

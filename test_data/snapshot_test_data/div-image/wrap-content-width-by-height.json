@@ -1,0 +1,40 @@
+{
+  "description": "Width of the image should be equal to the height of the image",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "image_block": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "image_block"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
