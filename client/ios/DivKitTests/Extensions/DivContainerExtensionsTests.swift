@@ -7,9 +7,28 @@ import BaseUIPublic
 import CommonCorePublic
 
 final class DivContainerExtensionsTests: XCTestCase {
-  func test_Empty() throws {
+  func test_NilItems() throws {
     let block = makeBlock(
-      divContainer()
+      divContainer(items: nil)
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: []
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_EmptyItems() throws {
+    let block = makeBlock(
+      divContainer(items: [])
     )
 
     let expectedBlock = try StateBlock(
@@ -54,6 +73,94 @@ final class DivContainerExtensionsTests: XCTestCase {
                 verticalAlignment: .leading
               ),
               accessibilityElement: accessibility(label: "Hello!")
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithItemBuilder() throws {
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([
+            ["text": "Item 1"],
+            ["text": "Item 2"]
+          ]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(textExpression: "@{it.text}")
+            )
+          ]
+        )
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "Item 1".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(label: "Item 1")
+            ),
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "Item 2".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(label: "Item 2")
+            ),
+          ]
+        ),
+        accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_ItemBuilder_HasHigherPriorityThanItems() throws {
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([[]]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(text: "itemBuilder")
+            )
+          ]
+        ),
+        items: [
+          divText(text: "items")
+        ]
+      )
+    )
+
+    let expectedBlock = try StateBlock(
+      child: DecoratingBlock(
+        child: ContainerBlock(
+          layoutDirection: .vertical,
+          children: [
+            DecoratingBlock(
+              child: TextBlock(
+                widthTrait: .resizable,
+                text: "itemBuilder".withTypo(),
+                verticalAlignment: .leading
+              ),
+              accessibilityElement: accessibility(label: "itemBuilder")
             ),
           ]
         ),

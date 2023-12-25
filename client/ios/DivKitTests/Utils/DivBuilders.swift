@@ -40,16 +40,23 @@ func divText(
   fontSize: Int? = nil,
   fontWeight: DivFontWeight? = nil,
   id: String? = nil,
-  text: String,
+  text: String = "",
+  textExpression: String? = nil,
   width: DivSize? = nil
 ) -> Div {
-  .divText(DivText(
+  let textValue: Expression<String>
+  if let textExpression {
+    textValue = expression(textExpression)
+  } else {
+    textValue = .value(text)
+  }
+  return .divText(DivText(
     accessibility: accessibility,
     actions: actions,
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
     id: id,
-    text: .value(text),
+    text: textValue,
     width: width
   ))
 }
@@ -76,7 +83,8 @@ func divContainer(
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
   height: DivSize? = nil,
-  items: [Div] = [],
+  itemBuilder: DivCollectionItemBuilder? = nil,
+  items: [Div]? = nil,
   width: DivSize? = nil
 ) -> Div {
   .divContainer(DivContainer(
@@ -100,7 +108,7 @@ func divContainer(
     focus: nil,
     height: height,
     id: nil,
-    itemBuilder: nil,
+    itemBuilder: itemBuilder,
     items: items,
     layoutMode: nil,
     lineSeparator: nil,
