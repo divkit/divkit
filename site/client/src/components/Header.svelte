@@ -32,11 +32,6 @@
         <div class="header__right">
             <ul class="header__links">
                 <li class="header__item">
-                    <a class="header__link" href="https://twitter.com/DivKitFramework">
-                        Twitter
-                    </a>
-                </li>
-                <li class="header__item">
                     <a class="header__link" href="https://github.com/divkit/divkit">
                         Github
                     </a>
