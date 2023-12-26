@@ -982,27 +982,6 @@
         return store;
     }
 
-    function waitForVars(vars: string[]): Promise<void> {
-        const remaining = new Set(vars);
-
-        filterDefinedVars(remaining);
-
-        if (!remaining.size) {
-            return Promise.resolve();
-        }
-
-        return new Promise(resolve => {
-            const unsubscribe = globalVariablesStore.subscribe(() => {
-                filterDefinedVars(remaining);
-
-                if (!remaining.size) {
-                    unsubscribe();
-                    resolve();
-                }
-            });
-        });
-    }
-
     function updateTheme(): void {
         if (!palette) {
             return;
@@ -1294,39 +1273,15 @@
         }
     });
 
-    const variableTriggers = json?.card?.variable_triggers;
-    if (Array.isArray(variableTriggers)) {
-        if (process.env.ENABLE_EXPRESSIONS) {
-            variableTriggers.forEach(trigger => {
-                let prevConditionResult = false;
+    const initVariableTriggers = () => {
+        const variableTriggers = json?.card?.variable_triggers;
+        if (Array.isArray(variableTriggers)) {
+            if (process.env.ENABLE_EXPRESSIONS) {
+                variableTriggers.forEach(trigger => {
+                    let prevConditionResult = false;
 
-                if (typeof trigger.condition !== 'string') {
-                    logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
-                        additional: {
-                            condition: trigger.condition
-                        }
-                    }));
-                    return;
-                }
-
-                const mode = trigger.mode || 'on_condition';
-
-                if (mode !== 'on_variable' && mode !== 'on_condition') {
-                    logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
-                        additional: {
-                            mode
-                        }
-                    }));
-                    return;
-                }
-
-                try {
-                    const ast = parse(trigger.condition, {
-                        startRule: 'JsonStringContents'
-                    });
-                    const exprVars = gatherVarsFromAst(ast);
-                    if (!exprVars.length) {
-                        logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                    if (typeof trigger.condition !== 'string') {
+                        logError(wrapError(new Error('variable_trigger has a condition that is not a string'), {
                             additional: {
                                 condition: trigger.condition
                             }
@@ -1334,8 +1289,32 @@
                         return;
                     }
 
-                    waitForVars(exprVars).then(() => {
-                        const stores = exprVars.map(name => variables.get(name)).filter(Truthy);
+                    const mode = trigger.mode || 'on_condition';
+
+                    if (mode !== 'on_variable' && mode !== 'on_condition') {
+                        logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
+                            additional: {
+                                mode
+                            }
+                        }));
+                        return;
+                    }
+
+                    try {
+                        const ast = parse(trigger.condition, {
+                            startRule: 'JsonStringContents'
+                        });
+                        const exprVars = gatherVarsFromAst(ast);
+                        if (!exprVars.length) {
+                            logError(wrapError(new Error('variable_trigger must have variables in the condition'), {
+                                additional: {
+                                    condition: trigger.condition
+                                }
+                            }));
+                            return;
+                        }
+
+                        const stores = exprVars.map(name => variables.get(name) || awaitVariableChanges(name));
 
                         derived(stores, () => {
                             const res = evalExpression(variables, ast);
@@ -1369,19 +1348,19 @@
 
                             prevConditionResult = Boolean(conditionResult.value);
                         });
-                    });
-                } catch (err) {
-                    logError(wrapError(new Error('Unable to parse variable_trigger'), {
-                        additional: {
-                            condition: trigger.condition
-                        }
-                    }));
-                }
-            });
-        } else {
-            logError(wrapError(new Error('variable_trigger is not supported')));
+                    } catch (err) {
+                        logError(wrapError(new Error('Unable to parse variable_trigger'), {
+                            additional: {
+                                condition: trigger.condition
+                            }
+                        }));
+                    }
+                });
+            } else {
+                logError(wrapError(new Error('variable_trigger is not supported')));
+            }
         }
-    }
+    };
 
     const timers = json?.card?.timers;
     if (timers && typeof document !== 'undefined') {
@@ -1431,6 +1410,8 @@
             window.addEventListener('keydown', onWindowKeyDown);
             window.addEventListener('pointerdown', onWindowPointerDown);
         }
+
+        initVariableTriggers();
     });
 
     onDestroy(() => {
