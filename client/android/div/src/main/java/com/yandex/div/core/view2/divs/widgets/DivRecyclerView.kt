@@ -120,7 +120,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
     override fun onTouchEvent(e: MotionEvent?): Boolean {
         if (scrollMode == ScrollMode.PAGING) needFling = true
 
-        val eventResult = super.onTouchEvent(e)
+        val eventResult = super.onTouchEvent(e) && canScroll()
         val action = e?.actionMasked ?: return eventResult
 
         when(action) {
@@ -143,6 +143,11 @@ internal class DivRecyclerView @JvmOverloads constructor(
         }
 
         return eventResult
+    }
+
+    private fun canScroll(): Boolean {
+        return canScrollHorizontally(-1) || canScrollHorizontally(1) ||
+            canScrollVertically(-1) || canScrollVertically(1)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

@@ -125,6 +125,19 @@
       "file": "gallery/gallery_swipe.json"
     },
     {
+      "title": "Incompletely filled gallery throws taps",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on the empty space inside the gallery"
+      ],
+      "expected_results": [
+        "Check view shown with text 'Last catched action: tap_container'"
+      ],
+      "file": "gallery/incompletely_filled_gallery_throws_taps.json"
+    },
+    {
       "title": "Paged gallery scroll",
       "automated": [
         "web"
