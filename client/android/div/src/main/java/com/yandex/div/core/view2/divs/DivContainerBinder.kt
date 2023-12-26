@@ -139,10 +139,10 @@ internal class DivContainerBinder @Inject constructor(
             }
         }
 
-        val widthAllChildrenAreIncorrect = childrenWithIncorrectWidth == items.size
         val widthHasMatchParentChild = childrenWithIncorrectWidth > 0
-        val heightAllChildrenAreIncorrect = childrenWithIncorrectHeight == items.size
+        val widthAllChildrenAreIncorrect = widthHasMatchParentChild && childrenWithIncorrectWidth == items.size
         val heightHasMatchParentChild = childrenWithIncorrectHeight > 0
+        val heightAllChildrenAreIncorrect = heightHasMatchParentChild && childrenWithIncorrectHeight == items.size
 
         val hasIncorrectSize = !div.isWrapContainer(resolver) && when {
             div.isVertical(resolver) -> widthAllChildrenAreIncorrect || heightHasMatchParentChild
