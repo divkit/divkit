@@ -5,9 +5,37 @@ import CommonCorePublic
 import LayoutKit
 import NetworkingPublic
 import Serialization
+import VGSL_Fundamentals_Tiny
 
 final class DivKitTests: XCTestCase {
   static let cardId = DivCardID(rawValue: "test_card_id")
+  
+  func test_multithreaded_blockCreation() {
+    let expectation = XCTestExpectation()
+    guard let data = try? dataFromFile(named: "heavy", subdirectory: nil) else {
+      XCTFail()
+      return
+    }
+    let components = DivKitComponents()
+    let counter = Atomic(initialValue: 0)
+    
+    for i in 0...50 {
+      let cardId = DivCardID(rawValue: "card_\(i)")
+      let result = try! components.parseDivDataWithTemplates(data, cardId: cardId)
+      onBackgroundThread {
+        let context = components.makeContext(cardId: cardId, cachedImageHolders: [])
+        let _ = try! result.value!.makeBlock(context: context)
+        
+        counter.accessWrite { counter in
+          counter += 1
+          if (counter == 50) {
+            expectation.fulfill()
+          }
+        } 
+      }
+    }
+    wait(for: [expectation])
+  }
 }
 
 extension TemplateValue where ResolvedValue: DivBlockModeling {
@@ -27,10 +55,14 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
   }
 }
 
-private func jsonDictFromFile(named name: String, subdirectory: String?) throws -> [String: Any] {
+private func dataFromFile(named name: String, subdirectory: String?) throws -> Data {
   let bundle = Bundle(for: DivKitTests.self)
   let url = bundle.url(forResource: name, withExtension: "json", subdirectory: subdirectory)!
-  let data = try Data(contentsOf: url)
+  return try Data(contentsOf: url)
+}
+
+private func jsonDictFromFile(named name: String, subdirectory: String?) throws -> [String: Any] {
+  let data = try dataFromFile(named: name, subdirectory: subdirectory)
   return try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
 }
 

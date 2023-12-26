@@ -213,6 +213,7 @@
 		8C9898422A4C59DF00FDC858 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */; };
 		8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
+		8CAB089A2B39AC15009330F3 /* heavy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8CAB08992B39AC15009330F3 /* heavy.json */; };
 		8CB03C1F2A66A07300847A65 /* PlaygroundUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */; };
 		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
@@ -482,6 +483,7 @@
 		8C97EA392A5C169E00EC0C3E /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
 		8C9898412A4C59DF00FDC858 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
 		8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionTests.swift; sourceTree = "<group>"; };
+		8CAB08992B39AC15009330F3 /* heavy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heavy.json; sourceTree = "<group>"; };
 		8CB03C1E2A66A07300847A65 /* PlaygroundUrlHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundUrlHandler.swift; sourceTree = "<group>"; };
 		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
@@ -881,6 +883,7 @@
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				8CAB08982B39ABC6009330F3 /* TestData */,
 				8C01499D287329D700BA5402 /* expression_test_data */,
 				8C23F3D229DDB2440069F3F7 /* template_test_data */,
 				8C23F44A29DDBD880069F3F7 /* unit_test_data */,
@@ -1081,6 +1084,14 @@
 				8C6DEA3D2866120A009956A1 /* Packages */,
 				8C4409D22864C3A900EF4175 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		8CAB08982B39ABC6009330F3 /* TestData */ = {
+			isa = PBXGroup;
+			children = (
+				8CAB08992B39AC15009330F3 /* heavy.json */,
+			);
+			path = TestData;
 			sourceTree = "<group>";
 		};
 		8CF329252875D534003F799A /* LayoutKitTests */ = {
@@ -1454,6 +1465,7 @@
 				8C7B1CA32865C01D0036EF4C /* gallery_without_template.json in Resources */,
 				8C7B1CA42865C01D0036EF4C /* text_card_with_template.json in Resources */,
 				8C7B1CA52865C01D0036EF4C /* text_card_without_template.json in Resources */,
+				8CAB089A2B39AC15009330F3 /* heavy.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
