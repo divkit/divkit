@@ -107,6 +107,24 @@
         }
     }
 
+    function pause(): void {
+        videoElem?.pause();
+    }
+
+    function start(): void {
+        const res = videoElem?.play();
+        if (res) {
+            res.catch(err => {
+                rootCtx.logError(wrapError(new Error('Video playing error'), {
+                    level: 'error',
+                    additional: {
+                        originalText: String(err)
+                    }
+                }));
+            });
+        }
+    }
+
     $: if (json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
@@ -116,24 +134,15 @@
         if (json.id && !hasError && !layoutParams?.fakeElement) {
             prevId = json.id;
             rootCtx.registerInstance<VideoElements>(json.id, {
-                pause() {
-                    videoElem?.pause();
-                },
-                start() {
-                    const res = videoElem?.play();
-                    if (res) {
-                        res.catch(err => {
-                            rootCtx.logError(wrapError(new Error('Video playing error'), {
-                                level: 'error',
-                                additional: {
-                                    originalText: String(err)
-                                }
-                            }));
-                        });
-                    }
-                }
+                pause,
+                start
             });
         }
+    }
+
+    // Video will not start after autoplay set in setData, do it manually
+    $: if (json && $jsonAutostart && videoElem) {
+        start();
     }
 
     $: mods = {
@@ -217,7 +226,9 @@
                     on:error={onError}
                 >
                     {#each sources as source}
-                        <source src={source.src} type={source.type} on:error={onError}>
+                        {#key source}
+                            <source src={source.src} type={source.type} on:error={onError}>
+                        {/key}
                     {/each}
                 </video>
             </div>
@@ -239,7 +250,9 @@
                 on:error={onError}
             >
                 {#each sources as source}
-                    <source src={source.src} type={source.type} on:error={onError}>
+                    {#key source}
+                        <source src={source.src} type={source.type} on:error={onError}>
+                    {/key}
                 {/each}
             </video>
         {/if}
