@@ -7,12 +7,8 @@ import LayoutKit
 
 final class DivStateManagerTests: XCTestCase {
   private let stateManager = DivStateManager()
-
   private let transition = DivAppearanceTransition.divFadeTransition(DivFadeTransition())
-
-  private let visibilityExpression = Expression<DivVisibility>.link(
-    try! ExpressionLink(rawValue: "@{visibility}", validator: nil)!
-  )
+  private let visibilityExpression: Expression<DivVisibility> = expression("@{visibility}")
 
   func test_shouldBlockAppearWithTransition_isFalseForNewBlock() {
     XCTAssertFalse(

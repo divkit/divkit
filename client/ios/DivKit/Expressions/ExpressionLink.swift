@@ -1,6 +1,7 @@
 import Foundation
 
 import CommonCorePublic
+import Serialization
 
 public struct ExpressionLink<T> {
   enum Item {
@@ -12,13 +13,12 @@ public struct ExpressionLink<T> {
   let items: [Item]
   let variablesNames: [String]
   let rawValue: String
-  let validator: ExpressionValueValidator<T>?
-  let errorTracker: ExpressionErrorTracker?
+  let validator: AnyValueValidator<T>?
 
   @usableFromInline
   init?(
     rawValue: String,
-    validator: ExpressionValueValidator<T>? = nil,
+    validator: AnyValueValidator<T>? = nil,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
   ) throws {
@@ -76,7 +76,6 @@ public struct ExpressionLink<T> {
     self.variablesNames = variablesNames
     self.rawValue = rawValue
     self.validator = validator
-    self.errorTracker = errorTracker
   }
 }
 

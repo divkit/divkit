@@ -129,7 +129,7 @@ public final class DivActionHandler {
     case let .divActionArrayRemoveValue(action):
       arrayRemoveValueActionHandler.handle(action, context: context)
     case let .divActionCopyToClipboard(action):
-      copyToClipboardActionHandler.handle(action)
+      copyToClipboardActionHandler.handle(action, context: context)
     case .none:
       isHandled = false
     default:

@@ -4,15 +4,6 @@ import Foundation
 public enum Expression<T> {
   case value(T)
   case link(ExpressionLink<T>)
-
-  public var rawValue: T? {
-    switch self {
-    case let .value(value):
-      return value
-    case .link:
-      return nil
-    }
-  }
 }
 
 extension Expression: Equatable where T: Equatable {

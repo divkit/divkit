@@ -25,7 +25,14 @@ extension DivActionBase {
   ) -> UserInterfaceAction.Payload {
     // url parameter is used for backward compatibility, it should be removed
     // when all custom div-action handlers will be replaced
-    let url = url?.rawValue.map { $0.adding(cardId: cardId.rawValue) }
+    let url: URL?
+    switch self.url {
+    case let .value(value):
+      url = value.adding(cardId: cardId.rawValue)
+    case .link, .none:
+      url = nil
+    }
+
     return .divAction(
       params: UserInterfaceAction.DivActionParams(
         action: .object(toDictionary().typedJSON()),

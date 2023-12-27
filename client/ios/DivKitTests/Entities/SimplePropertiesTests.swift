@@ -8,19 +8,19 @@ final class SimplePropertiesTests: XCTestCase {
     // TODO: boolean property represented by integer value must fail
     // XCTAssertNil(entity!.boolean!.rawValue!)
 
-    XCTAssertTrue(entity!.boolean!.rawValue!)
+    XCTAssertEqual(entity!.boolean, .value(true))
   }
 
   func test_BooleanIntAsBoolean() throws {
     let entity = try readEntity("boolean_int_as_boolean")
 
-    XCTAssertTrue(entity!.booleanInt!.rawValue!)
+    XCTAssertEqual(entity!.booleanInt, .value(true))
   }
 
   func test_BooleanIntAsInt() throws {
     let entity = try readEntity("boolean_int_as_int")
 
-    XCTAssertTrue(entity!.booleanInt!.rawValue!)
+    XCTAssertEqual(entity!.booleanInt, .value(true))
   }
 }
 

@@ -7,7 +7,7 @@ import Serialization
 func expressionTransform<T, U>(
   _ value: Any?,
   transform: (U) -> T?,
-  validator: ExpressionValueValidator<T>? = nil
+  validator: AnyValueValidator<T>? = nil
 ) -> Expression<T>? {
   do {
     if let rawValue = value as? String,
@@ -32,7 +32,7 @@ func expressionTransform<T, U>(
     return nil
   }
 
-  if let transformedValue = transform(value), validator?(transformedValue) != false {
+  if let transformedValue = transform(value), validator?.isValid(transformedValue) != false {
     return .value(transformedValue)
   }
 
@@ -56,7 +56,7 @@ func deserialize<T: ValidSerializationValue, U>(
   guard let result: Expression<U> = expressionTransform(
     value,
     transform: transform,
-    validator: validator?.isValid
+    validator: validator
   ) else {
     return .failure(NonEmptyArray(.typeMismatch(
       expected: "Expression<\(U.self)>",
@@ -76,11 +76,7 @@ func deserialize<T: ValidSerializationValue, U>(
   deserialize(
     value,
     transform: { (rawElement: T) -> DeserializationResult<Expression<U>> in
-      deserialize(
-        rawElement,
-        transform: transform,
-        validator: nil
-      )
+      deserialize(rawElement, transform: transform)
     },
     validator: validator
   )
@@ -94,7 +90,7 @@ func deserialize<T: RawRepresentable>(
   guard let result: Expression<T> = expressionTransform(
     value,
     transform: T.init(rawValue:),
-    validator: validator?.isValid
+    validator: validator
   ) else {
     return .failure(NonEmptyArray(.typeMismatch(
       expected: "Expression<\(T.self)>",

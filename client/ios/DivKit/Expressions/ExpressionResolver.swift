@@ -2,8 +2,6 @@ import Foundation
 
 import CommonCorePublic
 
-public typealias ExpressionValueValidator<T> = (T) -> Bool
-
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
@@ -173,11 +171,7 @@ public final class ExpressionResolver {
       return nil
     }
     do {
-      return try validatedValue(
-        value: evaluate(parsedExpression),
-        validator: link.validator,
-        rawValue: link.rawValue
-      )
+      return try validatedValue(value: evaluate(parsedExpression), link: link)
     } catch let error as CalcExpression.Error {
       let expression = parsedExpression.description
       errorTracker(
@@ -192,7 +186,7 @@ public final class ExpressionResolver {
 
   private func evaluateString<T>(
     link: ExpressionLink<T>,
-    initializer: (String) -> T?
+    initializer: (String) -> T? = { $0 }
   ) -> T? {
     var stringValue = ""
     for item in link.items {
@@ -213,19 +207,13 @@ public final class ExpressionResolver {
       case let .string(value):
         stringValue += value
       case let .nestedCalcExpression(link):
-        if let expression = evaluateString(
-          link: link,
-          initializer: { $0 }
-        ) {
+        if let expression = evaluateString(link: link) {
           let link = try? ExpressionLink<String>(
             rawValue: "@{\(expression)}",
-            errorTracker: link.errorTracker,
+            errorTracker: errorTracker,
             resolveNested: false
           )
-          if let link = link, let value = evaluateString(
-            link: link,
-            initializer: { $0 }
-          ) {
+          if let link = link, let value = evaluateString(link: link) {
             stringValue += value
           }
         }
@@ -240,7 +228,7 @@ public final class ExpressionResolver {
       )
       return nil
     }
-    return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
+    return validatedValue(value: result, link: link)
   }
 
   private func evaluate<T>(_ parsedExpression: ParsedCalcExpression) throws -> T {
@@ -253,14 +241,15 @@ public final class ExpressionResolver {
 
   private func validatedValue<T>(
     value: T?,
-    validator: ExpressionValueValidator<T>?,
-    rawValue: String
+    link: ExpressionLink<T>
   ) -> T? {
-    if let validator = validator, let value = value {
-      if validator(value) {
+    if let validator = link.validator, let value = value {
+      if validator.isValid(value) {
         return value
       } else {
-        errorTracker(ExpressionError("Failed to validate value: \(value)", expression: rawValue))
+        errorTracker(
+          ExpressionError("Failed to validate value: \(value)", expression: link.rawValue)
+        )
         return nil
       }
     }

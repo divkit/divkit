@@ -29,12 +29,10 @@ extension Dictionary where Key == String, Value == Any {
   @inlinable
   func getOptionalField<T, U>(
     _ key: String,
-    transform: (U) -> T?,
-    validator: AnyValueValidator<T>? = nil
+    transform: (U) -> T?
   ) throws -> Field<T>? {
     Field.makeOptional(
-      valueGetter: (try? self.getOptionalField(key, transform: transform, validator: validator))
-        .flatMap { $0 },
+      valueGetter: (try? self.getOptionalField(key, transform: transform)).flatMap { $0 },
       linkGetter: link(for: key)
     )
   }
@@ -58,13 +56,11 @@ extension Dictionary where Key == String, Value == Any {
   @inlinable
   func getOptionalField<T: TemplateValue>(
     _ key: String,
-    templateToType: [TemplateName: String],
-    validator: AnyValueValidator<T>? = nil
+    templateToType: [TemplateName: String]
   ) throws -> Field<T>? {
     try getOptionalField(
       key,
-      transform: { (dict: Self) in try? T(dictionary: dict, templateToType: templateToType) },
-      validator: validator
+      transform: { (dict: Self) in try? T(dictionary: dict, templateToType: templateToType) }
     )
   }
 }
@@ -113,13 +109,11 @@ extension Dictionary where Key == String, Value == Any {
   @inlinable
   func getOptionalArray<T: TemplateValue>(
     _ key: String,
-    templateToType: [TemplateName: String],
-    validator: AnyArrayValueValidator<T>? = nil
+    templateToType: [TemplateName: String]
   ) throws -> Field<[T]>? {
     try getOptionalArray(
       key,
-      transform: { (dict: Self) in try? T(dictionary: dict, templateToType: templateToType) },
-      validator: validator
+      transform: { (dict: Self) in try? T(dictionary: dict, templateToType: templateToType) }
     )
   }
 }
@@ -128,13 +122,11 @@ extension Dictionary where Key == String, Value == Any {
   @inlinable
   func getField<T: TemplateValue>(
     _ key: String,
-    templateToType: [TemplateName: String],
-    validator: AnyValueValidator<T>? = nil
+    templateToType: [TemplateName: String]
   ) throws -> T {
     try getField(
       key,
-      transform: { (dict: Self) in try T(dictionary: dict, templateToType: templateToType) },
-      validator: validator
+      transform: { (dict: Self) in try T(dictionary: dict, templateToType: templateToType) }
     )
   }
 }
@@ -163,7 +155,6 @@ func deserialize<T: TemplateValue>(
   _ value: Any,
   templates: [TemplateName: Any],
   templateToType: [TemplateName: String],
-  validator: AnyValueValidator<T.ResolvedValue>? = nil,
   type: T.Type
 ) -> DeserializationResult<T.ResolvedValue> {
   deserialize(
@@ -172,8 +163,7 @@ func deserialize<T: TemplateValue>(
       templates: templates,
       templateToType: templateToType,
       type: type
-    ),
-    validator: validator
+    )
   )
 }
 
