@@ -141,6 +141,37 @@ class VisibilityActionsTest {
     }
 
     @Test
+    fun disabledVisibilityActions() {
+        gallery {
+            testAsset = "regression_test_data/visibility_actions/is_enabled.json"
+            activityRule.buildContainer()
+        }
+
+        visibilityActions {
+            gallery { scrollTo(4) }
+            assert {
+                checkViewShownWithText("Last catched visibility action: none")
+            }
+        }
+    }
+
+    @Test
+    fun enabledVisibilityActions() {
+        gallery {
+            testAsset = "regression_test_data/visibility_actions/is_enabled.json"
+            activityRule.buildContainer()
+        }
+
+        visibilityActions {
+            click("Enable actions")
+            gallery { scrollTo(4) }
+            assert {
+                checkViewShownWithText("Last catched visibility action: item_4")
+            }
+        }
+    }
+
+    @Test
     fun includedVisibilityActions() {
         includedActions {
             activityRule.buildContainer()

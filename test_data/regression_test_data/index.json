@@ -1023,6 +1023,47 @@
       "file": "visibility_actions/gallery_child_of_item.json"
     },
     {
+      "title": "Visibility actions is_enabled",
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "visibility_actions",
+        "disappear_actions"
+      ],
+      "steps": [
+        "Scroll to last position",
+        "Check view shown with text 'Last catched visibility action: none'",
+        "Click on view with text 'Enable actions'",
+        "Check view shown with text 'Last catched visibility action: item_4'"
+      ],
+      "expected_results": [
+        "When actions disabled view shown with text 'Last catched visibility action: none'",
+        "When actions enabled view shown with text 'Last catched visibility action: item_{index}'"
+      ],
+      "file": "visibility_actions/is_enabled.json"
+    },
+    {
+      "title": "Actions is_enabled",
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "actions"
+      ],
+      "steps": [
+        "Click text 'Tested text'",
+        "Long click text 'Tested text'",
+        "Double click text 'Tested text'",
+        "Click on view with text 'Enable actions' and repeat steps before"
+      ],
+      "expected_results": [
+        "When actions disabled view shown with text 'Last catched action: none'",
+        "When actions enabled view shown with text 'Last catched action: {click | long_click | double_click}'"
+      ],
+      "file": "actions/is_enabled.json"
+    },
+    {
       "title": "Send select Pager using Div2View.tryLogVisibility",
       "automated": [
         "web"

@@ -24,8 +24,10 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_FOCU
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_LONG_CLICK
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.allIsNullOrEmpty
 import com.yandex.div.internal.widget.menu.OverflowMenuWrapper
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
@@ -62,13 +64,40 @@ internal class DivActionBinder @Inject constructor(
         doubleTapActions: List<DivAction>?,
         actionAnimation: DivAnimation
     ) {
+        val onApply = {
+            applyDivActions(
+                divView = divView,
+                target = target,
+                actions = actions.onlyEnabled(divView.expressionResolver),
+                doubleTapActions = doubleTapActions.onlyEnabled(divView.expressionResolver),
+                longTapActions = longTapActions.onlyEnabled(divView.expressionResolver),
+                actionAnimation = actionAnimation
+            )
+        }
+        val resolver = divView.expressionResolver
+        with(target) {
+            observe(actions, resolver) { onApply() }
+            observe(longTapActions, resolver) { onApply() }
+            observe(doubleTapActions, resolver) { onApply() }
+        }
+        onApply()
+    }
+
+    private fun applyDivActions(
+        divView: Div2View,
+        target: View,
+        actions: List<DivAction>,
+        longTapActions: List<DivAction>,
+        doubleTapActions: List<DivAction>,
+        actionAnimation: DivAnimation
+    ) {
         val clickableState = target.isClickable
         val longClickableState = target.isLongClickable
 
         val divGestureListener = DivGestureListener(
-            awaitLongClick = !longTapActions.isNullOrEmpty() || target.parentIsLongClickable()
+            awaitLongClick = longTapActions.isNotEmpty() || target.parentIsLongClickable()
         )
-        bindLongTapActions(divView, target, longTapActions, actions.isNullOrEmpty())
+        bindLongTapActions(divView, target, longTapActions, actions.isEmpty())
         bindDoubleTapActions(divView, target, divGestureListener, doubleTapActions)
         // Order is urgent: tap actions depend on double tap actions
         bindTapActions(divView, target, divGestureListener, actions, shouldIgnoreActionMenuItems)
@@ -92,10 +121,10 @@ internal class DivActionBinder @Inject constructor(
         divView: Div2View,
         target: View,
         divGestureListener: DivGestureListener,
-        actions: List<DivAction>?,
+        actions: List<DivAction>,
         shouldIgnoreActionMenuItems: Boolean
     ) {
-        if (actions.isNullOrEmpty()) {
+        if (actions.isEmpty()) {
             divGestureListener.onSingleTapListener = null
             target.setOnClickListener(null)
             target.isClickable = false
@@ -136,10 +165,10 @@ internal class DivActionBinder @Inject constructor(
     private fun bindLongTapActions(
         divView: Div2View,
         target: View,
-        actions: List<DivAction>?,
+        actions: List<DivAction>,
         noClickAction: Boolean
     ) {
-        if (actions.isNullOrEmpty()) {
+        if (actions.isEmpty()) {
             clearLongClickListener(target, longtapActionsPassToChild, noClickAction)
             return
         }
@@ -197,9 +226,9 @@ internal class DivActionBinder @Inject constructor(
         divView: Div2View,
         target: View,
         divGestureListener: DivGestureListener,
-        actions: List<DivAction>?
+        actions: List<DivAction>
     ) {
-        if (actions.isNullOrEmpty()) {
+        if (actions.isEmpty()) {
             divGestureListener.onDoubleTapListener = null
             return
         }
@@ -232,7 +261,7 @@ internal class DivActionBinder @Inject constructor(
         divView.bulkActions {
             val uuid = UUID.randomUUID().toString()
 
-            actions.forEach { action ->
+            actions.onlyEnabled(divView.expressionResolver).forEach { action ->
                 when(actionLogType) {
                     LOG_CLICK -> logger.logClick(divView, target, action, uuid)
                     LOG_LONG_CLICK -> logger.logLongClick(divView, target, action, uuid)
@@ -260,6 +289,7 @@ internal class DivActionBinder @Inject constructor(
         actionUid: String? = null,
         viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
     ) {
+        if (!action.isEnabled.evaluate(divView.expressionResolver)) return
         if (actionHandler.useActionUid && actionUid != null) {
             if (viewActionHandler == null || !viewActionHandler.handleAction(action, divView, actionUid)) {
                 actionHandler.handleAction(action, divView, actionUid)
@@ -272,7 +302,8 @@ internal class DivActionBinder @Inject constructor(
     }
 
     internal fun handleTapClick(divView: Div2View, target: View, actions: List<DivAction>) {
-        val menuAction = actions.firstOrNull { action -> !action.menuItems.isNullOrEmpty() }
+        val enabledActions = actions.onlyEnabled(divView.expressionResolver)
+        val menuAction = enabledActions.firstOrNull { action -> !action.menuItems.isNullOrEmpty() }
         if (menuAction != null) {
             prepareMenu(target, divView, menuAction) { overflowMenuWrapper ->
                 logger.logClick(divView, target, menuAction)
@@ -281,7 +312,7 @@ internal class DivActionBinder @Inject constructor(
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         } else {
-            handleBulkActions(divView, target, actions)
+            handleBulkActions(divView, target, enabledActions)
         }
     }
 
@@ -331,7 +362,7 @@ internal class DivActionBinder @Inject constructor(
                             KAssert.fail { "Menu item does not have any action" }
                             return@bulkActions
                         }
-                        actions.forEach { action ->
+                        actions.onlyEnabled(divView.expressionResolver).forEach { action ->
                             logger.logPopupMenuItemClick(
                                 divView,
                                 itemPosition,
@@ -363,6 +394,19 @@ internal class DivActionBinder @Inject constructor(
         }
     }
 }
+
+private fun View.observe(
+    actions: List<DivAction>?,
+    resolver: ExpressionResolver,
+    callback: (Any) -> Unit
+) {
+    if (this !is ExpressionSubscriber) return
+    actions?.forEach { it.isEnabled.observe(resolver, callback) }
+}
+
+private fun List<DivAction>?.onlyEnabled(
+    resolver: ExpressionResolver
+) = this?.filter { it.isEnabled.evaluate(resolver) } ?: emptyList()
 
 private fun View.parentIsLongClickable(): Boolean {
     val parent = parent as? ViewGroup ?: return false

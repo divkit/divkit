@@ -6,9 +6,12 @@ import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.GeneralClickAction
 import androidx.test.espresso.action.GeneralLocation
 import androidx.test.espresso.action.Press
@@ -18,10 +21,13 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isClickable
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.util.HumanReadables
+import androidx.test.espresso.util.TreeIterables
 import com.yandex.div.view.ViewMatchers.isDisplayedForClicking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import java.lang.Thread.sleep
 import java.util.concurrent.TimeoutException
 
 object ViewActions {
@@ -91,6 +97,7 @@ object ViewActions {
     )
 
     const val WAITING_TIMEOUT = 15_000L
+    const val WAITING_TIMEOUT_PER_TRY = 100L
     const val MAIN_THREAD_LOOP_TIME_MS = 50L
 
     /**
@@ -147,6 +154,43 @@ object ViewActions {
                     .withCause(TimeoutException())
                     .build()
             }
+        }
+    }
+
+    fun waitForView(
+        viewMatcher: Matcher<View>,
+        waitingTimeout: Long = WAITING_TIMEOUT,
+        waitTimeoutPerTry: Long = WAITING_TIMEOUT_PER_TRY
+    ): ViewInteraction {
+        val maxTries = waitingTimeout / waitTimeoutPerTry
+        var lastException: Exception? = null
+        for (i in 0..maxTries) {
+            try {
+                onView(isRoot()).perform(searchFor(viewMatcher))
+                return onView(viewMatcher)
+            } catch (e: Exception) {
+                lastException = e
+                sleep(waitTimeoutPerTry)
+            }
+        }
+        throw lastException ?: Exception("Error finding a view matching $viewMatcher")
+    }
+
+    private fun searchFor(matcher: Matcher<View>) = object : ViewAction {
+
+        override fun getConstraints() = isRoot()
+
+        override fun getDescription() = "Searching for view $matcher in the root view"
+
+        override fun perform(uiController: UiController, view: View) {
+            val childViews: Iterable<View> = TreeIterables.breadthFirstViewTraversal(view)
+            childViews.forEach {
+                if (matcher.matches(it)) return
+            }
+            throw NoMatchingViewException.Builder()
+                .withRootView(view)
+                .withViewMatcher(matcher)
+                .build()
         }
     }
 }

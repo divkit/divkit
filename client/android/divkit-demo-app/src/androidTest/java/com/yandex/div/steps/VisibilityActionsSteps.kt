@@ -2,6 +2,7 @@ package com.yandex.div.steps
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -17,6 +18,10 @@ class VisibilityActionsSteps {
 
     fun awaitViewShown() {
         VisibilityActionsIdlingResource("logViewShown").register().use { Espresso.onIdle() }
+    }
+
+    fun click(text: String): Unit = step("Click on view with text='$text'") {
+        onView(withText(text)).perform(ViewActions.click())
     }
 
     internal fun assert(f: VisibilityActionsAssertions.() -> Unit) = run {

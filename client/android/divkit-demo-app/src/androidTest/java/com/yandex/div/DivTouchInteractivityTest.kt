@@ -3,6 +3,7 @@ package com.yandex.div
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.testClicks
+import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import org.junit.Ignore
@@ -131,6 +132,37 @@ class DivTouchInteractivityTest {
             doubleClick("With double and long taps")
 
             assert { checkDoubleClickLogged("action_button", "doubletap_actions") }
+        }
+    }
+
+    @Test
+    fun disabledTapActions() {
+        testClicks {
+            testAsset = "regression_test_data/actions/is_enabled.json"
+            activityTestRule.buildContainer()
+
+            click("Tested text")
+            doubleClick("Tested text")
+            longClick("Tested text")
+
+            assert { checkShown("Last catched action: none") }
+        }
+    }
+
+    @Test
+    fun enabledTapActions() {
+        testClicks {
+            testAsset = "regression_test_data/actions/is_enabled.json"
+            activityTestRule.buildContainer()
+
+            click("Enable actions")
+
+            click("Tested text")
+            assert { checkShown("Last catched action: click", ViewActions.WAITING_TIMEOUT) }
+            doubleClick("Tested text")
+            assert { checkShown("Last catched action: double_click") }
+            longClick("Tested text")
+            assert { checkShown("Last catched action: long_click") }
         }
     }
 }

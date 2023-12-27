@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
@@ -60,9 +61,14 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
 @StepsDsl
 internal class ClickHandlingAssertions {
 
-    fun checkShown(text: String): Unit = step("View with text='$text' is shown") {
-        onView(withText(text)).check(matches(isDisplayed()))
-    }
+    fun checkShown(text: String, timeout: Long? = null): Unit =
+        step("View with text='$text' is shown") {
+            if (timeout == null) {
+                onView(withText(text))
+            } else {
+                ViewActions.waitForView(withText(text), timeout)
+            }.check(matches(isDisplayed()))
+        }
 
     fun checkClickLogged(cardId: String, id: String) =
         step("Check click on cardId=$cardId logged") {

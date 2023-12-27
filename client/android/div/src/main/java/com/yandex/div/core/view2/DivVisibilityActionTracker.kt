@@ -33,6 +33,15 @@ internal class DivVisibilityActionTracker @Inject constructor(
     private val handler = Handler(Looper.getMainLooper())
     private val trackedTokens = DivVisibilityTokenHolder()
 
+    private val isEnabledObserver = SightActionIsEnabledObserver(
+        onEnable = { scope, view, div, action ->
+            trackVisibilityActions(scope, view, div, listOf(action))
+        },
+        onDisable = { scope, _, div, action ->
+            shouldTrackVisibilityAction(scope, null, action, 0)
+        }
+    )
+
     private val visibleActions = WeakHashMap<View, Div>()
     private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
     private val previousVisibilityPercentages = WeakHashMap<View, Int>()
@@ -79,7 +88,10 @@ internal class DivVisibilityActionTracker @Inject constructor(
                 action = {
                     // Prevent visibility tracking when data has changed
                     if (scope.divData === originalDivData) {
-                        trackVisibilityActions(scope, view, div, visibilityActions)
+                        isEnabledObserver.observe(view, scope, div, visibilityActions)
+                        trackVisibilityActions(scope, view, div, visibilityActions.filter {
+                            it.isEnabled.evaluate(scope.expressionResolver)
+                        })
                     }
 
                     enqueuedVisibilityActions.remove(view)
@@ -90,6 +102,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             )
         } else {
             // Canceling tracking
+            isEnabledObserver.cancelObserving(visibilityActions)
             visibilityActions.forEach { action ->
                 shouldTrackVisibilityAction(scope, view, action, 0)
             }
@@ -102,7 +115,9 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div
     ) {
         val actions = div.value().disappearActions ?: return
-        trackVisibilityActions(scope, view, div, actions)
+        trackVisibilityActions(scope, view, div, actions.filter {
+            it.isEnabled.evaluate(scope.expressionResolver)
+        })
     }
 
     fun startTrackingViewsHierarchy(scope: Div2View, root: View, rootDiv: Div?) {
