@@ -20,6 +20,18 @@ exports[`DivText tests should create block with ellipsis 1`] = `
 }
 `;
 
+exports[`DivText tests should create block with expressions 1`] = `
+{
+  "type": "text",
+  "font_size": "@{font_size_var}",
+  "text": "Text: @{text_var}",
+  "width": {
+    "type": "fixed",
+    "value": "@{width_var}"
+  }
+}
+`;
+
 exports[`DivText tests should create block with ranges 1`] = `
 {
   "type": "text",

@@ -1,6 +1,7 @@
 import { DivFixedSize, DivMatchParentSize, DivSizeUnit, DivWrapContentSize } from './generated';
+import { DivExpression } from './safe-expression';
 
-export function fixed(value: number, unit: DivSizeUnit | undefined = undefined): DivFixedSize {
+export function fixed(value: number | DivExpression, unit: DivSizeUnit | undefined = undefined): DivFixedSize {
     if (unit === undefined) {
         return new DivFixedSize({ value: value });
     }
