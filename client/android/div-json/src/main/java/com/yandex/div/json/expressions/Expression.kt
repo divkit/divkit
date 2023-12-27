@@ -3,6 +3,7 @@ package com.yandex.div.json.expressions
 import com.yandex.div.core.Disposable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.internal.LiteralsEscaper
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
@@ -76,7 +77,29 @@ abstract class Expression<T : Any> {
         return rawValue.hashCode() * 16
     }
 
-    class ConstantExpression<T : Any>(private val value: T) : Expression<T>() {
+    class StringConstantExpression(
+        private val value: String,
+        private val defaultValue: String = "",
+        private val logger: ParsingErrorLogger = ParsingErrorLogger.LOG
+    ) : ConstantExpression<String>(value) {
+
+        private var cachedValue: String? = null
+
+        override fun evaluate(resolver: ExpressionResolver): String {
+            return cachedValue ?: try {
+                val newValue = LiteralsEscaper.process(value)
+                cachedValue = newValue
+                newValue
+            } catch (e: EvaluableException) {
+                logger.logError(e)
+                cachedValue = defaultValue
+                defaultValue
+            }
+        }
+    }
+
+    open class ConstantExpression<T : Any>(private val value: T) : Expression<T>() {
+
         override val rawValue
             get() = value as Any
 
@@ -199,7 +222,13 @@ abstract class Expression<T : Any> {
 
         @JvmStatic
         fun <T : Any> constant(value: T): Expression<T> {
-            val unTypedExpression = pool.getOrPut(value) { ConstantExpression(value) }
+            val unTypedExpression = pool.getOrPut(value) {
+                if (value is String) {
+                    StringConstantExpression(value)
+                } else {
+                    ConstantExpression(value)
+                }
+            }
             return unTypedExpression as Expression<T>
         }
 

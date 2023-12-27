@@ -7,8 +7,6 @@ internal object Tokenizer {
 
     private const val EMPTY_CHAR = '\u0000'
 
-    private val ESCAPE_LITERALS = arrayOf("'", "@{")
-
     fun tokenize(input: String): List<Token> {
         val state = TokenizationState(input)
         try {
@@ -98,69 +96,13 @@ internal object Tokenizer {
             state.forward()
         }
 
-        val string = replaceEscapingLiterals(state.part(start, state.index))
+        val string = LiteralsEscaper.process(state.part(start, state.index))
 
         return if (string.isNotEmpty()) {
             Token.Operand.Literal.Str(string)
         } else {
             null
         }
-    }
-
-    fun replaceEscapingLiterals(
-        string: String,
-        escapingLiterals: Array<String> = ESCAPE_LITERALS
-    ): String {
-        val literalBuilder = StringBuilder()
-        var index = 0
-        while (index < string.length) {
-            if (string[index] == '\\') {
-                val startIndexOfBackslash = index
-                while (index < string.length && string[index] == '\\') {
-                    index++
-                }
-                val countOfBackslashes = index - startIndexOfBackslash
-                repeat(countOfBackslashes / 2) {
-                    literalBuilder.append('\\')
-                }
-                val remainsEscapingBackslash = countOfBackslashes % 2 == 1
-                if (remainsEscapingBackslash) {
-                    if (index == string.length || string[index] == ' ') {
-                        throw TokenizingException("Alone backslash at ${index - 1}")
-                    }
-
-                    val escapingLiteralsSet = escapingLiterals.toMutableSet()
-                    var literalToReplace: String? = null
-                    var literalIndex = 0
-                    while (literalToReplace.isNullOrEmpty()
-                        && escapingLiteralsSet.isNotEmpty()
-                        && index < string.length
-                    ) {
-                        val escapingLiteralsIterator = escapingLiteralsSet.iterator()
-                        while (escapingLiteralsIterator.hasNext() && index < string.length) {
-                            val literal = escapingLiteralsIterator.next()
-                            if (literal[literalIndex] != string[index]) {
-                                escapingLiteralsIterator.remove()
-                            } else {
-                                if (literalIndex == literal.lastIndex) {
-                                    literalToReplace = literal
-                                    break
-                                }
-                            }
-                        }
-                        literalIndex++
-                        index++
-                    }
-                    if (literalToReplace.isNullOrEmpty()) {
-                        throw EvaluableException("Incorrect string escape")
-                    }
-                    literalBuilder.append(literalToReplace)
-                }
-            } else {
-                literalBuilder.append(string[index++])
-            }
-        }
-        return literalBuilder.toString()
     }
 
     private fun isAtEndOfString(state: TokenizationState, isLiteral: Boolean): Boolean {
