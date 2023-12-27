@@ -311,8 +311,13 @@ class Div2View private constructor(
     }
 
     private fun updateNow(data: DivData, tag: DivDataTag): Boolean {
-        histogramReporter?.onBindingStarted()
         val oldData = divData
+        if (oldData == null) {
+            histogramReporter.onBindingStarted()
+        } else {
+            histogramReporter.onRebindingStarted()
+        }
+
         cleanup(removeChildren = false)
 
         dataTag = tag
@@ -322,18 +327,23 @@ class Div2View private constructor(
 
         attachVariableTriggers()
 
-        if (bindOnAttachEnabled && oldData == null) {
-            histogramReporter?.onBindingPaused()
-            reportBindingResumedRunnable = SingleTimeOnAttachCallback(this) {
-                histogramReporter?.onBindingResumed()
-            }
-            reportBindingFinishedRunnable = SingleTimeOnAttachCallback(this) {
-                histogramReporter?.onBindingFinished()
-            }
-        } else {
-            histogramReporter?.onBindingFinished()
+        if (oldData != null) {
+            histogramReporter.onRebindingFinished()
+            return result
         }
 
+        if (!bindOnAttachEnabled) {
+            histogramReporter.onBindingFinished()
+            return result
+        }
+
+        histogramReporter.onBindingPaused()
+        reportBindingResumedRunnable = SingleTimeOnAttachCallback(this) {
+            histogramReporter.onBindingResumed()
+        }
+        reportBindingFinishedRunnable = SingleTimeOnAttachCallback(this) {
+            histogramReporter.onBindingFinished()
+        }
         return result
     }
 
@@ -901,7 +911,7 @@ class Div2View private constructor(
             }
             val state = newData.stateToBind ?: return
 
-            histogramReporter?.onRebindingStarted()
+            histogramReporter.onRebindingStarted()
             viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)
@@ -914,7 +924,7 @@ class Div2View private constructor(
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
             }
             attachVariableTriggers()
-            histogramReporter?.onRebindingFinished()
+            histogramReporter.onRebindingFinished()
         } catch (error: Exception) {
             updateNow(newData, dataTag)
             KAssert.fail(error)

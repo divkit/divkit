@@ -15,16 +15,16 @@ class Div2BenchmarkActivity : AppCompatActivity() {
         setContentView(rootLayout)
 
         val assetName = intent.getStringExtra(EXTRA_ASSET_NAME)
-        val rebindCount = intent.getIntExtra(EXTRA_REBIND_COUNT, -1)
+        val rebindAssetName = intent.getStringExtra(EXTRA_REBIND_ASSET_NAME)
 
         val viewController = Div2BenchmarkViewController(rootLayout)
         val divContext = divContext(activity = this)
-        benchmark = Div2Benchmark(divContext, viewController, rebindCount)
+        benchmark = Div2Benchmark(divContext, viewController)
 
         if (assetName == null) {
             viewController.showMessage("Error: asset file is not specified")
         } else {
-            benchmark.run(assetName)
+            benchmark.run(assetName, rebindAssetName)
         }
     }
 

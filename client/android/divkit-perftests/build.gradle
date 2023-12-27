@@ -47,6 +47,7 @@ task assemblePerfTests() {
             from buildDir
             into outputPerfDir
             include "**/apk/**/divkit-perftests-${buildType}.apk"
+            exclude "**/intermediates"
             eachFile { file ->
                 file.path = "mock-app.apk"
                 copied += 1
@@ -59,6 +60,7 @@ task assemblePerfTests() {
             from buildDir
             into outputPerfDir
             include "**/apk/androidTest/**/divkit-perftests-$buildType-androidTest.apk"
+            exclude "**/intermediates"
             eachFile { file ->
                 file.path = "tests.apk"
                 copied += 1

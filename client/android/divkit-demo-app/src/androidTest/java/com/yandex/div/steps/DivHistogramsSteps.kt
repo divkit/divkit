@@ -3,7 +3,7 @@ package com.yandex.div.steps
 import android.content.Intent
 import androidx.test.rule.ActivityTestRule
 import com.yandex.divkit.demo.benchmark.EXTRA_ASSET_NAME
-import com.yandex.divkit.demo.benchmark.EXTRA_REBIND_COUNT
+import com.yandex.divkit.demo.benchmark.EXTRA_REBIND_ASSET_NAME
 import com.yandex.divkit.demo.div.histogram.HistogramDispatcher
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.UiAutomator
@@ -95,7 +95,7 @@ internal class HistogramsAwaiter(private val expectedHistograms: Set<String>) {
 private fun createIntent(): Intent {
     return Intent()
         .putExtra(EXTRA_ASSET_NAME, "div2-perf/benchmark-with-templates.json")
-        .putExtra(EXTRA_REBIND_COUNT, 2)
+        .putExtra(EXTRA_REBIND_ASSET_NAME, "div2-perf/benchmark-with-templates.json")
 }
 
 private val COLD_WARM_HISTOGRAMS = setOf(

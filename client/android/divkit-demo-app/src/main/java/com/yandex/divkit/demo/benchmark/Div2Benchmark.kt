@@ -31,7 +31,6 @@ import java.util.UUID
 internal class Div2Benchmark(
     private val divContext: Div2Context,
     private val viewController: Div2BenchmarkViewController,
-    private val rebindCount: Int,
 ) {
 
     private val mainTemplateProvider = CachingTemplateProvider<DivTemplate>(
@@ -47,27 +46,32 @@ internal class Div2Benchmark(
     private val mainContext = Dispatchers.Main + job + exceptionHandler
     private val backgroundContext = newSingleThreadContext("BenchmarkThread")
 
-    fun run(assetName: String) {
+    fun run(assetName: String, rebindAssetName: String?) {
         GlobalScope.launch(mainContext) {
             warmUp()
+
             regularParserPass(passType = "Cold", assetName)
-            regularParserPass(passType = "Warm", assetName)
+            val rebindView = regularParserPass(passType = "Warm", assetName)
+
+            rebindAssetName?.let { asset ->
+                repeat(2) {
+                    rebind(rebindView, parseData(asset))
+                }
+            }
+
             finish()
         }
     }
 
-    private suspend fun regularParserPass(passType: String, assetName: String) {
-        val json = readJsonFile(assetName)
-        val environment = parseTemplates(json.optJSONObject("templates")).withLogger { e ->
-            throw RuntimeException(
-                "Benchmark expects divs without errors! Please fix them first!", e
-            )
-        }
-        val divData = parseCard(environment, json.getJSONObject("card"))
-        val divView = createView(divData)
+    private suspend fun regularParserPass(passType: String, assetName: String): Div2View {
+        val data = parseData(assetName)
+
+        val divView = createView(data)
         displayView(divView)
-        rebind(divView) { parseCard(environment, json.getJSONObject("card")) }
+
         reportMetrics(passType)
+
+        return divView
     }
 
     fun cancel() {
@@ -81,6 +85,16 @@ internal class Div2Benchmark(
         divContext.warmUp2()
         Container.parsingHistogramReporter
         delay(1_000L)
+    }
+
+    private suspend fun parseData(assetName: String): DivData {
+        val json = readJsonFile(assetName)
+        val environment = parseTemplates(json.optJSONObject("templates")).withLogger { e ->
+            throw RuntimeException(
+                "Benchmark expects divs without errors! Please fix them first!", e
+            )
+        }
+        return parseCard(environment, json.getJSONObject("card"))
     }
 
     private suspend fun readJsonFile(assetName: String): JSONObject {
@@ -149,11 +163,9 @@ internal class Div2Benchmark(
         delay(2_000L)
     }
 
-    private suspend fun rebind(divView: Div2View, divData: suspend () -> DivData) {
-        repeat(rebindCount) {
-            divView.setData(divData(), divDataTag)
-            delay(500L)
-        }
+    private suspend fun rebind(divView: Div2View, divData: DivData) {
+        divView.setData(divData, divDataTag)
+        delay(500L)
     }
 
     private fun reportMetrics(passType: String) {
