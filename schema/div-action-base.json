@@ -28,7 +28,9 @@
       "$ref": "common.json#/boolean_int",
       "$description": "translations.json#/div_action_base_is_enabled",
       "default_value": "true",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   }
 }

@@ -35,6 +35,7 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import { filterEnabledActions } from '../../utils/filterEnabledActions';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
@@ -663,7 +664,11 @@
                         selected: isSelected,
                         actionable: Boolean(item.title_click_action)
                     })}
-                    actions={item.title_click_action && !layoutParams?.fakeElement ? [item.title_click_action] : []}
+                    actions={
+                        item.title_click_action && !layoutParams?.fakeElement ?
+                            [item.title_click_action].filter(filterEnabledActions) :
+                            []
+                    }
                     attrs={{
                         id: `${instId}-tab-${index}`,
                         'aria-controls': `${instId}-panel-${index}`,

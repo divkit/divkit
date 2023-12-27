@@ -58,6 +58,7 @@
     import { Truthy } from '../../utils/truthy';
     import { shadowToCssBoxShadow } from '../../utils/shadow';
     import { isDeepEqual } from '../../utils/isDeepEqual';
+    import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -600,11 +601,11 @@
         }
 
         // todo check parent actions with customActions
-        actions = newActions;
-        doubleTapActions = newDoubleTapActions;
-        longTapActions = newLongTapActions;
-        focusActions = newFocusActions;
-        blurActions = newBlurActions;
+        actions = newActions.filter(filterEnabledActions);
+        doubleTapActions = newDoubleTapActions.filter(filterEnabledActions);
+        longTapActions = newLongTapActions.filter(filterEnabledActions);
+        focusActions = newFocusActions.filter(filterEnabledActions);
+        blurActions = newBlurActions.filter(filterEnabledActions);
     }
 
     $: {
@@ -863,11 +864,14 @@
 
         const disappearActions = layoutParams.fakeElement ? [] : json.disappear_actions;
 
+        let visAction: {
+            destroy(): void;
+        } | undefined;
         if (
             Array.isArray(visibilityActions) && visibilityActions.length ||
             Array.isArray(disappearActions) && disappearActions.length
         ) {
-            visibilityAction(node, {
+            visAction = visibilityAction(node, {
                 visibilityActions,
                 disappearActions,
                 rootCtx
@@ -896,6 +900,9 @@
             destroy() {
                 if (id) {
                     stateCtx.unregisterChild(id);
+                }
+                if (visAction) {
+                    visAction.destroy();
                 }
                 if (dev) {
                     dev.destroy();

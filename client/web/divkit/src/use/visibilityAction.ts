@@ -1,6 +1,19 @@
-import type { DisappearAction, VisibilityAction } from '../../typings/common';
+import { derived, type Readable } from 'svelte/store';
+import type { BooleanInt, DisappearAction, VisibilityAction } from '../../typings/common';
 import type { RootCtxValue } from '../context/root';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
+
+interface CalcedAction {
+    index: number | undefined;
+    visibility_percentage: number | undefined;
+    visibility_duration: number | undefined;
+    log_limit: number | undefined;
+    is_enabled: BooleanInt | undefined;
+}
+
+interface IndexedCalcedAction extends CalcedAction {
+    index: number;
+}
 
 function checkPercentage(isVisibility: boolean, val: number | undefined, defaultVal: number): number {
     if (typeof val === 'number') {
@@ -12,6 +25,10 @@ function checkPercentage(isVisibility: boolean, val: number | undefined, default
         }
     }
     return defaultVal;
+}
+
+function filterActions(it: CalcedAction): it is IndexedCalcedAction {
+    return it.is_enabled !== 0 && it.is_enabled !== false && it.index !== undefined;
 }
 
 export function visibilityAction(node: HTMLElement, {
@@ -60,104 +77,136 @@ export function visibilityAction(node: HTMLElement, {
         });
     }
 
-    const calcedList: {
-        visibility_percentage: number;
-        visibility_duration: number | undefined;
-        log_limit: number | undefined;
-    }[] = visibilityStatus.map(it => {
+    const calcedList: Readable<CalcedAction>[] = visibilityStatus.map((it, index) => {
         const isVisibility = it.type === 'visibility';
-        const calced = rootCtx.getJsonWithVars({
+        return rootCtx.getDerivedFromVars({
+            index,
             visibility_percentage: it.action.visibility_percentage,
             visibility_duration: isVisibility ?
                 (it.action as VisibilityAction).visibility_duration :
                 (it.action as DisappearAction).disappear_duration,
-            log_limit: it.action.log_limit
+            log_limit: it.action.log_limit,
+            is_enabled: it.action.is_enabled,
+        });
+    });
+
+    let observer: IntersectionObserver | undefined;
+    const cleanup = () => {
+        if (observer) {
+            observer.disconnect();
+        }
+
+        visibilityStatus.forEach(status => {
+            if (status.timer) {
+                clearTimeout(status.timer);
+            }
+        });
+    };
+
+    const totalStore = derived(calcedList, values => values);
+
+    const unsubscribe = totalStore.subscribe(values => {
+        const filtered = values.filter(filterActions);
+
+        const map: Record<number, IndexedCalcedAction> = {};
+        filtered.forEach(it => {
+            map[it.index] = it;
         });
 
-        return {
-            ...calced,
-            visibility_percentage: checkPercentage(
+        cleanup();
+
+        const thresholds = [...new Set(filtered.map(it => {
+            const isVisibility = visibilityStatus[it.index].type === 'visibility';
+
+            return checkPercentage(
                 isVisibility,
-                calced.visibility_percentage,
+                it.visibility_percentage,
                 isVisibility ? 50 : 0
-            )
-        };
-    });
+            ) / 100;
+        }))];
 
-    const thresholds = [...new Set(calcedList.map(it =>
-        it.visibility_percentage / 100
-    ))];
+        if (!thresholds.length) {
+            return;
+        }
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            visibilityStatus.forEach(status => {
-                const calcedParams = calcedList[status.index];
-                const isVisibility = status.type === 'visibility';
-                let nowVisible;
-                if (calcedParams.visibility_percentage === 0) {
-                    nowVisible = entry.intersectionRatio >= 1e-12;
-                } else {
-                    nowVisible = entry.intersectionRatio >= (calcedParams.visibility_percentage / 100);
-                }
-                const shouldProc = isVisibility ?
-                    !status.visible && nowVisible :
-                    status.visible && !nowVisible;
-                const shouldClear = isVisibility ?
-                    !nowVisible :
-                    nowVisible;
+        const observerCallback = (entries: IntersectionObserverEntry[]): void => {
+            entries.forEach(entry => {
+                filtered.forEach(calcedParams => {
+                    const status = visibilityStatus[calcedParams.index];
+                    const isVisibility = status.type === 'visibility';
+                    const percentage = checkPercentage(
+                        isVisibility,
+                        calcedParams.visibility_percentage,
+                        isVisibility ? 50 : 0
+                    );
 
-                if (shouldProc) {
-                    if (!status.finished) {
-                        status.timer = setTimeout(() => {
-                            ++status.count;
+                    let nowVisible;
+                    if (percentage === 0) {
+                        nowVisible = entry.intersectionRatio >= 1e-12;
+                    } else {
+                        nowVisible = entry.intersectionRatio >= (percentage / 100);
+                    }
 
-                            const limit = calcedParams.log_limit === 0 ? Infinity : (calcedParams.log_limit || 1);
-                            if (++status.count >= limit) {
-                                status.finished = true;
-                            }
+                    const shouldProc = isVisibility ?
+                        !status.visible && nowVisible :
+                        status.visible && !nowVisible;
+                    const shouldClear = isVisibility ?
+                        !nowVisible :
+                        nowVisible;
 
-                            const calcedAction = rootCtx.getJsonWithVars(status.action);
-                            const actionUrl = calcedAction.url;
-                            const actionTyped = calcedAction.typed;
-                            if (actionUrl) {
-                                const schema = getUrlSchema(actionUrl);
-                                if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
-                                    if (schema === 'div-action') {
-                                        rootCtx.execAction(calcedAction);
-                                    } else if (calcedAction.log_id) {
-                                        rootCtx.execCustomAction(calcedAction as VisibilityAction & { url: string });
-                                    }
+                    if (shouldProc) {
+                        if (!status.finished) {
+                            status.timer = setTimeout(() => {
+                                ++status.count;
+
+                                const limit = calcedParams.log_limit === 0 ? Infinity : (calcedParams.log_limit || 1);
+                                if (++status.count >= limit) {
+                                    status.finished = true;
                                 }
-                            } else if (actionTyped) {
-                                rootCtx.execAction(calcedAction);
-                            }
 
-                            rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
-                        }, calcedList[status.index].visibility_duration || 800);
+                                const calcedAction = rootCtx.getJsonWithVars(status.action);
+                                const actionUrl = calcedAction.url;
+                                const actionTyped = calcedAction.typed;
+                                if (actionUrl) {
+                                    const schema = getUrlSchema(actionUrl);
+                                    if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
+                                        if (schema === 'div-action') {
+                                            rootCtx.execAction(calcedAction);
+                                        } else if (calcedAction.log_id) {
+                                            rootCtx.execCustomAction(
+                                                calcedAction as VisibilityAction & { url: string }
+                                            );
+                                        }
+                                    }
+                                } else if (actionTyped) {
+                                    rootCtx.execAction(calcedAction);
+                                }
+
+                                rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
+                            }, calcedParams.visibility_duration || 800);
+                        }
+                    } else if (shouldClear) {
+                        if (status.timer) {
+                            clearTimeout(status.timer);
+                        }
                     }
-                } else if (shouldClear) {
-                    if (status.timer) {
-                        clearTimeout(status.timer);
-                    }
-                }
-                status.visible = nowVisible;
+                    status.visible = nowVisible;
+                });
             });
-        });
-    }, {
-        threshold: thresholds
-    });
+        };
 
-    observer.observe(node);
+        observer = new IntersectionObserver(observerCallback, {
+            threshold: thresholds
+        });
+
+        observer.observe(node);
+    });
 
     return {
         destroy() {
-            observer.disconnect();
+            cleanup();
 
-            visibilityStatus.forEach(status => {
-                if (status.timer) {
-                    clearTimeout(status.timer);
-                }
-            });
+            unsubscribe();
         }
     };
 }

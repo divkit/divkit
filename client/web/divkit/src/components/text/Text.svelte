@@ -26,6 +26,7 @@
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { propToString } from '../../utils/propToString';
     import { correctTintMode } from '../../utils/correctTintMode';
+    import { filterEnabledActions } from '../../utils/filterEnabledActions';
 
     export let json: Partial<DivTextData> = {};
     export let templateContext: TemplateContext;
@@ -314,7 +315,7 @@
                 newRenderList.push({
                     text: content.substring(prevIndex, index),
                     textStyles,
-                    actions: item.type === 'rangeEnd' && item.range?.actions || undefined
+                    actions: item.type === 'rangeEnd' && item.range?.actions?.filter(filterEnabledActions) || undefined
                 });
             }
 

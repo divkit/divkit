@@ -74,6 +74,7 @@
     import { TimersController } from '../utils/timers';
     import { arrayInsert, arrayRemove } from '../actions/array';
     import { copyToClipboard } from '../actions/copyToClipboard';
+    import { filterEnabledActions } from '../utils/filterEnabledActions';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -651,6 +652,10 @@
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
+        if (!filterEnabledActions(action)) {
+            return;
+        }
+
         if (actionUrl) {
             try {
                 const url = actionUrl.replace(/div-action:\/\//, '');
@@ -818,8 +823,10 @@
             return;
         }
 
-        for (let i = 0; i < actions.length; ++i) {
-            let action = actions[i];
+        const filtered = actions.filter(filterEnabledActions);
+
+        for (let i = 0; i < filtered.length; ++i) {
+            let action = filtered[i];
 
             const actionUrl = action.url;
             const actionTyped = action.typed;
@@ -850,7 +857,7 @@
                 execActionInternal(action);
             }
         }
-        actions.forEach(action => {
+        filtered.forEach(action => {
             if (action.log_id) {
                 logStat('click', action as Action);
             }

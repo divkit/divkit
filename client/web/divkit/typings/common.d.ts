@@ -185,39 +185,33 @@ export interface ActionFocusElement {
 export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArrayInsertValue |
     ActionCopyToClipboard | ActionFocusElement;
 
-export interface Action {
+export interface ActionBase {
     log_id: string;
     url?: string;
     // referer
     payload?: Record<string, unknown>;
     download_callbacks?: DownloadCallbacks;
+    typed?: TypedAction;
+    is_enabled?: BooleanInt;
+}
+
+export interface Action extends ActionBase {
     log_url?: string;
     target?: string;
-    typed?: TypedAction;
 }
 
-export interface VisibilityAction {
-    log_id: string;
-    url?: string;
-    // referer?: string;
-    payload?: Record<string, string>;
-    download_callbacks?: DownloadCallbacks;
+export interface SightAction extends ActionBase {
+    log_limit?: number;
+}
+
+export interface VisibilityAction extends SightAction {
     visibility_percentage?: number;
     visibility_duration?: number;
-    log_limit?: number;
-    typed?: TypedAction;
 }
 
-export interface DisappearAction {
-    log_id: string;
-    url?: string;
-    // referer?: string;
-    payload?: Record<string, string>;
-    download_callbacks?: DownloadCallbacks;
+export interface DisappearAction extends SightAction {
     visibility_percentage?: number;
     disappear_duration?: number;
-    log_limit?: number;
-    typed?: TypedAction;
 }
 
 export type StatCallback = (details: {
