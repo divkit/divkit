@@ -27,6 +27,7 @@
     import { propToString } from '../../utils/propToString';
     import { correctTintMode } from '../../utils/correctTintMode';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
+    import { autoEllipsize } from '../../use/autoEllipsize';
 
     export let json: Partial<DivTextData> = {};
     export let templateContext: TemplateContext;
@@ -102,6 +103,7 @@
     $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
     $: jsonTextGradient = rootCtx.getDerivedFromVars(json.text_gradient);
     $: jsonSelectable = rootCtx.getDerivedFromVars(json.selectable);
+    $: jsonAutoEllipsize = rootCtx.getDerivedFromVars(json.auto_ellipsize);
 
     $: {
         text = propToString($jsonText);
@@ -132,6 +134,8 @@
 
             newMaxHeight = lines * lineHeight + 'em';
             newLineClamp = lines;
+            newMultiline = true;
+        } else if ($jsonAutoEllipsize && $jsonMaxLines !== 1) {
             newMultiline = true;
         }
 
@@ -413,9 +417,16 @@
     {templateContext}
     {layoutParams}
 >
-    <span class={genClassName('text__inner', css, innerMods)} style={makeStyle(style)}>
+    <span
+        class={genClassName('text__inner', css, innerMods)}
+        style={makeStyle(style)}
+        use:autoEllipsize={{
+            enabled: $jsonAutoEllipsize,
+            lineClamp: typeof lineClamp === 'number' ? lineClamp : undefined
+        }}
+    >
         {#if renderList.length}
-            {#each renderList as item, index}
+            {#each renderList as item}
                 {#if 'text' in item}
                     {#if item.text}
                         <TextRangeView
@@ -429,22 +440,22 @@
                     {/if}
                 {:else if item.image}
                     <span style={makeStyle(item.image.wrapperStyle)}><img
-                            class={css.text__image}
-                            src={item.image.url}
-                            loading="lazy"
-                            decoding="async"
-                            aria-hidden="true"
-                            alt=""
-                            style={makeStyle({
-                                width: item.image.width,
-                                height: item.image.height,
-                                // Normalizes line-height for the containing text line
-                                'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
-                                'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
-                                filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
-                            })}
-                            on:error={onImgError}
-                        ></span>
+                        class={css.text__image}
+                        src={item.image.url}
+                        loading="lazy"
+                        decoding="async"
+                        aria-hidden="true"
+                        alt=""
+                        style={makeStyle({
+                            width: item.image.width,
+                            height: item.image.height,
+                            // Normalizes line-height for the containing text line
+                            'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
+                            'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
+                            filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined
+                        })}
+                        on:error={onImgError}
+                    ></span>
                 {/if}
             {/each}
         {:else}

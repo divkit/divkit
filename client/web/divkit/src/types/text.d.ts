@@ -60,11 +60,10 @@ export interface TextEllipsis {
 
 export interface DivTextData extends DivBaseData, DivActionableData, TextStyles {
     type: 'text';
-    // font_family;
     // font_size_unit;
     max_lines?: number;
     // min_hidden_lines;
-    // auto_ellipsize;
+    auto_ellipsize?: BooleanInt;
     text_alignment_horizontal?: AlignmentHorizontal;
     text_alignment_vertical?: AlignmentVertical;
     focused_text_color?: string;

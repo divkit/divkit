@@ -226,7 +226,8 @@
           "$ref": "common.json#/boolean_int",
           "$description": "translations.json#/div_text_auto_ellipsize",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "letter_spacing": {
