@@ -69,6 +69,15 @@ extension DivBase {
       boundary = nil
     }
 
+    let shadow = border?.resolveShadow(expressionResolver)
+    
+    let accessibilityElement = (accessibility ?? DivAccessibility())
+      .resolve(
+        expressionResolver,
+        id: id,
+        customDescriptionProvider: customA11yDescriptionProvider
+      )
+
     block = try applyBackground(
       getBackground(focusState),
       to: block,
@@ -77,7 +86,7 @@ extension DivBase {
     .addingDecorations(
       boundary: boundary,
       border: border?.resolveBorder(expressionResolver),
-      shadow: border?.resolveShadow(expressionResolver),
+      shadow: shadow,
       visibilityActions: hasVisibilityActions ? visibilityActions : nil,
       lastVisibleBounds: hasVisibilityActions ? Property<CGRect>(
         getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
@@ -89,32 +98,26 @@ extension DivBase {
         }
       ) : nil,
       scheduler: hasVisibilityActions ? context.scheduler : nil,
-      tooltips: tooltips.makeTooltips(context: context)
+      tooltips: tooltips.makeTooltips(context: context),
+      accessibilityElement: accessibilityElement
     )
-    
+
+    let rotation = transform?.resolveRotation(expressionResolver)
+
     if let transform {
       block = block.addingTransform(
-        transform: transform.resolveRotation(expressionResolver)
+        transform: rotation
           .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
         anchorPoint: transform.resolveAnchorPoint(expressionResolver)
       )
     }
-    
-    let accessibilityElement = (accessibility ?? DivAccessibility())
-      .resolve(
-        expressionResolver,
-        id: id,
-        customDescriptionProvider: customA11yDescriptionProvider
-      )
 
     block = applyTransitioningAnimations(to: block, context: context, statePath: statePath)
       .addActions(context: context, actionsHolder: actionsHolder)
       .addingEdgeInsets(externalInsets, clipsToBounds: false)
       .addingDecorations(
-        boundary: transform?.resolveRotation(expressionResolver).flatMap { _ in .noClip } ??
-          border?.resolveShadow(expressionResolver).flatMap { _ in .noClip },
-        alpha: CGFloat(resolveAlpha(expressionResolver)),
-        accessibilityElement: accessibilityElement
+        boundary: rotation != nil || shadow != nil ? .noClip : nil,
+        alpha: CGFloat(resolveAlpha(expressionResolver))
       )
 
     return applyExtensionHandlersAfterBaseProperties(

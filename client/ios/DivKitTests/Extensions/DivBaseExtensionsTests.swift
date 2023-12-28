@@ -18,10 +18,33 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
-        child: SeparatorBlock(
-          color: color("#14000000")
-        ),
+        child: separatorBlock(),
         accessibilityElement: accessibility(identifier: "id1")
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithMarginsAndPaddings() throws {
+    let block = makeBlock(
+      divText(
+        margins: DivEdgeInsets(bottom: .value(10), top: .value(10)),
+        paddings: DivEdgeInsets(left: .value(20), right: .value(20)),
+        text: "Hello!"
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: textBlock(text: "Hello!"),
+          paddings: EdgeInsets(horizontal: 20),
+          accessibilityElement: accessibility(label: "Hello!")
+        ),
+        boundary: .noClip,
+        paddings: EdgeInsets(vertical: 10)
       ),
       ids: []
     )
@@ -42,14 +65,41 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
-        child: SeparatorBlock(
-          color: color("#14000000")
-        ),
+        child: separatorBlock(),
         accessibilityElement: accessibility(
           traits: .button,
           label: "Accessibility description",
           identifier: "id1"
         )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_MarginsOverAccessibility() throws {
+    let block = makeBlock(
+      divSeparator(
+        accessibility: DivAccessibility(
+          description: .value("Accessibility description"),
+          type: .button
+        ),
+        margins: DivEdgeInsets(bottom: .value(10), top: .value(10))
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: separatorBlock(),
+          accessibilityElement: accessibility(
+            traits: .button,
+            label: "Accessibility description"
+          )
+        ),
+        boundary: .noClip,
+        paddings: EdgeInsets(vertical: 10)
       ),
       ids: []
     )
@@ -82,9 +132,38 @@ final class DivBaseExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: []
         ),
-        actions: NonEmptyArray(actions.compactMap { $0.uiAction(context: .default) }),
+        actions: NonEmptyArray(actions.compactMap { $0.uiAction }),
         actionAnimation: .default,
         accessibilityElement: .default
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_MarginsOverActions() throws {
+    let action = DivAction(
+      logId: "action_log_id",
+      url: .value(url("https://some.url"))
+    )
+    let block = makeBlock(
+      divSeparator(
+        actions: [action],
+        margins: DivEdgeInsets(bottom: .value(10), top: .value(10))
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: DecoratingBlock(
+          child: separatorBlock(),
+          actions: NonEmptyArray(action.uiAction!),
+          actionAnimation: .default,
+          accessibilityElement: .default
+        ),
+        boundary: .noClip,
+        paddings: EdgeInsets(vertical: 10)
       ),
       ids: []
     )
@@ -116,9 +195,7 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
-        child: SeparatorBlock(
-          color: color("#14000000")
-        ),
+        child: separatorBlock(),
         childAlpha: 0.0
       ),
       ids: []

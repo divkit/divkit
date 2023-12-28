@@ -10,6 +10,20 @@ func makeBlock(_ div: Div) -> StateBlock {
   try! divData(div).makeBlock(context: .default) as! StateBlock
 }
 
+func separatorBlock() -> Block {
+  SeparatorBlock(
+    color: color("#14000000")
+  )
+}
+
+func textBlock(text: String) -> Block {
+  TextBlock(
+    widthTrait: .resizable,
+    text: text.withTypo(),
+    verticalAlignment: .leading
+  )
+}
+
 extension AccessibilityElement {
   static let `default` = accessibility(traits: .none, label: nil)
 }

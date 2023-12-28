@@ -90,12 +90,12 @@ final class DivContainerExtensionsTests: XCTestCase {
         itemBuilder: DivCollectionItemBuilder(
           data: .value([
             ["text": "Item 1"],
-            ["text": "Item 2"]
+            ["text": "Item 2"],
           ]),
           prototypes: [
             DivCollectionItemBuilder.Prototype(
               div: divText(textExpression: "@{it.text}")
-            )
+            ),
           ]
         )
       )
@@ -140,11 +140,11 @@ final class DivContainerExtensionsTests: XCTestCase {
           prototypes: [
             DivCollectionItemBuilder.Prototype(
               div: divText(text: "itemBuilder")
-            )
+            ),
           ]
         ),
         items: [
-          divText(text: "items")
+          divText(text: "items"),
         ]
       )
     )

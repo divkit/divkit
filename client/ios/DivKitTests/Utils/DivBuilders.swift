@@ -40,6 +40,8 @@ func divText(
   fontSize: Int? = nil,
   fontWeight: DivFontWeight? = nil,
   id: String? = nil,
+  margins: DivEdgeInsets? = nil,
+  paddings: DivEdgeInsets? = nil,
   text: String = "",
   textExpression: String? = nil,
   width: DivSize? = nil
@@ -56,6 +58,8 @@ func divText(
     fontSize: fontSize.map { .value($0) },
     fontWeight: fontWeight.map { .value($0) },
     id: id,
+    margins: margins,
+    paddings: paddings,
     text: textValue,
     width: width
   ))
@@ -63,16 +67,22 @@ func divText(
 
 func divSeparator(
   accessibility: DivAccessibility? = nil,
+  actions: [DivAction]? = nil,
   delimiterStyle: DivSeparator.DelimiterStyle? = nil,
   id: String? = nil,
+  margins: DivEdgeInsets? = nil,
+  paddings: DivEdgeInsets? = nil,
   transitionIn: DivAppearanceTransition? = nil,
   transitionTriggers: [DivTransitionTrigger]? = nil,
   visibility: Expression<DivVisibility>? = nil
 ) -> Div {
   .divSeparator(DivSeparator(
     accessibility: accessibility,
+    actions: actions,
     delimiterStyle: delimiterStyle,
     id: id,
+    margins: margins,
+    paddings: paddings,
     transitionIn: transitionIn,
     transitionTriggers: transitionTriggers,
     visibility: visibility
