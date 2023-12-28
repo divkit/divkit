@@ -15,7 +15,7 @@ function arrayGetter(jsType: string, runtimeType: string) {
         if (
             jsType === 'array' && !Array.isArray(val) ||
             jsType !== 'array' && type !== jsType ||
-            type === 'obejct' && val === null
+            type === 'object' && val === null
         ) {
             if (type === 'object') {
                 if (Array.isArray(val)) {

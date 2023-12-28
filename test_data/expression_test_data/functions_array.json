@@ -811,6 +811,27 @@
       ]
     },
     {
+      "name": "getDictFromArray(null_array, 0) => error",
+      "expression": "@{getDictFromArray(null_array, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromArray(<array>, 0)]. Incorrect value type: expected \"dict\", got \"null\"."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "null_array",
+          "value": [
+            null
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
       "name": "len(array) => 0",
       "expression": "@{len(array)}",
       "expected": {
