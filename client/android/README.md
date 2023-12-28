@@ -95,7 +95,7 @@ You can override `DivCustomContainerViewAdapter#CreateView` like this:
 div.items!!.forEach {
    val childDivView = getDivChildFactory(divView).createChildView(
            it,
-           DivStatePath.fromState(divView.id),
+           path,
            divView
    )
    (customView as ViewGroup).addView(childDivView)
@@ -109,7 +109,7 @@ for (i in div.items!!.indices) {
    getDivChildFactory(divView).bindChildView(
            childDivView,
            childDiv,
-           DivStatePath.fromState(divView.id),
+           path,
            divView
    )
 }

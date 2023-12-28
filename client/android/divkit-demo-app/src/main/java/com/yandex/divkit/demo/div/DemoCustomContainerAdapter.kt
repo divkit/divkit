@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter.Companion.getDivChildFactory
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
@@ -35,7 +34,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
             div.items!!.forEach {
                 val childDivView = getDivChildFactory(divView).createChildView(
                     it,
-                    DivStatePath.fromState(divView.id.toLong()),
+                    path,
                     divView
                 )
                 (customView as ViewGroup).addView(childDivView)
@@ -57,7 +56,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
                         getDivChildFactory(divView).bindChildView(
                             childDivView,
                             childDiv,
-                            DivStatePath.fromState(divView.id.toLong()),
+                            path,
                             divView
                         )
                     }
