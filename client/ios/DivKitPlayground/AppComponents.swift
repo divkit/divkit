@@ -15,8 +15,8 @@ enum AppComponents {
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _, _ in },
     variableStorage: DivVariableStorage? = nil
   ) -> DivKitComponents {
-    let performer = URLRequestPerformer(urlTransform: nil)
-    let requester = NetworkURLResourceRequester(performer: performer)
+    let requestPerformer = URLRequestPerformer(urlTransform: nil)
+    let requester = NetworkURLResourceRequester(performer: requestPerformer)
     let lottieExtensionHanlder = LottieExtensionHandler(
       factory: LottieAnimationFactory(),
       requester: requester
@@ -36,7 +36,7 @@ enum AppComponents {
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,
       layoutDirection: layoutDirection,
-      patchProvider: PlaygroundPatchProvider(),
+      patchProvider: PlaygroundPatchProvider(requestPerformer: requestPerformer),
       reporter: reporter,
       trackVisibility: { logId, cardId in
         AppLogger.info("Visibility: cardId = \(cardId), logId = \(logId)")

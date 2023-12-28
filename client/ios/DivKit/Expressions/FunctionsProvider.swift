@@ -27,7 +27,7 @@ final class FunctionsProvider {
       GetStoredValueFunctions.allCases.forEach {
         functions.put(
           $0.rawValue,
-          $0.getFunction { self.persistentValuesStorage.get(name: $0) }
+          $0.getFunction(persistentValuesStorage.get)
         )
       }
       return functions

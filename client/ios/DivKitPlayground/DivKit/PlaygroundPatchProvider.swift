@@ -7,10 +7,8 @@ import NetworkingPublic
 struct PlaygroundPatchProvider: DivPatchProvider {
   private let downloader: DivPatchDownloader
 
-  init() {
-    self.downloader = DivPatchDownloader(
-      requestPerformer: URLRequestPerformer(urlTransform: nil)
-    )
+  init(requestPerformer: URLRequestPerforming) {
+    downloader = DivPatchDownloader(requestPerformer: requestPerformer)
   }
 
   func getPatch(url: URL, completion: @escaping DivPatchProviderCompletion) {
