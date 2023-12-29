@@ -221,14 +221,14 @@ internal class DivStateBinder @Inject constructor(
         val horizontalAlignment = div.alignmentHorizontal
         val verticalAlignment = div.alignmentVertical
 
-        listOf(horizontalAlignment, verticalAlignment)
-            .applyIfNotEquals(listOf(oldDiv?.alignmentHorizontal, oldDiv?.alignmentVertical)) {
-                val resolvedHorizontalAlignment = horizontalAlignment?.evaluate(resolver)
-                    ?: extractParentContentAlignmentHorizontal(resolver)?.toAlignmentHorizontal()
-                val resolvedVerticalAlignment = verticalAlignment?.evaluate(resolver)
-                    ?: extractParentContentAlignmentVertical(resolver)?.toAlignmentVertical()
-                applyAlignment(resolvedHorizontalAlignment, resolvedVerticalAlignment)
-            }
+        if (horizontalAlignment != oldDiv?.alignmentHorizontal ||
+            verticalAlignment != oldDiv?.alignmentVertical) {
+            val resolvedHorizontalAlignment = horizontalAlignment?.evaluate(resolver)
+                ?: extractParentContentAlignmentHorizontal(resolver)?.toAlignmentHorizontal()
+            val resolvedVerticalAlignment = verticalAlignment?.evaluate(resolver)
+                ?: extractParentContentAlignmentVertical(resolver)?.toAlignmentVertical()
+            applyAlignment(resolvedHorizontalAlignment, resolvedVerticalAlignment)
+        }
     }
 
     private fun DivStateLayout.observeStateIdVariable(div: DivState,

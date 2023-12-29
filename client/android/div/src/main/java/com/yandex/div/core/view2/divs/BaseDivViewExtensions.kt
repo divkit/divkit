@@ -582,28 +582,6 @@ internal fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
     id = viewId
 }
 
-internal inline fun <T> Any?.applyIfNotEquals(second: T, applyRef: () -> Unit) {
-    if (this != second) {
-        applyRef.invoke()
-    }
-}
-
-internal inline fun <T> List<Any?>.applyIfNotEquals(second: List<T>, applyRef: () -> Unit) {
-    if (this.size != second.size) {
-        applyRef()
-
-        return
-    } else {
-        zip(second) { t, s ->
-            if (t != s) {
-                applyRef()
-
-                return
-            }
-        }
-    }
-}
-
 internal val DivBase.hasSightActions: Boolean
     get() = visibilityAction != null || !visibilityActions.isNullOrEmpty() || !disappearActions.isNullOrEmpty()
 
