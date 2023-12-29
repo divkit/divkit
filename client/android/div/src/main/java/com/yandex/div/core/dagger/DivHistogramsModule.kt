@@ -7,8 +7,8 @@ import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.histogram.reporter.HistogramReporterDelegateImpl
-import dagger.Module
-import dagger.Provides
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import javax.inject.Provider
 
 @Module

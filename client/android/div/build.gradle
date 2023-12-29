@@ -33,8 +33,8 @@ dependencies {
     api project(path: ':div-states')
     api project(path: ':div-storage')
 
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.yandex.yatagan:api-compiled:$versions.yatagan"
+    kapt "com.yandex.yatagan:processor-jap:$versions.yatagan"
 
     implementation("androidx.appcompat:appcompat:$versions.androidx.appcompat") {
         exclude group: "androidx.fragment", module: "fragment"

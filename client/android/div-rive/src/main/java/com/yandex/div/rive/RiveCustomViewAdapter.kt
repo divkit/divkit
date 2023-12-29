@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.View
 import app.rive.runtime.kotlin.core.Rive
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View

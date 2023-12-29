@@ -1,6 +1,5 @@
 ext.versions = [
         coroutines                      : '1.6.0',
-        dagger                          : '2.38',
         dataStore                       : '1.0.0',
         dokka                           : '1.8.20',
         exoPlayer                       : '2.18.4',
@@ -34,7 +33,8 @@ ext.versions = [
         kotlinSerialization             : '1.3.2',
         stetho                          : '1.6.0',
         strikt                          : '0.28.2',
-        tinkoffAllure                   : '2.5.1'
+        tinkoffAllure                   : '2.5.1',
+        yatagan                         : '1.4.1',
 ]
 
 ext.versions.androidx = [

@@ -17,7 +17,7 @@ import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.RawJsonRepositoryException
 import com.yandex.div.storage.rawjson.RawJson
-import dagger.Lazy
+import com.yandex.yatagan.Lazy
 import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject

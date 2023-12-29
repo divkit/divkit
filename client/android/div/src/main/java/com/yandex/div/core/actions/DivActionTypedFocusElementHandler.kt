@@ -6,8 +6,9 @@ import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionTyped
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActionTypedHandler {
     override fun handleAction(action: DivActionTyped, view: Div2View): Boolean = when (action) {
         is DivActionTyped.FocusElement -> {

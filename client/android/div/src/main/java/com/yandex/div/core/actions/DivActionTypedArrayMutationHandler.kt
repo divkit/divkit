@@ -6,7 +6,9 @@ import com.yandex.div.internal.util.asList
 import com.yandex.div2.DivActionTyped
 import org.json.JSONArray
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class DivActionTypedArrayMutationHandler @Inject constructor()
     : DivActionTypedHandler {
 

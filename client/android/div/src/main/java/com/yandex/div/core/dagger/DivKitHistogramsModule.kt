@@ -7,13 +7,12 @@ import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
-import dagger.Module
-import dagger.Provides
-import dagger.internal.DoubleCheck
+import com.yandex.div.internal.util.DoubleCheckProvider
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import javax.inject.Provider
-import javax.inject.Scope
 import javax.inject.Singleton
 
 @Module
@@ -71,17 +70,17 @@ internal object DivKitHistogramsModule {
             histogramConfiguration.isSizeRecordingEnabled ->
                 executorService as Provider<Executor>
 
-            else -> DoubleCheck.provider(Provider { Executor {} })
+            else -> Provider { Executor {} }
         }
     }
 
     private fun provideHistogramReporter(
         histogramReporterDelegate: HistogramReporterDelegate,
     ): Provider<HistogramReporter> {
-        return DoubleCheck.provider(Provider {
+        return DoubleCheckProvider {
             createHistogramReporter(
                 histogramReporterDelegate
             )
-        })
+        }
     }
 }

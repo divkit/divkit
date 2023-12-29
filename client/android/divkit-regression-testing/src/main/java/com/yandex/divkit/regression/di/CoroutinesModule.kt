@@ -1,7 +1,7 @@
 package com.yandex.divkit.regression.di
 
-import dagger.Module
-import dagger.Provides
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton

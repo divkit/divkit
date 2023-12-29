@@ -10,9 +10,9 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div-core')
     implementation project(path: ':logging')
+    implementation project(path: ':utils')
 
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+    implementation "com.yandex.yatagan:api-compiled:$versions.yatagan"
 
     implementation "androidx.core:core-ktx:$versions.androidx.core"
 }

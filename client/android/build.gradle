@@ -61,7 +61,11 @@ allprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
-            freeCompilerArgs = ['-Xjvm-default=all', '-opt-in=com.yandex.div.data.DivModelInternalApi']
+            freeCompilerArgs = [
+                    '-Xjvm-default=all',
+                    '-opt-in=com.yandex.div.data.DivModelInternalApi',
+                    '-opt-in=com.yandex.yatagan.ConditionsApi',
+            ]
             languageVersion = "1.5"
             apiVersion = "1.5"
             jvmTarget = "1.8"
@@ -115,7 +119,6 @@ apiValidation {
         "unit-test-common"
     ]
     ignoredPackages += ["com.yandex.div.internal"]
-    nonPublicMarkers += ["dagger.internal.DaggerGenerated"]
 }
 
 task reportVersion {

@@ -19,14 +19,13 @@ import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
+import com.yandex.yatagan.Module;
+import com.yandex.yatagan.Provides;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import dagger.Module;
-import dagger.Provides;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
@@ -54,9 +53,9 @@ public class DivConfiguration {
     private final DivVisibilityChangeListener mDivVisibilityChangeListener;
     @NonNull
     private final DivCustomViewFactory mDivCustomViewFactory;
-    @Nullable
+    @NonNull
     private final DivCustomViewAdapter mDivCustomViewAdapter;
-    @Nullable
+    @NonNull
     private final DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
     @NonNull
     private final DivPlayerFactory mDivPlayerFactory;
@@ -109,8 +108,8 @@ public class DivConfiguration {
             @NonNull Div2ImageStubProvider div2ImageStubProvider,
             @NonNull DivVisibilityChangeListener divVisibilityChangeListener,
             @NonNull DivCustomViewFactory divCustomViewFactory,
-            @Nullable DivCustomViewAdapter divCustomViewAdapter,
-            @Nullable DivCustomContainerViewAdapter divCustomContainerViewAdapter,
+            @NonNull DivCustomViewAdapter divCustomViewAdapter,
+            @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter,
             @NonNull DivPlayerFactory divPlayerFactory,
             @NonNull DivTooltipRestrictor tooltipRestrictor,
             @NonNull List<DivExtensionHandler> extensionHandlers,
@@ -119,8 +118,8 @@ public class DivConfiguration {
             @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
             @NonNull ViewPreCreationProfile viewPreCreationProfile,
             @NonNull ViewPoolProfiler.Reporter reporter,
-            @Nullable GlobalVariableController globalVariableController,
-            @Nullable DivVariableController divVariableController,
+            @NonNull GlobalVariableController globalVariableController,
+            @NonNull DivVariableController divVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
             boolean longtapActionsPassToChild,
@@ -230,13 +229,13 @@ public class DivConfiguration {
     }
 
     @Provides
-    @Nullable
+    @NonNull
     public DivCustomViewAdapter getDivCustomViewAdapter() {
         return mDivCustomViewAdapter;
     }
 
     @Provides
-    @Nullable
+    @NonNull
     public DivCustomContainerViewAdapter getDivCustomContainerViewAdapter() {
         return mDivCustomContainerViewAdapter;
     }
@@ -719,8 +718,9 @@ public class DivConfiguration {
                     mDivVisibilityChangeListener == null ?
                             DivVisibilityChangeListener.STUB : mDivVisibilityChangeListener,
                     mDivCustomViewFactory == null ? DivCustomViewFactory.STUB : mDivCustomViewFactory,
-                    mDivCustomViewAdapter,
-                    mDivCustomContainerViewAdapter,
+                    mDivCustomViewAdapter == null ? DivCustomViewAdapter.STUB : mDivCustomViewAdapter,
+                    mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
+                            : mDivCustomContainerViewAdapter,
                     mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,

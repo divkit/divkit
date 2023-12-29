@@ -2,7 +2,6 @@ package com.yandex.div.video.custom
 
 import android.view.View
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View

@@ -10,7 +10,9 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionCopyToClipboardContent
 import com.yandex.div2.DivActionTyped
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class DivActionTypedCopyToClipboardHandler @Inject constructor()
     : DivActionTypedHandler {
 

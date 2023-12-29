@@ -23,7 +23,9 @@ import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
-import com.yandex.divkit.regression.di.DaggerRegressionComponent
+import com.yandex.divkit.regression.di.RegressionComponent
+import com.yandex.divkit.regression.di.`Yatagan$RegressionComponent`
+import com.yandex.yatagan.Yatagan
 import kotlinx.coroutines.MainScope
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
@@ -106,7 +108,7 @@ internal object Container {
     val flagPreferenceProvider by lazy { FlagPreferenceProvider(context) }
 
     val regressionComponent by lazy {
-        DaggerRegressionComponent.factory().create(
+        `Yatagan$RegressionComponent`.builder().create(
             context = context,
             viewCreator = RegressionDiv2ViewCreator(context)
         )

@@ -1,14 +1,18 @@
 package com.yandex.div.core
 
 import com.yandex.android.beacon.SendBeaconConfiguration
+import com.yandex.div.core.dagger.ExternalOptional
+import com.yandex.div.core.dagger.Names
 import com.yandex.div.histogram.CpuUsageHistogramReporter
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.HistogramRecordConfiguration
 import com.yandex.div.histogram.HistogramRecorder
-import dagger.Module
-import dagger.Provides
+import com.yandex.div.storage.DivStorageComponent
+import com.yandex.yatagan.Module
+import com.yandex.yatagan.Provides
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import javax.inject.Named
 import javax.inject.Provider
 import javax.inject.Singleton
 
@@ -16,7 +20,8 @@ import javax.inject.Singleton
 class DivKitConfiguration private constructor(
     private val sendBeaconConfiguration: Provider<SendBeaconConfiguration>?,
     private val executorService: ExecutorService,
-    private val histogramConfiguration: Provider<HistogramConfiguration>
+    private val histogramConfiguration: Provider<HistogramConfiguration>,
+    private val divStorageComponent: Provider<DivStorageComponent>?,
 ) {
 
     @Provides
@@ -49,11 +54,19 @@ class DivKitConfiguration private constructor(
         return histogramConfiguration.get().cpuUsageHistogramReporter.get()
     }
 
+    @Singleton
+    @Provides
+    @Named(Names.HAS_DEFAULTS)
+    fun externalDivStorageComponent(): ExternalOptional<DivStorageComponent> {
+        return ExternalOptional.ofNullable(divStorageComponent?.get())
+    }
+
     class Builder {
 
         private var sendBeaconConfiguration: Provider<SendBeaconConfiguration>? = null
         private var executorService: ExecutorService? = null
         private var histogramConfiguration = Provider { HistogramConfiguration.DEFAULT }
+        private var divStorageComponent: Provider<DivStorageComponent>? = null
 
         fun sendBeaconConfiguration(configuration: SendBeaconConfiguration): Builder {
             sendBeaconConfiguration = Provider { configuration }
@@ -81,11 +94,17 @@ class DivKitConfiguration private constructor(
             return this
         }
 
+        fun divStorageComponent(component: Provider<DivStorageComponent>): Builder {
+            divStorageComponent = component
+            return this
+        }
+
         fun build(): DivKitConfiguration {
             return DivKitConfiguration(
                 sendBeaconConfiguration,
                 executorService ?: Executors.newSingleThreadExecutor(),
-                histogramConfiguration
+                histogramConfiguration,
+                divStorageComponent,
             )
         }
     }

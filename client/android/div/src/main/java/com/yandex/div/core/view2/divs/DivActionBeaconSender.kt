@@ -10,7 +10,7 @@ import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivSightAction
-import dagger.Lazy
+import com.yandex.yatagan.Lazy
 import javax.inject.Inject
 
 @DivScope

@@ -4,8 +4,8 @@ import android.content.Context
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.data.DataSourceBindings
 import com.yandex.divkit.regression.data.ScenariosRepository
-import dagger.BindsInstance
-import dagger.Component
+import com.yandex.yatagan.BindsInstance
+import com.yandex.yatagan.Component
 import javax.inject.Singleton
 
 @Singleton
@@ -15,7 +15,7 @@ interface RegressionComponent {
     val scenariosRepository: ScenariosRepository
     val div2ViewCreator: Div2ViewCreator
 
-    @Component.Factory
+    @Component.Builder
     interface Factory {
         fun create(
             @BindsInstance context: Context,

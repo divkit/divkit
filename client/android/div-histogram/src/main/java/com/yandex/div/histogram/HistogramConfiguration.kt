@@ -1,6 +1,7 @@
 package com.yandex.div.histogram
 
 import com.yandex.div.core.annotations.PublicApi
+import com.yandex.div.internal.util.DoubleCheckProvider
 import javax.inject.Provider
 
 @PublicApi
@@ -32,11 +33,4 @@ interface HistogramConfiguration : HistogramRecordConfiguration {
         @JvmField
         val DEFAULT: HistogramConfiguration = DefaultHistogramConfiguration()
     }
-}
-
-private class DoubleCheckProvider<T>(init: () -> T) : Provider<T> {
-
-    private val value: T by lazy(init)
-
-    override fun get(): T = value
 }

@@ -5,13 +5,14 @@ import androidx.annotation.AnyThread
 import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.BuildConfig
 import com.yandex.div.core.annotations.PublicApi
-import com.yandex.div.core.dagger.DaggerDivKitComponent
 import com.yandex.div.core.dagger.DivKitComponent
+import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.Log
+import com.yandex.yatagan.Yatagan
 
 @PublicApi
 class DivKit private constructor(
@@ -19,7 +20,7 @@ class DivKit private constructor(
     configuration: DivKitConfiguration
 ) {
 
-    internal val component: DivKitComponent = DaggerDivKitComponent.builder()
+    internal val component: DivKitComponent = `Yatagan$DivKitComponent`.builder()
         .applicationContext(context.applicationContext)
         .configuration(configuration)
         .build()

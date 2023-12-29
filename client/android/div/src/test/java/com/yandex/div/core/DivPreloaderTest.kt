@@ -13,6 +13,7 @@ import com.yandex.div2.DivText
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
@@ -24,8 +25,12 @@ import java.util.Arrays
 @RunWith(RobolectricTestRunner::class)
 class DivPreloaderTest {
 
-    private val divCustomViewAdapter = mock<DivCustomViewAdapter>()
-    private val divCustomContainerViewAdapter = mock<DivCustomContainerViewAdapter>()
+    private val divCustomViewAdapter = mock<DivCustomViewAdapter> {
+        on { preload(any(), any()) } doReturn DivPreloader.PreloadReference.EMPTY
+    }
+    private val divCustomContainerViewAdapter = mock<DivCustomContainerViewAdapter> {
+        on { preload(any(), any()) } doReturn DivPreloader.PreloadReference.EMPTY
+    }
     private val divImagePreloader = mock<DivImagePreloader>()
 
     private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())

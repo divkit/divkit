@@ -21,8 +21,8 @@ import javax.inject.Inject
 internal class DivCustomBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divCustomViewFactory: DivCustomViewFactory,
-    private val divCustomViewAdapter: DivCustomViewAdapter? = null,
-    private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter? = null,
+    private val divCustomViewAdapter: DivCustomViewAdapter,
+    private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter,
     private val extensionController: DivExtensionController,
 ) : DivViewBinder<DivCustom, DivCustomWrapper> {
 
@@ -39,12 +39,12 @@ internal class DivCustomBinder @Inject constructor(
         baseBinder.bindView(view, div, null, divView)
         baseBinder.bindId(divView, view, null)
 
-        if (divCustomContainerViewAdapter?.isCustomTypeSupported(div.customType) == true) {
+        if (divCustomContainerViewAdapter.isCustomTypeSupported(div.customType)) {
             bind(view, customView, div, divView,
                 { divCustomContainerViewAdapter.createView(div, divView, path) },
                 { divCustomContainerViewAdapter.bindView(it, div, divView, path) }
             )
-        } else if (divCustomViewAdapter?.isCustomTypeSupported(div.customType) == true) {
+        } else if (divCustomViewAdapter.isCustomTypeSupported(div.customType)) {
             bind(view, customView, div, divView,
                 { divCustomViewAdapter.createView(div, divView) },
                 { divCustomViewAdapter.bindView(it, div, divView) }

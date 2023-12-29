@@ -45,9 +45,8 @@ import com.yandex.div.core.view2.divs.widgets.BitmapEffectHelper;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository;
-
-import dagger.BindsInstance;
-import dagger.Subcomponent;
+import com.yandex.yatagan.BindsInstance;
+import com.yandex.yatagan.Component;
 
 import javax.inject.Named;
 
@@ -55,7 +54,7 @@ import javax.inject.Named;
  * Context scoped component for div2 {@link com.yandex.div.core.Div2Context}
  */
 @DivScope
-@Subcomponent(modules = {
+@Component(isRoot = false, modules = {
         Div2Module.class,
         DivConfiguration.class,
         DivHistogramsModule.class
@@ -102,10 +101,10 @@ public interface Div2Component {
     @Deprecated
     DivCustomViewFactory getDivCustomViewFactory();
 
-    @Nullable
+    @NonNull
     DivCustomViewAdapter getDivCustomViewAdapter();
 
-    @Nullable
+    @NonNull
     DivCustomContainerViewAdapter getDivCustomContainerViewAdapter();
 
     @NonNull
@@ -198,7 +197,7 @@ public interface Div2Component {
     /**
      * Builder for Div2Component
      */
-    @Subcomponent.Builder
+    @Component.Builder
     interface Builder {
 
         @BindsInstance

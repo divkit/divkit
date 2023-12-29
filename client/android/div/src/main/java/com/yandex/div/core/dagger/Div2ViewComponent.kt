@@ -9,11 +9,11 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.errors.ErrorVisualMonitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
-import dagger.BindsInstance
-import dagger.Subcomponent
+import com.yandex.yatagan.BindsInstance
+import com.yandex.yatagan.Component
 
 @DivViewScope
-@Subcomponent(modules = [Div2ViewModule::class])
+@Component(isRoot = false, modules = [Div2ViewModule::class])
 internal interface Div2ViewComponent {
 
     val viewIdProvider: DivViewIdProvider
@@ -30,7 +30,7 @@ internal interface Div2ViewComponent {
     val bindingProvider: ViewBindingProvider
     val errorCollectors: ErrorCollectors
 
-    @Subcomponent.Builder
+    @Component.Builder
     interface Builder {
 
         @BindsInstance

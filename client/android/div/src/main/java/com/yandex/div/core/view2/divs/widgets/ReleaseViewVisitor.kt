@@ -17,8 +17,8 @@ import javax.inject.Inject
 @Mockable
 internal class ReleaseViewVisitor @Inject constructor(
     private val divView: Div2View,
-    private val divCustomViewAdapter: DivCustomViewAdapter?,
-    private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter?,
+    private val divCustomViewAdapter: DivCustomViewAdapter,
+    private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter,
     private val divExtensionController: DivExtensionController,
 ) : DivViewVisitor() {
 
@@ -29,7 +29,7 @@ internal class ReleaseViewVisitor @Inject constructor(
         release(view)
         view.customView?.let {
             divExtensionController.unbindView(divView, it, divCustom)
-            divCustomViewAdapter?.release(it, divCustom)
+            divCustomViewAdapter.release(it, divCustom)
             divCustomContainerViewAdapter?.release(it, divCustom)
         }
     }

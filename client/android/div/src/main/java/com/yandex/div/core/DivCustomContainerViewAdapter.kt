@@ -53,5 +53,24 @@ interface DivCustomContainerViewAdapter {
         fun getDivChildFactory(div2View: Div2View): DivCustomContainerChildFactory {
             return div2View.getCustomContainerChildFactory()
         }
+
+        @JvmField
+        val STUB = object : DivCustomContainerViewAdapter {
+            override fun createView(div: DivCustom, divView: Div2View, path: DivStatePath): View {
+                throw UnsupportedOperationException()
+            }
+
+            override fun bindView(view: View, div: DivCustom, divView: Div2View, path: DivStatePath) = Unit
+
+            override fun isCustomTypeSupported(type: String): Boolean {
+                return false
+            }
+
+            override fun release(view: View, div: DivCustom) = Unit
+
+            override fun preload(div: DivCustom, callBack: DivPreloader.Callback): DivPreloader.PreloadReference =
+                    DivPreloader.PreloadReference.EMPTY
+
+        }
     }
 }
