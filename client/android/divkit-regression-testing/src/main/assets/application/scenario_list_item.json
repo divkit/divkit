@@ -55,7 +55,6 @@
               "text": "@{title}",
               "font_size": 18,
               "font_weight": "regular",
-              "max_lines": 2,
               "line_height": 24,
               "width": {
                 "type": "match_parent",
