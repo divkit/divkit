@@ -729,7 +729,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "android"
       ]
     }
   ]

@@ -581,6 +581,28 @@ internal object GetOptDictFromArray : ArrayFunction(EvaluableType.DICT) {
         }
 }
 
+internal object GetArrayLength : Function() {
+
+    override val name: String = "len"
+
+    override val declaredArgs: List<FunctionArgument> = listOf(
+        FunctionArgument(type = EvaluableType.ARRAY)
+    )
+
+    override val resultType: EvaluableType = EvaluableType.INTEGER
+
+    override val isPure: Boolean = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val array = args[0] as JSONArray
+        return array.length().toLong()
+    }
+}
+
 private fun evaluate(functionName: String, args: List<Any>): Any {
     checkIndexOfBoundException(functionName, args)
     val array = args[0] as JSONArray

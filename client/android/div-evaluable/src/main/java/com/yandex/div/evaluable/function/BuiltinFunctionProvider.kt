@@ -238,6 +238,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetOptBooleanFromArray)
         registry.register(GetOptArrayFromArray)
         registry.register(GetOptDictFromArray)
+        registry.register(GetArrayLength)
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {
