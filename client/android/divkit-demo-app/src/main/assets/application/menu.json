@@ -53,7 +53,6 @@
                 "type": "fixed",
                 "value": 44
               },
-              "ratio": 1,
               "placeholder_color": "#00000000",
               "image_url": "file:///android_asset/application/images/DivKit.png"
             },
@@ -139,7 +138,9 @@
                             "type": "match_parent"
                           },
                           "type": "image",
-                          "ratio": 1,
+                          "aspect": {
+                            "ratio": 1
+                          },
                           "image_url": "file:///android_asset/application/images/Circle.png"
                         },
                         {
