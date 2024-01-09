@@ -1,0 +1,81 @@
+{
+  "card": {
+    "log_id": "custom_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "state",
+              "id": "filler",
+              "states": [
+                {
+                  "state_id": "fill",
+                  "div": {
+                    "type": "custom",
+                    "id": "new_custom_container_1",
+                    "items": [
+                      {
+                        "type": "state",
+                        "id": "first_block",
+                        "states": [
+                          {
+                            "state_id": "first_state",
+                            "div": {
+                              "type": "text",
+                              "text": "Text to click",
+                              "actions": [
+                                {
+                                  "log_id": "change_first",
+                                  "url": "div-action://set_state?state_id=0/filler/fill/first_block/second_state"
+                                },
+                                {
+                                  "log_id": "change_second",
+                                  "url": "div-action://set_state?state_id=0/filler/fill/second_block/second_state"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "second_state",
+                            "div": {
+                              "type": "text",
+                              "text": "Clicked text 1"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "id": "second_block",
+                        "states": [
+                          {
+                            "state_id": "first_state",
+                            "div": {
+                              "type": "text",
+                              "text": "Some text"
+                            }
+                          },
+                          {
+                            "state_id": "second_state",
+                            "div": {
+                              "type": "text",
+                              "text": "Clicked text 2"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "custom_type": "new_custom_container_1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

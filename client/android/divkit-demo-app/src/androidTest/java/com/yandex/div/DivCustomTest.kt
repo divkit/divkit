@@ -24,4 +24,16 @@ class DivCustomTest {
             }
         }
     }
+
+    @Test
+    fun severalStatesChanging_whenDivInsideCustom() {
+        divCustom {
+            activityTestRule.buildContainerForCase("several_states_changing")
+            clickOnText("Text to click")
+            assert {
+                textDisplayed("Clicked text 1")
+                textDisplayed("Clicked text 2")
+            }
+        }
+    }
 }

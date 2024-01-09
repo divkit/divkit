@@ -12,11 +12,13 @@ import com.yandex.div.core.DivCustomViewFactory
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
+import javax.inject.Provider
 
 internal class DivCustomBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
@@ -24,13 +26,17 @@ internal class DivCustomBinder @Inject constructor(
     private val divCustomViewAdapter: DivCustomViewAdapter,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter,
     private val extensionController: DivExtensionController,
+    private val divBinder: Provider<DivBinder>,
 ) : DivViewBinder<DivCustom, DivCustomWrapper> {
 
     override fun bindView(view: DivCustomWrapper, div: DivCustom, divView: Div2View, path: DivStatePath) {
         val customView = view.customView
         val oldDiv = view.div
 
-        if (oldDiv === div) return
+        if (oldDiv === div) {
+            view.bindStates(divView.rootDiv(), divView, divView.expressionResolver, divBinder.get())
+            return
+        }
 
         if (customView != null && oldDiv != null) {
             extensionController.unbindView(divView, customView, oldDiv)

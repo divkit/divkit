@@ -22,7 +22,6 @@ import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
-import com.yandex.div.core.state.DivPathUtils
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnActualLayout
@@ -35,8 +34,6 @@ import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
-import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -611,33 +608,31 @@ internal fun View.bindStates(
     binder: DivBinder,
 ) {
     if (div == null) return
-    val viewsToBind = mutableListOf<DivStateLayout>()
-    val divStateVisitor = object : DivViewVisitor() {
-        override fun visit(view: DivStateLayout) {
-            viewsToBind.add(view)
+    val statesByPath = mutableMapOf<DivStatePath, DivStateLayout>()
+    traverseViewHierarhy(this) { currentView ->
+        if (currentView !is DivStateLayout) {
+            return@traverseViewHierarhy true
         }
-    }
-    divStateVisitor.visitViewTree(this)
-
-    val viewsByPath = mutableMapOf<DivStatePath, MutableList<DivStateLayout>>()
-    viewsToBind.forEach { viewToBind ->
-        viewToBind.path?.let { path ->
-            viewsByPath.getOrPut(path) { mutableListOf() } += viewToBind
+        currentView.path?.let { path ->
+            statesByPath[path] = currentView
         }
+        false
     }
-    val paths = viewsToBind.mapNotNull { it.path }
-    val compactPaths = DivPathUtils.compactPathList(paths)
-
-    compactPaths.forEach { path ->
+    statesByPath.entries.forEach { (path, layout) ->
         val divByPath = div.findDivState(path, resolver)
-        val views = viewsByPath[path]
-
-        if (divByPath != null && views != null) {
+        if (divByPath != null) {
             val parentState = path.parentState()
-            views.forEach { view ->
-                binder.bind(view, divByPath, divView, parentState)
-            }
+            binder.bind(layout, divByPath, divView, parentState)
         }
+    }
+}
+
+private fun traverseViewHierarhy(view: View, action: (View) -> Boolean) {
+    if (!action(view) || view !is ViewGroup) {
+        return
+    }
+    view.children.forEach {
+        traverseViewHierarhy(it, action)
     }
 }
 
