@@ -588,7 +588,7 @@ class KotlinPropertyType(PropertyType):
                                      supports_expressions_flag: bool) -> Optional[str]:
         def wrap(value: str) -> str:
             if self.supports_expressions and supports_expressions_flag and \
-                    not self.is_array_of_expressions and not self.is_enum_of_expressions:
+                    not self.is_array_of_expressions:
                 return f'{EXPRESSION_TYPE_NAME}.constant({value})'
             return value
 
@@ -632,7 +632,7 @@ class KotlinPropertyType(PropertyType):
                 else:
                     name = utils.capitalize_camel_case(self.object.name)
                 def_val = utils.fixing_first_digit(utils.constant_upper_case(default_value))
-                return wrap(f'Expression.constant({name}.{def_val})')
+                return wrap(f'{name}.{def_val}')
 
             default_value_dict = utils.json_dict(default_value)
             if isinstance(self.object, EntityEnumeration):
