@@ -2,7 +2,7 @@ import CoreGraphics
 
 import CommonCorePublic
 
-extension Array where Element == CGFloat {
+extension [CGFloat] {
   func interim(at index: CGFloat) -> CGFloat {
     let leftIndex = floorIndex(index)
     let leftItem = self[leftIndex]

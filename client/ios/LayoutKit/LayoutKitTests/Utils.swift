@@ -87,8 +87,8 @@ public final class TestTimerScheduler: Scheduling {
   }
 }
 
-public func XCTAssertThrowsError<T: Equatable & Error, U>(
-  _ expression: @autoclosure () throws -> U,
+public func XCTAssertThrowsError<T: Equatable & Error>(
+  _ expression: @autoclosure () throws -> some Any,
   _ expectedError: T
 ) {
   XCTAssertThrowsError(try expression()) { error in

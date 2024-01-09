@@ -43,7 +43,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
       .getOptionalField("width_variable_name")
     let heightVariableName: DivVariableName? = try? extensionParams
       .getOptionalField("height_variable_name")
-    if widthVariableName == nil && heightVariableName == nil {
+    if widthVariableName == nil, heightVariableName == nil {
       DivKitLogger.error("No valid params for SizeProviderExtensionHandler")
       return block
     }
@@ -99,7 +99,7 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     context: DivBlockModelingContext,
     variableName: DivVariableName?
   ) -> ValueUpdater? {
-    guard let variableName = variableName else {
+    guard let variableName else {
       return nil
     }
     return { [weak self] in

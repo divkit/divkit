@@ -205,7 +205,7 @@ public func !==(lhs: [Block], rhs: [Block]) -> Bool {
   !(lhs === rhs)
 }
 
-extension Sequence where Element == Block {
+extension Sequence<Block> {
   public var hasVerticallyNonResizable: Bool {
     contains { !$0.isVerticallyResizable }
   }
@@ -248,7 +248,7 @@ extension Sequence where Element == Block {
   var maxWidthOfHorizontallyNonResizableBlocks: CGFloat? {
     self
       .filter { !$0.isHorizontallyResizable }
-      .map { $0.widthOfHorizontallyNonResizableBlock }
+      .map(\.widthOfHorizontallyNonResizableBlock)
       .max()
   }
 

@@ -36,7 +36,7 @@ extension DivIndicator: DivBlockModeling {
 
     let hightightedScaleX: CGFloat
     let hightightedScaleY: CGFloat
-    if let activeRect = activeRect, let inactiveRect = inactiveRect {
+    if let activeRect, let inactiveRect {
       hightightedScaleX = activeRect.size.width / inactiveRect.size.width
       hightightedScaleY = activeRect.size.height / inactiveRect.size.height
     } else {
@@ -47,7 +47,7 @@ extension DivIndicator: DivBlockModeling {
 
     let disappearingScaleX: CGFloat
     let disappearingScaleY: CGFloat
-    if let inactiveRect = inactiveRect, let inactiveMinimumRect = inactiveMinimumRect {
+    if let inactiveRect, let inactiveMinimumRect {
       disappearingScaleX = inactiveMinimumRect.size.width / inactiveRect.size.width
       disappearingScaleY = inactiveMinimumRect.size.height / inactiveRect.size.height
     } else {
@@ -106,7 +106,7 @@ extension DivIndicator: DivBlockModeling {
     with shape: DivRoundedRectangleShape?,
     resolver: ExpressionResolver
   ) -> PageIndicatorConfiguration.RoundedRectangleIndicator? {
-    guard let shape = shape else {
+    guard let shape else {
       return nil
     }
     return PageIndicatorConfiguration.RoundedRectangleIndicator(

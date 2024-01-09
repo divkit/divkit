@@ -249,7 +249,7 @@ extension DivTimer {
       DivKitLogger.failure("Timer '\(self.id)' parameters is not valid: tick_interval not set")
       return false
     }
-    if self.tickActions == nil && self.valueVariable == nil {
+    if self.tickActions == nil, self.valueVariable == nil {
       DivKitLogger
         .failure("Timer '\(self.id)' parameters is not valid: set tickActions or valueVariable")
       return false

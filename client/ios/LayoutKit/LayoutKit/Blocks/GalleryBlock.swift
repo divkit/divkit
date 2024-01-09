@@ -24,7 +24,7 @@ public final class GalleryBlock: BlockWithTraits {
     self.heightTrait = heightTrait
 
     if case .intrinsic = widthTrait, case .vertical = model.direction {
-      guard model.items.map({ $0.content }).hasHorizontallyNonResizable else {
+      guard model.items.map(\.content).hasHorizontallyNonResizable else {
         throw BlockError(
           "Gallery block error: in intrinsic-width vertical gallery all children have resizable width"
         )
@@ -172,7 +172,7 @@ extension GalleryBlock: ElementStateUpdating {
 
 extension GalleryBlock: LayoutCachingDefaultImpl {}
 
-extension Array where Element == GalleryViewModel.Item {
+extension [GalleryViewModel.Item] {
   fileprivate mutating func apply(contents: [Block]) {
     for i in indices {
       self[i].content = contents[i]

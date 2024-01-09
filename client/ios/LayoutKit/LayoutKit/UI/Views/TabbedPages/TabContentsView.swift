@@ -14,7 +14,7 @@ class TabContentsView: BlockView {
   private var footerView: UIView? {
     didSet {
       oldValue?.removeFromSuperview()
-      if let footerView = footerView {
+      if let footerView {
         addSubview(footerView)
       }
     }
@@ -23,7 +23,7 @@ class TabContentsView: BlockView {
   private var backgroundView: BlockView? {
     didSet {
       oldValue?.removeFromSuperview()
-      if let backgroundView = backgroundView {
+      if let backgroundView {
         insertSubview(backgroundView, at: 0)
       }
     }
@@ -96,7 +96,7 @@ class TabContentsView: BlockView {
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
       dataSource.models = [model.pages.map { $0.block as! CollectionCellModel }]
 
-      if let backgroundView = backgroundView,
+      if let backgroundView,
          let background = model.background,
          background.canConfigureBlockView(backgroundView) {
         background.configureBlockView(
@@ -192,7 +192,7 @@ class TabContentsView: BlockView {
     collectionView.contentOffset = selectedPageContentOffset
 
     let newLayout = TabContentsViewLayout(
-      pages: model.pages.map { $0.block },
+      pages: model.pages.map(\.block),
       footer: model.footer,
       size: collectionView.bounds.size,
       pagesInsets: model.contentInsets.horizontalInsets

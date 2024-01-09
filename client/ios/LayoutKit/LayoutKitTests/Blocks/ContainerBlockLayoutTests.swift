@@ -49,7 +49,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: imageSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     XCTAssertEqual(
       blockOriginYs,
       [
@@ -72,7 +72,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     let firstBlockOrigin =
       floor(
         ContainerBlockTestModels.threeGaps[0] +
@@ -102,7 +102,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     let firstBlockOrigin = floor(
       ContainerBlockTestModels.threeGaps[0] + containerSize
         .height -
@@ -125,7 +125,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     XCTAssertEqual(blockOriginYs, [0, 0])
   }
 
@@ -141,7 +141,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     let textBlockWidth = containerSize
       .width - (imageSize.width + ContainerBlockTestModels.threeGapsSize)
     let textBlockHeight = textBlock.heightOfVerticallyNonResizableBlock(forWidth: textBlockWidth)
@@ -164,7 +164,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginYs = layout.blockFrames.map { $0.origin.y }
+    let blockOriginYs = layout.blockFrames.map(\.origin.y)
     let textBlockWidth = containerSize
       .width - (imageSize.width + ContainerBlockTestModels.threeGapsSize)
     let textBlockHeight = textBlock.heightOfVerticallyNonResizableBlock(forWidth: textBlockWidth)
@@ -185,7 +185,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockHeights = layout.blockFrames.map { $0.height }
+    let blockHeights = layout.blockFrames.map(\.height)
     XCTAssertEqual(blockHeights, [imageSize.height, multilineTextSize.height])
   }
 
@@ -441,7 +441,7 @@ final class ContainerBlockLayoutTests: XCTestCase {
       size: containerSize
     )
 
-    let blockOriginXs = layout.blockFrames.map { $0.origin.x }
+    let blockOriginXs = layout.blockFrames.map(\.origin.x)
     XCTAssertEqual(
       blockOriginXs,
       [

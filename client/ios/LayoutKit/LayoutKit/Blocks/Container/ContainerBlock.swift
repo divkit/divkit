@@ -183,13 +183,13 @@ public final class ContainerBlock: BlockWithLayout {
     if layoutMode == .wrap {
       switch layoutDirection {
       case .horizontal:
-        guard (children.map { $0.content }.allVerticallyNonResizable) else {
+        guard children.map(\.content).allVerticallyNonResizable else {
           throw BlockError(
             "Container block error: horizontal wrap container has children with resizable height"
           )
         }
       case .vertical:
-        guard (children.map { $0.content }.allHorizontallyNonResizable) else {
+        guard children.map(\.content).allHorizontallyNonResizable else {
           throw BlockError(
             "Container block error: vertical wrap container has children with resizable width"
           )
@@ -200,13 +200,13 @@ public final class ContainerBlock: BlockWithLayout {
     if case .intrinsic = widthTrait {
       switch layoutDirection {
       case .horizontal:
-        guard (children.map { $0.content }.allHorizontallyNonResizable) else {
+        guard children.map(\.content).allHorizontallyNonResizable else {
           throw BlockError(
             "Container block error: horizontal intrinsic-width container has children with resizable width"
           )
         }
       case .vertical:
-        guard (children.map { $0.content }.hasHorizontallyNonResizable) else {
+        guard children.map(\.content).hasHorizontallyNonResizable else {
           throw BlockError(
             "Container block error: in vertical intrinsic-width container all children have resizable width"
           )
@@ -219,7 +219,7 @@ public final class ContainerBlock: BlockWithLayout {
       case .horizontal:
         break // this is currently a valid case, see `.max() ?? 0` on line 163
       case .vertical:
-        guard (children.map { $0.content }.allVerticallyNonResizable) else {
+        guard children.map(\.content).allVerticallyNonResizable else {
           throw BlockError(
             "Container block error: vertical intrinsic-height container has children with resizable height"
           )
@@ -255,9 +255,9 @@ public final class ContainerBlock: BlockWithLayout {
     var result: CGFloat
     switch layoutDirection {
     case .horizontal:
-      result = (children.map { $0.content.intrinsicContentWidth } + gaps).reduce(0, +)
+      result = (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
     case .vertical:
-      result = children.map { $0.content.intrinsicContentWidth }.max()!
+      result = children.map(\.content.intrinsicContentWidth).max()!
     }
 
     if case let .intrinsic(_, minSize, maxSize) = widthTrait {
@@ -300,9 +300,9 @@ public final class ContainerBlock: BlockWithLayout {
         size: CGSize(width: width, height: .zero),
         needCompressConstrainedBlocks: false
       )
-      result = layout.blockFrames.map { $0.maxY }.max() ?? 0
+      result = layout.blockFrames.map(\.maxY).max() ?? 0
     case .vertical:
-      let childrenHeights = children.map { $0.content }.intrinsicHeights(forWidth: width)
+      let childrenHeights = children.map(\.content).intrinsicHeights(forWidth: width)
       result = (childrenHeights + gaps).reduce(0, +)
     }
 
@@ -332,13 +332,13 @@ public final class ContainerBlock: BlockWithLayout {
 
     switch layoutDirection {
     case .horizontal:
-      result = (children.map { $0.content.widthOfHorizontallyNonResizableBlock } + gaps)
+      result = (children.map(\.content.widthOfHorizontallyNonResizableBlock) + gaps)
         .reduce(0, +)
     case .vertical:
       // MOBYANDEXIOS-1092: Only non-resizable children can influence the width of a container
       // because the widths of resizable children depend on the width of container itself
       result = children.filter { !$0.content.isHorizontallyResizable }
-        .map { $0.content.widthOfHorizontallyNonResizableBlock }.max()!
+        .map(\.content.widthOfHorizontallyNonResizableBlock).max()!
     }
 
     cached.nonResizableSize = (width: result, height: nil)
@@ -385,7 +385,7 @@ public final class ContainerBlock: BlockWithLayout {
       crossAlignment: crossAlignment,
       size: CGSize(width: .zero, height: height)
     )
-    result = layout.blockFrames.map { $0.maxX }.max()!
+    result = layout.blockFrames.map(\.maxX).max()!
     cached.nonResizableSize = (width: result, height: height)
     return result
   }
@@ -453,7 +453,7 @@ private func makeGapsWithSeparators(
   separator: ContainerBlock.Separator?,
   layoutMode: ContainerBlock.LayoutMode
 ) -> [CGFloat] {
-  guard layoutMode == .noWrap, let separator = separator else {
+  guard layoutMode == .noWrap, let separator else {
     return gaps
   }
   return Array<CGFloat>.build {
@@ -486,7 +486,7 @@ private func makeChildrenWithSeparators(
   separator: ContainerBlock.Separator?,
   layoutMode: ContainerBlock.LayoutMode
 ) -> [ContainerBlock.Child] {
-  guard layoutMode == .noWrap, let separator = separator else {
+  guard layoutMode == .noWrap, let separator else {
     return children
   }
   return Array<ContainerBlock.Child>.build {
@@ -565,9 +565,8 @@ extension ContainerBlock.CrossAlignment {
   }
 }
 
-extension Sequence where Element == ContainerBlock.Child {
-  fileprivate func applyingContents<S: Sequence>(_ contents: S) -> [ContainerBlock.Child]
-    where S.Element == Block {
+extension Sequence<ContainerBlock.Child> {
+  fileprivate func applyingContents(_ contents: some Sequence<Block>) -> [ContainerBlock.Child] {
     zip(self, contents).map { child, newContent in
       modified(child) { $0.content = newContent }
     }

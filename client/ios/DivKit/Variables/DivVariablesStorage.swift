@@ -77,7 +77,7 @@ public final class DivVariablesStorage {
     let variable = lock.read {
       cardVariables[cardId]?[name]
     }
-    if let variable = variable {
+    if let variable {
       return variable.typedValue()
     }
     return globalStorage.getValue(name)
@@ -275,7 +275,7 @@ private func makeDivVariableValue(
   return newValue
 }
 
-extension Collection where Element == DivVariable {
+extension Collection<DivVariable> {
   public func extractDivVariableValues() -> DivVariables {
     var variables = DivVariables()
     forEach { variable in
@@ -341,7 +341,7 @@ extension Dictionary where Key == String {
   }
 }
 
-extension Dictionary where Key == String, Value == Color {
+extension [String: Color] {
   public func mapToDivVariables() -> DivVariables {
     mapToDivVariables(valueTransform: DivVariableValue.color)
   }

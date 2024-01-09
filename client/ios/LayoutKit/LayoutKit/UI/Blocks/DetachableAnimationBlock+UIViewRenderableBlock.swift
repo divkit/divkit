@@ -34,7 +34,7 @@ extension DetachableAnimationBlock {
 final class DetachableAnimationBlockView: BlockView {
   private var childView: BlockView? {
     didSet {
-      if let childView = childView {
+      if let childView {
         addSubview(childView)
         animatedView = nil
       } else {
@@ -104,8 +104,8 @@ final class DetachableAnimationBlockView: BlockView {
     in container: UIView,
     startFrame: CGRect
   ) {
-    guard let childView = childView,
-          let animationChange = animationChange else {
+    guard let childView,
+          let animationChange else {
       return
     }
     let finishFrame = convertFrame(to: container)
@@ -148,7 +148,7 @@ final class DetachableAnimationBlockView: BlockView {
   }
 
   public func removeWithAnimation(in container: UIView) {
-    guard let childView = childView else {
+    guard let childView else {
       return
     }
 
@@ -161,8 +161,8 @@ final class DetachableAnimationBlockView: BlockView {
   }
 
   public func addWithAnimation(in container: UIView) {
-    guard let childView = childView,
-          let animationIn = animationIn else {
+    guard let childView,
+          let animationIn else {
       return
     }
 

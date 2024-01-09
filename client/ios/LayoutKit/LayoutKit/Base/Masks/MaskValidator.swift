@@ -25,7 +25,7 @@ public final class MaskValidator: Equatable {
       from: data.text.index(data.text.startIndex, offsetBy: pos),
       to: $0.index
     ) <= 0 }
-    if let removeIndex = removeIndex {
+    if let removeIndex {
       data.rawData.remove(at: removeIndex)
     }
     return (

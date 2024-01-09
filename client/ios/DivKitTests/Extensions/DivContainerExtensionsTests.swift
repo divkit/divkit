@@ -374,6 +374,6 @@ extension DivBlockModelingError: Equatable {
   public static func ==(lhs: DivBlockModelingError, rhs: DivBlockModelingError) -> Bool {
     lhs.message == rhs.message
       && lhs.path == rhs.path
-      && lhs.causes.map { $0.description } == rhs.causes.map { $0.description }
+      && lhs.causes.map(\.description) == rhs.causes.map(\.description)
   }
 }

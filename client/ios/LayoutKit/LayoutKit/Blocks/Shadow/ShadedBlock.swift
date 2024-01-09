@@ -42,7 +42,7 @@ extension ShadedBlock: Equatable {
 
 extension Block {
   public func shaded(with shadow: BlockShadow?) -> Block {
-    guard let shadow = shadow else { return self }
+    guard let shadow else { return self }
     return ShadedBlock(block: self, shadow: shadow)
   }
 

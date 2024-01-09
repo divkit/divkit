@@ -71,7 +71,7 @@ public final class TabListViewModel: Equatable {
 
 extension TabListViewModel: CustomDebugStringConvertible {
   public var debugDescription: String {
-    let titlesDescriptions = tabTitles.map { $0.debugDescription }
+    let titlesDescriptions = tabTitles.map(\.debugDescription)
     return """
     { titles: \(titlesDescriptions),
       titleStyle: \(titleStyle),

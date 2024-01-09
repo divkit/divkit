@@ -53,7 +53,7 @@ extension DecoratingBlock {
   }
 }
 
-extension Optional where Wrapped == NonEmpty<[UserInterfaceAction]> {
+extension NonEmpty<[UserInterfaceAction]>? {
   fileprivate var hasPayload: Bool {
     switch self {
     case let .some(actions):
@@ -64,7 +64,7 @@ extension Optional where Wrapped == NonEmpty<[UserInterfaceAction]> {
   }
 }
 
-extension Optional where Wrapped == LongTapActions {
+extension LongTapActions? {
   fileprivate var hasPayload: Bool {
     self?.hasPayload ?? false
   }
@@ -170,7 +170,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var borderLayer: CALayer? {
     didSet {
       oldValue?.removeFromSuperlayer()
-      if let borderLayer = borderLayer {
+      if let borderLayer {
         borderLayer.zPosition = 1000
         layer.addSublayer(borderLayer)
       }
@@ -180,9 +180,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var blurView: UIVisualEffectView? {
     didSet {
       oldValue?.removeFromSuperview()
-      if let blurView = blurView {
+      if let blurView {
         blurView.isUserInteractionEnabled = false
-        if let childView = childView {
+        if let childView {
           insertSubview(blurView, belowSubview: childView)
         } else {
           addSubview(blurView)

@@ -146,7 +146,7 @@ extension DivTrigger {
     }
 
     // oldVariables is nil for initial trigger resolving
-    guard let oldVariables = oldVariables else {
+    guard let oldVariables else {
       return true
     }
 

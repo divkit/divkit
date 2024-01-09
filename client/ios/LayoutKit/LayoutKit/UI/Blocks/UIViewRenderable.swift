@@ -80,7 +80,7 @@ extension UIViewRenderable {
     superview: UIView?,
     subviewPosition: SubviewPosition = .trailing
   ) -> BlockView {
-    if let view = view, canConfigureBlockView(view) {
+    if let view, canConfigureBlockView(view) {
       configureBlockView(
         view,
         observer: observer,
@@ -116,7 +116,7 @@ extension UIViewRenderable {
   }
 }
 
-extension Optional where Wrapped == UIViewRenderable {
+extension UIViewRenderable? {
   public func reuse(
     _ view: BlockView?,
     observer: ElementStateObserver? = nil,

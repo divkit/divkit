@@ -55,10 +55,10 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     case let .fixed(width):
       return width
     case let .intrinsic(_, minSize, maxSize):
-      let width = children.map { $0.content.intrinsicContentWidth }.max()!
+      let width = children.map(\.content.intrinsicContentWidth).max()!
       return clamp(width, min: minSize, max: maxSize)
     case .weighted:
-      return children.map { $0.content.intrinsicContentWidth }.max()!
+      return children.map(\.content.intrinsicContentWidth).max()!
     }
   }
 
@@ -67,10 +67,10 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     case let .fixed(height):
       return height
     case let .intrinsic(_, minSize, maxSize):
-      let height = children.map { $0.content }.intrinsicHeights(forWidth: width).max()!
+      let height = children.map(\.content).intrinsicHeights(forWidth: width).max()!
       return clamp(height, min: minSize, max: maxSize)
     case .weighted:
-      return children.map { $0.content }.intrinsicHeights(forWidth: width).max()!
+      return children.map(\.content).intrinsicHeights(forWidth: width).max()!
     }
   }
 

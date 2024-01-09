@@ -1,7 +1,7 @@
 import CommonCorePublic
 import LayoutKit
 
-extension Array where Element == Div {
+extension [Div] {
   func makeBlocks<T>(
     context: DivBlockModelingContext,
     sizeModifier: DivSizeModifier? = nil,

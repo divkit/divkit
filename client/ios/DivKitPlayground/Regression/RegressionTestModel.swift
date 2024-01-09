@@ -8,7 +8,7 @@ struct RegressionTestsModel: Decodable {
     tests = try decoder
       .container(keyedBy: CodingKeys.self)
       .decode([SafeDecodable<RegressionTestModel>].self, forKey: .tests)
-      .compactMap { $0.value }
+      .compactMap(\.value)
   }
 
   private enum CodingKeys: String, CodingKey {

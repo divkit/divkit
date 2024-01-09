@@ -1,6 +1,6 @@
 import Foundation
 
-extension Optional where Wrapped == NSAttributedString {
+extension NSAttributedString? {
   func attribute<T>(key: NSAttributedString.Key, defaultValue: T) -> T {
     guard case let .some(string) = self, !string.isEmpty else {
       return defaultValue

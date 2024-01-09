@@ -74,7 +74,7 @@ public final class TabsBlock: BlockWithTraits {
   }
 
   private func checkConstraints() throws {
-    let blocks = model.contentsModel.pages.map { $0.block }
+    let blocks = model.contentsModel.pages.map(\.block)
 
     if case .intrinsic = widthTrait, !blocks.hasHorizontallyNonResizable {
       throw BlockError("Tabs block error: in intrinsic-width tab all children have resizable width")

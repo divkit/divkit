@@ -53,7 +53,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     playerSignal = player?.signal.addObserver { [weak self] event in
       onMainThread {
-        guard let self = self else { return }
+        guard let self else { return }
 
         switch event {
         case let .currentTimeUpdate(time):

@@ -9,7 +9,7 @@ import VGSL_Fundamentals_Tiny
 
 final class DivKitTests: XCTestCase {
   static let cardId = DivCardID(rawValue: "test_card_id")
-  
+
   func test_multithreaded_blockCreation() {
     let expectation = XCTestExpectation()
     guard let data = try? dataFromFile(named: "heavy", subdirectory: nil) else {
@@ -18,20 +18,20 @@ final class DivKitTests: XCTestCase {
     }
     let components = DivKitComponents()
     let counter = Atomic(initialValue: 0)
-    
+
     for i in 0...50 {
       let cardId = DivCardID(rawValue: "card_\(i)")
       let result = try! components.parseDivDataWithTemplates(data, cardId: cardId)
       onBackgroundThread {
         let context = components.makeContext(cardId: cardId, cachedImageHolders: [])
         let _ = try! result.value!.makeBlock(context: context)
-        
+
         counter.accessWrite { counter in
           counter += 1
-          if (counter == 50) {
+          if counter == 50 {
             expectation.fulfill()
           }
-        } 
+        }
       }
     }
     wait(for: [expectation])
@@ -128,8 +128,8 @@ private final class FakeImageHolder: ImageHolder {
   }
 }
 
-public func XCTAssertThrowsError<T: Equatable & Error, U>(
-  _ expression: @autoclosure () throws -> U,
+public func XCTAssertThrowsError<T: Equatable & Error>(
+  _ expression: @autoclosure () throws -> some Any,
   _ expectedError: T
 ) {
   XCTAssertThrowsError(try expression()) { error in

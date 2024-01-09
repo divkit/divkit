@@ -167,7 +167,7 @@ private func validateContent(
   of items: [GalleryViewModel.Item],
   with direction: GalleryViewModel.Direction
 ) {
-  let blocks = items.map { $0.content }
+  let blocks = items.map(\.content)
   switch direction {
   case .horizontal:
     precondition(

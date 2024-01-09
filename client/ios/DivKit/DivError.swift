@@ -40,7 +40,7 @@ extension DivError {
     "[\(path)]: \(message)" + (
       causes.isEmpty
         ? ""
-        : "    caused by    \(rootCauses.map { $0.description }.joined(separator: ";   "))"
+        : "    caused by    \(rootCauses.map(\.description).joined(separator: ";   "))"
     )
   }
 }

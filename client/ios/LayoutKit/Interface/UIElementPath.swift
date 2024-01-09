@@ -75,7 +75,7 @@ extension UIElementPath {
   }
 }
 
-extension Optional where Wrapped == UIElementPath {
+extension UIElementPath? {
   public static func +(parent: Self, child: String) -> UIElementPath {
     parent.map { $0 + child } ?? UIElementPath(child)
   }

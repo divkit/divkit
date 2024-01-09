@@ -35,7 +35,7 @@ public enum DivVariableValue: Hashable {
     }
   }
 
-  init?<T>(_ value: T) {
+  init?(_ value: some Any) {
     switch value {
     case let value as String:
       self = .string(value)

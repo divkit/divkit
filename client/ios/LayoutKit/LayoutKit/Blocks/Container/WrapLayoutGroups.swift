@@ -49,7 +49,7 @@ struct WrapLayoutGroups {
       if child.isResizable(for: layoutDirection) {
         startNewLine()
         var childSize = child.content.size(forResizableBlockSize: size)
-        if let separator = separator {
+        if let separator {
           if separator.showAtStart {
             childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
               separatorSize[keyPath: keyPath]
@@ -90,11 +90,11 @@ struct WrapLayoutGroups {
       groups.reverse()
     }
 
-    childrenWithSeparators = groups.flatMap { $0 }.map { $0.child }
+    childrenWithSeparators = groups.flatMap { $0 }.map(\.child)
   }
 
   private var separatorOffset: CGFloat {
-    guard let separator = separator else {
+    guard let separator else {
       return 0
     }
     let separatorSize = separatorSize[keyPath: keyPath]
@@ -163,56 +163,56 @@ struct WrapLayoutGroups {
   }
 
   private mutating func addStartLineSeparator() {
-    guard let lineSeparator = lineSeparator, lineSeparator.showAtStart else {
+    guard let lineSeparator, lineSeparator.showAtStart else {
       return
     }
     addLineSeparator()
   }
 
   private mutating func addBetweenLineSeparator() {
-    guard let lineSeparator = lineSeparator, lineSeparator.showBetween else {
+    guard let lineSeparator, lineSeparator.showBetween else {
       return
     }
     addLineSeparator()
   }
 
   private mutating func addEndLineSeparator() {
-    guard let lineSeparator = lineSeparator, lineSeparator.showAtEnd else {
+    guard let lineSeparator, lineSeparator.showAtEnd else {
       return
     }
     addLineSeparator()
   }
 
   private mutating func addLineSeparator() {
-    guard let lineSeparator = lineSeparator else {
+    guard let lineSeparator else {
       return
     }
     groups.append([(child: lineSeparator.style, childSize: lineSeparatorSize, lineOffset: 0)])
   }
 
   private mutating func addStartSeparator() {
-    guard let separator = separator, separator.showAtStart else {
+    guard let separator, separator.showAtStart else {
       return
     }
     addSeparator()
   }
 
   private mutating func addEndSeparator() {
-    guard let separator = separator, separator.showAtEnd else {
+    guard let separator, separator.showAtEnd else {
       return
     }
     addSeparator()
   }
 
   private mutating func addBetweenSeparator() {
-    guard let separator = separator, separator.showBetween else {
+    guard let separator, separator.showBetween else {
       return
     }
     addSeparator()
   }
 
   private mutating func addSeparator() {
-    guard let separator = separator, !separatorAdded else {
+    guard let separator, !separatorAdded else {
       return
     }
     separatorAdded = true

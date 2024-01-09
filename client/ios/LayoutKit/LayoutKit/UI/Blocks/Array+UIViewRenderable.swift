@@ -2,7 +2,7 @@ import UIKit
 
 import CommonCorePublic
 
-extension Array where Element == BlockView {
+extension [BlockView] {
   func reused(
     with blocks: [UIViewRenderable],
     attachTo parent: UIView,

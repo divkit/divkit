@@ -23,7 +23,7 @@ func expressionTransform<T, U>(
     return nil
   }
 
-  guard let value = value else {
+  guard let value else {
     return nil
   }
 

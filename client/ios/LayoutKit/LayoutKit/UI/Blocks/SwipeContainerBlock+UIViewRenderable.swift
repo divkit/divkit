@@ -85,7 +85,7 @@ private final class SwipeContainerBlockView: BlockView, VisibleBoundsTrackingCon
     )
     swipeContainerView.state = model.state
     swipeContainerView.swipeOutAction = { [weak self] state in
-      guard let self = self, model.state == .normal else { return }
+      guard let self, model.state == .normal else { return }
       UIView.animate(
         withDuration: closeDuration,
         animations: {

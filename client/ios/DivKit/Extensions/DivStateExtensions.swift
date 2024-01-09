@@ -49,7 +49,7 @@ extension DivState: DivBlockModeling {
     var animationIn: [TransitioningAnimation]?
     var animationOut: [TransitioningAnimation]?
     let activeStateId = activeState.stateId
-    if let stateManagerItem = stateManagerItem,
+    if let stateManagerItem,
        let previousState = getPreviousState(stateManagerItem: stateManagerItem),
        previousState.stateId != activeStateId,
        let previousDiv = previousState.div {

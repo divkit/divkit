@@ -70,7 +70,7 @@ extension DivBase {
     }
 
     let shadow = border?.resolveShadow(expressionResolver)
-    
+
     let accessibilityElement = (accessibility ?? DivAccessibility())
       .resolve(
         expressionResolver,
@@ -225,7 +225,7 @@ extension DivBase {
     to block: Block,
     context: DivBlockModelingContext
   ) -> Block {
-    guard let backgrounds = backgrounds else {
+    guard let backgrounds else {
       return block
     }
 
@@ -313,7 +313,7 @@ extension LayoutTrait {
 
 extension DivBorder {
   fileprivate func resolveBorder(_ expressionResolver: ExpressionResolver) -> BlockBorder? {
-    guard let stroke = stroke else {
+    guard let stroke else {
       return nil
     }
     return BlockBorder(

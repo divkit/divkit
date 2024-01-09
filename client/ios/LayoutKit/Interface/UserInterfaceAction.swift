@@ -259,7 +259,7 @@ extension UserInterfaceAction.Payload: CustomDebugStringConvertible {
   }
 }
 
-extension Optional where Wrapped == URL {
+extension URL? {
   public func action(
     with path: UIElementPath,
     accessibilityElement: AccessibilityElement? = nil

@@ -45,7 +45,7 @@ final class DefaultImageHolderFactory: DivImageHolderFactory {
   }
 
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
-    guard let url = url else {
+    guard let url else {
       return placeholder?.toImageHolder() ?? NilImageHolder()
     }
     return RemoteImageHolder(

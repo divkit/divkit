@@ -6,7 +6,7 @@ final class RiveContainerView: UIView {
   private var riveViewModel: RiveViewModel?
   private var riveView: RiveView? {
     didSet {
-      if let riveView = riveView {
+      if let riveView {
         oldValue?.removeFromSuperview()
 
         addSubview(riveView)

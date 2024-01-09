@@ -144,10 +144,10 @@ extension WebPreviewSocket: URLSessionWebSocketDelegate {
 }
 
 extension URLSessionWebSocketTask {
-  fileprivate func send<T>(
-    _ payload: T,
+  fileprivate func send(
+    _ payload: some Encodable,
     completion: @escaping (Error?) -> Void
-  ) where T: Encodable {
+  ) {
     do {
       let data = try JSONEncoder().encode(payload)
       send(.data(data), completionHandler: completion)

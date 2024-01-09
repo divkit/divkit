@@ -63,7 +63,7 @@ final class AxialAlignmentManager {
   }
 }
 
-extension Array where Element == CGRect {
+extension [CGRect] {
   fileprivate func applyOffset(
     with axialAlignment: ContainerBlock.AxialAlignment,
     layoutDirection: ContainerBlock.LayoutDirection,

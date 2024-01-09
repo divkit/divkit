@@ -17,7 +17,7 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
     div _: DivBase,
     context: DivBlockModelingContext
   ) -> Block {
-    guard let overlayView = overlayView else {
+    guard let overlayView else {
       context.addError(message: "PinchToZoomExtensionHandler.overlayView is nil")
       return EmptyBlock()
     }

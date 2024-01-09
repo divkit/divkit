@@ -15,9 +15,9 @@ only_rules:
  - trailing_whitespace
 
 excluded:
-  - "Core"
   - "DivKit/generated_sources"
   - "DivKit/shared_data_generated_sources"
+  - "DivKitTests/Entities/generated_sources"
 
 custom_rules:
   dictionary_colon:

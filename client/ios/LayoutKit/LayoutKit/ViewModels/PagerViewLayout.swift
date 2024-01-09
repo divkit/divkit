@@ -24,7 +24,7 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
   public let contentSize: CGSize
 
   public var pageOrigins: [CGFloat] {
-    blockPages.map { $0.origin }
+    blockPages.map(\.origin)
   }
 
   public init(
@@ -148,12 +148,12 @@ extension GalleryViewModel {
       let rightGap = lastGap(forSize: size)
       let bottomGap = crossInsets(forSize: size).trailing
       let width = lastFrame.maxX + rightGap
-      let maxHeight = neigbourFrames.map { $0.maxY }.max()!
+      let maxHeight = neigbourFrames.map(\.maxY).max()!
       return CGSize(width: width, height: maxHeight + bottomGap)
     case .vertical:
       let rightGap = crossInsets(forSize: size).trailing
       let bottomGap = lastGap(forSize: size)
-      let maxWidth = neigbourFrames.map { $0.maxX }.max()!
+      let maxWidth = neigbourFrames.map(\.maxX).max()!
       let height = lastFrame.maxY + bottomGap
       return CGSize(width: maxWidth + rightGap, height: height)
     }
@@ -181,7 +181,7 @@ extension GalleryViewModel {
     fitting size: CGSize?,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
-    let blocks = items.map { $0.content }
+    let blocks = items.map(\.content)
     let widths = (0..<blocks.count).map {
       pageSize(index: $0, fitting: size, layoutMode: layoutMode)
     }
@@ -209,11 +209,11 @@ extension GalleryViewModel {
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
     let crossInsets = self.crossInsets(forSize: size)
-    let blocks = items.map { $0.content }
+    let blocks = items.map(\.content)
     let maxWidth = size.map { $0.width - crossInsets.sum } ??
       blocks
       .filter { !$0.isHorizontallyResizable }
-      .map { $0.widthOfHorizontallyNonResizableBlock }.max()!
+      .map(\.widthOfHorizontallyNonResizableBlock).max()!
 
     let minX = crossInsets.leading
     let gaps = self.gaps(forSize: size)

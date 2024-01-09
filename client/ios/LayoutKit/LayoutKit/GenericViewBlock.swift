@@ -138,7 +138,7 @@ extension GenericViewBlock.Trait {
   }
 }
 
-extension Optional where Wrapped == CGFloat {
+extension CGFloat? {
   fileprivate var trait: GenericViewBlock.Trait {
     map(GenericViewBlock.Trait.fixed) ?? GenericViewBlock.Trait.resizable
   }
@@ -154,7 +154,7 @@ extension GenericViewBlock.Trait {
   }
 }
 
-extension Optional where Wrapped == GenericViewBlock.Content {
+extension GenericViewBlock.Content? {
   static func !==(lhs: GenericViewBlock.Content?, rhs: GenericViewBlock.Content?) -> Bool {
     switch (lhs, rhs) {
     case let (lValue?, rValue?): return !(lValue === rValue)

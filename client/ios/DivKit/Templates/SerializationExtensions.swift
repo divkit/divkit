@@ -20,7 +20,7 @@ extension Field {
 }
 
 /// Deserialization for Field<T>?
-extension Dictionary where Key == String, Value == Any {
+extension [String: Any] {
   @inlinable
   func link(for key: String) -> TemplatedPropertyLink? {
     self["$" + key] as? TemplatedPropertyLink
@@ -66,7 +66,7 @@ extension Dictionary where Key == String, Value == Any {
 }
 
 /// Deserializaton for Field<[T]> and [T]
-extension Dictionary where Key == String, Value == Any {
+extension [String: Any] {
   @inlinable
   func getOptionalArray<T, U>(
     _ key: String,
@@ -118,7 +118,7 @@ extension Dictionary where Key == String, Value == Any {
   }
 }
 
-extension Dictionary where Key == String, Value == Any {
+extension [String: Any] {
   @inlinable
   func getField<T: TemplateValue>(
     _ key: String,

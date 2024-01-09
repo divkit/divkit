@@ -130,7 +130,7 @@ extension UIViewRenderable {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) -> BlockView {
-    if let view = view, canConfigureBlockView(view) {
+    if let view, canConfigureBlockView(view) {
       configureBlockView(
         view,
         observer: observer,

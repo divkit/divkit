@@ -44,7 +44,7 @@ extension DivSlider: DivBlockModeling {
       offsetY: thumbTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
     )
     let secondThumb: SliderModel.ThumbModel?
-    if let thumbSecondaryValueVariable = thumbSecondaryValueVariable {
+    if let thumbSecondaryValueVariable {
       let secondThumbValue = context.makeBinding(
         variableName: thumbSecondaryValueVariable,
         defaultValue: 0
@@ -212,7 +212,7 @@ private func makeRoundedRectangle(
   resolver: ExpressionResolver
 ) -> MarksConfiguration
   .RoundedRectangle? {
-  guard let mark = mark,
+  guard let mark,
         let divShapeDrawable = mark.value as? DivShapeDrawable,
         let shape = divShapeDrawable.shape.value as? DivRoundedRectangleShape else {
     return nil

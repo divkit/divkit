@@ -26,7 +26,7 @@ public final class TextExtensionHandler: DivExtensionHandler {
   ) -> Block {
     guard
       let textBlock = block as? TextBlock,
-      let text = text,
+      let text,
       let newTextBlock = TextBlock(copyingAttributesFrom: textBlock, text: text)
     else {
       return block

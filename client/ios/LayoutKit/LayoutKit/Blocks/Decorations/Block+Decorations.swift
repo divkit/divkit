@@ -277,7 +277,7 @@ extension DecoratingBlock {
 
   #if INTERNAL_BUILD
   fileprivate func makeNewBoundary(fromModifying newBoundary: BoundaryTrait?) -> BoundaryTrait? {
-    guard let newBoundary = newBoundary else {
+    guard let newBoundary else {
       return nil
     }
     switch (boundary, newBoundary) {
@@ -307,7 +307,7 @@ extension DecoratingBlock {
   #endif
 }
 
-extension Optional where Wrapped == BoundaryTrait {
+extension BoundaryTrait? {
   fileprivate var shouldApplyBoundary: Bool {
     switch self {
     case .noClip?, .none:

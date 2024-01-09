@@ -479,7 +479,7 @@ extension TextFieldBlockView: UITextFieldDelegate {
 
 extension UITextField {
   fileprivate func setTextPreservingPosition(_ newText: NSAttributedString?) {
-    guard let newText = newText else {
+    guard let newText else {
       attributedText = nil
       return
     }

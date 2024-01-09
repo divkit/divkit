@@ -21,10 +21,10 @@ extension DeserializationResult {
 }
 
 @usableFromInline
-func invalidFieldErrorForKey<T, U>(
-  _ key: [T],
+func invalidFieldErrorForKey(
+  _ key: [some Any],
   element: Int? = nil,
-  representation: U?
+  representation: (some Any)?
 ) -> DeserializationError {
   let keyStrings: [String] = key.map { "\($0)" }
   return .invalidFieldRepresentation(

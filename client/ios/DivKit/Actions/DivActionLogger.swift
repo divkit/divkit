@@ -23,11 +23,11 @@ public struct DefaultDivActionLogger: DivActionLogger {
 
   public func log(url: URL, referer: URL?, payload: [String: Any]?) {
     var request = URLRequest(url: url)
-    if let referer = referer {
+    if let referer {
       request.setValue(referer.absoluteString, forHTTPHeaderField: "referer")
     }
 
-    if let payload = payload {
+    if let payload {
       let json: JSONObject = .object(payload.typedJSON())
       guard let body = try? json.toJSONString().data(using: .utf8) else {
         assertionFailure("Can't serialize JSON payload")

@@ -37,7 +37,7 @@ struct SettingsView: View {
           Text("Playground theme")
             .font(ThemeFont.text)
           RadioButtonsView(
-            options: Theme.allCases.map { $0.rawValue },
+            options: Theme.allCases.map(\.rawValue),
             selected: $playgroundTheme
           )
         }

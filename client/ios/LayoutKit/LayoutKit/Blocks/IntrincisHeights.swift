@@ -1,6 +1,6 @@
 import CoreGraphics
 
-extension Array where Element == Block {
+extension [Block] {
   func intrinsicHeights(forWidth width: CGFloat) -> [CGFloat] {
     map {
       let blockWidth: CGFloat

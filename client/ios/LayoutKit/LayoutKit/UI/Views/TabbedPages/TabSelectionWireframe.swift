@@ -23,7 +23,7 @@ final class TabSelectionWireframe {
 
 extension TabSelectionWireframe: TabContentsViewDelegate {
   func tabContentsViewDidChangeRelativeContentOffsetTo(_ offset: CGFloat) {
-    guard let tabListView = tabListView else { return }
+    guard let tabListView else { return }
     let newModel = tabListSelectionDataSource.modelForItemSelection(offset)
     tabListView.model = newModel
   }
@@ -35,13 +35,13 @@ extension TabSelectionWireframe: TabContentsViewDelegate {
 
 extension TabSelectionWireframe: TabListViewDelegateTabSelection {
   func tabListViewDidSelectItemAt(_ index: Int, withUrl url: URL?, path: UIElementPath) {
-    guard let contentsView = tabContentsView, let tabListView = tabListView else {
+    guard let contentsView = tabContentsView, let tabListView else {
       return
     }
     let selection = CGFloat(index)
     let action: UserInterfaceAction
     if contentsView.selectedPageIndex.isApproximatelyEqualTo(selection) {
-      if let url = url {
+      if let url {
         action = UserInterfaceAction(url: url, path: path)
       } else {
         action = UserInterfaceAction(url: tabChangedUrl, path: path)
@@ -55,7 +55,7 @@ extension TabSelectionWireframe: TabListViewDelegateTabSelection {
   }
 
   func tabListViewDidScrollTo(_ offset: CGFloat) {
-    guard let tabListView = tabListView else {
+    guard let tabListView else {
       return
     }
     tabListView.model = tabListView.model.map { modified($0) { $0.offset = offset } }

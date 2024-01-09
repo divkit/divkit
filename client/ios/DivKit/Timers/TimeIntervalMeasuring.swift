@@ -20,7 +20,7 @@ final class TimeIntervalMeasuring: TimeMeasuring {
 
   public func pause() {
     paused = true
-    if let startDate = startDate {
+    if let startDate {
       passedTimeInterval += Date().timeIntervalSince(startDate)
     }
   }
@@ -34,7 +34,7 @@ final class TimeIntervalMeasuring: TimeMeasuring {
     if paused {
       return passedTimeInterval
     }
-    if let startDate = startDate {
+    if let startDate {
       return passedTimeInterval + Date().timeIntervalSince(startDate)
     }
     return 0

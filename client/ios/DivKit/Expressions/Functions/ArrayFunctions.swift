@@ -491,7 +491,7 @@ enum ArrayFunctions: String, CaseIterable {
     index: Int,
     expression: String
   ) throws -> AnyHashable {
-    guard index >= 0 && index < array.count
+    guard index >= 0, index < array.count
     else { throw Error.indexOutOfBounds(expression, index, array.count).message }
     return array[index]
   }

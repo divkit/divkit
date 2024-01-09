@@ -70,7 +70,7 @@ extension DivVideo: DivBlockModeling {
       playerFactory: playerFactory
     )
 
-    if let aspectRatio = aspectRatio {
+    if let aspectRatio {
       return AspectBlock(content: videoBlock, aspectRatio: aspectRatio)
     }
 

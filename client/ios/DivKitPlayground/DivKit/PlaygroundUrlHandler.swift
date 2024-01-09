@@ -10,7 +10,7 @@ final class PlaygroundUrlHandler: DivUrlHandler {
   }
 
   func handle(_ url: URL, sender _: AnyObject?) {
-    guard url.scheme == divDemoActionScheme && url.host == setDataHost,
+    guard url.scheme == divDemoActionScheme, url.host == setDataHost,
           let path = url.queryParamValue(forName: pathParam),
           let regressionFileUrl = RegressionFile.makeUrl(path) else {
       AppLogger.error("Unhandled URL: \(url)")

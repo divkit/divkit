@@ -134,7 +134,7 @@ public final class TextInputBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      guard let maxVisibleLines = maxVisibleLines else {
+      guard let maxVisibleLines else {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
         return clamp(textHeight, min: minSize, max: maxSize)
       }

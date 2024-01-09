@@ -144,7 +144,7 @@ extension DivText: DivBlockModeling {
     images: [Image]?,
     text: NSAttributedString?
   ) -> [TextBlock.InlineImage] {
-    guard let text = text else {
+    guard let text else {
       return []
     }
     return (images ?? [])
@@ -215,7 +215,7 @@ extension DivText: DivBlockModeling {
   }
 
   private func resolveGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
-    guard let textGradient = textGradient else {
+    guard let textGradient else {
       return nil
     }
     switch textGradient {
@@ -240,7 +240,7 @@ extension CFMutableAttributedString {
     _ actions: [UserInterfaceAction]?,
     at range: CFRange
   ) {
-    if let actions = actions {
+    if let actions {
       ActionsAttribute(actions: actions).apply(to: self, at: range)
     }
   }

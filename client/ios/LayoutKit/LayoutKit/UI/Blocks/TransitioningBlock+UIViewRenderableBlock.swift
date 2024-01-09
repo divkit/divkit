@@ -105,7 +105,7 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
         weak overscrollDelegate,
         weak renderingDelegate
       ] in
-        guard let self = self else { return }
+        guard let self else { return }
         self.toView = model.block.to.reuse(
           self.toView,
           observer: observer,
@@ -143,7 +143,7 @@ private final class TransitioningBlockView: BlockView, VisibleBoundsTrackingCont
     animations: [TransitioningAnimation],
     completion: Action? = nil
   ) {
-    guard let view = view else {
+    guard let view else {
       completion?()
       return
     }

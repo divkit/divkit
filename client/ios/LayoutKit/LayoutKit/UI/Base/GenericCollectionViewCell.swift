@@ -12,7 +12,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
   public private(set) var view: BlockView? {
     didSet {
       oldValue?.removeFromSuperview()
-      if let view = view {
+      if let view {
         contentView.addSubview(view)
         setNeedsLayout()
       }
@@ -28,7 +28,7 @@ open class GenericCollectionViewCell: UICollectionViewCell, VisibleBoundsTrackin
   ) {
     self.model = model
 
-    if let view = view, model.canConfigureBlockView(view) {
+    if let view, model.canConfigureBlockView(view) {
       model.configureBlockView(
         view,
         observer: observer,

@@ -21,9 +21,9 @@ final class AnimationBlockView: BlockView {
       let newValue = animationHolder
       animationRequest = animationHolder?
         .requestAnimationWithCompletion { [weak self] animationSource in
-          guard let self = self,
+          guard let self,
                 newValue === self.animationHolder,
-                let animationSource = animationSource else {
+                let animationSource else {
             return
           }
 

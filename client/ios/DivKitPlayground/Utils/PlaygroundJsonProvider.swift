@@ -15,11 +15,11 @@ struct PlaygroundJsonProvider {
       self.json = [:]
       return
     }
-    
+
     let paletteVaraibles = Palette(json: try! json.getOptionalField("palette") ?? [:])
       .makeVariables(theme: UserPreferences.playgroundTheme)
     paletteVariableStorage.replaceAll(paletteVaraibles)
-    
+
     self.json = json
   }
 }

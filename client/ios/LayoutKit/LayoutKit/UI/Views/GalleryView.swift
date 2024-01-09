@@ -105,7 +105,7 @@ public final class GalleryView: BlockView {
     updateLayoutIfNeeded(to: model)
 
     if oldModel != model {
-      let blocks = model.items.map { $0.content }
+      let blocks = model.items.map(\.content)
       dataSource.blocks = blocks
       if oldModel?.layoutDirection != model.layoutDirection {
         collectionView.semanticContentAttribute = model
@@ -153,7 +153,7 @@ public final class GalleryView: BlockView {
 
     self.state = state
 
-    if notifyingObservers, let model = model {
+    if notifyingObservers, let model {
       observer?.elementStateChanged(state, forPath: model.path)
     }
   }
@@ -179,7 +179,7 @@ public final class GalleryView: BlockView {
         )
         contentPager.setInitialOffset(layout.pageOrigins.first ?? .zero)
       }
-      if let contentPager = contentPager {
+      if let contentPager {
         configure(contentPager)
       } else {
         let contentPager = ScrollableContentPager()
@@ -236,7 +236,7 @@ public final class GalleryView: BlockView {
     collectionView.frame = bounds
     mask!.frame = bounds.insetBy(dx: 0, dy: shadowInsetValue)
 
-    if let model = model {
+    if let model {
       updateLayoutIfNeeded(to: model)
     }
     if case let .pending(state) = deferredStateSetting {

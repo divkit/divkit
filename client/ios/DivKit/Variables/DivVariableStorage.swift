@@ -35,7 +35,7 @@ public final class DivVariableStorage {
   public init(outerStorage: DivVariableStorage? = nil) {
     self.outerStorage = outerStorage
 
-    if let outerStorage = outerStorage {
+    if let outerStorage {
       weak var weakSelf: DivVariableStorage?
       let outerStorageEvents: Signal<ChangeEvent> = outerStorage.changeEvents.compactMap {
         guard let self = weakSelf else {
@@ -59,7 +59,7 @@ public final class DivVariableStorage {
     let variable = lock.read {
       values[name]
     }
-    if let variable = variable {
+    if let variable {
       return variable.typedValue()
     }
     return outerStorage?.getValue(name)
@@ -157,7 +157,7 @@ public final class DivVariableStorage {
       return
     }
 
-    if let outerStorage = outerStorage {
+    if let outerStorage {
       outerStorage.update(name: name, valueFactory: valueFactory)
     } else {
       DivKitLogger.error("Variable is not declared: \(name)")

@@ -103,7 +103,7 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
 
     let view: UIView
 
-    if let separatorView = separatorView {
+    if let separatorView {
       view = separatorView
     } else {
       view = UIView()

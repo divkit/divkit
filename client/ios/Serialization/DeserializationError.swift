@@ -93,9 +93,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   public var rootCauses: [DeserializationError] {
     switch self {
     case let .composite(_, causes):
-      return causes.flatMap {
-        $0.rootCauses
-      }
+      return causes.flatMap(\.rootCauses)
     case let .nestedObjectError(field, error):
       return error.rootCauses.map { .nestedObjectError(field: field, error: $0) }
     default:
@@ -133,7 +131,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   }
 }
 
-fileprivate func dbgStrLimited<T>(_ val: T?, limit: UInt = 100) -> String {
+fileprivate func dbgStrLimited(_ val: (some Any)?, limit: UInt = 100) -> String {
   val.map { "\($0)".crop(limit) } ?? "nil"
 }
 

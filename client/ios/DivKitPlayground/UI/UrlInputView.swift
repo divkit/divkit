@@ -66,7 +66,7 @@ private struct Link<Destination>: View where Destination: View {
 
   var body: some View {
     NavigationLink(title) {
-      if let url = url {
+      if let url {
         destination(url)
       }
     }

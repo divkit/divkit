@@ -47,7 +47,7 @@ private let staticFunctions: [AnyCalcExpression.Symbol: Function] = {
   return functions
 }()
 
-extension Dictionary where Key == AnyCalcExpression.Symbol, Value == Function {
+extension [AnyCalcExpression.Symbol: Function] {
   fileprivate mutating func put(_ name: String, _ function: Function) {
     self[.function(name, arity: function.arity)] = function
   }

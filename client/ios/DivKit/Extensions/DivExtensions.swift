@@ -44,13 +44,13 @@ extension Div {
   }
 }
 
-extension Sequence where Element == Div {
+extension Sequence<Div> {
   var hasHorizontallyMatchParent: Bool {
     contains { $0.isHorizontallyMatchParent }
   }
 
   var allHorizontallyMatchParent: Bool {
-    allSatisfy { $0.isHorizontallyMatchParent }
+    allSatisfy(\.isHorizontallyMatchParent)
   }
 
   var hasVerticallyMatchParent: Bool {
@@ -58,6 +58,6 @@ extension Sequence where Element == Div {
   }
 
   var allVerticallyMatchParent: Bool {
-    allSatisfy { $0.isVerticallyMatchParent }
+    allSatisfy(\.isVerticallyMatchParent)
   }
 }

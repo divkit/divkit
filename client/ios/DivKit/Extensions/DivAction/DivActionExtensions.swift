@@ -27,7 +27,7 @@ extension DivAction {
   }
 
   private func makeMenuPayload(context: DivBlockModelingContext) -> UserInterfaceAction.Payload? {
-    guard let menuItems = menuItems else { return nil }
+    guard let menuItems else { return nil }
     let expressionResolver = context.expressionResolver
 
     let items: [Menu.Item] = menuItems.compactMap { item in
@@ -55,7 +55,7 @@ extension DivAction {
   }
 }
 
-extension Array where Element == DivAction {
+extension [DivAction] {
   func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
     compactMap { $0.uiAction(context: context) }
   }

@@ -54,7 +54,7 @@ extension Block {
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?
   ) -> Block {
-    guard let actionsHolder = actionsHolder else {
+    guard let actionsHolder else {
       return self
     }
 

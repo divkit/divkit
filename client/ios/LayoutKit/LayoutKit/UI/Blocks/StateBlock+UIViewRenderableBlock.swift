@@ -83,8 +83,8 @@ private final class SubviewStorage: RenderingDelegate {
 
   func getViewsToAdd() -> [DetachableAnimationBlockView] {
     views
-      .filter { $0.view.hasAnimationIn }
-      .map { $0.view }
+      .filter(\.view.hasAnimationIn)
+      .map(\.view)
   }
 
   func getViewsToTransition(

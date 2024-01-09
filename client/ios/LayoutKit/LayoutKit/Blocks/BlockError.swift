@@ -10,8 +10,8 @@ public struct BlockError: Error {
 
 // Workaround for swift compiler bug, when protocol is not conforming parent protocol
 @inlinable
-public func modifyError<T: Error, R>(
-  _ modificator: (BlockError) -> T,
+public func modifyError<R>(
+  _ modificator: (BlockError) -> some Error,
   _ block: () throws -> R
 ) throws -> R {
   do {

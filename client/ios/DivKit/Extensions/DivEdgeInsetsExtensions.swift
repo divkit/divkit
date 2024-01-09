@@ -4,15 +4,15 @@ import BaseUIPublic
 import CommonCorePublic
 import LayoutKit
 
-extension Optional<DivEdgeInsets> {
+extension DivEdgeInsets? {
   func resolve(_ context: DivBlockModelingContext) -> EdgeInsets {
     self?.resolve(context) ?? EdgeInsets.zero
   }
-  
+
   func resolveHorizontalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
     self?.resolveHorizontalInsets(expressionResolver) ?? SideInsets.zero
   }
-  
+
   func resolveVerticalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
     self?.resolveVerticalInsets(expressionResolver) ?? SideInsets.zero
   }

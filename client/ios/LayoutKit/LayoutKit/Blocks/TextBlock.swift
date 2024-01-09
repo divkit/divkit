@@ -65,7 +65,7 @@ public final class TextBlock: BlockWithTraits {
     self.accessibilityElement = accessibilityElement
     self.canSelect = canSelect
     self.truncationImages = truncationImages
-    if let truncationToken = truncationToken {
+    if let truncationToken {
       (self.truncationToken, self.truncationAttachments) = setImagePlaceholders(
         for: truncationImages, to: truncationToken
       )
@@ -160,7 +160,7 @@ public final class TextBlock: BlockWithTraits {
   }
 
   public func getImageHolders() -> [ImageHolder] {
-    images.map { $0.holder }
+    images.map(\.holder)
   }
 
   public static func ==(lhs: TextBlock, rhs: TextBlock) -> Bool {
@@ -281,7 +281,7 @@ private let defaultFont = Font.systemFont(ofSize: Font.systemFontSize)
 extension TextBlock.InlineImage {
   fileprivate var tintColorImage: Image? {
     let holderImage = holder.image
-    guard let tintColor = tintColor else { return holderImage }
+    guard let tintColor else { return holderImage }
     return holderImage?.redrawn(withTintColor: tintColor)
   }
 }

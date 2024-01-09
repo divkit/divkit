@@ -4,7 +4,8 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let url = ProcessInfo.processInfo.environment["VGSL_SPM_REPO"] ?? "https://github.com/yandex/vgsl.git"
+  let url = ProcessInfo.processInfo.environment["VGSL_SPM_REPO"]
+    ?? "https://github.com/yandex/vgsl.git"
   let packageName = URL(string: url)!.deletingPathExtension().lastPathComponent
   return (
     url: url,

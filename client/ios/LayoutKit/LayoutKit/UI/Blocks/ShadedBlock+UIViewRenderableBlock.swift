@@ -63,7 +63,7 @@ private final class ShadedBlockView: ViewWithShadow, BlockViewProtocol,
     guard self.model != model || self.observer !== observer else { return }
     self.model = model
     self.observer = observer
-    if let blockView = blockView, model.block.canConfigureBlockView(blockView) {
+    if let blockView, model.block.canConfigureBlockView(blockView) {
       model.block.configureBlockView(
         blockView,
         observer: observer,

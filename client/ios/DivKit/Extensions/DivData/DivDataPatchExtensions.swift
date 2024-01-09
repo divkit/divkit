@@ -18,7 +18,7 @@ extension DivData {
 
 extension Div {
   fileprivate func applySingleItemPatch(_ patch: DivPatch) -> Div {
-    if let id = id, let change = patch.getChange(id: id) {
+    if let id, let change = patch.getChange(id: id) {
       guard let items = change.items, items.count == 1 else {
         DivKitLogger.error("Patch contains multiple items, but single item is expected: \(id)")
         return self
@@ -29,7 +29,7 @@ extension Div {
   }
 
   fileprivate func applyOptionalItemPatch(_ patch: DivPatch) -> Div? {
-    if let id = id, let change = patch.getChange(id: id) {
+    if let id, let change = patch.getChange(id: id) {
       guard let items = change.items else {
         return nil
       }
@@ -43,7 +43,7 @@ extension Div {
   }
 
   fileprivate func applyMultipleItemsPatch(_ patch: DivPatch) -> [Div] {
-    if let id = id, let change = patch.getChange(id: id) {
+    if let id, let change = patch.getChange(id: id) {
       return change.items ?? []
     }
     return [applyPatchToChildren(patch)]

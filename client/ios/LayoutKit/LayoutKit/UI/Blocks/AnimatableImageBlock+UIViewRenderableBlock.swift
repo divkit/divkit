@@ -43,7 +43,7 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
 
       let newValue = imageHolder
       imageRequest = imageHolder?.requestImageWithCompletion { [weak self] image in
-        guard let self = self,
+        guard let self,
               newValue === self.imageHolder else {
           return
         }

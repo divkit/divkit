@@ -68,7 +68,7 @@ final class TabListSelectionDataSourceImplTests: XCTestCase {
   }
 }
 
-extension Array where Element == TabTitleViewModel {
+extension [TabTitleViewModel] {
   fileprivate func isApproximatelyEqual(to other: [TabTitleViewModel]) -> Bool {
     guard count == other.count else {
       return false

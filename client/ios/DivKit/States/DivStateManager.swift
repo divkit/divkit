@@ -194,7 +194,7 @@ extension DivBase {
   }
 }
 
-extension Array where Element == String {
+extension [String] {
   fileprivate mutating func appendIdWithStateChangeTransition(div: Div) {
     if let id = div.id, div.value.shouldApplyTransition(.stateChange) {
       append(id)

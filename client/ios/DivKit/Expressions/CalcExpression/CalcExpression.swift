@@ -273,7 +273,7 @@ extension CalcExpression {
       ":": -8, // ternary
     ].mapValues { ($0, false) }
     precedences["?"] = (-7, true) // ternary
-    for op in [ "<", "<=", ">=", ">", "==", "!=" ] { // comparison
+    for op in ["<", "<=", ">=", ">", "==", "!="] { // comparison
       precedences[op] = (-4, true)
     }
     return precedences
@@ -411,7 +411,7 @@ struct ParsedCalcExpression: CustomStringConvertible {
         guard case .variable = $0 else { return false }
         return true
       }
-      .map { $0.name }
+      .map(\.name)
   }
 }
 
@@ -442,7 +442,7 @@ private enum Subexpression: CustomStringConvertible {
     case let .literal(literal):
       return literal
     case let .symbol(symbol, args, fn):
-      guard let fn = fn else {
+      guard let fn else {
         return .error(CalcExpression.Error.undefinedSymbol(symbol))
       }
       do {
@@ -457,7 +457,7 @@ private enum Subexpression: CustomStringConvertible {
 
   var description: String {
     func arguments(_ args: [Subexpression]) -> String {
-      args.map { $0.description }
+      args.map(\.description)
         .joined(separator: ", ")
     }
     switch self {

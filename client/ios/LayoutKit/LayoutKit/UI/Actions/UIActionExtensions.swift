@@ -26,7 +26,7 @@ extension UserInterfaceAction {
   }
 }
 
-extension Array where Element == UserInterfaceAction {
+extension [UserInterfaceAction] {
   public func perform(sendingFrom sender: UserInterfaceAction.ResponderType) {
     #if os(iOS)
     forEach {

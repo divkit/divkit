@@ -2,7 +2,7 @@ import Foundation
 
 extension DivContainer {
   func resolveAccessibilityDescription(_ context: DivBlockModelingContext) -> String? {
-    guard let accessibility = accessibility else {
+    guard let accessibility else {
       return nil
     }
 
@@ -21,7 +21,7 @@ extension DivContainer {
   }
 }
 
-extension Array where Element == Div {
+extension [Div] {
   fileprivate func resolveMergedDescription(_ context: DivBlockModelingContext) -> String? {
     var result = ""
     func traverse(div: Div) {

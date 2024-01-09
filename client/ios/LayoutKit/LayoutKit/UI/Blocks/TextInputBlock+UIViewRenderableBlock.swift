@@ -213,7 +213,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     mask: MaskValidator?
   ) {
     self.typo = typo.with(alignment: textAlignment)
-    if let mask = mask, let rawTextValue = rawTextValue {
+    if let mask, let rawTextValue {
       self.textValue = textValue
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
@@ -304,13 +304,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       }
     }.dispose(in: disposePool)
     maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
-      guard let self = self else { return }
+      guard let self else { return }
       self.rawTextValue.value = input
     }.dispose(in: disposePool)
 
     maskedViewModel?.$text.currentAndNewValues
       .addObserver { [weak self] input in
-        guard let self = self else { return }
+        guard let self else { return }
         DispatchQueue.main.async {
           self.setTextData(input)
           self.textValue.value = input
@@ -445,13 +445,13 @@ extension TextInputBlockView {
 
   private func onFocus() {
     onFocusActions.perform(sendingFrom: self)
-    guard let path = path else { return }
+    guard let path else { return }
     observer?.elementStateChanged(FocusViewState(isFocused: true), forPath: path)
   }
 
   private func onBlur() {
     onBlurActions.perform(sendingFrom: self)
-    guard let path = path else { return }
+    guard let path else { return }
     observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
   }
 

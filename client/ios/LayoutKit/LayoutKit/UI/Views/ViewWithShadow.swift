@@ -18,7 +18,7 @@ open class ViewWithShadow: UIView {
         return
       }
 
-      if let shadow = shadow {
+      if let shadow {
         layer.shadowRadius = shadow.blurRadius
         layer.shadowOffset = CGSize(width: shadow.offset.x, height: shadow.offset.y)
         layer.shadowOpacity = shadow.opacity
@@ -50,7 +50,7 @@ open class ViewWithShadow: UIView {
       return
     }
 
-    if let shadow = shadow {
+    if let shadow {
       layer.shadowPath = .roundedRect(
         size: bounds.size,
         cornerRadii: shadow.cornerRadii

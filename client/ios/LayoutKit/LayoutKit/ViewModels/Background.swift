@@ -125,7 +125,7 @@ extension Background: ImageContaining {
   }
 }
 
-extension Array where Element == Background {
+extension [Background] {
   public func composite() -> Element? {
     if isEmpty { return nil }
     return dropFirst().reduce(first!, +)

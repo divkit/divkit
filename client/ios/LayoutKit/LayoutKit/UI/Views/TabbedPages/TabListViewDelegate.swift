@@ -96,11 +96,11 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
     }
 
     if layoutDirection == .rightToLeft {
-      let pillSizeWidth = itemSizes.map { $0.width }.interim(at: itemSelection)
+      let pillSizeWidth = itemSizes.map(\.width).interim(at: itemSelection)
       pillOriginX = size.width - pillSizeWidth - pillOriginX
     }
 
-    if let offset = offset {
+    if let offset {
       return Layout(
         contentOffset: CGPoint(x: offset, y: 0),
         pillOriginX: pillOriginX - (offset - contentOffsetX)
@@ -183,7 +183,7 @@ final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {
   }
 
   private func sendScrollEvent(_ scrollView: UIScrollView) {
-    guard let scrollInfo = scrollInfo else {
+    guard let scrollInfo else {
       return
     }
 
@@ -243,7 +243,7 @@ extension UICollectionView {
     indexPaths.map {
       ($0, layoutAttributesForItem(at: $0)?.frame)
     }.compactMap { indexPath, frame in
-      if let frame = frame {
+      if let frame {
         return (indexPath, frame)
       } else {
         return nil

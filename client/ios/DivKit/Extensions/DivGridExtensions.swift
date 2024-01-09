@@ -9,7 +9,7 @@ extension DivGrid: DivBlockModeling {
       actionsHolder: self
     )
   }
-  
+
   var nonNilItems: [Div] {
     items ?? []
   }

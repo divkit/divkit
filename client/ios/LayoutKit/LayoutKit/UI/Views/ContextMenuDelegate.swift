@@ -19,7 +19,7 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     configurationForMenuAtLocation _: CGPoint
   ) -> UIContextMenuConfiguration? {
     UIContextMenuConfiguration(identifier: nil, previewProvider: makeVC) { [weak self] _ in
-      guard let self = self, let sender = self.view else {
+      guard let self, let sender = self.view else {
         return nil
       }
       return self.contextMenu.makeUIMenu(sender: sender)
@@ -38,7 +38,7 @@ final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
     _: UIContextMenuInteraction,
     previewForHighlightingMenuWithConfiguration _: UIContextMenuConfiguration
   ) -> UITargetedPreview? {
-    guard let view = view else {
+    guard let view else {
       return nil
     }
 

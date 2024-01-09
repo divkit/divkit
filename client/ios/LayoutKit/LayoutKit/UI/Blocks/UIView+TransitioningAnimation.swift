@@ -10,7 +10,7 @@ extension UIView {
     animated: Bool,
     completion: Action? = nil
   ) {
-    guard let animations = animations, !animations.isEmpty else {
+    guard let animations, !animations.isEmpty else {
       completion?()
       return
     }

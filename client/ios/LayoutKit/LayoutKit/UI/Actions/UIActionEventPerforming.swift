@@ -27,7 +27,7 @@ public final class UIActionEvent: AppActionEventProtocol {
   }
 }
 
-extension Array: AppActionEventProtocol where Element == UIActionEvent {
+extension [UIActionEvent]: AppActionEventProtocol {
   public func makeHandler(responder: UIResponder) -> Handler? {
     (responder as? UIActionEventPerforming)?.perform(uiActionEvents:from:)
   }
@@ -39,7 +39,7 @@ extension UIActionEvent {
   }
 }
 
-extension Array where Element == UIActionEvent {
+extension [UIActionEvent] {
   public func handlingURLPayload(
     handleEvent: @escaping (UIActionEvent, _ isLast: Bool) -> Void
   ) -> [UIActionEvent] {

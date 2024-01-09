@@ -43,7 +43,7 @@ extension DivTabs: DivBlockModeling {
 
     let titleStyle = tabTitleStyle ?? DivTabs.TabTitleStyle()
     let listModel = TabListViewModel(
-      tabTitles: tabs.map { $0.title },
+      tabTitles: tabs.map(\.title),
       titleStyle: titleStyle.resolve(context),
       layoutDirection: context.layoutDirection,
       listPaddings: titlePaddings.resolve(context)
@@ -51,7 +51,7 @@ extension DivTabs: DivBlockModeling {
 
     let expressionResolver = context.expressionResolver
     let contentsModel = try TabContentsViewModel(
-      pages: tabs.map { $0.page },
+      pages: tabs.map(\.page),
       pagesHeight: resolveDynamicHeight(expressionResolver)
         ? .bySelectedPage
         : .byHighestPage,
@@ -179,7 +179,7 @@ extension DivTabs.TabTitleStyle {
 
 extension Typo {
   fileprivate func with(height: Int?) -> Typo {
-    if let height = height {
+    if let height {
       return with(height: CGFloat(height))
     } else {
       return self

@@ -84,7 +84,7 @@ extension CAGradientLayer {
   fileprivate func apply(style: ShimmerStyle) {
     calculatePoints(for: style.angle)
 
-    colors = style.colorsAndLocations.map { $0.0.cgColor }
+    colors = style.colorsAndLocations.map(\.0.cgColor)
     locations = style.colorsAndLocations.map(\.1).map { NSNumber(value: $0.native) }
   }
 }

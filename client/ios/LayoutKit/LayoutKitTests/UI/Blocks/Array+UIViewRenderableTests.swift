@@ -17,7 +17,7 @@ final class Array_UIViewRenderableTests: XCTestCase {
     )
 
     XCTAssertEqual(views, parent.subviews)
-    let viewsBlocks = (parent.subviews as! [TestView]).compactMap { $0.renderable }
+    let viewsBlocks = (parent.subviews as! [TestView]).compactMap(\.renderable)
     XCTAssertTrue(viewsBlocks.elementsEqual(renderables, by: ===))
   }
 

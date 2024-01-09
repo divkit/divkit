@@ -15,7 +15,7 @@ public struct ExpressionError: Error {
 
 extension ExpressionError: CustomStringConvertible {
   public var description: String {
-    if let expression = expression {
+    if let expression {
       return "\(message). Expression: \(expression)"
     }
     return message

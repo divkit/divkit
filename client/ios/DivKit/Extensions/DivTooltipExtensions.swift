@@ -22,7 +22,7 @@ extension DivTooltip {
 
     let tooltipViewFactory: TooltipViewFactory =
       Variable { [tooltipViewFactory = context.tooltipViewFactory, div = self.div] in
-        guard let tooltipViewFactory = tooltipViewFactory else { return nil }
+        guard let tooltipViewFactory else { return nil }
         return tooltipViewFactory(div)
       }
 
@@ -53,7 +53,7 @@ extension DivTooltip.Position {
   }
 }
 
-extension Optional where Wrapped == [DivTooltip] {
+extension [DivTooltip]? {
   func makeTooltips(
     context: DivBlockModelingContext
   ) throws -> [BlockTooltip] {

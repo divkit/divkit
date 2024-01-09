@@ -47,7 +47,7 @@ public struct TransitioningAnimation: Equatable {
   }
 }
 
-extension Array where Element == TransitioningAnimation {
+extension [TransitioningAnimation] {
   func withDelay(_ delay: Double) -> [TransitioningAnimation] {
     if delay == 0 {
       return self

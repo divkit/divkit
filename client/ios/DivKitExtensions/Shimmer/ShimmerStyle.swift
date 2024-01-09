@@ -23,17 +23,17 @@ extension ShimmerStyle {
       "angle",
       expressionResolver: expressionResolver
     ) ?? defaultAngle
-    
+
     self.duration = try dictionary.getOptionalFloat(
       "duration",
       expressionResolver: expressionResolver
     ) ?? defaultDuration
-    
+
     let colors: [Color] = try dictionary.getOptionalArray(
       "colors",
       transform: { expressionResolver.resolveColor($0) }
     ) ?? defaultColors
-    
+
     let locations: [CGFloat] = try dictionary.getOptionalFloatArray(
       "locations",
       expressionResolver: expressionResolver

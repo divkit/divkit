@@ -210,7 +210,7 @@ private func calcPad(value: String, len: Int, pad: String) -> String {
   while part.count + value.count < len {
     part += pad
   }
-  if part.count > 0 && part.count + value.count > len {
+  if part.count > 0, part.count + value.count > len {
     part = String(part.prefix(len - value.count))
   }
   return part

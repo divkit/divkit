@@ -56,7 +56,7 @@ final class DivHostView: UICollectionView {
     override func layoutSubviews() {
       super.layoutSubviews()
 
-      guard let divView = divView else {
+      guard let divView else {
         return
       }
 

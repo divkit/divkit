@@ -69,7 +69,7 @@ private final class GridView: BlockView, VisibleBoundsTrackingContainer {
     // including view hierarchy layout.
     preventLayout = true
     blockViews = blockViews.reused(
-      with: model.items.map { $0.contents },
+      with: model.items.map(\.contents),
       attachTo: self,
       observer: observer,
       overscrollDelegate: overscrollDelegate,

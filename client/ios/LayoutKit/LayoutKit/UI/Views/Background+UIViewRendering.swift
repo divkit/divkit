@@ -33,7 +33,7 @@ private final class BackgroundView: BlockView, VisibleBoundsTrackingLeaf {
     didSet {
       guard oldValue !== innerView else { return }
       oldValue?.removeFromSuperview()
-      if let innerView = innerView {
+      if let innerView {
         addSubview(innerView)
       }
     }

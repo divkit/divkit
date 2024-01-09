@@ -37,7 +37,7 @@ public final class PagerBlock: BlockWithTraits {
     self.heightTrait = heightTrait
 
     if case .intrinsic = widthTrait, case .vertical = gallery.direction {
-      guard gallery.items.map({ $0.content }).hasHorizontallyNonResizable else {
+      guard gallery.items.map(\.content).hasHorizontallyNonResizable else {
         throw BlockError(
           "Pager block error: in intrinsic-width vertical pager all children have resizable width"
         )
@@ -135,7 +135,7 @@ extension PagerBlock: ElementStateUpdating {
 
 extension PagerBlock: LayoutCachingDefaultImpl {}
 
-extension Array where Element == GalleryViewModel.Item {
+extension [GalleryViewModel.Item] {
   fileprivate mutating func apply(contents: [Block]) {
     for i in indices {
       self[i].content = contents[i]

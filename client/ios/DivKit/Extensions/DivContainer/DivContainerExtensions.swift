@@ -39,7 +39,7 @@ extension DivContainer: DivBlockModeling {
     }
 
     let aspectRatio = aspect.resolveAspectRatio(expressionResolver)
-    if let aspectRatio = aspectRatio {
+    if let aspectRatio {
       if block.calculateWidthFirst {
         return block.aspectRatio(aspectRatio)
       }
@@ -151,7 +151,7 @@ extension DivContainer: DivBlockModeling {
   private func resolveSeparator(
     _ context: DivBlockModelingContext
   ) throws -> ContainerBlock.Separator? {
-    guard let separator = separator else {
+    guard let separator else {
       return nil
     }
     let separatorBlock = separator.style.makeBlock(
@@ -175,7 +175,7 @@ extension DivContainer: DivBlockModeling {
   private func resolveLineSeparator(
     _ context: DivBlockModelingContext
   ) -> ContainerBlock.Separator? {
-    guard let lineSeparator = lineSeparator else {
+    guard let lineSeparator else {
       return nil
     }
     let lineSeparatorBlock = lineSeparator.style.makeBlock(

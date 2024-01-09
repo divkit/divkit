@@ -29,7 +29,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     self.sliderModel = sliderModel
 
     inactiveRangeTracks = inactiveRangeTracks.reused(
-      with: sliderModel.ranges.map { $0.inactiveTrack },
+      with: sliderModel.ranges.map(\.inactiveTrack),
       attachTo: inactiveTrackView,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
@@ -37,7 +37,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     )
 
     activeRangeTracks = activeRangeTracks.reused(
-      with: sliderModel.ranges.map { $0.activeTrack },
+      with: sliderModel.ranges.map(\.activeTrack),
       attachTo: activeTrackView,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
@@ -185,8 +185,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     switch recognizer.state {
     case .began:
       thumbAnimator?.stopAnimation(true)
-      if let firstThumb = firstThumb,
-         let secondThumb = secondThumb {
+      if let firstThumb,
+         let secondThumb {
         if abs(firstThumb.frame.origin.x - location.x) <
           abs(secondThumb.frame.origin.x - location.x) {
           activeThumb = .first
@@ -397,8 +397,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     progress: CGFloat,
     thumbModel: SliderModel.ThumbModel?
   ) {
-    guard let thumbView = thumbView,
-          let thumbModel = thumbModel else {
+    guard let thumbView,
+          let thumbModel else {
       return
     }
 

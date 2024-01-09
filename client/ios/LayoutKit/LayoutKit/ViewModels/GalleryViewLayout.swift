@@ -33,7 +33,7 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public let contentSize: CGSize
 
   public var pageOrigins: [CGFloat] {
-    blockPages.map { $0.origin }
+    blockPages.map(\.origin)
   }
 
   public init(model: GalleryViewModel, boundsSize: CGSize? = nil) {
@@ -138,12 +138,12 @@ extension GalleryViewModel {
       let rightGap = lastGap(forSize: size)
       let bottomGap = crossInsets(forSize: size).trailing
       let width = lastFrame.maxX + rightGap
-      let maxHeight = frames.map { $0.maxY }.max()! + bottomGap
+      let maxHeight = frames.map(\.maxY).max()! + bottomGap
       return CGSize(width: width, height: maxHeight)
     case .vertical:
       let rightGap = crossInsets(forSize: size).trailing
       let bottomGap = lastGap(forSize: size)
-      let maxWidth = frames.map { $0.maxX }.max()! + rightGap
+      let maxWidth = frames.map(\.maxX).max()! + rightGap
       let height = lastFrame.maxY + bottomGap
       return CGSize(width: maxWidth, height: height)
     }
@@ -161,7 +161,7 @@ extension GalleryViewModel {
   }
 
   private func horizontallyOrientedFrames(fitting size: CGSize?) -> [CGRect] {
-    let blocks = items.map { $0.content }
+    let blocks = items.map(\.content)
     let widths = blocks.map {
       $0.isHorizontallyResizable
         ? size?.width ?? 0
@@ -170,7 +170,7 @@ extension GalleryViewModel {
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
     let maxItemHeight: CGFloat
-    if let size = size {
+    if let size {
       maxItemHeight = (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
         CGFloat(columnCount)
     } else if let maxNonResizableHeight = blocks
@@ -209,11 +209,11 @@ extension GalleryViewModel {
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
     let maxItemWidth: CGFloat
-    if let size = size {
+    if let size {
       maxItemWidth = (size.width - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
         CGFloat(columnCount)
     } else {
-      let blocks = items.map { $0.content }
+      let blocks = items.map(\.content)
       if let maxNonResizebleWidth = blocks.maxWidthOfHorizontallyNonResizableBlocks {
         maxItemWidth = maxNonResizebleWidth
       } else {

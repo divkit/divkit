@@ -15,7 +15,7 @@ public final class TimeMeasure {
   }
 
   private func stop() {
-    if let startTime = startTime {
+    if let startTime {
       time = Time(
         value: Int(Date().timeIntervalSince(startTime) * 1000),
         status: status

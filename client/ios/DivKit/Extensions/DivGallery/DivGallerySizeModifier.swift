@@ -16,7 +16,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
     direction: GalleryViewModel.Direction
   ) {
     let items = gallery.nonNilItems
-    
+
     if direction == .vertical,
        gallery.getTransformedWidth(context).isIntrinsic,
        items.allHorizontallyMatchParent {

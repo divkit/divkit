@@ -16,7 +16,7 @@ public final class GenericCollectionViewLayout: UICollectionViewLayout {
 
   public override func layoutAttributesForItem(at indexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
-    guard let layout = layout else {
+    guard let layout else {
       return nil
     }
     return UICollectionViewLayoutAttributes(

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-extension Array where Element == ImageRenderableBlock {
+extension [ImageRenderableBlock] {
   func draw(
     in context: CGContext,
     offset: CGPoint,

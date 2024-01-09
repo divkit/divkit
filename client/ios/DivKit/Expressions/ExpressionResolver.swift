@@ -213,7 +213,7 @@ public final class ExpressionResolver {
             errorTracker: errorTracker,
             resolveNested: false
           )
-          if let link = link, let value = evaluateString(link: link) {
+          if let link, let value = evaluateString(link: link) {
             stringValue += value
           }
         }
@@ -243,7 +243,7 @@ public final class ExpressionResolver {
     value: T?,
     link: ExpressionLink<T>
   ) -> T? {
-    if let validator = link.validator, let value = value {
+    if let validator = link.validator, let value {
       if validator.isValid(value) {
         return value
       } else {

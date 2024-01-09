@@ -44,7 +44,7 @@ public struct TabContentsViewModel: Equatable {
       throw BlockError("Tab error: no children provided")
     }
 
-    if let footer = footer, footer.isVerticallyResizable {
+    if let footer, footer.isVerticallyResizable {
       throw BlockError("Tab error: vertically resizable footer is unsupported")
     }
   }
@@ -62,7 +62,7 @@ public struct TabContentsViewModel: Equatable {
 
 extension TabContentsViewModel: CustomDebugStringConvertible {
   public var debugDescription: String {
-    let pagesDescription = pages.map { $0.debugDescription }
+    let pagesDescription = pages.map(\.debugDescription)
     return """
     { path: \(dbgStr(path)),
       pages: \(pagesDescription),

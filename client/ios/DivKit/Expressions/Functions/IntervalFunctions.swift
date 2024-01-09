@@ -108,7 +108,7 @@ enum IntervalFunctions: String, CaseIterable {
       throw AnyCalcExpression.Error.incorrectMilliseconds("\(funcName)(\(milliseconds))")
     }
     var val = milliseconds / divider
-    if let whole = whole {
+    if let whole {
       val = val % whole
     }
     return val

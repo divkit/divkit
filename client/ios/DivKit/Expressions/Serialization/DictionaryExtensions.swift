@@ -3,7 +3,7 @@ import Foundation
 import BasePublic
 import Serialization
 
-extension Dictionary where Key == String, Value == Any {
+extension [String: Any] {
   func getOptionalExpressionField<T: RawRepresentable>(
     _ key: String
   ) throws -> Field<Expression<T>>? {

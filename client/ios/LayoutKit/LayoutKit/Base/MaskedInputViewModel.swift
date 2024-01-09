@@ -43,12 +43,12 @@ public class MaskedInputViewModel {
     )
 
     maskValidator.newValues.skipRepeats().addObserver { [weak self] maskValidator in
-      guard let self = self else { return }
+      guard let self else { return }
       self.rawText = maskValidator.formatted(rawText: self.rawText, rawCursorPosition: nil).rawText
     }.dispose(in: disposePool)
 
     signal.addObserver { [weak self] action in
-      guard let self = self else { return }
+      guard let self else { return }
       let newString: String
       let newCursorPosition: CursorData?
       switch action {

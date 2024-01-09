@@ -131,7 +131,7 @@ extension SwitchBlock: CustomDebugStringConvertible {
       Enabled: \(enabled)
     """
 
-    if let action = action {
+    if let action {
       result += "\n  URL: \(dbgStr(action.url))"
       result += "\n  Path: \(dbgStr(action.path))"
     }
@@ -201,7 +201,7 @@ extension AnimationChanges: CustomDebugStringConvertible {
 
 extension BlockAnimation: CustomDebugStringConvertible {
   public var debugDescription: String {
-    "{ Animation changes:\(changes), KeyTimes: \(keyTimes.map { $0.value }), Duration: \(duration.value) }"
+    "{ Animation changes:\(changes), KeyTimes: \(keyTimes.map(\.value)), Duration: \(duration.value) }"
   }
 }
 
@@ -336,7 +336,7 @@ extension GridBlock: CustomDebugStringConvertible {
       Items map:
     \(formatTable(grid.itemsIndices).indented())
       Items:
-    \(items.map { $0.debugDescription }.joined(separator: ",\n").indented())
+    \(items.map(\.debugDescription).joined(separator: ",\n").indented())
     }
     """
   }
@@ -351,7 +351,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
       decorations.append("Background color: \(backgroundColor)")
     }
 
-    if let actions = actions {
+    if let actions {
       var actionDescription = "Actions:\n"
       for action in actions {
         actionDescription += "   UIAction:\n"
@@ -362,7 +362,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
       decorations.append(actionDescription)
     }
 
-    if let actionAnimation = actionAnimation {
+    if let actionAnimation {
       var description = "Action animation:\n"
       for animation in actionAnimation.touchDown {
         description += "   TouchDown animation:\n"
@@ -390,7 +390,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
       decorations.append("Boundary: \(boundary)")
     }
 
-    if let border = border {
+    if let border {
       decorations.append("Border: \(border)")
     }
 
@@ -500,10 +500,10 @@ extension EmptyBlock: CustomDebugStringConvertible {
   }
 }
 
-private func formatTable<T>(_ rawTable: [[T]]) -> String {
+private func formatTable(_ rawTable: [[some Any]]) -> String {
   let table = rawTable.map { $0.map(String.init(describing:)) }
   guard !table.isEmpty else { return "Empty table" }
-  let columnCounts = table.map { $0.count }
+  let columnCounts = table.map(\.count)
   guard columnCounts.min() == columnCounts.max() else {
     return "Malformed table"
   }

@@ -54,7 +54,7 @@ extension TextFieldBlock: CustomDebugStringConvertible {
       result += "\n  RightControl: \(control)"
     }
 
-    if let toolbar = toolbar {
+    if let toolbar {
       result += "\n  Toolbar: \(toolbar)"
     }
     result += "\n}"

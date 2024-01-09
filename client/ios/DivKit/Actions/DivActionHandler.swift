@@ -95,7 +95,7 @@ public final class DivActionHandler {
     default:
       action = parseAction(type: DivActionTemplate.self, json: params.action)
     }
-    guard let action = action else {
+    guard let action else {
       return
     }
 
@@ -170,7 +170,7 @@ public final class DivActionHandler {
       url,
       cardId: context.cardId,
       completion: { [weak self] result in
-        guard let self = self else {
+        guard let self else {
           return
         }
         let callbackActions: [DivAction]

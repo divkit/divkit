@@ -95,9 +95,9 @@ final class DivBlockProvider {
   }
 
   private func update(reasons: [DivActionURLHandler.UpdateReason]) {
-    guard var divData = divData else {
+    guard var divData else {
       guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(dataErrors.map { $0.prettyMessage })
+      block = makeErrorsBlock(dataErrors.map(\.prettyMessage))
       return
     }
 
@@ -204,7 +204,7 @@ final class DivBlockProvider {
     }
 
     if debugParams.isDebugInfoEnabled {
-      return makeErrorsBlock(errors.map { $0.prettyMessage })
+      return makeErrorsBlock(errors.map(\.prettyMessage))
     } else {
       return noDataBlock
     }

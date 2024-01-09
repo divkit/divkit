@@ -55,7 +55,7 @@ extension Block {
       child: indicator,
       showDebugInfo: {
         #if os(iOS)
-        debugParams.showDebugInfo(ErrorListView(errors: errors.map { $0.prettyMessage }))
+        debugParams.showDebugInfo(ErrorListView(errors: errors.map(\.prettyMessage)))
         #else
         return
         #endif

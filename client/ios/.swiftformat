@@ -1,19 +1,22 @@
+--swiftversion 5.7
+
 --exclude DivKit/generated_sources
 --exclude DivKit/shared_data_generated_sources
 --exclude DivKitTests/Entities/generated_sources
+
 --disable redundantSelf
 --disable redundantFileprivate
 --disable wrapMultilineStatementBraces
+
 --extensionacl on-declarations
 --hexgrouping 2
 --ifdef noindent
 --indent 2
 --maxwidth 100
+--modifierorder public,private,private(set),internal,override
 --nospaceoperators ...,..<
 --operatorfunc nospace
---swiftversion 5.1
 --symlinks ignore
 --wraparguments before-first
 --wrapcollections before-first
 --wrapparameters before-first
---modifierorder public,private,private(set),internal,override

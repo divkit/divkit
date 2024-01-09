@@ -9,7 +9,7 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
   private var view: BlockView? {
     didSet {
       oldValue?.removeFromSuperview()
-      if let view = view {
+      if let view {
         addSubview(view)
         setNeedsLayout()
       }
@@ -19,7 +19,7 @@ public final class GenericCollectionReusableView: UICollectionReusableView {
   public func configure(model: UIViewRenderable, observer: ElementStateObserver? = nil) {
     self.model = model
 
-    if let view = view, model.canConfigureBlockView(view) {
+    if let view, model.canConfigureBlockView(view) {
       model.configureBlockView(
         view,
         observer: observer,

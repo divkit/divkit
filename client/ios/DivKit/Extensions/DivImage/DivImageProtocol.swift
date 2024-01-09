@@ -12,7 +12,7 @@ protocol DivImageProtocol: DivBase, DivImageContentMode {
 
 extension DivImageProtocol {
   func resolveHeight(_ context: DivBlockModelingContext) -> ImageBlockHeight {
-    if let aspect = aspect {
+    if let aspect {
       return .ratio(aspect.resolveRatio(context.expressionResolver) ?? 0)
     }
     return .trait(resolveContentHeightTrait(context))

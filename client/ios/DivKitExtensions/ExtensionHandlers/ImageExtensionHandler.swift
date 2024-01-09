@@ -21,7 +21,7 @@ public final class ImageExtensionHandler: DivExtensionHandler {
   ) -> Block {
     guard
       let block = block as? ImageBlock,
-      let image = image
+      let image
     else {
       return block
     }

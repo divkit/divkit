@@ -86,7 +86,7 @@ final class TabListView: UIView {
     collectionView.frame = bounds
     delegate.size = bounds.size
 
-    if let animationInfo = animationInfo {
+    if let animationInfo {
       let fromLayout = delegate.collectionView(
         collectionView,
         layoutForItemSelection: animationInfo.fromSelection,
@@ -140,7 +140,7 @@ final class TabListView: UIView {
     collectionView.layoutIfNeeded()
 
     let pillSize = CGSize(
-      width: model.items.map { $0.totalSize.width }.interim(at: selection),
+      width: model.items.map(\.totalSize.width).interim(at: selection),
       height: model.items.first!.totalSize.height
     )
     let halfPill = pillSize.height / 2

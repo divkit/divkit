@@ -88,7 +88,7 @@ public struct TabViewLayout: Equatable {
 extension TabContentsViewModel {
   fileprivate var intrinsicWidth: CGFloat {
     TabContentsViewLayout.intrinsicWidth(
-      for: pages.map { $0.block },
+      for: pages.map(\.block),
       footer: footer,
       pagesInsets: contentInsets.horizontalInsets
     )
@@ -100,7 +100,7 @@ extension TabContentsViewModel {
   ) -> CGFloat {
     TabContentsViewLayout.intrinsicHeight(
       forWidth: width,
-      pages: pages.map { $0.block },
+      pages: pages.map(\.block),
       pagesHeightMode: pagesHeight,
       selectedPageIndex: selectedPageIndex,
       footer: footer,

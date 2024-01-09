@@ -149,8 +149,8 @@ private func makeEnumeratedItems(
     }
 }
 
-private func calculateSizes<T: NonResizableItem>(
-  for nonResizableItems: [T?],
+private func calculateSizes(
+  for nonResizableItems: [(some NonResizableItem)?],
   grid: Grid,
   weights: [LayoutTrait.Weight?],
   direction: Direction,
@@ -173,8 +173,8 @@ private func calculateSizes<T: NonResizableItem>(
   )
 }
 
-private func calculateSizes<T: NonResizableItem>(
-  for items: [T?],
+private func calculateSizes(
+  for items: [(some NonResizableItem)?],
   in grid: Grid,
   weights: [LayoutTrait.Weight?],
   weightToSize: CGFloat,
@@ -188,7 +188,7 @@ private func calculateSizes<T: NonResizableItem>(
     weights
       .enumerated()
       .filter { $0.element != nil }
-      .map { $0.offset }
+      .map(\.offset)
   )
   let spans = Set(items.compactMap { $0?.span }).sorted(by: <)
 
@@ -306,8 +306,8 @@ private func calculateWeights(
   return result
 }
 
-private func calculateWeightToSize<T: NonResizableItem>(
-  for nonResizableItems: [T?],
+private func calculateWeightToSize(
+  for nonResizableItems: [(some NonResizableItem)?],
   grid: Grid,
   weights: [LayoutTrait.Weight?],
   direction: Direction,
@@ -343,8 +343,8 @@ private func calculateWeightToSize<T: NonResizableItem>(
   return max(weightToBoundingSize, weightToIntrinsicSize)
 }
 
-private func calculateWeightToIntrinsicSize<T: NonResizableItem>(
-  for nonResizableItems: [T?],
+private func calculateWeightToIntrinsicSize(
+  for nonResizableItems: [(some NonResizableItem)?],
   grid: Grid,
   weights: [LayoutTrait.Weight?],
   direction: Direction

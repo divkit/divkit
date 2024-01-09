@@ -47,7 +47,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    if let lastNonZeroBounds = lastNonZeroBounds,
+    if let lastNonZeroBounds,
        lastNonZeroBounds != bounds {
       close()
     }

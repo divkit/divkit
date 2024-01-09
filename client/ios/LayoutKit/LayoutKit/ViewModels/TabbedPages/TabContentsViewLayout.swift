@@ -63,7 +63,7 @@ struct TabContentsViewLayout: Equatable {
   }
 }
 
-extension Array where Element == Block {
+extension [Block] {
   fileprivate func intrinsicContentHeight(
     forWidth width: CGFloat,
     selectedPageIndex index: CGFloat

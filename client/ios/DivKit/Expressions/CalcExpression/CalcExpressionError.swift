@@ -4,28 +4,28 @@ extension CalcExpression {
   enum Error: Swift.Error, CustomStringConvertible, Equatable {
     /// An application-specific error
     case message(String)
-    
+
     /// An application-specific error without information about failed expression
     case shortMessage(String)
-    
+
     /// The parser encountered a sequence of characters it didn't recognize
     case unexpectedToken(String)
-    
+
     /// The parser expected to find a delimiter (e.g. closing paren) but didn't
     case missingDelimiter(String)
-    
+
     /// The specified constant, operator or function was not recognized
     case undefinedSymbol(Symbol)
-    
+
     /// A function was called with the wrong number of arguments (arity)
     case arityMismatch(Symbol)
-    
+
     case escaping
-    
+
     var description: String {
       switch self {
       case let .message(message),
-        let .shortMessage(message):
+           let .shortMessage(message):
         return message
       case let .unexpectedToken(string):
         return "Unexpected token: \(string)"
@@ -57,7 +57,7 @@ extension CalcExpression {
         return "Incorrect string escape"
       }
     }
-    
+
     func makeOutputMessage(for expression: String) -> String {
       switch self {
       case let .shortMessage(message):

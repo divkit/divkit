@@ -133,7 +133,7 @@ public final class DivView: VisibleBoundsTrackingView {
   ///
   /// - Returns: The calculated intrinsic content size.
   public override var intrinsicContentSize: CGSize {
-    guard let cardSize = cardSize else {
+    guard let cardSize else {
       return CGSize(width: DivView.noIntrinsicMetric, height: DivView.noIntrinsicMetric)
     }
     let width: CGFloat
@@ -159,7 +159,7 @@ public final class DivView: VisibleBoundsTrackingView {
   }
 
   private func update(block: Block) {
-    if let blockView = blockView, block.canConfigureBlockView(blockView) {
+    if let blockView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(
         blockView,
         observer: self,

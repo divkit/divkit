@@ -31,7 +31,7 @@ final class RunLoopCardUpdateAggregator {
     if !scheduled {
       scheduled = true
       mainThreadAsyncRunner { [weak self] in
-        guard let self = self else { return }
+        guard let self else { return }
         if let reasons = NonEmptyArray(self.batch.merge()) {
           self.batch = []
           self.scheduled = false
@@ -42,7 +42,7 @@ final class RunLoopCardUpdateAggregator {
   }
 }
 
-extension Array where Element == DivActionURLHandler.UpdateReason {
+extension [DivActionURLHandler.UpdateReason] {
   fileprivate func merge() -> [DivActionURLHandler.UpdateReason] {
     var variables: DivActionURLHandler.UpdateReason.AffectedCards = .specific([])
 

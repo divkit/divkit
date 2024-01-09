@@ -706,7 +706,7 @@ extension AnyCalcExpression {
       default:
         return args[0]
       }
-    }
+    },
   ]
 }
 

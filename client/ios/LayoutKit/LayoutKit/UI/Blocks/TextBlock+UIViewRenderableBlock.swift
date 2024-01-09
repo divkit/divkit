@@ -42,7 +42,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
       guard textGradient == nil || textGradient != oldValue else {
         return
       }
-      if let textGradient = textGradient {
+      if let textGradient {
         gradientView = textGradient.uiView
         currentView = gradientView
       } else {
@@ -58,7 +58,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
         return
       }
       oldValue?.removeFromSuperview()
-      if let currentView = currentView {
+      if let currentView {
         addSubview(currentView)
       }
       setNeedsLayout()
@@ -220,7 +220,7 @@ private final class TextBlockView: UIView {
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
   override func draw(_ rect: CGRect) {
-    guard let model = model else { return }
+    guard let model else { return }
     let textLayout: AttributedStringLayout<ActionsAttribute> = model.text.drawAndGetLayout(
       inContext: UIGraphicsGetCurrentContext()!,
       verticalPosition: model.verticalPosition,
@@ -241,7 +241,7 @@ private final class TextBlockView: UIView {
   }
 
   override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
-    guard let textLayout = textLayout else {
+    guard let textLayout else {
       return false
     }
     return model.canSelect && bounds.contains(point)
@@ -253,7 +253,7 @@ private final class TextBlockView: UIView {
   }
 
   @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-    guard gesture.state == .ended, let textLayout = textLayout else {
+    guard gesture.state == .ended, let textLayout else {
       return
     }
     let tapLocation = gesture.location(in: gesture.view)
@@ -292,7 +292,7 @@ private final class TextBlockView: UIView {
         .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
     )
     UIMenuController.shared.hideMenu(animated: true)
-    if let elementIndex = elementIndex {
+    if let elementIndex {
       let prefix = model.text.string.prefix(elementIndex)
       let suffix = model.text.string.suffix(from: prefix.endIndex)
       let trailing = elementIndex + suffix.distance(
@@ -306,7 +306,7 @@ private final class TextBlockView: UIView {
   }
 
   func handleSelectionTapEnded(_: UIGestureRecognizer) {
-    guard let selectionRect = selectionRect else {
+    guard let selectionRect else {
       return
     }
     UIMenuController.shared.presentMenu(from: self, in: selectionRect)
@@ -327,8 +327,8 @@ private final class TextBlockView: UIView {
     )
     switch gesture.state {
     case .began:
-      guard let selectedRange = selectedRange,
-            let elementIndex = elementIndex else {
+      guard let selectedRange,
+            let elementIndex else {
         return
       }
       let lineIndex = textLayout?.lines.lastIndex(where: {
@@ -352,7 +352,7 @@ private final class TextBlockView: UIView {
           abs($0 - selectedRange.lowerBound),
           abs($0 - selectedRange.upperBound)
         ) < 5 }
-      guard let nearestIndex = nearestIndex else {
+      guard let nearestIndex else {
         return
       }
       activePointer =
@@ -362,8 +362,8 @@ private final class TextBlockView: UIView {
         ) ?
         .leading : .trailing
     case .changed:
-      guard let activePointer = activePointer, let elementIndex = elementIndex,
-            let selectedRange = selectedRange else {
+      guard let activePointer, let elementIndex,
+            let selectedRange else {
         return
       }
       switch activePointer {
@@ -374,7 +374,7 @@ private final class TextBlockView: UIView {
       }
     case .ended, .cancelled, .failed:
       activePointer = nil
-      guard let selectionRect = selectionRect else {
+      guard let selectionRect else {
         return
       }
       UIMenuController.shared.presentMenu(from: self, in: selectionRect)
@@ -411,7 +411,7 @@ private final class TextBlockView: UIView {
     let maxSymbolIndex = textLayout?.lines
       .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max()
 
-    if let selectedRange = selectedRange {
+    if let selectedRange {
       UIPasteboard.general.string = model.text.string[Range(uncheckedBounds: (
         selectedRange.lowerBound,
         min(selectedRange.upperBound, maxSymbolIndex ?? .max)
@@ -447,7 +447,7 @@ extension TextBlockView: UIGestureRecognizerDelegate {
 
 extension Image {
   fileprivate func withTintColor(_ color: Color?) -> Image {
-    guard let color = color else { return self }
+    guard let color else { return self }
     return self.redrawn(withTintColor: color)
   }
 }
@@ -486,7 +486,7 @@ private enum ActivePointer {
 extension AttributedStringLayout {
   fileprivate func getTapElementIndex(from point: CGPoint) -> Int? {
     let lineLayout = lines.last(where: { point.y <= $0.verticalOffset })
-    guard let lineLayout = lineLayout,
+    guard let lineLayout,
           point.x > lineLayout.horizontalOffset else {
       return nil
     }

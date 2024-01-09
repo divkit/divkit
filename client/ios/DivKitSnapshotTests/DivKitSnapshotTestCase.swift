@@ -128,7 +128,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     caseName: String,
     steps: [TestStep]? = nil
   ) throws {
-    if let steps = steps {
+    if let steps {
       for (index, step) in steps.enumerated() {
         step.divActions?.forEach { divAction in
           divKitComponents.actionHandler.handle(
@@ -221,7 +221,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       isDirectory: true
     ).appendingPathComponent(subdirectory)
     var stepDescription = ""
-    if let stepName = stepName {
+    if let stepName {
       stepDescription = "_" + stepName
     }
     let fileName = caseName + "_\(Int(device.size.width))" + device.scale
@@ -323,7 +323,7 @@ private final class TestImageHolderFactory: DivImageHolderFactory {
   private var reportedUrls = Set<String>()
 
   func make(_ url: URL?, _: ImagePlaceholder?) -> ImageHolder {
-    guard let url = url else {
+    guard let url else {
       XCTFail("Predefined images not supported in tests")
       return UIImage()
     }

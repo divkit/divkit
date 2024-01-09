@@ -328,7 +328,7 @@ extension TextFieldBlock.Placeholders.Separate.AnimatableAttributes {
 }
 
 extension TextFieldBlock.ToolbarType {
-  public static func == (
+  public static func ==(
     lhs: TextFieldBlock.ToolbarType,
     rhs: TextFieldBlock.ToolbarType
   ) -> Bool {

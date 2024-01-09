@@ -105,15 +105,15 @@ struct ContainerBlockLayout {
         children.reverse()
       }
 
-      let horizontallyResizableBlocks = children.map { $0.content }
-        .filter { $0.isHorizontallyResizable }
+      let horizontallyResizableBlocks = children.map(\.content)
+        .filter(\.isHorizontallyResizable)
       let widthOfHorizontallyNonResizableBlocks =
-        widthsOfHorizontallyNonResizableBlocksIn(children.map { $0.content }).reduce(0, +)
+        widthsOfHorizontallyNonResizableBlocksIn(children.map(\.content)).reduce(0, +)
       let widthAvailableForResizableBlocks = (
         size.width - widthOfHorizontallyNonResizableBlocks - gapsSize
       )
       let resizableBlockWeights = horizontallyResizableBlocks
-        .map { $0.weightOfHorizontallyResizableBlock.rawValue }
+        .map(\.weightOfHorizontallyResizableBlock.rawValue)
       let widthAvailablePerWeightUnit = max(0, widthAvailableForResizableBlocks) /
         resizableBlockWeights.reduce(0, +)
 
@@ -123,8 +123,8 @@ struct ContainerBlockLayout {
         lengthAvailableForResizableBlocks: widthAvailableForResizableBlocks
       )
 
-      let horizontallyConstrainedBlocks = children.map { $0.content }
-        .filter { $0.isHorizontallyConstrained }
+      let horizontallyConstrainedBlocks = children.map(\.content)
+        .filter(\.isHorizontallyConstrained)
       var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
         blockSizes: horizontallyConstrainedBlocks
           .map { .init(size: $0.widthOfHorizontallyNonResizableBlock, minSize: $0.minWidth) },
@@ -155,7 +155,7 @@ struct ContainerBlockLayout {
       contentSize = x
       frames.addBaselineOffset(children: children, ascent: containerAscent)
     case .vertical:
-      let blocks = children.map { $0.content }
+      let blocks = children.map(\.content)
 
       let blockSizes = blocks.map {
         (
@@ -176,9 +176,9 @@ struct ContainerBlockLayout {
       let heightAvailableForResizableBlocks = size
         .height - heightOfVerticallyNonResizableBlocks - gapsSize
 
-      let verticallyResizableBlocks = blocks.filter { $0.isVerticallyResizable }
+      let verticallyResizableBlocks = blocks.filter(\.isVerticallyResizable)
       let verticallyResizableBlocksWeight = verticallyResizableBlocks
-        .map { $0.weightOfVerticallyResizableBlock.rawValue }
+        .map(\.weightOfVerticallyResizableBlock.rawValue)
         .reduce(0, +)
       var blockMeasure = ResizableBlockMeasure(
         resizableBlockCount: verticallyResizableBlocks.count,
@@ -188,7 +188,7 @@ struct ContainerBlockLayout {
       )
 
       var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
-        blockSizes: blockSizes.filter { $0.0.isVerticallyConstrained }.map {
+        blockSizes: blockSizes.filter(\.0.isVerticallyConstrained).map {
           ConstrainedBlockSize(size: $0.1, minSize: $0.0.minHeight)
         },
         lengthToDecrease: heightAvailableForResizableBlocks < 0 ?
@@ -354,7 +354,7 @@ struct ContainerBlockLayout {
   public var leftInset: CGFloat {
     let leftMargin = layoutDirection == .horizontal ? gaps.first! : 0
     return ContentFitting(
-      offsets: blockFrames.map { $0.minX },
+      offsets: blockFrames.map(\.minX),
       margin: leftMargin
     ).insetValue
   }
@@ -362,7 +362,7 @@ struct ContainerBlockLayout {
   public var topInset: CGFloat {
     let topMargin = layoutDirection == .vertical ? gaps.first! : 0
     return ContentFitting(
-      offsets: blockFrames.map { $0.minY },
+      offsets: blockFrames.map(\.minY),
       margin: topMargin
     ).insetValue
   }
@@ -372,8 +372,8 @@ struct ContainerBlockLayout {
 
   public var contentSize: CGSize {
     CGSize(
-      width: blockFrames.map { $0.maxX }.max()!,
-      height: blockFrames.map { $0.maxY }.max()!
+      width: blockFrames.map(\.maxX).max()!,
+      height: blockFrames.map(\.maxY).max()!
     )
   }
 
@@ -383,10 +383,10 @@ struct ContainerBlockLayout {
     childSize: CGSize
   ) -> CGFloat? {
     let childAscent = child.contentAscent(forWidth: childSize.width)
-    guard let containerAscent = containerAscent else {
+    guard let containerAscent else {
       return childAscent
     }
-    guard let childAscent = childAscent else {
+    guard let childAscent else {
       return containerAscent
     }
     return max(containerAscent, childAscent)
@@ -402,7 +402,7 @@ private func heightsOfVerticallyNonResizableBlocksIn(
 }
 
 func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
-  blocks.filter { !$0.isHorizontallyResizable }.map { $0.widthOfHorizontallyNonResizableBlock }
+  blocks.filter { !$0.isHorizontallyResizable }.map(\.widthOfHorizontallyNonResizableBlock)
 }
 
 extension Block {
@@ -415,12 +415,12 @@ extension Block {
   }
 }
 
-extension Array where Element == CGRect {
+extension [CGRect] {
   fileprivate mutating func addBaselineOffset(
     children: [ContainerBlock.Child],
     ascent: CGFloat?
   ) {
-    guard let ascent = ascent, ascent > 0 else {
+    guard let ascent, ascent > 0 else {
       return
     }
     var framesWithOffset = [CGRect]()
@@ -442,7 +442,7 @@ extension ContainerBlock.Child {
   }
 
   fileprivate func baselineOffset(ascent: CGFloat?, width: CGFloat) -> CGFloat {
-    guard let ascent = ascent, ascent > 0,
+    guard let ascent, ascent > 0,
           let childAscent = contentAscent(forWidth: width) else {
       return 0
     }

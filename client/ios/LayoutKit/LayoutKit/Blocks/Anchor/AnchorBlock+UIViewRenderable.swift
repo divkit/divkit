@@ -68,7 +68,7 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
     self.observer = observer
 
     func reuse(_ block: Block?, view: BlockView?) -> BlockView? {
-      guard let block = block else {
+      guard let block else {
         view?.removeFromSuperview()
         return nil
       }

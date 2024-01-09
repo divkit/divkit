@@ -107,7 +107,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
       contentAlignment: contentAlignment,
       items: items,
       columnCount: columnCount,
-      grid: Grid(spans: items.map { $0.span }, columnCount: columnCount)
+      grid: Grid(spans: items.map(\.span), columnCount: columnCount)
     )
     try validateLayoutTraits()
   }
