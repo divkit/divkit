@@ -1,0 +1,229 @@
+{
+  "templates": {
+    "expressions_block": {
+      "type": "container",
+      "orientation": "horizontal",
+      "items": [
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        },
+        {
+          "type": "text",
+          "$text": "expression"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "expressions",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "items": [
+            {
+              "type": "expressions_block",
+              "expression": "@{mod(div((int1+int2)*int3, 15) - maxInteger()/minInteger()*abs(min(int1,int2)*max(int1,int2)),9)}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{round(mod(div((num1+num2)*num3, 15.0) - mod(maxNumber()-minNumber(),9.0) + abs(min(num1,num2)*max(num1,num2)),9.0))}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{floor((getColorRed(setColorRed(setColorGreen(setColorBlue(rgb(red,red,red),0.3),0.2),0.1)) + getColorGreen(setColorRed(setColorGreen(setColorBlue(rgb(red,red,red),0.3),0.2),0.1)) + getColorBlue(setColorRed(setColorGreen(setColorBlue(rgb(0.5,0.5,0.5),0.4),0.2),0.2))) * 10.0)}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{getHours(setHours(setDay(setMonth(setYear(addMillis(parseUnixTime(0),1000),2023),12),10),9))}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{testRegex(str_long, 'mqwertyui') ? (len(replaceAll(padStart(substring(str_long,0,1000),1100,'ca'),'a','b')) + lastIndex(toUpperCase(encodeUri(str_long)),'A')) / 1000 : ''}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{len('Lorem Ipsum @{substring(str_long,7,8)+substring('ab@{substring(str_long,11,12)}',2,3)} simply dummy text of the printing and typesetting industry.')-70}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{len(theme == 'light' ? 'iVBORw0KGgoAAAANSUhEUgAAAGEAAABgCAYAAAANWhwGAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQRSURBVHgB7ZztcRMxEIZfGP5jKkAluIOICggduIOkAx8VJFQQUwFQgdNB7Ap8VBBTgbmd803y4/YkSytbUvaZ2YGRc9JJrz5XOgGKoiiKoiiKoiiKoiiKoiiKkjXvIMess5vObGfmaDWyOdqfzn4jI+adPXd2eGO2QyaVzaB/mRIKLYU9IZL3iMei3q7HB+oFFohASoS3zhUikBDhMxSDCCRE4PiCfvZVk31DAiREMEz4HvWxYcINIkjZEmoUIQkpRVA8kVgxHxLGnSPi+dWWkAEqQgaoCBmgImSAipABKkIGqAgZICFCy4Qb1IdhwqO8Ax9weWxn13jxxm7RC0tGmdtABoPe9z87/v/z8V9Kj7YpHxHOxV00O4zvOBmPZ5fw371a4jRmx2d2nmn4xG/Ab3NelCeMv5h1PLdA2FbiDG7obzYB8d864rXMc2tcmDXGX+za8dwOYXu6DdysAuN+dsRrkUAEiYH5LxM+VWMNwgfuG7hbw1eEMYwXHNxv/xCBhAjcoOTTbYQwg1vglGmP0SKClCIY8LSIm1Gkmo20mC5QToSo90m5TviIab4jPL294/fQae1Px+9z8GleFBqAuZmMi3ucPnguPOK1AfGuPOJdI2wmmByDuLnzorNf6EWbOkpJv7mmkK+59YiP3vEB/oW4Y+KaIwKJLUjqJ7mp3Sec3l9SfK9XtrNjHCucHpfBywnBPV5W4C3C+vEDE57FVm6SGpIZlJeYFs8i5UXdMuE1iWCY8BaRSInQMuG1tYQxtohESoQkJ9My44oJl/LyRsP1ly5fTElwMy2LTBhmSGMvaVA+XCU7QACp7mhq88WifLjx4BECSO4xcwPUFcrHMuHRg7I0nPuihnGBWwe59kzODo0LXL9pUT7Dt2nkYhnylcplHsUaCN4NKwmD3ueUJeQ0S7K0V/wxqLtLSoL0CbwW/LQtu0GsZhrws6QsB7IamZolNSiLJfrKQ3aHwuBmSSW1Bir0oiuRRfmtYcwXVtzCs/TWwFWiorDgM1JC/1qFCATXGkpYN1QjggWfmR3y3muoRgRi6oCX71H3S1CVCFTIVOu5TD0gT6oSgbDgMzUIkVuLqE4EosG0ENQ1GeRDlSIQK0wLsUPkpX6CVCsCdTncN26vbY00B8eWOM/9rdn7mnyFGMRYQGa8uANwOLM1yJxTv00gQRr0+xIhreQSNxgX4WtqIJ9xDhVhAgPZa54Nk04jmIav3aMwGsiIsZhIgwrlXANzg0Ix6E9sxIixhgxc/G8KGoBXCBPEIp6ziVDKtZnzo1n0t7MM37SNQYeTt4gXgitw8TKr9e5SCc4mgt78lQEqQgaoCBmgImSAipABKgLP3jMsGhWB58dImOsqHiUBg6+paF+QoiiKoihKWfwHujOhcdJrcbAAAAAASUVORK5CYII=' : 'iVBORw0KGgoAAAANSUhEUgAAAGEAAABgCAYAAAANWhwGAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAQRSURBVHgB7ZztcRMxEIZfGP5jKkAluIOICggduIOkAx8VJFQQUwFQgdNB7Ap8VBBTgbmd803y4/YkSytbUvaZ2YGRc9JJrz5XOgGKoiiKoiiKoiiKoiiKoiiKkjXvIMess5vObGfmaDWyOdqfzn4jI+adPXd2eGO2QyaVzaB/mRIKLYU9IZL3iMei3q7HB+oFFohASoS3zhUikBDhMxSDCCRE4PiCfvZVk31DAiREMEz4HvWxYcINIkjZEmoUIQkpRVA8kVgxHxLGnSPi+dWWkAEqQgaoCBmgImSAipABKkIGqAgZICFCy4Qb1IdhwqO8Ax9weWxn13jxxm7RC0tGmdtABoPe9z87/v/z8V9Kj7YpHxHOxV00O4zvOBmPZ5fw371a4jRmx2d2nmn4xG/Ab3NelCeMv5h1PLdA2FbiDG7obzYB8d864rXMc2tcmDXGX+za8dwOYXu6DdysAuN+dsRrkUAEiYH5LxM+VWMNwgfuG7hbw1eEMYwXHNxv/xCBhAjcoOTTbYQwg1vglGmP0SKClCIY8LSIm1Gkmo20mC5QToSo90m5TviIab4jPL294/fQae1Px+9z8GleFBqAuZmMi3ucPnguPOK1AfGuPOJdI2wmmByDuLnzorNf6EWbOkpJv7mmkK+59YiP3vEB/oW4Y+KaIwKJLUjqJ7mp3Sec3l9SfK9XtrNjHCucHpfBywnBPV5W4C3C+vEDE57FVm6SGpIZlJeYFs8i5UXdMuE1iWCY8BaRSInQMuG1tYQxtohESoQkJ9My44oJl/LyRsP1ly5fTElwMy2LTBhmSGMvaVA+XCU7QACp7mhq88WifLjx4BECSO4xcwPUFcrHMuHRg7I0nPuihnGBWwe59kzODo0LXL9pUT7Dt2nkYhnylcplHsUaCN4NKwmD3ueUJeQ0S7K0V/wxqLtLSoL0CbwW/LQtu0GsZhrws6QsB7IamZolNSiLJfrKQ3aHwuBmSSW1Bir0oiuRRfmtYcwXVtzCs/TWwFWiorDgM1JC/1qFCATXGkpYN1QjggWfmR3y3muoRgRi6oCX71H3S1CVCFTIVOu5TD0gT6oSgbDgMzUIkVuLqE4EosG0ENQ1GeRDlSIQK0wLsUPkpX6CVCsCdTncN26vbY00B8eWOM/9rdn7mnyFGMRYQGa8uANwOLM1yJxTv00gQRr0+xIhreQSNxgX4WtqIJ9xDhVhAgPZa54Nk04jmIav3aMwGsiIsZhIgwrlXANzg0Ix6E9sxIixhgxc/G8KGoBXCBPEIp6ziVDKtZnzo1n0t7MM37SNQYeTt4gXgitw8TKr9e5SCc4mgt78lQEqQgaoCBmgImSAipABKgLP3jMsGhWB58dImOsqHiUBg6+paF+QoiiKoihKWfwHujOhcdJrcbAAAAAASUVORK5CYII=')/1000}"
+            },
+            {
+              "type": "expressions_block",
+              "expression": "@{toInteger(getArrayString(arr,9)) - getArrayInteger(arr,3) + toInteger(getArrayNumber(arr,8)) - toInteger(getColorRed(getArrayColor(arr,7))) - getArrayOptInteger(arr,11,6)}"
+            }
+          ],
+          "type": "container"
+        }
+      }
+    ],
+    "variables": [
+      {
+        "type": "string",
+        "name": "theme",
+        "value": "light"
+      },
+      {
+        "type": "string",
+        "name": "str_long",
+        "value": "qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbnm"
+      },
+      {
+        "type": "integer",
+        "name": "int1",
+        "value": 120
+      },
+      {
+        "type": "integer",
+        "name": "int2",
+        "value": 1321
+      },
+      {
+        "type": "integer",
+        "name": "int3",
+        "value": 1321
+      },
+      {
+        "type": "number",
+        "name": "num1",
+        "value": 120
+      },
+      {
+        "type": "number",
+        "name": "num2",
+        "value": 1321
+      },
+      {
+        "type": "number",
+        "name": "num3",
+        "value": 1321
+      },
+      {
+        "type": "number",
+        "name": "red",
+        "value": 0.5
+      },
+      {
+        "type": "array",
+        "name": "arr",
+        "value": [
+            1,2,3,4,5,6,7,"#FFAABB",9.0,"10"
+        ]
+      }
+    ]
+  }
+}
