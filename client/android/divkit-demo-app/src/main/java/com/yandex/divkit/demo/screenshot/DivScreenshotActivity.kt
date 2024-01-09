@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.FOCUS_BEFORE_DESCENDANTS
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.descendants
+import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
@@ -73,6 +76,7 @@ class DivScreenshotActivity : AppCompatActivity() {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
             id = R.id.morda_screenshot_div
             hideCursor()
+            focusRecyclersBeforeDescendants()
         }
         applyConfiguration(divView)
         setContentView(divView)
@@ -87,6 +91,14 @@ class DivScreenshotActivity : AppCompatActivity() {
                 child.inputType = child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             } else {
                 (child as? ViewGroup)?.hideCursor()
+            }
+        }
+    }
+
+    private fun ViewGroup.focusRecyclersBeforeDescendants() {
+        descendants.forEach {
+            if (it is RecyclerView) {
+                it.descendantFocusability = FOCUS_BEFORE_DESCENDANTS
             }
         }
     }

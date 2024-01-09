@@ -164,11 +164,11 @@ internal interface DivGalleryItemHelper {
                 }
 
                 ScrollPosition.DEFAULT -> {
-                    val startGap = orientationHelper.getDecoratedStart(targetView) -
-                            orientationHelper.startAfterPadding -
-                            offset +
-                            targetView.marginStart
-
+                    var startGap = orientationHelper.getDecoratedStart(targetView) - offset +
+                        targetView.marginStart
+                    if (view.clipToPadding) {
+                        startGap -= orientationHelper.startAfterPadding
+                    }
                     view.scrollBy(startGap, startGap)
                 }
             }

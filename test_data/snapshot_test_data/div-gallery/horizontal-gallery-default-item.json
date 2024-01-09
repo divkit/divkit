@@ -2,7 +2,8 @@
   "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
   "platforms": [
     "ios",
-    "web"
+    "web",
+    "android"
   ],
   "templates": {},
   "card": {
