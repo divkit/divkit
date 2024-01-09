@@ -76,7 +76,7 @@
             },
             {
               "type": "state",
-              "div_id": "sample",
+              "id": "sample",
               "states": [
                 {
                   "state_id": "visible",

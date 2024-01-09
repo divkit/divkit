@@ -40,7 +40,7 @@
         },
         {
           "type": "state",
-          "$div_id": "content_id",
+          "$id": "content_id",
           "states": [
             {
               "state_id": "collapsed",
@@ -67,7 +67,7 @@
         },
         {
           "type": "state",
-          "$div_id": "button_id",
+          "$id": "button_id",
           "states": [
             {
               "state_id": "text_expand",

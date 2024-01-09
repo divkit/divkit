@@ -646,7 +646,7 @@
                   "items": [
                     {
                       "type": "state",
-                      "div_id": "shortcuts_stack",
+                      "id": "shortcuts_stack",
                       "width": {
                         "type": "fixed",
                         "value": 114,
@@ -1288,7 +1288,7 @@
             },
             {
               "type": "state",
-              "div_id": "switch_button",
+              "id": "switch_button",
               "states": [
                 {
                   "state_id": "button_0",

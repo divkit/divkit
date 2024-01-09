@@ -101,8 +101,7 @@
             },
             "type": "state",
             "alignment_horizontal": "center",
-            "div_id": "status",
-            "id": "status_text",
+            "id": "status",
             "states": [
               {
                 "state_id": "hidden",

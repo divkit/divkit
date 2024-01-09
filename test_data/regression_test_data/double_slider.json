@@ -324,7 +324,7 @@
             },
             {
               "type": "counter",
-              "div_id": "counter"
+              "id": "counter"
             }
           ]
         }

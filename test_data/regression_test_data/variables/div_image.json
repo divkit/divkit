@@ -39,7 +39,7 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "div_id": "label",
+          "id": "label",
           "alignment_vertical": "center",
           "height": {
             "type": "match_parent"

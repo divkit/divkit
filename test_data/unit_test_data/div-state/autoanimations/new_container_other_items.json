@@ -5,7 +5,7 @@
   "items": [
     {
       "type": "state",
-      "div_id": "alert2",
+      "id": "alert2",
       "states": [
         {
           "state_id": "shown",

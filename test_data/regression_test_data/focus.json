@@ -33,7 +33,7 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "div_id": "container",
+          "id": "container",
           "paddings": {
             "left": 8,
             "right": 8,
@@ -80,7 +80,7 @@
               "items": [
                 {
                   "type": "state",
-                  "div_id": "left",
+                  "id": "left",
                   "states": [
                     {
                       "state_id": "not_tapped",
@@ -153,7 +153,7 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "up",
+                  "id": "up",
                   "states": [
                     {
                       "state_id": "not_tapped",
@@ -226,7 +226,7 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "right",
+                  "id": "right",
                   "states": [
                     {
                       "state_id": "not_tapped",
@@ -299,7 +299,7 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "down",
+                  "id": "down",
                   "states": [
                     {
                       "state_id": "not_tapped",

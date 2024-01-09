@@ -70,7 +70,7 @@ class Div2RebindTest {
         val divStateLayout: DivStateLayout? = divView.findStateLayout(path)
 
         assertNotNull(divStateLayout)
-        assertEquals("state_container", divStateLayout?.div?.divId)
+        assertEquals("state_container", divStateLayout?.div?.id)
     }
 
     @Test
@@ -86,7 +86,7 @@ class Div2RebindTest {
             val divStateLayout: DivStateLayout? = divView.findStateLayout(path)
 
             assertNotNull(divStateLayout)
-            assertEquals(containerStateId, divStateLayout?.div?.divId)
+            assertEquals(containerStateId, divStateLayout?.div?.id)
         }
     }
 
@@ -101,7 +101,7 @@ class Div2RebindTest {
 
         // default state is 0/state_container/first/{futher_path} but state_container is created, so we still get it.
         assertNotNull(divStateLayout)
-        assertEquals("state_container", divStateLayout?.div?.divId)
+        assertEquals("state_container", divStateLayout?.div?.id)
     }
 
     @Test

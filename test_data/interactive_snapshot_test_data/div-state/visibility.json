@@ -103,7 +103,7 @@
             "items": [
               {
                 "type": "div_base",
-                "div_id": "div_state_test",
+                "id": "div_state_test",
                 "default_state_id": "second_item",
                 "states": [
                   {

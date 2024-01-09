@@ -55,7 +55,7 @@
             "type": "fixed",
             "value": 200
           },
-          "div_id": "state_container",
+          "id": "state_container",
           "default_state_id": "default",
           "states": [
             {

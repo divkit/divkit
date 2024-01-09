@@ -75,7 +75,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "blink",
+              "id": "blink",
               "width": {
                 "type": "fixed",
                 "value": 120
@@ -183,7 +183,7 @@
             },
             {
               "type": "state",
-              "div_id": "button",
+              "id": "button",
               "width": {
                 "type": "match_parent"
               },

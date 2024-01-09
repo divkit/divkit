@@ -6,7 +6,6 @@ import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
-import com.yandex.div.core.expression.variables.TwoWayVariableBinder
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TemporaryDivStateCache

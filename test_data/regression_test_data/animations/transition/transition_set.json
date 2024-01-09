@@ -35,7 +35,7 @@
         },
         {
           "type": "state",
-          "$div_id": "album_cover_id",
+          "$id": "album_cover_id",
           "width": {
             "type": "match_parent"
           },

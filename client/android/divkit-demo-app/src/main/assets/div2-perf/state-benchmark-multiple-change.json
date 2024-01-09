@@ -111,7 +111,7 @@
     },
     "page": {
       "type": "state",
-      "$div_id": "page_id",
+      "$id": "page_id",
       "states": [
         {
           "state_id": "stub",

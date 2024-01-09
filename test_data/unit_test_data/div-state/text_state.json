@@ -9,7 +9,7 @@
     },
     {
       "type": "state",
-      "div_id": "more",
+      "id": "more",
       "states": [
         {
           "state_id": "collapsed"

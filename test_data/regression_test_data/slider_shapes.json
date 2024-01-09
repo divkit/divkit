@@ -108,7 +108,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_round_rect"
+              "id": "slider_round_rect"
             },
             {
               "type": "title_preset",
@@ -116,7 +116,7 @@
             },
             {
               "type": "slider_circle",
-              "div_id": "slider_circle"
+              "id": "slider_circle"
             }
           ]
         }

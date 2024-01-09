@@ -9,9 +9,9 @@ import java.lang.Math.min
  * Path could be parsed from string by using [parse] method.
  * Path structure is:
  * ```
- * top_level_state_id/div_id_of_DivState1/state_id1_of_DivState1/.../div_id_of_DivStateN/state_id1_of_DivStateN
+ * top_level_state_id/id_of_DivState1/state_id1_of_DivState1/.../id_of_DivStateN/state_id1_of_DivStateN
  * ```
- * **Note:** after integer top_level_state_id goes pairs of ```div_id->state_id``` of nested DivState's
+ * **Note:** after integer top_level_state_id goes pairs of ```id->state_id``` of nested DivState's
  * ignoring other Divs.
  */
 data class DivStatePath @VisibleForTesting internal constructor(

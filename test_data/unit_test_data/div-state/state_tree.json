@@ -1,6 +1,6 @@
 {
   "type": "state",
-  "div_id": "state_container",
+  "id": "state_container",
   "states": [
     {
       "state_id": "first",
@@ -15,7 +15,6 @@
             "items": [
               {
                 "type": "state",
-                "div_id": "container_item_one",
                 "id": "container_item_one",
                 "states": [
                   {
@@ -43,7 +42,7 @@
               },
               {
                 "type": "state",
-                "div_id": "container_item_two",
+                "id": "container_item_two",
                 "states": [
                   {
                     "state_id": "one",
@@ -70,7 +69,7 @@
               },
               {
                 "type": "state",
-                "div_id": "container_item_three",
+                "id": "container_item_three",
                 "states": [
                   {
                     "state_id": "one",
@@ -104,7 +103,7 @@
       "state_id": "second",
       "div": {
         "type": "state",
-        "div_id": "second_state",
+        "id": "second_state",
         "states": [
           {
             "state_id": "hidden",

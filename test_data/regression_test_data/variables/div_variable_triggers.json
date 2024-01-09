@@ -127,7 +127,7 @@
               "items": [
                 {
                   "type": "state",
-                  "div_id": "left_button",
+                  "id": "left_button",
                   "states": [
                     {
                       "state_id": "off",
@@ -173,7 +173,7 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "right_button",
+                  "id": "right_button",
                   "states": [
                     {
                       "state_id": "off",

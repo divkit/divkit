@@ -16,7 +16,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "first_case",
+              "id": "first_case",
               "transition_animation_selector": "state_change",
               "background": [
                 {
@@ -89,7 +89,7 @@
             },
             {
               "type": "state",
-              "div_id": "second_case",
+              "id": "second_case",
               "transition_animation_selector": "state_change",
               "background": [
                 {
@@ -162,7 +162,7 @@
             },
             {
               "type": "state",
-              "div_id": "third_case",
+              "id": "third_case",
               "background": [
                 {
                   "type": "solid",
@@ -234,7 +234,7 @@
             },
             {
               "type": "state",
-              "div_id": "transition_button",
+              "id": "transition_button",
               "states": [
                 {
                   "state_id": "normal",

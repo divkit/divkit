@@ -129,7 +129,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "video",
+              "id": "video",
               "states": [
                 {
                   "state_id": "normal",
@@ -308,7 +308,7 @@
             },
             {
               "type": "state",
-              "div_id": "play_signal",
+              "id": "play_signal",
               "states": [
                 {
                   "state_id": "play_not_called",
@@ -328,7 +328,7 @@
             },
             {
               "type": "state",
-              "div_id": "pause_signal",
+              "id": "pause_signal",
               "states": [
                 {
                   "state_id": "pause_not_called",
@@ -348,7 +348,7 @@
             },
             {
               "type": "state",
-              "div_id": "buffering_signal",
+              "id": "buffering_signal",
               "states": [
                 {
                   "state_id": "buffering_not_called",
@@ -368,7 +368,7 @@
             },
             {
               "type": "state",
-              "div_id": "end_signal",
+              "id": "end_signal",
               "states": [
                 {
                   "state_id": "end_not_called",
@@ -388,7 +388,7 @@
             },
             {
               "type": "state",
-              "div_id": "fatal_signal",
+              "id": "fatal_signal",
               "states": [
                 {
                   "state_id": "fatal_not_called",

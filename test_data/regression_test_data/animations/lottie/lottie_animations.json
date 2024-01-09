@@ -118,7 +118,7 @@
       {
         "state_id": 0,
         "div": {
-          "div_id": "lottie_grid",
+          "id": "lottie_grid",
           "type": "lottie_grid",
           "items": [
             {

@@ -48,7 +48,7 @@
   "card": {
     "log_id": "action_button",
     "type": "state",
-    "div_id": "action_button",
+    "id": "action_button",
     "states": [
       {
         "state_id": 0,

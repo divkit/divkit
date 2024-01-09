@@ -98,7 +98,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "body",
+              "id": "body",
               "states": [
                 {
                   "state_id": "card",

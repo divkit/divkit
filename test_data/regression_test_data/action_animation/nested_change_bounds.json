@@ -124,7 +124,7 @@
         "state_id": 0,
         "div": {
           "type": "state",
-          "div_id": "card_state",
+          "id": "card_state",
           "height": {
             "type": "fixed",
             "value": 360

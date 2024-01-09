@@ -48,7 +48,7 @@
                 }
               },
               {
-                "div_id": "text",
+                "id": "text",
                 "height": {
                   "type": "match_parent"
                 },

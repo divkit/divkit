@@ -139,7 +139,7 @@
             "bottom": 8
           },
           "column_span": 2,
-          "$div_id": "comment_id",
+          "$id": "comment_id",
           "states": [
             {
               "state_id": "collapsed",
@@ -336,7 +336,7 @@
             },
             {
               "type": "state",
-              "div_id": "content",
+              "id": "content",
               "states": [
                 {
                   "state_id": "collapsed",
@@ -384,7 +384,7 @@
                       },
                       {
                         "type": "state",
-                        "div_id": "comments",
+                        "id": "comments",
                         "states": [
                           {
                             "state_id": "collapsed",
@@ -548,7 +548,7 @@
                         "margins": {
                           "bottom": 8
                         },
-                        "div_id": "comments_button",
+                        "id": "comments_button",
                         "states": [
                           {
                             "state_id": "text_show_comments",
@@ -613,7 +613,7 @@
             },
             {
               "type": "state",
-              "div_id": "button",
+              "id": "button",
               "states": [
                 {
                   "state_id": "text_expand",

@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import androidx.transition.TransitionSet
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.Div2ImageStubProvider
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.dagger.Div2Component
@@ -13,6 +12,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
+import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.internal.viewpool.PseudoViewPool
@@ -40,7 +40,6 @@ open class DivBinderTest {
         on { validate(any(), any()) } doReturn true
     }
     internal val imageLoader = mock<DivImageLoader>()
-    internal val imageStubProvider = mock<Div2ImageStubProvider>()
 
     internal val context = RuntimeEnvironment.application
     private val expressionResolver = mock<ExpressionResolver>()
@@ -62,18 +61,21 @@ open class DivBinderTest {
             divExtensionController,
         )
     ).apply {
-        whenever(divView.releaseViewVisitor).doReturn(this)
+        whenever(divView.releaseViewVisitor) doReturn this
     }
 
     private val transitionBuilder = mock<DivTransitionBuilder> {
         on { buildTransitions(fromDiv = anyOrNull(), toDiv = anyOrNull(), any()) } doReturn TransitionSet()
     }
 
-    private val mockViewComponent = mock<Div2ViewComponent>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
+    private val viewIdProvider = DivViewIdProvider()
+
+    private val viewComponent = mock<Div2ViewComponent>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
+        on { viewIdProvider } doReturn viewIdProvider
         on { releaseViewVisitor } doReturn visitor
         on { transitionBuilder } doReturn transitionBuilder
     }.apply {
-        whenever(divView.viewComponent).doReturn(this)
+        whenever(divView.viewComponent) doReturn this
     }
 
     internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))

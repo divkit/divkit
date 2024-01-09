@@ -101,7 +101,7 @@
               "type": "pager"
             },
             {
-              "div_id": "description",
+              "id": "description",
               "states": [
                 {
                   "div": {

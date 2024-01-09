@@ -75,7 +75,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -104,7 +104,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {
@@ -183,7 +183,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -212,7 +212,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {
@@ -291,7 +291,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -320,7 +320,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {
@@ -399,7 +399,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -428,7 +428,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {
@@ -507,7 +507,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -536,7 +536,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {
@@ -615,7 +615,7 @@
                           },
                           {
                             "type": "tabState",
-                            "div_id": "hidden_stories",
+                            "id": "hidden_stories",
                             "buttonStateId": "button_show_0",
                             "buttonText": "Показать ещё",
                             "showMoreAction": {
@@ -644,7 +644,7 @@
                               },
                               {
                                 "type": "tabState",
-                                "div_id": "hidden_stories",
+                                "id": "hidden_stories",
                                 "buttonStateId": "button_show_1",
                                 "buttonText": "Показать ещё",
                                 "showMoreAction": {

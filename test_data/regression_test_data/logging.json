@@ -45,7 +45,7 @@
       {
         "state_id": 0,
         "div": {
-          "div_id": "label",
+          "id": "label",
           "alignment_vertical": "center",
           "type": "button",
           "text": "Test button",

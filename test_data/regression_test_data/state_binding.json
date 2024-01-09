@@ -60,7 +60,7 @@
             {
               "type": "state",
               "content_alignment_vertical": "center",
-              "div_id": "state_container",
+              "id": "state_container",
               "state_id_variable": "state_variable",
               "states": [
                 {

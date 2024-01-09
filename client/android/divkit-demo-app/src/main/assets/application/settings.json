@@ -91,7 +91,7 @@
                         "items": [
                             {
                                 "type": "switch_pointer",
-                                "div_id": "pointer"
+                                "id": "pointer"
                             }
                         ],
                         "actions": [
@@ -119,7 +119,7 @@
                         "items": [
                             {
                                 "type": "switch_pointer",
-                                "div_id": "pointer"
+                                "id": "pointer"
                             }
                         ],
                         "content_alignment_horizontal": "left",
@@ -365,7 +365,7 @@
                           },
                           {
                             "type": "setting_switch_state",
-                            "div_id": "complex_rebind",
+                            "id": "complex_rebind",
                             "active_click_log_id": "set_complex_rebind_disabled",
                             "active_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/inactive",
                             "active_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=0",
@@ -384,7 +384,7 @@
                                 },
                                 {
                                     "type": "setting_switch_state",
-                                    "div_id": "div2_view_pool",
+                                    "id": "div2_view_pool",
                                     "active_click_log_id": "set_div2_view_pool_disabled",
                                     "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/inactive",
                                     "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=0",
@@ -403,7 +403,7 @@
                                 },
                                 {
                                     "type": "setting_switch_state",
-                                    "div_id": "div2_view_pool_profiling",
+                                    "id": "div2_view_pool_profiling",
                                     "active_click_log_id": "set_div2_view_pool_profilingl_disabled",
                                     "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=0",
                                     "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/inactive",
@@ -422,7 +422,7 @@
                                 },
                                 {
                                     "type": "setting_switch_state",
-                                    "div_id": "multiple_state_change",
+                                    "id": "multiple_state_change",
                                     "active_click_log_id": "set_multiple_state_change_disabled",
                                     "active_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/inactive",
                                     "active_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=0",
@@ -442,7 +442,7 @@
                                 },
                                 {
                                     "type": "slider_preset",
-                                    "div_id": "slider_default",
+                                    "id": "slider_default",
                                     "min_value": 0,
                                     "max_value": 2,
                                     "thumb_value_variable": "image_loader",
@@ -621,7 +621,7 @@
                                 },
                                 {
                                     "type": "setting_switch_state",
-                                    "div_id": "demo_activity_rendering_time",
+                                    "id": "demo_activity_rendering_time",
                                     "active_click_log_id": "demo_activity_rendering_time_disabled",
                                     "active_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/inactive",
                                     "active_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=0",

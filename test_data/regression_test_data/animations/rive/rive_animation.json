@@ -92,7 +92,7 @@
       {
         "state_id": 0,
         "div": {
-          "div_id": "rive_grid",
+          "id": "rive_grid",
           "type": "rive_grid",
           "items": [
             {

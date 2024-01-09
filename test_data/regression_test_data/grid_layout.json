@@ -134,7 +134,7 @@
             },
             {
               "type": "state",
-              "div_id": "button",
+              "id": "button",
               "states": [
                 {
                   "state_id": "state0",

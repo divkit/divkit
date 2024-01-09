@@ -37,7 +37,7 @@ class DivStatePathUtilsTest {
             Assert.assertNotNull(div)
             val divState: DivState = div?.value() as? DivState
                 ?: throw AssertionFailedError("DivStatePath#findDivState found smthng wrong")
-            Assert.assertEquals(divState.divId, containerStateId)
+            Assert.assertEquals(divState.id, containerStateId)
             Assert.assertEquals(divState.states.size, 3)
         }
     }
@@ -51,7 +51,7 @@ class DivStatePathUtilsTest {
         Assert.assertNotNull(div)
         val divState: DivState = div?.value() as? DivState
             ?: throw AssertionFailedError("DivStatePath#findDivState found smthng wrong")
-        Assert.assertEquals(divState.divId, "second_state")
+        Assert.assertEquals(divState.id, "second_state")
         Assert.assertEquals(divState.states.size, 3)
         Assert.assertEquals(divState.states[0].stateId, "hidden")
         Assert.assertEquals(divState.states[1].stateId, "shown")
@@ -67,7 +67,7 @@ class DivStatePathUtilsTest {
         Assert.assertNotNull(div)
         val divState: DivState = div?.value() as? DivState
             ?: throw AssertionFailedError("DivStatePath#findDivState found smthng wrong")
-        Assert.assertEquals(divState.divId, "state_container")
+        Assert.assertEquals(divState.id, "state_container")
         Assert.assertEquals(divState.states.size, 2)
         Assert.assertEquals(divState.states[0].stateId, "first")
         Assert.assertEquals(divState.states[1].stateId, "second")

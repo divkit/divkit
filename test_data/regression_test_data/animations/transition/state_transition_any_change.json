@@ -18,7 +18,7 @@
     },
     "button": {
       "type": "state",
-      "$div_id": "button_id",
+      "$id": "button_id",
       "margins": {
         "left": 24,
         "top": 24,

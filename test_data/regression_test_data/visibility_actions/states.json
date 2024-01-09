@@ -49,7 +49,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "states",
+              "id": "states",
               "states": [
                 {
                   "state_id": "state1",

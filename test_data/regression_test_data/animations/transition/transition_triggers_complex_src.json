@@ -63,7 +63,7 @@
             },
             {
               "type": "state",
-              "div_id": "transition_button",
+              "id": "transition_button",
               "states": [
                 {
                   "state_id": "state_one",
@@ -296,7 +296,7 @@
               "items": [
                 {
                   "type": "state",
-                  "div_id": "target_div",
+                  "id": "target_div",
                   "background": [
                     {
                       "type": "solid",
@@ -414,7 +414,7 @@
                   "items": [
                     {
                       "type": "state",
-                      "div_id": "target_div_in_gallery",
+                      "id": "target_div_in_gallery",
                       "background": [
                         {
                           "type": "solid",

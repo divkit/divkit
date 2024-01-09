@@ -140,7 +140,7 @@
                     },
                     {
                       "type": "state",
-                      "div_id": "mute",
+                      "id": "mute",
                       "margins": {
                         "left": 16,
                         "top": 16,

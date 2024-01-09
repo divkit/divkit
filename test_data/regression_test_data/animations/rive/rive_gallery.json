@@ -82,7 +82,7 @@
       {
         "state_id": 0,
         "div": {
-          "div_id": "gallery",
+          "id": "gallery",
           "type": "gallery",
           "items": [
             {

@@ -453,7 +453,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_default",
+              "id": "slider_default",
               "thumb_value_variable": "first_thumb_value",
               "accessibility": {
                 "description": "Default slider"
@@ -465,7 +465,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_default",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 10,
               "thumb_value_variable": "second_thumb_value",
@@ -525,7 +525,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_default",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 3,
               "thumb_value_variable": "third_thumb_value",
@@ -585,7 +585,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_default",
+              "id": "slider_default",
               "min_value": 0,
               "max_value": 10,
               "thumb_value_variable": "fourth_thumb_value",
@@ -665,7 +665,7 @@
             },
             {
               "type": "slider_preset",
-              "div_id": "slider_default",
+              "id": "slider_default",
               "thumb_value_variable": "fifth_thumb_value",
               "thumb_secondary_value_variable": "fifth_thumb_secondary_value",
               "accessibility": {
@@ -701,7 +701,7 @@
             },
             {
               "type": "state",
-              "div_id": "custom_slider",
+              "id": "custom_slider",
               "default_state_id": "no_tick_marks_1_thumb",
               "states": [
                 {
@@ -760,7 +760,7 @@
                   "items": [
                     {
                       "type": "state",
-                      "div_id": "secondary_thumb_switch",
+                      "id": "secondary_thumb_switch",
                       "width": {
                         "type": "fixed",
                         "value": 40
@@ -812,7 +812,7 @@
                   "items": [
                     {
                       "type": "state",
-                      "div_id": "tick_marks_switch",
+                      "id": "tick_marks_switch",
                       "width": {
                         "type": "fixed",
                         "value": 40

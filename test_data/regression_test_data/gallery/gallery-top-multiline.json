@@ -62,7 +62,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "body",
+              "id": "body",
               "states": [
                 {
                   "state_id": "card",
@@ -101,7 +101,7 @@
                         }
                       },
                       {
-                        "div_id": "description",
+                        "id": "description",
                         "type": "state",
                         "states": [
                           {
@@ -115,7 +115,7 @@
                               "items": [
                                 {
                                   "type": "state",
-                                  "div_id": "text",
+                                  "id": "text",
                                   "states": [
                                     {
                                       "state_id": "short",
@@ -196,7 +196,7 @@
                               "items": [
                                 {
                                   "type": "state",
-                                  "div_id": "text",
+                                  "id": "text",
                                   "states": [
                                     {
                                       "state_id": "short",
@@ -277,7 +277,7 @@
                               "items": [
                                 {
                                   "type": "state",
-                                  "div_id": "text",
+                                  "id": "text",
                                   "states": [
                                     {
                                       "state_id": "short",
@@ -358,7 +358,7 @@
                               "items": [
                                 {
                                   "type": "state",
-                                  "div_id": "text",
+                                  "id": "text",
                                   "states": [
                                     {
                                       "state_id": "short",

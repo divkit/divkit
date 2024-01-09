@@ -18,7 +18,7 @@
     },
     "button": {
       "type": "state",
-      "$div_id": "button_id",
+      "$id": "button_id",
       "margins": {
         "left": 24,
         "top": 24,
@@ -94,7 +94,7 @@
     },
     "card": {
       "type": "state",
-      "div_id": "root",
+      "id": "root",
       "transition_animation_selector": "data_change",
       "states": [
         {

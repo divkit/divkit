@@ -53,7 +53,7 @@
             "type": "match_parent"
           },
           "content_alignment_vertical": "center",
-          "div_id": "state_container",
+          "id": "state_container",
           "default_state_id": "default",
           "states": [
             {

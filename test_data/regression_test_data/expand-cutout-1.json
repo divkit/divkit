@@ -32,7 +32,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "body",
+              "id": "body",
               "states": [
                 {
                   "state_id": "card",
@@ -41,7 +41,7 @@
                     "items": [
                       {
                         "type": "state",
-                        "div_id": "text",
+                        "id": "text",
                         "states": [
                           {
                             "state_id": "short",

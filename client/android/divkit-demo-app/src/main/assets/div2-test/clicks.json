@@ -43,7 +43,7 @@
   "card": {
     "log_id": "action_button",
     "type": "state",
-    "div_id": "action_button",
+    "id": "action_button",
     "states": [
       {
         "state_id": 0,
@@ -51,7 +51,7 @@
           "type": "container",
           "items": [
             {
-              "div_id": "with_double_and_long_taps",
+              "id": "with_double_and_long_taps",
               "type": "button",
               "text": "With double and long taps",
               "accessibility": {
@@ -77,7 +77,7 @@
               ]
             },
             {
-              "div_id": "without_double_tap",
+              "id": "without_double_tap",
               "type": "button",
               "text": "Without double tap",
               "accessibility": {
@@ -91,7 +91,7 @@
               ]
             },
             {
-              "div_id": "with_child_view_inside",
+              "id": "with_child_view_inside",
               "accessibility": {
                 "description": "With child view inside"
               },

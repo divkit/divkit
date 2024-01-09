@@ -323,7 +323,7 @@
                 {
                   "type": "geoblock2AlertsSeparator/a7f9bf8a2a26a568ae4bf1b89a65f7e0",
                   "separatorColor": "#e0e0e0",
-                  "div_id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde_separator"
+                  "id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde_separator"
                 }
               ],
               "orientation": "overlap",
@@ -333,7 +333,7 @@
               "items": [
                 {
                   "type": "geoAlertWrapper/9ffb69cc6936792b127f380566211a0b",
-                  "div_id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde",
+                  "id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde",
                   "onSwipeActions": [
                     {
                       "url": "div-action://set_state?state_id=0/weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde/swiped",
@@ -891,7 +891,7 @@
           "state_id": "default"
         }
       ],
-      "div_id": "more",
+      "id": "more",
       "alignment_horizontal": "right"
     },
     "geoblock2HeaderPlayer/0dfa6153cab8f19d6ff88bf2d73d4192": {
@@ -992,7 +992,7 @@
       ],
       "type": "state",
       "alignment_horizontal": "right",
-      "div_id": "player_button"
+      "id": "player_button"
     },
     "geoblock2AlertsSeparator/a7f9bf8a2a26a568ae4bf1b89a65f7e0": {
       "type": "state",

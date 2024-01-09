@@ -242,7 +242,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "pager_container",
+              "id": "pager_container",
               "default_state_id": "fixed",
               "states": [
                 {

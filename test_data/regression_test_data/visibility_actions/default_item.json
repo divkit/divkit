@@ -84,7 +84,7 @@
           "items": [
             {
               "type": "state",
-              "div_id": "body",
+              "id": "body",
               "states": [
                 {
                   "state_id": "card",
@@ -93,7 +93,7 @@
                     "items": [
                       {
                         "type": "state",
-                        "div_id": "slider",
+                        "id": "slider",
                         "states": [
                           {
                             "state_id": "without_ad",
@@ -288,7 +288,7 @@
                       },
                       {
                         "type": "state",
-                        "div_id": "description",
+                        "id": "description",
                         "states": [
                           {
                             "state_id": "0",
@@ -349,7 +349,7 @@
                           {
                             "state_id": "4",
                             "div": {
-                              "div_id": "text",
+                              "id": "text",
                               "type": "text_14_18_standard",
                               "text_14_18_regular__text": "Item 4",
                               "max_lines": 2,

@@ -39,7 +39,7 @@
             "left": 12,
             "right": 12
           },
-          "div_id": "state_container",
+          "id": "state_container",
           "default_state_id": "default",
           "states": [
             {

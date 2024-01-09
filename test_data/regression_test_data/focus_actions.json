@@ -49,7 +49,7 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "div_id": "container",
+          "id": "container",
           "paddings": {
             "left": 8,
             "right": 8,
@@ -73,13 +73,13 @@
           "items": [
             {
               "type": "container",
-              "div_id": "container",
+              "id": "container",
               "orientation": "horizontal",
               "content_horizontal_alignment": "center",
               "items": [
                 {
                   "type": "button",
-                  "div_id": "focus",
+                  "id": "focus",
                   "text": "handler",
                   "focus": {
                     "background": [
@@ -110,7 +110,7 @@
                 },
                 {
                   "type": "button",
-                  "div_id": "focus",
+                  "id": "focus",
                   "text": "idle",
                   "focus": {
                     "background": [
@@ -129,7 +129,7 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "indicator",
+                  "id": "indicator",
                   "height": {
                     "type": "wrap_content"
                   },

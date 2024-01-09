@@ -67,7 +67,7 @@
           "state_id": 0,
           "div": {
             "type": "state",
-            "div_id": "state_container",
+            "id": "state_container",
             "height": {
               "type": "fixed",
               "value": 300
