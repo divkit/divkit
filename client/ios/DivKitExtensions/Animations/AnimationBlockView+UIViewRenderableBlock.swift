@@ -20,7 +20,7 @@ extension LottieAnimationBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let lottieView = view as! AnimationBlockView
-    if lottieView.animationHolder !== animationHolder {
+    if lottieView.animationHolder != animationHolder {
       lottieView.animatableView = animatableView.value
       lottieView.animationHolder = animationHolder
     }
