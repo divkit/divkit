@@ -227,10 +227,10 @@ internal interface DivGalleryItemHelper {
         val div = divItems[position]
 
         if (clear) {
-            divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, itemView, div)
+            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(divView, itemView, div)
             divView.unbindViewFromDiv(itemView)
         } else {
-            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(divView, itemView, div)
+            divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, itemView, div)
             divView.bindViewToDiv(itemView, div)
         }
     }

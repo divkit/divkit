@@ -44,7 +44,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
     private val visibleActions = WeakHashMap<View, Div>()
     private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
-    private val previousVisibilityPercentages = WeakHashMap<View, Int>()
+    private val previousVisibilityIsFull = WeakHashMap<View, Boolean>()
 
     private val divWithWaitingDisappearActions = WeakHashMap<View, Div>()
     // Actions that was more visible than its disappear trigger percent, so they can be triggered for disappearing
@@ -122,14 +122,11 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
     fun startTrackingViewsHierarchy(scope: Div2View, root: View, rootDiv: Div?) {
         trackViewsHierarchy(scope, root, rootDiv) { currentView, currentDiv ->
-            val currentVisibilityPercentage =
-                viewVisibilityCalculator.calculateVisibilityPercentage(currentView)
-            val previousVisibilityPercentage =
-                previousVisibilityPercentages[currentView] ?: -1
-            if (currentVisibilityPercentage == previousVisibilityPercentage) {
+            val isViewFullyVisible = viewVisibilityCalculator.isViewFullyVisible(currentView)
+            if (isViewFullyVisible && previousVisibilityIsFull[currentView] == true) {
                 false
             } else {
-                previousVisibilityPercentages[currentView] = currentVisibilityPercentage
+                previousVisibilityIsFull[currentView] = isViewFullyVisible
                 currentDiv?.let { trackVisibilityActionsOf(scope, currentView, it) }
                 true
             }
@@ -138,7 +135,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
     fun cancelTrackingViewsHierarchy(scope: Div2View, root: View, div: Div?) {
         trackViewsHierarchy(scope, root, div) { currentView, currentDiv ->
-            previousVisibilityPercentages.remove(currentView)
+            previousVisibilityIsFull.remove(currentView)
             currentDiv?.let { trackVisibilityActionsOf(scope, null, it) }
             true
         }

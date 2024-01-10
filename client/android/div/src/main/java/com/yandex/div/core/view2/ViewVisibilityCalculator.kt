@@ -27,4 +27,10 @@ internal class ViewVisibilityCalculator @Inject constructor() {
         val visibleArea = visibleRect.width() * visibleRect.height()
         return visibleArea * 100 / viewArea
     }
+
+    @MainThread
+    fun isViewFullyVisible(view: View): Boolean {
+        if (!view.isShown || !view.getGlobalVisibleRect(visibleRect)) return false
+        return view.width == visibleRect.width() && view.height == visibleRect.height()
+    }
 }
