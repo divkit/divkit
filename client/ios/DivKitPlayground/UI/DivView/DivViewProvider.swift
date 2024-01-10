@@ -1,10 +1,9 @@
-import BasePublic
 import DivKit
 import LayoutKit
 import SwiftUI
 
 final class DivViewProvider {
-  public let jsonProvider: PlaygroundJsonProvider
+  let jsonProvider: PlaygroundJsonProvider
   private let divKitComponents: DivKitComponents
   private let layoutDirection: UIUserInterfaceLayoutDirection
 
@@ -12,9 +11,7 @@ final class DivViewProvider {
     self.layoutDirection = layoutDirection
     let jsonProvider = PlaygroundJsonProvider()
     let urlHandler = PlaygroundUrlHandler(
-      loadJsonUrl: { url in
-        jsonProvider.load(url: url)
-      }
+      loadJsonUrl: jsonProvider.load(url:)
     )
     divKitComponents = AppComponents.makeDivKitComponents(
       layoutDirection: layoutDirection,
@@ -26,7 +23,7 @@ final class DivViewProvider {
 
   func makeDivView(_ url: URL) -> some View {
     DivViewControllerSwiftUIAdapter(
-      jsonProvider: jsonProvider.$json.newValues,
+      jsonPublisher: jsonProvider.jsonPublisher,
       divKitComponents: divKitComponents,
       debugParams: AppComponents.debugParams
     )

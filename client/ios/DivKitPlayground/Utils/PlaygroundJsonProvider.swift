@@ -1,26 +1,31 @@
-import BasePublic
+import Combine
 import DivKit
 import Foundation
 
-struct PlaygroundJsonProvider {
-  typealias Json = [String: Any]
+typealias JsonPublisher = AnyPublisher<[String: Any], Never>
 
-  @ObservableProperty
-  private(set) var json: Json = [:]
+struct PlaygroundJsonProvider {
+  private let jsonSubject = CurrentValueSubject<[String: Any], Never>([:])
+
+  var jsonPublisher: JsonPublisher {
+    jsonSubject.eraseToAnyPublisher()
+  }
 
   let paletteVariableStorage = DivVariableStorage()
 
   func load(url: URL) {
-    guard let json = try? Data(contentsOf: url).asJsonDictionary() else {
-      self.json = [:]
-      return
+    Task {
+      let data = try? await URLSession.shared.data(from: url).0
+      let json = (try? data?.asJsonDictionary()) ?? [:]
+      let palette = Palette(json: (try? json.getOptionalField("palette")) ?? [:])
+
+      await MainActor.run {
+        let paletteVaraibles = palette.makeVariables(theme: UserPreferences.playgroundTheme)
+        paletteVariableStorage.replaceAll(paletteVaraibles)
+
+        jsonSubject.send(json)
+      }
     }
-
-    let paletteVaraibles = Palette(json: try! json.getOptionalField("palette") ?? [:])
-      .makeVariables(theme: UserPreferences.playgroundTheme)
-    paletteVariableStorage.replaceAll(paletteVaraibles)
-
-    self.json = json
   }
 }
 

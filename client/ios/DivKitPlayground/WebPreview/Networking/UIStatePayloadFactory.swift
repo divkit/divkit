@@ -1,7 +1,5 @@
-import Foundation
-
-import CommonCorePublic
 import DivKit
+import Foundation
 
 struct ScreenshotInfo {
   let data: Data

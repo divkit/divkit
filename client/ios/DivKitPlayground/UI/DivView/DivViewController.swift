@@ -1,19 +1,18 @@
-import UIKit
-
-import CommonCorePublic
+import Combine
 import DivKit
 import DivKitExtensions
 import LayoutKit
+import UIKit
 
 open class DivViewController: UIViewController {
   private let divKitComponents: DivKitComponents
   private let debugParams: DebugParams
   private let divView: DivView
-  private let disposePool = AutodisposePool()
   private let scrollView = VisibilityTrackingScrollView()
+  private var cancellables = Set<AnyCancellable>()
 
   init(
-    jsonProvider: Signal<[String: Any]>,
+    jsonPublisher: JsonPublisher,
     divKitComponents: DivKitComponents,
     debugParams: DebugParams
   ) {
@@ -25,10 +24,12 @@ open class DivViewController: UIViewController {
 
     view.addSubview(divView)
 
-    jsonProvider.addObserver { [weak self] in
-      self?.divKitComponents.reset(cardId: cardId)
-      self?.setData($0)
-    }.dispose(in: disposePool)
+    jsonPublisher
+      .sink { [weak self] in
+        self?.divKitComponents.reset(cardId: cardId)
+        self?.setData($0)
+      }
+      .store(in: &cancellables)
   }
 
   @available(*, unavailable)
@@ -54,7 +55,7 @@ open class DivViewController: UIViewController {
 
   public override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
-    disposePool.drain()
+    cancellables = []
   }
 
   open func onViewUpdated() {}

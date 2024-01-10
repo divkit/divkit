@@ -1,8 +1,5 @@
 import Foundation
 
-import CommonCorePublic
-import Serialization
-
 struct ListenPayload: Encodable {
   struct Message: Encodable {
     let uuid: String

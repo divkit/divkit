@@ -1,15 +1,15 @@
-import CommonCorePublic
+import Combine
 import DivKit
 import SwiftUI
 
 struct DivViewControllerSwiftUIAdapter: UIViewControllerRepresentable {
-  let jsonProvider: Signal<[String: Any]>
+  let jsonPublisher: JsonPublisher
   let divKitComponents: DivKitComponents
   let debugParams: DebugParams
 
   func makeUIViewController(context _: Context) -> UIViewController {
     DivViewController(
-      jsonProvider: jsonProvider,
+      jsonPublisher: jsonPublisher,
       divKitComponents: divKitComponents,
       debugParams: debugParams
     )

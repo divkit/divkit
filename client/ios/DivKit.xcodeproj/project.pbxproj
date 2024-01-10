@@ -786,6 +786,7 @@
 		8C440A0E2864C6B700EF4175 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8C1A378328B5143200A047C8 /* DivView */,
 				8C7B18712864C9C70036EF4C /* MainView.swift */,
 				8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */,
 				89D02B1328C891890041EC18 /* RadioButtonsView.swift */,
@@ -795,7 +796,6 @@
 				8CFD4C9D2B2C5B780092814C /* Theme.swift */,
 				8CF1296028B0018E00351F65 /* UrlInputView.swift */,
 				8C7915CF28B177CE00A4642A /* ViewWithHeader.swift */,
-				8C1A378328B5143200A047C8 /* DivView */,
 			);
 			path = UI;
 			sourceTree = "<group>";

@@ -1,4 +1,4 @@
-import BasePublic
+import Combine
 import DivKit
 import SwiftUI
 
@@ -17,7 +17,7 @@ struct WebPreviewView: View {
       presentationMode: presentationMode
     ) {
       WebPreviewViewRepresentable(
-        jsonProvider: model.response,
+        jsonPublisher: model.responsePublsiher,
         divKitComponents: model.divKitComponents,
         debugParams: model.debugParams,
         onScreenshotTaken: model.sendScreenshot(_:)
@@ -26,7 +26,7 @@ struct WebPreviewView: View {
         model.connect(httpUrl: url)
       }
       .onDisappear { [model] in
-        model.endConnection()
+        model.disconnect()
       }
     }
   }
@@ -38,10 +38,11 @@ private final class WebPreviewModel {
   private(set) var debugParams: DebugParams!
   private let payloadFactory: UIStatePayloadFactory
   private var renderingTime: UIStatePayload.RenderingTime?
-  private let disposePool = AutodisposePool()
+  private var cancellables = Set<AnyCancellable>()
 
-  private let responsePipe: SignalPipe<[String: Any]>
-  var response: Signal<[String: Any]> { responsePipe.signal }
+  var responsePublsiher: JsonPublisher {
+    socket.responsePublisher
+  }
 
   init() {
     let payloadFactory = UIStatePayloadFactory(
@@ -49,21 +50,15 @@ private final class WebPreviewModel {
     )
     self.payloadFactory = payloadFactory
 
-    let responsePipe = SignalPipe<[String: Any]>()
-    self.responsePipe = responsePipe
-
     divKitComponents = AppComponents.makeDivKitComponents(
       reporter: DivReporterDelegate {
         payloadFactory.addError($0)
       }
     )
 
-    socket.response
-      .addObserver {
-        payloadFactory.resetErrors()
-        responsePipe.send($0)
-      }
-      .dispose(in: disposePool)
+    socket.responsePublisher
+      .sink { _ in payloadFactory.resetErrors() }
+      .store(in: &cancellables)
 
     debugParams = DebugParams(
       isDebugInfoEnabled: true,
@@ -77,8 +72,8 @@ private final class WebPreviewModel {
     socket.connect(httpUrl: httpUrl)
   }
 
-  func endConnection() {
-    socket.endConnection()
+  func disconnect() {
+    socket.disconnect()
   }
 
   func sendScreenshot(_ screenshotInfo: ScreenshotInfo) {

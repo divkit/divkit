@@ -1,5 +1,4 @@
 import DivKit
-import Foundation
 import LayoutKit
 
 extension DebugParams.Measurements {

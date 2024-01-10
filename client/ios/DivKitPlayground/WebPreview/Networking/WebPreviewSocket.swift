@@ -1,27 +1,15 @@
+import Combine
 import Foundation
 
-import CommonCorePublic
-
 final class WebPreviewSocket: NSObject {
-  enum State {
-    enum Disconnected {
-      case failed
-      case ended
-    }
-
-    case disconnected(Disconnected)
-    case connecting
-    case connected
-  }
-
   private var session: URLSession!
   private var task: URLSessionWebSocketTask?
 
-  private let responsePipe = SignalPipe<[String: Any]>()
-  var response: Signal<[String: Any]> { responsePipe.signal }
+  private let responseSubject = CurrentValueSubject<[String: Any], Never>([:])
 
-  @ObservableProperty
-  private(set) var state: State = .disconnected(.ended)
+  var responsePublisher: JsonPublisher {
+    responseSubject.eraseToAnyPublisher()
+  }
 
   override init() {
     super.init()
@@ -34,7 +22,7 @@ final class WebPreviewSocket: NSObject {
   }
 
   deinit {
-    disconnect(.ended)
+    disconnect()
   }
 
   func connect(httpUrl: URL) {
@@ -56,18 +44,17 @@ final class WebPreviewSocket: NSObject {
   }
 
   func connect(url: URL, uuid: String) {
-    disconnect(.ended)
-    state = .connecting
+    disconnect()
+
     let task = session.webSocketTask(with: url)
     task.resume()
     task.send(ListenPayload(uuid: uuid)) { [weak self] in
       if let error = $0 {
         AppLogger.error("Failed to connect to server: \(error)")
-        self?.disconnect(.failed)
+        self?.disconnect()
         return
       }
       self?.listen()
-      self?.state = .connected
     }
     self.task = task
   }
@@ -78,25 +65,19 @@ final class WebPreviewSocket: NSObject {
     }
   }
 
-  func endConnection() {
-    disconnect(.ended)
-  }
-
-  private func disconnect(_ reason: State.Disconnected) {
+  func disconnect() {
     guard task != nil else { return }
     task?.cancel(with: .goingAway, reason: nil)
     task = nil
-    state = .disconnected(reason)
   }
 
   private func listen() {
     task?.receive { [weak self] in
       switch $0 {
       case let .success(message):
-        self?.responsePipe.send({
-          let dictionary = try! message.data.asJsonDictionary()
-          return try! JSONPayload(dictionary: dictionary).message.json
-        }())
+        let dictionary = try! message.data.asJsonDictionary()
+        let json = try! JSONPayload(dictionary: dictionary).message.json
+        self?.responseSubject.send(json)
       case let .failure(error):
         AppLogger.error("Failed to receive message with \(error)")
       }
@@ -123,23 +104,11 @@ extension WebPreviewSocket: URLSessionWebSocketDelegate {
   func urlSession(
     _: URLSession,
     webSocketTask: URLSessionWebSocketTask,
-    didCloseWith closeCode: URLSessionWebSocketTask.CloseCode,
-    reason: Data?
+    didCloseWith _: URLSessionWebSocketTask.CloseCode,
+    reason _: Data?
   ) {
     guard webSocketTask == task else { return }
-    let reason: State.Disconnected
-    switch closeCode {
-    case .goingAway, .normalClosure:
-      reason = .ended
-    case .abnormalClosure, .internalServerError, .invalid,
-         .invalidFramePayloadData, .mandatoryExtensionMissing, .messageTooBig,
-         .noStatusReceived, .policyViolation, .protocolError,
-         .tlsHandshakeFailure, .unsupportedData:
-      reason = .failed
-    @unknown default:
-      reason = .ended
-    }
-    disconnect(reason)
+    disconnect()
   }
 }
 

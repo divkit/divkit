@@ -7,14 +7,14 @@ import DivKit
 typealias ScreenshotCallback = (ScreenshotInfo) -> Void
 
 struct WebPreviewViewRepresentable: UIViewControllerRepresentable {
-  let jsonProvider: Signal<[String: Any]>
+  let jsonPublisher: JsonPublisher
   let divKitComponents: DivKitComponents
   let debugParams: DebugParams
   let onScreenshotTaken: ScreenshotCallback
 
   func makeUIViewController(context _: Context) -> UIViewController {
     WebPreviewViewController(
-      jsonProvider: jsonProvider,
+      jsonPublisher: jsonPublisher,
       divKitComponents: divKitComponents,
       debugParams: debugParams,
       onScreenshotTaken: onScreenshotTaken
@@ -32,7 +32,7 @@ private final class WebPreviewViewController: DivViewController {
   private var screenshotCancellationToken: Cancellable?
 
   init(
-    jsonProvider: Signal<[String: Any]>,
+    jsonPublisher: JsonPublisher,
     divKitComponents: DivKitComponents,
     debugParams: DebugParams,
     onScreenshotTaken: @escaping ScreenshotCallback
@@ -40,7 +40,7 @@ private final class WebPreviewViewController: DivViewController {
     self.onScreenshotTaken = onScreenshotTaken
 
     super.init(
-      jsonProvider: jsonProvider,
+      jsonPublisher: jsonPublisher,
       divKitComponents: divKitComponents,
       debugParams: debugParams
     )
