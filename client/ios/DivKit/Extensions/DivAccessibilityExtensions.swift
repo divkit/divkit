@@ -15,13 +15,14 @@ extension DivAccessibility {
       )
     }
 
-    let label: String?
+    var label: String? = nil
     if let customDescriptionProvider {
       label = customDescriptionProvider()
     } else if let description = resolveDescription(expressionResolver) {
       label = description
-    } else {
-      label = type == nil ? nil : ""
+    }
+    if label == nil, type != nil {
+      label = ""
     }
 
     return AccessibilityElement(

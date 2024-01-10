@@ -63,6 +63,19 @@ final class DivAccessibilityExtentionsTests: XCTestCase {
     assertEqual(element, expectedElement)
   }
 
+  func test_resolve_WithTypeAndNilCustomDescription_MakesEmptyDescription() {
+    let element = DivAccessibility(
+      type: .button
+    ).resolve(customDescriptionProvider: { nil })
+
+    let expectedElement = AccessibilityElement(
+      traits: .button,
+      strings: AccessibilityElement.Strings(label: "")
+    )
+
+    assertEqual(element, expectedElement)
+  }
+
   func test_resolve_WithModeExclude_IgnoresParams() {
     let element = DivAccessibility(
       description: .value("Description"),
@@ -98,7 +111,7 @@ final class DivAccessibilityExtentionsTests: XCTestCase {
 extension DivAccessibility {
   fileprivate func resolve(
     id: String? = nil,
-    customDescriptionProvider: (() -> String)? = nil
+    customDescriptionProvider: (() -> String?)? = nil
   ) -> AccessibilityElement {
     resolve(
       DivBlockModelingContext.default.expressionResolver,
