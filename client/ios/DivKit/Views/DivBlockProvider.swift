@@ -75,9 +75,14 @@ final class DivBlockProvider {
   private func update(data: Data) {
     dataErrors = []
     do {
-      let result = try divKitComponents.parseDivDataWithTemplates(data, cardId: cardId)
-      dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
-      divData = result.value
+      guard let jsonObj = try? JSONSerialization.jsonObject(with: data),
+            let jsonDict = jsonObj as? [String: Any] else {
+        throw DeserializationError.nestedObjectError(
+          field: cardId.rawValue,
+          error: .invalidJSONData(data: data)
+        )
+      }
+      update(json: jsonDict)
     } catch {
       block = handleError(error: error)
     }
@@ -228,7 +233,7 @@ final class DivBlockProvider {
       )
     }
     return try! GalleryBlock(
-      gaps: [0] + Array(repeating: 10, count: errorBlocks.count + 1),
+      gaps: [0] + Array(repeating: 10, times: UInt(errorBlocks.count + 1)),
       children: [errorsHeader] + errorBlocks,
       path: UIElementPath(cardId.rawValue),
       direction: .vertical,
