@@ -23,7 +23,6 @@ internal class AndroidDatabaseOpenHelper(
     version: Int,
     ccb: CreateCallback,
     ucb: UpgradeCallback,
-    private val useDatabaseManager: Boolean  = true,
 ) : DatabaseOpenHelper {
     private val mSQLiteOpenHelper: SQLiteOpenHelper
     private val databaseManager: DatabaseManager
@@ -69,25 +68,13 @@ internal class AndroidDatabaseOpenHelper(
     // to prevent close for concurrent user of the same database object
     override val readableDatabase: DatabaseOpenHelper.Database
         get() {
-            return if (useDatabaseManager) {
-                wrapDataBase(databaseManager.openReadableDatabase())
-            } else {
-                synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
-                    wrapDataBase(mSQLiteOpenHelper.readableDatabase)
-                }
-            }
+            return wrapDataBase(databaseManager.openReadableDatabase())
         }
 
     // to prevent close for concurrent user of the same database object
     override val writableDatabase: DatabaseOpenHelper.Database
         get() {
-            return if (useDatabaseManager) {
-                wrapDataBase(databaseManager.openWritableDatabase())
-            } else {
-                synchronized(mOpenCloseLock) { // to prevent close for concurrent user of the same database object
-                    wrapDataBase(mSQLiteOpenHelper.writableDatabase)
-                }
-            }
+            return wrapDataBase(databaseManager.openWritableDatabase())
         }
 
     @VisibleForTesting
@@ -147,30 +134,12 @@ internal class AndroidDatabaseOpenHelper(
 
         @Throws(IOException::class)
         override fun close() {
-            if (useDatabaseManager) {
-                databaseManager.closeDatabase(mDb)
-                return
-            }
-
-            synchronized(mOpenCloseLock) {
-                if (--mOpenCloseInfo.currentlyOpenedCount > 0) {
-                    ++mOpenCloseInfo.postponedCloseCount
-                } else {
-                    mOpenCloseInfoMap.remove(mDb)
-                    // we're the last user, close as many times as it was opened, as we can't be sure
-                    // that "ref count isn't incremented on reuse" bug isn't fixed
-                    while (mOpenCloseInfo.postponedCloseCount > 0) {
-                        mDb.close()
-                        --mOpenCloseInfo.postponedCloseCount
-                    }
-                }
-            }
+            databaseManager.closeDatabase(mDb)
         }
     }
 
     private class OpenCloseInfo {
         var currentlyOpenedCount = 0
-        var postponedCloseCount = 0
     }
 
     private class DatabaseManager(
