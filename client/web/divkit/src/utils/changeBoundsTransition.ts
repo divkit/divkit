@@ -3,6 +3,7 @@ import type { ChangeBoundsTransition, Interpolation } from '../types/base';
 import { ease } from './easings/ease';
 import { spring } from './easings/spring';
 import { lerp } from './lerp';
+import { isPrefersReducedMotion } from './isPrefersReducedMotion';
 
 const EASING: Record<Interpolation, (t: number) => number> = {
     linear,
@@ -31,7 +32,7 @@ export function changeBoundsTransition(node: HTMLElement, {
 }: TransitionProps) {
     return {
         delay: transition.start_delay ?? DEFAULT_DELAY,
-        duration: transition.duration ?? DEFAULT_DURATION,
+        duration: isPrefersReducedMotion() ? 0 : (transition.duration ?? DEFAULT_DURATION),
         easing: (transition.interpolator && transition.interpolator in EASING) ?
             EASING[transition.interpolator] :
             cubicInOut,

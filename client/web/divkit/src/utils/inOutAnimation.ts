@@ -5,6 +5,7 @@ import { ease } from './easings/ease';
 import { spring } from './easings/spring';
 import { flattenAnimation } from './flattenAnimation';
 import type { MaybeMissing } from '../expressions/json';
+import { isPrefersReducedMotion } from './isPrefersReducedMotion';
 
 const EASING: Record<Interpolation, (t: number) => number> = {
     linear,
@@ -46,7 +47,7 @@ export function inOutAnimation(node: HTMLElement, {
     }
 
     return {
-        duration: maxDuration,
+        duration: isPrefersReducedMotion() ? 0 : maxDuration,
         css: (t: number) => {
             const tMs = t * maxDuration;
 

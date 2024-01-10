@@ -2,6 +2,7 @@ import { linear, cubicIn, cubicOut, cubicInOut } from 'svelte/easing';
 import type { AnyTransition, Interpolation } from '../types/base';
 import { ease } from './easings/ease';
 import { spring } from './easings/spring';
+import { isPrefersReducedMotion } from './isPrefersReducedMotion';
 
 const EASING: Record<Interpolation, (t: number) => number> = {
     linear,
@@ -45,7 +46,7 @@ export function inOutTransition(node: HTMLElement, {
     const startAlpha = alpha ?? 1;
 
     return {
-        duration: maxDuration,
+        duration: isPrefersReducedMotion() ? 0 : maxDuration,
         css: (t: number) => {
             const tMs = t * maxDuration;
 

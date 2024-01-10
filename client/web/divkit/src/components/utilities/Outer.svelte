@@ -59,6 +59,7 @@
     import { shadowToCssBoxShadow } from '../../utils/shadow';
     import { isDeepEqual } from '../../utils/isDeepEqual';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
+    import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -623,7 +624,7 @@
         const startValue = correctNumber(animation.start_value, 1);
         const endValue = correctNumber(animation.end_value, 1);
         const delay = correctNonNegativeNumber(animation.start_delay, 0);
-        const duration = correctNonNegativeNumber(animation.duration, 300);
+        const duration = isPrefersReducedMotion() ? 0 : correctNonNegativeNumber(animation.duration, 300);
         const interpolator = correctCSSInterpolator(animation.interpolator, 'ease_in_out').replace(/_/g, '-');
 
         switch (animation.name) {
