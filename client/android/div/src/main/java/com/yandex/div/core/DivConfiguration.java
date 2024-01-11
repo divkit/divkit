@@ -13,6 +13,7 @@ import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerFactory;
+import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
@@ -59,6 +60,8 @@ public class DivConfiguration {
     private final DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
     @NonNull
     private final DivPlayerFactory mDivPlayerFactory;
+    @Nullable
+    private DivPlayerPreloader mDivPlayerPreloader;
     @NonNull
     private final DivTooltipRestrictor mTooltipRestrictor;
     @NonNull
@@ -111,6 +114,7 @@ public class DivConfiguration {
             @NonNull DivCustomViewAdapter divCustomViewAdapter,
             @NonNull DivCustomContainerViewAdapter divCustomContainerViewAdapter,
             @NonNull DivPlayerFactory divPlayerFactory,
+            @NonNull DivPlayerPreloader divPlayerPreloader,
             @NonNull DivTooltipRestrictor tooltipRestrictor,
             @NonNull List<DivExtensionHandler> extensionHandlers,
             @NonNull DivDownloader divDownloader,
@@ -148,6 +152,7 @@ public class DivConfiguration {
         mDivCustomViewAdapter = divCustomViewAdapter;
         mDivCustomContainerViewAdapter = divCustomContainerViewAdapter;
         mDivPlayerFactory = divPlayerFactory;
+        mDivPlayerPreloader = divPlayerPreloader;
         mTooltipRestrictor = tooltipRestrictor;
         mExtensionHandlers = extensionHandlers;
         mDivDownloader = divDownloader;
@@ -244,6 +249,12 @@ public class DivConfiguration {
     @NonNull
     public DivPlayerFactory getDivPlayerFactory() {
         return mDivPlayerFactory;
+    }
+
+    @Provides
+    @NonNull
+    public DivPlayerPreloader getDivPlayerPreloader() {
+        return mDivPlayerPreloader;
     }
 
     @Provides
@@ -417,6 +428,8 @@ public class DivConfiguration {
         @Nullable
         private DivPlayerFactory mDivPlayerFactory;
         @Nullable
+        private DivPlayerPreloader mDivPlayerPreloader;
+        @Nullable
         private DivCustomContainerViewAdapter mDivCustomContainerViewAdapter;
         @Nullable
         private DivTooltipRestrictor mTooltipRestrictor;
@@ -546,6 +559,12 @@ public class DivConfiguration {
         @NonNull
         public Builder divPlayerFactory(@NonNull DivPlayerFactory divPlayerFactory) {
             mDivPlayerFactory = divPlayerFactory;
+            return this;
+        }
+
+        @NonNull
+        public Builder divPlayerPreloader(@NonNull DivPlayerPreloader divPlayerPreloader) {
+            mDivPlayerPreloader = divPlayerPreloader;
             return this;
         }
 
@@ -722,6 +741,7 @@ public class DivConfiguration {
                     mDivCustomContainerViewAdapter == null ? DivCustomContainerViewAdapter.STUB
                             : mDivCustomContainerViewAdapter,
                     mDivPlayerFactory == null ? DivPlayerFactory.STUB : mDivPlayerFactory,
+                    mDivPlayerPreloader == null ? DivPlayerPreloader.STUB : mDivPlayerPreloader,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,
                     mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,

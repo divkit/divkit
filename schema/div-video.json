@@ -31,6 +31,14 @@
           "default_value": "false",
           "$description": "translations.json#/div_video_autostart"
         },
+        "preload_required": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_video_preload_required",
+          "platforms": [
+            "android"
+          ]
+        },
         "muted": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",

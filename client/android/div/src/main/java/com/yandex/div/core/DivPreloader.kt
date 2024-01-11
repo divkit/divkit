@@ -1,5 +1,6 @@
 package com.yandex.div.core
 
+import android.net.Uri
 import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.DivPreloader.PreloadReference
 import com.yandex.div.core.annotations.Mockable
@@ -9,6 +10,7 @@ import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.buildItems
@@ -24,14 +26,16 @@ class DivPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,
     private val customViewAdapter: DivCustomViewAdapter?,
     private val customContainerViewAdapter: DivCustomContainerViewAdapter,
-    private val extensionController: DivExtensionController
+    private val extensionController: DivExtensionController,
+    private val videoPreloader: DivPlayerPreloader,
 ) {
 
     constructor(context: Div2Context) : this(
         imagePreloader = context.div2Component.imagePreloader,
         customViewAdapter = context.div2Component.divCustomViewAdapter,
         customContainerViewAdapter = context.div2Component.divCustomContainerViewAdapter,
-        extensionController = context.div2Component.extensionController
+        extensionController = context.div2Component.extensionController,
+        videoPreloader = context.div2Component.divVideoPreloader
     )
 
     @Deprecated("Use DivPreloader(Div2Context) instead")
@@ -43,7 +47,8 @@ class DivPreloader internal constructor(
         imagePreloader = imagePreloader,
         customViewAdapter = customViewAdapter,
         customContainerViewAdapter = DivCustomContainerViewAdapter.STUB,
-        extensionController = DivExtensionController(extensionHandlers)
+        extensionController = DivExtensionController(extensionHandlers),
+        videoPreloader = DivPlayerPreloader.STUB,
     )
 
     fun preload(div: Div, resolver: ExpressionResolver, callback: Callback = NO_CALLBACK): Ticket {
@@ -110,6 +115,17 @@ class DivPreloader internal constructor(
             customViewAdapter?.preload(data.value, callback)?.let { ticket.addReference(it) }
             customContainerViewAdapter.preload(data.value, callback).also { ticket.addReference(it) }
             defaultVisit(data, resolver)
+        }
+
+        override fun visit(data: Div.Video, resolver: ExpressionResolver) {
+            defaultVisit(data, resolver)
+            if (data.value.preloadRequired.evaluate(resolver)) {
+                val sources = mutableListOf<Uri>()
+                data.value.videoSources.forEach {
+                    sources.add(it.url.evaluate(resolver))
+                }
+                videoPreloader.preloadVideo(sources).also { ticket.addReference(it) }
+            }
         }
     }
 

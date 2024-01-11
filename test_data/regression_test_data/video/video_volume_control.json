@@ -51,6 +51,7 @@
                   "mime_type": "video/mp4"
                 }
               ],
+              "preload_required": true,
               "repeatable": true,
               "autostart": true,
               "muted": "@{video_1_muted}",

@@ -2123,6 +2123,10 @@
     "en": "Actions performed when playback is paused.",
     "ru": "Действия, которые выполняются при приостановке воспроизведения."
   },
+  "div_video_preload_required": {
+    "en": "This option turns on preloading of video sources.",
+    "ru": "Опция включает предзагрузку видео."
+  },
   "div_video_player_settings_payload": {
     "en": "Additional information that can be used in the player.",
     "ru": "Дополнительная информация, которая может быть использована внутри плеера."

@@ -3,7 +3,6 @@ package com.yandex.div.core.dagger;
 import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import com.yandex.div.core.Div2Logger;
 import com.yandex.div.core.DivActionHandler;
@@ -25,6 +24,7 @@ import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.player.DivPlayerFactory;
+import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.player.DivVideoActionHandler;
 import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.state.DivStateManager;
@@ -164,6 +164,9 @@ public interface Div2Component {
 
     @NonNull
     DivPlayerFactory getDivVideoFactory();
+
+    @NonNull
+    DivPlayerPreloader getDivVideoPreloader();
 
     @NonNull
     DivCreationTracker getDivCreationTracker();

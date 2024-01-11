@@ -3,6 +3,7 @@ package com.yandex.div.core
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -52,10 +53,15 @@ class DivPreloaderTest {
 
     private val container = DivContainer(items = containerItems, extensions = listOf(mock()))
     private val divContainer = Div.Container(container)
+    private val videoPreloader = mock<DivPlayerPreloader>()
 
-    private val underTest: DivPreloader =
-        DivPreloader(divImagePreloader, divCustomViewAdapter, divCustomContainerViewAdapter,
-                extensionHandlersController)
+    private val underTest: DivPreloader = DivPreloader(
+        divImagePreloader,
+        divCustomViewAdapter,
+        divCustomContainerViewAdapter,
+        extensionHandlersController,
+        videoPreloader
+    )
 
     @Test
     fun `preload div background`() {

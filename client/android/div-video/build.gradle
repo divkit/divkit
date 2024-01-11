@@ -10,4 +10,7 @@ dependencies {
     implementation project(path: ':assertion')
 
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoPlayer"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation project(path: ':logging')
 }

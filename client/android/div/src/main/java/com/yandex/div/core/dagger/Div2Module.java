@@ -14,6 +14,7 @@ import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
+import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
 import com.yandex.div.internal.viewpool.AdvanceViewPool;
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
@@ -99,8 +100,11 @@ abstract public class Div2Module {
             @NonNull DivImagePreloader imagePreloader,
             @NonNull DivCustomViewAdapter customViewAdapter,
             @NonNull DivCustomContainerViewAdapter customContainerViewAdapter,
+            @NonNull DivPlayerPreloader videoPreloader,
             @NonNull DivExtensionController extensionController
-    ) {
-        return new DivPreloader(imagePreloader, customViewAdapter, customContainerViewAdapter, extensionController);
+      ) {
+        return new DivPreloader(imagePreloader, customViewAdapter,
+          customContainerViewAdapter, extensionController, videoPreloader
+        );
     }
 }
