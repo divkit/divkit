@@ -1,3 +1,16 @@
+## 29.2.0 (January 15, 2024)
+
+* Fixed an issue with the `visibility_action`s restart on variable changes and their cleanup.
+* Added support for the `is_enabled` flag inside all types of actions.
+* Added `clip_to_bounds` property support for the `container` component.
+* Fixed an issue with the `wrap_content` `image`s in Safari.
+* Fixed `variable_triggers` logic to match other platforms. Now they are executed, even if not all variables are present.
+* Fixed `variable_triggers` to be executed only after components mount.
+* Added `auto_ellipsize` property support in `text` component.
+* Fixed an issue with the experimental method `setData` and `video` updates.
+* Fixed `null` value processing in `array` getter functions.
+
+
 ## 29.1.0 (December 25, 2023)
 
 * Fixed rare cases with the `lottie` animations load errors.

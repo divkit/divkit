@@ -1,3 +1,39 @@
+## 29.2.0
+
+# Android Client:
+* Fixed character escaping.
+* Fixed `state` does not switch inside `div-custom`.
+* Added support `is_enabled` for `action`.
+* Migrated from Dagger to Yatagan DI framework
+* Added supporting `len(array)` function in evaluable.
+* Fixed min size applying in `div-container`.
+* Fix wrong gradient color in `div-text`.
+* Fixed not sending taps through the `div-gallery`.
+
+# iOS Client:
+* Supported `is_enabled` property in `div-action`.
+* Optimized accessibility elements creation.
+* Changed `DivText.text` property type from `CFString` to `String`.
+* Fixed `DivContainer` without items behavior.
+* Fixed accessibility params for elements with margins.
+* Fixed memory leak in `FunctionsProvider`.
+* Fixed Lottie blinking when state changed.
+
+# Web Client:
+* Fixed an issue with the `visibility_action`s restart on variable changes and their cleanup.
+* Added support for the `is_enabled` flag inside all types of actions.
+* Added `clip_to_bounds` property support for the `container` component.
+* Fixed an issue with the `wrap_content` `image`s in Safari.
+* Fixed `variable_triggers` logic to match other platforms. Now they are executed, even if not all variables are present.
+* Fixed `variable_triggers` to be executed only after components mount.
+* Added `auto_ellipsize` property support in `text` component.
+* Fixed an issue with the experimental method `setData` and `video` updates.
+* Fixed `null` value processing in `array` getter functions.
+
+# TypeScript JSON Builder:
+* Added expressions support in `fixed` function.
+
+
 ## 29.1.0
 
 # Android Client:
