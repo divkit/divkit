@@ -8,7 +8,8 @@ data class Scenario(
     var file: String = "",
     var priority: Priority = Priority.normal,
     var position: Int = 0,
-    var platforms: List<Platforms> = emptyList()
+    var platforms: List<Platforms> = emptyList(),
+    var automated: List<Platforms> = emptyList(),
 )
 
 @Suppress("EnumEntryName")

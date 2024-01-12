@@ -102,7 +102,7 @@
           "state_id": "10",
           "div": {
             "type": "nps_button",
-            "text": "😍😍😍"
+            "text": "😍😍😍 Awesome"
           }
         }
       ]
@@ -157,6 +157,9 @@
               "type": "slider",
               "width": {
                 "type": "match_parent"
+              },
+              "accessibility": {
+                "description": "Min - 0, max - 10"
               },
               "paddings": {
                 "left": 8,

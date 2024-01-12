@@ -16,7 +16,6 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.PositionAssertions
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.matcher.ViewMatchers
@@ -105,6 +104,8 @@ fun ViewInteraction.clickRecyclerViewItem(index: Int) =
 
 fun ViewInteraction.swipeRight() = perform(ViewActions.swipeRight())
 fun ViewInteraction.swipeLeft() = perform(ViewActions.swipeLeft())
+fun ViewInteraction.swipeUp() = perform(ViewActions.swipeUp())
+fun ViewInteraction.swipeDown() = perform(ViewActions.swipeDown())
 
 fun ViewInteraction.waitForCompletelyDisplayedAndCallOnClick() =
     perform(waitForCompletelyDisplayedAndPerformAction(callOnClickAction()))

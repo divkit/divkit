@@ -2,8 +2,12 @@ package com.yandex.div
 
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
+import com.yandex.div.steps.defaultSlider
+import com.yandex.div.steps.doubleDefaultSlider
+import com.yandex.div.steps.doubleWithDivisionsSlider
+import com.yandex.div.steps.max10Slider
+import com.yandex.div.steps.max3Slider
 import com.yandex.div.steps.slider
-import com.yandex.div.steps.sliderPreferences
 import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test
@@ -30,18 +34,18 @@ class SliderTests {
             testAsset = "regression_test_data/slider_nps.json"
             activityTestRule.buildContainer()
 
-            scrollToText(BUTTON_VALUE_NOT_SURE)
+            scrollToText(Recommendation.BAD.text)
 
             setTo(2)
             assert {
                 checkThumbValue(2)
-                hasTextOnScreen(BUTTON_VALUE_BAD)
+                hasTextOnScreen(Recommendation.AWFUL.text)
             }
 
             setTo(9)
             assert {
                 checkThumbValue(9)
-                hasTextOnScreen(BUTTON_VALUE_PERFECT)
+                hasTextOnScreen(Recommendation.EXCELLENT.text)
             }
         }
     }
@@ -52,104 +56,186 @@ class SliderTests {
             testAsset = "regression_test_data/double_slider.json"
             activityTestRule.buildContainer()
 
-            scrollToText(BUTTON_VALUE_NOT_SURE)
+            scrollToText(Recommendation.BAD.text)
 
             setTo(4)
             assert {
                 checkThumbValue(4)
-                hasTextOnScreen(BUTTON_VALUE_NOT_SURE)
+                hasTextOnScreen(Recommendation.BAD.text)
             }
 
             setTo(8)
             assert {
                 checkThumbValue(4)
                 checkSecondaryThumbValue(8)
-                hasTextOnScreen(BUTTON_VALUE_NOT_SURE)
+                hasTextOnScreen(Recommendation.BAD.text)
             }
 
             setTo(3)
             assert {
                 checkThumbValue(3)
-                hasTextOnScreen(BUTTON_VALUE_BAD)
+                hasTextOnScreen(Recommendation.AWFUL.text)
             }
         }
     }
 
     @Test
     fun sliderPreferencesDefaultSliderInteractivity() {
-        sliderPreferences {
-            val slider = defaultSlider
-            slider {
-                testAsset = "regression_test_data/slider_presets.json"
-                activityTestRule.buildContainer()
+        defaultSlider {
+            testAsset = "regression_test_data/slider_presets.json"
+            activityTestRule.buildContainer()
 
-                setTo(5, slider)
-                assert { checkThumbValue(5, slider) }
-            }
+            setTo(5)
+            assert { checkThumbValue(5) }
         }
     }
 
     @Test
     fun sliderPreferencesMax10SliderInteractivity() {
-        sliderPreferences {
-            val slider = max10Slider
-            slider {
-                testAsset = "regression_test_data/slider_presets.json"
-                activityTestRule.buildContainer()
+        max10Slider {
+            testAsset = "regression_test_data/slider_presets.json"
+            activityTestRule.buildContainer()
 
-                setTo(9, slider)
-                assert { checkThumbValue(9, slider) }
-            }
+            setTo(9)
+            assert { checkThumbValue(9) }
         }
     }
 
     @Test
     fun sliderPreferencesMax3SliderInteractivity() {
-        sliderPreferences {
-            val slider = max3Slider
-            slider {
-                testAsset = "regression_test_data/slider_presets.json"
-                activityTestRule.buildContainer()
+        max3Slider {
+            testAsset = "regression_test_data/slider_presets.json"
+            activityTestRule.buildContainer()
 
-                setTo(2, slider)
-                assert { checkThumbValue(2, slider) }
-            }
+            setTo(2)
+            assert { checkThumbValue(2) }
         }
     }
 
     @Test
     fun sliderPreferencesDoubleDefaultSliderInteractivity() {
-        sliderPreferences {
-            val slider = doubleDefaultSlider
-            slider {
-                testAsset = "regression_test_data/slider_presets.json"
-                activityTestRule.buildContainer()
+        doubleDefaultSlider {
+            testAsset = "regression_test_data/slider_presets.json"
+            activityTestRule.buildContainer()
 
-                setTo(9, slider)
-                setTo(1, slider)
-                assert {
-                    checkThumbValue(1, slider)
-                    checkSecondaryThumbValue(9, slider)
-                }
+            setTo(9)
+            setTo(1)
+            assert {
+                checkThumbValue(1)
+                checkSecondaryThumbValue(9)
             }
         }
     }
 
     @Test
     fun sliderPreferencesDoubleWithDivisionsSliderInteractivity() {
-        sliderPreferences {
-            val slider = doubleWithDivisionsSlider
-            slider {
-                testAsset = "regression_test_data/slider_presets.json"
-                activityTestRule.buildContainer()
+        doubleWithDivisionsSlider {
+            testAsset = "regression_test_data/slider_presets.json"
+            activityTestRule.buildContainer()
 
-                setTo(1, slider)
-                setTo(9, slider)
+            setTo(1)
+            setTo(9)
+            assert {
+                checkThumbValue(1)
+                checkSecondaryThumbValue(9)
+            }
+        }
+    }
+
+    @Test
+    fun sliderDoNotInterruptVerticalScroll() {
+        max10Slider {
+            testAsset = "regression_test_data/slider_scroll_vertical.json"
+            activityTestRule.buildContainer()
+
+            saveCoordinates()
+            swipeUp()
+
+            assert {
+                parentWasScrolled()
+            }
+        }
+    }
+
+    @Test
+    fun sliderInterruptHorizontalScroll() {
+        max10Slider {
+            testAsset = "regression_test_data/slider_scroll_horizontal.json"
+            activityTestRule.buildContainer()
+
+            saveCoordinates()
+            dragTo(6,5)
+
+            assert {
+                parentWasNotScrolled()
+            }
+        }
+    }
+
+    @Test
+    fun sliderChangesStatesWhenDragged() {
+        max10Slider {
+            testAsset = "regression_test_data/slider_nps.json"
+            activityTestRule.buildContainer()
+
+            setTo(1)
+            assert {
+                hasTextOnScreen(recommendationSliderExpectedText(1))
+            }
+            for (i in 2..10) {
+                dragTo(i-1, i)
                 assert {
-                    checkThumbValue(1, slider)
-                    checkSecondaryThumbValue(9, slider)
+                    hasTextOnScreen(recommendationSliderExpectedText(i))
                 }
             }
         }
+    }
+
+    @Test
+    fun doubleSliderChangesStatesWhenDragged() {
+        doubleWithDivisionsSlider {
+            testAsset = "regression_test_data/double_slider.json"
+            activityTestRule.buildContainer()
+
+            setTo(3)
+            assert {
+                hasTextOnScreen(recommendationSliderExpectedText(1))
+            }
+            for (i in 4..10) {
+                dragTo(i-1, i)
+                assert {
+                    hasTextOnScreen(recommendationSliderExpectedText(i))
+                }
+            }
+
+            setTo(3)
+            for (i in 9 downTo 4) {
+                dragTo(i+1, i)
+                assert {
+                    hasTextOnScreen(Recommendation.AWFUL.text)
+                }
+            }
+        }
+    }
+
+    private fun recommendationSliderExpectedText(position: Int): String {
+        return when (position) {
+            in 0..3 -> Recommendation.AWFUL.text
+            in 4..6 -> Recommendation.BAD.text
+            7 -> Recommendation.OK.text
+            8 -> Recommendation.GOOD.text
+            9 -> Recommendation.EXCELLENT.text
+            10 -> Recommendation.AWESOME.text
+            else -> throw RuntimeException("Unexpected slider thumb position")
+        }
+    }
+
+    private enum class Recommendation(val text: String) {
+        AWFUL("This is bad"),
+        BAD("Not sure"),
+        OK("You can do better"),
+        GOOD("Good"),
+        EXCELLENT("Excellent"),
+        AWESOME("Awesome")
     }
 }

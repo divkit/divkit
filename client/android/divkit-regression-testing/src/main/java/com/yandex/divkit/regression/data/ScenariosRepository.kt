@@ -27,7 +27,10 @@ class ScenariosRepository @Inject constructor(
 
     private fun loadScenariosInternal(): List<Scenario> {
         return dataSource.loadScenarios()
-            .filter { it.platforms.isEmpty() || it.platforms.contains(Platforms.android) }
+            .filter {
+                (it.platforms.isEmpty() || it.platforms.contains(Platforms.android))
+                        && !it.automated.contains(Platforms.android)
+            }
             .sortedBy { it.title }
             .sortedBy { it.priority }
             .also {

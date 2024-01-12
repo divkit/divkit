@@ -8,7 +8,7 @@ import com.yandex.test.util.Report
 
 internal fun sliderActivity(f: SliderActivitySteps.() -> Unit) = f(SliderActivitySteps())
 
-internal class SliderActivitySteps : SliderSteps() {
+internal class SliderActivitySteps : SliderSteps(SliderViews.commonSlider) {
     private val interactivity get() = Espresso.onView(ViewMatchers.withId(R.id.interactive_switch))
     private val secondaryThumbSwitcher get() = Espresso.onView(ViewMatchers.withId(R.id.secondary_thumb_switch))
 

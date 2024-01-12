@@ -390,11 +390,11 @@
           },
           {
             "log_id": "update_tick_marks_switch",
-            "url": "div-action://set_state?state_id=0/tick_marks_switch/false"
+            "url": "div-action://set_state?state_id=0/tick_marks_switch/0"
           },
           {
             "log_id": "change_tick_marks",
-            "url": "div-action://set_variable?name=tick_marks&value=true"
+            "url": "div-action://set_variable?name=tick_marks&value=false"
           }
         ]
       },

@@ -335,6 +335,9 @@
       "tags": [
         "Slider"
       ],
+      "automated": [
+        "android"
+      ],
       "priority": "blocker",
       "steps": [
         "Interact with the slider"
@@ -348,6 +351,9 @@
       "title": "Slider with two pointers",
       "tags": [
         "Slider"
+      ],
+      "automated": [
+        "android"
       ],
       "priority": "critical",
       "steps": [
@@ -1363,7 +1369,7 @@
       "title": "Variable triggers (closures)",
       "tags": [
         "DivInput",
-        "DivSlider",
+        "Slider",
         "Triggers",
         "Functions"
       ],
@@ -1748,19 +1754,6 @@
         "If item 'Visible' or 'Invisible' - blue background visible, otherwise hidden"
       ],
       "file": "animations/transition/transition_triggers_complex_src.json"
-    },
-    {
-      "title": "Slider shapes",
-      "platforms": [
-        "android"
-      ],
-      "expected_results": [
-        "Two sliders with different thumb shapes - Rounded Rectangle and Circle"
-      ],
-      "file": "slider_shapes.json",
-      "tags": [
-        "Slider"
-      ]
     },
     {
       "title": "Indicator shapes",
@@ -2338,6 +2331,38 @@
         "A keyboard appears and the number can be edited."
       ],
       "file": "input_inside_pager.json"
+    },
+    {
+      "title": "Slider vertical scroll interruption",
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Drag slider view up."
+      ],
+      "expected_results": [
+        "The entire gallery should be moved upwards."
+      ],
+      "file": "slider_scroll_vertical.json"
+    },
+    {
+      "title": "Slider horizontal scroll interruption",
+      "automated": [
+        "android"
+      ],
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Drag slider to the left."
+      ],
+      "expected_results": [
+        "Slider should change value, but its view shouldn't be moved."
+      ],
+      "file": "slider_scroll_horizontal.json"
     }
   ]
 }

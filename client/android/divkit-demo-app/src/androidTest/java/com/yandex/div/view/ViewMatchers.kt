@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Root
+import androidx.test.espresso.action.GeneralLocation
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
@@ -295,6 +296,22 @@ object ViewMatchers {
                     is TextView -> checkBitmap(view.context, view.compoundDrawables[position.ordinal], drawableId, tint)
                     else -> checkBitmap(view.context, view.background, drawableId, tint)
                 }
+            }
+        }
+    }
+
+    fun positionMatch(shouldMatch: Boolean, lastPosition: FloatArray) : Matcher<View> {
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("Check last view position")
+                if (!shouldMatch) description.appendText(" does not")
+                description.appendText(" matches current")
+            }
+
+            override fun matchesSafely(item: View): Boolean {
+                val equals = GeneralLocation.CENTER.calculateCoordinates(item).contentEquals(lastPosition)
+
+                return shouldMatch == equals
             }
         }
     }

@@ -10,15 +10,20 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.CoordinatesProvider
 import androidx.test.espresso.action.GeneralClickAction
+import androidx.test.espresso.action.GeneralSwipeAction
 import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.Tap
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.internal.widget.slider.SliderView
+import com.yandex.div.view.ViewAssertions.hasChangedPosition
+import com.yandex.div.view.ViewAssertions.hasNotChangedPosition
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div.view.scrollTo
+import com.yandex.div.view.swipeUp
 import com.yandex.test.util.Report.step
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -27,13 +32,22 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.TypeSafeMatcher
 import ru.tinkoff.allure.step as allureStep
 
-internal fun slider(f: SliderSteps.() -> Unit) = f(SliderSteps())
+internal fun slider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.commonSlider))
 
-internal open class SliderSteps : DivTestAssetSteps() {
+internal fun defaultSlider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.defaultSlider))
 
-    val BUTTON_VALUE_PERFECT = "Excellent"
-    val BUTTON_VALUE_NOT_SURE = "Not sure"
-    val BUTTON_VALUE_BAD = "This is bad"
+internal fun max10Slider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.max10Slider))
+
+internal fun max3Slider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.max3Slider))
+
+internal fun doubleDefaultSlider(f: SliderSteps.() -> Unit) = f(SliderSteps(SliderViews.doubleDefaultSlider))
+
+internal fun doubleWithDivisionsSlider(f: SliderSteps.() -> Unit) =
+    f(SliderSteps(SliderViews.doubleWithDivisionsSlider))
+
+internal open class SliderSteps(
+    private val sliderView: ViewInteraction
+) : DivTestAssetSteps(), CoordinateSteps by CoordinateStepsMixin() {
 
     fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
         buildContainer(
@@ -43,43 +57,61 @@ internal open class SliderSteps : DivTestAssetSteps() {
         )
     }
 
-    fun setTo(sliderPosition: Int, sliderView: ViewInteraction = commonSlider): Unit =
-        step("Set slider value to $sliderPosition") {
-            sliderView.perform(clickOnValue(sliderPosition))
+    fun setTo(sliderPosition: Int): Unit = step("Set slider value to $sliderPosition") {
+        sliderView.perform(clickOnValue(sliderPosition))
+    }
+
+    fun dragTo(startPosition: Int, endPosition: Int): Unit =
+        step("Drag thumb from $startPosition to $endPosition") {
+            sliderView.perform(dragToValue(startPosition, endPosition))
         }
 
     fun scrollToText(text: String): Unit = step("Scroll to text=$text") {
         onView(withText(containsString(text))).scrollTo()
     }
 
-    fun assert(f: SliderAssertions.() -> Unit) = f(SliderAssertions())
+    fun saveCoordinates() = step("Save current slider on-screen coordinates") {
+        saveCoordinates(sliderView)
+    }
+
+    fun swipeUp(): Unit = step("Swipe slider view upwards") {
+        sliderView.swipeUp()
+    }
+
+    fun assert(f: SliderAssertions.() -> Unit) = f(SliderAssertions(this, sliderView))
 }
 
-internal class SliderAssertions {
+internal class SliderAssertions(
+    private val coordinateSteps: CoordinateSteps,
+    private val sliderView: ViewInteraction
+) {
 
-    fun checkThumbValue(value: Int, sliderView: ViewInteraction? = null): Unit =
-        step("Assert thumb value is $value") {
-            checkThumbValue(value, false, sliderView)
-        }
+    private val lastCoordinates get() = coordinateSteps.lastSavedCoordinates
+        ?: throw RuntimeException("View should have saved position coordinates before position change assertion call")
 
-    fun checkSecondaryThumbValue(value: Int, sliderView: ViewInteraction? = null): Unit =
-        step("Assert secondary thumb value is $value") {
-            checkThumbValue(value, true, sliderView)
-        }
+    fun checkThumbValue(value: Int): Unit = step("Assert thumb value is $value") {
+        checkThumbValue(value, false)
+    }
+
+    fun checkSecondaryThumbValue(value: Int): Unit = step("Assert secondary thumb value is $value") {
+        checkThumbValue(value, true)
+    }
 
     fun hasTextOnScreen(text: String): Unit = step("Assert has text on screen $text") {
         onView(allOf(withText(containsString(text)),
             isAssignableFrom(AppCompatTextView::class.java))).checkIsDisplayed()
     }
 
-    private fun checkThumbValue(
-        value: Int,
-        secondary: Boolean = false,
-        sliderView: ViewInteraction? = null
-    ) {
-        val slider = sliderView ?: commonSlider
-        slider.check(matches(thumbMatch(value, secondary)))
+    fun parentWasScrolled() = step("Assert view has changed position on screen") {
+        hasChangedPosition(sliderView, lastCoordinates)
     }
+
+    fun parentWasNotScrolled() = step("Assert view stayed at the same position on screen") {
+        hasNotChangedPosition(sliderView, lastCoordinates)
+    }
+
+    private fun checkThumbValue(value: Int, secondary: Boolean = false) =
+        sliderView.check(matches(thumbMatch(value, secondary)))
 }
 
 private class SliderCoordinatesProvider(val sliderPosition: Int) : CoordinatesProvider {
@@ -106,7 +138,15 @@ private fun clickOnValue(sliderPosition: Int) = GeneralClickAction(
     MotionEvent.BUTTON_PRIMARY
 )
 
-private val commonSlider get() = onView(isAssignableFrom(SliderView::class.java))
+private fun dragToValue(
+    startPosition: Int,
+    endPosition: Int,
+) = GeneralSwipeAction(
+    Swipe.FAST,
+    SliderCoordinatesProvider(startPosition),
+    SliderCoordinatesProvider(endPosition),
+    Press.PINPOINT
+)
 
 private fun thumbMatch(thumbValue: Int, isSecondary: Boolean) : Matcher<View> {
     return object : TypeSafeMatcher<View>() {
