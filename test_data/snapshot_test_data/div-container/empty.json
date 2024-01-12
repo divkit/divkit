@@ -1,0 +1,36 @@
+{
+  "description": "div-container with empty items.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "empty_container",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "items": [],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#d31515"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
