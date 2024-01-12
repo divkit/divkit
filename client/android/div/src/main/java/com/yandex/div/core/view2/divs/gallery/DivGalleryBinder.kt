@@ -14,6 +14,7 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -88,6 +89,7 @@ internal class DivGalleryBinder @Inject constructor(
         }
         view.adapter =
             GalleryAdapter(div.nonNullItems, divView, divBinder.get(), viewCreator, itemStateBinder, path)
+        view.resetAnimatorAndRestoreOnLayout()
 
         updateDecorations(view, div, divView, resolver)
     }
@@ -174,6 +176,15 @@ internal class DivGalleryBinder @Inject constructor(
             )
         } else {
             null
+        }
+    }
+
+    private fun DivRecyclerView.resetAnimatorAndRestoreOnLayout() {
+        val prevItemAnimator = itemAnimator.also { itemAnimator = null }
+        doOnActualLayout {
+            if (itemAnimator == null) {
+                itemAnimator = prevItemAnimator
+            }
         }
     }
 
