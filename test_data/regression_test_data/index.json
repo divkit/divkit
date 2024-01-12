@@ -1025,7 +1025,8 @@
     {
       "title": "Visibility actions is_enabled",
       "automated": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "visibility_actions",
@@ -1046,7 +1047,8 @@
     {
       "title": "Actions is_enabled",
       "automated": [
-        "android"
+        "android",
+        "web"
       ],
       "tags": [
         "actions"
