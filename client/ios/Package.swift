@@ -10,7 +10,7 @@ let vgsl = {
   return (
     url: url,
     packageName: packageName,
-    version: Version("2.3.3")
+    version: Version("3.0.0")
   )
 }()
 
