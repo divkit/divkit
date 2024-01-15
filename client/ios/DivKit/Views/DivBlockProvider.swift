@@ -67,7 +67,7 @@ final class DivBlockProvider {
     self.debugParams = debugParams
     switch source.kind {
     case let .data(data): update(data: data)
-    case let .divData(divData): self.divData = divData
+    case let .divData(divData): update(divData: divData)
     case let .json(json): update(json: json)
     }
   }
@@ -93,10 +93,20 @@ final class DivBlockProvider {
     do {
       let result = try parseDivDataWithTemplates(json, cardId: cardId)
       dataErrors.append(contentsOf: result.errorsOrWarnings?.asArray() ?? [])
-      divData = result.value
+      update(divData: result.value)
     } catch {
       block = handleError(error: error)
     }
+  }
+
+  private func update(divData: DivData?) {
+    guard let divData else {
+      self.divData = nil
+      return
+    }
+    divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
+    divKitComponents.setTimers(divData: divData, cardId: cardId)
+    self.divData = divData
   }
 
   private func update(reasons: [DivActionURLHandler.UpdateReason]) {
@@ -182,14 +192,9 @@ final class DivBlockProvider {
       DivTemplates(dictionary: rawDivData.templates)
     }
     return try measurements.divDataParsingTime.updateMeasure {
-      let result = templates
+      templates
         .parseValue(type: DivDataTemplate.self, from: rawDivData.card)
         .asCardResult(cardId: cardId)
-      if let divData = result.value {
-        divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
-        divKitComponents.setTimers(divData: divData, cardId: cardId)
-      }
-      return result
     }
   }
 

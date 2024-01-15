@@ -225,6 +225,7 @@ public final class DivKitComponents {
     timerStorage.reset(cardId: cardId)
   }
 
+  /// When using DivView, use DivData.resolve to avoid adding variables twice.
   public func parseDivData(
     _ jsonDict: [String: Any],
     cardId: DivCardID
@@ -232,6 +233,8 @@ public final class DivKitComponents {
     try parseDivDataWithTemplates(["card": jsonDict], cardId: cardId)
   }
 
+  /// When using DivView, use DivData.resolve to avoid adding variables twice.
+  ///
   /// Parses DivData from JSON in following format:
   /// {
   ///   "card": { ... },
@@ -253,6 +256,8 @@ public final class DivKitComponents {
     return result
   }
 
+  /// When using DivView, use DivData.resolve to avoid adding variables twice.
+  ///
   /// Parses DivData from JSON in following format:
   /// {
   ///   "card": { ... },
