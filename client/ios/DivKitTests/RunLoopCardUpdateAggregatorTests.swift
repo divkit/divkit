@@ -52,6 +52,25 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
       XCTAssertEqual(reasons, updateReasons)
     }
   }
+
+  func test_FlushUpdateActions_RunActionsSynchronously() {
+    aggregator.aggregate(.variable(.specific(["first"])))
+    aggregator.aggregate(.variable(.specific(["second"])))
+
+    aggregator.flushUpdateActions()
+
+    XCTAssertEqual([.variable(.specific(["first", "second"]))], updateReasons)
+  }
+
+  func test_FlushUpdateActions_DoesNotRunActionsRepeatedly() {
+    aggregator.aggregate(.variable(.specific(["cardId"])))
+    aggregator.flushUpdateActions()
+    updateReasons = []
+
+    mainThreadBlock!()
+
+    XCTAssertEqual([], updateReasons)
+  }
 }
 
 extension DivActionURLHandler.UpdateReason: Equatable {
