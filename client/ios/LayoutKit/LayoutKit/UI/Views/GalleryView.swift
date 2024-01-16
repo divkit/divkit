@@ -102,7 +102,7 @@ public final class GalleryView: BlockView {
     self.model = model
 
     setState(state.resetToModelIfInconsistent(model), notifyingObservers: false)
-    updateLayoutIfNeeded(to: model)
+    updateLayout(to: model)
 
     if oldModel != model {
       let blocks = model.items.map(\.content)
@@ -158,11 +158,7 @@ public final class GalleryView: BlockView {
     }
   }
 
-  private func updateLayoutIfNeeded(to model: GalleryViewModel) {
-    if self.layout?.isEqual(to: model, boundsSize: bounds.size) == true {
-      return
-    }
-
+  private func updateLayout(to model: GalleryViewModel) {
     let layout = layoutFactory(model, bounds.size)
     collectionViewLayout.apply(layout)
     self.layout = layout
@@ -236,8 +232,8 @@ public final class GalleryView: BlockView {
     collectionView.frame = bounds
     mask!.frame = bounds.insetBy(dx: 0, dy: shadowInsetValue)
 
-    if let model {
-      updateLayoutIfNeeded(to: model)
+    if let model, layout?.isEqual(to: model, boundsSize: bounds.size) != true {
+      updateLayout(to: model)
     }
     if case let .pending(state) = deferredStateSetting {
       collectionView.performWithDetachedDelegate {

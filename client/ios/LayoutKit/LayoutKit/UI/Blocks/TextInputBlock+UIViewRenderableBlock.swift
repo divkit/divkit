@@ -217,16 +217,14 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       self.textValue = textValue
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
-      if textValue != self.textValue {
-        self.textValue = textValue
-        let text: String
-        if let selectionItems = self.selectionItems {
-          text = selectionItems.first { $0.value == textValue.value }?.text ?? ""
-        } else {
-          text = textValue.value
-        }
-        setTextData(text)
+      self.textValue = textValue
+      let text: String
+      if let selectionItems = self.selectionItems {
+        text = selectionItems.first { $0.value == textValue.value }?.text ?? ""
+      } else {
+        text = textValue.value
       }
+      setTextData(text)
     }
     updateHintVisibility()
     updateMultiLineOffset()

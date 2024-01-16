@@ -177,6 +177,10 @@ extension TextInputBlock {
     lhs.widthTrait == rhs.widthTrait
       && lhs.heightTrait == rhs.heightTrait
       && lhs.hint == rhs.hint
+      && lhs.layoutDirection == rhs.layoutDirection
+      && lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      && lhs.textAlignmentVertical == rhs.textAlignmentVertical
+      && lhs.textTypo == rhs.textTypo
       && lhs.textValue.value == rhs.textValue.value
       && lhs.rawTextValue?.value == rhs.rawTextValue?.value
       && lhs.multiLineMode == rhs.multiLineMode

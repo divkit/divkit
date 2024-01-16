@@ -19,7 +19,7 @@ private func doTest(_ file: JsonFile) {
   let test = DivKitSnapshotTestCase()
   test.rootDirectory = testDirectory
   test.subdirectory = file.subdirectory
-  test.testDivs(
+  test.run(
     file.name,
     customCaseName: file.name.removingFileExtension
   )

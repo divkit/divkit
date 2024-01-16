@@ -62,7 +62,7 @@ public struct DivViewSize: Equatable {
     let height: CGFloat
     switch self.height {
     case .matchParent:
-      height = parentViewSize.width
+      height = parentViewSize.height
     case let .desired(value):
       height = value
     case let .dependsOnOtherDimensionSize(heightForWidth):

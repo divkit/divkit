@@ -41,15 +41,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     return platforms.contains { $0 as? String == "ios" }
   }
 
-  func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
-    let configuration = try? jsonDict.getField("configuration") as [String: Any]
-    guard configuration?["layout_direction"] as? String == "rtl" else {
-      return .leftToRight
-    }
-    return .rightToLeft
-  }
-
-  final func testDivs(
+  final func run(
     _ fileName: String,
     testName: String = #function,
     customCaseName: String? = nil,
@@ -74,25 +66,46 @@ open class DivKitSnapshotTestCase: XCTestCase {
       divKitComponents.blockStateStorage.setState(path: path, state: state)
     }
 
-    let dataWithErrors = loadDivData(dictionary: jsonDict, divKitComponents: divKitComponents)
-    guard let data = dataWithErrors.0 else {
-      XCTFail(
-        "Data could not be created from json \(fileName), try to set breakpoint on the following errors: \(dataWithErrors.1.map { type(of: $0) })"
-      )
-      return
-    }
+    let caseName = customCaseName
+      ?? (fileName.removingFileExtension + "_" + testName.extractingDescription)
 
     do {
-      try testDivs(
-        data: data,
-        divKitComponents: divKitComponents,
-        caseName: customCaseName ??
-          (fileName.removingFileExtension + "_" + testName.extractingDescription),
-        steps: loadSteps(dictionary: jsonDict)
-      )
+      let view = DivView(divKitComponents: divKitComponents)
+      try view.setSource(.init(
+        kind: .json(jsonDict.getOptionalField("div_data") ?? jsonDict),
+        cardId: testDivCardId
+      ))
+      if let steps = try loadSteps(dictionary: jsonDict) {
+        for (index, step) in steps.enumerated() {
+          step.actions?.forEach { action in
+            divKitComponents.actionHandler.handle(
+              action,
+              cardId: testDivCardId,
+              source: .tap,
+              sender: nil
+            )
+          }
+          divKitComponents.flushUpdateActions()
+          try checkSnapshots(
+            view: view,
+            caseName: caseName,
+            stepName: step.name ?? "step\(index)"
+          )
+        }
+      } else {
+        try checkSnapshots(view: view, caseName: caseName)
+      }
     } catch {
       XCTFail("Testing div failed with error: \(error.localizedDescription)")
     }
+  }
+
+  private func getLayoutDirection(from jsonDict: [String: Any]) -> UserInterfaceLayoutDirection {
+    let configuration = try? jsonDict.getField("configuration") as [String: Any]
+    guard configuration?["layout_direction"] as? String == "rtl" else {
+      return .leftToRight
+    }
+    return .rightToLeft
   }
 
   private func loadSteps(dictionary: [String: Any]) throws -> [TestStep]? {
@@ -103,147 +116,53 @@ open class DivKitSnapshotTestCase: XCTestCase {
       ).unwrap()
   }
 
-  private func loadDivData(
-    dictionary: [String: Any],
-    divKitComponents: DivKitComponents
-  ) -> (DivData?, [Error]) {
-    var errors = [Error]()
-    do {
-      let divData = try dictionary.getOptionalField("div_data") ?? dictionary
-      let result = try divKitComponents.parseDivDataWithTemplates(divData, cardId: testDivCardId)
-      if let data = result.value {
-        return (data, errors)
-      } else {
-        errors += result.errorsOrWarnings?.map { $0 as Error } ?? []
-      }
-    } catch {
-      errors.append(error)
-    }
-    return (nil, errors)
-  }
-
-  private func testDivs(
-    data: DivData,
-    divKitComponents: DivKitComponents,
-    caseName: String,
-    steps: [TestStep]? = nil
-  ) throws {
-    if let steps {
-      for (index, step) in steps.enumerated() {
-        step.divActions?.forEach { divAction in
-          divKitComponents.actionHandler.handle(
-            divAction,
-            cardId: testDivCardId,
-            source: .tap,
-            sender: nil
-          )
-        }
-        try checkSnapshots(
-          data: data,
-          divKitComponents: divKitComponents,
-          caseName: caseName,
-          stepName: step.name ?? "step\(index)"
-        )
-      }
-    } else {
-      try checkSnapshots(
-        data: data,
-        divKitComponents: divKitComponents,
-        caseName: caseName
-      )
-    }
-  }
-
   private func checkSnapshots(
-    data: DivData,
-    divKitComponents: DivKitComponents,
+    view: DivView,
     caseName: String,
     stepName: String? = nil
   ) throws {
-    let currentScale = UIScreen.main.scale
-    let devices = ScreenSize.portrait.filter { $0.scale == currentScale }
-    try devices.forEach { device in
-      var view = try makeDivView(
-        data: data,
-        divKitComponents: divKitComponents,
-        size: device.size
-      )
-      if view.bounds.isEmpty {
-        view = makeEmptyView()
-      }
-      guard let image = view.makeSnapshot() else {
-        throw DivTestingErrors.snapshotCouldNotBeCreated
-      }
-      let referenceUrl = referenceFileURL(
-        device: device,
-        caseName: caseName,
-        stepName: stepName
-      )
+    let screen = try Screen.makeForScale(UIScreen.main.scale)
+    let cardSize = view.cardSize?.sizeFor(parentViewSize: screen.size) ?? .zero
+    view.frame = CGRect(origin: .zero, size: cardSize)
 
-      SnapshotTestKit.testSnapshot(
-        image,
-        referenceURL: referenceUrl,
-        mode: mode
-      )
-      checkSnapshotsForAnotherScales(currentScale, caseName: caseName, stepName: stepName)
+    let nonEmptyView: UIView
+    if view.bounds.isEmpty {
+      let label = UILabel()
+      label.text = "<empty view>"
+      label.frame = CGRect(origin: .zero, size: label.intrinsicContentSize)
+      nonEmptyView = label
+    } else {
+      nonEmptyView = view
     }
-  }
+    guard let image = nonEmptyView.makeSnapshot() else {
+      if let stepName {
+        throw "Failed to create spanshot. Step: \(stepName)"
+      }
+      throw "Failed to create spanshot."
+    }
 
-  private func checkSnapshotsForAnotherScales(
-    _ scale: CGFloat,
-    caseName: String,
-    stepName: String?
-  ) {
-    let scaleToCheck: CGFloat = scale == 2 ? 3 : 2
-    let devices = ScreenSize.portrait.filter { $0.scale == scaleToCheck }
-    let fileManager = FileManager.default
-    devices.forEach { device in
-      let referenceUrl = referenceFileURL(
-        device: device,
-        caseName: caseName,
-        stepName: stepName
-      )
-      let path = referenceUrl.path
-      XCTAssertTrue(
-        fileManager.fileExists(atPath: path),
-        "Don't forget to add file with scale \(scaleToCheck) and path \(path)"
-      )
-    }
+    SnapshotTestKit.compareSnapshot(
+      image,
+      referenceURL: referenceFileURL(screen: screen, caseName: caseName, stepName: stepName),
+      mode: mode
+    )
   }
 
   private func referenceFileURL(
-    device: ScreenSize,
+    screen: Screen,
     caseName: String,
     stepName: String?
   ) -> URL {
-    let referencesURL = URL(
-      fileURLWithPath: ReferenceSet.path,
-      isDirectory: true
-    ).appendingPathComponent(subdirectory)
     var stepDescription = ""
     if let stepName {
       stepDescription = "_" + stepName
     }
-    let fileName = caseName + "_\(Int(device.size.width))" + device.scale
-      .imageSuffix + "\(stepDescription).png"
-    return referencesURL.appendingPathComponent(fileName, isDirectory: false)
-  }
-
-  private func makeDivView(
-    data: DivData,
-    divKitComponents: DivKitComponents,
-    size: CGSize
-  ) throws -> UIView {
-    guard let block = data.makeBlock(
-      divKitComponents: divKitComponents
-    ) else {
-      throw DivTestingErrors.blockCouldNotBeCreatedFromData
-    }
-    let blockSize = block.size(forResizableBlockSize: size)
-    let divView = block.makeBlockView()
-    divView.frame = CGRect(origin: .zero, size: blockSize)
-    divView.layoutIfNeeded()
-    return divView
+    return URL(fileURLWithPath: ReferenceSet.path, isDirectory: true)
+      .appendingPathComponent(subdirectory)
+      .appendingPathComponent(
+        "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription).png",
+        isDirectory: false
+      )
   }
 }
 
@@ -256,27 +175,6 @@ private func jsonDict(fileName: String, subdirectory: String) -> [String: Any]? 
     return nil
   }
   return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
-}
-
-private func makeEmptyView() -> UIView {
-  let label = UILabel()
-  label.text = "<empty view>"
-  label.frame = CGRect(origin: .zero, size: label.intrinsicContentSize)
-  return label
-}
-
-private enum DivTestingErrors: LocalizedError {
-  case blockCouldNotBeCreatedFromData
-  case snapshotCouldNotBeCreated
-
-  var errorDescription: String? {
-    switch self {
-    case .blockCouldNotBeCreatedFromData:
-      return "Block could not be created from data"
-    case .snapshotCouldNotBeCreated:
-      return "Snapshot could not be created from view"
-    }
-  }
 }
 
 extension String {
@@ -294,30 +192,7 @@ extension String {
   }
 }
 
-extension CGFloat {
-  fileprivate var imageSuffix: String {
-    self == 1 ? "" : "@\(Int(self))x"
-  }
-}
-
 private let testBundle = Bundle(for: DivKitSnapshotTestCase.self)
-
-extension DivData {
-  fileprivate func makeBlock(
-    divKitComponents: DivKitComponents
-  ) -> Block? {
-    let context = divKitComponents.makeContext(
-      cardId: testDivCardId,
-      cachedImageHolders: []
-    )
-    do {
-      return try makeBlock(context: context)
-    } catch {
-      XCTFail("Failure while making block: \(error)")
-      return nil
-    }
-  }
-}
 
 private final class TestImageHolderFactory: DivImageHolderFactory {
   private var reportedUrls = Set<String>()
@@ -347,12 +222,12 @@ private final class TestImageHolderFactory: DivImageHolderFactory {
 
 private struct TestStep {
   let name: String?
-  let divActions: [DivActionBase]?
+  let actions: [DivActionBase]?
 
-  public init(dictionary: [String: Any]) throws {
+  init(dictionary: [String: Any]) throws {
     let expectedScreenshot: String? = try dictionary.getOptionalField("expected_screenshot")
     name = expectedScreenshot?.replacingOccurrences(of: ".png", with: "")
-    divActions = try? dictionary.getOptionalArray(
+    actions = try? dictionary.getOptionalArray(
       "div_actions",
       transform: { (actionDictionary: [String: Any]) -> DivActionBase in
         try DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: actionDictionary)

@@ -38,7 +38,7 @@ extension DivIndicatorTests {
       var testName = functionName
       testName.removeLast(2)
       testName += "_\(state.currentPage)()"
-      testDivs(fileName, testName: testName, blocksState: blocksState)
+      run(fileName, testName: testName, blocksState: blocksState)
     }
   }
 }

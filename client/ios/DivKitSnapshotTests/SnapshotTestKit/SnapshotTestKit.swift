@@ -11,7 +11,7 @@ public enum TestMode {
 }
 
 public enum SnapshotTestKit {
-  public static func testSnapshot(
+  public static func compareSnapshot(
     _ snapshot: UIImage,
     referenceURL: URL,
     mode: TestMode
@@ -41,7 +41,7 @@ public enum SnapshotTestKit {
         }
 
         try snapshot.makePNGData().write(to: referenceURL)
-        throw SnapshotTestError.updateModeEnabled
+        throw "Snapshot saved. Don't forget to change mode back to `verify`!"
       case .verify:
         let reference = try UIImage.makeWith(url: referenceURL)
         if snapshot.compare(with: reference) {
@@ -54,7 +54,7 @@ public enum SnapshotTestKit {
           $0.add(.init(image: reference, name: "reference"))
           $0.add(.init(image: diff, name: "diff"))
         }
-        throw SnapshotTestError.comparisonFailed
+        throw "View snapshot is not equal to reference. Diff is attached in test result."
       }
     } catch {
       XCTFail("Error in \(mode) mode for \(referenceURL.path): \(error.localizedDescription)")
@@ -65,7 +65,7 @@ public enum SnapshotTestKit {
 extension UIImage {
   fileprivate func makePNGData() throws -> Data {
     guard let data = pngData() else {
-      throw SnapshotTestError.nilPNGData
+      throw "UIImage.pngData() returns nil"
     }
     return data
   }
@@ -73,29 +73,9 @@ extension UIImage {
   fileprivate static func makeWith(url: URL) throws -> UIImage {
     let data = try Data(contentsOf: url)
     guard let image = UIImage(data: data, scale: UIScreen.main.scale) else {
-      throw SnapshotTestError.imageCouldNotBeCreated
+      throw "UIImage could not be created with data"
     }
     return image
-  }
-}
-
-private enum SnapshotTestError: LocalizedError {
-  case updateModeEnabled
-  case comparisonFailed
-  case nilPNGData
-  case imageCouldNotBeCreated
-
-  var errorDescription: String? {
-    switch self {
-    case .updateModeEnabled:
-      return "Snapshot saved. Don't forget to change mode back to `verify`!"
-    case .comparisonFailed:
-      return "View snapshot is not equal to reference. Diff is attached in test result."
-    case .nilPNGData:
-      return "UIImage.pngData() returns nil"
-    case .imageCouldNotBeCreated:
-      return "UIImage could not be created with data"
-    }
   }
 }
 
@@ -108,5 +88,11 @@ extension XCTAttachment {
   fileprivate convenience init(image: UIImage, name: String) {
     self.init(image: image)
     self.name = name
+  }
+}
+
+extension String: LocalizedError {
+  public var errorDescription: String? {
+    self
   }
 }

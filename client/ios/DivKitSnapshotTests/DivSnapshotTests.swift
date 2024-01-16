@@ -53,7 +53,7 @@ private func doTest(_ file: JsonFile) {
   test.rootDirectory = testDirectory
   test.subdirectory = file.subdirectory
 
-  test.testDivs(
+  test.run(
     file.name,
     customCaseName: file.name.removingFileExtension,
     imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? PlaceholderFactory() : nil,
