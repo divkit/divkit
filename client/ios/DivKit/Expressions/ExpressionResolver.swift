@@ -145,8 +145,9 @@ public final class ExpressionResolver {
         let next = value[nextIndex...]
 
         if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
+          let distance = value.distance(from: value.startIndex, to: index)
           value.remove(at: index)
-          index = value.index(index, offsetBy: escaped.count)
+          index = value.index(value.startIndex, offsetBy: distance + escaped.count)
         } else {
           if next.isEmpty {
             errorTracker(ExpressionError("Error tokenizing '\(value)'.", expression: value))
