@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithArrayOfNestedItems(
     @JvmField final val items: List<Item>, // at least 1 elements
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            items.sumOf { it.hash() }
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
@@ -56,7 +68,20 @@ class EntityWithArrayOfNestedItems(
     class Item(
         @JvmField final val entity: Entity,
         @JvmField final val property: Expression<String>,
-    ) : JSONSerializable {
+    ) : JSONSerializable, Hashable {
+
+        private var _hash: Int? = null 
+
+        override fun hash(): Int {
+            _hash?.let {
+                return it
+            }
+            val hash = 
+                entity.hash() +
+                property.hashCode()
+            _hash = hash
+            return hash
+        }
 
         override fun writeToJSON(): JSONObject {
             val json = JSONObject()

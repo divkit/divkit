@@ -376,6 +376,10 @@ class KotlinProperty(Property):
         )
         return f'{prefix}{type_decl}{suffix}{"?" if self.should_be_optional else ""}'
 
+    @property
+    def use_custom_hash(self) -> bool:
+        return self.property_type.use_custom_hash
+
     def declaration(self, overridden: bool, in_interface: bool, with_comma: bool, with_default: bool) -> Text:
         if isinstance(self.property_type, StaticString):
             assert not overridden and not with_comma

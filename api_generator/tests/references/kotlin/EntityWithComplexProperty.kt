@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithComplexProperty(
     @JvmField final val property: Property,
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            property.hash()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
@@ -47,7 +59,19 @@ class EntityWithComplexProperty(
     @Mockable
     class Property(
         @JvmField final val value: Expression<Uri>,
-    ) : JSONSerializable {
+    ) : JSONSerializable, Hashable {
+
+        private var _hash: Int? = null 
+
+        override fun hash(): Int {
+            _hash?.let {
+                return it
+            }
+            val hash = 
+                value.hashCode()
+            _hash = hash
+            return hash
+        }
 
         override fun writeToJSON(): JSONObject {
             val json = JSONObject()

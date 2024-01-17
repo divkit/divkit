@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithStringEnumPropertyWithDefaultValue(
     @JvmField final val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            value.hashCode()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()

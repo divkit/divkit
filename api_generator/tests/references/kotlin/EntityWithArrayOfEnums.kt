@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithArrayOfEnums(
     @JvmField final val items: List<Item>, // at least 1 elements
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            items.hashCode()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()

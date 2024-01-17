@@ -14,7 +14,27 @@ class EntityWithSimpleProperties(
     @JvmField final val positiveInteger: Expression<Long>? = null, // constraint: number > 0
     @JvmField final val string: Expression<String>? = null,
     @JvmField final val url: Expression<Uri>? = null,
-) {
+) : Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            (boolean?.hashCode() ?: 0) +
+            (booleanInt?.hashCode() ?: 0) +
+            (color?.hashCode() ?: 0) +
+            (double?.hashCode() ?: 0) +
+            id.hashCode() +
+            integer.hashCode() +
+            (positiveInteger?.hashCode() ?: 0) +
+            (string?.hashCode() ?: 0) +
+            (url?.hashCode() ?: 0)
+        _hash = hash
+        return hash
+    }
 
     companion object {
         const val TYPE = "entity_with_simple_properties"

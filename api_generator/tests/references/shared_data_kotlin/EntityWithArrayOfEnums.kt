@@ -6,7 +6,19 @@ import org.json.JSONObject
 
 class EntityWithArrayOfEnums(
     @JvmField final val items: List<Item>, // at least 1 elements
-) {
+) : Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            items.hashCode()
+        _hash = hash
+        return hash
+    }
 
     fun copyWithNewProperties(
         items: List<EntityWithArrayOfEnums.Item>,

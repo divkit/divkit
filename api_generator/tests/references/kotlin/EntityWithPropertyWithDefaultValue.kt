@@ -21,7 +21,21 @@ class EntityWithPropertyWithDefaultValue(
     @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
     @JvmField final val nested: Nested? = null,
     @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            int.hashCode() +
+            (nested?.hash() ?: 0) +
+            url.hashCode()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
@@ -63,7 +77,21 @@ class EntityWithPropertyWithDefaultValue(
         @JvmField final val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
         @JvmField final val nonOptional: Expression<String>,
         @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
-    ) : JSONSerializable {
+    ) : JSONSerializable, Hashable {
+
+        private var _hash: Int? = null 
+
+        override fun hash(): Int {
+            _hash?.let {
+                return it
+            }
+            val hash = 
+                int.hashCode() +
+                nonOptional.hashCode() +
+                url.hashCode()
+            _hash = hash
+            return hash
+        }
 
         override fun writeToJSON(): JSONObject {
             val json = JSONObject()

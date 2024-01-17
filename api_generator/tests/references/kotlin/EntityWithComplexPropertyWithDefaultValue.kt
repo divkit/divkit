@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithComplexPropertyWithDefaultValue(
     @JvmField final val property: Property = PROPERTY_DEFAULT_VALUE, // default value: EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            property.hash()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
@@ -49,7 +61,19 @@ class EntityWithComplexPropertyWithDefaultValue(
     @Mockable
     class Property(
         @JvmField final val value: Expression<String>,
-    ) : JSONSerializable {
+    ) : JSONSerializable, Hashable {
+
+        private var _hash: Int? = null 
+
+        override fun hash(): Int {
+            _hash?.let {
+                return it
+            }
+            val hash = 
+                value.hashCode()
+            _hash = hash
+            return hash
+        }
 
         override fun writeToJSON(): JSONObject {
             val json = JSONObject()

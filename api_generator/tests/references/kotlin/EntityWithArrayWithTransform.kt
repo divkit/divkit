@@ -19,7 +19,19 @@ import org.json.JSONArray
 @Mockable
 class EntityWithArrayWithTransform(
     @JvmField final val array: ExpressionList<Int>, // at least 1 elements
-) : JSONSerializable {
+) : JSONSerializable, Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            array.hashCode()
+        _hash = hash
+        return hash
+    }
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()

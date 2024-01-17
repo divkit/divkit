@@ -831,6 +831,11 @@ class PropertyType(ABC):
                 'obj': self.object.as_json if self.object is not None else 'None'
             }
 
+    @property
+    def use_custom_hash(self) -> bool:
+        return (isinstance(self, Object) and not isinstance(self.object, StringEnumeration)) \
+            or (isinstance(self, Array) and self.property_type.use_custom_hash)
+
 
 @dataclass
 class Int(PropertyType):
