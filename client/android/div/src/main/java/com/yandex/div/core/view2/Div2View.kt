@@ -17,6 +17,7 @@ import androidx.transition.TransitionManager
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivCreationTracker
 import com.yandex.div.core.DivCustomContainerChildFactory
 import com.yandex.div.core.DivKit
@@ -743,12 +744,14 @@ class Div2View private constructor(
         if (childCount > 0) (getChildAt(0) as? DivAnimator)?.stopDivAnimation()
     }
 
-    fun handleAction(action: DivAction) {
-        handleActionWithResult(action)
+    @JvmOverloads
+    fun handleAction(action: DivAction, reason: String = DivActionReason.EXTERNAL) {
+        handleActionWithResult(action, reason)
     }
 
-    fun handleActionWithResult(action: DivAction): Boolean {
-        return div2Component.actionHandler.handleAction(action, this)
+    @JvmOverloads
+    fun handleActionWithResult(action: DivAction, reason: String = DivActionReason.EXTERNAL): Boolean {
+        return div2Component.actionHandler.handleActionWithReason(action, this, reason)
     }
 
     override fun handleUri(uri: Uri) {

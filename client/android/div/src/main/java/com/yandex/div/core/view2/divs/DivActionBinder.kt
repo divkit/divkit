@@ -8,6 +8,7 @@ import androidx.appcompat.widget.PopupMenu
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
@@ -272,31 +273,42 @@ internal class DivActionBinder @Inject constructor(
                 }
                 divActionBeaconSender.sendTapActionBeacon(action,
                     divView.expressionResolver)
-                handleAction(divView, action, uuid)
+                handleAction(divView, action, actionLogType.toDivActionReason(), uuid)
             }
         }
     }
 
-    internal fun handleActions(divView: DivViewFacade, actions: List<DivAction>?) {
+    private fun String.toDivActionReason() = when (this) {
+        LOG_CLICK -> DivActionReason.CLICK
+        LOG_LONG_CLICK -> DivActionReason.LONG_CLICK
+        LOG_DOUBLE_CLICK -> DivActionReason.DOUBLE_CLICK
+        LOG_FOCUS -> DivActionReason.FOCUS
+        LOG_BLUR -> DivActionReason.BLUR
+        else -> DivActionReason.EXTERNAL
+    }
+
+    internal fun handleActions(divView: DivViewFacade, actions: List<DivAction>?, reason: String) {
         if (actions == null) return
         val viewActionHandler = (divView as? Div2View)?.actionHandler
-        actions.forEach { handleAction(divView, it, null, viewActionHandler) }
+        actions.forEach { handleAction(divView, it, reason, null, viewActionHandler) }
     }
 
     internal fun handleAction(
         divView: DivViewFacade,
         action: DivAction,
+        reason: String,
         actionUid: String? = null,
         viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
     ) {
         if (!action.isEnabled.evaluate(divView.expressionResolver)) return
         if (actionHandler.useActionUid && actionUid != null) {
-            if (viewActionHandler == null || !viewActionHandler.handleAction(action, divView, actionUid)) {
-                actionHandler.handleAction(action, divView, actionUid)
+            if (viewActionHandler == null ||
+                !viewActionHandler.handleActionWithReason(action, divView, actionUid, reason)) {
+                actionHandler.handleActionWithReason(action, divView, actionUid, reason)
             }
         } else {
-            if (viewActionHandler == null || !viewActionHandler.handleAction(action, divView)) {
-                actionHandler.handleAction(action, divView)
+            if (viewActionHandler == null || !viewActionHandler.handleActionWithReason(action, divView, reason)) {
+                actionHandler.handleActionWithReason(action, divView, reason)
             }
         }
     }
@@ -371,7 +383,7 @@ internal class DivActionBinder @Inject constructor(
                             )
                             divActionBeaconSender.sendTapActionBeacon(action,
                                 divView.expressionResolver)
-                            handleAction(divView, action)
+                            handleAction(divView, action, DivActionReason.MENU)
                         }
                         actionsHandled = true
                     }

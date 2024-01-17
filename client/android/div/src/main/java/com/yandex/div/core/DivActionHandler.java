@@ -16,9 +16,9 @@ import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div2.DivAction;
-import com.yandex.div2.DivVisibilityAction;
 import com.yandex.div2.DivDisappearAction;
 import com.yandex.div2.DivSightAction;
+import com.yandex.div2.DivVisibilityAction;
 import org.json.JSONObject;
 
 /**
@@ -26,6 +26,23 @@ import org.json.JSONObject;
  */
 @PublicApi
 public class DivActionHandler {
+
+    public static class DivActionReason {
+        public static final String BLUR = "blur";
+        public static final String CLICK = "click";
+        public static final String DOUBLE_CLICK = "double_click";
+        public static final String EXTERNAL = "external";
+        public static final String FOCUS = "focus";
+        public static final String LONG_CLICK = "long_click";
+        public static final String MENU = "menu";
+        public static final String PATCH = "patch";
+        public static final String SELECTION = "selection";
+        public static final String STATE_SWIPE_OUT = "state_swipe_out";
+        public static final String TIMER = "timer";
+        public static final String TRIGGER = "trigger";
+        public static final String VIDEO = "video";
+    }
+
     private static final String SCHEME_DIV_ACTION = "div-action";
 
     private static final String AUTHORITY_SWITCH_STATE = "set_state";
@@ -93,6 +110,43 @@ public class DivActionHandler {
     @CallSuper
     public boolean handleAction(@NonNull DivAction action, @NonNull DivViewFacade view, @NonNull String actionUid) {
         return handleAction(action, view);
+    }
+
+    /**
+     * Handles the given div action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div action to handle
+     * @param view calling DivView
+     * @param reason reason of div action call
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleActionWithReason(
+            @NonNull DivAction action,
+            @NonNull DivViewFacade view,
+            @NonNull String reason
+    ) {
+        return handleAction(action, view);
+    }
+
+    /**
+     * Handles the given div action.
+     * Call super implementation to automatically handle internal div schemes when overriding.
+     *
+     * @param action full div action to handle
+     * @param view calling DivView
+     * @param actionUid action UUID string
+     * @param reason reason of div action call
+     * @return TRUE if uri was handled
+     */
+    @CallSuper
+    public boolean handleActionWithReason(
+            @NonNull DivAction action,
+            @NonNull DivViewFacade view,
+            @NonNull String actionUid,
+            @NonNull String reason) {
+        return handleAction(action, view, actionUid);
     }
 
     /**

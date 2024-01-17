@@ -1,5 +1,6 @@
 package com.yandex.div.core.timer
 
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
@@ -87,7 +88,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             div2View?.let {
-                divActionBinder.handleActions(it, tickActions)
+                divActionBinder.handleActions(it, tickActions, DivActionReason.TIMER)
             }
         }
     }
@@ -97,7 +98,7 @@ internal class TimerController(
 
         UiThreadHandler.executeOnMainThread {
             div2View?.let {
-                divActionBinder.handleActions(it, endActions)
+                divActionBinder.handleActions(it, endActions, DivActionReason.TIMER)
             }
         }
     }

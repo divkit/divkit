@@ -1,6 +1,7 @@
 package com.yandex.div.core.downloader
 
 import android.net.Uri
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
@@ -51,14 +52,14 @@ internal object DivDownloadActionHandler {
                 val success = view.applyPatch(patch)
                 if (success) {
                     view.bulkActions {
-                        downloadCallbacks?.onSuccessActions?.forEach { view.handleAction(it) }
+                        downloadCallbacks?.onSuccessActions?.forEach { view.handleAction(it, DivActionReason.PATCH) }
                     }
                 }
             }
 
             override fun onFail() {
                 view.bulkActions {
-                    downloadCallbacks?.onFailActions?.forEach { view.handleAction(it) }
+                    downloadCallbacks?.onFailActions?.forEach { view.handleAction(it, DivActionReason.PATCH) }
                 }
             }
         }

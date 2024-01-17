@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
@@ -75,23 +76,23 @@ internal class DivVideoBinder @Inject constructor(
 
         val playerListener = object : DivPlayer.Observer {
             override fun onPlay() {
-                divActionBinder.handleActions(divView, div.resumeActions)
+                divActionBinder.handleActions(divView, div.resumeActions, DivActionReason.VIDEO)
             }
 
             override fun onPause() {
-                divActionBinder.handleActions(divView, div.pauseActions)
+                divActionBinder.handleActions(divView, div.pauseActions, DivActionReason.VIDEO)
             }
 
             override fun onBuffering() {
-                divActionBinder.handleActions(divView, div.bufferingActions)
+                divActionBinder.handleActions(divView, div.bufferingActions, DivActionReason.VIDEO)
             }
 
             override fun onEnd() {
-                divActionBinder.handleActions(divView, div.endActions)
+                divActionBinder.handleActions(divView, div.endActions, DivActionReason.VIDEO)
             }
 
             override fun onFatal() {
-                divActionBinder.handleActions(divView, div.fatalActions)
+                divActionBinder.handleActions(divView, div.fatalActions, DivActionReason.VIDEO)
             }
 
             override fun onReady() {
