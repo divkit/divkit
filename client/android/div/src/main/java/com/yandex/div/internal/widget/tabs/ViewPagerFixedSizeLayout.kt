@@ -1,11 +1,11 @@
 package com.yandex.div.internal.widget.tabs
 
 import android.content.Context
+import android.graphics.Rect
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.widget.FrameLayout
-import com.yandex.div.R
 
 /**
  * An auxiliary view, that embraces [ViewPager] and controls its height by setting
@@ -21,6 +21,11 @@ internal class ViewPagerFixedSizeLayout @JvmOverloads constructor(
     private var heightCalculator: HeightCalculator? = null
     private var _collapsiblePaddingBottom = 0
 
+    private var visibleRect: Rect? = null
+    var animateOnScroll: Boolean = true
+
+    private var lastHeightMeasureSpec: Int? = null
+
     // TODO(gulevsky): notify padding changed
     var collapsiblePaddingBottom: Int
         get() = _collapsiblePaddingBottom
@@ -34,7 +39,21 @@ internal class ViewPagerFixedSizeLayout @JvmOverloads constructor(
         this.heightCalculator = heightCalculator
     }
 
+    fun shouldRequestLayoutOnScroll(position: Int, positionOffset: Float): Boolean {
+        if (!animateOnScroll) return false
+        val calculator = heightCalculator
+        if (calculator == null || !calculator.shouldRequestLayoutOnScroll(position, positionOffset)) return false
+        val visibleRect = this.visibleRect ?: Rect().also { this.visibleRect = it }
+        getLocalVisibleRect(visibleRect)
+        if (visibleRect.height() == height) return true
+        val widthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+        val heightSpec = lastHeightMeasureSpec ?: MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+        val newHeight = calculator.measureHeight(widthSpec, heightSpec)
+        return newHeight != height && newHeight in visibleRect.top..visibleRect.bottom
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        lastHeightMeasureSpec = heightMeasureSpec
         var heightSpec = heightMeasureSpec
         if (heightCalculator != null) {
             val newHeight = heightCalculator!!.measureHeight(widthMeasureSpec, heightMeasureSpec)
