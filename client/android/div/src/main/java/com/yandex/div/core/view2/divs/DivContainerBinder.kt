@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -441,9 +440,9 @@ internal class DivContainerBinder @Inject constructor(
         }
 
         val callback: (Any) -> Unit = { applySeparatorShowMode(newSeparator, resolver) }
-        addSubscription(newSeparator?.showAtStart?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(newSeparator?.showBetween?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(newSeparator?.showAtEnd?.observe(resolver, callback) ?: Disposable.NULL)
+        addSubscription(newSeparator?.showAtStart?.observe(resolver, callback))
+        addSubscription(newSeparator?.showBetween?.observe(resolver, callback))
+        addSubscription(newSeparator?.showAtEnd?.observe(resolver, callback))
     }
 
     private inline fun <T> T.bindSeparatorStyle(
@@ -458,12 +457,12 @@ internal class DivContainerBinder @Inject constructor(
 
         applySeparatorStyle(newSeparator?.style, resolver)
 
-        if (newSeparator?.style?.isConstant() != false) {
+        if (newSeparator?.style.isConstant()) {
             return
         }
 
-        val callback: (Any) -> Unit = { applySeparatorStyle(newSeparator.style, resolver) }
-        observeDrawable(newSeparator.style, resolver, callback)
+        val callback: (Any) -> Unit = { applySeparatorStyle(newSeparator?.style, resolver) }
+        observeDrawable(newSeparator?.style, resolver, callback)
     }
 
     private inline fun <T> T.bindSeparatorMargins(
@@ -487,8 +486,8 @@ internal class DivContainerBinder @Inject constructor(
         addSubscription(margins.top.observe(resolver, callback))
         addSubscription(margins.bottom.observe(resolver, callback))
         if (margins.start != null || margins.end != null) {
-            addSubscription(margins.start?.observe(resolver, callback) ?: Disposable.NULL)
-            addSubscription(margins.end?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(margins.start?.observe(resolver, callback))
+            addSubscription(margins.end?.observe(resolver, callback))
         } else {
             addSubscription(margins.left.observe(resolver, callback))
             addSubscription(margins.right.observe(resolver, callback))
@@ -561,8 +560,8 @@ internal class DivContainerBinder @Inject constructor(
         val callback = { _: Any -> applyChildAlignment(newDiv, newChildDiv, resolver) }
         subscriber.addSubscription(newDiv.contentAlignmentHorizontal.observe(resolver, callback))
         subscriber.addSubscription(newDiv.contentAlignmentVertical.observe(resolver, callback))
-        subscriber.addSubscription(newChildDiv.alignmentHorizontal?.observe(resolver, callback) ?: Disposable.NULL)
-        subscriber.addSubscription(newChildDiv.alignmentVertical?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newChildDiv.alignmentHorizontal?.observe(resolver, callback))
+        subscriber.addSubscription(newChildDiv.alignmentVertical?.observe(resolver, callback))
     }
 
     private fun View.applyChildAlignment(

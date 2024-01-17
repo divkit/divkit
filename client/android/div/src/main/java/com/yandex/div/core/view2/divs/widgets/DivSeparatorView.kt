@@ -13,6 +13,10 @@ internal class DivSeparatorView  @JvmOverloads constructor(
 ) : SeparatorView(context, attrs, defStyleAttr),
     DivHolderView<DivSeparator> by DivHolderViewMixin() {
 
+    init {
+        dividerColor = DEFAULT_DIVIDER_COLOR
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
        onBoundsChanged(w, h)
@@ -24,5 +28,9 @@ internal class DivSeparatorView  @JvmOverloads constructor(
 
     override fun dispatchDraw(canvas: Canvas) {
         dispatchDrawBorderClipped(canvas) { super.dispatchDraw(it) }
+    }
+
+    companion object {
+        const val DEFAULT_DIVIDER_COLOR = 0x14000000
     }
 }

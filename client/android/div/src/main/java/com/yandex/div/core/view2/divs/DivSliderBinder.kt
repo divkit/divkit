@@ -310,26 +310,32 @@ internal class DivSliderBinder @Inject constructor(
                 updateAfter { range.endValue = it.toFloat() }
             })
 
-            with (divRange.margins) {
-                val useRelativeMargins = start != null || end != null
-                val marginStart = if (useRelativeMargins) start else left
-                val marginEnd = if (useRelativeMargins) end else right
+            val margins = divRange.margins
+            if (margins == null) {
+                range.marginStart = 0
+                range.marginEnd = 0
+            } else {
+                with(margins) {
+                    val useRelativeMargins = start != null || end != null
+                    val marginStart = if (useRelativeMargins) start else left
+                    val marginEnd = if (useRelativeMargins) end else right
 
-                marginStart?.let { expr ->
-                    addSubscription(expr.observe(resolver) {
-                        updateAfter { range.marginStart = applyUnit(it, resolver, metrics) }
-                    })
-                }
-                marginEnd?.let { expr ->
-                    addSubscription(expr.observe(resolver) {
-                        updateAfter { range.marginEnd = applyUnit(it, resolver, metrics) }
-                    })
-                }
+                    marginStart?.let { expr ->
+                        addSubscription(expr.observe(resolver) {
+                            updateAfter { range.marginStart = applyUnit(it, resolver, metrics) }
+                        })
+                    }
+                    marginEnd?.let { expr ->
+                        addSubscription(expr.observe(resolver) {
+                            updateAfter { range.marginEnd = applyUnit(it, resolver, metrics) }
+                        })
+                    }
 
-                unit.observeAndGet(resolver) { unit ->
-                    updateAfter {
-                        marginStart?.let { range.marginStart = it.evaluate(resolver).castToUnit(unit, metrics) }
-                        marginEnd?.let { range.marginEnd = it.evaluate(resolver).castToUnit(unit, metrics) }
+                    unit.observeAndGet(resolver) { unit ->
+                        updateAfter {
+                            marginStart?.let { range.marginStart = it.evaluate(resolver).castToUnit(unit, metrics) }
+                            marginEnd?.let { range.marginEnd = it.evaluate(resolver).castToUnit(unit, metrics) }
+                        }
                     }
                 }
             }

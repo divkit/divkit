@@ -22,7 +22,7 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         divView: Div2View,
         resolver: ExpressionResolver,
         focusedBorder: DivBorder?,
-        blurredBorder: DivBorder
+        blurredBorder: DivBorder?
     ): Unit = view.run {
         val border = when {
             focusedBorder == null -> blurredBorder
@@ -52,13 +52,14 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
         }
     }
 
-    private fun View.applyBorder(border: DivBorder, resolver: ExpressionResolver) {
+    private fun View.applyBorder(border: DivBorder?, resolver: ExpressionResolver) {
         if (this is DivBorderSupports) {
             setBorder(border, this, resolver)
             return
         }
 
         elevation = when {
+            border == null -> DivBorderDrawer.NO_ELEVATION
             border.isConstantlyEmpty() -> DivBorderDrawer.NO_ELEVATION
             !border.hasShadow.evaluate(resolver) -> DivBorderDrawer.NO_ELEVATION
             border.shadow != null -> DivBorderDrawer.NO_ELEVATION

@@ -9,13 +9,14 @@ import androidx.core.view.ViewCompat
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isConstant
+import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeSize
+import com.yandex.div.core.util.observeTransform
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
@@ -32,9 +33,7 @@ import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivPivot
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
 
@@ -184,7 +183,6 @@ internal class DivBaseBinder @Inject constructor(
         }
     }
 
-
     private fun View.bindMargins(
         newDiv: DivBase,
         oldDiv: DivBase?,
@@ -201,15 +199,8 @@ internal class DivBaseBinder @Inject constructor(
             return
         }
 
-        val callback = { _: Any -> applyMargins(newDiv.margins, resolver) }
-        subscriber.addSubscription(newDiv.margins.top.observe(resolver, callback))
-        subscriber.addSubscription(newDiv.margins.bottom.observe(resolver, callback))
-        if (newDiv.margins.start != null || newDiv.margins.end != null) {
-            subscriber.addSubscription(newDiv.margins.start?.observe(resolver, callback) ?: Disposable.NULL)
-            subscriber.addSubscription(newDiv.margins.end?.observe(resolver, callback) ?: Disposable.NULL)
-        } else {
-            subscriber.addSubscription(newDiv.margins.left.observe(resolver, callback))
-            subscriber.addSubscription(newDiv.margins.right.observe(resolver, callback))
+        subscriber.observeEdgeInsets(newDiv.margins, resolver)  {
+            applyMargins(newDiv.margins, resolver)
         }
     }
 
@@ -239,8 +230,8 @@ internal class DivBaseBinder @Inject constructor(
                 newDiv.alignmentVertical?.evaluate(resolver)
             )
         }
-        subscriber.addSubscription(newDiv.alignmentHorizontal?.observe(resolver, callback) ?: Disposable.NULL)
-        subscriber.addSubscription(newDiv.alignmentVertical?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newDiv.alignmentHorizontal?.observe(resolver, callback))
+        subscriber.addSubscription(newDiv.alignmentVertical?.observe(resolver, callback))
     }
 
     //endregion
@@ -263,15 +254,8 @@ internal class DivBaseBinder @Inject constructor(
             return
         }
 
-        val callback = { _: Any -> applyPaddings(newDiv.paddings, resolver) }
-        subscriber.addSubscription(newDiv.paddings.top.observe(resolver, callback))
-        subscriber.addSubscription(newDiv.paddings.bottom.observe(resolver, callback))
-        if (newDiv.paddings.start != null || newDiv.paddings.end != null) {
-            subscriber.addSubscription(newDiv.paddings.start?.observe(resolver, callback) ?: Disposable.NULL)
-            subscriber.addSubscription(newDiv.paddings.end?.observe(resolver, callback) ?: Disposable.NULL)
-        } else {
-            subscriber.addSubscription(newDiv.paddings.left.observe(resolver, callback))
-            subscriber.addSubscription(newDiv.paddings.right.observe(resolver, callback))
+        subscriber.observeEdgeInsets(newDiv.paddings, resolver) {
+            applyPaddings(newDiv.paddings, resolver)
         }
     }
 
@@ -286,9 +270,15 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
+        if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
+            // Shortcut for empty accessibility binding
+            applyAccessibilityMode(divView, DivAccessibility.Mode.DEFAULT)
+            return
+        }
+
         bindAccessibilityType(newDiv, oldDiv)
         bindAccessibilityDescriptionAndHint(newDiv, oldDiv, resolver, subscriber)
-        bindAccessibilityMode(divView, newDiv, oldDiv, resolver, subscriber)
+        bindAccessibilityMode(divView, newDiv, resolver, subscriber)
         bindAccessibilityStateDescription(newDiv, oldDiv, resolver, subscriber)
         //TODO: bind 'muteAfterAction' property
     }
@@ -297,11 +287,11 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?
     ) {
-        if (newDiv.accessibility.type == oldDiv?.accessibility?.type) {
+        if (newDiv.accessibility?.type == oldDiv?.accessibility?.type) {
             return
         }
 
-        applyAccessibilityType(newDiv, newDiv.accessibility.type)
+        applyAccessibilityType(newDiv, newDiv.accessibility?.type)
     }
 
     private fun View.applyAccessibilityType(div: DivBase, type: DivAccessibility.Type?) {
@@ -318,29 +308,29 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        if (newDiv.accessibility.description.equalsToConstant(oldDiv?.accessibility?.description)
-            && newDiv.accessibility.hint.equalsToConstant(oldDiv?.accessibility?.hint)) {
+        if (newDiv.accessibility?.description.equalsToConstant(oldDiv?.accessibility?.description)
+            && newDiv.accessibility?.hint.equalsToConstant(oldDiv?.accessibility?.hint)) {
             return
         }
 
         applyAccessibilityDescriptionAndHint(
-            newDiv.accessibility.description?.evaluate(resolver),
-            newDiv.accessibility.hint?.evaluate(resolver)
+            newDiv.accessibility?.description?.evaluate(resolver),
+            newDiv.accessibility?.hint?.evaluate(resolver)
         )
 
-        if (newDiv.accessibility.description.isConstantOrNull()
-            && newDiv.accessibility.hint.isConstantOrNull()) {
+        if (newDiv.accessibility?.description.isConstantOrNull()
+            && newDiv.accessibility?.hint.isConstantOrNull()) {
             return
         }
 
         val callback = { _: Any ->
             applyAccessibilityDescriptionAndHint(
-                newDiv.accessibility.description?.evaluate(resolver),
-                newDiv.accessibility.hint?.evaluate(resolver)
+                newDiv.accessibility?.description?.evaluate(resolver),
+                newDiv.accessibility?.hint?.evaluate(resolver)
             )
         }
-        subscriber.addSubscription(newDiv.accessibility.description?.observe(resolver, callback) ?: Disposable.NULL)
-        subscriber.addSubscription(newDiv.accessibility.hint?.observe(resolver, callback) ?: Disposable.NULL)
+        subscriber.addSubscription(newDiv.accessibility?.description?.observe(resolver, callback))
+        subscriber.addSubscription(newDiv.accessibility?.hint?.observe(resolver, callback))
     }
 
     private fun View.applyAccessibilityDescriptionAndHint(contentDescription: String?, hint: String?) {
@@ -354,27 +344,27 @@ internal class DivBaseBinder @Inject constructor(
     private fun View.bindAccessibilityMode(
         divView: Div2View,
         newDiv: DivBase,
-        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        if (newDiv.accessibility.mode.equalsToConstant(oldDiv?.accessibility?.mode)) {
-            return
-        }
+        // We can't compare accessibility mode with previous one due to actual value depends on parent mode
+        // and should be recalculated.
 
-        applyAccessibilityMode(divView, newDiv.accessibility.mode.evaluate(resolver))
+        applyAccessibilityMode(divView, newDiv.accessibility?.mode?.evaluate(resolver))
 
-        if (newDiv.accessibility.mode.isConstant()) {
+        if (newDiv.accessibility?.mode.isConstantOrNull()) {
             return
         }
 
         subscriber.addSubscription(
-            newDiv.accessibility.mode.observe(resolver) { mode -> applyAccessibilityMode(divView, mode) }
+            newDiv.accessibility?.mode?.observe(resolver) { mode ->
+                applyAccessibilityMode(divView, mode)
+            }
         )
     }
 
-    private fun View.applyAccessibilityMode(divView: Div2View, mode: DivAccessibility.Mode) {
-        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode)
+    private fun View.applyAccessibilityMode(divView: Div2View, mode: DivAccessibility.Mode?) {
+        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode ?: DivAccessibility.Mode.DEFAULT)
     }
 
     private fun View.bindAccessibilityStateDescription(
@@ -383,20 +373,20 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        if (newDiv.accessibility.stateDescription.equalsToConstant(oldDiv?.accessibility?.stateDescription)) {
+        if (newDiv.accessibility?.stateDescription.equalsToConstant(oldDiv?.accessibility?.stateDescription)) {
             return
         }
 
-        applyAccessibilityStateDescription(newDiv.accessibility.stateDescription?.evaluate(resolver))
+        applyAccessibilityStateDescription(newDiv.accessibility?.stateDescription?.evaluate(resolver))
 
-        if (newDiv.accessibility.stateDescription.isConstantOrNull()) {
+        if (newDiv.accessibility?.stateDescription.isConstantOrNull()) {
             return
         }
 
         subscriber.addSubscription(
-            newDiv.accessibility.stateDescription?.observe(resolver) { stateDescription ->
+            newDiv.accessibility?.stateDescription?.observe(resolver) { stateDescription ->
                 applyAccessibilityStateDescription(stateDescription)
-            } ?: Disposable.NULL
+            }
         )
     }
 
@@ -523,7 +513,7 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         subscriber.addSubscription(
-            newFocusId?.observe(resolver) { id -> applyNextFocusId(id) } ?: Disposable.NULL
+            newFocusId?.observe(resolver) { id -> applyNextFocusId(id) }
         )
     }
 
@@ -655,34 +645,6 @@ internal class DivBaseBinder @Inject constructor(
 
         subscriber.observeTransform(newDiv.transform, resolver) {
             applyTransform(newDiv.transform, resolver)
-        }
-    }
-
-    private fun ExpressionSubscriber.observeTransform(
-        transform: DivTransform,
-        resolver: ExpressionResolver,
-        callback: (Any) -> Unit
-    ) {
-        addSubscription(transform.rotation?.observe(resolver, callback) ?: Disposable.NULL)
-        when (val pivotX = transform.pivotX) {
-            is DivPivot.Fixed -> {
-                addSubscription(pivotX.value.value?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(pivotX.value.unit.observe(resolver, callback))
-            }
-
-            is DivPivot.Percentage -> {
-                addSubscription(pivotX.value.value?.observe(resolver, callback))
-            }
-        }
-        when (val pivotY = transform.pivotY) {
-            is DivPivot.Fixed -> {
-                addSubscription(pivotY.value.value?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(pivotY.value.unit.observe(resolver, callback))
-            }
-
-            is DivPivot.Percentage -> {
-                addSubscription(pivotY.value.value?.observe(resolver, callback))
-            }
         }
     }
 

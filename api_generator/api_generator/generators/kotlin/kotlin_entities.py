@@ -328,22 +328,17 @@ class KotlinProperty(Property):
             )
             if declaration is not None:
                 return declaration
-        empty_dict_deserialization = cast(KotlinPropertyType, self.property_type).empty_dict_deserialization
-        if empty_dict_deserialization is not None:
-            return empty_dict_deserialization
         return None
 
     @property
     def should_be_optional(self) -> bool:
-        prop_type = cast(KotlinPropertyType, self.property_type)
         if self.mode.is_template:
             return False
-        return self.optional and (self.default_value is None) and prop_type.empty_dict_deserialization is None
+        return self.optional and (self.default_value is None)
 
     @property
     def parsed_value_is_optional(self) -> bool:
-        prop_type = cast(KotlinPropertyType, self.property_type)
-        return self.optional or self.default_value is not None or prop_type.empty_dict_deserialization is not None
+        return self.optional or self.default_value is not None
 
     @property
     def use_expression_type(self) -> bool:
@@ -578,13 +573,6 @@ class KotlinPropertyType(PropertyType):
     @property
     def is_enum_of_expressions(self) -> bool:
         return isinstance(self, Object) and isinstance(self.object, StringEnumeration)
-
-    @property
-    def empty_dict_deserialization(self) -> Optional[str]:
-        if isinstance(self, Object) and isinstance(self.object, Entity) and \
-                self.object.all_properties_are_optional_except_default_values:
-            return f'{self.object.resolved_prefixed_declaration}()'
-        return None
 
     def declaration_by_default_value(self,
                                      default_value: str,

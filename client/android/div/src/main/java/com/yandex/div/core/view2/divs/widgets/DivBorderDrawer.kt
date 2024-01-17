@@ -19,7 +19,9 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.util.getCornerRadii
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.ShadowCache
-import com.yandex.div.core.view2.divs.*
+import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.dpToPxF
+import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -79,22 +81,22 @@ internal class DivBorderDrawer(
             view.invalidate()
         }
 
-        addSubscription(border.cornerRadius?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.cornersRadius?.topLeft?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.cornersRadius?.topRight?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.cornersRadius?.bottomRight?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.cornersRadius?.bottomLeft?.observe(resolver, callback) ?: Disposable.NULL)
+        addSubscription(border.cornerRadius?.observe(resolver, callback))
+        addSubscription(border.cornersRadius?.topLeft?.observe(resolver, callback))
+        addSubscription(border.cornersRadius?.topRight?.observe(resolver, callback))
+        addSubscription(border.cornersRadius?.bottomRight?.observe(resolver, callback))
+        addSubscription(border.cornersRadius?.bottomLeft?.observe(resolver, callback))
         addSubscription(border.hasShadow.observe(resolver, callback))
-        addSubscription(border.stroke?.color?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.stroke?.width?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.stroke?.unit?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.alpha?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.blur?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.color?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.offset?.x?.unit?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.offset?.x?.value?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.offset?.y?.unit?.observe(resolver, callback) ?: Disposable.NULL)
-        addSubscription(border.shadow?.offset?.y?.value?.observe(resolver, callback) ?: Disposable.NULL)
+        addSubscription(border.stroke?.color?.observe(resolver, callback))
+        addSubscription(border.stroke?.width?.observe(resolver, callback))
+        addSubscription(border.stroke?.unit?.observe(resolver, callback))
+        addSubscription(border.shadow?.alpha?.observe(resolver, callback))
+        addSubscription(border.shadow?.blur?.observe(resolver, callback))
+        addSubscription(border.shadow?.color?.observe(resolver, callback))
+        addSubscription(border.shadow?.offset?.x?.unit?.observe(resolver, callback))
+        addSubscription(border.shadow?.offset?.x?.value?.observe(resolver, callback))
+        addSubscription(border.shadow?.offset?.y?.unit?.observe(resolver, callback))
+        addSubscription(border.shadow?.offset?.y?.value?.observe(resolver, callback))
     }
 
     private fun applyBorder(border: DivBorder, resolver: ExpressionResolver) {

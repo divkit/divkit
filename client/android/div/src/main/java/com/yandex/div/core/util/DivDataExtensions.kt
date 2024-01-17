@@ -14,11 +14,9 @@ import com.yandex.div2.DivStroke
 import com.yandex.div2.DivTransform
 
 internal fun DivSize?.equalsToConstant(other: DivSize?): Boolean {
-    if (this == null && other == null) {
-        return true
-    }
+     return when (this) {
+        null -> other == null
 
-    return when (this) {
         is DivSize.Fixed -> {
             other is DivSize.Fixed
                 && value.value.equalsToConstant(other.value.value)
@@ -38,8 +36,6 @@ internal fun DivSize?.equalsToConstant(other: DivSize?): Boolean {
                 && value.maxSize?.value.equalsToConstant(other.value.maxSize?.value)
                 && value.maxSize?.unit.equalsToConstant(other.value.maxSize?.unit)
         }
-
-        else -> false
     }
 }
 
@@ -126,11 +122,9 @@ internal fun DivTransform?.isConstant(): Boolean {
 }
 
 internal fun DivPivot?.equalsToConstant(other: DivPivot?): Boolean {
-    if (this == null && other == null) {
-        return true
-    }
-
     return when (this) {
+        null -> other == null
+
         is DivPivot.Fixed ->  {
             other is DivPivot.Fixed
                 && value.value.equalsToConstant(other.value.value)
@@ -141,8 +135,6 @@ internal fun DivPivot?.equalsToConstant(other: DivPivot?): Boolean {
             other is DivPivot.Percentage
                 && value.value.equalsToConstant(other.value.value)
         }
-
-        else -> false
     }
 }
 
@@ -155,14 +147,10 @@ internal fun DivPivot?.isConstant(): Boolean {
 }
 
 internal fun DivFilter?.equalsToConstant(other: DivFilter?): Boolean {
-    if (this == null && other == null) {
-        return true
-    }
-
     return when (this) {
+        null -> other == null
         is DivFilter.RtlMirror -> other is DivFilter.RtlMirror
         is DivFilter.Blur -> other is DivFilter.Blur && value.radius.equalsToConstant(other.value.radius)
-        null -> false
     }
 }
 
@@ -175,19 +163,15 @@ internal fun DivFilter?.isConstant(): Boolean {
 }
 
 internal fun DivDrawable?.equalsToConstant(other: DivDrawable?): Boolean {
-    if (this == null && other == null) {
-        return true
-    }
-
     return when (this) {
+        null -> other == null
+
         is DivDrawable.Shape -> {
             other is DivDrawable.Shape
                 && value.color.equalsToConstant(other.value.color)
                 && value.shape.equalsToConstant(other.value.shape)
                 && value.stroke.equalsToConstant(other.value.stroke)
         }
-
-        else -> false
     }
 }
 
@@ -198,17 +182,15 @@ internal fun DivDrawable?.isConstant(): Boolean {
         is DivDrawable.Shape -> {
             value.color.isConstant()
                 && value.shape.isConstant()
-                && value.stroke?.isConstant() != false
+                && value.stroke.isConstant()
         }
     }
 }
 
 internal fun DivShape?.equalsToConstant(other: DivShape?): Boolean {
-    if (this == null && other == null) {
-        return true
-    }
-
     return when (this) {
+        null -> other == null
+
         is DivShape.RoundedRectangle -> {
             other is DivShape.RoundedRectangle
                 && value.backgroundColor.equalsToConstant(other.value.backgroundColor)
@@ -224,8 +206,6 @@ internal fun DivShape?.equalsToConstant(other: DivShape?): Boolean {
                 && value.stroke.equalsToConstant(other.value.stroke)
                 && value.radius.equalsToConstant(other.value.radius)
         }
-
-        else -> false
     }
 }
 
@@ -235,7 +215,7 @@ internal fun DivShape?.isConstant(): Boolean {
 
         is DivShape.RoundedRectangle -> {
             value.backgroundColor.isConstantOrNull()
-                && value.stroke?.isConstant() != false
+                && value.stroke.isConstant()
                 && value.itemWidth.isConstant()
                 && value.itemHeight.isConstant()
                 && value.cornerRadius.isConstant()
