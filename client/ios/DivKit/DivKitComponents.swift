@@ -108,7 +108,8 @@ public final class DivKitComponents {
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler? = nil,
     urlOpener: @escaping UrlOpener = { _ in },
-    variablesStorage: DivVariablesStorage = DivVariablesStorage()
+    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
+    logger: DivActionLogger? = nil
   ) {
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.extensionHandlers = extensionHandlers
@@ -172,9 +173,7 @@ public final class DivKitComponents {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
-      logger: DefaultDivActionLogger(
-        requestPerformer: requestPerformer
-      ),
+      logger: logger ?? DefaultDivActionLogger(requestPerformer: requestPerformer),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },

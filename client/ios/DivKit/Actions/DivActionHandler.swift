@@ -187,11 +187,13 @@ public final class DivActionHandler {
     )
 
     if !isDivActionURLHandled {
+        let referer = action.resolveReferer(expressionResolver)
+        logger.log(url: url, referer: referer, payload: action.payload)
+        
       switch source {
       case .visibility, .disappear:
         // For visibility actions url is treated as logUrl.
-        let referer = action.resolveReferer(expressionResolver)
-        logger.log(url: url, referer: referer, payload: action.payload)
+          break
       default:
         urlHandler.handle(url, sender: sender)
       }
