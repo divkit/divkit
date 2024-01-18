@@ -1,3 +1,8 @@
+## 29.3.0 (January 22, 2024)
+
+* `transition_in`, `transition_out`, `transition_change`, `action_animation` and `animation_in` / `animation_out` from the `tooltip` will now use system setting "prefers reduced motion".
+
+
 ## 29.2.0 (January 15, 2024)
 
 * Fixed an issue with the `visibility_action`s restart on variable changes and their cleanup.
