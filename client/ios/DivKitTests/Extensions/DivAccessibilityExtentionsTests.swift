@@ -93,6 +93,21 @@ final class DivAccessibilityExtentionsTests: XCTestCase {
     assertEqual(element, expectedElement)
   }
 
+  func test_resolve_WithTypeList() {
+    let element = DivAccessibility(
+      description: .value("Description"),
+      type: .list
+    ).resolve()
+
+    let expectedElement = AccessibilityElement(
+      traits: .none,
+      strings: AccessibilityElement.Strings(label: "Description"),
+      isContainer: true
+    )
+
+    assertEqual(element, expectedElement)
+  }
+
   func test_customDescriptionProvider_HasHigherPriorityThanDescription() {
     let element = DivAccessibility(
       description: .value("Description"),

@@ -454,14 +454,11 @@
         "Accessibility"
       ],
       "steps": [
-        "Set russian language on device",
-        "Turn on TalkBack and set order of elements description to '\u0421\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435,\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435,\u0442\u0438\u043f'",
-        "Focus on top button",
-        "Move focuse rom one button to another"
+        "Turn on TalkBack/VoiceOver",
+        "Tap on elements"
       ],
       "expected_results": [
-        "On each elements will be text '\u0422\u0438\u043f - X', you should hear '\u0422\u0438\u043f - X; X'; For example '\u0422\u0438\u043f - \u043a\u043d\u043e\u043f\u043a\u0430; \u043a\u043d\u043e\u043f\u043a\u0430'",
-        "For '\u0422\u0438\u043f - \u0442\u0435\u043a\u0441\u0442' and '\u0411\u0435\u0437 \u0442\u0438\u043f\u0430' you will hear '\u0422\u0438\u043f - \u0442\u0435\u043a\u0441\u0442' and '\u0411\u0435\u0437 \u0442\u0438\u043f\u0430'."
+        "TalkBack/VoiceOver should read elements correctly according to their accessibility types."
       ],
       "file": "accessibility/types.json"
     },

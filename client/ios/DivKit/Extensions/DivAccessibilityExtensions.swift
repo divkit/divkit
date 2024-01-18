@@ -33,7 +33,8 @@ extension DivAccessibility {
         value: resolveStateDescription(expressionResolver),
         identifier: id
       ),
-      startsMediaSession: resolveMuteAfterAction(expressionResolver)
+      startsMediaSession: resolveMuteAfterAction(expressionResolver),
+      isContainer: type == .list
     )
   }
 
@@ -51,10 +52,10 @@ extension DivAccessibility {
       return .searchField
     case .tabBar:
       return .tabBar
-    case .list, .select:
+    case .select:
       DivKitLogger.warning("Unsupported accessibility type")
       return .none
-    case .none?, nil:
+    case .list, .none?, nil:
       return .none
     }
   }
