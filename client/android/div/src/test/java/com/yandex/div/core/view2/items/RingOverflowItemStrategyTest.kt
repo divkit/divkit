@@ -28,13 +28,13 @@ internal class RingOverflowItemStrategyTest(private val testCase: TestCase) {
     fun `next item`() {
         val underTest = OverflowItemStrategy.Ring(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
 
-        Assert.assertEquals(testCase.nextItem, underTest.nextItem)
+        Assert.assertEquals(testCase.nextItem, underTest.nextItem())
     }
 
     @Test
     fun `previous item`() {
         val underTest = OverflowItemStrategy.Ring(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
 
-        Assert.assertEquals(testCase.previousItem, underTest.previousItem)
+        Assert.assertEquals(testCase.previousItem, underTest.previousItem())
     }
 }

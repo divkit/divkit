@@ -15,12 +15,12 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
     /**
      * Index of next item
      */
-    abstract val nextItem: Int
+    abstract fun nextItem(step: Int = 1): Int
 
     /**
      * Index of previous item
      */
-    abstract val previousItem: Int
+    abstract fun previousItem(step: Int = 1): Int
 
     protected inline fun checkItemCount(block: () -> Int): Int {
         return when {
@@ -33,22 +33,21 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
      * Implementation of [OverflowItemStrategy] that clamps next and previous when overflowed.
      */
     internal class Clamp(private val currentItem: Int, private val itemCount: Int) : OverflowItemStrategy(itemCount) {
-        override val nextItem: Int
-            get() = checkItemCount { min(currentItem + 1, itemCount - 1) }
+        override fun nextItem(step: Int) =
+            checkItemCount { min(currentItem + step, itemCount - 1) }
 
-        override val previousItem: Int
-            get() = checkItemCount { max(0, currentItem - 1) }
+        override fun previousItem(step: Int) =
+            checkItemCount { max(0, currentItem - step) }
     }
 
     /**
      * Implementation of [OverflowItemStrategy] that cycles over items when overflowed.
      */
     internal class Ring(private val currentItem: Int, private val itemCount: Int) : OverflowItemStrategy(itemCount) {
-        override val nextItem: Int
-            get() = checkItemCount { (currentItem + 1) % itemCount }
+        override fun nextItem(step: Int) = checkItemCount { (currentItem + step) % itemCount }
 
-        override val previousItem: Int
-            get() = checkItemCount { (itemCount + (currentItem - 1)) % itemCount }
+        override fun previousItem(step: Int) =
+            checkItemCount { (currentItem - step).mod(itemCount) }
     }
 
     internal companion object {

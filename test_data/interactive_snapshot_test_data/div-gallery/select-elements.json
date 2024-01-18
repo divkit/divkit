@@ -1,8 +1,7 @@
 {
   "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
   "platforms": [
-    "android",
-    "web"
+    "android"
   ],
   "div_data": {
     "templates": {
@@ -178,6 +177,24 @@
         {
           "url": "div-action://set_current_item?id=test_gallery&item=-1",
           "log_id": "middle (nonexistent) item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_gallery&step=2",
+          "log_id": "last item"
+        }
+      ],
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_gallery&step=3",
+          "log_id": "second item"
         }
       ],
       "delay": 500

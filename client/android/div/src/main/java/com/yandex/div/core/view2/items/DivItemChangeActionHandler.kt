@@ -11,6 +11,7 @@ private const val AUTHORITY_PREVIOUS_ITEM = "set_previous_item"
 
 private const val PARAM_ITEM = "item"
 private const val PARAM_ID = "id"
+private const val PARAM_STEP = "step"
 private const val PARAM_OVERFLOW = "overflow"
 
 /**
@@ -68,23 +69,37 @@ internal object DivItemChangeActionHandler {
     }
 
     private fun handleNextItem(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy -> view.currentItem = strategy.nextItem }
+        return handleItemNavigation(uri, view) { strategy, step ->
+            view.currentItem = strategy.nextItem(step)
+        }
     }
 
     private fun handlePreviousItem(uri: Uri, view: DivViewWithItems): Boolean {
-        return handleItemNavigation(uri, view) { strategy -> view.currentItem = strategy.previousItem }
+        return handleItemNavigation(uri, view) { strategy, step ->
+            view.currentItem = strategy.previousItem(step)
+        }
     }
 
     private inline fun handleItemNavigation(
         uri: Uri,
         view: DivViewWithItems,
-        navigate: (strategy: OverflowItemStrategy) -> Unit
+        navigate: (strategy: OverflowItemStrategy, step: Int) -> Unit
     ): Boolean {
         val strategy = overflowStrategy(uri, view.currentItem, view.itemCount)
-        navigate(strategy)
+        val step = uri.getStepParam()
+        navigate(strategy, step)
         return true
     }
 
+    private fun Uri.getStepParam(default: Int = 1): Int {
+        val rawStep = getQueryParameter(PARAM_STEP) ?: return default
+        return try {
+            rawStep.toInt()
+        } catch (e: NumberFormatException) {
+            KAssert.fail { "$rawStep is not a number" }
+            default
+        }
+    }
 }
 
 private fun overflowStrategy(uri: Uri, currentItem: Int, itemCount: Int): OverflowItemStrategy {
