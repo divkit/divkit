@@ -81,6 +81,8 @@ internal class DivTabsBinder @Inject constructor(
 
         baseBinder.bindView(view, div, oldDiv, divView)
 
+        view.clipToPadding = false
+
         val applyPaddings = { _: Any? ->
             view.titleLayout.applyPaddings(div.titlePaddings, resolver)
         }
