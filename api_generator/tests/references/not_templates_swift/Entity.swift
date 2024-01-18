@@ -70,6 +70,54 @@ public enum Entity {
   }
 }
 
+extension Entity {
+  public init(dictionary: [String: Any]) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case EntityWithArray.type:
+      self = .entityWithArray(try EntityWithArray(dictionary: dictionary))
+    case EntityWithArrayOfEnums.type:
+      self = .entityWithArrayOfEnums(try EntityWithArrayOfEnums(dictionary: dictionary))
+    case EntityWithArrayOfExpressions.type:
+      self = .entityWithArrayOfExpressions(try EntityWithArrayOfExpressions(dictionary: dictionary))
+    case EntityWithArrayOfNestedItems.type:
+      self = .entityWithArrayOfNestedItems(try EntityWithArrayOfNestedItems(dictionary: dictionary))
+    case EntityWithArrayWithTransform.type:
+      self = .entityWithArrayWithTransform(try EntityWithArrayWithTransform(dictionary: dictionary))
+    case EntityWithComplexProperty.type:
+      self = .entityWithComplexProperty(try EntityWithComplexProperty(dictionary: dictionary))
+    case EntityWithComplexPropertyWithDefaultValue.type:
+      self = .entityWithComplexPropertyWithDefaultValue(try EntityWithComplexPropertyWithDefaultValue(dictionary: dictionary))
+    case EntityWithEntityProperty.type:
+      self = .entityWithEntityProperty(try EntityWithEntityProperty(dictionary: dictionary))
+    case EntityWithOptionalComplexProperty.type:
+      self = .entityWithOptionalComplexProperty(try EntityWithOptionalComplexProperty(dictionary: dictionary))
+    case EntityWithOptionalProperty.type:
+      self = .entityWithOptionalProperty(try EntityWithOptionalProperty(dictionary: dictionary))
+    case EntityWithOptionalStringEnumProperty.type:
+      self = .entityWithOptionalStringEnumProperty(try EntityWithOptionalStringEnumProperty(dictionary: dictionary))
+    case EntityWithPropertyWithDefaultValue.type:
+      self = .entityWithPropertyWithDefaultValue(try EntityWithPropertyWithDefaultValue(dictionary: dictionary))
+    case EntityWithRawArray.type:
+      self = .entityWithRawArray(try EntityWithRawArray(dictionary: dictionary))
+    case EntityWithRequiredProperty.type:
+      self = .entityWithRequiredProperty(try EntityWithRequiredProperty(dictionary: dictionary))
+    case EntityWithSimpleProperties.type:
+      self = .entityWithSimpleProperties(try EntityWithSimpleProperties(dictionary: dictionary))
+    case EntityWithStringArrayProperty.type:
+      self = .entityWithStringArrayProperty(try EntityWithStringArrayProperty(dictionary: dictionary))
+    case EntityWithStringEnumProperty.type:
+      self = .entityWithStringEnumProperty(try EntityWithStringEnumProperty(dictionary: dictionary))
+    case EntityWithStringEnumPropertyWithDefaultValue.type:
+      self = .entityWithStringEnumPropertyWithDefaultValue(try EntityWithStringEnumPropertyWithDefaultValue(dictionary: dictionary))
+    case EntityWithoutProperties.type:
+      self = .entityWithoutProperties(try EntityWithoutProperties(dictionary: dictionary))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "entity", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension Entity: Equatable {
   public static func ==(lhs: Entity, rhs: Entity) -> Bool {

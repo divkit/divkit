@@ -7,6 +7,8 @@ import Serialization
 public final class WithDefault {
   public static let type: String = "default"
 
+  public init(dictionary: [String: Any]) throws {}
+
   init() {}
 }
 

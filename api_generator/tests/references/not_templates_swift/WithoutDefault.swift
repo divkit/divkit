@@ -7,6 +7,8 @@ import Serialization
 public final class WithoutDefault {
   public static let type: String = "non_default"
 
+  public init(dictionary: [String: Any]) throws {}
+
   init() {}
 }
 

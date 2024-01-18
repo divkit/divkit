@@ -19,6 +19,20 @@ public enum EnumWithDefaultType {
   }
 }
 
+extension EnumWithDefaultType {
+  public init(dictionary: [String: Any]) throws {
+    let blockType = try dictionary.getField("type") as String
+    switch blockType {
+    case WithDefault.type:
+      self = .withDefault(try WithDefault(dictionary: dictionary))
+    case WithoutDefault.type:
+      self = .withoutDefault(try WithoutDefault(dictionary: dictionary))
+    default:
+      throw DeserializationError.invalidFieldRepresentation(field: "enum_with_default_type", representation: dictionary)
+    }
+  }
+}
+
 #if DEBUG
 extension EnumWithDefaultType: Equatable {
   public static func ==(lhs: EnumWithDefaultType, rhs: EnumWithDefaultType) -> Bool {

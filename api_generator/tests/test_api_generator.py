@@ -112,6 +112,12 @@ def test_shared_data_kotlin_generator():
                           references_folder_name='shared_data_kotlin')
 
 
+def test_not_templates_kotlin_generator():
+    assert_test_generator(config_filename='not_templates_kotlin_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='not_templates_kotlin')
+
+
 def test_not_templates_swift_generator():
     assert_test_generator(config_filename='not_templates_swift_config.json',
                           schema_path=TEST_SCHEMA_PATH,
