@@ -4,15 +4,14 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let url = ProcessInfo.processInfo.environment["VGSL_SPM_REPO"]
-    ?? "https://github.com/yandex/vgsl.git"
-  let packageName = URL(string: url)!.deletingPathExtension().lastPathComponent
+  let version = Version("3.0.0")
   return (
-    url: url,
-    packageName: packageName,
-    version: Version("3.0.0")
+    package: Package.Dependency.package(url: "https://github.com/yandex/vgsl.git", from: version),
+    packageName: "vgsl"
   )
 }()
+
+let swiftSettings: [SwiftSetting] = [.unsafeFlags(["-warnings-as-errors"])]
 
 let package = Package(
   name: "DivKit",
@@ -27,7 +26,7 @@ let package = Package(
     .library(name: "Serialization", targets: ["Serialization"]),
   ],
   dependencies: [
-    .package(url: vgsl.url, from: vgsl.version),
+    vgsl.package,
   ],
   targets: [
     .target(
@@ -43,13 +42,7 @@ let package = Package(
         "generator_config.json",
         "shared_data_generator_config.json",
       ],
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-warnings-as-errors",
-          ]
-        ),
-      ]
+      swiftSettings: swiftSettings
     ),
     .target(
       name: "DivKitExtensions",
@@ -57,13 +50,7 @@ let package = Package(
         "DivKit",
       ],
       path: "DivKitExtensions",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-warnings-as-errors",
-          ]
-        ),
-      ]
+      swiftSettings: swiftSettings
     ),
     .target(
       name: "LayoutKit",
@@ -72,13 +59,7 @@ let package = Package(
         "LayoutKitInterface",
       ],
       path: "LayoutKit/LayoutKit",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-warnings-as-errors",
-          ]
-        ),
-      ]
+      swiftSettings: swiftSettings
     ),
     .target(
       name: "LayoutKitInterface",
@@ -86,13 +67,7 @@ let package = Package(
         .product(name: "BasePublic", package: vgsl.packageName),
       ],
       path: "LayoutKit/Interface",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-warnings-as-errors",
-          ]
-        ),
-      ]
+      swiftSettings: swiftSettings
     ),
     .target(
       name: "Serialization",
@@ -100,13 +75,7 @@ let package = Package(
         .product(name: "CommonCorePublic", package: vgsl.packageName),
       ],
       path: "Serialization",
-      swiftSettings: [
-        .unsafeFlags(
-          [
-            "-warnings-as-errors",
-          ]
-        ),
-      ]
+      swiftSettings: swiftSettings
     ),
   ]
 )
