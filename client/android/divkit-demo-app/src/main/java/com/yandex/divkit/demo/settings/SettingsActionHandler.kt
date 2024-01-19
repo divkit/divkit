@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.settings
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import com.yandex.div.core.experiments.Experiment
+import com.yandex.div.internal.util.toBoolean
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 
@@ -30,10 +31,10 @@ internal object SettingsActionHandler {
             return false
 
         val value = uri.getQueryParameter(PARAM_VALUE)
+        val valueInt = value?.toIntOrNull() ?: 0
 
         when (uri.getQueryParameter(PARAM_NAME)) {
             IMAGE_LOADER -> {
-                val valueInt = value?.toIntOrNull() ?: 0
                 Container.preferences.imageLoader = Preferences.ImageLoaderOption.fromInt(valueInt)
             }
             NIGHT_MODE -> {
@@ -46,11 +47,11 @@ internal object SettingsActionHandler {
                 AppCompatDelegate.setDefaultNightMode(Container.preferences.nightMode)
                 return true
             }
-            COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, value.toBoolean())
-            DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, value.toBoolean())
-            DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, value.toBoolean())
-            DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, value.toBoolean())
-            DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, value.toBoolean())
+            COMPLEX_REBIND -> setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, valueInt.toBoolean())
+            DIV2_VIEW_POOL -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_ENABLED, valueInt.toBoolean())
+            DIV2_VIEW_POOL_PROFILING -> setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueInt.toBoolean())
+            DIV2_MULTIPLE_STATE_CHANGE -> setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueInt.toBoolean())
+            DIV2_DEMO_SHOW_RENDERING_TIME -> setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBoolean())
             else -> return false
         }
 

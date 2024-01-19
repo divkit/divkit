@@ -4,6 +4,7 @@ package com.yandex.div.internal.parser
 
 import android.net.Uri
 import com.yandex.div.evaluable.types.Color
+import com.yandex.div.internal.util.toBoolean
 
 typealias Converter<T, R> = (T) -> R
 
@@ -41,19 +42,3 @@ val ANY_TO_BOOLEAN: Converter<Any, Boolean?> = { value ->
 val NUMBER_TO_DOUBLE: Converter<Number, Double> = { n: Number -> n.toDouble() }
 
 val NUMBER_TO_INT: Converter<Number, Long> = { n: Number -> n.toLong() }
-
-fun Number.toBoolean(): Boolean? {
-    return when (toInt()) {
-        0 -> false
-        1 -> true
-        else -> null
-    }
-}
-
-fun Int.toBoolean(): Boolean {
-    return when (this) {
-        0 -> false
-        1 -> true
-        else -> throw IllegalArgumentException("Unable to convert $this to boolean")
-    }
-}

@@ -8,7 +8,7 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
-import com.yandex.div.internal.parser.toBoolean
+import com.yandex.div.internal.util.toBoolean
 
 private const val AUTHORITY_SET_STORED_VALUE = "set_stored_value"
 
