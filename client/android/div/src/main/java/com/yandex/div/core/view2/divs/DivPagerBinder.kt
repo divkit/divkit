@@ -45,6 +45,8 @@ import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.math.sign
 
+private const val OFFSET_TO_REAL_ITEM = 2
+
 @DivScope
 internal class DivPagerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
@@ -86,11 +88,18 @@ internal class DivPagerBinder @Inject constructor(
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         var divItems = div.nonNullItems
         if (div.infiniteScroll.evaluate(resolver)) {
-            divItems = ArrayList(divItems)
             val firstItem = divItems.first()
+            val secondItem = divItems.getOrNull(OFFSET_TO_REAL_ITEM - 1)
             val lastItem = divItems.last()
-            divItems.add(0, lastItem)
-            divItems.add(firstItem)
+            val preLastItem = divItems.getOrNull(divItems.size - OFFSET_TO_REAL_ITEM)
+            val newDivItems = ArrayList<Div>(divItems.size + 4).apply {
+                add(preLastItem ?: lastItem)
+                add(lastItem)
+                addAll(divItems)
+                add(firstItem)
+                add(secondItem ?: firstItem)
+            }
+            divItems = newDivItems
         }
         view.viewPager.adapter = PagerAdapter(
             divs = divItems,
@@ -166,7 +175,7 @@ internal class DivPagerBinder @Inject constructor(
             }
             changePageCallbackForState = UpdateStateChangePageCallback(id, state)
             view.viewPager.registerOnPageChangeCallback(changePageCallbackForState!!)
-            val correctPosition = if (div.infiniteScroll.evaluate(resolver)) 1 else 0
+            val correctPosition = if (div.infiniteScroll.evaluate(resolver)) OFFSET_TO_REAL_ITEM else 0
             view.currentItem = (pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver)
                 .toIntSafely()) + correctPosition
         }
@@ -193,10 +202,10 @@ internal class DivPagerBinder @Inject constructor(
                 super.onScrolled(recyclerView, dx, dy)
                 val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
                 val lastItemVisible = layoutManager.findLastVisibleItemPosition()
-                if (firstItemVisible == (itemCount - 1) && dx > 0) {
-                    recyclerView.scrollToPosition(1)
-                } else if (lastItemVisible == 0 && dx < 0) {
-                    recyclerView.scrollToPosition(itemCount - 2)
+                if (firstItemVisible == (itemCount - OFFSET_TO_REAL_ITEM) && dx > 0) {
+                    recyclerView.scrollToPosition(OFFSET_TO_REAL_ITEM)
+                } else if (lastItemVisible == OFFSET_TO_REAL_ITEM - 1 && dx < 0) {
+                    recyclerView.scrollToPosition(itemCount - 1 - OFFSET_TO_REAL_ITEM)
                 }
             }
         })
