@@ -12,6 +12,7 @@ enum DatetimeFunctions: String, CaseIterable {
     case millis(Date, Int)
     case components(String)
     case component(String, String)
+    case format(String)
 
     var message: AnyCalcExpression.Error {
       AnyCalcExpression.Error.message(description)
@@ -35,11 +36,14 @@ enum DatetimeFunctions: String, CaseIterable {
         return "Failed to evaluate [\(funcName)]. Date components not found."
       case let .component(funcName, component):
         return "Failed to evaluate [\(funcName)]. Component '\(component)' not found."
+      case let .format(format):
+        return "z/Z not supported in [\(format)]"
       }
     }
   }
 
   case parseUnixTime
+  case parseUnixTimeAsLocal
   case nowLocal
   case addMillis
   case setYear
@@ -57,11 +61,17 @@ enum DatetimeFunctions: String, CaseIterable {
   case getMinutes
   case getSeconds
   case getMillis
+  case formatDateAsLocal
+  case formatDateAsLocalWithLocale
+  case formatDateAsUTC
+  case formatDateAsUTCWithLocale
 
   var function: Function {
     switch self {
     case .parseUnixTime:
       return FunctionUnary(impl: _parseUnixTime)
+    case .parseUnixTimeAsLocal:
+        return FunctionUnary(impl: _parseUnixTimeAsLocal)
     case .nowLocal:
       return FunctionNullary(impl: _nowLocal)
     case .addMillis:
@@ -96,6 +106,14 @@ enum DatetimeFunctions: String, CaseIterable {
       return FunctionUnary(impl: _getSeconds)
     case .getMillis:
       return FunctionUnary(impl: _getMillis)
+    case .formatDateAsLocal:
+      return FunctionBinary(impl: _formatDateAsLocal)
+    case .formatDateAsLocalWithLocale:
+      return FunctionTernary(impl: _formatDateAsLocalWithLocale)
+    case .formatDateAsUTC:
+      return FunctionBinary(impl: _formatDateAsUTC)
+    case .formatDateAsUTCWithLocale:
+      return FunctionTernary(impl: _formatDateAsUTCWithLocale)
     }
   }
 }
@@ -104,17 +122,12 @@ private func _parseUnixTime(_ value: Int) -> Date {
   Date(timeIntervalSince1970: Double(value))
 }
 
+private func _parseUnixTimeAsLocal(_ value: Int) -> Date {
+  Date(timeIntervalSince1970: Double(value)).local
+}
+
 private func _nowLocal() -> Date {
-  let dateUTC = Date()
-  let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: dateUTC))
-  guard let localDate = Calendar.current.date(
-    byAdding: .second,
-    value: Int(timeZoneOffset),
-    to: dateUTC
-  ) else {
-    return dateUTC
-  }
-  return localDate
+  Date().local
 }
 
 private func _addMillis(_ date: Date, _ offsetInMillis: Int) -> Date {
@@ -258,6 +271,42 @@ private func _getMillis(_ value: Date) -> Int {
   Int(value.timeIntervalSince1970.truncatingRemainder(dividingBy: 1) * 1000)
 }
 
+private func _formatDateAsLocal(_ value: Date, _ format: String) throws -> String {
+  try formatDate(value, format)
+}
+
+private func _formatDateAsLocalWithLocale(
+  value: Date,
+  format: String,
+  locale: String
+) throws -> String {
+  try formatDate(value, format, locale: locale)
+}
+
+private func _formatDateAsUTC(_ value: Date, _ format: String) throws -> String {
+  try formatDate(value, format, isUTC: true)
+}
+
+private func _formatDateAsUTCWithLocale(
+  value: Date,
+  format: String,
+  locale: String
+) throws -> String {
+  try formatDate(value, format, isUTC: true, locale: locale)
+}
+
+private func formatDate(
+  _ value: Date,
+  _ format: String,
+  isUTC: Bool = false,
+  locale: String? = nil
+) throws -> String {
+  guard !format.contains("Z") && !format.contains("z") else {
+    throw DatetimeFunctions.Error.format(format).message
+  }
+  return makeDateFormatter(format, isUTC: isUTC, locale: locale).string(from: value)
+}
+
 private func makeFuncName(_ funcName: String, _ date: Date, _ value: Int) -> String {
   "\(getFuncName(funcName))('\(date.formatString)', \(value))"
 }
@@ -278,13 +327,13 @@ private let timeZone = "UTC"
 
 extension String {
   func toDatetime() -> Date? {
-    dateFormatter.date(from: self)
+    makeDateFormatter(dateFormat, isUTC: true).date(from: self)
   }
 }
 
 extension Date {
   var formatString: String {
-    dateFormatter.string(from: self)
+    makeDateFormatter(dateFormat, isUTC: true).string(from: self)
   }
 
   fileprivate var components: DateComponents {
@@ -292,6 +341,18 @@ extension Date {
       [.year, .month, .day, .weekday, .hour, .minute, .second, .nanosecond],
       from: self
     )
+  }
+
+  fileprivate var local: Date {
+    let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: self))
+    guard let localDate = Calendar.current.date(
+      byAdding: .second,
+      value: Int(timeZoneOffset),
+      to: self
+    ) else {
+      return self
+    }
+    return localDate
   }
 }
 
@@ -307,9 +368,18 @@ private let calendar: Calendar = {
   return calendar
 }()
 
-private let dateFormatter: DateFormatter = {
+private func makeDateFormatter(
+  _ format: String,
+  isUTC: Bool = false,
+  locale: String? = nil
+) -> DateFormatter {
   let dateFormatter = DateFormatter()
-  dateFormatter.dateFormat = dateFormat
-  dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
+  dateFormatter.dateFormat = format.replacingOccurrences(of: "u", with: "e")
+  if isUTC {
+    dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
+  }
+  if let locale {
+    dateFormatter.locale = Locale(identifier: locale)
+  }
   return dateFormatter
-}()
+}
