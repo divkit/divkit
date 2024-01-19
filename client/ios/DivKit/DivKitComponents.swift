@@ -89,6 +89,7 @@ public final class DivKitComponents {
   ///   - urlOpener: Deprecated. This parameter is deprecated, use ``DivUrlHandler`` instead.
   ///   - variablesStorage: A ``DivVariablesStorage`` object that handles the storage and retrieval
   /// of variables.
+  ///   - logger: a ``DivActionLogger`` protocol to handle log when component action has triggered.
   public init(
     divCustomBlockFactory: DivCustomBlockFactory? = nil,
     extensionHandlers: [DivExtensionHandler] = [],
