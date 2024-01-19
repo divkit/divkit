@@ -2,12 +2,6 @@
   "templates": {
     "button": {
       "type": "text",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 16,
         "top": 16,
@@ -40,76 +34,62 @@
   },
   "card": {
     "log_id": "accessibility/types",
-    "transition_animation_selector": "data_change",
-    "variables": [
-      {
-        "name": "button_1_active",
-        "type": "boolean",
-        "value": false
-      }
-    ],
     "states": [
       {
         "state_id": 0,
         "div": {
           "type": "container",
-          "height": {
-            "type": "wrap_content"
-          },
           "margins": {
             "top": 16,
             "bottom": 8
           },
           "orientation": "vertical",
+          "accessibility": {
+            "type": "list",
+            "description": "List"
+          },
           "items": [
             {
               "type": "button",
               "accessibility": {
                 "type": "button"
               },
-              "text": "Тип - кнопка"
+              "text": "type: button"
             },
             {
               "type": "button",
               "accessibility": {
                 "type": "image"
               },
-              "text": "Тип - изображение"
+              "text": "type: image"
             },
             {
               "type": "button",
               "accessibility": {
                 "type": "text"
               },
-              "text": "Тип - текст"
+              "text": "type: text"
             },
             {
               "type": "button",
               "accessibility": {
                 "type": "edit_text"
               },
-              "text": "Тип - окно редактирования"
+              "text": "type: edit_text"
             },
             {
               "type": "button",
               "accessibility": {
                 "type": "header"
               },
-              "text": "Тип - заголовок"
-            },
-            {
-              "type": "button",
-              "accessibility": {
-                "type": "tab_bar"
-              },
-              "text": "Тип - панель вкладок"
+              "text": "type: header"
             },
             {
               "type": "button",
               "accessibility": {
                 "type": "none"
               },
-              "text": "Без типа"
+              "text": "type: none"
             }
           ]
         }

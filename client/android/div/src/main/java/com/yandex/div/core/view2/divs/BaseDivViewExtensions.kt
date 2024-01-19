@@ -19,7 +19,6 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivPathUtils.findDivState
@@ -297,10 +296,10 @@ internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, re
 }
 
 internal fun View.applyTransform(
-    transform: DivTransform,
+    transform: DivTransform?,
     resolver: ExpressionResolver,
 ) {
-    val rotation = transform.rotation?.evaluate(resolver)?.toFloat()
+    val rotation = transform?.rotation?.evaluate(resolver)?.toFloat()
     if (rotation == null) {
         this.rotation = 0.0f
         return
@@ -814,7 +813,7 @@ internal fun View.bindAspectRatio(newAspect: DivAspect?, oldAspect: DivAspect?, 
         return
     }
 
-    addSubscription(newAspect?.ratio?.observe(resolver) { ratio -> applyAspectRatio(ratio) } ?: Disposable.NULL)
+    addSubscription(newAspect?.ratio?.observe(resolver) { ratio -> applyAspectRatio(ratio) })
 }
 
 internal fun View.applyBitmapFilters(

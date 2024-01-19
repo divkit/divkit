@@ -6,7 +6,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
@@ -81,6 +80,8 @@ internal class DivTabsBinder @Inject constructor(
         }
 
         baseBinder.bindView(view, div, oldDiv, divView)
+
+        view.clipToPadding = false
 
         val applyPaddings = { _: Any? ->
             view.titleLayout.applyPaddings(div.titlePaddings, resolver)
@@ -233,10 +234,11 @@ internal class DivTabsBinder @Inject constructor(
 
     private fun TabTitlesLayoutView<*>.observeHeight(div: DivTabs, resolver: ExpressionResolver) {
         val applyHeight = { _: Any? ->
-            val textPaddings = div.tabTitleStyle.paddings
+            val tabTitleStyle = div.tabTitleStyle ?: DEFAULT_TAB_TITLE_STYLE
+            val textPaddings = tabTitleStyle?.paddings
             val layoutPaddings = div.titlePaddings
-            val lineHeight = div.tabTitleStyle.lineHeight?.evaluate(resolver)
-                ?: (div.tabTitleStyle.fontSize.evaluate(resolver) * DEFAULT_LINE_HEIGHT_COEFFICIENT).toLong()
+            val lineHeight = tabTitleStyle.lineHeight?.evaluate(resolver)
+                ?: (tabTitleStyle?.fontSize?.evaluate(resolver) * DEFAULT_LINE_HEIGHT_COEFFICIENT).toLong()
 
             val height = lineHeight + textPaddings.top.evaluate(resolver) + textPaddings.bottom.evaluate(resolver) + layoutPaddings.top.evaluate(resolver) + layoutPaddings.bottom.evaluate(resolver)
             val metrics = resources.displayMetrics
@@ -245,39 +247,36 @@ internal class DivTabsBinder @Inject constructor(
         applyHeight(null)
 
         val subscriber = expressionSubscriber
-        div.tabTitleStyle.lineHeight?.let {
-            subscriber.addSubscription(it.observe(resolver, applyHeight))
-        }
-
-        subscriber.addSubscription(div.tabTitleStyle.fontSize.observe(resolver, applyHeight))
-        subscriber.addSubscription(div.tabTitleStyle.paddings.top.observe(resolver, applyHeight))
-        subscriber.addSubscription(div.tabTitleStyle.paddings.bottom.observe(resolver, applyHeight))
+        subscriber.addSubscription(div.tabTitleStyle?.lineHeight?.observe(resolver, applyHeight))
+        subscriber.addSubscription(div.tabTitleStyle?.fontSize?.observe(resolver, applyHeight))
+        subscriber.addSubscription(div.tabTitleStyle?.paddings?.top?.observe(resolver, applyHeight))
+        subscriber.addSubscription(div.tabTitleStyle?.paddings?.bottom?.observe(resolver, applyHeight))
         subscriber.addSubscription(div.titlePaddings.top.observe(resolver, applyHeight))
         subscriber.addSubscription(div.titlePaddings.bottom.observe(resolver, applyHeight))
     }
 
-    private fun DivTabsLayout.observeStyle(resolver: ExpressionResolver, style: DivTabs.TabTitleStyle) {
-        titleLayout.applyStyle(resolver, style)
+    private fun DivTabsLayout.observeStyle(resolver: ExpressionResolver, style: DivTabs.TabTitleStyle?) {
+        titleLayout.applyStyle(resolver, style ?: DEFAULT_TAB_TITLE_STYLE)
 
         fun Expression<*>?.addToSubscriber() = addSubscription(this?.observe(resolver) {
             titleLayout.applyStyle(
                 resolver,
-                style
+                style ?: DEFAULT_TAB_TITLE_STYLE
             )
-        } ?: Disposable.NULL)
+        })
 
-        style.activeTextColor.addToSubscriber()
-        style.activeBackgroundColor.addToSubscriber()
-        style.inactiveTextColor.addToSubscriber()
-        style.inactiveBackgroundColor.addToSubscriber()
-        style.cornerRadius?.addToSubscriber()
-        style.cornersRadius?.topLeft.addToSubscriber()
-        style.cornersRadius?.topRight.addToSubscriber()
-        style.cornersRadius?.bottomRight.addToSubscriber()
-        style.cornersRadius?.bottomLeft.addToSubscriber()
-        style.itemSpacing.addToSubscriber()
-        style.animationType.addToSubscriber()
-        style.animationDuration.addToSubscriber()
+        style?.activeTextColor.addToSubscriber()
+        style?.activeBackgroundColor.addToSubscriber()
+        style?.inactiveTextColor.addToSubscriber()
+        style?.inactiveBackgroundColor.addToSubscriber()
+        style?.cornerRadius.addToSubscriber()
+        style?.cornersRadius?.topLeft.addToSubscriber()
+        style?.cornersRadius?.topRight.addToSubscriber()
+        style?.cornersRadius?.bottomRight.addToSubscriber()
+        style?.cornersRadius?.bottomLeft.addToSubscriber()
+        style?.itemSpacing.addToSubscriber()
+        style?.animationType.addToSubscriber()
+        style?.animationDuration.addToSubscriber()
     }
 
     private fun TabTitlesLayoutView<*>.applyStyle(resolver: ExpressionResolver, style: DivTabs.TabTitleStyle) {
@@ -333,10 +332,12 @@ internal class DivTabsBinder @Inject constructor(
         )
     }
 
-    companion object {
-        const val TAG_TAB_HEADER = "DIV2.TAB_HEADER_VIEW"
-        const val TAG_TAB_ITEM = "DIV2.TAB_ITEM_VIEW"
-        const val DEFAULT_LINE_HEIGHT_COEFFICIENT = 1.3f
+    private companion object {
+        private const val TAG_TAB_HEADER = "DIV2.TAB_HEADER_VIEW"
+        private const val TAG_TAB_ITEM = "DIV2.TAB_ITEM_VIEW"
+        private const val DEFAULT_LINE_HEIGHT_COEFFICIENT = 1.3f
+
+        private val DEFAULT_TAB_TITLE_STYLE = DivTabs.TabTitleStyle()
     }
 }
 
@@ -415,9 +416,9 @@ internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: Expres
     subscriber.addSubscription(paddings.bottom.observe(resolver, applyTabPaddings))
     if (paddings.start != null || paddings.end != null) {
        subscriber.addSubscription(paddings.start?.observe(resolver, applyTabPaddings)
-                ?: Disposable.NULL)
+               )
         subscriber.addSubscription(paddings.end?.observe(resolver, applyTabPaddings)
-                ?: Disposable.NULL)
+               )
     } else {
         subscriber.addSubscription(paddings.left.observe(resolver, applyTabPaddings))
         subscriber.addSubscription(paddings.right.observe(resolver, applyTabPaddings))

@@ -6,7 +6,19 @@ import org.json.JSONObject
 
 class EntityWithArrayOfNestedItems(
     @JvmField final val items: List<Item>, // at least 1 elements
-) {
+) : Hashable {
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        val hash = 
+            items.sumOf { it.hash() }
+        _hash = hash
+        return hash
+    }
 
     fun copyWithNewProperties(
         items: List<EntityWithArrayOfNestedItems.Item>,
@@ -24,6 +36,19 @@ class EntityWithArrayOfNestedItems(
     class Item(
         @JvmField final val entity: Entity,
         @JvmField final val property: Expression<String>,
-    ) {
+    ) : Hashable {
+
+        private var _hash: Int? = null 
+
+        override fun hash(): Int {
+            _hash?.let {
+                return it
+            }
+            val hash = 
+                entity.hash() +
+                property.hashCode()
+            _hash = hash
+            return hash
+        }
     }
 }

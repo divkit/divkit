@@ -5,13 +5,17 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.AttributeSet
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.widget.SuperLineHeightEditText
 import com.yandex.div2.DivInput
 
 @Mockable
-internal class DivInputView constructor(context: Context) : SuperLineHeightEditText(context),
+internal class DivInputView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null
+) : SuperLineHeightEditText(context, attrs),
     DivHolderView<DivInput> by DivHolderViewMixin(),
     DivAnimator {
 
@@ -20,6 +24,10 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
     private val onTextChangedActions = mutableListOf<(Editable?) -> Unit>()
 
     private var textChangeWatcher: TextWatcher? = null
+
+    init {
+        setPadding(0, 0, 0, 0)
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

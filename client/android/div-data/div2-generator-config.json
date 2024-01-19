@@ -7,6 +7,5 @@
     },
     "errorsCollectors": [
         "div-data"
-    ],
-  "generateEquality": true
+    ]
 }

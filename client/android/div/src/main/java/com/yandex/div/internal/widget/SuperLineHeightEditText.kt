@@ -3,6 +3,7 @@ package com.yandex.div.internal.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
@@ -11,7 +12,11 @@ import kotlin.math.roundToInt
 
 private const val UNDEFINED = -1
 
-internal open class SuperLineHeightEditText constructor(context: Context) : AppCompatEditText(context) {
+internal open class SuperLineHeightEditText @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = androidx.appcompat.R.attr.editTextStyle
+) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     private var fixedLineHeight = UNDEFINED
 

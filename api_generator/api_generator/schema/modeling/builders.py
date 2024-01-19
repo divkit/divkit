@@ -182,9 +182,11 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
                                          mode=mode,
                                          config=config)
 
-    normal_result: List[Declarable] = make_result(GenerationMode(GenerationMode.NORMAL_WITH_TEMPLATES))
+    generate_templates = __generate_templates(config)
+    gen_mode = GenerationMode.NORMAL_WITH_TEMPLATES if generate_templates else GenerationMode.NORMAL_WITHOUT_TEMPLATES
+    normal_result: List[Declarable] = make_result(GenerationMode(gen_mode))
     template_result: List[Declarable] = []
-    if __generate_templates(config):
+    if generate_templates:
         template_result += make_result(GenerationMode(GenerationMode.TEMPLATE))
     return normal_result + template_result
 

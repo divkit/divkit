@@ -4,7 +4,7 @@ package com.yandex.div2
 
 import org.json.JSONObject
 
-sealed class Entity {
+sealed class Entity : Hashable {
     class WithArray(val value: EntityWithArray) : Entity()
     class WithArrayOfEnums(val value: EntityWithArrayOfEnums) : Entity()
     class WithArrayOfExpressions(val value: EntityWithArrayOfExpressions) : Entity()
@@ -24,6 +24,37 @@ sealed class Entity {
     class WithStringEnumProperty(val value: EntityWithStringEnumProperty) : Entity()
     class WithStringEnumPropertyWithDefaultValue(val value: EntityWithStringEnumPropertyWithDefaultValue) : Entity()
     class WithoutProperties(val value: EntityWithoutProperties) : Entity()
+
+    private var _hash: Int? = null 
+
+    override fun hash(): Int {
+        _hash?.let {
+            return it
+        }
+        return when(this) {
+            is WithArray -> 31 + this.value.hash()
+            is WithArrayOfEnums -> 62 + this.value.hash()
+            is WithArrayOfExpressions -> 93 + this.value.hash()
+            is WithArrayOfNestedItems -> 124 + this.value.hash()
+            is WithArrayWithTransform -> 155 + this.value.hash()
+            is WithComplexProperty -> 186 + this.value.hash()
+            is WithComplexPropertyWithDefaultValue -> 217 + this.value.hash()
+            is WithEntityProperty -> 248 + this.value.hash()
+            is WithOptionalComplexProperty -> 279 + this.value.hash()
+            is WithOptionalProperty -> 310 + this.value.hash()
+            is WithOptionalStringEnumProperty -> 341 + this.value.hash()
+            is WithPropertyWithDefaultValue -> 372 + this.value.hash()
+            is WithRawArray -> 403 + this.value.hash()
+            is WithRequiredProperty -> 434 + this.value.hash()
+            is WithSimpleProperties -> 465 + this.value.hash()
+            is WithStringArrayProperty -> 496 + this.value.hash()
+            is WithStringEnumProperty -> 527 + this.value.hash()
+            is WithStringEnumPropertyWithDefaultValue -> 558 + this.value.hash()
+            is WithoutProperties -> 589 + this.value.hash()
+        }.also {
+            _hash = it
+        }
+    }
 
     fun value(): Any {
         return when (this) {

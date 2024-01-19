@@ -537,8 +537,8 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             if (mViewPagerFixedSizeLayout == null || mViewPagerHeightCalculator == null) {
                 return;
             }
-            if (mViewPagerHeightCalculator.shouldRequestLayoutOnScroll(position, positionOffset)) {
-                mViewPagerHeightCalculator.setPositionAndOffsetForMeasure(position, positionOffset);
+            mViewPagerHeightCalculator.setPositionAndOffsetForMeasure(position, positionOffset);
+            if (mViewPagerFixedSizeLayout.shouldRequestLayoutOnScroll(position, positionOffset)) {
                 if (mViewPagerFixedSizeLayout.isInLayout()) {
                     mViewPagerFixedSizeLayout.post(mViewPagerFixedSizeLayout::requestLayout);
                 } else {

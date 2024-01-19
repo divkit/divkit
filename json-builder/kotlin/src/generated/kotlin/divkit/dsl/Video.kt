@@ -59,6 +59,7 @@ class Video internal constructor(
             paddings = additive.paddings ?: properties.paddings,
             pauseActions = additive.pauseActions ?: properties.pauseActions,
             playerSettingsPayload = additive.playerSettingsPayload ?: properties.playerSettingsPayload,
+            preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
             preview = additive.preview ?: properties.preview,
             repeatable = additive.repeatable ?: properties.repeatable,
             resumeActions = additive.resumeActions ?: properties.resumeActions,
@@ -177,6 +178,11 @@ class Video internal constructor(
          */
         val playerSettingsPayload: Property<Map<String, Any>>?,
         /**
+         * This option turns on preloading of video sources.
+         * Default value: `false`.
+         */
+        val preloadRequired: Property<Boolean>?,
+        /**
          * Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
          */
         val preview: Property<String>?,
@@ -272,6 +278,7 @@ class Video internal constructor(
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("pause_actions", pauseActions)
             result.tryPutProperty("player_settings_payload", playerSettingsPayload)
+            result.tryPutProperty("preload_required", preloadRequired)
             result.tryPutProperty("preview", preview)
             result.tryPutProperty("repeatable", repeatable)
             result.tryPutProperty("resume_actions", resumeActions)
@@ -318,6 +325,7 @@ class Video internal constructor(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -361,6 +369,7 @@ fun DivScope.video(
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
     playerSettingsPayload: Map<String, Any>? = null,
+    preloadRequired: Boolean? = null,
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
@@ -403,6 +412,7 @@ fun DivScope.video(
         paddings = valueOrNull(paddings),
         pauseActions = valueOrNull(pauseActions),
         playerSettingsPayload = valueOrNull(playerSettingsPayload),
+        preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
@@ -447,6 +457,7 @@ fun DivScope.video(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -490,6 +501,7 @@ fun DivScope.videoProps(
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
     playerSettingsPayload: Map<String, Any>? = null,
+    preloadRequired: Boolean? = null,
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
@@ -531,6 +543,7 @@ fun DivScope.videoProps(
     paddings = valueOrNull(paddings),
     pauseActions = valueOrNull(pauseActions),
     playerSettingsPayload = valueOrNull(playerSettingsPayload),
+    preloadRequired = valueOrNull(preloadRequired),
     preview = valueOrNull(preview),
     repeatable = valueOrNull(repeatable),
     resumeActions = valueOrNull(resumeActions),
@@ -574,6 +587,7 @@ fun DivScope.videoProps(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -617,6 +631,7 @@ fun TemplateScope.videoRefs(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
@@ -658,6 +673,7 @@ fun TemplateScope.videoRefs(
     paddings = paddings,
     pauseActions = pauseActions,
     playerSettingsPayload = playerSettingsPayload,
+    preloadRequired = preloadRequired,
     preview = preview,
     repeatable = repeatable,
     resumeActions = resumeActions,
@@ -701,6 +717,7 @@ fun TemplateScope.videoRefs(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -744,6 +761,7 @@ fun Video.override(
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
     playerSettingsPayload: Map<String, Any>? = null,
+    preloadRequired: Boolean? = null,
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
@@ -786,6 +804,7 @@ fun Video.override(
         paddings = valueOrNull(paddings) ?: properties.paddings,
         pauseActions = valueOrNull(pauseActions) ?: properties.pauseActions,
         playerSettingsPayload = valueOrNull(playerSettingsPayload) ?: properties.playerSettingsPayload,
+        preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         preview = valueOrNull(preview) ?: properties.preview,
         repeatable = valueOrNull(repeatable) ?: properties.repeatable,
         resumeActions = valueOrNull(resumeActions) ?: properties.resumeActions,
@@ -830,6 +849,7 @@ fun Video.override(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -873,6 +893,7 @@ fun Video.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
@@ -915,6 +936,7 @@ fun Video.defer(
         paddings = paddings ?: properties.paddings,
         pauseActions = pauseActions ?: properties.pauseActions,
         playerSettingsPayload = playerSettingsPayload ?: properties.playerSettingsPayload,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = resumeActions ?: properties.resumeActions,
@@ -942,6 +964,7 @@ fun Video.defer(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -957,6 +980,7 @@ fun Video.evaluate(
     autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     muted: ExpressionProperty<Boolean>? = null,
+    preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -987,6 +1011,7 @@ fun Video.evaluate(
         paddings = properties.paddings,
         pauseActions = properties.pauseActions,
         playerSettingsPayload = properties.playerSettingsPayload,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
         repeatable = repeatable ?: properties.repeatable,
         resumeActions = properties.resumeActions,
@@ -1031,6 +1056,7 @@ fun Video.evaluate(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -1074,6 +1100,7 @@ fun Component<Video>.override(
     paddings: EdgeInsets? = null,
     pauseActions: List<Action>? = null,
     playerSettingsPayload: Map<String, Any>? = null,
+    preloadRequired: Boolean? = null,
     preview: String? = null,
     repeatable: Boolean? = null,
     resumeActions: List<Action>? = null,
@@ -1117,6 +1144,7 @@ fun Component<Video>.override(
         paddings = valueOrNull(paddings),
         pauseActions = valueOrNull(pauseActions),
         playerSettingsPayload = valueOrNull(playerSettingsPayload),
+        preloadRequired = valueOrNull(preloadRequired),
         preview = valueOrNull(preview),
         repeatable = valueOrNull(repeatable),
         resumeActions = valueOrNull(resumeActions),
@@ -1161,6 +1189,7 @@ fun Component<Video>.override(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -1204,6 +1233,7 @@ fun Component<Video>.defer(
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pauseActions: ReferenceProperty<List<Action>>? = null,
     playerSettingsPayload: ReferenceProperty<Map<String, Any>>? = null,
+    preloadRequired: ReferenceProperty<Boolean>? = null,
     preview: ReferenceProperty<String>? = null,
     repeatable: ReferenceProperty<Boolean>? = null,
     resumeActions: ReferenceProperty<List<Action>>? = null,
@@ -1247,6 +1277,7 @@ fun Component<Video>.defer(
         paddings = paddings,
         pauseActions = pauseActions,
         playerSettingsPayload = playerSettingsPayload,
+        preloadRequired = preloadRequired,
         preview = preview,
         repeatable = repeatable,
         resumeActions = resumeActions,
@@ -1274,6 +1305,7 @@ fun Component<Video>.defer(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
+ * @param preloadRequired This option turns on preloading of video sources.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1289,6 +1321,7 @@ fun Component<Video>.evaluate(
     autostart: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     muted: ExpressionProperty<Boolean>? = null,
+    preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     repeatable: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
@@ -1320,6 +1353,7 @@ fun Component<Video>.evaluate(
         paddings = null,
         pauseActions = null,
         playerSettingsPayload = null,
+        preloadRequired = preloadRequired,
         preview = preview,
         repeatable = repeatable,
         resumeActions = null,

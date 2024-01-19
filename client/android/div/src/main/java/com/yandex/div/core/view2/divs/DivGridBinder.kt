@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
@@ -117,8 +116,8 @@ internal class DivGridBinder @Inject constructor(
 
         if (childView !is ExpressionSubscriber) return
         val callback = { _: Any -> childView.applyGridLayoutParams(resolver, childDiv) }
-        childView.addSubscription(childDiv.columnSpan?.observe(resolver, callback) ?: Disposable.NULL)
-        childView.addSubscription(childDiv.rowSpan?.observe(resolver, callback) ?: Disposable.NULL)
+        childView.addSubscription(childDiv.columnSpan?.observe(resolver, callback))
+        childView.addSubscription(childDiv.rowSpan?.observe(resolver, callback))
     }
 
     private fun View.applyGridLayoutParams(resolver: ExpressionResolver, div: DivBase) {

@@ -16,6 +16,7 @@ from ...schema.modeling.entities import (
     Entity,
     Object,
     ObjectFormat,
+    Array,
 )
 from ...schema.modeling.text import Text, EMPTY
 
@@ -58,13 +59,44 @@ class KotlinGenerator(Generator):
             result += '    }'
             result += EMPTY
             result += entity.value_resolving_declaration.indented(indent_width=4)
-        elif self._generate_equality and entity.instance_properties_kotlin:
+        else:
             result += EMPTY
-            result += '    private val hash = lazy(LazyThreadSafetyMode.NONE) {'
-            for prop in entity.instance_properties_kotlin:
-                ending = "+" if prop != entity.instance_properties_kotlin[-1] else ""
-                result += f'            {prop.declaration_name}.hashCode() {ending}'
+            result += '    private var _hash: Int? = null '
+            result += EMPTY
+            result += '    override fun hash(): Int {'
+            result += '        _hash?.let {'
+            result += '            return it'
+            result += '        }'
+
+            if entity.instance_properties_kotlin:
+                result += '        val hash = '
+                for prop in entity.instance_properties_kotlin:
+                    hash_type = 'hash()' if prop.use_custom_hash else 'hashCode()'
+
+                    prop_hash = ''
+                    if prop.should_be_optional:
+                        prop_hash += '('
+                    prop_hash += prop.declaration_name
+                    if prop.should_be_optional:
+                        prop_hash += '?'
+                    prop_hash += '.'
+                    if isinstance(prop.property_type, Array) and prop.use_custom_hash:
+                        prop_hash += f'sumOf {{ it.{hash_type} }}'
+                    else:
+                        prop_hash += hash_type
+                    if prop.should_be_optional:
+                        prop_hash += ' ?: 0)'
+                    prop_hash += " +" if prop != entity.instance_properties_kotlin[-1] else ""
+                    result += Text(prop_hash).indented(indent_width=12)
+            else:
+                result += '        val hash = javaClass.hashCode()'
+
+            result += '        _hash = hash'
+            result += '        return hash'
             result += '    }'
+            if self._generate_equality:
+                result += EMPTY
+                result += '    fun isHashCalculated() = _hash != null'
 
         if self.generate_serialization:
             result += EMPTY
@@ -76,9 +108,8 @@ class KotlinGenerator(Generator):
                 result += '    override fun equals(other: Any?): Boolean {'
                 result += '        if (this === other) { return true }'
                 class_name = utils.capitalize_camel_case(entity.name)
-                result += f'        if (other !is {class_name}'
-                result += ('                || (this.hash.isInitialized() && other.hash.isInitialized() '
-                           '&& this.hash.value != other.hash.value)) {')
+                result += f'        if (other !is {class_name} || (this.isHashCalculated() && other.isHashCalculated()'
+                result += '                    && this.hash() != other.hash())) {'
                 result += '            return false'
                 result += '        }'
                 result += EMPTY
@@ -88,7 +119,7 @@ class KotlinGenerator(Generator):
                     result += f'         {prefix}this.{prop.declaration_name} == other.{prop.declaration_name} {postfix}'
                 result += '    }'
                 result += EMPTY
-                result += '    override fun hashCode() = hash.value'
+                result += '    override fun hashCode() = hash()'
             else:
                 result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
 
@@ -133,6 +164,8 @@ class KotlinGenerator(Generator):
         prefix = f'class {utils.capitalize_camel_case(entity.name)}'
 
         interfaces = ['JSONSerializable'] if self.generate_serialization else []
+        if not entity.generation_mode.is_template:
+            interfaces.append('Hashable')
         protocol_plus_super_entities = entity.protocol_plus_super_entities()
         if protocol_plus_super_entities is not None:
             interfaces.append(protocol_plus_super_entities)
@@ -203,6 +236,8 @@ class KotlinGenerator(Generator):
         for annotation in self.kotlin_annotations.classes:
             result += annotation
         interfaces = ['JSONSerializable'] if self.generate_serialization else []
+        if not entity_enumeration.mode.is_template:
+            interfaces.append('Hashable')
         interfaces.append(entity_enumeration.mode.protocol_name(
             lang=GeneratedLanguage.KOTLIN,
             name=entity_enumeration.resolved_prefixed_declaration))
@@ -218,15 +253,25 @@ class KotlinGenerator(Generator):
             result += Text(indent_width=4, init_lines=decl)
         result += EMPTY
 
-        if not entity_enumeration.mode.is_template and self._generate_equality:
-            result += '    private val hash = lazy(LazyThreadSafetyMode.NONE) {'
-            result += '        when(this) {'
+        if not entity_enumeration.mode.is_template:
+            result += '    private var _hash: Int? = null '
+            result += EMPTY
+            result += '    override fun hash(): Int {'
+            result += '        _hash?.let {'
+            result += '            return it'
+            result += '        }'
+            result += '        return when(this) {'
             for i, decl in enumerate(entity_declarations, start=1):
                 naming = entity_enumeration.format_case_naming(decl)
-                result += f'            is {naming} -> {i * 31}'
-            result += '        } + this.value().hashCode()'
+                result += f'            is {naming} -> {i * 31} + this.value.hash()'
+            result += '        }.also {'
+            result += '            _hash = it'
+            result += '        }'
             result += '    }'
             result += EMPTY
+            if self._generate_equality:
+                result += '    fun isHashCalculated() = _hash != null'
+                result += EMPTY
 
         result += f'    fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
         result += '        return when (this) {'
@@ -275,16 +320,15 @@ class KotlinGenerator(Generator):
         elif self._generate_equality:
             result += '    override fun equals(other: Any?): Boolean {'
             result += '        if (this === other) { return true }'
-            result += f'        if (other !is {declaration_name}'
-            result += ('                || (this.hash.isInitialized() && other.hash.isInitialized() '
-                       '&& this.hash.value != other.hash.value)) {')
+            result += f'        if (other !is {declaration_name} || (this.isHashCalculated() && other.isHashCalculated()'
+            result += '                    && this.hash() != other.hash())) {'
             result += '            return false'
             result += '        }'
             result += EMPTY
             result += '        return this.value() == other.value()'
             result += '    }'
             result += EMPTY
-            result += '    override fun hashCode() = hash.value'
+            result += '    override fun hashCode() = hash()'
             result += EMPTY
 
         if not self.generate_serialization:

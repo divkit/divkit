@@ -108,7 +108,7 @@ class TriggersControllerTest {
 
     private fun verifyActionTriggered(logId: String, times: Int = 1) {
         val actions = argumentCaptor<List<DivAction>>()
-        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture())
+        verify(divActionBinder, atLeastOnce()).handleActions(any(), actions.capture(), any())
 
         val actionsWithLogId = actions.allValues.flatten().filter { it.logId == logId }
         Assert.assertEquals(times, actionsWithLogId.size)

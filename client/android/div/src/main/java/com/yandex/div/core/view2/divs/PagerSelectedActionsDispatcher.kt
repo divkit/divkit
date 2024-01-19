@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
@@ -69,7 +70,7 @@ internal class PagerSelectedActionsDispatcher(
         div.value().selectedActions?.let { actions ->
             divView.bulkActions {
                 actions.forEach { action ->
-                    divActionBinder.handleAction(divView, action)
+                    divActionBinder.handleAction(divView, action, DivActionReason.SELECTION)
                 }
             }
         }

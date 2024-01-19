@@ -399,9 +399,9 @@
     "en": "Array of `div` from which the collection items will be created.",
     "ru": "Массив `div` из которых будут созданы элементы коллекции."
   },
-  "div_collection_item_builder_prototypes_data_element_prefix": {
-    "en": "Prefix for accessing the next `data` element in the prototype.",
-    "ru": "Префикс для обращения к очередному элементу `data` в прототипе."
+  "div_collection_item_builder_prototypes_data_element_name": {
+    "en": "Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.",
+    "ru": "Имя для обращения к очередному элементу `data` в прототипе. Работа с этим элементом ведется как со словарями."
   },
   "div_collection_item_builder_prototypes_div": {
     "en": "`Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.",

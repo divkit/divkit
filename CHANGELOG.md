@@ -1,3 +1,22 @@
+## 29.3.0
+
+# Android Client:
+* Fixed element blinking when rebinding galleries.
+* Implemented `hashCode()` and `equals()` for Divs.
+* Added a parameter to `DivConfiguration.Builder#divPlayerPreloader`. Also implemented `ExoPlayerVideoPreloader`, which can be used to preload videos if you are using `ExoDivPlayerFactory` as your video player.
+* Disabled creation of implicit default values for object properties.
+* Fixed a bug that 'visibility_action' does not work for children with size more than 'div-gallery' size.
+* Added parameter describing the reason of `div-action` call to `DivActionHandler` methods.
+
+# iOS Client:
+* Updated VGSL version to 3.0.0.
+* Fixed `DivView` size calculation.
+* Added ability to force action updates scheduled for the next run loop iteration.
+
+# Web Client:
+* `transition_in`, `transition_out`, `transition_change`, `action_animation` and `animation_in` / `animation_out` from the `tooltip` will now use system setting "prefers reduced motion".
+
+
 ## 29.2.0
 
 # Android Client:

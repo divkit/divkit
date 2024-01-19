@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.variables.VariableController
@@ -17,8 +18,6 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
-import java.lang.IllegalStateException
-import kotlin.ClassCastException
 
 @Mockable
 internal class TriggersController(
@@ -156,7 +155,7 @@ private class TriggerExecutor(
                 logger.logTrigger(div2View, it)
             }
         }
-        divActionBinder.handleActions(viewFacade, actions)
+        divActionBinder.handleActions(viewFacade, actions, DivActionReason.TRIGGER)
     }
 
     private fun conditionSatisfied(): Boolean {

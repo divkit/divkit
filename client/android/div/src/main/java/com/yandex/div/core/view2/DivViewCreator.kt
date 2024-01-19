@@ -112,8 +112,9 @@ internal class DivViewCreator @Inject constructor(
     override fun defaultVisit(data: Div, resolver: ExpressionResolver): View =
         viewPool.obtain(data.getTag(resolver))
 
-    override fun visit(data: Div.Separator, resolver: ExpressionResolver): View =
-        DivSeparatorView(context)
+    override fun visit(data: Div.Separator, resolver: ExpressionResolver): View {
+        return DivSeparatorView(context)
+    }
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver): View {
         val view = defaultVisit(data, resolver) as ViewGroup

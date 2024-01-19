@@ -1,11 +1,11 @@
 {
   "type": "object",
   "properties": {
-    "data_element_prefix": { 
+    "data_element_name": {
       "type": "string",
-      "default_value": "it.",
+      "default_value": "it",
       "supports_expressions": false,
-      "$description": "translations.json#/div_collection_item_builder_prototypes_data_element_prefix"
+      "$description": "translations.json#/div_collection_item_builder_prototypes_data_element_name"
     },
     "data": {
       "type": "array",

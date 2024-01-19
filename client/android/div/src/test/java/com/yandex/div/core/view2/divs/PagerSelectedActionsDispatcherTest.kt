@@ -155,11 +155,11 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     private fun verifyActionHandled(urlStr: String, times: Int = 1) {
-        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), anyOrNull(), anyOrNull())
+        verify(divActionBinder, times(times)).handleAction(eq(divView), urlEq(urlStr), any(), anyOrNull(), anyOrNull())
     }
 
     private fun InOrderOnType<DivActionBinder>.verifyActionHandled(div2View: Div2View, url: String) {
-        verify().handleAction(eq(div2View), urlEq(url), anyOrNull(), anyOrNull())
+        verify().handleAction(eq(div2View), urlEq(url), any(), anyOrNull(), anyOrNull())
     }
 
     private companion object {

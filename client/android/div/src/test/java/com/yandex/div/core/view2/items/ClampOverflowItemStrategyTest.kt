@@ -28,7 +28,7 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
     fun `next item`() {
         val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
 
-        Assert.assertEquals(testCase.nextItem, underTest.nextItem)
+        Assert.assertEquals(testCase.nextItem, underTest.nextItem())
     }
 
 
@@ -36,6 +36,6 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
     fun `previous item`() {
         val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
 
-        Assert.assertEquals(testCase.previousItem, underTest.previousItem)
+        Assert.assertEquals(testCase.previousItem, underTest.previousItem())
     }
 }
