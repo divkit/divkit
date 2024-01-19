@@ -24,6 +24,9 @@ class DemoGlobalVariablesController {
         gatherGlobalVariables().iterator().forEach {
             if (lastDivVariableController?.isDeclared(it.name) == false) {
                 lastDivVariableController?.declare(it)
+            } else {
+                val variable = lastDivVariableController?.get(it.name) ?: return
+                variable.set(it.getValue().toString())
             }
         }
     }
