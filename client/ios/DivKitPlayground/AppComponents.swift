@@ -25,6 +25,8 @@ enum AppComponents {
     let sizeProviderExtensionHandler = SizeProviderExtensionHandler(
       variablesStorage: variablesStorage
     )
+
+    let playerFactory = makeCachingPlayerFactory(requester: requester)
     return DivKitComponents(
       divCustomBlockFactory: PlaygroundDivCustomBlockFactory(requester: requester),
       extensionHandlers: [
@@ -44,7 +46,7 @@ enum AppComponents {
       trackDisappear: { logId, cardId in
         AppLogger.info("Disappear: cardId = \(cardId), logId = \(logId)")
       },
-      playerFactory: DefaultPlayerFactory(),
+      playerFactory: playerFactory,
       urlHandler: urlHandler,
       variablesStorage: variablesStorage
     )
@@ -55,4 +57,23 @@ enum AppComponents {
       isDebugInfoEnabled: true
     )
   }
+}
+
+private func makeCachingPlayerFactory(requester: URLResourceRequesting) -> PlayerFactory {
+  let cacheQueue = OperationQueue.serialQueue(
+    name: "divkit.playground.VideoAssetCache.ioqueue",
+    qos: .userInitiated
+  )
+  let resourcesCache = CacheFactory.makeLRUDiskCache(
+    name: "divkit.playground.VideoAssetCache",
+    ioQueue: cacheQueue,
+    maxCapacity: 10_485_760,
+    reportError: nil
+  )
+  let requester = CachedURLResourceRequester(
+    cache: resourcesCache,
+    cachemissRequester: requester,
+    waitForCacheWrite: true
+  )
+  return DefaultPlayerFactory(itemsProvider: requester)
 }

@@ -1,6 +1,7 @@
 import AVFoundation
 import BasePublic
 import Foundation
+import NetworkingPublic
 
 final class DefaultPlayer: Player {
   private let eventPipe = SignalPipe<PlayerEvent>()
@@ -14,8 +15,8 @@ final class DefaultPlayer: Player {
   private let playerObservers = AutodisposePool()
   private let playbackConfigObservers = AutodisposePool()
 
-  init(player: CorePlayer? = nil) {
-    self.player = player ?? CorePlayerImpl()
+  init(itemsProvider: PlayerItemsProvider) {
+    self.player = CorePlayerImpl(itemsProvider: itemsProvider)
     configureObservers(for: self.player)
   }
 
