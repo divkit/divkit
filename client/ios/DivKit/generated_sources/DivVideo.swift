@@ -29,6 +29,7 @@ public final class DivVideo: DivBase {
   public let paddings: DivEdgeInsets?
   public let pauseActions: [DivAction]?
   public let playerSettingsPayload: [String: Any]?
+  public let preloadRequired: Expression<Bool> // default value: false
   public let preview: Expression<String>?
   public let repeatable: Expression<Bool> // default value: false
   public let resumeActions: [DivAction]?
@@ -69,6 +70,10 @@ public final class DivVideo: DivBase {
 
   public func resolveMuted(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(muted) ?? false
+  }
+
+  public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(preloadRequired) ?? false
   }
 
   public func resolvePreview(_ resolver: ExpressionResolver) -> String? {
@@ -130,6 +135,7 @@ public final class DivVideo: DivBase {
     paddings: DivEdgeInsets? = nil,
     pauseActions: [DivAction]? = nil,
     playerSettingsPayload: [String: Any]? = nil,
+    preloadRequired: Expression<Bool>? = nil,
     preview: Expression<String>? = nil,
     repeatable: Expression<Bool>? = nil,
     resumeActions: [DivAction]? = nil,
@@ -171,6 +177,7 @@ public final class DivVideo: DivBase {
     self.paddings = paddings
     self.pauseActions = pauseActions
     self.playerSettingsPayload = playerSettingsPayload
+    self.preloadRequired = preloadRequired ?? .value(false)
     self.preview = preview
     self.repeatable = repeatable ?? .value(false)
     self.resumeActions = resumeActions
@@ -246,42 +253,47 @@ extension DivVideo: Equatable {
     }
     guard
       lhs.pauseActions == rhs.pauseActions,
-      lhs.preview == rhs.preview,
-      lhs.repeatable == rhs.repeatable
+      lhs.preloadRequired == rhs.preloadRequired,
+      lhs.preview == rhs.preview
     else {
       return false
     }
     guard
+      lhs.repeatable == rhs.repeatable,
       lhs.resumeActions == rhs.resumeActions,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scale == rhs.scale,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.videoSources == rhs.videoSources,
-      lhs.visibility == rhs.visibility
+      lhs.videoSources == rhs.videoSources
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -318,6 +330,7 @@ extension DivVideo: Serializable {
     result["paddings"] = paddings?.toDictionary()
     result["pause_actions"] = pauseActions?.map { $0.toDictionary() }
     result["player_settings_payload"] = playerSettingsPayload
+    result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["preview"] = preview?.toValidSerializationValue()
     result["repeatable"] = repeatable.toValidSerializationValue()
     result["resume_actions"] = resumeActions?.map { $0.toDictionary() }

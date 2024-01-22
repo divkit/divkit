@@ -12,15 +12,11 @@ final class FunctionProviderTests: XCTestCase {
       cardId: cardId,
       variables: [DivVariableName(rawValue: "variable"): .string("value1")]
     )
-    let prototypesData: (String, [String: AnyHashable]) = ("it.", ["variable": "value2"])
-    let prototypesStorage = PrototypesValueStorage()
-    prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
     let functionsProvider = makeFunctionsProvider(
       cardId: cardId,
       variablesStorage: variablesStorage,
       variableTracker: { self.trackedResult = Array($0.map(\.rawValue)) },
-      persistentValuesStorage: DivPersistentValuesStorage(),
-      prototypesStorage: prototypesStorage
+      persistentValuesStorage: DivPersistentValuesStorage()
     )
     return functionsProvider.functions[.function("getStringValue", arity: .exactly(2))]!
   }()
@@ -29,7 +25,6 @@ final class FunctionProviderTests: XCTestCase {
 
   func test_takingValue() throws {
     XCTAssertEqual(getValue("variable"), "value1")
-    XCTAssertEqual(getValue("it.variable"), "value2")
   }
 
   func test_takingMissingValue() throws {
@@ -44,11 +39,6 @@ final class FunctionProviderTests: XCTestCase {
   func test_missingVariableTracked() throws {
     let _: Any? = getValue("missing_variable")
     XCTAssertEqual(trackedResult, ["missing_variable"])
-  }
-
-  func test_prototypeDataNotTracked() throws {
-    let _: Any? = getValue("it.variable")
-    XCTAssertEqual(trackedResult, [])
   }
 
   private func getValue<T>(_ argument: String) -> T? {

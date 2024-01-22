@@ -94,7 +94,7 @@ final class DivContainerExtensionsTests: XCTestCase {
           ]),
           prototypes: [
             DivCollectionItemBuilder.Prototype(
-              div: divText(textExpression: "@{it.text}")
+              div: divText(textExpression: "@{getStringFromDict(it, 'text')}")
             ),
           ]
         )

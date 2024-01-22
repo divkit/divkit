@@ -106,14 +106,14 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
   }
 
   public let data: Field<Expression<[Any]>>?
-  public let dataElementPrefix: Field<String>? // default value: it.
+  public let dataElementName: Field<String>? // default value: it
   public let prototypes: Field<[PrototypeTemplate]>? // at least 1 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     do {
       self.init(
         data: try dictionary.getOptionalExpressionField("data"),
-        dataElementPrefix: try dictionary.getOptionalField("data_element_prefix"),
+        dataElementName: try dictionary.getOptionalField("data_element_name"),
         prototypes: try dictionary.getOptionalArray("prototypes", templateToType: templateToType)
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
@@ -123,21 +123,21 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
 
   init(
     data: Field<Expression<[Any]>>? = nil,
-    dataElementPrefix: Field<String>? = nil,
+    dataElementName: Field<String>? = nil,
     prototypes: Field<[PrototypeTemplate]>? = nil
   ) {
     self.data = data
-    self.dataElementPrefix = dataElementPrefix
+    self.dataElementName = dataElementName
     self.prototypes = prototypes
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivCollectionItemBuilderTemplate?) -> DeserializationResult<DivCollectionItemBuilder> {
     let dataValue = parent?.data?.resolveValue(context: context) ?? .noValue
-    let dataElementPrefixValue = parent?.dataElementPrefix?.resolveOptionalValue(context: context) ?? .noValue
+    let dataElementNameValue = parent?.dataElementName?.resolveOptionalValue(context: context) ?? .noValue
     let prototypesValue = parent?.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
-      dataElementPrefixValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_prefix", error: $0) },
+      dataElementNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_name", error: $0) },
       prototypesValue.errorsOrWarnings?.map { .nestedObjectError(field: "prototypes", error: $0) }
     )
     if case .noValue = dataValue {
@@ -154,7 +154,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     }
     let result = DivCollectionItemBuilder(
       data: dataNonNil,
-      dataElementPrefix: dataElementPrefixValue.value,
+      dataElementName: dataElementNameValue.value,
       prototypes: prototypesNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -165,20 +165,20 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var dataValue: DeserializationResult<Expression<[Any]>> = parent?.data?.value() ?? .noValue
-    var dataElementPrefixValue: DeserializationResult<String> = parent?.dataElementPrefix?.value() ?? .noValue
+    var dataElementNameValue: DeserializationResult<String> = parent?.dataElementName?.value() ?? .noValue
     var prototypesValue: DeserializationResult<[DivCollectionItemBuilder.Prototype]> = .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "data":
         dataValue = deserialize(__dictValue).merged(with: dataValue)
-      case "data_element_prefix":
-        dataElementPrefixValue = deserialize(__dictValue).merged(with: dataElementPrefixValue)
+      case "data_element_name":
+        dataElementNameValue = deserialize(__dictValue).merged(with: dataElementNameValue)
       case "prototypes":
         prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
       case parent?.data?.link:
         dataValue = dataValue.merged(with: deserialize(__dictValue))
-      case parent?.dataElementPrefix?.link:
-        dataElementPrefixValue = dataElementPrefixValue.merged(with: deserialize(__dictValue))
+      case parent?.dataElementName?.link:
+        dataElementNameValue = dataElementNameValue.merged(with: deserialize(__dictValue))
       case parent?.prototypes?.link:
         prototypesValue = prototypesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self))
       default: break
@@ -189,7 +189,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     }
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },
-      dataElementPrefixValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_prefix", error: $0) },
+      dataElementNameValue.errorsOrWarnings?.map { .nestedObjectError(field: "data_element_name", error: $0) },
       prototypesValue.errorsOrWarnings?.map { .nestedObjectError(field: "prototypes", error: $0) }
     )
     if case .noValue = dataValue {
@@ -206,7 +206,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     }
     let result = DivCollectionItemBuilder(
       data: dataNonNil,
-      dataElementPrefix: dataElementPrefixValue.value,
+      dataElementName: dataElementNameValue.value,
       prototypes: prototypesNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
@@ -221,7 +221,7 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
 
     return DivCollectionItemBuilderTemplate(
       data: merged.data,
-      dataElementPrefix: merged.dataElementPrefix,
+      dataElementName: merged.dataElementName,
       prototypes: try merged.prototypes?.resolveParent(templates: templates)
     )
   }
