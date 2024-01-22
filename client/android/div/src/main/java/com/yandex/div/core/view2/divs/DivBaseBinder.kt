@@ -537,30 +537,28 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-
         if (newDiv.visibility.equalsToConstant(oldDiv?.visibility)) {
             return
         }
 
-        applyVisibility(divView, newDiv, oldDiv, resolver)
+        applyVisibility(divView, newDiv, resolver, oldDiv == null)
 
         if (newDiv.visibility.isConstant()) {
             return
         }
 
         subscriber.addSubscription(
-            newDiv.visibility.observe(resolver) { applyVisibility(divView, newDiv, oldDiv, resolver) }
+            newDiv.visibility.observe(resolver) { applyVisibility(divView, newDiv, resolver, false) }
         )
     }
 
     private fun View.applyVisibility(
         divView: Div2View,
         newDiv: DivBase,
-        oldDiv: DivBase?,
         resolver: ExpressionResolver,
+        firstApply: Boolean
     ) {
         val divTransitionHandler = divView.divTransitionHandler
-        val firstApply = oldDiv == null
 
         val newVisibility = when (newDiv.visibility.evaluate(resolver)) {
             DivVisibility.VISIBLE -> View.VISIBLE

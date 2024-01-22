@@ -7,6 +7,7 @@
 * Disabled creation of implicit default values for object properties.
 * Fixed a bug that 'visibility_action' does not work for children with size more than 'div-gallery' size.
 * Added parameter describing the reason of `div-action` call to `DivActionHandler` methods.
+* Fixed `visibility_change` animation
 
 # iOS Client:
 * Updated VGSL version to 3.0.0.
