@@ -73,7 +73,7 @@ enum ColorFunctions: CaseIterable {
           FunctionUnary(impl: { getChannelFromColor(channel, from: $0) }),
         ]
       ) {
-        ColorFunctions.Error.get(channel, String(describing: $0.first)).message
+        ColorFunctions.Error.get(channel, String(describing: $0.first?.value)).message
       }
     case let .set(channel):
       return OverloadedFunction(
@@ -84,7 +84,7 @@ enum ColorFunctions: CaseIterable {
       ) {
         ColorFunctions.Error
           .outOfRange(
-            "setColor\(channel.description)(\(String(describing: $0.first)), \(String(describing: $0[1]))"
+            "setColor\(channel.description)(\(String(describing: $0.first?.value)), \(String(describing: $0[1].value))"
           )
           .message
       }

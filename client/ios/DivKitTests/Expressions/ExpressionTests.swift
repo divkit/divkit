@@ -11,12 +11,6 @@ final class ExpressionTests: XCTestCase {
 }
 
 private let excludedFiles = [
-  "operations_comparison_boolean.json",
-  "operations_comparison_with_different_types.json",
-  "operations_equality_with_different_types.json",
-  "operations_sum_string.json",
-  "operations_try.json",
-  "operations_unsuppported.json",
   "variables_names.json",
   "variables_values.json",
 ]

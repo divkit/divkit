@@ -61,7 +61,7 @@ struct AnyCalcExpression {
       expression,
       impureSymbols: { symbol in
         switch symbol {
-        case .function:
+        case .function, .infix, .prefix:
           return functions[symbol]?.symbolEvaluator
         default:
           return nil
@@ -71,7 +71,7 @@ struct AnyCalcExpression {
         switch symbol {
         case let .variable(name):
           return variables(name).map { value in { _ in value } }
-        case .function:
+        case .function, .infix, .prefix:
           return functions[symbol]?.symbolEvaluator
         default:
           return nil
@@ -91,99 +91,6 @@ struct AnyCalcExpression {
     pureSymbols: (Symbol) -> SymbolEvaluator?
   ) throws {
     let box = NanBox()
-
-    func loadNumber(_ arg: Double) -> Double? {
-      box.loadIfStored(arg).map {
-        ($0 as? NSNumber).map(Double.init(truncating:))
-      } ?? arg
-    }
-    func argsToDouble(
-      _ args: [CalcExpression.Value],
-      for symbol: Symbol
-    ) throws -> [CalcExpression.Value] {
-      try args.map {
-        switch $0 {
-        case .integer:
-          return $0
-        case let .number(value):
-          guard let doubleValue = loadNumber(value) else {
-            throw try Error.typeMismatch(symbol, args.map(box.load))
-          }
-          return .number(doubleValue)
-        case .string:
-          throw Error.message("Invalid argument type")
-        case let .datetime(dateValue):
-          guard symbol != .infix("&&") else {
-            throw Error
-              .message(
-                "Failed to evaluate [\(dateValue.formatString) && ...]. '&&' must be called with boolean operands."
-              )
-          }
-          guard symbol != .infix("||") else {
-            throw Error
-              .message(
-                "Failed to evaluate [\(dateValue.formatString) || ...]. '||' must be called with boolean operands."
-              )
-          }
-          guard symbol != .prefix("!") else {
-            throw Error
-              .message(
-                "Failed to evaluate [!\(dateValue.formatString)]. A Boolean is expected after a unary not."
-              )
-          }
-          return .number(dateValue.timeIntervalSince1970)
-        case .error:
-          return $0
-        }
-      }
-    }
-    func equalArgs(_ lhs: CalcExpression.Value, _ rhs: CalcExpression.Value) throws -> Bool {
-      switch try (
-        AnyCalcExpression.unwrap(box.load(lhs)),
-        AnyCalcExpression.unwrap(box.load(rhs))
-      ) {
-      case (nil, nil):
-        return true
-      case (nil, _), (_, nil):
-        return false
-      case let (lhs as Double, rhs as Double):
-        return lhs.isApproximatelyEqualTo(rhs)
-      case let (lhs as URL, rhs as String):
-        return lhs == URL(string: rhs)
-      case let (lhs as String, rhs as URL):
-        return rhs == URL(string: lhs)
-      case let (lhs as Color, rhs as String):
-        return lhs == Color.color(withHexString: rhs)
-      case let (lhs as String, rhs as Color):
-        return rhs == Color.color(withHexString: lhs)
-      case let (lhs as AnyHashable, rhs as AnyHashable):
-        return lhs == rhs
-      case let (lhs as (AnyHashable, AnyHashable), rhs as (AnyHashable, AnyHashable)):
-        return lhs == rhs
-      case let (
-        lhs as (AnyHashable, AnyHashable, AnyHashable),
-        rhs as (AnyHashable, AnyHashable, AnyHashable)
-      ):
-        return lhs == rhs
-      case let (
-        lhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable),
-        rhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable)
-      ):
-        return lhs == rhs
-      case let (
-        lhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable),
-        rhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable)
-      ):
-        return lhs == rhs
-      case let (
-        lhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable),
-        rhs as (AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable, AnyHashable)
-      ):
-        return lhs == rhs
-      case let (lhs?, rhs?):
-        throw Error.typeMismatch(.infix("=="), [lhs, rhs])
-      }
-    }
     func unwrapString(_ name: String) -> String? {
       guard name.count >= 2, "'\"".contains(name.first!) else {
         return nil
@@ -199,7 +106,7 @@ struct AnyCalcExpression {
         }
       case let fn as CalcExpression.SymbolEvaluator:
         return { args in
-          try fn(argsToDouble(args, for: symbol))
+          try fn(args)
         }
       default:
         return nil
@@ -210,48 +117,13 @@ struct AnyCalcExpression {
     func defaultEvaluator(for symbol: Symbol) throws -> CalcExpression.SymbolEvaluator? {
       if let fn = AnyCalcExpression.standardSymbols[symbol] {
         return fn
-      } else if let fn = CalcExpression.StandartSymbols.mathSymbols[symbol] {
-        return fn
-      } else if let fn = CalcExpression.StandartSymbols.boolSymbols[symbol] {
-        switch symbol {
-        case .infix("=="):
-          return {
-            try equalArgs($0[0], $0[1]) ? .number(NanBox.trueValue) : .number(NanBox.falseValue)
-          }
-        case .infix("!="):
-          return {
-            try equalArgs($0[0], $0[1]) ? .number(NanBox.falseValue) : .number(NanBox.trueValue)
-          }
-        case .infix("?:"):
-          return { args in
-            guard args.count == 3 else {
-              throw Error.arityMismatch(symbol)
-            }
-            guard let doubleValue = loadNumber(args[0].value) else {
-              throw try Error.typeMismatch(symbol, args.map(box.load))
-            }
-            switch doubleValue {
-            case 1:
-              return args[1]
-            case 0:
-              return args[2]
-            default:
-              throw try Error.typeMismatch(symbol, args.map(box.load))
-            }
-          }
-        default:
-          return { args in
-            try fn(argsToDouble(args, for: symbol)).value == 0 ?
-              .number(NanBox.falseValue) : .number(NanBox.trueValue)
-          }
-        }
       } else {
         switch symbol {
         case .function("[]", _):
           return { try box.store($0.map(box.load)) }
         case let .variable(name):
           guard let string = unwrapString(name) else {
-            return { _ in throw Error.undefinedSymbol(symbol) }
+            return { _ in throw Error.missingVariable(symbol) }
           }
           let stringRef = try box.store(string)
           return { _ in stringRef }
@@ -288,7 +160,7 @@ struct AnyCalcExpression {
             case let fn as SymbolEvaluator:
               return try box.store(fn(args.dropFirst().map(box.load)))
             case let fn as CalcExpression.SymbolEvaluator:
-              return try fn(argsToDouble(Array(args.dropFirst()), for: symbol))
+              return try fn(Array(args.dropFirst()))
             default:
               throw try Error.typeMismatch(symbol, args.map(box.load))
             }
@@ -442,10 +314,6 @@ extension AnyCalcExpression.Error {
       }
     case .infix("==") where types.count == 2 && types[0] == types[1]:
       return .message("Arguments for \(symbol) must conform to the Hashable protocol")
-    case .infix("?:"):
-      return .message(
-        "Failed to evaluate [\(args[0]) ? \(args[1]) : \(args[2])]. Ternary must be called with a Boolean value as a condition."
-      )
     case _ where types.count == 1:
       return .message("Argument of type \(types[0]) is not compatible with \(symbol)")
     default:
@@ -536,6 +404,7 @@ extension AnyCalcExpression {
       case "d":
         let nf = NumberFormatter()
         nf.minimumFractionDigits = 1
+        nf.maximumFractionDigits = 15
         nf.locale = Locale(identifier: "en")
         return nf.string(from: number)
       default:
@@ -603,8 +472,6 @@ extension AnyCalcExpression {
     private static let mask = (-Double.nan).bitPattern
     private static let indexOffset = 4
     private static let nilBits = bitPattern(for: -1)
-    private static let falseBits = bitPattern(for: -2)
-    private static let trueBits = bitPattern(for: -3)
 
     private static func bitPattern(for index: Int) -> UInt64 {
       assert(index > -indexOffset)
@@ -613,8 +480,6 @@ extension AnyCalcExpression {
 
     // Literal values
     static let nilValue = Double(bitPattern: nilBits)
-    static let trueValue = Double(bitPattern: trueBits)
-    static let falseValue = Double(bitPattern: falseBits)
 
     // The values stored in the box
     var values = [Any]()
@@ -625,7 +490,7 @@ extension AnyCalcExpression {
       case let doubleValue as Double:
         return .number(doubleValue)
       case let boolValue as Bool:
-        return boolValue ? .number(NanBox.trueValue) : .number(NanBox.falseValue)
+        return .boolean(boolValue)
       case let floatValue as Float:
         return .number(Double(floatValue))
       case is Int, is UInt, is Int32, is UInt32, is Int64, is UInt64:
@@ -660,10 +525,6 @@ extension AnyCalcExpression {
       switch arg.bitPattern {
       case NanBox.nilBits:
         return nil as Any? as Any
-      case NanBox.trueBits:
-        return true
-      case NanBox.falseBits:
-        return false
       case let bits:
         guard var index = Int(exactly: bits ^ NanBox.mask) else {
           return nil
@@ -688,6 +549,8 @@ extension AnyCalcExpression {
         }
       case let .datetime(value):
         return value
+      case let .boolean(value):
+        return value
       case let .error(error):
         throw error
       }
@@ -697,8 +560,8 @@ extension AnyCalcExpression {
   // Standard symbols
   fileprivate static let standardSymbols: [Symbol: CalcExpression.SymbolEvaluator] = [
     // Boolean symbols
-    .variable("true"): { _ in .number(NanBox.trueValue) },
-    .variable("false"): { _ in .number(NanBox.falseValue) },
+    .variable("true"): { _ in .boolean(true) },
+    .variable("false"): { _ in .boolean(false) },
     .infix("!:"): { args in
       switch args[0] {
       case .error:

@@ -44,6 +44,10 @@ private let staticFunctions: [AnyCalcExpression.Symbol: Function] = {
   IntervalFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
   MathFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
   StringFunctions.allCases.forEach { functions.put($0.rawValue, $0.function) }
+  ComparisonOperators.allCases.forEach { functions[.infix($0.rawValue)] = $0.function }
+  EqualityOperators.allCases.forEach { functions[.infix($0.rawValue)] = $0.function }
+  BooleanOperators.allCases.forEach { functions[$0.symbol] = $0.function }
+  MathOperators.allCases.forEach { functions[$0.symbol] = $0.function }
   return functions
 }()
 
