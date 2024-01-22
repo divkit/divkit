@@ -26,7 +26,6 @@ final class VisibilityTrackingScrollView: UIScrollView {
 
     let divViewFrame = CGRect(origin: .zero, size: divViewSize)
     divView?.frame = divViewFrame
-    divView?.layoutIfNeeded()
     divView?.onVisibleBoundsChanged(to: bounds.intersection(divViewFrame))
     contentSize = divViewSize
   }
