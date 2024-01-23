@@ -20,8 +20,8 @@
     import css from './Slider.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivSliderData } from '../../types/slider';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { ACTION_CTX, ActionCtxValue } from '../../context/action';
     import { genClassName } from '../../utils/genClassName';
@@ -36,9 +36,7 @@
     import { createVariable } from '../../expressions/variable';
     import { debounce } from '../../utils/debounce';
 
-    export let json: Partial<DivSliderData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivSliderData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -66,7 +64,7 @@
     let secondaryDescription = '';
     let hasError = false;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         thumbStyle = DEFAULT_DRAWABLE_STYLE;
         thumbSecondaryStyle = thumbStyle;
         trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
@@ -79,24 +77,26 @@
         secondaryDescription = '';
     }
 
-    $: firstVariable = json.thumb_value_variable;
-    $: secondVariable = json.thumb_secondary_value_variable;
+    $: firstVariable = componentContext.json.thumb_value_variable;
+    $: secondVariable = componentContext.json.thumb_secondary_value_variable;
 
-    $: valueVariable = firstVariable && rootCtx.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
-    $: value2Variable = secondVariable && rootCtx.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);
+    $: valueVariable = firstVariable && componentContext.getVariable(firstVariable, 'integer') || createVariable('temp', 'integer', 0);
+    $: value2Variable = secondVariable && componentContext.getVariable(secondVariable, 'integer') || createVariable('temp', 'integer', 0);
 
-    $: jsonMinValue = rootCtx.getDerivedFromVars(json.min_value);
-    $: jsonMaxValue = rootCtx.getDerivedFromVars(json.max_value);
-    $: jsonThumbStyle = rootCtx.getDerivedFromVars(json.thumb_style);
-    $: jsonThumbSecondaryStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_style);
-    $: jsonTrackInactiveStyle = rootCtx.getDerivedFromVars(json.track_inactive_style);
-    $: jsonTrackActiveStyle = rootCtx.getDerivedFromVars(json.track_active_style);
-    $: jsonMarkActiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_active_style);
-    $: jsonMarkInactiveStyle = rootCtx.getDerivedFromVars(json.tick_mark_inactive_style);
-    $: jsonTextStyle = rootCtx.getDerivedFromVars(json.thumb_text_style);
-    $: jsonSecondaryTextStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_text_style);
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    $: jsonSecondaryAccessibility = rootCtx.getDerivedFromVars(json.secondary_value_accessibility);
+    $: jsonMinValue = componentContext.getDerivedFromVars(componentContext.json.min_value);
+    $: jsonMaxValue = componentContext.getDerivedFromVars(componentContext.json.max_value);
+    $: jsonThumbStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_style);
+    $: jsonThumbSecondaryStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_secondary_style);
+    $: jsonTrackInactiveStyle = componentContext.getDerivedFromVars(componentContext.json.track_inactive_style);
+    $: jsonTrackActiveStyle = componentContext.getDerivedFromVars(componentContext.json.track_active_style);
+    $: jsonMarkActiveStyle = componentContext.getDerivedFromVars(componentContext.json.tick_mark_active_style);
+    $: jsonMarkInactiveStyle = componentContext.getDerivedFromVars(componentContext.json.tick_mark_inactive_style);
+    $: jsonTextStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_text_style);
+    $: jsonSecondaryTextStyle = componentContext.getDerivedFromVars(componentContext.json.thumb_secondary_text_style);
+    $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
+    $: jsonSecondaryAccessibility = componentContext.getDerivedFromVars(
+        componentContext.json.secondary_value_accessibility
+    );
 
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
@@ -199,7 +199,7 @@
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
-        rootCtx.logError(wrapError(new Error('Missing accessibility "description" for slider'), {
+        componentContext.logError(wrapError(new Error('Missing accessibility "description" for slider'), {
             level: 'warn'
         }));
     }
@@ -207,7 +207,7 @@
     $: if ($jsonSecondaryAccessibility?.description) {
         secondaryDescription = $jsonSecondaryAccessibility.description;
     } else if (secondVariable) {
-        rootCtx.logError(wrapError(new Error('Missing second accessibility "description" for slider'), {
+        componentContext.logError(wrapError(new Error('Missing second accessibility "description" for slider'), {
             level: 'warn'
         }));
     }
@@ -216,16 +216,16 @@
         let newHasError = false;
 
         if (actionCtx.hasAction()) {
-            rootCtx.logError(wrapError(new Error('Cannot show "slider" inside component with action')));
+            componentContext.logError(wrapError(new Error('Cannot show "slider" inside component with action')));
             newHasError = true;
         } else if (thumbStyle === DEFAULT_DRAWABLE_STYLE) {
-            rootCtx.logError(wrapError(new Error('Missing "thumb_style" in slider')));
+            componentContext.logError(wrapError(new Error('Missing "thumb_style" in slider')));
             newHasError = true;
         } else if (trackActiveStyle === DEFAULT_DRAWABLE_STYLE) {
-            rootCtx.logError(wrapError(new Error('Missing "track_active_style" in slider')));
+            componentContext.logError(wrapError(new Error('Missing "track_active_style" in slider')));
             newHasError = true;
         } else if (trackInactiveStyle === DEFAULT_DRAWABLE_STYLE) {
-            rootCtx.logError(wrapError(new Error('Missing "track_inactive_style" in slider')));
+            componentContext.logError(wrapError(new Error('Missing "track_inactive_style" in slider')));
             newHasError = true;
         }
 
@@ -327,7 +327,7 @@
 
         if (maxTickWidth * ticksCount >= tracksInner?.clientWidth) {
             if (!isTicksWarning) {
-                rootCtx.logError(wrapError(new Error('Slider ticks overlap each other'), {
+                componentContext.logError(wrapError(new Error('Slider ticks overlap each other'), {
                     level: 'warn'
                 }));
                 isTicksWarning = true;
@@ -339,15 +339,15 @@
 
     const checkTicksDebounced = debounce(checkTicks, 50);
 
-    $: if (json && input) {
+    $: if (componentContext.json && input) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerFocusable(json.id, {
+        if (componentContext.json.id && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (input) {
                         input.focus();
@@ -380,9 +380,7 @@
         customDescription={true}
         customActions={'slider'}
         hasInnerFocusable={true}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
     >
         <div class={css['slider__tracks-wrapper']}>

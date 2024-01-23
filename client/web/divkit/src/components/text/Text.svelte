@@ -7,10 +7,11 @@
     import type { DivTextData, TextImage, TextRange, TextStyles } from '../../types/text';
     import type { Style } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { Action, DivBase, TemplateContext } from '../../../typings/common';
     import type { AlignmentHorizontal } from '../../types/alignment';
+    import type { Action } from '../../../typings/common';
     import type { TintMode } from '../../types/image';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import TextRangeView from './TextRange.svelte';
@@ -29,9 +30,7 @@
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { autoEllipsize } from '../../use/autoEllipsize';
 
-    export let json: Partial<DivTextData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -67,7 +66,7 @@
     })[] = [];
     let usedTintColors: [string, TintMode][] = [];
 
-    $: if (json) {
+    $: if (componentContext.json) {
         fontSize = 12;
         lineHeight = 1.25;
         customLineHeight = false;
@@ -81,31 +80,31 @@
         selectable = false;
     }
 
-    $: jsonText = rootCtx.getDerivedFromVars(json.text);
-    $: jsonRanges = rootCtx.getDerivedFromVars(json.ranges);
-    $: jsonImages = rootCtx.getDerivedFromVars(json.images);
-    $: jsonRootTextStyles = rootCtx.getDerivedFromVars({
-        font_size: json.font_size,
-        letter_spacing: json.letter_spacing,
-        font_weight: json.font_weight,
-        font_family: json.font_family,
-        text_color: json.text_color,
-        underline: json.underline,
-        strike: json.strike,
-        line_height: json.line_height,
-        text_shadow: json.text_shadow
+    $: jsonText = componentContext.getDerivedFromVars(componentContext.json.text);
+    $: jsonRanges = componentContext.getDerivedFromVars(componentContext.json.ranges);
+    $: jsonImages = componentContext.getDerivedFromVars(componentContext.json.images);
+    $: jsonRootTextStyles = componentContext.getDerivedFromVars({
+        font_size: componentContext.json.font_size,
+        letter_spacing: componentContext.json.letter_spacing,
+        font_weight: componentContext.json.font_weight,
+        font_family: componentContext.json.font_family,
+        text_color: componentContext.json.text_color,
+        underline: componentContext.json.underline,
+        strike: componentContext.json.strike,
+        line_height: componentContext.json.line_height,
+        text_shadow: componentContext.json.text_shadow
     });
-    $: jsonTextSize = rootCtx.getDerivedFromVars(json.font_size);
-    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    $: jsonMaxLines = rootCtx.getDerivedFromVars(json.max_lines);
-    $: jsonHAlign = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
-    $: jsonVAlign = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
-    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    $: jsonFocusTextColor = rootCtx.getDerivedFromVars(json.focused_text_color);
-    $: jsonTruncate = rootCtx.getDerivedFromVars(json.truncate);
-    $: jsonTextGradient = rootCtx.getDerivedFromVars(json.text_gradient);
-    $: jsonSelectable = rootCtx.getDerivedFromVars(json.selectable);
-    $: jsonAutoEllipsize = rootCtx.getDerivedFromVars(json.auto_ellipsize);
+    $: jsonTextSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
+    $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
+    $: jsonMaxLines = componentContext.getDerivedFromVars(componentContext.json.max_lines);
+    $: jsonHAlign = componentContext.getDerivedFromVars(componentContext.json.text_alignment_horizontal);
+    $: jsonVAlign = componentContext.getDerivedFromVars(componentContext.json.text_alignment_vertical);
+    $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
+    $: jsonFocusTextColor = componentContext.getDerivedFromVars(componentContext.json.focused_text_color);
+    $: jsonTruncate = componentContext.getDerivedFromVars(componentContext.json.truncate);
+    $: jsonTextGradient = componentContext.getDerivedFromVars(componentContext.json.text_gradient);
+    $: jsonSelectable = componentContext.getDerivedFromVars(componentContext.json.selectable);
+    $: jsonAutoEllipsize = componentContext.getDerivedFromVars(componentContext.json.auto_ellipsize);
 
     $: {
         text = propToString($jsonText);
@@ -414,9 +413,7 @@
 
 <Outer
     cls="{genClassName('text', css, mods)} {selectable ? '' : rootCss.root__unselectable}"
-    {json}
-    {origJson}
-    {templateContext}
+    {componentContext}
     {layoutParams}
 >
     <span
@@ -432,7 +429,7 @@
                 {#if 'text' in item}
                     {#if item.text}
                         <TextRangeView
-                            {json}
+                            {componentContext}
                             text={item.text}
                             rootFontSize={fontSize}
                             textStyles={item.textStyles}
@@ -462,7 +459,7 @@
             {/each}
         {:else}
             <TextRangeView
-                {json}
+                {componentContext}
                 {text}
                 rootFontSize={fontSize}
                 textStyles={$jsonRootTextStyles}

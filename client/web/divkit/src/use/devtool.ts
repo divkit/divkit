@@ -1,64 +1,37 @@
 import type { RootCtxValue } from '../context/root';
-import type { DivBase, TemplateContext } from '../../typings/common';
-import type { DivBaseData } from '../types/base';
+import type { ComponentContext } from '../types/componentContext';
 
 export interface DevtoolResult {
-    update({
-        json,
-        origJson,
-        templateContext
-    }: {
-        json: Partial<DivBaseData>;
-        origJson?: DivBase | undefined;
-        templateContext: TemplateContext;
-    }): void;
+    update(componentContext: ComponentContext): void;
     destroy(): void;
 }
 
-function devtoolReal(node: HTMLElement, {
-    json,
-    origJson,
-    templateContext,
-    rootCtx
-}: {
-    json: Partial<DivBaseData>;
-    origJson?: DivBase | undefined;
-    templateContext: TemplateContext;
-    rootCtx: RootCtxValue;
-}): DevtoolResult {
+function devtoolReal(node: HTMLElement, rootCtx: RootCtxValue, componentContext: ComponentContext): DevtoolResult {
     rootCtx.componentDevtool?.({
         type: 'mount',
         node,
-        json,
-        origJson,
-        templateContext
+        json: componentContext.json,
+        origJson: componentContext.origJson,
+        templateContext: componentContext.templateContext
     });
 
     return {
-        update({
-            json,
-            origJson,
-            templateContext
-        }: {
-            json: Partial<DivBaseData>;
-            origJson?: DivBase | undefined;
-            templateContext: TemplateContext;
-        }) {
+        update(componentContext) {
             rootCtx.componentDevtool?.({
                 type: 'update',
                 node,
-                json,
-                origJson,
-                templateContext
+                json: componentContext.json,
+                origJson: componentContext.origJson,
+                templateContext: componentContext.templateContext
             });
         },
         destroy() {
             rootCtx.componentDevtool?.({
                 type: 'destroy',
                 node,
-                json,
-                origJson,
-                templateContext
+                json: componentContext.json,
+                origJson: componentContext.origJson,
+                templateContext: componentContext.templateContext
             });
         }
     };

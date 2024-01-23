@@ -248,6 +248,60 @@ export function createVariable(
     return new (TYPE_TO_CLASS[type] as any)(name, value);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+function noop(): void {
+}
+
+function constSubscribe<ValueType>(this: Variable<ValueType>, cb: Subscriber<ValueType>): Unsubscriber {
+    cb(this.value);
+
+    return noop;
+}
+
+function constSetter(): void {
+    throw new Error('Cannot change the value of this type of variable');
+}
+
+class ConstStringVariable extends StringVariable {}
+class ConstNumberVariable extends NumberVariable {}
+class ConstIntegerVariable extends IntegerVariable {}
+class ConstBooleanVariable extends BooleanVariable {}
+class ConstColorVariable extends ColorVariable {}
+class ConstUrlVariable extends UrlVariable {}
+class ConstDictVariable extends DictVariable {}
+class ConstArrayVariable extends ArrayVariable {}
+
+export const CONST_TYPE_TO_CLASS: Record<VariableType, typeof Variable<VariableValue, VariableType>> = {
+    string: ConstStringVariable,
+    number: ConstNumberVariable,
+    integer: ConstIntegerVariable,
+    boolean: ConstBooleanVariable,
+    color: ConstColorVariable,
+    url: ConstUrlVariable,
+    dict: ConstDictVariable,
+    array: ConstArrayVariable
+};
+
+for (const type in CONST_TYPE_TO_CLASS) {
+    const Class = CONST_TYPE_TO_CLASS[type as keyof typeof CONST_TYPE_TO_CLASS];
+
+    Class.prototype.subscribe = constSubscribe;
+    Class.prototype.set = constSetter;
+    Class.prototype.setValue = constSetter;
+}
+
+export function createConstVariable(
+    name: string,
+    type: VariableType,
+    value: unknown
+): InstanceType<typeof CONST_TYPE_TO_CLASS[typeof type]> {
+    if (!(type in CONST_TYPE_TO_CLASS)) {
+        throw new Error('Unsupported variable type');
+    }
+
+    return new (CONST_TYPE_TO_CLASS[type] as any)(name, value);
+}
+
 export function defaultValueByType(type: keyof typeof TYPE_TO_CLASS): VariableValue {
     if (type === 'integer') {
         return bigIntZero;

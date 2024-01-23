@@ -1,6 +1,7 @@
+import type { MaybeMissing } from '../expressions/json';
 import type { AppearanceTransition, DivBaseData } from '../types/base';
-import type { TemplateContext } from '../../typings/common';
 import type { TransitionChange } from '../types/base';
+import type { ComponentContext } from '../types/componentContext';
 
 export const STATE_CTX = Symbol('state');
 
@@ -16,22 +17,22 @@ export interface StateCtxValue {
 
     registerChildWithTransitionIn(
         json: DivBaseData,
-        templateContext: TemplateContext,
-        transitions: AppearanceTransition,
+        componentContext: ComponentContext,
+        transitions: MaybeMissing<AppearanceTransition>,
         node: HTMLElement
     ): Promise<void>;
 
     registerChildWithTransitionOut(
         json: DivBaseData,
-        templateContext: TemplateContext,
-        transitions: AppearanceTransition,
+        componentContext: ComponentContext,
+        transitions: MaybeMissing<AppearanceTransition>,
         node: HTMLElement
     ): Promise<void>;
 
     registerChildWithTransitionChange(
         json: DivBaseData,
-        templateContext: TemplateContext,
-        transitions: TransitionChange,
+        componentContext: ComponentContext,
+        transitions: MaybeMissing<TransitionChange>,
         node: HTMLElement
     ): Promise<void>;
 
@@ -39,8 +40,8 @@ export interface StateCtxValue {
 
     runVisibilityTransition(
         json: DivBaseData,
-        templateContext: TemplateContext,
-        transitions: AppearanceTransition,
+        componentContext: ComponentContext,
+        transitions: MaybeMissing<AppearanceTransition>,
         node: HTMLElement,
         direction: 'in' | 'out'
     ): Promise<void>;

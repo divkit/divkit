@@ -18,13 +18,13 @@
     import css from './Input.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivInputData, KeyboardType } from '../../types/input';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { FixedLengthInputMask } from '../../utils/mask/fixedLengthInputMask';
     import type { MaybeMissing } from '../../expressions/json';
     import type { InputMask } from '../../types/input';
     import type { AlignmentHorizontal } from '../../types/alignment';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -48,9 +48,7 @@
     import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
 
-    export let json: Partial<DivInputData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivInputData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -83,7 +81,7 @@
     let verticalPadding = '';
     let description = '';
 
-    $: if (json) {
+    $: if (componentContext.json) {
         hintColor = '';
         fontSize = 12;
         fontWeight = undefined;
@@ -98,42 +96,42 @@
         inputMode = undefined;
     }
 
-    $: variable = json.text_variable;
-    $: rawVariable = json.mask?.raw_text_variable;
+    $: variable = componentContext.json.text_variable;
+    $: rawVariable = componentContext.json.mask?.raw_text_variable;
 
-    $: valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
-    $: rawValueVariable = rawVariable && rootCtx.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
+    $: valueVariable = variable && componentContext.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+    $: rawValueVariable = rawVariable && componentContext.getVariable(rawVariable, 'string') || createVariable('temp', 'string', '');
 
-    $: jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
-    $: jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
-    $: jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
-    $: jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
-    $: jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
-    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    $: jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
-    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    $: jsonHighlightColor = rootCtx.getDerivedFromVars(json.highlight_color);
-    $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.text_alignment_horizontal);
-    $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.text_alignment_vertical);
-    $: jsonKeyboardType = rootCtx.getDerivedFromVars(json.keyboard_type);
-    $: jsonMask = rootCtx.getDerivedFromVars(json.mask);
-    $: jsonVisibleMaxLines = rootCtx.getDerivedFromVars(json.max_visible_lines);
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    $: jsonSelectAll = rootCtx.getDerivedFromVars(json.select_all_on_focus);
+    $: jsonHintText = componentContext.getDerivedFromVars(componentContext.json.hint_text);
+    $: jsonHintColor = componentContext.getDerivedFromVars(componentContext.json.hint_color);
+    $: jsonFontSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
+    $: jsonFontWeight = componentContext.getDerivedFromVars(componentContext.json.font_weight);
+    $: jsonFontFamily = componentContext.getDerivedFromVars(componentContext.json.font_family);
+    $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
+    $: jsonLetterSpacing = componentContext.getDerivedFromVars(componentContext.json.letter_spacing);
+    $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
+    $: jsonHighlightColor = componentContext.getDerivedFromVars(componentContext.json.highlight_color);
+    $: jsonAlignmentHorizontal = componentContext.getDerivedFromVars(componentContext.json.text_alignment_horizontal);
+    $: jsonAlignmentVertical = componentContext.getDerivedFromVars(componentContext.json.text_alignment_vertical);
+    $: jsonKeyboardType = componentContext.getDerivedFromVars(componentContext.json.keyboard_type);
+    $: jsonMask = componentContext.getDerivedFromVars(componentContext.json.mask);
+    $: jsonVisibleMaxLines = componentContext.getDerivedFromVars(componentContext.json.max_visible_lines);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+    $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
+    $: jsonSelectAll = componentContext.getDerivedFromVars(componentContext.json.select_all_on_focus);
 
     $: if (variable) {
         hasError = false;
     } else {
         hasError = true;
-        rootCtx.logError(wrapError(new Error('Missing "text_variable" in "input"')));
+        componentContext.logError(wrapError(new Error('Missing "text_variable" in "input"')));
     }
 
     function updateMaskData(mask: MaybeMissing<InputMask> | undefined): void {
         if (mask?.type === 'fixed_length') {
-            inputMask = updateFixedMask(mask, rootCtx.logError, inputMask as FixedLengthInputMask);
+            inputMask = updateFixedMask(mask, componentContext.logError, inputMask as FixedLengthInputMask);
         } else if (mask?.type === 'currency') {
-            inputMask = updateCurrencyMask(mask, rootCtx.logError, inputMask as CurrencyInputMask);
+            inputMask = updateCurrencyMask(mask, componentContext.logError, inputMask as CurrencyInputMask);
         }
 
         if (inputMask) {
@@ -236,7 +234,7 @@
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
-        rootCtx.logError(wrapError(new Error('Missing accessibility "description" for input'), {
+        componentContext.logError(wrapError(new Error('Missing accessibility "description" for input'), {
             level: 'warn'
         }));
     }
@@ -371,15 +369,15 @@
         }
     }
 
-    $: if (input && json) {
+    $: if (input && componentContext.json) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerFocusable(json.id, {
+        if (componentContext.json.id && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (input) {
                         input.focus();
@@ -417,9 +415,7 @@
         customActions={'input'}
         customPaddings={true}
         hasInnerFocusable={true}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
     >
         {#if isMultiline}

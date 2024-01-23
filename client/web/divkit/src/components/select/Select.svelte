@@ -4,7 +4,7 @@
     import css from './Select.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
@@ -22,9 +22,7 @@
     import { makeStyle } from '../../utils/makeStyle';
     import Outer from '../utilities/Outer.svelte';
 
-    export let json: Partial<DivSelectData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivSelectData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -46,7 +44,7 @@
     let textColor = '#000';
     let description = '';
 
-    $: if (json) {
+    $: if (componentContext.json) {
         selfPadding = null;
         hintColor = 'rgba(0,0,0,.45)';
         fontSize = 12;
@@ -58,32 +56,32 @@
         description = '';
     }
 
-    $: variable = json.value_variable;
-    $: items = json.options;
+    $: variable = componentContext.json.value_variable;
+    $: items = componentContext.json.options;
     $: filteredItems = Array.isArray(items) && items.filter(it => typeof it.value === 'string') || [];
 
-    $: valueVariable = variable && rootCtx.getVariable(variable, 'string') || createVariable('temp', 'string', '');
+    $: valueVariable = variable && componentContext.getVariable(variable, 'string') || createVariable('temp', 'string', '');
 
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    $: jsonHintText = rootCtx.getDerivedFromVars(json.hint_text);
-    $: jsonHintColor = rootCtx.getDerivedFromVars(json.hint_color);
-    $: jsonFontSize = rootCtx.getDerivedFromVars(json.font_size);
-    $: jsonFontWeight = rootCtx.getDerivedFromVars(json.font_weight);
-    $: jsonFontFamily = rootCtx.getDerivedFromVars(json.font_family);
-    $: jsonLineHeight = rootCtx.getDerivedFromVars(json.line_height);
-    $: jsonLetterSpacing = rootCtx.getDerivedFromVars(json.letter_spacing);
-    $: jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+    $: jsonHintText = componentContext.getDerivedFromVars(componentContext.json.hint_text);
+    $: jsonHintColor = componentContext.getDerivedFromVars(componentContext.json.hint_color);
+    $: jsonFontSize = componentContext.getDerivedFromVars(componentContext.json.font_size);
+    $: jsonFontWeight = componentContext.getDerivedFromVars(componentContext.json.font_weight);
+    $: jsonFontFamily = componentContext.getDerivedFromVars(componentContext.json.font_family);
+    $: jsonLineHeight = componentContext.getDerivedFromVars(componentContext.json.line_height);
+    $: jsonLetterSpacing = componentContext.getDerivedFromVars(componentContext.json.letter_spacing);
+    $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
+    $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
 
     $: if (!(Array.isArray(filteredItems) && filteredItems.length)) {
-        rootCtx.logError(wrapError(new Error('Empty selection "items" in "select"')));
+        componentContext.logError(wrapError(new Error('Empty selection "items" in "select"')));
     }
 
     $: if (variable) {
         hasError = false;
     } else {
         hasError = true;
-        rootCtx.logError(wrapError(new Error('Missing "value_variable" in "select"')));
+        componentContext.logError(wrapError(new Error('Missing "value_variable" in "select"')));
     }
 
     $: {
@@ -91,11 +89,11 @@
             return it.value === $valueVariable;
         });
         if (item) {
-            selectText = typeof item.text === 'string' ? item.text : item.value;
+            selectText = (typeof item.text === 'string' ? item.text : item.value) || '';
         } else {
             selectText = '';
             if ($valueVariable) {
-                rootCtx.logError(wrapError(new Error('Value from the variable was not found in the selection items for "select"')));
+                componentContext.logError(wrapError(new Error('Value from the variable was not found in the selection items for "select"')));
             }
         }
     }
@@ -149,7 +147,7 @@
     $: if ($jsonAccessibility?.description) {
         description = $jsonAccessibility.description;
     } else {
-        rootCtx.logError(wrapError(new Error('Missing accessibility "description" for select'), {
+        componentContext.logError(wrapError(new Error('Missing accessibility "description" for select'), {
             level: 'warn'
         }));
     }
@@ -175,15 +173,15 @@
         'letter-spacing': letterSpacing
     };
 
-    $: if (json && select) {
+    $: if (componentContext.json && select) {
         if (prevId) {
             rootCtx.unregisterFocusable(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerFocusable(json.id, {
+        if (componentContext.json.id && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerFocusable(prevId, {
                 focus() {
                     if (select) {
                         select.focus();
@@ -212,9 +210,7 @@
         customActions={'select'}
         customPaddings={true}
         hasInnerFocusable={true}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
     >
         <span class={css['select__select-text']} style={makeStyle(innerStl)} aria-hidden="true">

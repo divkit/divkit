@@ -11,12 +11,12 @@
     import rootCss from '../Root.module.css';
     import css from './Indicator.module.css';
 
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivIndicatorData } from '../../types/indicator';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { PagerData } from '../../stores/pagers';
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivIndicatorDefaultItemPlacement, DivIndicatorStretchItemPlacement } from '../../types/indicator';
+    import type { ComponentContext } from '../../types/componentContext';
 
     import Outer from '../utilities/Outer.svelte';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
@@ -28,9 +28,7 @@
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
     import { correctColor } from '../../utils/correctColor';
 
-    export let json: Partial<DivIndicatorData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivIndicatorData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -57,7 +55,7 @@
     let indicatorItemsWrapper: HTMLElement;
     let pagerData: PagerData;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         placement = 'default';
         spaceBetweenCenters = 15;
         maxVisibleItems = 10;
@@ -76,14 +74,14 @@
         };
     }
 
-    $: jsonShape = rootCtx.getDerivedFromVars(json.shape);
-    $: jsonActiveItemColor = rootCtx.getDerivedFromVars(json.active_item_color);
-    $: jsonInactiveItemColor = rootCtx.getDerivedFromVars(json.inactive_item_color);
-    $: jsonActiveItemSize = rootCtx.getDerivedFromVars(json.active_item_size);
-    $: jsonActiveShape = rootCtx.getDerivedFromVars(json.active_shape);
-    $: jsonInactiveShape = rootCtx.getDerivedFromVars(json.inactive_shape);
-    $: jsonSpaceBetweenCenters = rootCtx.getDerivedFromVars(json.space_between_centers);
-    $: jsonItemsPlacement = rootCtx.getDerivedFromVars(json.items_placement);
+    $: jsonShape = componentContext.getDerivedFromVars(componentContext.json.shape);
+    $: jsonActiveItemColor = componentContext.getDerivedFromVars(componentContext.json.active_item_color);
+    $: jsonInactiveItemColor = componentContext.getDerivedFromVars(componentContext.json.inactive_item_color);
+    $: jsonActiveItemSize = componentContext.getDerivedFromVars(componentContext.json.active_item_size);
+    $: jsonActiveShape = componentContext.getDerivedFromVars(componentContext.json.active_shape);
+    $: jsonInactiveShape = componentContext.getDerivedFromVars(componentContext.json.inactive_shape);
+    $: jsonSpaceBetweenCenters = componentContext.getDerivedFromVars(componentContext.json.space_between_centers);
+    $: jsonItemsPlacement = componentContext.getDerivedFromVars(componentContext.json.items_placement);
 
     $: {
         if ($jsonActiveShape) {
@@ -141,8 +139,8 @@
     }
 
     async function onPagerDataUpdate(pagersMap: Map<string, PagerData>): Promise<void> {
-        if (json.pager_id && pagersMap.has(json.pager_id)) {
-            pagerData = pagersMap.get(json.pager_id) as PagerData;
+        if (componentContext.json.pager_id && pagersMap.has(componentContext.json.pager_id)) {
+            pagerData = pagersMap.get(componentContext.json.pager_id) as PagerData;
 
             await tick();
 
@@ -210,9 +208,7 @@
 
 <Outer
     cls={genClassName('indicator', css, mods)}
-    {json}
-    {origJson}
-    {templateContext}
+    {componentContext}
     {layoutParams}
 >
     <div

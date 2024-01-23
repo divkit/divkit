@@ -1,6 +1,8 @@
 import { derived, type Readable } from 'svelte/store';
 import type { BooleanInt, DisappearAction, VisibilityAction } from '../../typings/common';
 import type { RootCtxValue } from '../context/root';
+import type { MaybeMissing } from '../expressions/json';
+import type { ComponentContext } from '../types/componentContext';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 
 interface CalcedAction {
@@ -34,16 +36,18 @@ function filterActions(it: CalcedAction): it is IndexedCalcedAction {
 export function visibilityAction(node: HTMLElement, {
     visibilityActions,
     disappearActions,
-    rootCtx
+    rootCtx,
+    componentContext
 }: {
-    visibilityActions?: VisibilityAction[];
-    disappearActions?: DisappearAction[];
+    visibilityActions?: MaybeMissing<VisibilityAction>[];
+    disappearActions?: MaybeMissing<DisappearAction>[];
     rootCtx: RootCtxValue;
+    componentContext: ComponentContext;
 }) {
     const visibilityStatus: {
         type: 'visibility' | 'disappear';
         index: number;
-        action: VisibilityAction | DisappearAction;
+        action: MaybeMissing<VisibilityAction | DisappearAction>;
         visible: boolean;
         count: number;
         finished: boolean;
@@ -79,7 +83,7 @@ export function visibilityAction(node: HTMLElement, {
 
     const calcedList: Readable<CalcedAction>[] = visibilityStatus.map((it, index) => {
         const isVisibility = it.type === 'visibility';
-        return rootCtx.getDerivedFromVars({
+        return componentContext.getDerivedFromVars({
             index,
             visibility_percentage: it.action.visibility_percentage,
             visibility_duration: isVisibility ?
@@ -164,7 +168,7 @@ export function visibilityAction(node: HTMLElement, {
                                     status.finished = true;
                                 }
 
-                                const calcedAction = rootCtx.getJsonWithVars(status.action);
+                                const calcedAction = componentContext.getJsonWithVars(status.action);
                                 const actionUrl = calcedAction.url;
                                 const actionTyped = calcedAction.typed;
                                 if (actionUrl) {

@@ -5,13 +5,14 @@
     import rootCss from '../Root.module.css';
     import arrowsCss from '../utilities/Arrows.module.css';
 
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { DivPagerData } from '../../types/pager';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
     import type { PagerData } from '../../stores/pagers';
     import type { Overflow, SwitchElements } from '../../types/switch-elements';
+    import type { ComponentContext } from '../../types/componentContext';
+    import type { MaybeMissing } from '../../expressions/json';
 
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -26,9 +27,7 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
 
-    export let json: Partial<DivPagerData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivPagerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -59,45 +58,38 @@
     let padding = '';
     let sizeVal = '';
 
-    $: if (json) {
+    $: if (componentContext.json) {
         padding = '';
     }
 
-    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
-    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+    $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);
+    $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
+    $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+    $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
 
-    function replaceItems(items: (DivBaseData | undefined)[]): void {
-        json = {
-            ...json,
-            items: items.filter(Truthy)
+    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+        componentContext = {
+            ...componentContext,
+            json: {
+                ...componentContext.json,
+                items: items.filter(Truthy)
+            }
         };
     }
 
-    $: items = (Array.isArray(json.items) && json.items || []).map(item => {
-        let childJson: DivBaseData = item as DivBaseData;
-        let childContext: TemplateContext = templateContext;
-
-        ({
-            templateContext: childContext,
-            json: childJson
-        } = rootCtx.processTemplate(childJson, childContext));
-
-        return {
-            json: childJson,
-            templateContext: childContext,
-            origJson: item
-        };
+    $: items = (Array.isArray(componentContext.json.items) && componentContext.json.items || []).map((item, index) => {
+        return componentContext.produceChildContext(item, {
+            path: index
+        });
     });
     $: {
         if (!$jsonLayoutMode) {
             hasLayoutModeError = true;
-            rootCtx.logError(wrapError(new Error('Empty "layout_mode" prop for div "pager"')));
+            componentContext.logError(wrapError(new Error('Empty "layout_mode" prop for div "pager"')));
         } else if ($jsonLayoutMode.type !== 'percentage' && $jsonLayoutMode.type !== 'fixed') {
             hasLayoutModeError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect value of "layout_mode.type" for div "pager"')));
+            componentContext.logError(wrapError(new Error('Incorrect value of "layout_mode.type" for div "pager"')));
         } else {
             hasLayoutModeError = false;
         }
@@ -124,10 +116,19 @@
         if ($jsonLayoutMode?.type === 'fixed') {
             const paddings = orientation === 'horizontal' ?
                 pxToEmWithUnits(
-                    (($direction === 'ltr' ? json.paddings?.start : json.paddings?.end) || json.paddings?.left || 0) +
-                    (($direction === 'ltr' ? json.paddings?.end : json.paddings?.start) || json.paddings?.right || 0)
+                    (($direction === 'ltr' ?
+                        componentContext.json.paddings?.start :
+                        componentContext.json.paddings?.end
+                    ) || componentContext.json.paddings?.left || 0) +
+                    (($direction === 'ltr' ?
+                        componentContext.json.paddings?.end :
+                        componentContext.json.paddings?.start
+                    ) || componentContext.json.paddings?.right || 0)
                 ) :
-                pxToEmWithUnits((json.paddings?.top || 0) + (json.paddings?.bottom || 0));
+                pxToEmWithUnits(
+                    (componentContext.json.paddings?.top || 0) +
+                    (componentContext.json.paddings?.bottom || 0)
+                );
             const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value;
             sizeVal = neighbourPageWidth ?
                 `calc(100% + ${paddings} - 2 * ${pxToEmWithUnits(neighbourPageWidth)} - 2 * ${itemSpacing})` :
@@ -194,7 +195,7 @@
     $: pagers = rootCtx.getStore<Map<string, PagerData>>('pagers');
 
     function pagerDataUpdate(size: number, currentItem: number): void {
-        const pagerId = json.id;
+        const pagerId = componentContext.json.id;
         if (pagerId) {
             const newPagersMap = new Map($pagers);
             $pagers = newPagersMap.set(pagerId, { instId, size, currentItem, scrollToPagerItem });
@@ -208,11 +209,11 @@
         }
         prevSelectedItem = currentItem;
 
-        const actions = rootCtx.getJsonWithVars(items[currentItem].json?.selected_actions);
+        const actions = componentContext.getJsonWithVars(items[currentItem].json?.selected_actions);
         if (!actions?.length) {
             return;
         }
-        rootCtx.execAnyActions(actions);
+        componentContext.execAnyActions(actions);
     }
 
     $: pagerDataUpdate(items.length, currentItem);
@@ -252,15 +253,15 @@
         scrollToPagerItem(nextItem);
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerInstance<SwitchElements>(json.id, {
+        if (componentContext.json.id && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
@@ -303,12 +304,10 @@
 {#if !hasError}
     <Outer
         cls={genClassName('pager', css, mods)}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
         customPaddings={true}
-        parentOf={json.items}
+        parentOf={items.map(it => it.json)}
         {replaceItems}
     >
         <div
@@ -320,10 +319,7 @@
             {#each items as item}
                 <div class={css.pager__item}>
                     <Unknown
-                        div={item.json}
-                        templateContext={item.templateContext}
-                        origJson={item.origJson}
-                        layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
+                        componentContext={item}
                     />
                 </div>
             {/each}

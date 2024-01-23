@@ -3,7 +3,7 @@ import { SizeProvider } from './extensions/sizeProvider';
 import { lottieExtensionBuilder } from './extensions/lottie';
 import type { DivExtensionClass } from '../typings/common';
 import Lottie from 'lottie-web/build/player/lottie';
-import './devCustomComponents';
+import { initComponents } from './devCustomComponents';
 
 const json = {
     "templates": {},
@@ -52,3 +52,5 @@ window.root = new Root({
         ])
     }
 });
+
+initComponents();

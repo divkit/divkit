@@ -32,15 +32,16 @@
     import type { Mods, Style } from '../../types/general';
     import type { DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, DivExtension, TemplateContext } from '../../../typings/common';
+    import type { DivExtension } from '../../../typings/common';
     import type { Visibility } from '../../types/base';
-    import type { Action } from '../../../typings/common';
+    import type { Action, DivBase } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { CornersRadius } from '../../types/border';
     import type { WrapContentSize } from '../../types/sizes';
     import type { Background } from '../../types/background';
     import type { Animation, AnyAnimation } from '../../types/animation';
+    import type { ComponentContext } from '../../types/componentContext';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -73,9 +74,7 @@
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
-    export let json: Partial<DivBaseData & DivActionableData> = {};
-    export let origJson: DivBase | undefined = undefined;
-    export let templateContext: TemplateContext;
+    export let componentContext: ComponentContext<DivBaseData & DivActionableData>;
     export let cls = '';
     export let style: Style | undefined = undefined;
     export let layoutParams: LayoutParams = {};
@@ -84,9 +83,9 @@
     export let customActions = '';
     export let additionalPaddings: EdgeInsets | null = null;
     export let heightByAspect = false;
-    export let parentOf: (DivBaseData | undefined)[] | undefined = undefined;
+    export let parentOf: (MaybeMissing<DivBaseData> | undefined)[] | undefined = undefined;
     export let parentOfSimpleMode: boolean | undefined = undefined;
-    export let replaceItems: ((items: (DivBaseData | undefined)[]) => void) | undefined = undefined;
+    export let replaceItems: ((items: (MaybeMissing<DivBaseData> | undefined)[]) => void) | undefined = undefined;
     export let hasInnerFocusable = false;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -175,11 +174,11 @@
 
     let hasCustomFocus = false;
 
-    let prevExtensionsVal: Extension[] | undefined = undefined;
+    let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
 
     let dev: DevtoolResult | null = null;
 
-    $: if (json && layoutParams) {
+    $: if (componentContext.json && layoutParams) {
         selfPadding = null;
         margin = '';
         alpha = 1;
@@ -190,31 +189,31 @@
         transformOrigin = undefined;
         transform = undefined;
 
-        jsonTransitionTriggers = layoutParams.fakeElement ?
+        jsonTransitionTriggers = componentContext.fakeElement ?
             [] :
-            (json.transition_triggers || ['state_change', 'visibility_change']);
-        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && json.id);
-        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && json.id);
+            (componentContext.json.transition_triggers || ['state_change', 'visibility_change']);
+        hasStateChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('state_change') !== -1 && componentContext.json.id);
+        hasVisibilityChangeTrigger = Boolean(jsonTransitionTriggers.indexOf('visibility_change') !== -1 && componentContext.json.id);
     }
 
-    $: jsonFocus = rootCtx.getDerivedFromVars(json.focus);
-    $: jsonBorder = rootCtx.getDerivedFromVars(json.border);
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    $: jsonMargins = rootCtx.getDerivedFromVars(json.margins);
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.alignment_horizontal);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.alignment_vertical);
-    $: jsonAlpha = rootCtx.getDerivedFromVars(json.alpha);
-    $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
-    $: jsonBackground = rootCtx.getDerivedFromVars(json.background);
-    $: jsonAction = rootCtx.getDerivedFromVars(json.action);
-    $: jsonActions = rootCtx.getDerivedFromVars(json.actions);
-    $: jsonDoubleTapActions = rootCtx.getDerivedFromVars(json.doubletap_actions);
-    $: jsonLongTapActions = rootCtx.getDerivedFromVars(json.longtap_actions);
-    $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
-    $: jsonVisibility = rootCtx.getDerivedFromVars(json.visibility);
-    $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
+    $: jsonFocus = componentContext.getDerivedFromVars(componentContext.json.focus);
+    $: jsonBorder = componentContext.getDerivedFromVars(componentContext.json.border);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+    $: jsonMargins = componentContext.getDerivedFromVars(componentContext.json.margins);
+    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
+    $: jsonAlignmentHorizontal = componentContext.getDerivedFromVars(componentContext.json.alignment_horizontal);
+    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
+    $: jsonAlignmentVertical = componentContext.getDerivedFromVars(componentContext.json.alignment_vertical);
+    $: jsonAlpha = componentContext.getDerivedFromVars(componentContext.json.alpha);
+    $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
+    $: jsonBackground = componentContext.getDerivedFromVars(componentContext.json.background);
+    $: jsonAction = componentContext.getDerivedFromVars(componentContext.json.action);
+    $: jsonActions = componentContext.getDerivedFromVars(componentContext.json.actions);
+    $: jsonDoubleTapActions = componentContext.getDerivedFromVars(componentContext.json.doubletap_actions);
+    $: jsonLongTapActions = componentContext.getDerivedFromVars(componentContext.json.longtap_actions);
+    $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
+    $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
+    $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
 
     $: {
         prevChilds.forEach(id => {
@@ -246,7 +245,7 @@
             }
         }
 
-        const index = parentOf.findIndex(json => json?.id === id);
+        const index = parentOf.findIndex(item => item?.id === id);
         const newItems = parentOf.slice();
         newItems.splice(index, 1, ...(items || []));
 
@@ -369,7 +368,7 @@
             }
 
             if (type === 'match_parent' || !type) {
-                rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
                     level: 'warn'
                 }));
             }
@@ -377,7 +376,7 @@
             widthType = 'parent';
             if (layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerWrap) {
                 newWidthError = true;
-                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                componentContext.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
                     level: 'error'
                 }));
             }
@@ -443,7 +442,7 @@
             heightType = 'parent';
             if (layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerWrap) {
                 newHeightError = true;
-                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                componentContext.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
                     level: 'error'
                 }));
             }
@@ -478,7 +477,7 @@
             }
 
             if (type === 'match_parent') {
-                rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                componentContext.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
                     level: 'warn'
                 }));
             }
@@ -559,15 +558,15 @@
 
     $: {
         stateChangingInProgress = undefined;
-        if (hasStateChangeTrigger && json.transition_in && rootCtx.isRunning('stateChange')) {
+        if (hasStateChangeTrigger && componentContext.json.transition_in && rootCtx.isRunning('stateChange')) {
             stateChangingInProgress = true;
         }
     }
     $: {
         transitionChangeInProgress = undefined;
         if (
-            hasStateChangeTrigger && json.transition_change &&
-            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(json.id)
+            hasStateChangeTrigger && componentContext.json.transition_change &&
+            rootCtx.isRunning('stateChange') && stateCtx.hasTransitionChange(componentContext.json.id)
         ) {
             transitionChangeInProgress = true;
         }
@@ -580,7 +579,7 @@
         let newFocusActions = $jsonFocus?.on_focus || [];
         let newBlurActions = $jsonFocus?.on_blur || [];
 
-        if (layoutParams.fakeElement) {
+        if (componentContext.fakeElement) {
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
@@ -589,23 +588,23 @@
         } else {
             if (!Array.isArray(newActions)) {
                 newActions = [];
-                rootCtx.logError(wrapError(new Error('Actions should be array')));
+                componentContext.logError(wrapError(new Error('Actions should be array')));
             }
             if (!Array.isArray(newDoubleTapActions)) {
                 newDoubleTapActions = [];
-                rootCtx.logError(wrapError(new Error('DoubleTapActions should be array')));
+                componentContext.logError(wrapError(new Error('DoubleTapActions should be array')));
             }
             if (!Array.isArray(newLongTapActions)) {
                 newLongTapActions = [];
-                rootCtx.logError(wrapError(new Error('LongTapActions should be array')));
+                componentContext.logError(wrapError(new Error('LongTapActions should be array')));
             }
             if (!Array.isArray(newFocusActions)) {
                 newFocusActions = [];
-                rootCtx.logError(wrapError(new Error('FocusActions should be array')));
+                componentContext.logError(wrapError(new Error('FocusActions should be array')));
             }
             if (!Array.isArray(newBlurActions)) {
                 newBlurActions = [];
-                rootCtx.logError(wrapError(new Error('BlurActions should be array')));
+                componentContext.logError(wrapError(new Error('BlurActions should be array')));
             }
         }
 
@@ -613,7 +612,7 @@
             newActions = [];
             newDoubleTapActions = [];
             newLongTapActions = [];
-            rootCtx.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
+            componentContext.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
         }
 
         // todo check parent actions with customActions
@@ -655,7 +654,7 @@
             case 'no_animation':
                 return '';
             default:
-                rootCtx.logError(wrapError(new Error('Unknown action_animation name'), {
+                componentContext.logError(wrapError(new Error('Unknown action_animation name'), {
                     additional: {
                         animation: animation.name
                     }
@@ -685,7 +684,7 @@
         visibility = nextVisibility;
 
         const direction = nextVisibility === 'visible' ? 'in' : 'out';
-        const transition = direction === 'in' ? json.transition_in : json.transition_out;
+        const transition = direction === 'in' ? componentContext.json.transition_in : componentContext.json.transition_out;
 
         if (
             hasVisibilityChangeTrigger &&
@@ -698,10 +697,10 @@
             }
             stateCtx.runVisibilityTransition(
                 {
-                    ...json,
+                    ...componentContext.json,
                     visibility: 'visible'
                 } as DivBaseData,
-                templateContext,
+                componentContext,
                 transition,
                 currentNode,
                 direction
@@ -728,8 +727,8 @@
         }
     }
 
-    $: if (json && currentNode && !isDeepEqual(json.extensions, prevExtensionsVal)) {
-        let exts = prevExtensionsVal = json.extensions;
+    $: if (componentContext.json && currentNode && !isDeepEqual(componentContext.json.extensions, prevExtensionsVal)) {
+        let exts = prevExtensionsVal = componentContext.json.extensions;
 
         tick().then(() => {
             if (exts !== prevExtensionsVal || !currentNode) {
@@ -738,10 +737,15 @@
 
             unmountExtensions();
 
-            if (Array.isArray(json.extensions)) {
+            if (Array.isArray(componentContext.json.extensions)) {
                 const ctx = rootCtx.getExtensionContext();
-                extensions = json.extensions.map(it => {
-                    const instance = rootCtx.getExtension(it.id, it.params);
+                extensions = componentContext.json.extensions.map(it => {
+                    const id = it.id;
+                    if (!id) {
+                        return;
+                    }
+
+                    const instance = rootCtx.getExtension(id, it.params);
 
                     if (instance) {
                         instance.mountView?.(currentNode, ctx);
@@ -755,15 +759,11 @@
 
     function updateDevtool(): void {
         if (dev) {
-            dev.update({
-                json,
-                origJson,
-                templateContext
-            });
+            dev.update(componentContext);
         }
     }
 
-    $: if (json && origJson && templateContext) {
+    $: if (componentContext) {
         updateDevtool();
     }
 
@@ -780,7 +780,7 @@
         'has-action-animation': Boolean(actionAnimationTransition),
         'parent-flex': layoutParams.parentContainerOrientation || undefined,
         'parent-grid': Boolean(layoutParams.gridArea) || undefined,
-        'has-custom-focus': Boolean(hasCustomFocus && json.focus)
+        'has-custom-focus': Boolean(hasCustomFocus && componentContext.json.focus)
     };
 
     $: {
@@ -836,11 +836,11 @@
 
     function useAction(node: HTMLElement) {
         currentNode = node;
-        if (hasStateChangeTrigger && json.transition_in) {
+        if (hasStateChangeTrigger && componentContext.json.transition_in) {
             stateCtx.registerChildWithTransitionIn(
-                json as DivBaseData,
-                templateContext,
-                json.transition_in,
+                componentContext.json as DivBaseData,
+                componentContext,
+                componentContext.json.transition_in,
                 node
             ).then(() => {
                 stateChangingInProgress = false;
@@ -849,19 +849,19 @@
                 throw e;
             });
         }
-        if (hasStateChangeTrigger && json.transition_out) {
+        if (hasStateChangeTrigger && componentContext.json.transition_out) {
             stateCtx.registerChildWithTransitionOut(
-                json as DivBaseData,
-                templateContext,
-                json.transition_out,
+                componentContext.json as DivBaseData,
+                componentContext,
+                componentContext.json.transition_out,
                 node
             );
         }
-        if (hasStateChangeTrigger && json.transition_change) {
+        if (hasStateChangeTrigger && componentContext.json.transition_change) {
             stateCtx.registerChildWithTransitionChange(
-                json as DivBaseData,
-                templateContext,
-                json.transition_change,
+                componentContext.json as DivBaseData,
+                componentContext,
+                componentContext.json.transition_change,
                 node
             ).then(() => {
                 transitionChangeInProgress = false;
@@ -871,14 +871,14 @@
             });
         }
 
-        const visibilityActions = layoutParams.fakeElement ?
+        const visibilityActions = componentContext.fakeElement ?
             [] :
             (
-                json.visibility_actions ||
-                json.visibility_action && [json.visibility_action]
+                componentContext.json.visibility_actions ||
+                componentContext.json.visibility_action && [componentContext.json.visibility_action]
             );
 
-        const disappearActions = layoutParams.fakeElement ? [] : json.disappear_actions;
+        const disappearActions = componentContext.fakeElement ? [] : componentContext.json.disappear_actions;
 
         let visAction: {
             destroy(): void;
@@ -890,26 +890,22 @@
             visAction = visibilityAction(node, {
                 visibilityActions,
                 disappearActions,
-                rootCtx
+                rootCtx,
+                componentContext
             });
         }
 
-        const id = json.id;
+        const id = componentContext.json.id;
         if (id) {
             stateCtx.registerChild(id);
         }
 
-        json.tooltips?.forEach(tooltip => {
+        componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.registerTooltip(node, tooltip);
         });
 
-        if (devtool && !layoutParams.fakeElement) {
-            dev = devtool(node, {
-                json,
-                origJson,
-                rootCtx,
-                templateContext
-            });
+        if (devtool && !componentContext.fakeElement) {
+            dev = devtool(node, rootCtx, componentContext);
         }
 
         return {
@@ -928,7 +924,7 @@
     }
 
     function focusHandler() {
-        if (!json.focus) {
+        if (!componentContext.json.focus) {
             return;
         }
 
@@ -936,16 +932,16 @@
             hasCustomFocus = true;
         }
 
-        rootCtx.execAnyActions(focusActions);
+        componentContext.execAnyActions(focusActions);
     }
 
     function blurHandler() {
-        if (!json.focus) {
+        if (!componentContext.json.focus) {
             return;
         }
 
         hasCustomFocus = false;
-        rootCtx.execAnyActions(blurActions);
+        componentContext.execAnyActions(blurActions);
     }
 
     onDestroy(() => {
@@ -954,7 +950,7 @@
         });
         prevChilds = [];
 
-        json.tooltips?.forEach(tooltip => {
+        componentContext.json.tooltips?.forEach(tooltip => {
             rootCtx.unregisterTooltip(tooltip);
         });
 
@@ -964,7 +960,8 @@
 
 {#if !hasWidthError && !hasHeightError}
     <Actionable
-        id={json.id}
+        {componentContext}
+        id={componentContext.json.id}
         use={useAction}
         cls="{cls} {genClassName('outer', css, mods)}"
         style={makeStyle(stl)}
@@ -978,6 +975,6 @@
         on:blur={blurHandler}
     >
         <!-- eslint-disable-next-line max-len -->
-        {#if hasSeparateBg}<OuterBackground direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+        {#if hasSeparateBg}<OuterBackground {componentContext} direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

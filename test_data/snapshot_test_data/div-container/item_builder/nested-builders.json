@@ -1,0 +1,87 @@
+{
+  "description": "Inner data_element_name should override outer one.",
+  "platforms": [
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "prototypes",
+    "variables": [
+      {
+        "name": "data",
+        "type": "array",
+        "value": [
+          {
+            "title": "First array",
+            "items": [
+              {
+                "title": "First subarray",
+                "text": "First text"
+              },
+              {
+                "title": "First subarray",
+                "text": "Second text"
+              }
+            ]
+          },
+          {
+            "title": "Second array",
+            "items": [
+              {
+                "title": "Second subarray",
+                "text": "First text"
+              },
+              {
+                "text": "Second text"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "item_builder": {
+            "type": "prototype",
+            "data": "@{data}",
+            "prototypes": [
+              {
+                "div": {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "item_builder": {
+                    "type": "prototype",
+                    "data": "@{getArrayFromDict(it, 'items')}",
+                    "prototypes": [
+                      {
+                        "div": {
+                          "type": "container",
+                          "orientation": "vertical",
+                          "items": [
+                            {
+                              "type": "text",
+                              "text": "@{getOptStringFromDict('', it, 'title') != '' ? getStringFromDict(it, 'title') : '<title is missing>'}",
+                              "font_size": 16
+                            },
+                            {
+                              "type": "text",
+                              "text": "@{getStringFromDict(it, 'text')}"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

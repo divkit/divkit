@@ -21,7 +21,7 @@ class ExpressionBinding {
      * @param variables
      * @param logError
      */
-    apply(variables: VariablesMap, logError: LogError): VariableValue | string | undefined {
+    apply(variables: VariablesMap, logError: LogError, keepComplex = false): VariableValue | string | undefined {
         try {
             const res = evalExpression(variables, this.ast);
             res.warnings.forEach(logError);
@@ -57,7 +57,7 @@ class ExpressionBinding {
                 }
                 return Number(value);
             }
-            if (result.type === 'array' || result.type === 'dict') {
+            if (!keepComplex && (result.type === 'array' || result.type === 'dict')) {
                 try {
                     return JSON.stringify(value);
                 } catch (err) {
@@ -172,13 +172,13 @@ function prepareVarsObj<T>(
     return jsonProp;
 }
 
-function applyVars(jsonProp: unknown, variables: VariablesMap, logError: LogError): unknown {
+function applyVars(jsonProp: unknown, variables: VariablesMap, logError: LogError, keepComplex = false): unknown {
     if (jsonProp) {
         if (
             (process.env.ENABLE_EXPRESSIONS || process.env.ENABLE_EXPRESSIONS === undefined) &&
             jsonProp instanceof ExpressionBinding
         ) {
-            return jsonProp.apply(variables, logError);
+            return jsonProp.apply(variables, logError, keepComplex);
         } else if (
             (!process.env.ENABLE_EXPRESSIONS && process.env.ENABLE_EXPRESSIONS !== undefined) &&
             jsonProp instanceof VariableBinding
@@ -200,7 +200,7 @@ function applyVars(jsonProp: unknown, variables: VariablesMap, logError: LogErro
 export function prepareVars<T>(jsonProp: T, logError: LogError): {
     vars: string[];
     hasExpression: boolean;
-    applyVars: (variables: VariablesMap) => MaybeMissing<T>;
+    applyVars: (variables: VariablesMap, keepComplex?: boolean) => MaybeMissing<T>;
 } {
     const store: {
         vars: string[];
@@ -216,8 +216,8 @@ export function prepareVars<T>(jsonProp: T, logError: LogError): {
     return {
         vars,
         hasExpression: store.hasExpression,
-        applyVars(variables: VariablesMap) {
-            return applyVars(root, variables, logError) as MaybeMissing<T>;
+        applyVars(variables: VariablesMap, keepComplex?: boolean) {
+            return applyVars(root, variables, logError, keepComplex) as MaybeMissing<T>;
         }
     };
 }

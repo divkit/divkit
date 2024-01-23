@@ -34,14 +34,15 @@
 
     import type { ContainerOrientation, DivContainerData } from '../../types/container';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
+    import type { Variable } from '../../expressions/variable';
+    import type { ComponentContext } from '../../types/componentContext';
+    import type { MaybeMissing } from '../../expressions/json';
     import { prepareMargins } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
-    import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
     import { calcAdditionalPaddings, calcItemsGap, hasKnownHeightCheck, hasKnownWidthCheck } from '../../utils/container';
     import { hasGapSupport } from '../../utils/hasGapSupport';
@@ -52,10 +53,9 @@
     import { ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
     import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
+    import { assignIfDifferent } from '../../utils/assignIfDifferent';
 
-    export let json: Partial<DivContainerData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivContainerData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -71,55 +71,107 @@
     let aspect: number | undefined = undefined;
     let childLayoutParams: LayoutParams = {};
 
-    $: if (json) {
+    $: if (componentContext.json) {
         orientation = 'vertical';
         contentVAlign = 'start';
         contentHAlign = 'start';
         aspect = undefined;
     }
 
-    $: jsonItems = json.items;
+    $: jsonItems = componentContext.json.items;
+    $: jsonItemBuilderData = componentContext.getDerivedFromVars(
+        componentContext.json.item_builder?.data, undefined, true
+    );
 
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
-    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
-    $: jsonContentVAlign = rootCtx.getDerivedFromVars(json.content_alignment_vertical);
-    $: jsonContentHAlign = rootCtx.getDerivedFromVars(json.content_alignment_horizontal);
-    $: jsonSeparator = rootCtx.getDerivedFromVars(json.separator);
-    $: jsonLineSeparator = rootCtx.getDerivedFromVars(json.line_separator);
-    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    $: jsonClipToBounds = rootCtx.getDerivedFromVars(json.clip_to_bounds);
+    $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
+    $: jsonLayoutMode = componentContext.getDerivedFromVars(componentContext.json.layout_mode);
+    $: jsonContentVAlign = componentContext.getDerivedFromVars(componentContext.json.content_alignment_vertical);
+    $: jsonContentHAlign = componentContext.getDerivedFromVars(componentContext.json.content_alignment_horizontal);
+    $: jsonSeparator = componentContext.getDerivedFromVars(componentContext.json.separator);
+    $: jsonLineSeparator = componentContext.getDerivedFromVars(componentContext.json.line_separator);
+    $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
+    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
+    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
+    $: jsonClipToBounds = componentContext.getDerivedFromVars(componentContext.json.clip_to_bounds);
 
-    function replaceItems(items: (DivBaseData | undefined)[]): void {
-        json = {
-            ...json,
-            items: items.filter(Truthy)
+    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+        componentContext = {
+            ...componentContext,
+            json: {
+                ...componentContext.json,
+                items: items.filter(Truthy)
+            }
         };
     }
 
-    $: items = (jsonItems || []).map(item => {
-        let childJson: DivBaseData = item as DivBaseData;
-        let childContext: TemplateContext = templateContext;
+    let items: ComponentContext[] = [];
 
-        ({
-            templateContext: childContext,
-            json: childJson
-        } = rootCtx.processTemplate(childJson, childContext));
+    $: {
+        let newItems: {
+            div: MaybeMissing<DivBaseData>;
+            vars?: Map<string, Variable> | undefined;
+        }[] = [];
+        if (
+            componentContext.json.item_builder &&
+            Array.isArray($jsonItemBuilderData) &&
+            Array.isArray(componentContext.json.item_builder.prototypes)
+        ) {
+            const builder = componentContext.json.item_builder;
+            newItems = [];
 
-        return {
-            json: childJson,
-            templateContext: childContext,
-            origJson: item
-        };
-    });
+            $jsonItemBuilderData.forEach(it => {
+                if (it === null || typeof it !== 'object') {
+                    return;
+                }
+                const additionalVars = rootCtx.preparePrototypeVariables(builder.data_element_name || 'it', it as Record<string, unknown>);
+
+                let div: MaybeMissing<DivBaseData> | undefined;
+                for (let i = 0; i < builder.prototypes.length; ++i) {
+                    const prototype = builder.prototypes[i];
+                    if (!prototype.div) {
+                        continue;
+                    }
+                    if (prototype.selector === undefined) {
+                        div = prototype.div;
+                        break;
+                    }
+
+                    const selectorVal = componentContext.getJsonWithVars(prototype.selector, additionalVars);
+                    if (selectorVal) {
+                        div = prototype.div;
+                        break;
+                    }
+                }
+
+                if (div) {
+                    newItems.push({
+                        div,
+                        vars: additionalVars
+                    });
+                }
+            });
+        } else {
+            newItems = (jsonItems || []).map(it => {
+                return {
+                    div: it
+                };
+            });
+        }
+
+        items = newItems.map((item, index) => {
+            return componentContext.produceChildContext(item.div, {
+                path: index,
+                variables: item.vars
+            });
+        });
+    }
 
     $: {
         let children: Readable<ContainerChildInfo>[] = [];
 
         items.forEach(item => {
             children.push(
-                rootCtx.getDerivedFromVars({
+                componentContext.getDerivedFromVars({
                     width: item.json.width,
                     height: item.json.height
                 })
@@ -212,9 +264,6 @@
     $: {
         let newChildLayoutParams: LayoutParams = {};
 
-        if (layoutParams?.fakeElement) {
-            newChildLayoutParams.fakeElement = true;
-        }
         if (orientation === 'overlap') {
             newChildLayoutParams.overlapParent = true;
         }
@@ -272,22 +321,18 @@
 
 <Outer
     cls={genClassName('container', css, mods)}
-    {style}
-    {json}
-    {origJson}
-    {templateContext}
+    {componentContext}
     {layoutParams}
+    {style}
     {additionalPaddings}
     heightByAspect={Boolean(aspect)}
-    parentOf={jsonItems}
+    parentOf={items.map(it => it.json)}
     {replaceItems}
 >
     {#each items as item}
         <Unknown
+            componentContext={item}
             layoutParams={childLayoutParams}
-            div={item.json}
-            templateContext={item.templateContext}
-            origJson={item.origJson}
         />
     {/each}
 

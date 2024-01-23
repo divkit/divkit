@@ -1,4 +1,5 @@
-import type { Tooltip } from './base';
+import type { Variable } from '../expressions/variable';
+import type { DivBaseData, Tooltip } from './base';
 import type { Orientation } from './orientation';
 
 export type Align = 'start' | 'center' | 'end';
@@ -21,11 +22,4 @@ export interface LayoutParams {
         rowSpan: number;
     };
     scrollSnap?: ScrollSnap;
-    fakeElement?: boolean;
-    tooltips?: {
-        internalId: number;
-        ownerNode: HTMLElement;
-        desc: Tooltip;
-        timeoutId: number | null;
-    }[];
 }

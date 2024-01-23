@@ -8,17 +8,16 @@
 
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { Overflow, SwitchElements } from '../../types/switch-elements';
     import type { Orientation } from '../../types/orientation';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
     import type { Style } from '../../types/general';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
-    import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
@@ -32,9 +31,7 @@
     import { debounce } from '../../utils/debounce';
     import { Truthy } from '../../utils/truthy';
 
-    export let json: Partial<DivGalleryData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivGalleryData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -69,7 +66,7 @@
     let childLayoutParams: LayoutParams = {};
     let defaultItem = 0;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         columns = 1;
         orientation = 'horizontal';
         align = 'start';
@@ -77,48 +74,35 @@
         padding = '';
     }
 
-    $: jsonItems = Array.isArray(json.items) && json.items || [];
+    $: jsonItems = Array.isArray(componentContext.json.items) && componentContext.json.items || [];
 
-    $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
-    $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
-    $: jsonCrossContentAlignment = rootCtx.getDerivedFromVars(json.cross_content_alignment);
-    $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
-    $: jsonCrossSpacing = rootCtx.getDerivedFromVars(json.cross_spacing);
-    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    $: jsonScrollMode = rootCtx.getDerivedFromVars(json.scroll_mode);
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
-    $: jsonScrollbar = rootCtx.getDerivedFromVars(json.scrollbar);
-    $: jsonDefaultItem = rootCtx.getDerivedFromVars(json.default_item);
+    $: jsonColumnCount = componentContext.getDerivedFromVars(componentContext.json.column_count);
+    $: jsonOrientation = componentContext.getDerivedFromVars(componentContext.json.orientation);
+    $: jsonCrossContentAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_content_alignment);
+    $: jsonItemSpacing = componentContext.getDerivedFromVars(componentContext.json.item_spacing);
+    $: jsonCrossSpacing = componentContext.getDerivedFromVars(componentContext.json.cross_spacing);
+    $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+    $: jsonScrollMode = componentContext.getDerivedFromVars(componentContext.json.scroll_mode);
+    $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
+    $: jsonScrollbar = componentContext.getDerivedFromVars(componentContext.json.scrollbar);
+    $: jsonDefaultItem = componentContext.getDerivedFromVars(componentContext.json.default_item);
 
-    function replaceItems(items: (DivBaseData | undefined)[]): void {
-        json = {
-            ...json,
-            items: items.filter(Truthy)
+    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+        componentContext = {
+            ...componentContext,
+            json: {
+                ...componentContext.json,
+                items: items.filter(Truthy)
+            }
         };
     }
 
     const isDesktop = rootCtx.isDesktop;
 
-    interface Item {
-        json: DivBaseData;
-        templateContext: TemplateContext;
-        origJson: DivBaseData;
-    }
-
-    $: items = jsonItems.map(item => {
-        let childJson: DivBaseData = item as DivBaseData;
-        let childContext: TemplateContext = templateContext;
-
-        ({
-            templateContext: childContext,
-            json: childJson
-        } = rootCtx.processTemplate(childJson, childContext));
-
-        return {
-            json: childJson,
-            templateContext: childContext,
-            origJson: item
-        };
+    $: items = jsonItems.map((item, index) => {
+        return componentContext.produceChildContext(item, {
+            path: index
+        });
     });
 
     $: shouldCheckArrows = $isDesktop && mounted;
@@ -139,9 +123,9 @@
         columns = correctPositiveNumber($jsonColumnCount, columns);
     }
 
-    function rebuildItemsGrid(items: Item[], columns: number): Item[][] {
+    function rebuildItemsGrid(items: ComponentContext[], columns: number): ComponentContext[][] {
         let column = 0;
-        let res: Item[][] = [];
+        let res: ComponentContext[][] = [];
 
         for (let i = 0; i < items.length; ++i) {
             if (!res[column]) {
@@ -185,7 +169,7 @@
 
         items.forEach(item => {
             const itemSize = orientation === 'horizontal' ? 'width' : 'height';
-            children.push(rootCtx.getDerivedFromVars(item.json[itemSize]));
+            children.push(componentContext.getDerivedFromVars(item.json[itemSize]));
         });
 
         childStore = derived(children, val => val);
@@ -210,10 +194,6 @@
         const newScrollerStyle: Style = {};
         let newChildLayoutParams: LayoutParams = {};
         scrollSnap = false;
-
-        if (layoutParams?.fakeElement) {
-            newChildLayoutParams.fakeElement = true;
-        }
 
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentVAlign = align;
@@ -280,7 +260,7 @@
 
     const updateArrowsVisibilityDebounced = debounce(updateArrowsVisibility, 50);
 
-    $: if (json) {
+    $: if (componentContext.json) {
         updateArrowsVisibilityDebounced();
     }
 
@@ -372,15 +352,15 @@
         return action === 'prev' ? 1 : galleryElements.length - 2;
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerInstance<SwitchElements>(json.id, {
+        if (componentContext.json.id && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     const galleryElements = getItems();
                     if (item < 0 || item > galleryElements.length - 1) {
@@ -440,7 +420,7 @@
     onDestroy(() => {
         mounted = false;
 
-        if (prevId && !layoutParams?.fakeElement) {
+        if (prevId && !componentContext.fakeElement) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
@@ -451,9 +431,7 @@
 
 <Outer
     cls={genClassName('gallery', css, mods)}
-    {json}
-    {origJson}
-    {templateContext}
+    {componentContext}
     {layoutParams}
     customPaddings={true}
     customActions={'gallery'}
@@ -479,10 +457,8 @@
                 >
                     {#each itemsRow as item}
                         <Unknown
+                            componentContext={item}
                             layoutParams={childLayoutParams}
-                            div={item.json}
-                            templateContext={item.templateContext}
-                            origJson={item.origJson}
                         />
                     {/each}
                 </div>
