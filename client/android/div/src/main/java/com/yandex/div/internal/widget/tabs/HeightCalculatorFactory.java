@@ -9,7 +9,7 @@ public interface HeightCalculatorFactory {
                                                                       @NonNull GetTabCountFn getTabCountFn);
 
     interface MeasureTabHeightFn {
-        int apply(@NonNull ViewGroup channelGroup, int width, int tab);
+        int apply(@NonNull ViewGroup channelGroup, int width, int heightMeasureSpec, int tab);
     }
 
     interface GetTabCountFn {
