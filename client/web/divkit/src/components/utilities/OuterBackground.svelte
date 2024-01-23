@@ -6,11 +6,13 @@
     import type { Style } from '../../types/general';
     import type { Background } from '../../types/background';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { Direction } from '../../../typings/common';
     import { getBackground } from '../../utils/background';
     import { makeStyle } from '../../utils/makeStyle';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { getCssFilter } from '../../utils/filters';
 
+    export let direction: Direction;
     export let background: MaybeMissing<Background[]> = [];
     export let radius = '';
 
@@ -45,6 +47,10 @@
 
                 if (Array.isArray(bg.filters) && bg.filters.length) {
                     stl.filter = getCssFilter(bg.filters, rootCtx.logError);
+
+                    if (direction === 'rtl' && bg.filters.some(it => it.type === 'rtl_mirror')) {
+                        stl.transform = 'scale(-1,1)';
+                    }
                 }
             }
         }

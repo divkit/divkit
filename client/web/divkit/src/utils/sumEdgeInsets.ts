@@ -19,7 +19,9 @@ export function sumEdgeInsets(a: EdgeInsets | null, b: EdgeInsets | null): EdgeI
         'top',
         'right',
         'bottom',
-        'left'
+        'left',
+        'start',
+        'end'
     ] as const).forEach(side => {
         const aVal = a[side];
         if (aVal) {

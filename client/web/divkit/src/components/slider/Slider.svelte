@@ -44,6 +44,8 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
 
+    const direction = rootCtx.direction;
+
     let prevId: string | undefined;
     let input: HTMLInputElement;
     let tracksInner: HTMLElement;
@@ -280,7 +282,9 @@
         '--divkit-slider-track-secondary-part': trackSecondaryPart,
     };
 
-    $: mods = {};
+    $: mods = {
+        direction: $direction
+    };
 
     function onSecondMousedown(event: MouseEvent | TouchEvent): void {
         const pageX = 'pageX' in event ? event.pageX : event.changedTouches?.[0]?.pageX;
@@ -392,7 +396,8 @@
                 ></div>
                 <div
                     class={css['slider__active-track']}
-                    style:left={(trackActiveOffset * 100).toFixed(2) + '%'}
+                    style:left={$direction === 'ltr' ? ((trackActiveOffset * 100).toFixed(2) + '%') : undefined}
+                    style:right={$direction === 'ltr' ? undefined : ((trackActiveOffset * 100).toFixed(2) + '%')}
                     style:width={(trackActivePart * 100).toFixed(2) + '%'}
                     style:height={pxToEm(trackActiveStyle.height)}
                     style:border-radius={pxToEm(trackActiveStyle.borderRadius)}
@@ -414,10 +419,10 @@
                     {#if textStyle}
                         <div class={css['slider__thumb-text']}>
                             <div
-                                    class={css['slider__thumb-text-inner']}
-                                    style:font-size={textStyle?.fontSize || '1em'}
-                                    style:font-weight={textStyle?.fontWeight || ''}
-                                    style:color={textStyle?.textColor || '#000'}
+                                class={css['slider__thumb-text-inner']}
+                                style:font-size={textStyle?.fontSize || '1em'}
+                                style:font-weight={textStyle?.fontWeight || ''}
+                                style:color={textStyle?.textColor || '#000'}
                             >
                                 {value}
                             </div>
@@ -434,10 +439,10 @@
                         {#if textSecondaryStyle}
                             <div class="{css['slider__thumb-text']} {css['slider__thumb-text_secondary']}">
                                 <div
-                                        class={css['slider__thumb-text-inner']}
-                                        style:font-size={textSecondaryStyle?.fontSize || '1em'}
-                                        style:font-weight={textSecondaryStyle?.fontWeight || ''}
-                                        style:color={textSecondaryStyle?.textColor || '#000'}
+                                    class={css['slider__thumb-text-inner']}
+                                    style:font-size={textSecondaryStyle?.fontSize || '1em'}
+                                    style:font-weight={textSecondaryStyle?.fontWeight || ''}
+                                    style:color={textSecondaryStyle?.textColor || '#000'}
                                 >
                                     {value2}
                                 </div>

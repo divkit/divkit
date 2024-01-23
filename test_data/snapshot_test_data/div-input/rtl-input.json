@@ -2,7 +2,8 @@
   "description": "RTL input. Text in the input must be on the right side.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "configuration": {
     "layout_direction": "rtl"

@@ -1,7 +1,8 @@
 {
     "description": "Image with RTL mirror filter",
     "platforms": [
-        "android"
+        "android",
+        "web"
     ],
     "configuration": {
         "layout_direction": "rtl"

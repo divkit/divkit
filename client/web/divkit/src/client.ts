@@ -3,6 +3,7 @@ import type {
     ComponentCallback,
     CustomActionCallback,
     Customization,
+    Direction,
     DivExtensionClass,
     DivJson,
     DivkitInstance,
@@ -36,6 +37,7 @@ export function render(opts: {
     fetchInit?: FetchInit;
     tooltipRoot?: HTMLElement;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    direction?: Direction;
 }): DivkitInstance {
     const { target, hydrate, ...rest } = opts;
 

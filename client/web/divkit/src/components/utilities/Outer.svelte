@@ -1,8 +1,18 @@
 <script lang="ts" context="module">
-    const HORIZONTAL_ALIGN_TO_GENERAL = {
+    const HORIZONTAL_ALIGN_TO_GENERAL_LTR = {
         left: 'start',
         center: 'center',
-        right: 'end'
+        right: 'end',
+        start: 'start',
+        end: 'end'
+    };
+
+    const HORIZONTAL_ALIGN_TO_GENERAL_RTL = {
+        left: 'end',
+        center: 'center',
+        right: 'start',
+        start: 'start',
+        end: 'end'
     };
 
     const VERTICAL_ALIGN_TO_GENERAL = {
@@ -82,6 +92,7 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
     const isPointerFocus = rootCtx.isPointerFocus;
+    const direction = rootCtx.direction;
 
     let currentNode: HTMLElement;
     let attrs: Record<string, string> | undefined;
@@ -311,10 +322,10 @@
         );
     }
 
-    $: padding = edgeInsertsToCss(sumEdgeInsets(selfPadding, additionalPaddings));
+    $: padding = edgeInsertsToCss(sumEdgeInsets(selfPadding, additionalPaddings), $direction);
 
     $: {
-        margin = correctEdgeInserts($jsonMargins, margin);
+        margin = correctEdgeInserts($jsonMargins, $direction, margin);
     }
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
@@ -384,8 +395,12 @@
             newWidthMods['halign-self'] = 'stretch';
         } else {
             const align = $jsonAlignmentHorizontal;
-            if (align === 'left' || align === 'center' || align === 'right') {
-                newWidthMods['halign-self'] = HORIZONTAL_ALIGN_TO_GENERAL[align as keyof typeof HORIZONTAL_ALIGN_TO_GENERAL];
+            if (align === 'left' || align === 'center' || align === 'right' || align === 'start' || align === 'end') {
+                newWidthMods['halign-self'] = (
+                    $direction === 'ltr' ?
+                        HORIZONTAL_ALIGN_TO_GENERAL_LTR :
+                        HORIZONTAL_ALIGN_TO_GENERAL_RTL
+                )[align];
             } else {
                 newWidthMods['halign-self'] = layoutParams.parentHAlign || 'start';
             }
@@ -963,6 +978,6 @@
         on:blur={blurHandler}
     >
         <!-- eslint-disable-next-line max-len -->
-        {#if hasSeparateBg}<OuterBackground background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+        {#if hasSeparateBg}<OuterBackground direction={$direction} background={background} radius={backgroundRadius} />{/if}<slot {focusHandler} {blurHandler} {hasCustomFocus} />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

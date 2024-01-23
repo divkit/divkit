@@ -49,6 +49,9 @@
     }
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
+
     const instId = rootCtx.genId('tabs');
 
     let prevId: string | undefined;
@@ -230,12 +233,12 @@
 
             const adjustedPaddings: EdgeInsets = {
                 top: (Number(paddings.top) || 0) / tabFontSize * 10,
-                right: (Number(paddings.right) || 0) / tabFontSize * 10,
+                right: (Number($direction === 'ltr' ? paddings.end : paddings.start) || Number(paddings.right) || 0) / tabFontSize * 10,
                 bottom: (Number(paddings.bottom) || 0) / tabFontSize * 10,
-                left: (Number(paddings.left) || 0) / tabFontSize * 10
+                left: (Number($direction === 'ltr' ? paddings.start : paddings.end) || Number(paddings.left) || 0) / tabFontSize * 10
             };
 
-            tabPaddings = correctEdgeInserts(adjustedPaddings, tabPaddings);
+            tabPaddings = correctEdgeInserts(adjustedPaddings, $direction, tabPaddings);
         }
     }
 
@@ -324,7 +327,7 @@
                 separatorBackground = correctColor($jsonSeparatorColor, 1, separatorBackground);
             }
             if ($jsonSeparatorPaddings) {
-                separatorMargins = correctEdgeInserts($jsonSeparatorPaddings, separatorMargins);
+                separatorMargins = correctEdgeInserts($jsonSeparatorPaddings, $direction, separatorMargins);
             }
         }
     }
@@ -638,7 +641,7 @@
             bind:this={tabsElem}
             class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             role="tablist"
-            style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding) : ''}
+            style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding, $direction) : ''}
             style:--divkit-tabs-font-size={pxToEm(tabFontSize)}
             style:--divkit-tabs-paddings={tabPaddings}
             style:--divkit-tabs-line-height={tabLineHeight}

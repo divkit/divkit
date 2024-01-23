@@ -29,6 +29,8 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    const direction = rootCtx.direction;
+
     let prevId: string | undefined;
     let select: HTMLSelectElement;
     let hasError = false;
@@ -102,10 +104,10 @@
         selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
         padding = selfPadding ? edgeInsertsToCss({
             top: (Number(selfPadding.top) || 0) / fontSize * 10,
-            right: (Number(selfPadding.right) || 0) / fontSize * 10,
+            right: (Number($direction === 'ltr' ? selfPadding.end : selfPadding.start) || Number(selfPadding.right) || 0) / fontSize * 10,
             bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10,
-            left: (Number(selfPadding.left) || 0) / fontSize * 10
-        }) : '';
+            left: (Number($direction === 'ltr' ? selfPadding.start : selfPadding.end) || Number(selfPadding.left) || 0) / fontSize * 10
+        }, $direction) : '';
     }
 
     $: {

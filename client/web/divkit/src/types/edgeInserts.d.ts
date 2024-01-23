@@ -4,4 +4,6 @@ export interface EdgeInsets {
     top?: number;
     bottom?: number;
     // unit
+    start?: number;
+    end?: number;
 }

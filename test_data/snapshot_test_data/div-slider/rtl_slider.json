@@ -2,7 +2,8 @@
   "description": "Different sliders in right-to-left context. Right value must be always smaller. Minimal values is on the right, max value on the left.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "configuration": {
     "layout_direction": "rtl"

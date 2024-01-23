@@ -38,6 +38,9 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
+
     let scroller: HTMLElement;
     let galleryItemsWrappers: HTMLElement[] = [];
     let hasScrollLeft = false;
@@ -173,7 +176,7 @@
     }
 
     $: {
-        padding = correctEdgeInserts($jsonPaddings, padding);
+        padding = correctEdgeInserts($jsonPaddings, $direction, padding);
     }
 
     $: gridTemplate = orientation === 'horizontal' ? 'grid-template-columns' : 'grid-template-rows';
@@ -259,12 +262,20 @@
             return;
         }
 
-        const scrollLeft = scroller.scrollLeft;
+        let scrollLeft = scroller.scrollLeft;
+        if ($direction === 'rtl') {
+            scrollLeft *= -1;
+        }
         const scrollWidth = scroller.scrollWidth;
         const containerWidth = scroller.offsetWidth;
 
-        hasScrollLeft = scrollLeft > 2;
-        hasScrollRight = scrollLeft + containerWidth < scrollWidth - 2;
+        if ($direction === 'ltr') {
+            hasScrollLeft = scrollLeft > 2;
+            hasScrollRight = scrollLeft + containerWidth < scrollWidth - 2;
+        } else {
+            hasScrollRight = scrollLeft > 2;
+            hasScrollLeft = scrollLeft + containerWidth < scrollWidth - 2;
+        }
     }
 
     const updateArrowsVisibilityDebounced = debounce(updateArrowsVisibility, 50);

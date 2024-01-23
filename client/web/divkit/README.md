@@ -292,6 +292,12 @@ fetchInit: {
 
 The default value is `auto`. Tweaks for mouse or touch events.
 
+#### direction
+
+`ltr` | `rtl`
+
+The default value is `ltr`. This will set the direction of the text and layout inside the markup (the html `dir` attribute). This property changes the behaviour of `start` / `end` and other properties and values.
+
 #### mix
 
 String, optional.

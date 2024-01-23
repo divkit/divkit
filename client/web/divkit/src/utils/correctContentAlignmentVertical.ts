@@ -1,9 +1,12 @@
-import type { ContentAlignmentVertical } from '../types/alignment';
+export type ContentAlignmentVerticalMapped =
+    'start' | 'center' | 'end' |
+    'space-between' | 'space-around' | 'space-evenly' |
+    'baseline';
 
 export function correctContentAlignmentVertical(
     orientation: string | undefined,
-    defaultVal: ContentAlignmentVertical
-): ContentAlignmentVertical {
+    defaultVal: ContentAlignmentVerticalMapped
+): ContentAlignmentVerticalMapped {
     if (
         orientation === 'top' ||
         orientation === 'center' ||
@@ -13,6 +16,11 @@ export function correctContentAlignmentVertical(
         orientation === 'space-around' ||
         orientation === 'space-evenly'
     ) {
+        if (orientation === 'top') {
+            return 'start';
+        } else if (orientation === 'bottom') {
+            return 'end';
+        }
         return orientation;
     }
 

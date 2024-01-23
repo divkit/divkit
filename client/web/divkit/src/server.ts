@@ -1,5 +1,5 @@
 import Root from './components/Root.svelte';
-import type { Platform, TypefaceProvider } from '../typings/common';
+import type { Direction, Platform, TypefaceProvider } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 import type { CustomComponentDescription } from '../typings/custom';
 
@@ -14,6 +14,7 @@ export function render(opts: {
     typefaceProvider?: TypefaceProvider;
     platform?: Platform;
     customComponents?: Map<string, CustomComponentDescription> | undefined;
+    direction?: Direction;
 }) {
     // Root has client-side typings, not a server one
     return (Root as any).render(opts).html;

@@ -257,6 +257,8 @@ export type Platform = 'desktop' | 'touch' | 'auto';
 
 export type Theme = 'system' | 'light' | 'dark';
 
+export type Direction = 'ltr' | 'rtl';
+
 export interface Customization {
     galleryLeftClass?: string;
     galleryRightClass?: string;

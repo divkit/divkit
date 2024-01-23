@@ -2,7 +2,8 @@
   "description": "Images aligned to the end in RTL context. Image must be on the left side",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "configuration": {
     "layout_direction": "rtl"

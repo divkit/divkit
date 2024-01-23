@@ -1,6 +1,6 @@
 import type { Readable, Writable } from 'svelte/store';
 import type { WrappedError } from '../utils/wrapError';
-import type { Action, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
+import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VisibilityAction } from '../../typings/common';
 import type { DivBaseData, Tooltip } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
@@ -59,6 +59,7 @@ export interface RootCtxValue {
     isPointerFocus: Readable<boolean>;
     typefaceProvider: TypefaceProvider;
     isDesktop: Readable<boolean>;
+    direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
 
     // Devtool

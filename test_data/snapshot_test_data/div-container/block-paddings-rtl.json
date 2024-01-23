@@ -2,7 +2,8 @@
     "description": "Blocks with paddings aligned right-to-left. Text in blocks should be padded accroding to text regarding to the alignment.",
     "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
     ],
     "configuration": {
         "layout_direction": "rtl"

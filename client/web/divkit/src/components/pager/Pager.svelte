@@ -32,6 +32,9 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
+
     const instId = rootCtx.genId('pager');
 
     const leftClass = rootCtx.getCustomization('pagerLeftClass');
@@ -112,7 +115,7 @@
     }
 
     $: {
-        padding = correctEdgeInserts($jsonPaddings, padding);
+        padding = correctEdgeInserts($jsonPaddings, $direction, padding);
     }
 
     $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
@@ -120,7 +123,10 @@
     $: {
         if ($jsonLayoutMode?.type === 'fixed') {
             const paddings = orientation === 'horizontal' ?
-                pxToEmWithUnits((json.paddings?.left || 0) + (json.paddings?.right || 0)) :
+                pxToEmWithUnits(
+                    (($direction === 'ltr' ? json.paddings?.start : json.paddings?.end) || json.paddings?.left || 0) +
+                    (($direction === 'ltr' ? json.paddings?.end : json.paddings?.start) || json.paddings?.right || 0)
+                ) :
                 pxToEmWithUnits((json.paddings?.top || 0) + (json.paddings?.bottom || 0));
             const neighbourPageWidth = $jsonLayoutMode.neighbour_page_width?.value;
             sizeVal = neighbourPageWidth ?
@@ -146,9 +152,9 @@
 
     $: shouldCheckArrows = $isDesktop && mounted && !hasError;
 
-    $: hasScrollLeft = currentItem > 0;
+    $: hasScrollLeft = $direction === 'ltr' ? currentItem > 0 : currentItem + 1 < items.length;
 
-    $: hasScrollRight = currentItem + 1 < items.length;
+    $: hasScrollRight = $direction === 'ltr' ? currentItem + 1 < items.length : currentItem > 0;
 
     function checkIsFullyIntersecting(scroller: DOMRect, item: DOMRect): boolean {
         if (orientation === 'horizontal') {
@@ -326,7 +332,7 @@
         {#if hasScrollLeft && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => setPreviousItem('clamp')}>
+            <div class="{leftClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_left}`}" on:click={() => ($direction === 'ltr' ? setPreviousItem : setNextItem)('clamp')}>
                 {#if !leftClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
@@ -337,7 +343,7 @@
         {#if hasScrollRight && shouldCheckArrows}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
-            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => setNextItem('clamp')}>
+            <div class="{rightClass || `${css.pager__arrow} ${arrowsCss.arrow} ${arrowsCss.arrow_right}`}" on:click={() => ($direction === 'ltr' ? setNextItem : setPreviousItem)('clamp')}>
                 {#if !rightClass}
                     <svg class={arrowsCss.arrow__icon} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['pager__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>

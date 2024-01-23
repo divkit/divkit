@@ -2,11 +2,11 @@ import { correctAlignmentVertical } from '../../src/utils/correctAlignmentVertic
 
 describe('correctAlignmentVertical', () => {
     test('simple', () => {
-        expect(correctAlignmentVertical(undefined, 'top')).toBe('top');
-        expect(correctAlignmentVertical('top', 'center')).toBe('top');
-        expect(correctAlignmentVertical('center', 'top')).toBe('center');
-        expect(correctAlignmentVertical('bottom', 'top')).toBe('bottom');
-        expect(correctAlignmentVertical('baseline', 'top')).toBe('baseline');
-        expect(correctAlignmentVertical('smth', 'top')).toBe('top');
+        expect(correctAlignmentVertical(undefined, 'start')).toBe('start');
+        expect(correctAlignmentVertical('top', 'center')).toBe('start');
+        expect(correctAlignmentVertical('center', 'start')).toBe('center');
+        expect(correctAlignmentVertical('bottom', 'start')).toBe('end');
+        expect(correctAlignmentVertical('baseline', 'start')).toBe('baseline');
+        expect(correctAlignmentVertical('smth', 'start')).toBe('start');
     });
 });

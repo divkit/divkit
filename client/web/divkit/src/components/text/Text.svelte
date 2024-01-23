@@ -8,7 +8,7 @@
     import type { Style } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Action, DivBase, TemplateContext } from '../../../typings/common';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { AlignmentHorizontal } from '../../types/alignment';
     import type { TintMode } from '../../types/image';
     import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
@@ -21,7 +21,7 @@
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctColor } from '../../utils/correctColor';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { propToString } from '../../utils/propToString';
@@ -36,6 +36,8 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    const direction = rootCtx.direction;
+
     let text = '';
     let fontSize = 12;
     let lineHeight = 1.25;
@@ -43,8 +45,8 @@
     let maxHeight = '';
     let lineClamp: string | number = '';
     let multiline = false;
-    let halign: AlignmentHorizontal = 'left';
-    let valign: AlignmentVertical = 'top';
+    let halign: AlignmentHorizontal = 'start';
+    let valign: AlignmentVerticalMapped = 'start';
     let rootTextColor = '';
     let focusTextColor = '';
     let gradient = '';
@@ -72,8 +74,8 @@
         maxHeight = '';
         lineClamp = '';
         multiline = false;
-        halign = 'left';
-        valign = 'top';
+        halign = 'start';
+        valign = 'start';
         rootTextColor = '';
         gradient = '';
         selectable = false;
@@ -145,7 +147,7 @@
     }
 
     $: {
-        halign = correctAlignmentHorizontal($jsonHAlign, halign);
+        halign = correctAlignmentHorizontal($jsonHAlign, $direction, halign);
     }
 
     $: {

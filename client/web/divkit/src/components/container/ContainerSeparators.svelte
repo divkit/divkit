@@ -11,15 +11,18 @@
     import type { ContainerOrientation } from '../../types/container';
     import type { SeparatorStyle } from '../../utils/container';
     import type { DrawableStyle } from '../../utils/correctDrawableStyles';
+    import type { Direction } from '../../../typings/common';
+    import type { ContentAlignmentHorizontalMapped } from '../../utils/correctContentAlignmentHorizontal';
+    import type { ContentAlignmentVerticalMapped } from '../../utils/correctContentAlignmentVertical';
     import { simpleThrottle } from '../../utils/simpleThrottle';
-    import { Box, getMarginBox } from '../../utils/getMarginBox';
-    import type { ContentAlignmentHorizontal, ContentAlignmentVertical } from '../../types/alignment';
+    import { type Box, getMarginBox } from '../../utils/getMarginBox';
 
     export let orientation: ContainerOrientation;
     export let separator: SeparatorStyle | null;
     export let lineSeparator: SeparatorStyle | null;
-    export let contentHAlign: ContentAlignmentHorizontal;
-    export let contentVAlign: ContentAlignmentVertical;
+    export let contentHAlign: ContentAlignmentHorizontalMapped;
+    export let contentVAlign: ContentAlignmentVerticalMapped;
+    export let direction: Direction;
 
     const throttledUpdated = simpleThrottle(updateSeparators, THROTTLE_TIMEOUT);
 
@@ -117,7 +120,7 @@
         separator: SeparatorStyle,
         boxes: Box[],
         crossAxis: boolean,
-        align: ContentAlignmentHorizontal | ContentAlignmentVertical,
+        align: ContentAlignmentHorizontalMapped | ContentAlignmentVerticalMapped,
         contentBox: {
             top: number;
             right: number;
@@ -224,6 +227,7 @@
             row.push(firstChild);
 
             let bbox = firstChild.getBoundingClientRect();
+            let left = bbox.left;
             let right = bbox.right;
             let bottom = bbox.bottom;
 
@@ -235,11 +239,12 @@
                     if (bbox.top < bottom) {
                         break;
                     }
-                } else if (bbox.left < right) {
+                } else if (direction === 'ltr' ? (bbox.left < right) : (bbox.right > left)) {
                     break;
                 }
 
                 right = Math.max(right, bbox.right);
+                left = Math.min(left, bbox.left);
                 bottom = Math.max(bottom, bbox.bottom);
                 row.push(first);
                 children.shift();
@@ -251,6 +256,10 @@
         const rowBoxes: Box[] = [];
         rows.forEach(row => {
             const boxes = row.map(it => getMarginBox(it));
+
+            if (direction === 'rtl' && orientation === 'horizontal') {
+                boxes.reverse();
+            }
 
             if (separator) {
                 appendSeparators(
@@ -271,6 +280,10 @@
             };
             rowBoxes.push(rowBox);
         });
+
+        if (direction === 'rtl' && orientation === 'vertical') {
+            rowBoxes.reverse();
+        }
         if (lineSeparator) {
             appendSeparators(
                 separators,

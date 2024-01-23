@@ -40,6 +40,8 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    const direction = rootCtx.direction;
+
     let img: HTMLImageElement;
     let state = STATE_LOADING;
     let isEmpty = false;
@@ -61,6 +63,7 @@
     let animationDuration = 0;
     let filter = '';
     let filterClipPath = '';
+    let isRTLMirror = false;
 
     $: if (json) {
         scale = 'none';
@@ -137,7 +140,7 @@
         content_alignment_horizontal?: AlignmentHorizontal;
         content_alignment_vertical?: AlignmentVertical;
     }): void {
-        position = correctImagePosition(pos, position);
+        position = correctImagePosition(pos, $direction, position);
     }
     $: updatePosition($jsonPosition);
 
@@ -184,6 +187,7 @@
         }
         filter = newFilter;
         filterClipPath = newClipPath;
+        isRTLMirror = $direction === 'rtl' && Array.isArray($jsonFilters) && $jsonFilters.some(it => it.type === 'rtl_mirror');
     }
 
     $: mods = {
@@ -191,7 +195,8 @@
         'is-width-content': isWidthContent,
         'is-height-content': isHeightContent,
         loaded: state === STATE_LOADED,
-        'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING
+        'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING,
+        'is-rtl-mirror': isRTLMirror
     };
 
     $: style = {

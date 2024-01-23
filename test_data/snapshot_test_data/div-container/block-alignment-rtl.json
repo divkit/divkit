@@ -2,8 +2,9 @@
     "description": "Container with content aligned right-to-left. Start/end text blocks should be aligned according to the alignment (right-to-left), left/right must stay unchanged.",
     "platforms": [
         "android",
-        "ios"
-    ],   
+        "ios",
+        "web"
+    ],
     "configuration": {
         "layout_direction": "rtl"
     },

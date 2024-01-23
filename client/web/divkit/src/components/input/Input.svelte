@@ -24,6 +24,7 @@
     import type { FixedLengthInputMask } from '../../utils/mask/fixedLengthInputMask';
     import type { MaybeMissing } from '../../expressions/json';
     import type { InputMask } from '../../types/input';
+    import type { AlignmentHorizontal } from '../../types/alignment';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -44,8 +45,7 @@
     import { updateCurrencyMask } from '../../utils/updateCurrencyMask';
     import { CurrencyInputMask } from '../../utils/mask/currencyInputMask';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
-    import { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
-    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { calcSelectionOffset, setSelectionOffset } from '../../utils/contenteditable';
 
     export let json: Partial<DivInputData> = {};
@@ -54,6 +54,8 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
 
     let prevId: string | undefined;
     let input: HTMLInputElement | HTMLSpanElement;
@@ -70,8 +72,8 @@
     let letterSpacing = '';
     let textColor = '#000';
     let highlightColor = '';
-    let alignmentHorizontal: AlignmentHorizontal = 'left';
-    let alignmentVertical: AlignmentVertical = 'center';
+    let alignmentHorizontal: AlignmentHorizontal = 'start';
+    let alignmentVertical: AlignmentVerticalMapped = 'center';
     let keyboardType = 'multi_line_text';
     let inputType = 'text';
     let inputMode: HTMLAttributes<HTMLInputElement>['inputmode'] = undefined;
@@ -191,7 +193,7 @@
     }
 
     $: {
-        alignmentHorizontal = correctAlignmentHorizontal($jsonAlignmentHorizontal, alignmentHorizontal);
+        alignmentHorizontal = correctAlignmentHorizontal($jsonAlignmentHorizontal, $direction, alignmentHorizontal);
     }
 
     $: {
@@ -221,14 +223,14 @@
         selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
         padding = selfPadding ? edgeInsertsToCss({
             top: (Number(selfPadding.top) || 0) / fontSize * 10,
-            right: (Number(selfPadding.right) || 0) / fontSize * 10,
+            right: (Number($direction === 'ltr' ? selfPadding.end : selfPadding.start) || Number(selfPadding.right) || 0) / fontSize * 10,
             bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10,
-            left: (Number(selfPadding.left) || 0) / fontSize * 10
-        }) : '';
+            left: (Number($direction === 'ltr' ? selfPadding.start : selfPadding.end) || Number(selfPadding.left) || 0) / fontSize * 10
+        }, $direction) : '';
         verticalPadding = selfPadding ? edgeInsertsToCss({
             top: (Number(selfPadding.top) || 0) / fontSize * 10,
             bottom: (Number(selfPadding.bottom) || 0) / fontSize * 10
-        }) : '';
+        }, $direction) : '';
     }
 
     $: if ($jsonAccessibility?.description) {

@@ -38,7 +38,8 @@
         TypefaceProvider,
         DisappearAction,
         FetchInit,
-        DivVariable
+        DivVariable,
+        Direction
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -93,6 +94,7 @@
     export let fetchInit: FetchInit = {};
     export let tooltipRoot: HTMLElement | undefined = undefined;
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
+    export let direction: Direction = 'ltr';
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -124,6 +126,8 @@
     $: if (currentTheme) {
         updateTheme();
     }
+
+    const directionStore = writable<Direction>(direction === 'rtl' ? 'rtl' : 'ltr');
 
     function themeQueryListener(): void {
         if (theme !== 'system' || !themeQuery) {
@@ -1058,6 +1062,7 @@
         isDesktop,
         isPointerFocus,
         customComponents,
+        direction: directionStore,
         componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
     });
 
@@ -1446,6 +1451,7 @@
     <div
         class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}{mix ? ` ${mix}` : ''}"
         on:touchstart={emptyTouchstartHandler}
+        dir={$directionStore}
     >
         <RootSvgFilters {svgFiltersMap} />
         <Unknown

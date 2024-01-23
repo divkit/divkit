@@ -9,7 +9,7 @@
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { Size } from '../../types/sizes';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { AlignmentHorizontal } from '../../types/alignment';
     import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
@@ -18,7 +18,7 @@
     import { genClassName } from '../../utils/genClassName';
     import { gridCalcTemplates } from '../../utils/gridCalcTemplates';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
-    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { type AlignmentVerticalMapped, correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
 
@@ -28,6 +28,8 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
 
     let columnCount = 1;
     let childStore: Readable<ChildInfo[]>;
@@ -43,13 +45,13 @@
     let rowsMinHeight: number[] = [];
     let rowCount = 0;
     let hasLayoutError = false;
-    let contentVAlign: AlignmentVertical = 'top';
-    let contentHAlign: AlignmentHorizontal = 'left';
+    let contentVAlign: AlignmentVerticalMapped = 'start';
+    let contentHAlign: AlignmentHorizontal = 'start';
 
     $: if (json) {
         columnCount = 1;
-        contentVAlign = 'top';
-        contentHAlign = 'left';
+        contentVAlign = 'start';
+        contentHAlign = 'start';
     }
 
     $: jsonItems = Array.isArray(json.items) && json.items || [];
@@ -209,7 +211,7 @@
     }
 
     $: {
-        contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, contentHAlign);
+        contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, $direction, contentHAlign);
     }
 
     $: mods = {

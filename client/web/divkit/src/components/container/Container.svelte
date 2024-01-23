@@ -1,8 +1,8 @@
 <script lang="ts" context="module">
     const HALIGN_MAP = {
-        left: 'start',
+        start: 'start',
         center: 'center',
-        right: 'end',
+        end: 'end',
         // 'space-*' values doesn't supported for cross-axis in wrap-container
         'space-between': 'start',
         'space-around': 'start',
@@ -10,9 +10,9 @@
     } as const;
 
     const VALIGN_MAP = {
-        top: 'start',
+        start: 'start',
         center: 'center',
-        bottom: 'end',
+        end: 'end',
         baseline: 'baseline',
         // 'space-*' doesn't supported for cross-axis in wrap-container
         'space-between': 'start',
@@ -36,10 +36,6 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
-    import type {
-        ContentAlignmentHorizontal,
-        ContentAlignmentVertical
-    } from '../../types/alignment';
     import type { ContainerChildInfo, SeparatorStyle } from '../../utils/container';
     import { prepareMargins } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
@@ -53,8 +49,8 @@
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
-    import { correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
-    import { correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
+    import { ContentAlignmentVerticalMapped, correctContentAlignmentVertical } from '../../utils/correctContentAlignmentVertical';
+    import { ContentAlignmentHorizontalMapped, correctContentAlignmentHorizontal } from '../../utils/correctContentAlignmentHorizontal';
     import { Truthy } from '../../utils/truthy';
 
     export let json: Partial<DivContainerData> = {};
@@ -64,10 +60,12 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    const direction = rootCtx.direction;
+
     let childStore: Readable<ContainerChildInfo[]>;
     let orientation: ContainerOrientation = 'vertical';
-    let contentVAlign: ContentAlignmentVertical = 'top';
-    let contentHAlign: ContentAlignmentHorizontal = 'left';
+    let contentVAlign: ContentAlignmentVerticalMapped = 'start';
+    let contentHAlign: ContentAlignmentHorizontalMapped = 'start';
     let separator: SeparatorStyle | null = null;
     let lineSeparator: SeparatorStyle | null = null;
     let aspect: number | undefined = undefined;
@@ -75,8 +73,8 @@
 
     $: if (json) {
         orientation = 'vertical';
-        contentVAlign = 'top';
-        contentHAlign = 'left';
+        contentVAlign = 'start';
+        contentHAlign = 'start';
         aspect = undefined;
     }
 
@@ -146,7 +144,7 @@
     }
 
     $: {
-        contentHAlign = correctContentAlignmentHorizontal($jsonContentHAlign, contentHAlign);
+        contentHAlign = correctContentAlignmentHorizontal($jsonContentHAlign, $direction, contentHAlign);
     }
 
     $: {
@@ -295,6 +293,7 @@
 
     {#if separator || lineSeparator}
         <ContainerSeparators
+            direction={$direction}
             {separator}
             {lineSeparator}
             {orientation}
