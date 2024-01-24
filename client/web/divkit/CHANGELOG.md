@@ -1,3 +1,10 @@
+## 29.4.0 (January 29, 2024)
+
+* Added `item_builder` property support in the `container` component.
+* Added `getDictFromDict`, `getArrayFromDict`, `getOptArrayFromDict` and `getOptDictFromDict` functions.
+* Added support for the `RTL` layout (with the `direction` configuration property).
+
+
 ## 29.3.0 (January 22, 2024)
 
 * `transition_in`, `transition_out`, `transition_change`, `action_animation` and `animation_in` / `animation_out` from the `tooltip` will now use system setting "prefers reduced motion".
