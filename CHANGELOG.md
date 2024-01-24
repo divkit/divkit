@@ -1,3 +1,26 @@
+## 29.4.0
+
+# Android Client:
+* Optimized the performance of tabs when scrolling.
+* Fixed a bug when the last element twitched when scrolling `div-pager` with `infinite-scroll`.
+* Added ability to scroll 'div-gallery' forward/backward by N-items using 'div-action'.
+* Fixed div models generating without templates.
+
+# iOS Client:
+* Add operators error messages.
+* Supported datetime format functions.
+* Added `list` value support for `div-accessibility.type`.
+* Fixed visibility actions for views that can change their size.
+
+# Web Client:
+* Added `item_builder` property support in the `container` component.
+* Added `getDictFromDict`, `getArrayFromDict`, `getOptArrayFromDict` and `getOptDictFromDict` functions.
+* Added support for the `RTL` layout (with the `direction` configuration property).
+
+# Kotlin JSON Builder:
+* Completely removed divkit.dsl.Url input value validation since it doesn't comply with RFC 2396.
+
+
 ## 29.3.0
 
 # Android Client:
