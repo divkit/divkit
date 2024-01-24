@@ -33,7 +33,7 @@ class CollectionItemBuilder internal constructor(
     operator fun plus(additive: Properties): CollectionItemBuilder = CollectionItemBuilder(
         Properties(
             data = additive.data ?: properties.data,
-            dataElementPrefix = additive.dataElementPrefix ?: properties.dataElementPrefix,
+            dataElementName = additive.dataElementName ?: properties.dataElementName,
             prototypes = additive.prototypes ?: properties.prototypes,
         )
     )
@@ -44,10 +44,10 @@ class CollectionItemBuilder internal constructor(
          */
         val data: Property<List<Any>>?,
         /**
-         * Prefix for accessing the next `data` element in the prototype.
-         * Default value: `it.`.
+         * Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+         * Default value: `it`.
          */
-        val dataElementPrefix: Property<String>?,
+        val dataElementName: Property<String>?,
         /**
          * Array of `div` from which the collection items will be created.
          */
@@ -57,7 +57,7 @@ class CollectionItemBuilder internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("data", data)
-            result.tryPutProperty("data_element_prefix", dataElementPrefix)
+            result.tryPutProperty("data_element_name", dataElementName)
             result.tryPutProperty("prototypes", prototypes)
             return result
         }
@@ -108,91 +108,91 @@ class CollectionItemBuilder internal constructor(
 
 /**
  * @param data Data that will be used to create collection items.
- * @param dataElementPrefix Prefix for accessing the next `data` element in the prototype.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
  * @param prototypes Array of `div` from which the collection items will be created.
  */
 @Generated
 fun DivScope.collectionItemBuilder(
     `use named arguments`: Guard = Guard.instance,
     data: List<Any>? = null,
-    dataElementPrefix: String? = null,
+    dataElementName: String? = null,
     prototypes: List<CollectionItemBuilder.Prototype>? = null,
 ): CollectionItemBuilder = CollectionItemBuilder(
     CollectionItemBuilder.Properties(
         data = valueOrNull(data),
-        dataElementPrefix = valueOrNull(dataElementPrefix),
+        dataElementName = valueOrNull(dataElementName),
         prototypes = valueOrNull(prototypes),
     )
 )
 
 /**
  * @param data Data that will be used to create collection items.
- * @param dataElementPrefix Prefix for accessing the next `data` element in the prototype.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
  * @param prototypes Array of `div` from which the collection items will be created.
  */
 @Generated
 fun DivScope.collectionItemBuilderProps(
     `use named arguments`: Guard = Guard.instance,
     data: List<Any>? = null,
-    dataElementPrefix: String? = null,
+    dataElementName: String? = null,
     prototypes: List<CollectionItemBuilder.Prototype>? = null,
 ) = CollectionItemBuilder.Properties(
     data = valueOrNull(data),
-    dataElementPrefix = valueOrNull(dataElementPrefix),
+    dataElementName = valueOrNull(dataElementName),
     prototypes = valueOrNull(prototypes),
 )
 
 /**
  * @param data Data that will be used to create collection items.
- * @param dataElementPrefix Prefix for accessing the next `data` element in the prototype.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
  * @param prototypes Array of `div` from which the collection items will be created.
  */
 @Generated
 fun TemplateScope.collectionItemBuilderRefs(
     `use named arguments`: Guard = Guard.instance,
     data: ReferenceProperty<List<Any>>? = null,
-    dataElementPrefix: ReferenceProperty<String>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
     prototypes: ReferenceProperty<List<CollectionItemBuilder.Prototype>>? = null,
 ) = CollectionItemBuilder.Properties(
     data = data,
-    dataElementPrefix = dataElementPrefix,
+    dataElementName = dataElementName,
     prototypes = prototypes,
 )
 
 /**
  * @param data Data that will be used to create collection items.
- * @param dataElementPrefix Prefix for accessing the next `data` element in the prototype.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
  * @param prototypes Array of `div` from which the collection items will be created.
  */
 @Generated
 fun CollectionItemBuilder.override(
     `use named arguments`: Guard = Guard.instance,
     data: List<Any>? = null,
-    dataElementPrefix: String? = null,
+    dataElementName: String? = null,
     prototypes: List<CollectionItemBuilder.Prototype>? = null,
 ): CollectionItemBuilder = CollectionItemBuilder(
     CollectionItemBuilder.Properties(
         data = valueOrNull(data) ?: properties.data,
-        dataElementPrefix = valueOrNull(dataElementPrefix) ?: properties.dataElementPrefix,
+        dataElementName = valueOrNull(dataElementName) ?: properties.dataElementName,
         prototypes = valueOrNull(prototypes) ?: properties.prototypes,
     )
 )
 
 /**
  * @param data Data that will be used to create collection items.
- * @param dataElementPrefix Prefix for accessing the next `data` element in the prototype.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
  * @param prototypes Array of `div` from which the collection items will be created.
  */
 @Generated
 fun CollectionItemBuilder.defer(
     `use named arguments`: Guard = Guard.instance,
     data: ReferenceProperty<List<Any>>? = null,
-    dataElementPrefix: ReferenceProperty<String>? = null,
+    dataElementName: ReferenceProperty<String>? = null,
     prototypes: ReferenceProperty<List<CollectionItemBuilder.Prototype>>? = null,
 ): CollectionItemBuilder = CollectionItemBuilder(
     CollectionItemBuilder.Properties(
         data = data ?: properties.data,
-        dataElementPrefix = dataElementPrefix ?: properties.dataElementPrefix,
+        dataElementName = dataElementName ?: properties.dataElementName,
         prototypes = prototypes ?: properties.prototypes,
     )
 )
@@ -207,7 +207,7 @@ fun CollectionItemBuilder.evaluate(
 ): CollectionItemBuilder = CollectionItemBuilder(
     CollectionItemBuilder.Properties(
         data = data ?: properties.data,
-        dataElementPrefix = properties.dataElementPrefix,
+        dataElementName = properties.dataElementName,
         prototypes = properties.prototypes,
     )
 )
