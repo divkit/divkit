@@ -26,7 +26,7 @@ final class DecoratingBlock: WrapperBlock {
   let paddings: EdgeInsets
   let visibilityActions: [VisibilityAction]
   let scheduler: Scheduling?
-  let lastVisibleBounds: Property<CGRect>?
+  let lastVisibleArea: Property<Int>?
   let tooltips: [BlockTooltip]
   let accessibilityElement: AccessibilityElement?
 
@@ -46,7 +46,7 @@ final class DecoratingBlock: WrapperBlock {
     paddings: EdgeInsets = .zero,
     visibilityActions: [VisibilityAction] = [],
     scheduler: Scheduling? = nil,
-    lastVisibleBounds: Property<CGRect>? = nil,
+    lastVisibleArea: Property<Int>? = nil,
     tooltips: [BlockTooltip] = [],
     accessibilityElement: AccessibilityElement? = nil
   ) {
@@ -65,7 +65,7 @@ final class DecoratingBlock: WrapperBlock {
     self.paddings = paddings
     self.visibilityActions = visibilityActions
     self.scheduler = scheduler
-    self.lastVisibleBounds = lastVisibleBounds
+    self.lastVisibleArea = lastVisibleArea
     self.tooltips = tooltips
     self.accessibilityElement = accessibilityElement
   }
@@ -151,7 +151,7 @@ extension DecoratingBlock {
     paddings: EdgeInsets? = nil,
     visibilityActions: [VisibilityAction]? = nil,
     scheduler: Scheduling? = nil,
-    lastVisibleBounds: Property<CGRect>? = nil,
+    lastVisibleArea: Property<Int>? = nil,
     tooltips: [BlockTooltip]? = nil,
     accessibilityElement: AccessibilityElement? = nil
   ) -> DecoratingBlock {
@@ -171,7 +171,7 @@ extension DecoratingBlock {
       paddings: paddings ?? self.paddings,
       visibilityActions: visibilityActions ?? self.visibilityActions,
       scheduler: scheduler ?? self.scheduler,
-      lastVisibleBounds: lastVisibleBounds ?? self.lastVisibleBounds,
+      lastVisibleArea: lastVisibleArea ?? self.lastVisibleArea,
       tooltips: tooltips ?? self.tooltips,
       accessibilityElement: accessibilityElement ?? self.accessibilityElement
     )

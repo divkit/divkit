@@ -6,19 +6,19 @@ import LayoutKit
 public final class DivLastVisibleBoundsCache {
   private let rwLock = RWLock()
 
-  private var storage: [UIElementPath: CGRect] = [:]
+  private var storage: [UIElementPath: Int] = [:]
 
   init() {}
 
-  func lastVisibleBounds(for path: UIElementPath) -> CGRect {
+  func lastVisibleArea(for path: UIElementPath) -> Int {
     rwLock.read {
       storage[path] ?? .zero
     }
   }
 
-  func updateLastVisibleBounds(for path: UIElementPath, bounds: CGRect) {
+  func updateLastVisibleArea(for path: UIElementPath, area: Int) {
     rwLock.write {
-      storage[path] = bounds
+      storage[path] = area
     }
   }
 

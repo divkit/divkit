@@ -4,48 +4,37 @@ import LayoutKit
 import XCTest
 
 final class DivLastVisibleBoundsCacheTests: XCTestCase {
-  let cache = DivLastVisibleBoundsCache()
+  private let cache = DivLastVisibleBoundsCache()
 
   func test_WhenCacheIsEmpty_RetrievesZeroFromCache() {
-    XCTAssertEqual(cache.lastVisibleBounds(for: "path"), .zero)
+    XCTAssertEqual(cache.lastVisibleArea(for: "path"), 0)
   }
 
-  func test_WhenUpdateLastVisibleBounds_RetrievesUpdatedValueFromCache() {
-    let rect = CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(squareDimension: 10))
+  func test_WhenUpdateLastVisibleArea_RetrievesUpdatedValueFromCache() {
+    cache.updateLastVisibleArea(for: "path", area: 12)
 
-    cache.updateLastVisibleBounds(for: "path", bounds: rect)
-
-    XCTAssertEqual(cache.lastVisibleBounds(for: "path"), rect)
+    XCTAssertEqual(cache.lastVisibleArea(for: "path"), 12)
   }
 
   func test_WhenReset_RetrievesZeroFromCache() {
-    let rect = CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(squareDimension: 10))
+    cache.updateLastVisibleArea(for: "path", area: 12)
 
-    cache.updateLastVisibleBounds(for: "path", bounds: rect)
     cache.reset()
 
-    XCTAssertEqual(cache.lastVisibleBounds(for: "path"), .zero)
+    XCTAssertEqual(cache.lastVisibleArea(for: "path"), 0)
   }
 
   func test_WhenDropVisibleBoundsWithMatchingPrefix_ClearsAllChildPaths() {
-    let rect1 = CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(squareDimension: 10))
-    let rect2 = CGRect(origin: .zero, size: CGSize(squareDimension: 10))
-    let rect3 = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
-    let parentPath: UIElementPath = "path"
-    let parentPath2: UIElementPath = "path2"
-    let childPath: UIElementPath = parentPath + "child"
-    let nestedChildPath: UIElementPath = childPath + "nestedChild"
+    cache.updateLastVisibleArea(for: "root", area: 12)
+    cache.updateLastVisibleArea(for: "another_root", area: 23)
+    cache.updateLastVisibleArea(for: "root" + "child", area: 34)
+    cache.updateLastVisibleArea(for: "root" + "child" + "nested_child", area: 45)
 
-    cache.updateLastVisibleBounds(for: parentPath, bounds: rect1)
-    cache.updateLastVisibleBounds(for: parentPath2, bounds: rect1)
-    cache.updateLastVisibleBounds(for: childPath, bounds: rect2)
-    cache.updateLastVisibleBounds(for: nestedChildPath, bounds: rect3)
+    cache.dropVisibleBounds(forMatchingPrefix: "root")
 
-    cache.dropVisibleBounds(forMatchingPrefix: parentPath)
-
-    XCTAssertEqual(cache.lastVisibleBounds(for: childPath), .zero)
-    XCTAssertEqual(cache.lastVisibleBounds(for: nestedChildPath), .zero)
-    XCTAssertEqual(cache.lastVisibleBounds(for: parentPath2), rect1)
-    XCTAssertEqual(cache.lastVisibleBounds(for: parentPath), .zero)
+    XCTAssertEqual(cache.lastVisibleArea(for: "root"), 0)
+    XCTAssertEqual(cache.lastVisibleArea(for: "root" + "child"), 0)
+    XCTAssertEqual(cache.lastVisibleArea(for: "root" + "child" + "nested_child"), 0)
+    XCTAssertEqual(cache.lastVisibleArea(for: "another_root"), 23)
   }
 }

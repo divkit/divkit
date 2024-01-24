@@ -28,7 +28,7 @@ extension Block {
     analyticsURL: URL? = nil,
     visibilityActions: [VisibilityAction]? = nil,
     scheduler: Scheduling? = nil,
-    lastVisibleBounds: Property<CGRect>? = nil,
+    lastVisibleArea: Property<Int>? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
     accessibilityElement: AccessibilityElement? = nil
@@ -95,7 +95,7 @@ extension Block {
         blurEffect: blurEffect ?? block.blurEffect,
         visibilityActions: visibilityActions ?? block.visibilityActions,
         scheduler: scheduler ?? block.scheduler,
-        lastVisibleBounds: lastVisibleBounds ?? block.lastVisibleBounds,
+        lastVisibleArea: lastVisibleArea ?? block.lastVisibleArea,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement
       )
@@ -121,7 +121,7 @@ extension Block {
       blurEffect: blurEffect,
       visibilityActions: visibilityActions ?? [],
       scheduler: scheduler,
-      lastVisibleBounds: lastVisibleBounds,
+      lastVisibleArea: lastVisibleArea,
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement
     )
@@ -149,7 +149,7 @@ extension Block {
     analyticsURL: URL? = nil,
     shadow: BlockShadow? = nil,
     visibilityActions: [VisibilityAction]? = nil,
-    lastVisibleBounds: Property<CGRect>? = nil,
+    lastVisibleArea: Property<Int>? = nil,
     scheduler: Scheduling? = nil,
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool = false,
@@ -169,7 +169,7 @@ extension Block {
       analyticsURL: analyticsURL,
       visibilityActions: visibilityActions,
       scheduler: scheduler,
-      lastVisibleBounds: lastVisibleBounds,
+      lastVisibleArea: lastVisibleArea,
       tooltips: tooltips,
       forceWrapping: forceWrapping,
       accessibilityElement: accessibilityElement

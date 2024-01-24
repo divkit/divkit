@@ -5,26 +5,23 @@ import BasePublic
 
 public final class VisibilityActionPerformers {
   private let actionPerformers: [VisibilityActionPerformer]
-  private let lastVisibleBounds: Property<CGRect>
+  private let lastVisibleArea: Property<Int>
 
   init(
     visibilityCheckParams: [VisibilityCheckParam],
-    lastVisibleBounds: Property<CGRect>,
+    lastVisibleArea: Property<Int>,
     scheduling: Scheduling
   ) {
-    self.lastVisibleBounds = lastVisibleBounds
+    self.lastVisibleArea = lastVisibleArea
     actionPerformers = visibilityCheckParams.map {
       VisibilityActionPerformer(visibilityCheckParam: $0, scheduling: scheduling)
     }
   }
 
   func onVisibleBoundsChanged(to: CGRect, bounds: CGRect) {
-    let beforeVisibleBounds = lastVisibleBounds.value
-    lastVisibleBounds.value = to
-
-    let visibleAreaPercentageBefore = bounds
-      .isEmpty ? 0 : Int(beforeVisibleBounds.area * 100 / bounds.area)
+    let visibleAreaPercentageBefore = lastVisibleArea.value
     let visibleAreaPercentageAfter = bounds.isEmpty ? 0 : Int(to.area * 100 / bounds.area)
+    lastVisibleArea.value = visibleAreaPercentageAfter
 
     for performer in actionPerformers {
       performer.onVisibleBoundsChanged(

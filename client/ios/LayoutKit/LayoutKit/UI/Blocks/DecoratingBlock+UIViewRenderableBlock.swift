@@ -40,7 +40,7 @@ extension DecoratingBlock {
       source: Variable { [weak self] in self },
       scheduler: scheduler,
       visibilityActions: visibilityActions,
-      lastVisibleBounds: lastVisibleBounds,
+      lastVisibleArea: lastVisibleArea,
       tooltips: tooltips,
       accessibility: accessibilityElement
     )
@@ -105,7 +105,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let source: Variable<AnyObject?>
     let scheduler: Scheduling?
     let visibilityActions: [VisibilityAction]
-    let lastVisibleBounds: Property<CGRect>?
+    let lastVisibleArea: Property<Int>?
     let tooltips: [BlockTooltip]
     let accessibility: AccessibilityElement?
 
@@ -343,7 +343,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
               type: visibilityAction.actionType
             )
           },
-          lastVisibleBounds: model.lastVisibleBounds ?? Property(initialValue: .zero),
+          lastVisibleArea: model.lastVisibleArea ?? Property(initialValue: 0),
           scheduling: model.scheduler ?? TimerScheduler()
         )
     }

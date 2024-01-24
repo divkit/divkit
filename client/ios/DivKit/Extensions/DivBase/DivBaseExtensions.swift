@@ -88,12 +88,12 @@ extension DivBase {
       border: border?.resolveBorder(expressionResolver),
       shadow: shadow,
       visibilityActions: hasVisibilityActions ? visibilityActions : nil,
-      lastVisibleBounds: hasVisibilityActions ? Property<CGRect>(
-        getter: { context.lastVisibleBoundsCache.lastVisibleBounds(for: context.parentPath) },
+      lastVisibleArea: hasVisibilityActions ? Property<Int>(
+        getter: { context.lastVisibleBoundsCache.lastVisibleArea(for: context.parentPath) },
         setter: {
-          context.lastVisibleBoundsCache.updateLastVisibleBounds(
+          context.lastVisibleBoundsCache.updateLastVisibleArea(
             for: context.parentPath,
-            bounds: $0
+            area: $0
           )
         }
       ) : nil,
