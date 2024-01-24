@@ -89,7 +89,6 @@ public final class DivKitComponents {
   ///   - urlOpener: Deprecated. This parameter is deprecated, use ``DivUrlHandler`` instead.
   ///   - variablesStorage: A ``DivVariablesStorage`` object that handles the storage and retrieval
   /// of variables.
-  ///   - logger: a ``DivActionLogger`` protocol to handle log when component action has triggered.
   public init(
     divCustomBlockFactory: DivCustomBlockFactory? = nil,
     extensionHandlers: [DivExtensionHandler] = [],
@@ -109,8 +108,7 @@ public final class DivKitComponents {
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler? = nil,
     urlOpener: @escaping UrlOpener = { _ in },
-    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    logger: DivActionLogger? = nil
+    variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.extensionHandlers = extensionHandlers
@@ -174,7 +172,9 @@ public final class DivKitComponents {
       updateCard: updateCard,
       showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
-      logger: logger ?? DefaultDivActionLogger(requestPerformer: requestPerformer),
+      logger: DefaultDivActionLogger(
+        requestPerformer: requestPerformer
+      ),
       trackVisibility: trackVisibility,
       trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },

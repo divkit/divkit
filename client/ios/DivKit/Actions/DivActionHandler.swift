@@ -146,7 +146,7 @@ public final class DivActionHandler {
       logger.log(url: logUrl, referer: referer, payload: action.payload)
     }
 
-    reporter.reportAction(cardId: cardId, info: DivActionInfo(logId: action.logId, source: source))
+    reporter.reportAction(cardId: cardId, info: DivActionInfo(logId: action.logId, source: source, payload: action.payload))
 
     if source == .visibility {
       trackVisibility(action.logId, cardId)
@@ -187,13 +187,11 @@ public final class DivActionHandler {
     )
 
     if !isDivActionURLHandled {
-      let referer = action.resolveReferer(expressionResolver)
-      logger.log(url: url, referer: referer, payload: action.payload)
-        
       switch source {
       case .visibility, .disappear:
         // For visibility actions url is treated as logUrl.
-          break
+        let referer = action.resolveReferer(expressionResolver)
+        logger.log(url: url, referer: referer, payload: action.payload)
       default:
         urlHandler.handle(url, sender: sender)
       }
