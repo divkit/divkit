@@ -889,6 +889,7 @@
       ],
       "result_type": "dict",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -909,6 +910,7 @@
       ],
       "result_type": "array",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1129,6 +1131,7 @@
       ],
       "result_type": "array",
       "platforms": [
+        "android",
         "web"
       ]
     },
@@ -1149,6 +1152,7 @@
       ],
       "result_type": "dict",
       "platforms": [
+        "android",
         "web"
       ]
     },

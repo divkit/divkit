@@ -1,7 +1,9 @@
 package com.yandex.div.evaluable.function
 
-import com.yandex.div.evaluable.*
+import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
+import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.FunctionProvider
 
 @Deprecated(
     "Use `GeneratedBuiltinFunctionProvider` instead",
@@ -178,6 +180,8 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetDictColor)
         registry.register(GetDictUrl)
         registry.register(GetDictBoolean)
+        registry.register(GetArrayFromDict)
+        registry.register(GetDictFromDict)
         registry.register(GetDictOptInteger)
         registry.register(GetDictOptNumber)
         registry.register(GetDictOptString)
@@ -186,6 +190,8 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetDictOptUrlWithStringFallback)
         registry.register(GetDictOptUrlWithUrlFallback)
         registry.register(GetDictOptBoolean)
+        registry.register(GetOptArrayFromDict)
+        registry.register(GetOptDictFromDict)
 
         // Dict functions
         registry.register(GetIntegerFromDict)

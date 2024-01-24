@@ -298,6 +298,48 @@ internal object GetBooleanFromDict : Function() {
     }
 }
 
+internal object GetDictFromDict : Function() {
+
+    override val name = "getDictFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.DICT
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
+        it as? JSONObject ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
+internal object GetArrayFromDict : Function() {
+
+    override val name = "getArrayFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.ARRAY
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ) = evaluate(name, args).let {
+        it as? JSONArray ?: throwWrongTypeException(name, args, resultType, it)
+    }
+}
+
 private fun evaluate(functionName: String, args: List<Any>): Any {
     var dict = args.first() as JSONObject?
     var propName: String
@@ -740,9 +782,54 @@ internal object GetOptBooleanFromDict : Function() {
     }
 }
 
-private fun evaluateSafe(args: List<Any>, fallback: Any): Any? {
-    var dict = args[1] as? JSONObject ?: return fallback
-    for (i in 2 until args.size - 1) {
+internal object GetOptDictFromDict : Function() {
+
+    override val name = "getOptDictFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.DICT
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val fallback = JSONObject()
+        return evaluateSafe(args, fallback, defaultFallback = true) as? JSONObject ?: fallback
+    }
+}
+
+internal object GetOptArrayFromDict : Function() {
+
+    override val name = "getOptArrayFromDict"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DICT), // variable name
+        FunctionArgument(type = EvaluableType.STRING, isVariadic = true) // property name
+    )
+
+    override val resultType = EvaluableType.ARRAY
+    override val isPure = false
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val fallback = JSONArray()
+        return evaluateSafe(args, fallback, defaultFallback = true) as? JSONArray ?: fallback
+    }
+}
+
+private fun evaluateSafe(args: List<Any>, fallback: Any, defaultFallback: Boolean = false): Any? {
+    val dictIndex = if (defaultFallback) 0 else 1
+    var dict = args[dictIndex] as? JSONObject ?: return fallback
+    for (i in dictIndex + 1 until args.size - 1) {
         dict = dict.optJSONObject(args[i] as String) ?: return fallback
     }
     return dict.opt(args.last() as String)
