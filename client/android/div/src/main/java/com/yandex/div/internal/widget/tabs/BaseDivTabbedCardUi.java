@@ -377,12 +377,21 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         }
         binding.bind();
         tabView.forceLayout();
+        int resolvedMeasureSpec = resolveHeightMeasureSpec(heightMeasureSpec, tab);
         tabView.measure(
             View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-            heightMeasureSpec
+            resolvedMeasureSpec
         );
         int result = tabView.getMeasuredHeight() + collapsiblePaddingBottom;
         return result;
+    }
+
+    private int resolveHeightMeasureSpec(int heightMeasureSpecFromParent, TAB_DATA tab) {
+        if (tab.getTabHeightLayoutParam() == ViewGroup.LayoutParams.MATCH_PARENT) {
+            return heightMeasureSpecFromParent;
+        } else {
+            return View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        }
     }
 
     @CallSuper
@@ -419,6 +428,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             //TextStyle getTextStyle(); take dep from legacy TextStyle.
             @Nullable
             Integer getTabHeight();
+            Integer getTabHeightLayoutParam();
         }
 
         /**

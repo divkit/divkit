@@ -143,6 +143,9 @@ internal class DivSimpleTab(
         }
     }
 
+    override fun getTabHeightLayoutParam() =
+        item.div.value().height.toLayoutParamsSize(displayMetrics, resolver)
+
     override fun getItem(): DivTabs.Item {
         return item
     }
