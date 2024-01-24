@@ -128,7 +128,7 @@ class DartGenerator(Generator):
             result += f'    return {full_name}('
             for prop in entity.instance_properties:
                 decode_strategy = prop.get_parse_strategy()
-                result += f"      {utils.lower_camel_case(prop.name)}: {prop.add_default_value_to(decode_strategy, in_constructor=False)},"
+                result += f"      {utils.lower_camel_case(prop.name)}: {decode_strategy},"
             result += '    );'
             result += '  }'
         else:

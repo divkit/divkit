@@ -23,7 +23,7 @@ class EntityWithComplexProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexProperty(
-      property: safeParseClass(EntityWithComplexPropertyProperty.fromJson(json['property']))!,
+      property: safeParseObj(EntityWithComplexPropertyProperty.fromJson(json['property']),)!,
     );
   }
 }

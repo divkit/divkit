@@ -23,7 +23,7 @@ class EntityWithComplexPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyWithDefaultValue(
-      property: safeParseClass(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property'])) ?? const EntityWithComplexPropertyWithDefaultValueProperty(value: Expression.value("Default text"),),
+      property: safeParseObj(EntityWithComplexPropertyWithDefaultValueProperty.fromJson(json['property']), fallback: const EntityWithComplexPropertyWithDefaultValueProperty(value: Expression.value("Default text"),),)!,
     );
   }
 }
@@ -46,7 +46,7 @@ class EntityWithComplexPropertyWithDefaultValueProperty with EquatableMixin {
       return null;
     }
     return EntityWithComplexPropertyWithDefaultValueProperty(
-      value: safeParseStrExpr(json['value']?.toString())!,
+      value: safeParseStrExpr(json['value']?.toString(),)!,
     );
   }
 }

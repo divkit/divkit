@@ -23,7 +23,7 @@ class EntityWithJsonProperty with EquatableMixin {
       return null;
     }
     return EntityWithJsonProperty(
-      jsonProperty: safeParseClass(json) ?? None,
+      jsonProperty: safeParseObj(json, fallback: None,)!,
     );
   }
 }

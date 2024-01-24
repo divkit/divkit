@@ -23,7 +23,7 @@ class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
     return EntityWithStringEnumPropertyWithDefaultValue(
-      value: safeParseClassExpr(EntityWithStringEnumPropertyWithDefaultValueValue.fromJson(json['value']), fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second) ?? const Expression.value(EntityWithStringEnumPropertyWithDefaultValueValue.second),
+      value: safeParseStrEnumExpr(json['value'], parse: EntityWithStringEnumPropertyWithDefaultValueValue.fromJson, fallback: EntityWithStringEnumPropertyWithDefaultValueValue.second,)!,
     );
   }
 }

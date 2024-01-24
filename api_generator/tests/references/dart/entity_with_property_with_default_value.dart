@@ -31,9 +31,9 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
       return null;
     }
     return EntityWithPropertyWithDefaultValue(
-      iNum: safeParseIntExpr(json['iNum'], fallback: 0) ?? const Expression.value(0),
-      nested: safeParseClass(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested'])),
-      url: safeParseUriExpr(json['url']) ?? const Expression.value(const Uri.parse("https://yandex.ru")),
+      iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
+      nested: safeParseObj(EntityWithPropertyWithDefaultValueNested.fromJson(json['nested']),),
+      url: safeParseUriExpr(json['url'])!,
     );
   }
 }
@@ -64,9 +64,9 @@ class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
       return null;
     }
     return EntityWithPropertyWithDefaultValueNested(
-      iNum: safeParseIntExpr(json['iNum'], fallback: 0) ?? const Expression.value(0),
-      nonOptional: safeParseStrExpr(json['non_optional']?.toString())!,
-      url: safeParseUriExpr(json['url']) ?? const Expression.value(const Uri.parse("https://yandex.ru")),
+      iNum: safeParseIntExpr(json['iNum'], fallback: 0,)!,
+      nonOptional: safeParseStrExpr(json['non_optional']?.toString(),)!,
+      url: safeParseUriExpr(json['url'])!,
     );
   }
 }

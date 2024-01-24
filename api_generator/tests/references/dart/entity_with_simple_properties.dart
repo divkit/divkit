@@ -55,14 +55,14 @@ class EntityWithSimpleProperties with EquatableMixin {
       return null;
     }
     return EntityWithSimpleProperties(
-      boolean: safeParseBoolExpr(json['boolean']),
-      booleanInt: safeParseBoolExpr(json['boolean_int']),
-      color: safeParseColorExpr(json['color']),
-      dNum: safeParseDoubleExpr(json['dNum']),
-      id: safeParseInt(json['id']) ?? 0,
-      integer: safeParseIntExpr(json['integer'], fallback: 0) ?? const Expression.value(0),
-      positiveInteger: safeParseIntExpr(json['positive_integer']),
-      string: safeParseStrExpr(json['string']?.toString()),
+      boolean: safeParseBoolExpr(json['boolean'],),
+      booleanInt: safeParseBoolExpr(json['boolean_int'],),
+      color: safeParseColorExpr(json['color'],),
+      dNum: safeParseDoubleExpr(json['dNum'],),
+      id: safeParseInt(json['id'], fallback: 0,)!,
+      integer: safeParseIntExpr(json['integer'], fallback: 0,)!,
+      positiveInteger: safeParseIntExpr(json['positive_integer'],),
+      string: safeParseStrExpr(json['string']?.toString(),),
       url: safeParseUriExpr(json['url']),
     );
   }

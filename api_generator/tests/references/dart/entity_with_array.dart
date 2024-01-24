@@ -24,7 +24,7 @@ class EntityWithArray with EquatableMixin {
       return null;
     }
     return EntityWithArray(
-      array: safeParseClass((json['array'] as List<dynamic>).map((j) => Entity.fromJson(j as Map <String, dynamic>)!).toList())!,
+      array: safeParseObj((json['array'] as List<dynamic>).map((j) => Entity.fromJson(j as Map <String, dynamic>)!,).toList())!,
     );
   }
 }

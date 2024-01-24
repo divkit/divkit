@@ -23,7 +23,7 @@ class EntityWithRawArray with EquatableMixin {
       return null;
     }
     return EntityWithRawArray(
-      array: safeParseClassExpr(json['array'])!,
+      array: safeParseObjExpr(json['array'],)!,
     );
   }
 }

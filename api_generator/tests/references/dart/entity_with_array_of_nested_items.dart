@@ -24,7 +24,7 @@ class EntityWithArrayOfNestedItems with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfNestedItems(
-      items: safeParseClass((json['items'] as List<dynamic>).map((j) => EntityWithArrayOfNestedItemsItem.fromJson(j as Map <String, dynamic>)!).toList())!,
+      items: safeParseObj((json['items'] as List<dynamic>).map((j) => EntityWithArrayOfNestedItemsItem.fromJson(j as Map <String, dynamic>)!,).toList())!,
     );
   }
 }
@@ -51,8 +51,8 @@ class EntityWithArrayOfNestedItemsItem with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfNestedItemsItem(
-      entity: safeParseClass(Entity.fromJson(json['entity']))!,
-      property: safeParseStrExpr(json['property']?.toString())!,
+      entity: safeParseObj(Entity.fromJson(json['entity']),)!,
+      property: safeParseStrExpr(json['property']?.toString(),)!,
     );
   }
 }

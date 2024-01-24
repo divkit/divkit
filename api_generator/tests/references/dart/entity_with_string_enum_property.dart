@@ -23,7 +23,7 @@ class EntityWithStringEnumProperty with EquatableMixin {
       return null;
     }
     return EntityWithStringEnumProperty(
-      property: safeParseClassExpr(EntityWithStringEnumPropertyProperty.fromJson(json['property']))!,
+      property: safeParseStrEnumExpr(json['property'], parse: EntityWithStringEnumPropertyProperty.fromJson,)!,
     );
   }
 }
