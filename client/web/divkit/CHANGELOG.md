@@ -1,4 +1,4 @@
-## 29.4.0 (ADD DATE HERE)
+## 29.4.0 (January 29, 2024)
 
 * Added `item_builder` property support in the `container` component.
 * Added `getDictFromDict`, `getArrayFromDict`, `getOptArrayFromDict` and `getOptDictFromDict` functions.
