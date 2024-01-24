@@ -60,7 +60,7 @@
         ],
         "prototypes": [
           {
-            "selector": "@{it.type == 'text'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'text'}",
             "div": {
               "type": "base_text",
               "paddings": {
@@ -75,7 +75,7 @@
             }
           },
           {
-            "selector": "@{it.type == 'image'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'image'}",
             "div": {
               "type": "image",
               "width": {
@@ -332,14 +332,14 @@
         ],
         "prototypes": [
           {
-            "selector": "@{it.type == 'title'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'title'}",
             "div": {
               "type": "title_text",
               "$text": "post_title"
             }
           },
           {
-            "selector": "@{it.type == 'text'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'text'}",
             "div": {
               "type": "base_text",
               "margins": {
@@ -352,7 +352,7 @@
             }
           },
           {
-            "selector": "@{it.type == 'bottom'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'bottom'}",
             "div": {
               "type": "base_text",
               "margins": {
@@ -381,14 +381,14 @@
         ],
         "prototypes": [
           {
-            "selector": "@{it.type == 'title'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'title'}",
             "div": {
               "type": "title_text",
               "$text": "form_title"
             }
           },
           {
-            "selector": "@{it.type == 'container'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'container'}",
             "div": {
               "type": "container",
               "orientation": "horizontal",
@@ -420,25 +420,25 @@
                   {
                     "type": "title",
                     "text": "Long top input title 1",
-                    "left_padding": "16",
-                    "right_padding": "16"
+                    "left_padding": 16,
+                    "right_padding": 16
                   },
                   {
                     "type": "title",
                     "text": "Long top input title 2",
-                    "left_padding": "16",
-                    "right_padding": "16"
+                    "left_padding": 16,
+                    "right_padding": 16
                   },
                   {
                     "type": "input",
                     "text_variable": "top_input_var",
-                    "corner_radius": "8",
+                    "corner_radius": 8,
                     "border_color": "#F1C40F"
                   },
                   {
                     "type": "title",
                     "text": "Middle input title",
-                    "left_padding": "16"
+                    "left_padding": 16
                   },
                   {
                     "type": "input",
@@ -447,7 +447,7 @@
                   {
                     "type": "title",
                     "text": "Bottom",
-                    "left_padding": "16"
+                    "left_padding": 16
                   },
                   {
                     "type": "title",
@@ -460,28 +460,28 @@
                 ],
                 "prototypes": [
                   {
-                    "selector": "@{it.type == 'title'}",
+                    "selector": "@{getStringFromDict(it, 'type') == 'title'}",
                     "div": {
                       "type": "base_text",
                       "width": {
                         "type": "wrap_content"
                       },
                       "margins": {
-                        "left": "@{toInteger(it.left_padding) !: 0}",
-                        "right": "@{toInteger(it.right_padding) !: 0}"
+                        "left": "@{getIntegerFromDict(it, 'left_padding') !: 0}",
+                        "right": "@{getIntegerFromDict(it, 'right_padding') !: 0}"
                       },
                       "line_height": 16,
-                      "text": "@{it.text}"
+                      "text": "@{getStringFromDict(it, 'text')}"
                     }
                   },
                   {
-                    "selector": "@{it.type == 'input'}",
+                    "selector": "@{getStringFromDict(it, 'type') == 'input'}",
                     "div": {
                       "type": "base_input",
                       "border": {
-                        "corner_radius": "@{toInteger(it.corner_radius) !: 0}",
+                        "corner_radius": "@{getIntegerFromDict(it, 'corner_radius') !: 0}",
                         "stroke": {
-                          "color": "@{it.border_color !: '#00ffffff'}"
+                          "color": "@{getColorFromDict(it, 'border_color') !: '#00ffffff'}"
                         }
                       },
                       "text_variable": "middle_input_var"
@@ -556,20 +556,20 @@
         ],
         "prototypes": [
           {
-            "selector": "@{it.type == 'header'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'header'}",
             "div": {
               "type": "card_header"
             }
           },
           {
-            "selector": "@{it.type == 'tab_pager'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'tab_pager'}",
             "div": {
               "type": "tab_pager",
               "$items": "pages"
             }
           },
           {
-            "selector": "@{it.type == 'separator'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'separator'}",
             "div": {
               "type": "separator",
               "delimiter_style": {
@@ -578,7 +578,7 @@
             }
           },
           {
-            "selector": "@{it.type == 'button'}",
+            "selector": "@{getStringFromDict(it, 'type') == 'button'}",
             "div": {
               "type": "button",
               "$text": "button_text",
@@ -719,10 +719,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -786,10 +786,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -853,10 +853,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -920,10 +920,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -995,10 +995,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1062,10 +1062,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1129,10 +1129,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1196,10 +1196,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1271,10 +1271,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1338,10 +1338,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1405,10 +1405,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1472,10 +1472,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1547,10 +1547,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1614,10 +1614,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1681,10 +1681,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1748,10 +1748,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1823,10 +1823,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1890,10 +1890,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -1957,10 +1957,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2024,10 +2024,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2099,10 +2099,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2166,10 +2166,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2233,10 +2233,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2300,10 +2300,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2375,10 +2375,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2442,10 +2442,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2509,10 +2509,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2576,10 +2576,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2651,10 +2651,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2718,10 +2718,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2785,10 +2785,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
@@ -2852,10 +2852,10 @@
                         {
                           "div": {
                             "type": "list_item",
-                            "indicator_color": "@{it.color}",
+                            "indicator_color": "@{getColorFromDict(it, 'color')}",
                             "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                            "title": "@{it.title}",
-                            "subtitle": "@{it.subtitle}",
+                            "title": "@{getStringFromDict(it, 'title')}",
+                            "subtitle": "@{getStringFromDict(it, 'subtitle')}",
                             "counter": "1K",
                             "action": {
                               "log_id": "benchmark/list_item_1",
