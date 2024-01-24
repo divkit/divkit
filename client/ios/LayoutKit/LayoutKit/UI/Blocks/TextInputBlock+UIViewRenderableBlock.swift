@@ -286,13 +286,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       maskValidator: mask,
       signal: userInputPipe.signal
     )
-    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] position in
-      guard let self, let position else { return }
+    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
+      guard let self, let range else { return }
       DispatchQueue.main.async {
-        self.multiLineInput.selectedRange = NSRange(position.rawValue..<(position.rawValue))
+        self.multiLineInput.selectedRange = range
         if let textFieldPosition = self.singleLineInput.position(
           from: self.singleLineInput.beginningOfDocument,
-          offset: position.rawValue
+          offset: range.location
         ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
           self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
             from: textFieldPosition,
@@ -453,19 +453,19 @@ extension TextInputBlockView {
     observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
   }
 
-  private func inputViewReplaceTextIn(view _: UIView, range: NSRange, text: String) -> Bool {
+  private func inputViewReplaceTextIn(view _: UIView, range: Range<String.Index>, text: String) -> Bool {
     if maskedViewModel != nil {
       if text == "" {
-        if range.length == 0 {
-          if range.lowerBound > 0 {
-            userInputPipe.send(.clear(pos: range.lowerBound - 1))
+        if range.isEmpty {
+          if range.lowerBound > currentText.startIndex {
+            userInputPipe.send(.clear(pos: currentText.index(before: range.lowerBound)))
           }
         } else {
           userInputPipe
-            .send(.clearRange(range: range.lowerBound..<range.upperBound))
+            .send(.clearRange(range: range))
         }
       } else {
-        userInputPipe.send(.insert(string: text, range: range.lowerBound..<range.upperBound))
+        userInputPipe.send(.insert(string: text, range: range))
       }
       return false
     }
@@ -492,7 +492,9 @@ extension TextInputBlockView: UITextViewDelegate {
     shouldChangeTextIn _: NSRange,
     replacementText text: String
   ) -> Bool {
-    let range = multiLineInput.selectedRange
+    guard let range = Range(multiLineInput.selectedRange, in: currentText) else {
+      return false
+    }
     return inputViewReplaceTextIn(view: self, range: range, text: text)
   }
 }
@@ -515,12 +517,19 @@ extension TextInputBlockView: UITextFieldDelegate {
     shouldChangeCharactersIn range: NSRange,
     replacementString string: String
   ) -> Bool {
-    guard let selectionRange = textField.selectedTextRange else {
-      return inputViewReplaceTextIn(view: textField, range: range, text: string)
+    let nsRange: NSRange
+    if let selectedRange = textField.selectedTextRange {
+      let location = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
+      let length = textField.offset(from: selectedRange.start, to: selectedRange.end)
+      nsRange = NSRange(location: location, length: length)
+    } else {
+      nsRange = range
     }
-    let location = textField.offset(from: textField.beginningOfDocument, to: selectionRange.start)
-    let length = textField.offset(from: selectionRange.start, to: selectionRange.end)
-    let range = NSRange(location: location, length: length)
+    
+    guard let range = Range(nsRange, in: currentText) else {
+      return false
+    }
+
     return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
 }

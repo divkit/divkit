@@ -108,7 +108,7 @@ extension InputData {
 extension CursorData {
   init(_ pos: Int, _ afterNonDecodingSymbols: Bool) {
     self.init(
-      cursorPosition: .init(rawValue: pos),
+      cursorPosition: .init(rawValue: String.Index(integerLiteral: pos)),
       afterNonDecodingSymbols: afterNonDecodingSymbols
     )
   }

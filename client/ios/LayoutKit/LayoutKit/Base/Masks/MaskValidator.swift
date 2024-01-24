@@ -18,74 +18,60 @@ public final class MaskValidator: Equatable {
     formatter.formatted(rawText: rawText, rawCursorPosition: rawCursorPosition)
   }
 
-  public func removeSymbols(at pos: Int, data: InputData) -> (String, CursorData?) {
-    let pos = min(pos, data.text.count)
+  public func removeSymbols(at index: String.Index, data: InputData) -> (String, CursorData?) {
     var data = data
-    let removeIndex = data.rawData.lastIndex { data.text.distance(
-      from: data.text.index(data.text.startIndex, offsetBy: pos),
-      to: $0.index
-    ) <= 0 }
-    if let removeIndex {
-      data.rawData.remove(at: removeIndex)
+    let removePosition = data.rawData.lastIndex {
+      data.text.distance(from: index, to: $0.index) <= 0
     }
+    if let removePosition {
+      data.rawData.remove(at: removePosition)
+    }
+    let rawText = data.rawText
     return (
-      data.rawText,
-      CursorData(cursorPosition: .init(rawValue: removeIndex ?? 0), afterNonDecodingSymbols: false)
+      rawText,
+      CursorData(
+        cursorPosition: .init(
+          rawValue: removePosition.flatMap { rawText.index(offsetBy: $0) } ?? rawText.startIndex
+        ),
+        afterNonDecodingSymbols: false
+      )
     )
   }
 
-  public func removeSymbols(at range: Range<Int>, data: InputData) -> (String, CursorData?) {
-    let range = Range<Int>
-      .init(uncheckedBounds: (
-        min(range.lowerBound, data.text.count),
-        min(range.upperBound, data.text.count)
-      ))
-    let index = data.rawData.firstIndex { data.text.distance(
-      from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
-      to: $0.index
-    ) >= 0 }
+  public func removeSymbols(at range: Range<String.Index>, data: InputData) -> (String, CursorData?) {
+    let range = range.clamped(to: data.text.wholeStringRange)
     return (
       String(data.rawData.filter {
-        data.text.distance(
-          from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
-          to: $0.index
-        ) < 0 ||
-          data.text.distance(
-            from: data.text.index(data.text.startIndex, offsetBy: range.upperBound),
-            to: $0.index
-          ) >= 0
+        data.text.distance(from: range.lowerBound, to: $0.index) < 0 ||
+        data.text.distance(from: range.upperBound, to: $0.index) >= 0
       }.map(\.char)),
-      index
-        .flatMap { CursorData(cursorPosition: .init(rawValue: $0), afterNonDecodingSymbols: false) }
+      data.rawData.firstIndex { data.text.distance(from: range.lowerBound, to: $0.index) >= 0 }
+        .flatMap {
+          CursorData(
+            cursorPosition: .init(rawValue: data.rawText.index(offsetBy: $0)),
+            afterNonDecodingSymbols: false
+          )
+        }
     )
   }
 
   public func addSymbols(
-    at range: Range<Int>,
+    at range: Range<String.Index>,
     data: InputData,
     string: String
   ) -> (String, CursorData?) {
-    let range = Range<Int>
-      .init(uncheckedBounds: (
-        min(range.lowerBound, data.text.count),
-        min(range.upperBound, data.text.count)
-      ))
-    let leftIndex = data.rawData.firstIndex { data.text.distance(
-      from: data.text.index(data.text.startIndex, offsetBy: range.lowerBound),
-      to: $0.index
-    ) >= 0 } ?? data.rawData.count
-
-    let rightIndex = data.rawData.firstIndex { data.text.distance(
-      from: data.text.index(data.text.startIndex, offsetBy: range.upperBound),
-      to: $0.index
-    ) >= 0 } ?? data.rawData.count
-
-    let prefix = String(data.rawData[0..<leftIndex].map(\.char))
-    let suffix = String(data.rawData[rightIndex..<data.rawData.count].map(\.char))
+    let range = range.clamped(to: data.text.wholeStringRange)
+    let prefix = data.rawData.filter {
+      data.text.distance(from: range.lowerBound, to: $0.index) < 0
+    }.map(\.char)
+    let suffix = data.rawData.filter {
+      data.text.distance(from: range.upperBound, to: $0.index) >= 0
+    }.map(\.char)
+    let text = String(prefix + string + suffix)
     return (
-      String(prefix + string + suffix),
+      text,
       CursorData(
-        cursorPosition: .init(rawValue: prefix.count + string.count),
+        cursorPosition: .init(rawValue: text.index(offsetBy: prefix.count + string.count)),
         afterNonDecodingSymbols: true
       )
     )
@@ -97,7 +83,7 @@ public final class MaskValidator: Equatable {
 }
 
 public enum CursorPositionTag {}
-public typealias CursorPosition = Tagged<CursorPositionTag, Int>
+public typealias CursorPosition = Tagged<CursorPositionTag, String.Index>
 
 public struct CursorData: Equatable {
   let cursorPosition: CursorPosition
@@ -115,5 +101,11 @@ public struct InputData {
   public var rawData: [RawCharacter]
   public var rawText: String {
     String(rawData.map(\.char))
+  }
+}
+
+extension String {
+  fileprivate func index(offsetBy: Int) -> Index {
+    index(startIndex, offsetBy: offsetBy)
   }
 }

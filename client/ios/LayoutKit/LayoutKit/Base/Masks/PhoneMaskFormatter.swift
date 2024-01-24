@@ -41,21 +41,18 @@ public final class PhoneMaskFormatter: MaskFormatter {
     }
     let textString = String(text)
     if let rawCursorPosition {
-      if rawData.count > rawCursorPosition.cursorPosition.rawValue {
-        let pos = rawCursorPosition.cursorPosition.rawValue
-        if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
-          newCursorPosition = .init(
-            rawValue: textString
-              .distance(from: textString.startIndex, to: rawData[pos].index)
-          )
+      let cursorIndex = rawCursorPosition.cursorPosition.rawValue
+      if cursorIndex < rawText.endIndex {
+        let pos = rawText.distance(from: rawText.startIndex, to: cursorIndex)
+        if pos >= rawData.count {
+          newCursorPosition = .init(rawValue: textString.endIndex)
+        } else if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
+          newCursorPosition = .init(rawValue: rawData[pos].index)
         } else {
-          newCursorPosition = .init(
-            rawValue: textString
-              .distance(from: textString.startIndex, to: rawData[pos - 1].index) + 1
-          )
+          newCursorPosition = .init(rawValue: textString.index(after: rawData[pos - 1].index))
         }
       } else {
-        newCursorPosition = .init(rawValue: text.count)
+        newCursorPosition = .init(rawValue: textString.endIndex)
       }
     }
     return InputData(text: textString, cursorPosition: newCursorPosition, rawData: rawData)

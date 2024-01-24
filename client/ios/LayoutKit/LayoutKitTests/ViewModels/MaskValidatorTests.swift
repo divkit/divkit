@@ -190,3 +190,34 @@ private final class FakeMaskFormatter: MaskFormatter {
     return true
   }
 }
+
+extension MaskValidator {
+  fileprivate func removeSymbols(at pos: Int, data: InputData) -> (String, CursorData?) {
+    removeSymbols(at: String.Index(integerLiteral: pos), data: data)
+  }
+
+  fileprivate func removeSymbols(at range: Range<Int>, data: InputData) -> (String, CursorData?) {
+    removeSymbols(at: range.indexRange, data: data)
+  }
+
+  fileprivate func addSymbols(
+    at range: Range<Int>,
+    data: InputData,
+    string: String
+  ) -> (String, CursorData?) {
+    addSymbols(at: range.indexRange, data: data, string: string)
+  }
+}
+
+extension String.Index: ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: IntegerLiteralType) {
+    self.init(utf16Offset: value, in: String(repeating: " ", count: value))
+  }
+}
+
+extension Range<Int> {
+  fileprivate var indexRange: Range<String.Index> {
+    String.Index(integerLiteral: lowerBound)..<String.Index(integerLiteral: upperBound)
+  }
+}
+

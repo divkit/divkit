@@ -32,10 +32,6 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
             text.append(element)
           } else {
             text.append(ch)
-            if let rawCursorPosition, rawData.count == rawCursorPosition.cursorPosition.rawValue,
-               rawCursorPosition.afterNonDecodingSymbols {
-              newCursorPosition = .init(rawValue: text.count)
-            }
           }
         }
         break
@@ -60,18 +56,24 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
         } else {
           text.append(placeholder)
         }
-
-        if let rawCursorPosition, rawData.count <= rawCursorPosition.cursorPosition.rawValue {
-          newCursorPosition = .init(rawValue: text.count)
-        }
       } else {
         text.append(element)
-        if let rawCursorPosition, rawData.count < rawCursorPosition.cursorPosition.rawValue {
-          newCursorPosition = .init(rawValue: text.count)
-        } else if let rawCursorPosition, rawData.count == rawCursorPosition.cursorPosition.rawValue,
-                  rawCursorPosition.afterNonDecodingSymbols {
-          newCursorPosition = .init(rawValue: text.count)
+      }
+    }
+    let textString = String(text)
+    if let rawCursorPosition {
+      let cursorIndex = rawCursorPosition.cursorPosition.rawValue
+      if cursorIndex < rawText.endIndex {
+        let pos = rawText.distance(from: rawText.startIndex, to: cursorIndex)
+        if pos >= rawData.count {
+          newCursorPosition = .init(rawValue: textString.endIndex)
+        } else if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
+          newCursorPosition = .init(rawValue: rawData[pos].index)
+        } else {
+          newCursorPosition = .init(rawValue: textString.index(after: rawData[pos - 1].index))
         }
+      } else {
+        newCursorPosition = .init(rawValue: textString.endIndex)
       }
     }
     return InputData(text: String(text), cursorPosition: newCursorPosition, rawData: rawData)

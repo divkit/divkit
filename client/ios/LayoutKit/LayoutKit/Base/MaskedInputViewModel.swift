@@ -4,14 +4,14 @@ import UIKit
 
 public class MaskedInputViewModel {
   public enum Action: Equatable {
-    case insert(string: String, range: Range<Int>)
-    case clear(pos: Int)
-    case clearRange(range: Range<Int>)
+    case insert(string: String, range: Range<String.Index>)
+    case clear(pos: String.Index)
+    case clearRange(range: Range<String.Index>)
   }
 
   @ObservableProperty private var rawCursorPosition: CursorData?
   @ObservableVariable var text: String
-  @ObservableVariable var cursorPosition: CursorPosition?
+  @ObservableVariable var cursorPosition: NSRange?
   @ObservableProperty var rawText: String
   @ObservableProperty var maskValidator: MaskValidator
   private let disposePool = AutodisposePool()
@@ -34,10 +34,13 @@ public class MaskedInputViewModel {
       rawCursorData.currentAndNewValues.skipRepeats()
     ).map { binding, maskValidator, cursor in
       let res = maskValidator.formatted(rawText: binding, rawCursorPosition: cursor)
-      return (res.text, res.cursorPosition)
+      return (
+        res.text,
+        res.cursorPosition.flatMap { NSRange($0.rawValue..<$0.rawValue, in: res.text) }
+      )
     }
     _text = ObservableVariable(initialValue: "", newValues: resultSignal.map(\.0))
-    _cursorPosition = ObservableVariable<CursorPosition?>(
+    _cursorPosition = ObservableVariable<NSRange?>(
       initialValue: nil,
       newValues: resultSignal.map(\.1)
     )
