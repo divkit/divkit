@@ -4,7 +4,8 @@ import com.yandex.div.gradle.PublicationType
 apply from: "$projectDir/version.gradle"
 apply from: "$projectDir/dependencies.gradle"
 
-def publicationType = PublicationType.fromString(project.findProperty("publicationType"))
+def publicationType = project.findProperty("publicationType")
+def regularVersion = project.findProperty("regularVersion")
 
 ext {
     minSdkVersion = 21
@@ -12,7 +13,11 @@ ext {
     targetSdkVersion = 34
     buildToolsVersion = "34.0.0"
 
-    divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix()}"
+    if (regularVersion == null) {
+        divkitVersionName = "${divkitVersion.versionName}${PublicationType.fromString(publicationType).getVersionSuffix()}"
+    } else {
+        divkitVersionName = "regular-$regularVersion"
+    }
 }
 
 buildscript {
