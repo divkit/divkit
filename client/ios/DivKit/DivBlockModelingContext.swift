@@ -41,7 +41,7 @@ public struct DivBlockModelingContext {
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
   private(set) var sizeModifier: DivSizeModifier?
-  private var prototypesStorage = PrototypesValueStorage()
+  private var prototypesStorage = [String: Any]()
 
   public init(
     cardId: DivCardID,
@@ -273,8 +273,8 @@ extension DivBlockModelingContext {
     let variableValueProvider: AnyCalcExpression.ValueProvider
     let functionsProvider: FunctionsProvider
     if let prototypesData {
-      let prototypesStorage = self.prototypesStorage.copy()
-      prototypesStorage.insert(prefix: prototypesData.0, data: prototypesData.1)
+      var prototypesStorage = self.prototypesStorage
+      prototypesStorage[prototypesData.0] = prototypesData.1
       variableValueProvider = makeVariableValueProvider(
         cardId: cardId,
         variablesStorage: variablesStorage,

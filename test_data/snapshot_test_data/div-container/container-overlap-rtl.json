@@ -2,8 +2,9 @@
     "description": "Overlap container aligned right-to-left. Start/end text blocks should be aligned according to the alignment (right-to-left).",
     "platforms": [
         "android",
-        "ios"
-    ], 
+        "ios",
+        "web"
+    ],
     "configuration": {
         "layout_direction": "rtl"
     },

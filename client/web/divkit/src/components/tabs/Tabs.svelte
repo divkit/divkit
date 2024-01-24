@@ -8,12 +8,13 @@
     import type { Mods } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivTabsData } from '../../types/tabs';
-    import type { Action, DivBase, TemplateContext } from '../../../typings/common';
+    import type { Action } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { SwitchElements, Overflow } from '../../types/switch-elements';
     import type { TabItem } from '../../types/tabs';
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -37,9 +38,7 @@
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
 
-    export let json: Partial<DivTabsData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivTabsData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     interface ChildInfo {
@@ -49,6 +48,9 @@
     }
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
+
     const instId = rootCtx.genId('tabs');
 
     let prevId: string | undefined;
@@ -81,7 +83,7 @@
     let isSwipeInitialized = false;
     let isAnimated = false;
     let previousSelected: number | undefined;
-    let showedPanels: boolean[] = [];
+    let showedPanels: (ComponentContext | undefined)[] = [];
     let visiblePanels: boolean[] = [];
     let hidePanelsTimeout: number | null = null;
     let startCoords: Coords | null = null;
@@ -92,7 +94,7 @@
     let startTransform: number;
     let currentTransform: number;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         tabFontSize = 12;
         tabPaddings = '';
         tabBorderRadius = '';
@@ -110,21 +112,23 @@
         titlePadding = null;
     }
 
-    $: items = json.items || [];
+    $: items = componentContext.json.items || [];
     $: parentOfItems = items.map(it => {
         return it.div;
     });
 
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    $: jsonSelectedTab = rootCtx.getJsonWithVars(json.selected_tab);
-    $: jsonTabStyle = rootCtx.getDerivedFromVars(json.tab_title_style);
-    $: jsonSeparator = rootCtx.getDerivedFromVars(json.has_separator);
-    $: jsonSeparatorColor = rootCtx.getDerivedFromVars(json.separator_color);
-    $: jsonSeparatorPaddings = rootCtx.getDerivedFromVars(json.separator_paddings);
-    $: jsonSwipeEnabled = rootCtx.getDerivedFromVars(json.switch_tabs_by_content_swipe_enabled);
-    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
-    $: jsonTitlePaddings = rootCtx.getDerivedFromVars(json.title_paddings);
+    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
+    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
+    $: jsonSelectedTab = componentContext.getJsonWithVars(componentContext.json.selected_tab);
+    $: jsonTabStyle = componentContext.getDerivedFromVars(componentContext.json.tab_title_style);
+    $: jsonSeparator = componentContext.getDerivedFromVars(componentContext.json.has_separator);
+    $: jsonSeparatorColor = componentContext.getDerivedFromVars(componentContext.json.separator_color);
+    $: jsonSeparatorPaddings = componentContext.getDerivedFromVars(componentContext.json.separator_paddings);
+    $: jsonSwipeEnabled = componentContext.getDerivedFromVars(
+        componentContext.json.switch_tabs_by_content_swipe_enabled
+    );
+    $: jsonRestrictParentScroll = componentContext.getDerivedFromVars(componentContext.json.restrict_parent_scroll);
+    $: jsonTitlePaddings = componentContext.getDerivedFromVars(componentContext.json.title_paddings);
 
     $: selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
@@ -132,7 +136,7 @@
         let children: ChildInfo[] = [];
 
         items.forEach((item, index) => {
-            const part = rootCtx.getJsonWithVars({
+            const part = componentContext.getJsonWithVars({
                 index,
                 title: item.title,
                 title_click_action: item.title_click_action,
@@ -140,7 +144,7 @@
             if (part.title && typeof part.title === 'string') {
                 children.push(part as ChildInfo);
             } else {
-                rootCtx.logError(wrapError(new Error('Incorrect title for the tab'), {
+                componentContext.logError(wrapError(new Error('Incorrect title for the tab'), {
                     additional: {
                         index
                     }
@@ -153,26 +157,29 @@
         childStore.set([]);
     }
 
-    function replaceItems(items: (DivBaseData | undefined)[]): void {
-        if (!json.items) {
+    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+        if (!componentContext.json.items) {
             return;
         }
 
-        json = {
-            ...json,
-            items: json.items.map((it, index) => {
-                return {
-                    ...it,
-                    div: (items)[index] as DivBaseData
-                };
-            })
+        componentContext = {
+            ...componentContext,
+            json: {
+                ...componentContext.json,
+                items: componentContext.json.items.map((it, index) => {
+                    return {
+                        ...it,
+                        div: items[index] as DivBaseData
+                    };
+                })
+            }
         };
     }
 
     $: {
         if (!$childStore?.length) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "tabs"')));
+            componentContext.logError(wrapError(new Error('Incorrect or empty "items" prop for div "tabs"')));
         } else {
             hasError = false;
         }
@@ -181,9 +188,6 @@
     $: {
         let newLayoutParams: LayoutParams = {};
 
-        if (layoutParams?.fakeElement) {
-            newLayoutParams.fakeElement = true;
-        }
         if ($jsonWidth?.type === 'wrap_content') {
             newLayoutParams.parentHorizontalWrapContent = true;
         }
@@ -195,9 +199,9 @@
     }
 
     $: if (!hasError && (selected < 0 || selected >= items.length)) {
-        rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
+        componentContext.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
             additional: {
-                selected: json.selected_tab,
+                selected: componentContext.json.selected_tab,
                 length: items.length
             }
         }));
@@ -205,9 +209,9 @@
     }
 
     $: if (!hasError && !$childStore.some(it => selected === it.index)) {
-        rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
+        componentContext.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
             additional: {
-                selected: json.selected_tab
+                selected: componentContext.json.selected_tab
             }
         }));
         selected = $childStore[0]?.index || 0;
@@ -230,12 +234,12 @@
 
             const adjustedPaddings: EdgeInsets = {
                 top: (Number(paddings.top) || 0) / tabFontSize * 10,
-                right: (Number(paddings.right) || 0) / tabFontSize * 10,
+                right: (Number($direction === 'ltr' ? paddings.end : paddings.start) || Number(paddings.right) || 0) / tabFontSize * 10,
                 bottom: (Number(paddings.bottom) || 0) / tabFontSize * 10,
-                left: (Number(paddings.left) || 0) / tabFontSize * 10
+                left: (Number($direction === 'ltr' ? paddings.start : paddings.end) || Number(paddings.left) || 0) / tabFontSize * 10
             };
 
-            tabPaddings = correctEdgeInserts(adjustedPaddings, tabPaddings);
+            tabPaddings = correctEdgeInserts(adjustedPaddings, $direction, tabPaddings);
         }
     }
 
@@ -324,7 +328,7 @@
                 separatorBackground = correctColor($jsonSeparatorColor, 1, separatorBackground);
             }
             if ($jsonSeparatorPaddings) {
-                separatorMargins = correctEdgeInserts($jsonSeparatorPaddings, separatorMargins);
+                separatorMargins = correctEdgeInserts($jsonSeparatorPaddings, $direction, separatorMargins);
             }
         }
     }
@@ -341,12 +345,18 @@
         titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
     }
 
-    function updateItems(_items: TabItem[]): void {
+    function updateItems(items: MaybeMissing<TabItem>[]): void {
         if (hasError) {
             return;
         }
 
-        showedPanels = items.map((_, i) => i === selected);
+        showedPanels = items.map((item, i) => {
+            if (i === selected && item?.div) {
+                return componentContext.produceChildContext(item.div, {
+                    path: i
+                });
+            }
+        });
         visiblePanels = items.map((_, i) => i === selected);
     }
     $: updateItems(items);
@@ -419,7 +429,17 @@
             Math.min(items.length - 1, selected + 1) :
             Math.max(selected, previousSelected ?? selected);
 
-        showedPanels = showedPanels.map((isShowed, index) => isShowed || index >= start && index <= end);
+        showedPanels = showedPanels.map((context, index) => {
+            if (context) {
+                return context;
+            }
+            if (index >= start && index <= end && items[index]?.div) {
+                return componentContext.produceChildContext(items[index].div, {
+                    path: index
+                });
+            }
+            return undefined;
+        });
         visiblePanels = visiblePanels.map((_, index) => index >= start && index <= end);
     }
 
@@ -575,15 +595,15 @@
         }
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !hasError && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerInstance<SwitchElements>(json.id, {
+        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerInstance<SwitchElements>(prevId, {
                 setCurrentItem(item: number) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
@@ -624,9 +644,7 @@
 {#if !hasError}
     <Outer
         cls={genClassName('tabs', css, mods)}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
         customActions={'tabs'}
         parentOf={parentOfItems}
@@ -638,7 +656,7 @@
             bind:this={tabsElem}
             class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             role="tablist"
-            style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding) : ''}
+            style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding, $direction) : ''}
             style:--divkit-tabs-font-size={pxToEm(tabFontSize)}
             style:--divkit-tabs-paddings={tabPaddings}
             style:--divkit-tabs-line-height={tabLineHeight}
@@ -660,12 +678,13 @@
                 {@const isSelected = index === selected}
 
                 <Actionable
+                    {componentContext}
                     cls={genClassName('tabs__item', css, {
                         selected: isSelected,
                         actionable: Boolean(item.title_click_action)
                     })}
                     actions={
-                        item.title_click_action && !layoutParams?.fakeElement ?
+                        item.title_click_action && !componentContext.fakeElement ?
                             [item.title_click_action].filter(filterEnabledActions) :
                             []
                     }
@@ -674,10 +693,10 @@
                         'aria-controls': `${instId}-panel-${index}`,
                         role: 'tab',
                         // eslint-disable-next-line no-nested-ternary
-                        tabindex: isSelected && !layoutParams?.fakeElement ? (item.title_click_action ? undefined : '0') : '-1',
+                        tabindex: isSelected && !componentContext.fakeElement ? (item.title_click_action ? undefined : '0') : '-1',
                         'aria-selected': isSelected ? 'true' : 'false'
                     }}
-                    customAction={layoutParams?.fakeElement ? null : (event => selectItem(event, index))}
+                    customAction={componentContext.fakeElement ? null : (event => selectItem(event, index))}
                 >
                     {item.title}
                 </Actionable>
@@ -706,6 +725,7 @@
             >
                 {#each $childStore as item}
                     {@const index = item.index}
+                    {@const childComponentContext = showedPanels[index]}
 
                     <div
                         class={genClassName('tabs__panel', css, {
@@ -716,8 +736,11 @@
                         aria-labelledby="{instId}-tab-{index}"
                         style="left: {index * 100}%"
                     >
-                        {#if showedPanels[index]}
-                            <Unknown div={items[index].div} {templateContext} layoutParams={childLayoutParams} />
+                        {#if childComponentContext}
+                            <Unknown
+                                componentContext={childComponentContext}
+                                layoutParams={childLayoutParams}
+                            />
                         {/if}
                     </div>
                 {/each}

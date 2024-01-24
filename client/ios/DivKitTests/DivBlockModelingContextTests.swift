@@ -53,11 +53,14 @@ final class DivBlockModelingContextTests: XCTestCase {
   }
 
   func test_modifying_prototypesData_AddsVariablesToExpressionResolver() {
-    let prototypesData: (String, [String: AnyHashable]) = ("it.", ["var1": "value"])
+    let prototypesData: (String, [String: AnyHashable]) = ("it", ["var1": "value"])
     let context = DivBlockModelingContext()
       .modifying(prototypesData: prototypesData)
 
-    XCTAssertEqual(context.expressionResolver.resolveString(expression("@{it.var1}")), "value")
+    XCTAssertEqual(
+      context.expressionResolver.resolveString(expression("@{getStringFromDict(it, 'var1')}")),
+      "value"
+    )
   }
 
   func test_WhenHasNoExtensionHandler_AddsErrorToErrorStorage() throws {

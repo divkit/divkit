@@ -33,6 +33,10 @@
     visibility: hidden;
 }
 
+.image_is-rtl-mirror .image__image {
+    transform: scale(-1, 1);
+}
+
 .image__aspect-wrapper {
     position: relative;
     display: block;

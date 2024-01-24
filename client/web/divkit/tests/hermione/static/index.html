@@ -120,6 +120,7 @@
                 }
 
                 return {
+                    configuration: card.configuration,
                     card: card.card || card,
                     templates: card.templates || templates || {}
                 };
@@ -143,6 +144,7 @@
                     target: root,
                     json,
                     platform: 'touch',
+                    direction: json.configuration && json.configuration.layout_direction === 'rtl' ? 'rtl' : 'ltr',
                     onStat(arg) {
                         if (!Array.isArray(window.divkitLogs)) {
                             window.divkitLogs = [];

@@ -1,6 +1,6 @@
 import { toBigInt } from '../bigint';
-import { BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
-import { BooleanValue, DictValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
+import { ARRAY, BOOLEAN, COLOR, DICT, INTEGER, NUMBER, STRING, URL } from '../const';
+import { ArrayValue, BooleanValue, DictValue, EvalContext, EvalTypes, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
 import { checkIntegerOverflow, transformColorValue } from '../utils';
 import { registerFunc } from './funcs';
 
@@ -26,7 +26,11 @@ function dictGetter(jsType: string, runtimeType: string) {
         let val = getProp(dict.value, path.map(it => it.value));
 
         let type: string = typeof val;
-        if (type !== jsType) {
+        if (
+            jsType === 'array' && !Array.isArray(val) ||
+            jsType !== 'array' && type !== jsType ||
+            type === 'object' && val === null
+        ) {
             if (type === 'object') {
                 if (Array.isArray(val)) {
                     type = 'array';
@@ -84,6 +88,8 @@ const getDictInteger = dictGetter('number', 'integer');
 const getDictBoolean = dictGetter('boolean', 'boolean');
 const getDictColor = dictGetter('string', 'color');
 const getDictUrl = dictGetter('string', 'url');
+const getDictArray = dictGetter('array', 'array');
+const getDictDict = dictGetter('object', 'dict');
 
 const getDictOptString = optWrapper<StringValue>(getDictString, 'string');
 const getDictOptNumber = optWrapper<NumberValue>(getDictNumber, 'number');
@@ -91,6 +97,30 @@ const getDictOptInteger = optWrapper<IntegerValue>(getDictInteger, 'integer');
 const getDictOptBoolean = optWrapper<BooleanValue>(getDictBoolean, 'boolean');
 const getDictOptColor = optWrapper<BooleanValue>(getDictColor, 'color');
 const getDictOptUrl = optWrapper<BooleanValue>(getDictUrl, 'url');
+
+function getDictOptArray(ctx: EvalContext, dict: DictValue, ...path: StringValue[]): EvalValue {
+    try {
+        return getDictArray(ctx, dict, ...path);
+    } catch (_err) {
+        // ignore error
+        return {
+            type: ARRAY,
+            value: []
+        } as unknown as EvalValue;
+    }
+}
+
+function getDictOptDict(ctx: EvalContext, dict: DictValue, ...path: StringValue[]): EvalValue {
+    try {
+        return getDictDict(ctx, dict, ...path);
+    } catch (_err) {
+        // ignore error
+        return {
+            type: DICT,
+            value: {}
+        } as unknown as EvalValue;
+    }
+}
 
 export function registerDict(): void {
     registerFunc('getDictString', [
@@ -274,4 +304,32 @@ export function registerDict(): void {
             isVararg: true
         }
     ], getDictOptUrl);
+
+    registerFunc('getDictFromDict', [
+        DICT, {
+            type: STRING,
+            isVararg: true
+        }
+    ], getDictDict);
+
+    registerFunc('getArrayFromDict', [
+        DICT, {
+            type: STRING,
+            isVararg: true
+        }
+    ], getDictArray);
+
+    registerFunc('getOptArrayFromDict', [
+        DICT, {
+            type: STRING,
+            isVararg: true
+        }
+    ], getDictOptArray);
+
+    registerFunc('getOptDictFromDict', [
+        DICT, {
+            type: STRING,
+            isVararg: true
+        }
+    ], getDictOptDict);
 }

@@ -30,6 +30,7 @@ public final class DivVideoTemplate: TemplateValue {
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let pauseActions: Field<[DivActionTemplate]>?
   public let playerSettingsPayload: Field<[String: Any]>?
+  public let preloadRequired: Field<Expression<Bool>>? // default value: false
   public let preview: Field<Expression<String>>?
   public let repeatable: Field<Expression<Bool>>? // default value: false
   public let resumeActions: Field<[DivActionTemplate]>?
@@ -75,6 +76,7 @@ public final class DivVideoTemplate: TemplateValue {
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
         pauseActions: try dictionary.getOptionalArray("pause_actions", templateToType: templateToType),
         playerSettingsPayload: try dictionary.getOptionalField("player_settings_payload"),
+        preloadRequired: try dictionary.getOptionalExpressionField("preload_required"),
         preview: try dictionary.getOptionalExpressionField("preview"),
         repeatable: try dictionary.getOptionalExpressionField("repeatable"),
         resumeActions: try dictionary.getOptionalArray("resume_actions", templateToType: templateToType),
@@ -123,6 +125,7 @@ public final class DivVideoTemplate: TemplateValue {
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     pauseActions: Field<[DivActionTemplate]>? = nil,
     playerSettingsPayload: Field<[String: Any]>? = nil,
+    preloadRequired: Field<Expression<Bool>>? = nil,
     preview: Field<Expression<String>>? = nil,
     repeatable: Field<Expression<Bool>>? = nil,
     resumeActions: Field<[DivActionTemplate]>? = nil,
@@ -165,6 +168,7 @@ public final class DivVideoTemplate: TemplateValue {
     self.paddings = paddings
     self.pauseActions = pauseActions
     self.playerSettingsPayload = playerSettingsPayload
+    self.preloadRequired = preloadRequired
     self.preview = preview
     self.repeatable = repeatable
     self.resumeActions = resumeActions
@@ -208,6 +212,7 @@ public final class DivVideoTemplate: TemplateValue {
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let pauseActionsValue = parent?.pauseActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     let playerSettingsPayloadValue = parent?.playerSettingsPayload?.resolveOptionalValue(context: context) ?? .noValue
+    let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue
     let previewValue = parent?.preview?.resolveOptionalValue(context: context) ?? .noValue
     let repeatableValue = parent?.repeatable?.resolveOptionalValue(context: context) ?? .noValue
     let resumeActionsValue = parent?.resumeActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
@@ -249,6 +254,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pauseActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pause_actions", error: $0) },
       playerSettingsPayloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "player_settings_payload", error: $0) },
+      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
       repeatableValue.errorsOrWarnings?.map { .nestedObjectError(field: "repeatable", error: $0) },
       resumeActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "resume_actions", error: $0) },
@@ -299,6 +305,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddings: paddingsValue.value,
       pauseActions: pauseActionsValue.value,
       playerSettingsPayload: playerSettingsPayloadValue.value,
+      preloadRequired: preloadRequiredValue.value,
       preview: previewValue.value,
       repeatable: repeatableValue.value,
       resumeActions: resumeActionsValue.value,
@@ -347,6 +354,7 @@ public final class DivVideoTemplate: TemplateValue {
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var pauseActionsValue: DeserializationResult<[DivAction]> = .noValue
     var playerSettingsPayloadValue: DeserializationResult<[String: Any]> = parent?.playerSettingsPayload?.value() ?? .noValue
+    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
     var previewValue: DeserializationResult<Expression<String>> = parent?.preview?.value() ?? .noValue
     var repeatableValue: DeserializationResult<Expression<Bool>> = parent?.repeatable?.value() ?? .noValue
     var resumeActionsValue: DeserializationResult<[DivAction]> = .noValue
@@ -412,6 +420,8 @@ public final class DivVideoTemplate: TemplateValue {
         pauseActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).merged(with: pauseActionsValue)
       case "player_settings_payload":
         playerSettingsPayloadValue = deserialize(__dictValue).merged(with: playerSettingsPayloadValue)
+      case "preload_required":
+        preloadRequiredValue = deserialize(__dictValue).merged(with: preloadRequiredValue)
       case "preview":
         previewValue = deserialize(__dictValue).merged(with: previewValue)
       case "repeatable":
@@ -492,6 +502,8 @@ public final class DivVideoTemplate: TemplateValue {
         pauseActionsValue = pauseActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self))
       case parent?.playerSettingsPayload?.link:
         playerSettingsPayloadValue = playerSettingsPayloadValue.merged(with: deserialize(__dictValue))
+      case parent?.preloadRequired?.link:
+        preloadRequiredValue = preloadRequiredValue.merged(with: deserialize(__dictValue))
       case parent?.preview?.link:
         previewValue = previewValue.merged(with: deserialize(__dictValue))
       case parent?.repeatable?.link:
@@ -580,6 +592,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
       pauseActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "pause_actions", error: $0) },
       playerSettingsPayloadValue.errorsOrWarnings?.map { .nestedObjectError(field: "player_settings_payload", error: $0) },
+      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
       previewValue.errorsOrWarnings?.map { .nestedObjectError(field: "preview", error: $0) },
       repeatableValue.errorsOrWarnings?.map { .nestedObjectError(field: "repeatable", error: $0) },
       resumeActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "resume_actions", error: $0) },
@@ -630,6 +643,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddings: paddingsValue.value,
       pauseActions: pauseActionsValue.value,
       playerSettingsPayload: playerSettingsPayloadValue.value,
+      preloadRequired: preloadRequiredValue.value,
       preview: previewValue.value,
       repeatable: repeatableValue.value,
       resumeActions: resumeActionsValue.value,
@@ -683,6 +697,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddings: paddings ?? mergedParent.paddings,
       pauseActions: pauseActions ?? mergedParent.pauseActions,
       playerSettingsPayload: playerSettingsPayload ?? mergedParent.playerSettingsPayload,
+      preloadRequired: preloadRequired ?? mergedParent.preloadRequired,
       preview: preview ?? mergedParent.preview,
       repeatable: repeatable ?? mergedParent.repeatable,
       resumeActions: resumeActions ?? mergedParent.resumeActions,
@@ -731,6 +746,7 @@ public final class DivVideoTemplate: TemplateValue {
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       pauseActions: merged.pauseActions?.tryResolveParent(templates: templates),
       playerSettingsPayload: merged.playerSettingsPayload,
+      preloadRequired: merged.preloadRequired,
       preview: merged.preview,
       repeatable: merged.repeatable,
       resumeActions: merged.resumeActions?.tryResolveParent(templates: templates),

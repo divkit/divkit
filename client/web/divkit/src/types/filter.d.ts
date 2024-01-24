@@ -3,4 +3,8 @@ export interface Blur {
     radius: number;
 }
 
-export type Filter = Blur;
+export interface RTLMirror {
+    type: 'rtl_mirror';
+}
+
+export type Filter = Blur | RTLMirror;

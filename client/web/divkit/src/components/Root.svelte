@@ -38,7 +38,8 @@
         TypefaceProvider,
         DisappearAction,
         FetchInit,
-        DivVariable
+        DivVariable,
+        Direction
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -46,6 +47,7 @@
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
     import type { Patch } from '../types/patch';
+    import type { ComponentContext } from '../types/componentContext';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
@@ -64,7 +66,7 @@
     import { parse } from '../expressions/expressions';
     import { gatherVarsFromAst } from '../expressions/utils';
     import { Truthy } from '../utils/truthy';
-    import { createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
+    import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, VariableType } from '../expressions/variable';
     import {
         getControllerStore,
         getControllerVars,
@@ -93,6 +95,7 @@
     export let fetchInit: FetchInit = {};
     export let tooltipRoot: HTMLElement | undefined = undefined;
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
+    export let direction: Direction = 'ltr';
 
     let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
@@ -124,6 +127,8 @@
     $: if (currentTheme) {
         updateTheme();
     }
+
+    const directionStore = writable<Direction>(direction === 'rtl' ? 'rtl' : 'ltr');
 
     function themeQueryListener(): void {
         if (theme !== 'system' || !themeQuery) {
@@ -177,7 +182,6 @@
         logError(wrapError(new Error('"id" prop is required')));
     }
 
-    let templateContext: TemplateContext = {};
     $: templates = json.templates || {};
 
     const running: Record<Running, boolean> = {
@@ -200,61 +204,85 @@
     let tooltips: {
         internalId: number;
         ownerNode: HTMLElement;
-        desc: Tooltip;
+        desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
     }[] = [];
 
-    function getVariableInstance(name: string, type: VariableType): Variable | undefined {
-        const variable = variables.get(name);
-
-        if (variable) {
-            const foundType = variable.getType();
-
-            if (foundType !== type) {
-                logError(wrapError(new Error(`Variable should have type "${type}"`), {
-                    additional: {
-                        name,
-                        foundType
-                    }
-                }));
-                return;
-            }
+    function mergeVars(
+        variables0: Map<string, Variable>,
+        variables1: Map<string, Variable> | undefined
+    ): Map<string, Variable>;
+    function mergeVars(
+        variables0: Map<string, Variable> | undefined,
+        variables1: Map<string, Variable> | undefined
+    ): Map<string, Variable> | undefined;
+    function mergeVars(
+        variables0: Map<string, Variable> | undefined,
+        variables1: Map<string, Variable> | undefined
+    ): Map<string, Variable> | undefined {
+        if (variables0 && variables1) {
+            return new Map([...variables0, ...variables1]);
+        } else if (variables0) {
+            return variables0;
+        } else if (variables1) {
+            return variables1;
         }
 
-        return variable;
+        return undefined;
     }
 
     function getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined {
         return customization?.[prop];
     }
 
-    function getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>> {
+    function getDerivedFromVars<T>(
+        jsonProp: T,
+        additionalVars?: Map<string, Variable>,
+        keepComplex = false
+    ): Readable<MaybeMissing<T>> {
         if (!jsonProp) {
             return constStore(jsonProp);
         }
 
+        const vars = mergeVars(variables, additionalVars);
+
         const prepared = prepareVars(jsonProp, logError);
         if (!prepared.vars.length) {
             if (prepared.hasExpression) {
-                return constStore(prepared.applyVars(variables));
+                return constStore(prepared.applyVars(vars));
             }
             return constStore(jsonProp);
         }
         const stores = prepared.vars.map(name => {
-            return variables.get(name) || awaitVariableChanges(name);
+            return vars.get(name) || awaitVariableChanges(name);
         }).filter(Truthy);
 
-        return derived(stores, () => prepared.applyVars(variables));
+        return derived(stores, () => prepared.applyVars(vars, keepComplex));
     }
 
-    function getJsonWithVars<T>(jsonProp: T): MaybeMissing<T> {
+    function getJsonWithVars<T>(
+        jsonProp: T,
+        additionalVars?: Map<string, Variable>,
+        keepComplex = false
+    ): MaybeMissing<T> {
         const prepared = prepareVars(jsonProp, logError);
 
         if (!prepared.hasExpression) {
             return jsonProp;
         }
 
-        return prepared.applyVars(variables);
+        const vars = mergeVars(variables, additionalVars);
+
+        return prepared.applyVars(vars, keepComplex);
+    }
+
+    function preparePrototypeVariables(name: string, data: Record<string, unknown>): Map<string, Variable> {
+        const map = new Map<string, Variable>();
+
+        const dict = createConstVariable(name, 'dict', data);
+        map.set(name, dict);
+
+        return map;
     }
 
     function logError(error: WrappedError): void {
@@ -282,8 +310,8 @@
         return templateName in templates;
     }
 
-    function processTemplate(json: DivBaseData, templateContext: TemplateContext): {
-        json: DivBaseData;
+    function processTemplate(json: MaybeMissing<DivBaseData>, templateContext: TemplateContext): {
+        json: MaybeMissing<DivBaseData>;
         templateContext: TemplateContext;
     } {
         if (!json) {
@@ -295,7 +323,7 @@
 
         const usedTypes = new Set([json.type]);
 
-        while (json.type in templates) {
+        while (json.type && json.type in templates) {
             ({
                 json,
                 templateContext
@@ -325,8 +353,8 @@
     }: {
         type: 'mount' | 'update' | 'destroy';
         node: HTMLElement;
-        json: Partial<DivBaseData>;
-        origJson: DivBase | undefined;
+        json: MaybeMissing<DivBaseData>;
+        origJson: MaybeMissing<DivBaseData> | undefined;
         templateContext: TemplateContext;
     }): void {
         if (onComponent) {
@@ -334,7 +362,7 @@
                 type,
                 node,
                 json: json as DivBase,
-                origJson,
+                origJson: origJson as DivBase | undefined,
                 templateContext
             });
         }
@@ -476,7 +504,13 @@
         }
     }
 
-    function callVideoAction(id: string | null, action: string | null): void {
+    function callVideoAction(
+        id: string | null,
+        action: string | null,
+        componentContext?: ComponentContext
+    ): void {
+        const log = (componentContext?.logError || logError);
+
         if (id) {
             const instance = getInstance<VideoElements>(id);
 
@@ -486,7 +520,7 @@
                 } else if (action === 'pause') {
                     instance.pause();
                 } else {
-                    logError(wrapError(new Error('Unknown video action'), {
+                    log(wrapError(new Error('Unknown video action'), {
                         additional: {
                             id,
                             action
@@ -494,7 +528,7 @@
                     }));
                 }
             } else {
-                logError(wrapError(new Error('Video component is not found'), {
+                log(wrapError(new Error('Video component is not found'), {
                     additional: {
                         id,
                         action
@@ -502,7 +536,7 @@
                 }));
             }
         } else {
-            logError(wrapError(new Error('Missing id in video action'), {
+            log(wrapError(new Error('Missing id in video action'), {
                 additional: {
                     action
                 }
@@ -512,8 +546,11 @@
 
     function callDownloadAction(
         url: string | null,
-        action: MaybeMissing<Action | VisibilityAction | DisappearAction>
+        action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        componentContext?: ComponentContext
     ): void {
+        const log = (componentContext?.logError || logError);
+
         if (url) {
             let init;
             if (typeof fetchInit === 'function') {
@@ -528,7 +565,7 @@
                 return res.json();
             }).then((json: Patch) => {
                 if (!json) {
-                    logError(wrapError(new Error('Incorrect patch'), {
+                    log(wrapError(new Error('Incorrect patch'), {
                         additional: {
                             url
                         }
@@ -556,7 +593,7 @@
                             return false;
                         });
                         if (failed) {
-                            logError(wrapError(new Error('Skipping transactional, child is not found or broken'), {
+                            log(wrapError(new Error('Skipping transactional, child is not found or broken'), {
                                 additional: {
                                     url,
                                     id: failed.id
@@ -575,7 +612,7 @@
                     execAnyActions(action.download_callbacks?.on_success_actions);
                 }
             }).catch(err => {
-                logError(wrapError(new Error('Failed to download the patch'), {
+                log(wrapError(new Error('Failed to download the patch'), {
                     additional: {
                         url,
                         originalError: err
@@ -584,7 +621,7 @@
                 execAnyActions(action.download_callbacks?.on_fail_actions);
             });
         } else {
-            logError(wrapError(new Error('Missing url in download action'), {
+            log(wrapError(new Error('Missing url in download action'), {
                 additional: {
                     url
                 }
@@ -592,14 +629,16 @@
         }
     }
 
-    function callShowTooltip(id: string | null, multiple: string | null): void {
+    function callShowTooltip(id: string | null, multiple: string | null, componentContext?: ComponentContext): void {
+        const log = (componentContext?.logError || logError);
+
         if (!id) {
-            logError(wrapError(new Error('Missing id in show_tooltip action')));
+            log(wrapError(new Error('Missing id in show_tooltip action')));
             return;
         }
         const item = tooltipMap.get(id);
         if (!item) {
-            logError(wrapError(new Error('Tooltip with the provided id is not found'), {
+            log(wrapError(new Error('Tooltip with the provided id is not found'), {
                 additional: {
                     id
                 }
@@ -627,9 +666,11 @@
         }
     }
 
-    function callHideTooltip(id: string | null): void {
+    function callHideTooltip(id: string | null, componentContext?: ComponentContext): void {
+        const log = (componentContext?.logError || logError);
+
         if (!id) {
-            logError(wrapError(new Error('Missing id in hide_tooltip action')));
+            log(wrapError(new Error('Missing id in hide_tooltip action')));
             return;
         }
         tooltips = tooltips.filter(it => {
@@ -648,13 +689,18 @@
         execActionInternal(getJsonWithVars(action));
     }
 
-    function execActionInternal(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
+    function execActionInternal(
+        action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
+        componentContext?: ComponentContext
+    ): void {
         const actionUrl = action.url ? String(action.url) : '';
         const actionTyped = action.typed;
 
         if (!filterEnabledActions(action)) {
             return;
         }
+
+        const log = (componentContext?.logError || logError);
 
         if (actionUrl) {
             try {
@@ -687,7 +733,7 @@
                             if (variableInstance) {
                                 const type = variableInstance.getType();
                                 if (type === 'dict' || type === 'array') {
-                                    logError(wrapError(new Error(`Setting ${type} variables is not supported`), {
+                                    log(wrapError(new Error(`Setting ${type} variables is not supported`), {
                                         additional: {
                                             name
                                         }
@@ -696,14 +742,14 @@
                                     variableInstance.set(value);
                                 }
                             } else {
-                                logError(wrapError(new Error('Cannot find variable'), {
+                                log(wrapError(new Error('Cannot find variable'), {
                                     additional: {
                                         name
                                     }
                                 }));
                             }
                         } else {
-                            logError(wrapError(new Error('Incorrect set_variable_action'), {
+                            log(wrapError(new Error('Incorrect set_variable_action'), {
                                 additional: {
                                     url
                                 }
@@ -717,7 +763,7 @@
                         if (timersController) {
                             timersController.execTimerAction(id, timerAction);
                         } else {
-                            logError(wrapError(new Error('Incorrect timer action'), {
+                            log(wrapError(new Error('Incorrect timer action'), {
                                 additional: {
                                     id,
                                     action: timerAction
@@ -726,26 +772,26 @@
                         }
                         break;
                     case 'video':
-                        callVideoAction(params.get('id'), params.get('action'));
+                        callVideoAction(params.get('id'), params.get('action'), componentContext);
                         break;
                     case 'download':
-                        callDownloadAction(params.get('url'), action);
+                        callDownloadAction(params.get('url'), action, componentContext);
                         break;
                     case 'show_tooltip':
-                        callShowTooltip(params.get('id'), params.get('multiple'));
+                        callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
                         break;
                     case 'hide_tooltip':
-                        callHideTooltip(params.get('id'));
+                        callHideTooltip(params.get('id'), componentContext);
                         break;
                     default:
-                        logError(wrapError(new Error('Unknown type of action'), {
+                        log(wrapError(new Error('Unknown type of action'), {
                             additional: {
                                 url: actionUrl
                             }
                         }));
                 }
             } catch (err: any) {
-                logError(wrapError(err, {
+                log(wrapError(err, {
                     additional: {
                         url: actionUrl
                     }
@@ -762,7 +808,7 @@
                             if (type === value.type) {
                                 variableInstance.setValue(value.value);
                             } else {
-                                logError(wrapError(new Error('Trying to set value with invalid type'), {
+                                log(wrapError(new Error('Trying to set value with invalid type'), {
                                     additional: {
                                         name,
                                         type: value.type
@@ -770,14 +816,14 @@
                                 }));
                             }
                         } else {
-                            logError(wrapError(new Error('Cannot find variable'), {
+                            log(wrapError(new Error('Cannot find variable'), {
                                 additional: {
                                     name
                                 }
                             }));
                         }
                     } else {
-                        logError(wrapError(new Error('Incorrect set_variable action'), {
+                        log(wrapError(new Error('Incorrect set_variable action'), {
                             additional: {
                                 name
                             }
@@ -786,20 +832,20 @@
                     break;
                 }
                 case 'array_insert_value':
-                    arrayInsert(variables, logError, actionTyped);
+                    arrayInsert(variables, log, actionTyped);
                     break;
                 case 'array_remove_value':
-                    arrayRemove(variables, logError, actionTyped);
+                    arrayRemove(variables, log, actionTyped);
                     break;
                 case 'copy_to_clipboard':
-                    copyToClipboard(logError, actionTyped);
+                    copyToClipboard(log, actionTyped);
                     break;
                 case 'focus_element': {
                     const methods = actionTyped.element_id && focusableMap.get(actionTyped.element_id);
                     if (methods) {
                         methods.focus();
                     } else {
-                        logError(wrapError(new Error('Incorrect focus_element action'), {
+                        log(wrapError(new Error('Incorrect focus_element action'), {
                             additional: {
                                 elementId: actionTyped.element_id
                             }
@@ -808,7 +854,7 @@
                     break;
                 }
                 default: {
-                    logError(wrapError(new Error('Unknown type of action'), {
+                    log(wrapError(new Error('Unknown type of action'), {
                         additional: {
                             type: actionTyped.type
                         }
@@ -818,7 +864,13 @@
         }
     }
 
-    async function execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void> {
+    async function execAnyActions(
+        actions: MaybeMissing<Action[]> | undefined,
+        opts: {
+            componentContext?: ComponentContext;
+            processUrls?: boolean;
+        } = {}
+    ): Promise<void> {
         if (!actions || !Array.isArray(actions)) {
             return;
         }
@@ -834,7 +886,7 @@
                 const schema = getUrlSchema(actionUrl);
                 if (schema) {
                     if (isBuiltinSchema(schema, builtinSet)) {
-                        if (processUrls) {
+                        if (opts.processUrls) {
                             if (action.target === '_blank') {
                                 const win = window.open('', '_blank');
                                 if (win) {
@@ -846,7 +898,7 @@
                             }
                         }
                     } else if (schema === 'div-action') {
-                        execActionInternal(action);
+                        execActionInternal(action, opts.componentContext);
                         await tick();
                     } else if (action.log_id) {
                         execCustomAction(action as Action & { url: string });
@@ -854,7 +906,7 @@
                     }
                 }
             } else if (actionTyped) {
-                execActionInternal(action);
+                execActionInternal(action, opts.componentContext);
             }
         }
         filtered.forEach(action => {
@@ -881,7 +933,7 @@
     const focusableMap: Map<string, FocusableMethods> = new Map();
     const tooltipMap: Map<string, {
         onwerNode: HTMLElement;
-        tooltip: Tooltip;
+        tooltip: MaybeMissing<Tooltip>;
     }> = new Map();
     function registerInstance<T>(id: string, block: T) {
         if (instancesMap.has(id)) {
@@ -928,26 +980,38 @@
         focusableMap.delete(id);
     }
 
-    function registerTooltip(onwerNode: HTMLElement, tooltip: Tooltip): void {
-        if (tooltipMap.has(tooltip.id)) {
+    function registerTooltip(onwerNode: HTMLElement, tooltip: MaybeMissing<Tooltip>): void {
+        const id = tooltip.id;
+
+        if (!id) {
+            return;
+        }
+
+        if (tooltipMap.has(id)) {
             logError(wrapError(new Error('Duplicate tooltip id'), {
                 additional: {
-                    id: tooltip.id
+                    id
                 }
             }));
         }
 
-        tooltipMap.set(tooltip.id, {
+        tooltipMap.set(id, {
             onwerNode,
             tooltip
         });
     }
 
-    function unregisterTooltip(tooltip: Tooltip): void {
-        tooltipMap.delete(tooltip.id);
+    function unregisterTooltip(tooltip: MaybeMissing<Tooltip>): void {
+        const id = tooltip.id;
 
-        if (tooltips.some(it => it.desc.id === tooltip.id)) {
-            tooltips = tooltips.filter(it => it.desc.id !== tooltip.id);
+        if (!id) {
+            return;
+        }
+
+        tooltipMap.delete(id);
+
+        if (tooltips.some(it => it.desc.id === id)) {
+            tooltips = tooltips.filter(it => it.desc.id !== id);
         }
     }
 
@@ -967,16 +1031,6 @@
         }
 
         return stores.get(id) as Writable<T>;
-    }
-
-    function filterDefinedVars(vars: Set<string>): Set<string> {
-        for (const varName of vars) {
-            if (variables.has(varName)) {
-                vars.delete(varName);
-            }
-        }
-
-        return vars;
     }
 
     function awaitVariableChanges(variableName: string): Readable<any> {
@@ -1022,15 +1076,113 @@
         };
     }
 
+    function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
+        const res: ComponentContext = {
+            json: {} as DivBaseData,
+            path: [],
+            templateContext: {},
+            logError(error) {
+                error.additional = error.additional || {};
+                error.additional.path = res.path.join('/');
+                if (process.env.DEVTOOL) {
+                    error.additional.json = res.json;
+                    error.additional.origJson = res.origJson;
+                }
+                logError(error);
+            },
+            execAnyActions(actions, opts = {}) {
+                return execAnyActions(actions, {
+                    componentContext: res,
+                    processUrls: opts.processUrls
+                });
+            },
+            getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
+                return getDerivedFromVars(jsonProp, mergeVars(res.variables, additionalVars), keepComplex);
+            },
+            getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
+                return getJsonWithVars(jsonProp, mergeVars(res.variables, additionalVars), keepComplex);
+            },
+            produceChildContext(div, opts = {}) {
+                const componentContext = produceComponentContext(res);
+
+                let childJson: MaybeMissing<DivBaseData> = div;
+                let childContext: TemplateContext = res.templateContext;
+
+                const {
+                    templateContext: childProcessedContext,
+                    json: childProcessedJson
+                } = processTemplate(childJson, childContext);
+
+                componentContext.json = childProcessedJson;
+                componentContext.templateContext = childProcessedContext;
+                componentContext.origJson = div;
+
+                if (opts.path !== undefined/*  && !res.isRootState */) {
+                    componentContext.path.push(String(opts.path));
+                }
+                if (div.type && !opts.isRootState) {
+                    componentContext.path.push(div.type);
+                }
+
+                componentContext.variables = mergeVars(res.variables, opts.variables);
+
+                if (opts.tooltips) {
+                    componentContext.tooltips = opts.tooltips;
+                }
+
+                if (opts.fake) {
+                    componentContext.fakeElement = true;
+                }
+                if (opts.isRootState) {
+                    componentContext.isRootState = true;
+                }
+
+                return componentContext;
+            },
+            getVariable(varName, type) {
+                const variable = (res.variables || variables).get(varName);
+
+                if (variable) {
+                    const foundType = variable.getType();
+
+                    if (foundType !== type) {
+                        res.logError(wrapError(new Error(`Variable should have type "${type}"`), {
+                            additional: {
+                                name: varName,
+                                foundType
+                            }
+                        }));
+                        return;
+                    }
+                }
+
+                return variable;
+            },
+        };
+
+        if (from) {
+            res.path = from.path.slice();
+
+            if (from.fakeElement) {
+                res.fakeElement = true;
+            }
+        } else {
+            res.json = {
+                type: 'root'
+            };
+            res.isRootState = true;
+        }
+
+        return res;
+    }
+
     setContext<RootCtxValue>(ROOT_CTX, {
-        logError,
         logStat,
         hasTemplate,
         processTemplate,
         genId,
         genClass,
         execAction: execActionInternal,
-        execAnyActions,
         execCustomAction,
         isRunning,
         setRunning,
@@ -1046,10 +1198,8 @@
         unregisterFocusable,
         addSvgFilter,
         removeSvgFilter,
-        getDerivedFromVars,
-        getJsonWithVars,
+        preparePrototypeVariables,
         getStore,
-        getVariable: getVariableInstance,
         getCustomization,
         getBuiltinProtocols,
         getExtension,
@@ -1058,6 +1208,7 @@
         isDesktop,
         isPointerFocus,
         customComponents,
+        direction: directionStore,
         componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined
     });
 
@@ -1108,7 +1259,7 @@
         },
         runVisibilityTransition(
             _json: DivBaseData,
-            _templateContext: TemplateContext,
+            _componentContext: ComponentContext,
             _transitions: AppearanceTransition,
             _node: HTMLElement,
             _direction: 'in' | 'out'
@@ -1117,7 +1268,7 @@
         },
         registerChildWithTransitionIn(
             _json: DivBaseData,
-            _templateContext: TemplateContext,
+            _componentContext: ComponentContext,
             _transitions: AppearanceTransition,
             _node: HTMLElement
         ) {
@@ -1125,7 +1276,7 @@
         },
         registerChildWithTransitionOut(
             _json: DivBaseData,
-            _templateContext: TemplateContext,
+            _componentContext: ComponentContext,
             _transitions: AppearanceTransition,
             _node: HTMLElement
         ) {
@@ -1133,7 +1284,7 @@
         },
         registerChildWithTransitionChange(
             _json: DivBaseData,
-            _templateContext: TemplateContext,
+            _componentContext: ComponentContext,
             _transitions: TransitionChange,
             _node: HTMLElement
         ) {
@@ -1382,22 +1533,33 @@
     }
 
     $: states = json?.card?.states;
-    let rootStateDiv: DivBaseData | undefined;
+    const rootComponentContext = produceComponentContext();
+    let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hsaIdError) {
-        rootStateDiv = (process.env.ENABLE_COMPONENT_STATE || process.env.ENABLE_COMPONENT_STATE === undefined) ? {
-            type: 'state',
-            id: 'root',
-            width: {
-                type: 'match_parent',
-            },
-            height: {
-                type: 'match_parent',
-            },
-            states: states.map(state => ({
-                state_id: state.state_id.toString(),
-                div: state.div
-            }))
-        } : states[0].div;
+        const rootStateDiv = (
+            process.env.ENABLE_COMPONENT_STATE ||
+            process.env.ENABLE_COMPONENT_STATE === undefined
+        ) ?
+            {
+                type: 'state',
+                id: 'root',
+                width: {
+                    type: 'match_parent',
+                },
+                height: {
+                    type: 'match_parent',
+                },
+                states: states.map(state => ({
+                    state_id: state.state_id.toString(),
+                    div: state.div
+                }))
+            } :
+            states[0].div;
+
+        rootStateComponentContext = rootComponentContext.produceChildContext(rootStateDiv, {
+            tooltips,
+            isRootState: true
+        });
     }
 
     function onTooltipClose(internalId: number): void {
@@ -1442,18 +1604,16 @@
     });
 </script>
 
-{#if !hasError && !hsaIdError && rootStateDiv}
+{#if !hasError && !hsaIdError && rootStateComponentContext}
     <div
         class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}{mix ? ` ${mix}` : ''}"
         on:touchstart={emptyTouchstartHandler}
+        dir={$directionStore}
     >
         <RootSvgFilters {svgFiltersMap} />
+
         <Unknown
-            div={rootStateDiv}
-            {templateContext}
-            layoutParams={{
-                tooltips
-            }}
+            componentContext={rootStateComponentContext}
         />
     </div>
 {/if}

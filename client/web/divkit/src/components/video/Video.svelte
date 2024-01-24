@@ -5,8 +5,8 @@
     import css from './Video.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivVideoData, VideoElements } from '../../types/video';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { createVariable } from '../../expressions/variable';
@@ -19,9 +19,7 @@
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { genClassName } from '../../utils/genClassName';
 
-    export let json: Partial<DivVideoData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivVideoData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -39,7 +37,7 @@
     let aspectPaddingBottom = '0';
     let elapsedVariableUnsubscriber: Unsubscriber | undefined;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         loop = false;
         autoplay = false;
         muted = false;
@@ -47,8 +45,8 @@
         scale = 'fit';
     }
 
-    $: elapsedVariableName = json.elapsed_time_variable;
-    $: elapsedVariable = elapsedVariableName && rootCtx.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
+    $: elapsedVariableName = componentContext.json.elapsed_time_variable;
+    $: elapsedVariable = elapsedVariableName && componentContext.getVariable(elapsedVariableName, 'integer') || createVariable('temp', 'integer', 0);
 
     function variableListener(val: number): void {
         if (isSelfVariableSet) {
@@ -67,13 +65,13 @@
         elapsedVariableUnsubscriber = elapsedVariable.subscribe(variableListener);
     }
 
-    $: jsonSource = rootCtx.getDerivedFromVars(json.video_sources);
-    $: jsonRepeatable = rootCtx.getDerivedFromVars(json.repeatable);
-    $: jsonAutostart = rootCtx.getDerivedFromVars(json.autostart);
-    $: jsonMuted = rootCtx.getDerivedFromVars(json.muted);
-    $: jsonPreview = rootCtx.getDerivedFromVars(json.preview);
-    $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
-    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
+    $: jsonSource = componentContext.getDerivedFromVars(componentContext.json.video_sources);
+    $: jsonRepeatable = componentContext.getDerivedFromVars(componentContext.json.repeatable);
+    $: jsonAutostart = componentContext.getDerivedFromVars(componentContext.json.autostart);
+    $: jsonMuted = componentContext.getDerivedFromVars(componentContext.json.muted);
+    $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
+    $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
+    $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
 
     $: {
         sources = correctVideoSource($jsonSource, sources);
@@ -82,7 +80,7 @@
             hasError = false;
         } else {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Missing "video_sources" in "video"')));
+            componentContext.logError(wrapError(new Error('Missing "video_sources" in "video"')));
         }
     }
 
@@ -115,7 +113,7 @@
         const res = videoElem?.play();
         if (res) {
             res.catch(err => {
-                rootCtx.logError(wrapError(new Error('Video playing error'), {
+                componentContext.logError(wrapError(new Error('Video playing error'), {
                     level: 'error',
                     additional: {
                         originalText: String(err)
@@ -125,15 +123,15 @@
         }
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         if (prevId) {
             rootCtx.unregisterInstance(prevId);
             prevId = undefined;
         }
 
-        if (json.id && !hasError && !layoutParams?.fakeElement) {
-            prevId = json.id;
-            rootCtx.registerInstance<VideoElements>(json.id, {
+        if (componentContext.json.id && !hasError && !componentContext.fakeElement) {
+            prevId = componentContext.json.id;
+            rootCtx.registerInstance<VideoElements>(prevId, {
                 pause,
                 start
             });
@@ -141,7 +139,7 @@
     }
 
     // Video will not start after autoplay set in setData, do it manually
-    $: if (json && $jsonAutostart && videoElem) {
+    $: if (componentContext.json && $jsonAutostart && videoElem) {
         start();
     }
 
@@ -161,28 +159,28 @@
     }
 
     function onEnd(): void {
-        const actions = rootCtx.getJsonWithVars(json.end_actions);
-        rootCtx.execAnyActions(actions);
+        const actions = componentContext.getJsonWithVars(componentContext.json.end_actions);
+        componentContext.execAnyActions(actions);
     }
 
     function onPlaying(): void {
-        const actions = rootCtx.getJsonWithVars(json.resume_actions);
-        rootCtx.execAnyActions(actions);
+        const actions = componentContext.getJsonWithVars(componentContext.json.resume_actions);
+        componentContext.execAnyActions(actions);
     }
 
     function onPause(): void {
-        const actions = rootCtx.getJsonWithVars(json.pause_actions);
-        rootCtx.execAnyActions(actions);
+        const actions = componentContext.getJsonWithVars(componentContext.json.pause_actions);
+        componentContext.execAnyActions(actions);
     }
 
     function onWaiting(): void {
-        const actions = rootCtx.getJsonWithVars(json.buffering_actions);
-        rootCtx.execAnyActions(actions);
+        const actions = componentContext.getJsonWithVars(componentContext.json.buffering_actions);
+        componentContext.execAnyActions(actions);
     }
 
     function onError(): void {
-        const actions = rootCtx.getJsonWithVars(json.fatal_actions);
-        rootCtx.execAnyActions(actions);
+        const actions = componentContext.getJsonWithVars(componentContext.json.fatal_actions);
+        componentContext.execAnyActions(actions);
     }
 
     onDestroy(() => {
@@ -202,9 +200,7 @@
     <Outer
         cls={genClassName('video', css, mods)}
         customActions={'video'}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
     >
         {#if mods.aspect}

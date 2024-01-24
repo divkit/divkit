@@ -32,6 +32,7 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   private let player: AVPlayer
+  private let itemsProvider: PlayerItemsProvider
 
   private let playerObservers = AutodisposePool()
   private let itemObservers = AutodisposePool()
@@ -44,8 +45,9 @@ final class CorePlayerImpl: CorePlayer {
 
   private var currentTimePipes = [TimeInterval: SignalPipe<TimeInterval>]()
 
-  init() {
+  init(itemsProvider: PlayerItemsProvider) {
     self.player = AVPlayer()
+    self.itemsProvider = itemsProvider
     setup(player)
   }
 
@@ -58,12 +60,11 @@ final class CorePlayerImpl: CorePlayer {
   }
 
   func set(source: Video) {
-    let item = source.avPlayerItem
-
-    resetItemObservers()
-    configureObservers(for: item)
-
-    player.replaceCurrentItem(with: item)
+    itemsProvider.getAVPlayerItem(from: source.url) { [weak self] item in
+      self?.resetItemObservers()
+      self?.configureObservers(for: item)
+      self?.player.replaceCurrentItem(with: item)
+    }
   }
 
   func play() {
@@ -187,11 +188,5 @@ final class CorePlayerImpl: CorePlayer {
     return Disposable {
       observer.invalidate()
     }
-  }
-}
-
-extension Video {
-  fileprivate var avPlayerItem: AVPlayerItem {
-    AVPlayerItem(url: url)
   }
 }

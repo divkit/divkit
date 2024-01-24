@@ -51,7 +51,7 @@ private struct TestCases: Decodable {
 private struct SignatureTestCase: Decodable {
   let name: String
   let functionName: String
-  let arguments: [FunctionSignature.Argument]?
+  let arguments: [FunctionSignature.ArgumentSignature]?
   let resultType: FunctionSignature.ArgumentType
   let platforms: [Platform]
 

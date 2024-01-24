@@ -82,7 +82,9 @@ public abstract class BaseCardHeightCalculator implements ViewPagerFixedSizeLayo
             }
 
             int width = View.MeasureSpec.getSize(widthMeasureSpec);
-            measurement = new TabMeasurement(tabCount, tabIndex -> mMeasureTabHeightFn.apply(mChannelGroup, width, tabIndex));
+            measurement = new TabMeasurement(tabCount, tabIndex ->
+                mMeasureTabHeightFn.apply(mChannelGroup, width, heightMeasureSpec, tabIndex)
+            );
             if (mPendingState != null) {
                 measurement.restoreState(mPendingState, widthMeasureSpec);
                 measurement.removeState(mPendingState, widthMeasureSpec);

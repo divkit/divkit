@@ -19,7 +19,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _intToBoolean),
         ],
         makeError: {
-          AnyCalcExpression.Error.toBooleanUnsupportedType($0.first)
+          AnyCalcExpression.Error.toBooleanUnsupportedType($0.first?.value)
         }
       )
     case .toString:
@@ -32,7 +32,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _urlToString),
         ],
         makeError: {
-          AnyCalcExpression.Error.toString($0.first)
+          AnyCalcExpression.Error.toString($0.first?.value)
         }
       )
     case .toNumber:
@@ -42,7 +42,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _stringToNumber),
         ],
         makeError: {
-          AnyCalcExpression.Error.toNumberUnsupportedType($0.first)
+          AnyCalcExpression.Error.toNumberUnsupportedType($0.first?.value)
         }
       )
     case .toInteger:
@@ -53,7 +53,7 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _stringToInteger),
         ],
         makeError: {
-          AnyCalcExpression.Error.toInteger($0.first)
+          AnyCalcExpression.Error.toInteger($0.first?.value)
         }
       )
     case .toColor:

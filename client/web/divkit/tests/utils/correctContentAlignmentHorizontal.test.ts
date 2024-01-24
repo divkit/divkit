@@ -2,13 +2,22 @@ import { correctContentAlignmentHorizontal } from '../../src/utils/correctConten
 
 describe('correctContentAlignmentHorizontal', () => {
     test('simple', () => {
-        expect(correctContentAlignmentHorizontal(undefined, 'left')).toBe('left');
-        expect(correctContentAlignmentHorizontal('left', 'center')).toBe('left');
-        expect(correctContentAlignmentHorizontal('center', 'left')).toBe('center');
-        expect(correctContentAlignmentHorizontal('right', 'left')).toBe('right');
-        expect(correctContentAlignmentHorizontal('space-between', 'left')).toBe('space-between');
-        expect(correctContentAlignmentHorizontal('space-around', 'left')).toBe('space-around');
-        expect(correctContentAlignmentHorizontal('space-evenly', 'left')).toBe('space-evenly');
-        expect(correctContentAlignmentHorizontal('smth', 'left')).toBe('left');
+        expect(correctContentAlignmentHorizontal(undefined, 'ltr', 'start')).toBe('start');
+        expect(correctContentAlignmentHorizontal('left', 'ltr', 'center')).toBe('start');
+        expect(correctContentAlignmentHorizontal('center', 'ltr', 'start')).toBe('center');
+        expect(correctContentAlignmentHorizontal('right', 'ltr', 'start')).toBe('end');
+        expect(correctContentAlignmentHorizontal('space-between', 'ltr', 'start')).toBe('space-between');
+        expect(correctContentAlignmentHorizontal('space-around', 'ltr', 'start')).toBe('space-around');
+        expect(correctContentAlignmentHorizontal('space-evenly', 'ltr', 'start')).toBe('space-evenly');
+        expect(correctContentAlignmentHorizontal('smth', 'ltr', 'start')).toBe('start');
+
+        expect(correctContentAlignmentHorizontal(undefined, 'rtl', 'start')).toBe('start');
+        expect(correctContentAlignmentHorizontal('left', 'rtl', 'center')).toBe('end');
+        expect(correctContentAlignmentHorizontal('center', 'rtl', 'start')).toBe('center');
+        expect(correctContentAlignmentHorizontal('right', 'rtl', 'start')).toBe('start');
+        expect(correctContentAlignmentHorizontal('space-between', 'rtl', 'start')).toBe('space-between');
+        expect(correctContentAlignmentHorizontal('space-around', 'rtl', 'start')).toBe('space-around');
+        expect(correctContentAlignmentHorizontal('space-evenly', 'rtl', 'start')).toBe('space-evenly');
+        expect(correctContentAlignmentHorizontal('smth', 'rtl', 'start')).toBe('start');
     });
 });

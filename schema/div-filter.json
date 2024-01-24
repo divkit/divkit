@@ -7,7 +7,10 @@
     {
       "$ref": "div-filter-rtl-mirror.json",
       "$description": "translations.json#/div_filter_rtl_mirror",
-      "platforms": [ "android" ]
+      "platforms": [
+        "android",
+        "web"
+      ]
     }
   ]
 }

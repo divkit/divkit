@@ -74,7 +74,9 @@ class NewCustomContainer extends HTMLElement {
     }
 }
 
-customElements.define('old-custom-card1', OldCustomCard1);
-customElements.define('old-custom-card2', OldCustomCard2);
-customElements.define('new-custom-card', NewCustomCard);
-customElements.define('new-custom-container', NewCustomContainer);
+export function initComponents() {
+    customElements.define('old-custom-card1', OldCustomCard1);
+    customElements.define('old-custom-card2', OldCustomCard2);
+    customElements.define('new-custom-card', NewCustomCard);
+    customElements.define('new-custom-container', NewCustomContainer);
+}

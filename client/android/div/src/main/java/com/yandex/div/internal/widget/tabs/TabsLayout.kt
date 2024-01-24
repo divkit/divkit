@@ -53,7 +53,7 @@ internal open class TabsLayout @JvmOverloads constructor(
 
         pagerLayout = ViewPagerFixedSizeLayout(context).apply {
             id = R.id.div_tabs_container_helper
-            layoutParams = ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            layoutParams = ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             collapsiblePaddingBottom = 0
 
             val bottomView = FrameLayout(context).apply {

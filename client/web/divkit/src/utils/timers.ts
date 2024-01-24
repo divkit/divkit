@@ -1,7 +1,8 @@
-import { Action, DivTimer } from '../../typings/common';
+import type { Action, DivTimer } from '../../typings/common';
+import type { MaybeMissing } from '../expressions/json';
+import type { ComponentContext } from '../types/componentContext';
+import type { VariableType } from '../expressions/variable';
 import { LogError, wrapError } from './wrapError';
-import { MaybeMissing } from '../expressions/json';
-import { VariableType } from '../expressions/variable';
 
 interface TimerState {
     state: 'stopped' | 'running' | 'paused';
@@ -31,7 +32,10 @@ type HasVariableWithTypeFunc = (name: string, type: VariableType) => boolean;
 
 type SetVariableValueFunc = (name: string, value: unknown) => void;
 
-type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean) => Promise<void>;
+type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, opts: {
+    componentContext?: ComponentContext;
+    processUrls?: boolean;
+}) => Promise<void>;
 
 export class TimersController {
     private readonly timers: Map<string, TimerState> = new Map();
@@ -321,7 +325,9 @@ export class TimersController {
 
         if (actions) {
             const actionsWithExpressions = this.applyVars(actions);
-            this.execAnyActions(actionsWithExpressions, false);
+            this.execAnyActions(actionsWithExpressions, {
+                processUrls: false
+            });
         }
     }
 

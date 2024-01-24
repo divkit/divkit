@@ -18,7 +18,7 @@ extension DivCollectionItemBuilder {
         return try modifyError({ DivBlockModelingError($0.message, path: itemContext.parentPath)
         }) {
           let prototypeContext = itemContext
-            .modifying(prototypesData: (dataElementPrefix, item))
+            .modifying(prototypesData: (dataElementName, item))
           let prototype = prototypes
             .first { $0.resolveSelector(prototypeContext.expressionResolver) }
           guard let prototype else {

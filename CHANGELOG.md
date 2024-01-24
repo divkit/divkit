@@ -2,11 +2,12 @@
 
 # Android Client:
 * Fixed element blinking when rebinding galleries.
-* Implemented `hashCode()` and `equals()` for Divs.
+* Implemented `hash()` method for Divs.
 * Added a parameter to `DivConfiguration.Builder#divPlayerPreloader`. Also implemented `ExoPlayerVideoPreloader`, which can be used to preload videos if you are using `ExoDivPlayerFactory` as your video player.
 * Disabled creation of implicit default values for object properties.
 * Fixed a bug that 'visibility_action' does not work for children with size more than 'div-gallery' size.
 * Added parameter describing the reason of `div-action` call to `DivActionHandler` methods.
+* Fixed `visibility_change` animation
 
 # iOS Client:
 * Updated VGSL version to 3.0.0.

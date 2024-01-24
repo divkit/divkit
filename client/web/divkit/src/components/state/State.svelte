@@ -4,10 +4,11 @@
     import css from './State.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivStateData, State } from '../../types/state';
     import type { AnyTransition, AppearanceTransition, DivBaseData, TransitionChange } from '../../types/base';
     import type { ChangeBoundsTransition } from '../../types/base';
+    import type { ComponentContext } from '../../types/componentContext';
+    import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { wrapError } from '../../utils/wrapError';
     import { STATE_CTX, StateCtxValue, StateInterface } from '../../context/state';
@@ -18,9 +19,7 @@
     import Unknown from '../utilities/Unknown.svelte';
     import TooltipView from '../tooltip/Tooltip.svelte';
 
-    export let json: Partial<DivStateData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivStateData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -39,17 +38,17 @@
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
     let prevStateId: string | undefined;
-    $: stateId = json.div_id || json.id;
+    $: stateId = componentContext.json.div_id || componentContext.json.id;
     let selectedId: string | undefined;
-    let selectedState: State | null = null;
-    $: jsonDefaultStateId = rootCtx.getJsonWithVars(json.default_state_id);
-    $: stateVariableName = json.state_id_variable;
+    let selectedComponentContext: ComponentContext | undefined;
+    $: jsonDefaultStateId = componentContext.getJsonWithVars(componentContext.json.default_state_id);
+    $: stateVariableName = componentContext.json.state_id_variable;
     $: stateVariable = stateVariableName ?
-        rootCtx.getVariable(stateVariableName, 'string') :
+        componentContext.getVariable(stateVariableName, 'string') :
         null;
     let inited = false;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         inited = false;
     }
 
@@ -57,14 +56,14 @@
         hasError = false;
     } else {
         hasError = true;
-        rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
+        componentContext.logError(wrapError(new Error('Missing "id" prop for div "state"')));
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         childrenIds = new Set<string>();
     }
 
-    $: items = json.states || [];
+    $: items = componentContext.json.states || [];
     $: parentOfItems = items.map(it => {
         return it.div;
     });
@@ -72,14 +71,20 @@
     $: {
         if (!items?.length) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Empty "states" prop for div "state"')));
+            componentContext.logError(wrapError(new Error('Empty "states" prop for div "state"')));
         } else {
             hasError = false;
         }
     }
 
-    function replaceItems(items: (DivBaseData | undefined)[]): void {
-        const states = json.states;
+    function selectState(selectedState: MaybeMissing<State> | null): void {
+        selectedComponentContext = selectedState?.div ? componentContext.produceChildContext(selectedState.div, {
+            path: selectedState.state_id || '<unknown>'
+        }) : undefined;
+    }
+
+    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+        const states = componentContext.json.states;
 
         if (!states) {
             return;
@@ -92,18 +97,18 @@
             };
         });
 
-        json = {
-            ...json,
+        componentContext.json = {
+            ...componentContext.json,
             states: newStates
         };
         if (selectedId) {
-            selectedState = newStates.find(it => it.state_id === selectedId) || null;
+            selectState(newStates.find(it => it.state_id === selectedId) || null);
         }
     }
 
     interface AnimationItem {
         json: DivBaseData;
-        templateContext: TemplateContext;
+        componentContextCopy: ComponentContext;
         elementBbox: DOMRect;
         rootBbox: DOMRect;
         transitions: AnyTransition[];
@@ -121,7 +126,7 @@
     }
     interface ChangeBoundsItem {
         json: DivBaseData;
-        templateContext: TemplateContext;
+        componentContextCopy: ComponentContext;
         rootBbox: DOMRect;
         beforeBbox: DOMRect;
         afterBbox: DOMRect;
@@ -132,7 +137,7 @@
 
     interface ChildWithTransition {
         json: DivBaseData;
-        templateContext: TemplateContext;
+        parentComponentContext: ComponentContext;
         transitions: AppearanceTransition;
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
@@ -140,7 +145,7 @@
     interface ChildWithTransitionChange {
         id: string;
         json: DivBaseData;
-        templateContext: TemplateContext;
+        parentComponentContext: ComponentContext;
         transitions: TransitionChange;
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
@@ -151,20 +156,23 @@
     }
 
     function getItemAnimation(rootBbox: DOMRect, child: ChildWithTransition, direction: 'in' | 'out'): AnimationItem {
-        let { json, templateContext, transitions, node } = child;
-        json = rootCtx.getJsonWithVars(json) as DivBaseData;
-        transitions = rootCtx.getJsonWithVars(transitions) as AppearanceTransition;
+        let { json, parentComponentContext, transitions, node } = child;
+        json = componentContext.getJsonWithVars(json) as DivBaseData;
+        transitions = componentContext.getJsonWithVars(transitions) as AppearanceTransition;
 
         const transitionsList: AnyTransition[] = flattenTransition(transitions);
         const bbox = node.getBoundingClientRect();
+        const jsonCopy = {
+            ...json,
+            margins: undefined,
+            alpha: haveFadeTransition(transitionsList) ? undefined : json.alpha
+        };
 
         return {
-            json: {
-                ...json,
-                margins: undefined,
-                alpha: haveFadeTransition(transitionsList) ? undefined : json.alpha
-            },
-            templateContext,
+            json: jsonCopy,
+            componentContextCopy: parentComponentContext.produceChildContext(jsonCopy, {
+                fake: true
+            }),
             elementBbox: bbox,
             rootBbox,
             transitions: transitionsList,
@@ -220,9 +228,9 @@
         if (newState) {
             selectedId = stateId;
             stateVariable?.setValue(selectedId);
-            selectedState = newState;
+            selectState(newState);
         } else {
-            rootCtx.logError(wrapError(new Error('Cannot find state with id'), {
+            componentContext.logError(wrapError(new Error('Cannot find state with id'), {
                 additional: {
                     stateId
                 }
@@ -265,19 +273,23 @@
         const changeList: ChangeBoundsItem[] = childrenWithTransitionChange
             .filter(child => transitionChangeBoxes.has(child.id))
             .map(child => {
+                const jsonCopy: DivBaseData = {
+                    ...child.json,
+                    margins: undefined,
+                    width: { type: 'match_parent' },
+                    height: { type: 'match_parent' },
+                };
+
                 const res: ChangeBoundsItem = {
-                    json: {
-                        ...child.json,
-                        margins: undefined,
-                        width: { type: 'match_parent' },
-                        height: { type: 'match_parent' },
-                    },
-                    templateContext: child.templateContext,
+                    json: jsonCopy,
+                    componentContextCopy: child.parentComponentContext.produceChildContext(jsonCopy, {
+                        fake: true
+                    }),
                     rootBbox,
                     beforeBbox: transitionChangeBoxes.get(child.id) as DOMRect,
                     afterBbox: child.node.getBoundingClientRect(),
                     node: child.node,
-                    transition: rootCtx.getJsonWithVars(
+                    transition: componentContext.getJsonWithVars(
                         getTransitionChange(child.transitions)
                     ) as ChangeBoundsTransition,
                     resolvePromise: child.resolvePromise
@@ -306,7 +318,7 @@
             return childStateMap.get(id);
         }
 
-        rootCtx.logError(wrapError(new Error('Missing state block with id'), {
+        componentContext.logError(wrapError(new Error('Missing state block with id'), {
             additional: {
                 id
             }
@@ -314,13 +326,13 @@
         return undefined;
     }
 
-    $: if (json) {
+    $: if (componentContext.json) {
         if (prevStateId) {
             stateCtx.unregisterInstance(prevStateId);
             prevStateId = undefined;
         }
 
-        if (stateId && !layoutParams?.fakeElement) {
+        if (stateId && !componentContext?.fakeElement) {
             prevStateId = stateId;
             stateCtx.registerInstance(stateId, {
                 setState,
@@ -336,7 +348,7 @@
             }
 
             if (childStateMap.has(id)) {
-                rootCtx.logError(wrapError(new Error('Duplicate state with id'), {
+                componentContext.logError(wrapError(new Error('Duplicate state with id'), {
                     additional: {
                         id
                     }
@@ -350,7 +362,7 @@
         },
         runVisibilityTransition(
             json: DivBaseData,
-            templateContext: TemplateContext,
+            parentComponentContext: ComponentContext,
             transitions: AppearanceTransition,
             node: HTMLElement,
             direction: 'in' | 'out'
@@ -364,7 +376,7 @@
                 rootBbox,
                 {
                     json,
-                    templateContext,
+                    parentComponentContext,
                     transitions,
                     node
                 },
@@ -387,13 +399,13 @@
         },
         registerChildWithTransitionIn(
             json: DivBaseData,
-            templateContext: TemplateContext,
+            parentComponentContext: ComponentContext,
             transitions: AppearanceTransition,
             node: HTMLElement
         ) {
             const item: ChildWithTransition = {
                 json,
-                templateContext,
+                parentComponentContext,
                 transitions,
                 node
             };
@@ -405,13 +417,13 @@
         },
         registerChildWithTransitionOut(
             json: DivBaseData,
-            templateContext: TemplateContext,
+            parentComponentContext: ComponentContext,
             transitions: AppearanceTransition,
             node: HTMLElement
         ) {
             const item: ChildWithTransition = {
                 json,
-                templateContext,
+                parentComponentContext,
                 transitions,
                 node
             };
@@ -423,7 +435,7 @@
         },
         registerChildWithTransitionChange(
             json: DivBaseData,
-            templateContext: TemplateContext,
+            parentComponentContext: ComponentContext,
             transitions: TransitionChange,
             node: HTMLElement
         ) {
@@ -436,7 +448,7 @@
             const item: ChildWithTransitionChange = {
                 id,
                 json,
-                templateContext,
+                parentComponentContext,
                 transitions,
                 node
             };
@@ -461,7 +473,7 @@
         }
     });
 
-    function initDefaultState(items: State[]): void {
+    function initDefaultState(items: MaybeMissing<State>[]): void {
         if (inited) {
             return;
         }
@@ -471,17 +483,19 @@
             const defaultVal = stateVariable?.getValue() || jsonDefaultStateId;
             if (defaultVal) {
                 selectedId = defaultVal;
-                selectedState = items.find(it => it.state_id === selectedId) || null;
+                const selectedState = items.find(it => it.state_id === selectedId) || null;
+                selectState(selectedState);
                 if (!selectedState) {
-                    rootCtx.logError(wrapError(new Error('Cannot find state for default_state_id'), {
+                    componentContext.logError(wrapError(new Error('Cannot find state for default_state_id'), {
                         additional: {
                             selectedId
                         }
                     }));
                 }
             } else {
-                selectedState = items[0];
+                const selectedState = items[0];
                 selectedId = selectedState.state_id;
+                selectState(selectedState);
             }
 
             if (stateVariable) {
@@ -512,19 +526,20 @@
 {#if !hasError}
     <Outer
         cls={css.state}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
         parentOf={parentOfItems}
         parentOfSimpleMode={true}
         {replaceItems}
     >
-        {#if selectedState?.div}
+        {#if selectedComponentContext}
             {#key selectedId}
-                <Unknown div={selectedState.div} templateContext={templateContext} />
+                <Unknown
+                    componentContext={selectedComponentContext}
+                />
             {/key}
         {/if}
+
         <div class={css.state__animations} bind:this={animationRoot} aria-hidden="true">
             {#each animationList as item (item)}
                 {#if 'direction' in item}
@@ -539,9 +554,7 @@
                     >
                         <div class={css['state__animation-child-inner']}>
                             <Unknown
-                                div={item.json}
-                                templateContext={item.templateContext}
-                                layoutParams={{ fakeElement: true }}
+                                componentContext={item.componentContextCopy}
                             />
                         </div>
                     </div>
@@ -553,9 +566,7 @@
                     >
                         <div class={css['state__animation-child-inner']}>
                             <Unknown
-                                div={item.json}
-                                templateContext={item.templateContext}
-                                layoutParams={{ fakeElement: true }}
+                                componentContext={item.componentContextCopy}
                             />
                         </div>
                     </div>
@@ -564,13 +575,13 @@
         </div>
     </Outer>
 
-    {#if layoutParams?.tooltips}
-        {#each layoutParams?.tooltips as item (item.internalId)}
+    {#if componentContext?.tooltips}
+        {#each componentContext.tooltips as item (item.internalId)}
             <TooltipView
                 ownerNode={item.ownerNode}
                 data={item.desc}
                 internalId={item.internalId}
-                {templateContext}
+                parentComponentContext={componentContext}
             />
         {/each}
     {/if}

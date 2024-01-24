@@ -10,6 +10,7 @@
 
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { ComponentContext } from '../../types/componentContext';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { doNothing } from '../../utils/doNothing';
     import { ACTION_CTX, ActionCtxValue } from '../../context/action';
@@ -17,6 +18,7 @@
     import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
     import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
 
+    export let componentContext: ComponentContext;
     export let id = '';
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let doubleTapActions: MaybeMissing<Action[]> | undefined = undefined;
@@ -61,7 +63,7 @@
 
         if (Array.isArray(actions) && actions?.length && actionCtx.hasAction()) {
             href = '';
-            rootCtx.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
+            componentContext.logError(wrapError(new Error('Actionable element is forbidden inside other actionable element'), {
                 level: 'warn',
                 additional: {
                     actions
@@ -76,7 +78,7 @@
         } else if (!href && Array.isArray(actions) && actions?.length) {
             hasJSAction = true;
             if (!actions.some(action => action.url || action.typed)) {
-                rootCtx.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
+                componentContext.logError(wrapError(new Error('The component has a list of actions, but does not have a real action'), {
                     level: 'warn',
                     additional: {
                         actions
@@ -151,7 +153,7 @@
             if (hasCustomAction) {
                 event.preventDefault();
             }
-            rootCtx.execAnyActions(actions);
+            componentContext.execAnyActions(actions);
         }
     }
 
@@ -164,7 +166,7 @@
             return;
         }
 
-        rootCtx.execAnyActions(doubleTapActions, true);
+        componentContext.execAnyActions(doubleTapActions, { processUrls: true });
     }
 
     function onTouchStart(event: TouchEvent): void {
@@ -195,7 +197,7 @@
         }
 
         if (!isChanged && (Date.now() - startTs) >= MIN_LONG_TAP_DURATION) {
-            rootCtx.execAnyActions(longTapActions, true);
+            componentContext.execAnyActions(longTapActions, { processUrls: true });
         }
 
         startCoords = null;
@@ -217,7 +219,7 @@
         }
 
         if (event.key === 'Enter' && Array.isArray(actions) && actions.length) {
-            rootCtx.execAnyActions(actions);
+            componentContext.execAnyActions(actions);
             event.preventDefault();
         }
     }

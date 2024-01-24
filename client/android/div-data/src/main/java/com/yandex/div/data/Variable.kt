@@ -7,7 +7,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
-import com.yandex.div.internal.parser.toBoolean
+import com.yandex.div.internal.util.toBoolean
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

@@ -1230,6 +1230,208 @@
         "android",
         "web"
       ]
+    },
+    {
+      "name": "getDictFromDict(dict, 'prop') => dict",
+      "expression": "@{getDictFromDict(dict, 'prop')}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "subdict": 1
+        }
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": {
+              "subdict": 1
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getDictFromDict(dict, 'missing_prop') => error",
+      "expression": "@{getDictFromDict(dict, 'missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromDict(<dict>, 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getDictFromDict(dict, 'incorrect_type') => error",
+      "expression": "@{getDictFromDict(dict, 'incorrect_type')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getDictFromDict(<dict>, 'incorrect_type')]. Incorrect value type: expected \"dict\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "incorrect_type": 1
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getArrayFromDict(dict, 'prop') => dict",
+      "expression": "@{getArrayFromDict(dict, 'prop')}",
+      "expected": {
+        "type": "array",
+        "value": [1]
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "prop": [1]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getArrayFromDict(dict, 'missing_prop') => error",
+      "expression": "@{getArrayFromDict(dict, 'missing_prop')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayFromDict(<dict>, 'missing_prop')]. Missing property \"missing_prop\" in the dict."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {}
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getArrayFromDict(dict, 'incorrect_type') => error",
+      "expression": "@{getArrayFromDict(dict, 'incorrect_type')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getArrayFromDict(<dict>, 'incorrect_type')]. Incorrect value type: expected \"array\", got \"number\"."
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "incorrect_type": 1
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getOptArrayFromDict(dict, 'correct_prop') => array",
+      "expression": "@{getOptArrayFromDict(dict, 'correct_prop')}",
+      "expected": {
+        "type": "array",
+        "value": [1]
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "correct_prop": [1]
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getOptArrayFromDict(dict, 'missing_prop') => array",
+      "expression": "@{getOptArrayFromDict(dict, 'missing_prop')}",
+      "expected": {
+        "type": "array",
+        "value": []
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getOptDictFromDict(dict, 'correct_prop') => dict",
+      "expression": "@{getOptDictFromDict(dict, 'correct_prop')}",
+      "expected": {
+        "type": "dict",
+        "value": {
+          "dict_prop": 1
+        }
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+            "correct_prop": {
+              "dict_prop": 1
+            }
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getOptDictFromDict(dict, 'missing_prop') => dict",
+      "expression": "@{getOptDictFromDict(dict, 'missing_prop')}",
+      "expected": {
+        "type": "dict",
+        "value": {}
+      },
+      "variables": [
+        {
+          "type": "dict",
+          "name": "dict",
+          "value": {
+          }
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

@@ -2,7 +2,7 @@
     display: grid;
 }
 
-.grid_halign_left {
+.grid_halign_start {
     justify-content: start;
 }
 
@@ -10,11 +10,11 @@
     justify-content: center;
 }
 
-.grid_halign_right {
+.grid_halign_end {
     justify-content: end;
 }
 
-.grid_valign_top {
+.grid_valign_start {
     align-content: start;
 }
 
@@ -22,6 +22,6 @@
     align-content: center;
 }
 
-.grid_valign_bottom {
+.grid_valign_end {
     align-content: end;
 }

@@ -341,7 +341,12 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         return mCurrentData.getTabs().size();
     }
 
-    private int measureTabHeight(@NonNull ViewGroup tabView, int width, int tabIndex) {
+    private int measureTabHeight(
+        @NonNull ViewGroup tabView,
+        int width,
+        int heightMeasureSpec,
+        int tabIndex
+    ) {
         if (mCurrentData == null) {
             return -1;
         }
@@ -372,8 +377,10 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         }
         binding.bind();
         tabView.forceLayout();
-        tabView.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        tabView.measure(
+            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            heightMeasureSpec
+        );
         int result = tabView.getMeasuredHeight() + collapsiblePaddingBottom;
         return result;
     }

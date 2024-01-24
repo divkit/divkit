@@ -873,6 +873,46 @@
       ]
     },
     {
+      "name": "getDictFromDict(dict, vararg string) dict",
+      "function_name": "getDictFromDict",
+      "doc": "Returns an dict property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getArrayFromDict(dict, vararg string) array",
+      "function_name": "getArrayFromDict",
+      "doc": "Returns an array property from dictionary.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
       "name": "getOptStringFromDict(string, dict, vararg string) string",
       "function_name": "getOptStringFromDict",
       "doc": "Returns an optional string property from dictionary.",
@@ -1069,6 +1109,46 @@
       "result_type": "url",
       "platforms": [
         "android",
+        "web"
+      ]
+    },
+    {
+      "name": "getOptArrayFromDict(dict, vararg string) array",
+      "function_name": "getOptArrayFromDict",
+      "doc": "Returns an array value from dict if exist or empty array otherwise.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "array",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getOptDictFromDict(dict, vararg string) dict",
+      "function_name": "getOptDictFromDict",
+      "doc": "Returns an dict value from dict if exist or empty dict otherwise.",
+      "arguments": [
+        {
+          "type": "dict",
+          "doc": "Dictionary."
+        },
+        {
+          "type": "string",
+          "vararg": true,
+          "doc": "Path in dictionary."
+        }
+      ],
+      "result_type": "dict",
+      "platforms": [
         "web"
       ]
     },

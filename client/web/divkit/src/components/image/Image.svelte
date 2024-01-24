@@ -16,8 +16,8 @@
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivImageData, TintMode } from '../../types/image';
-    import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { ComponentContext } from '../../types/componentContext';
     import Outer from '../utilities/Outer.svelte';
     import { makeStyle } from '../../utils/makeStyle';
     import { genClassName } from '../../utils/genClassName';
@@ -33,12 +33,12 @@
     import { getCssFilter } from '../../utils/filters';
     import { prepareBase64 } from '../../utils/prepareBase64';
 
-    export let json: Partial<DivImageData> = {};
-    export let templateContext: TemplateContext;
-    export let origJson: DivBase | undefined = undefined;
+    export let componentContext: ComponentContext<DivImageData>;
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+
+    const direction = rootCtx.direction;
 
     let img: HTMLImageElement;
     let state = STATE_LOADING;
@@ -61,33 +61,34 @@
     let animationDuration = 0;
     let filter = '';
     let filterClipPath = '';
+    let isRTLMirror = false;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         scale = 'none';
         position = '50% 50%';
         tintMode = 'source_in';
     }
 
-    $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
-    $: jsonGifUrl = rootCtx.getDerivedFromVars(json.gif_url);
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-    $: jsonPreview = rootCtx.getDerivedFromVars(json.preview);
-    $: jsonPlaceholderColor = rootCtx.getDerivedFromVars(json.placeholder_color);
-    $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
-    $: jsonPosition = rootCtx.getDerivedFromVars({
-        content_alignment_horizontal: json.content_alignment_horizontal,
-        content_alignment_vertical: json.content_alignment_vertical
+    $: jsonImageUrl = componentContext.getDerivedFromVars(componentContext.json.image_url);
+    $: jsonGifUrl = componentContext.getDerivedFromVars(componentContext.json.gif_url);
+    $: jsonWidth = componentContext.getDerivedFromVars(componentContext.json.width);
+    $: jsonHeight = componentContext.getDerivedFromVars(componentContext.json.height);
+    $: jsonPreview = componentContext.getDerivedFromVars(componentContext.json.preview);
+    $: jsonPlaceholderColor = componentContext.getDerivedFromVars(componentContext.json.placeholder_color);
+    $: jsonScale = componentContext.getDerivedFromVars(componentContext.json.scale);
+    $: jsonPosition = componentContext.getDerivedFromVars({
+        content_alignment_horizontal: componentContext.json.content_alignment_horizontal,
+        content_alignment_vertical: componentContext.json.content_alignment_vertical
     });
-    $: jsonA11y = rootCtx.getDerivedFromVars(json.accessibility);
-    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
-    $: jsonTintColor = rootCtx.getDerivedFromVars(json.tint_color);
-    $: jsonTintMode = rootCtx.getDerivedFromVars(json.tint_mode);
-    $: jsonAppearanceAnimation = rootCtx.getDerivedFromVars(json.appearance_animation);
-    $: jsonFilters = rootCtx.getDerivedFromVars(json.filters);
+    $: jsonA11y = componentContext.getDerivedFromVars(componentContext.json.accessibility);
+    $: jsonAspect = componentContext.getDerivedFromVars(componentContext.json.aspect);
+    $: jsonTintColor = componentContext.getDerivedFromVars(componentContext.json.tint_color);
+    $: jsonTintMode = componentContext.getDerivedFromVars(componentContext.json.tint_mode);
+    $: jsonAppearanceAnimation = componentContext.getDerivedFromVars(componentContext.json.appearance_animation);
+    $: jsonFilters = componentContext.getDerivedFromVars(componentContext.json.filters);
 
     $: {
-        let img = json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
+        let img = componentContext.json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
         isEmpty = img === EMPTY_IMAGE;
         if (isEmpty) {
             img = FALLBACK_IMAGE;
@@ -103,7 +104,7 @@
     $: {
         if (!imageUrl) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error(`Missing "${json.type === 'gif' ? 'gif_url' : 'image_url'}" for "${json.type}"`)));
+            componentContext.logError(wrapError(new Error(`Missing "${componentContext.json.type === 'gif' ? 'gif_url' : 'image_url'}" for "${componentContext.json.type}"`)));
         } else {
             hasError = false;
         }
@@ -137,7 +138,7 @@
         content_alignment_horizontal?: AlignmentHorizontal;
         content_alignment_vertical?: AlignmentVertical;
     }): void {
-        position = correctImagePosition(pos, position);
+        position = correctImagePosition(pos, $direction, position);
     }
     $: updatePosition($jsonPosition);
 
@@ -177,13 +178,14 @@
         let newFilter = '';
         let newClipPath = '';
         if (Array.isArray($jsonFilters) && $jsonFilters.length) {
-            newFilter = getCssFilter($jsonFilters, rootCtx.logError);
+            newFilter = getCssFilter($jsonFilters, componentContext.logError);
         }
         if (newFilter) {
             newClipPath = 'polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)';
         }
         filter = newFilter;
         filterClipPath = newClipPath;
+        isRTLMirror = $direction === 'rtl' && Array.isArray($jsonFilters) && $jsonFilters.some(it => it.type === 'rtl_mirror');
     }
 
     $: mods = {
@@ -191,7 +193,8 @@
         'is-width-content': isWidthContent,
         'is-height-content': isHeightContent,
         loaded: state === STATE_LOADED,
-        'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING
+        'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING,
+        'is-rtl-mirror': isRTLMirror
     };
 
     $: style = {
@@ -234,9 +237,7 @@
 {#if !hasError}
     <Outer
         cls={genClassName('image', css, mods)}
-        {json}
-        {origJson}
-        {templateContext}
+        {componentContext}
         {layoutParams}
         customDescription={true}
     >

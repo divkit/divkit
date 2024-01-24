@@ -2,7 +2,8 @@
     "description": "RTL and LTR text aligned to start/end in RTL layout direction context. Text should be aligned according to the title of the text-block.",
     "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
     ],
     "configuration": {
         "layout_direction": "rtl"

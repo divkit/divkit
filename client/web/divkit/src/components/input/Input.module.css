@@ -5,14 +5,15 @@
     min-height: 0;
     letter-spacing: 0;
     line-height: var(--divkit-input-line-height);
+    text-align: start;
 }
 
 .input_alignment-horizontal_center {
     text-align: center;
 }
 
-.input_alignment-horizontal_right {
-    text-align: right;
+.input_alignment-horizontal_end {
+    text-align: end;
 }
 
 .input__input {
@@ -61,15 +62,15 @@
     justify-content: center;
 }
 
-.input_alignment-horizontal_right .input__placeholder {
+.input_alignment-horizontal_end .input__placeholder {
     justify-content: flex-end;
 }
 
-.input_alignment-vertical_top .input__placeholder {
+.input_alignment-vertical_start .input__placeholder {
     align-items: flex-start;
 }
 
-.input_alignment-vertical_bottom .input__placeholder {
+.input_alignment-vertical_end .input__placeholder {
     align-items: flex-end;
 }
 
@@ -85,16 +86,16 @@
     text-align: center;
 }
 
-.input_alignment-horizontal_right .input__input_singleline {
-    text-align: right;
+.input_alignment-horizontal_end .input__input_singleline {
+    text-align: end;
 }
 
-.input_alignment-vertical_top .input__input_singleline {
+.input_alignment-vertical_start .input__input_singleline {
     align-self: flex-start;
     height: calc(1em * var(--divkit-input-line-height));
 }
 
-.input_alignment-vertical_bottom .input__input_singleline {
+.input_alignment-vertical_end .input__input_singleline {
     align-self: flex-end;
     height: calc(1em * var(--divkit-input-line-height));
 }
@@ -118,11 +119,11 @@
     height: max-content;
 }
 
-.input_alignment-vertical_top .input__input_multiline {
+.input_alignment-vertical_start .input__input_multiline {
     justify-content: flex-start;
 }
 
-.input_alignment-vertical_bottom .input__input_multiline {
+.input_alignment-vertical_end .input__input_multiline {
     justify-content: flex-end;
 }
 
@@ -134,7 +135,7 @@
     align-items: center;
 }
 
-.input_alignment-horizontal_right .input__input_multiline {
+.input_alignment-horizontal_end .input__input_multiline {
     align-items: flex-end;
 }
 

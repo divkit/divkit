@@ -12,9 +12,9 @@
     }
 }*/
 
-.text_halign_left {
+.text_halign_start {
     justify-content: flex-start;
-    text-align: left;
+    text-align: start;
 }
 
 .text_halign_center {
@@ -22,12 +22,12 @@
     text-align: center;
 }
 
-.text_halign_right {
+.text_halign_end {
     justify-content: flex-end;
-    text-align: right;
+    text-align: end;
 }
 
-.text_valign_top {
+.text_valign_start {
     align-items: flex-start;
 }
 
@@ -35,7 +35,7 @@
     align-items: center;
 }
 
-.text_valign_bottom {
+.text_valign_end {
     align-items: flex-end;
 }
 

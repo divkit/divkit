@@ -24,17 +24,19 @@
     },
     "start": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_edge_insets_start",
-      "platforms": [ "android" ]
+      "$description": "translations.json#/div_edge_insets_start"
     },
     "end": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_edge_insets_end",
-      "platforms": [ "android" ]
+      "$description": "translations.json#/div_edge_insets_end"
     },
     "unit": {
       "$ref": "div-size-unit.json",
-      "default_value": "dp"
+      "default_value": "dp",
+      "platforms": [
+        "android",
+        "ios"
+      ]
     }
   }
 }

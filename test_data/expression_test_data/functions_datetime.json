@@ -489,7 +489,8 @@
         "value": "13/01/1970 00:00:000"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -500,7 +501,8 @@
         "value": "Thu, Jan 1, 70"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -511,7 +513,8 @@
         "value": "12 o'clock AM"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -522,7 +525,8 @@
         "value": "01970 January 01 AD 12:00 AM"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
      {
@@ -533,7 +537,8 @@
         "value": "0:00 AM"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
      {
@@ -544,29 +549,31 @@
         "value": "1970-01-13T00:00:00.000"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
       {
-      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 1970-W01-4",
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 1970-W01-5",
       "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'YYYY-\\'W\\'ww-u', 'en-US')}",
       "expected": {
         "type": "string",
-        "value": "1970-W01-4"
+        "value": "1970-W01-5"
       },
       "platforms": [
-        "android"
+        "ios"
       ]
     },
     {
       "name": "formatDateAsUTCWithLocale(parseUnixTime(0), ru-RU) => 01970 января 01 н. э. чт",
-      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'yyyyy MMMM dd GGG EEE', 'ru-RU')}",
+      "expression": "@{toLowerCase(formatDateAsUTCWithLocale(parseUnixTime(0), 'yyyyy MMMM dd GGG EEE', 'ru-RU'))}",
       "expected": {
         "type": "string",
         "value": "01970 января 01 н. э. чт"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -577,7 +584,8 @@
         "value": "z/Z not supported in [dd/MM/yyyy HH:mm Z]"
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     }
   ]

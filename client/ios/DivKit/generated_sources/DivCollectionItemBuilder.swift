@@ -23,7 +23,7 @@ public final class DivCollectionItemBuilder {
   }
 
   public let data: Expression<[Any]>
-  public let dataElementPrefix: String // default value: it.
+  public let dataElementName: String // default value: it
   public let prototypes: [Prototype] // at least 1 elements
 
   public func resolveData(_ resolver: ExpressionResolver) -> [Any]? {
@@ -35,11 +35,11 @@ public final class DivCollectionItemBuilder {
 
   init(
     data: Expression<[Any]>,
-    dataElementPrefix: String? = nil,
+    dataElementName: String? = nil,
     prototypes: [Prototype]
   ) {
     self.data = data
-    self.dataElementPrefix = dataElementPrefix ?? "it."
+    self.dataElementName = dataElementName ?? "it"
     self.prototypes = prototypes
   }
 }
@@ -49,7 +49,7 @@ public final class DivCollectionItemBuilder {
 extension DivCollectionItemBuilder: Equatable {
   public static func ==(lhs: DivCollectionItemBuilder, rhs: DivCollectionItemBuilder) -> Bool {
     guard
-      lhs.dataElementPrefix == rhs.dataElementPrefix,
+      lhs.dataElementName == rhs.dataElementName,
       lhs.prototypes == rhs.prototypes
     else {
       return false
@@ -63,7 +63,7 @@ extension DivCollectionItemBuilder: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["data"] = data.toValidSerializationValue()
-    result["data_element_prefix"] = dataElementPrefix
+    result["data_element_name"] = dataElementName
     result["prototypes"] = prototypes.map { $0.toDictionary() }
     return result
   }

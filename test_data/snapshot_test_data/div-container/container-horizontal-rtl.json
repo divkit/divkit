@@ -2,7 +2,8 @@
     "description": "Horizontal container aligned right-to-left. The countdown should start from right to left.",
     "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
     ],
     "configuration": {
         "layout_direction": "rtl"

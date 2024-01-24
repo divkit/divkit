@@ -1,7 +1,8 @@
 {
     "description": "RTL and LTR text aligned to start/end in LTR layout direction context. Text should be aligned according the title of the text-block.",
     "platforms": [
-        "ios"
+        "ios",
+        "web"
     ],
     "templates": {
         "text_block": {

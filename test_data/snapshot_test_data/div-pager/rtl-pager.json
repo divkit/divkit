@@ -2,7 +2,8 @@
   "description": "Pager aligned right-to-left.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "configuration": {
     "layout_direction": "rtl"

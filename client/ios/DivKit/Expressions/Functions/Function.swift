@@ -245,13 +245,13 @@ struct FunctionVarTernary<T1, T2, T3, R>: SimpleFunction {
 
 struct OverloadedFunction: Function {
   private let functions: [SimpleFunction]
-  private let makeError: ([Any]) -> Error
+  private let makeError: ([Argument]) -> Error
 
   var arity: CalcExpression.Arity {
     functions.first?.arity ?? 0
   }
 
-  init(functions: [SimpleFunction], makeError: (([Any]) -> Error)? = nil) {
+  init(functions: [SimpleFunction], makeError: (([Argument]) -> Error)? = nil) {
     self.functions = functions
     self.makeError = makeError ?? { FunctionSignature.Error.typeMismatch(args: $0).message }
   }
@@ -264,12 +264,16 @@ struct OverloadedFunction: Function {
 
   func invoke(args: [Any]) throws -> Any {
     let arguments = try args.map {
-      try FunctionSignature.Argument(type: .from(type: type(of: $0)))
+      try FunctionSignature.ArgumentSignature(type: .from(type: type(of: $0)))
     }
     guard let function = try functions
-      .first(where: { try $0.signature.allArguments(arguments.count) == arguments })
+      .first(where: { try
+        zip($0.signature.allArguments(arguments.count), arguments)
+          .allSatisfy { $0.type == $1.type || $0.type == .any }
+
+      })
     else {
-      throw makeError(args)
+      throw makeError(zip(args, arguments).map { Argument(type: $1.type, value: $0) })
     }
     return try function.invoke(args: args)
   }
@@ -279,11 +283,26 @@ struct OverloadedFunction: Function {
   }
 }
 
+struct Argument {
+  let type: FunctionSignature.ArgumentType
+  let value: Any
+
+  var formattedValue: String {
+    let value = AnyCalcExpression.stringify(value) ?? ""
+    switch type {
+    case .string:
+      return "'\(value)'"
+    case .integer, .number, .boolean, .datetime, .color, .url, .dict, .array, .any:
+      return value
+    }
+  }
+}
+
 struct FunctionSignature: Decodable {
-  let arguments: [Argument]
+  let arguments: [ArgumentSignature]
   let resultType: ArgumentType
 
-  struct Argument: Decodable, Equatable {
+  struct ArgumentSignature: Decodable, Equatable {
     let type: ArgumentType
     var vararg: Bool?
   }
@@ -306,6 +325,7 @@ struct FunctionSignature: Decodable {
     case url
     case dict
     case array
+    case any
 
     func check(arg: Any) -> Bool {
       type(of: arg) == swiftType
@@ -331,6 +351,17 @@ struct FunctionSignature: Decodable {
         return [String: AnyHashable].self
       case .array:
         return [AnyHashable].self
+      case .any:
+        return Any.self
+      }
+    }
+
+    var name: String {
+      switch self {
+      case .datetime:
+        return "DateTime"
+      default:
+        return rawValue.stringWithFirstCharCapitalized()
       }
     }
 
@@ -345,7 +376,7 @@ struct FunctionSignature: Decodable {
   enum Error {
     case cast(ArgumentType)
     case arityMismatch
-    case typeMismatch(args: [Any])
+    case typeMismatch(args: [Argument])
     case argumentTypeMismatch(Int, ArgumentType, ArgumentType)
     case resultTypeMismatch(ArgumentType, ArgumentType)
     case notFound
@@ -362,7 +393,7 @@ struct FunctionSignature: Decodable {
       case .arityMismatch:
         return "Function arity mismatch"
       case let .typeMismatch(args):
-        return "Type mismatch \(args.map { "\($0)" }.joined(separator: " "))"
+        return "Type mismatch \(args.map { $0.formattedValue }.joined(separator: " "))"
       case let .argumentTypeMismatch(i, expected, found):
         return "Argument \(i + 1) type mismatch, expected: \(expected), found: \(found)"
       case let .resultTypeMismatch(expected, found):
@@ -386,7 +417,7 @@ struct FunctionSignature: Decodable {
     }
   }
 
-  fileprivate func allArguments(_ i: Int) -> [Argument] {
+  fileprivate func allArguments(_ i: Int) -> [ArgumentSignature] {
     if let last = arguments.last, last.vararg == true {
       return (arguments + Array(repeating: last, times: UInt(i - arguments.count))).map {
         .init(type: $0.type)

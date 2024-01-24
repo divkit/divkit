@@ -18,10 +18,12 @@ final class DivBlockProvider {
   }
 
   private(set) var cardId: DivCardID!
+
   private(set) var cardSize: DivViewSize? {
     didSet {
-      guard let cardSize else { return }
-      onCardSizeChanged(cardId, cardSize)
+      if let cardSize, let cardId {
+        onCardSizeChanged(cardId, cardSize)
+      }
     }
   }
 
@@ -35,7 +37,12 @@ final class DivBlockProvider {
   )
 
   @ObservableProperty
-  private(set) var block: Block = noDataBlock
+  private(set) var block: Block = noDataBlock {
+    didSet {
+      cardSize = DivViewSize(block: block)
+    }
+  }
+  
   weak var parentScrollView: ScrollView? {
     didSet {
       guard oldValue !== parentScrollView else { return }
@@ -112,7 +119,7 @@ final class DivBlockProvider {
   private func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData else {
       guard debugParams.isDebugInfoEnabled else { return }
-      block = makeErrorsBlock(dataErrors.map(\.prettyMessage))
+      block = makeErrorsBlock(dataErrors)
       return
     }
 
@@ -147,7 +154,6 @@ final class DivBlockProvider {
       )
       block = handleError(error: error, context: context)
     }
-    cardSize = DivViewSize(block: block)
   }
 
   private func needUpdateBlock(reasons: [DivActionURLHandler.UpdateReason]) -> Bool {
@@ -214,15 +220,15 @@ final class DivBlockProvider {
     }
 
     if debugParams.isDebugInfoEnabled {
-      return makeErrorsBlock(errors.map(\.prettyMessage))
+      return makeErrorsBlock(errors)
     } else {
       return noDataBlock
     }
   }
 
-  private func makeErrorsBlock(_ errors: [String]) -> Block {
-    guard !errors.isEmpty else {
-      return EmptyBlock.zeroSized
+  private func makeErrorsBlock(_ errors: [DivError]) -> Block {
+    guard !errors.isEmpty, !errors.isNoDataError else {
+      return noDataBlock
     }
     let headerTypo = Typo(size: 18, weight: .bold)
     let errorsHeader = TextBlock(
@@ -234,7 +240,7 @@ final class DivBlockProvider {
     let errorBlocks = errors.map {
       TextBlock(
         widthTrait: .resizable,
-        text: $0.with(typo: errorBlockTypo)
+        text: $0.prettyMessage.with(typo: errorBlockTypo)
       )
     }
     return try! GalleryBlock(
@@ -259,5 +265,16 @@ extension DivActionURLHandler.UpdateReason {
     case .timer, .variable, .state:
       return nil
     }
+  }
+}
+
+extension [DivError] {
+  fileprivate var isNoDataError: Bool {
+    if count == 1,
+       let deserializationError = first as? DeserializationError,
+       case .noData = deserializationError {
+      return true
+    }
+    return false
   }
 }

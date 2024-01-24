@@ -1,17 +1,22 @@
+import type { Direction } from '../../typings/common';
 import type { EdgeInsets } from '../types/edgeInserts';
 import { edgeInsertsToCss } from './edgeInsertsToCss';
 import { isNonNegativeNumber } from './isNonNegativeNumber';
 
-export function correctEdgeInserts(edgeInsets: EdgeInsets | undefined, defaultVal: string): string {
+export function correctEdgeInserts(
+    edgeInsets: EdgeInsets | undefined,
+    direction: Direction,
+    defaultVal: string
+): string {
     if (!edgeInsets) {
         return defaultVal;
     }
 
     const list = [
         edgeInsets.top,
-        edgeInsets.right,
+        (direction === 'ltr' ? edgeInsets.end : edgeInsets.start) ?? edgeInsets.right,
         edgeInsets.bottom,
-        edgeInsets.left
+        (direction === 'ltr' ? edgeInsets.start : edgeInsets.end) ?? edgeInsets.left
     ];
 
     for (let i = 0; i < list.length; ++i) {
@@ -20,5 +25,5 @@ export function correctEdgeInserts(edgeInsets: EdgeInsets | undefined, defaultVa
         }
     }
 
-    return edgeInsertsToCss(edgeInsets);
+    return edgeInsertsToCss(edgeInsets, direction);
 }

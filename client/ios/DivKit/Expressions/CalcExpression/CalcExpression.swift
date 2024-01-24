@@ -169,7 +169,7 @@ final class CalcExpression: CustomStringConvertible {
     root = try expression.root.optimized(
       withImpureSymbols: impureSymbols,
       pureSymbols: {
-        if let fn = try pureSymbols($0) ?? StandartSymbols.symbols[$0] {
+        if let fn = try pureSymbols($0){
           return fn
         }
         if case let .function(name, _) = $0 {
@@ -235,12 +235,6 @@ extension CalcExpression {
     switch symbol {
     case .infix("[]"), .function("[]", _), .infix("()"):
       return { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
-    case let .function(called, arity):
-      for case let .function(name, expected) in StandartSymbols.symbols.keys
-        where name == called && arity != expected {
-        return { _ in throw Error.arityMismatch(.function(called, arity: expected)) }
-      }
-      fallthrough
     default:
       return { _ in throw Error.undefinedSymbol(symbol) }
     }
@@ -1128,13 +1122,7 @@ extension UnicodeScalarView {
                     expression.description
                   )
                 }
-              case .number:
-                break
-              case .string:
-                break
-              case .datetime:
-                break
-              case .error:
+              case .number, .string, .datetime, .boolean, .error:
                 break
               }
             case .error, .symbol:

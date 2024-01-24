@@ -8,6 +8,7 @@ import type { BooleanInt } from '../../typings/common';
 import type { Drawable } from './drawable';
 import type { DivAspect } from './image';
 import type { EdgeInsets } from './edgeInserts';
+import type { CollectionItemBuilder } from './itemBuilder';
 
 export type ContainerOrientation = 'vertical' | 'horizontal' | 'overlap';
 
@@ -31,6 +32,7 @@ export interface DivContainerData extends DivBaseData, DivActionableData {
     layout_mode?: ContainerLayoutMode;
     separator?: ContainerSeparator;
     line_separator?: ContainerSeparator;
+    item_builder?: CollectionItemBuilder;
     aspect?: DivAspect;
     clip_to_bounds?: BooleanInt;
 }

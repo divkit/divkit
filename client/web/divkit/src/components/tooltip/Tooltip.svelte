@@ -15,18 +15,19 @@
     import rootCss from '../Root.module.css';
     import css from './Tooltip.module.css';
 
-    import type { TemplateContext } from '../../../typings/common';
     import type { Tooltip } from '../../types/base';
     import type { Animation } from '../../types/animation';
+    import type { ComponentContext } from '../../types/componentContext';
+    import type { MaybeMissing } from '../../expressions/json';
     import Unknown from '../utilities/Unknown.svelte';
     import { genClassName } from '../../utils/genClassName';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { inOutAnimation } from '../../utils/inOutAnimation';
 
     export let ownerNode: HTMLElement;
-    export let data: Tooltip;
+    export let data: MaybeMissing<Tooltip>;
     export let internalId: number;
-    export let templateContext: TemplateContext;
+    export let parentComponentContext: ComponentContext;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
@@ -42,12 +43,14 @@
     let tooltipHeight = '';
     let resizeObserver: ResizeObserver | null = null;
 
-    $: position = rootCtx.getDerivedFromVars(data.position);
-    $: offsetX = rootCtx.getDerivedFromVars(data.offset?.x?.value);
-    $: offsetY = rootCtx.getDerivedFromVars(data.offset?.y?.value);
+    $: componentContext = parentComponentContext.produceChildContext(data.div);
 
-    $: animationIn = rootCtx.getDerivedFromVars(data.animation_in);
-    $: animationOut = rootCtx.getDerivedFromVars(data.animation_out);
+    $: position = parentComponentContext.getDerivedFromVars(data.position);
+    $: offsetX = parentComponentContext.getDerivedFromVars(data.offset?.x?.value);
+    $: offsetY = parentComponentContext.getDerivedFromVars(data.offset?.y?.value);
+
+    $: animationIn = parentComponentContext.getDerivedFromVars(data.animation_in);
+    $: animationOut = parentComponentContext.getDerivedFromVars(data.animation_out);
 
     $: mods = {
         visible
@@ -83,8 +86,8 @@
         let calcedWidth = 0;
         let calcedHeight = 0;
 
-        const jsonWidth = rootCtx.getJsonWithVars(data.div?.width);
-        const jsonHeight = rootCtx.getJsonWithVars(data.div?.width);
+        const jsonWidth = parentComponentContext.getJsonWithVars(data.div?.width);
+        const jsonHeight = parentComponentContext.getJsonWithVars(data.div?.width);
 
         if (!jsonWidth || jsonWidth.type === 'match_parent') {
             calcedWidth = width = ownerBbox.width;
@@ -195,7 +198,6 @@
     out:inOutAnimation={{ animations: $animationOut || DEFAULT_ANIMATION, direction: 'out' }}
 >
     <Unknown
-        div={data.div}
-        {templateContext}
+        {componentContext}
     />
 </div>

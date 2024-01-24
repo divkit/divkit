@@ -5,6 +5,7 @@
     import type { DivTextData, TextRange } from '../../types/text';
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { ComponentContext } from '../../types/componentContext';
     import Actionable from '../utilities/Actionable.svelte';
     import { pxToEm } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
@@ -18,7 +19,7 @@
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { shadowToCssFilter } from '../../utils/shadow';
 
-    export let json: Partial<DivTextData>;
+    export let componentContext: ComponentContext<DivTextData>;
     export let text: string;
     export let rootFontSize: number;
     export let textStyles: MaybeMissing<Partial<TextRange>> = {};
@@ -39,7 +40,7 @@
         width: number;
     } | null = null;
 
-    $: if (json) {
+    $: if (componentContext.json) {
         decoration = 'none';
         fontSize = 12;
         lineHeight = 1.25;
@@ -144,6 +145,7 @@
 </script>
 
 {#if topOffset}<span class={css['text-range__top-offset']} style:margin-top={topOffset}></span>{/if}<Actionable
+    {componentContext}
     cls={genClassName('text-range', css, mods)}
     {actions}
     style={makeStyle(style)}
