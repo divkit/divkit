@@ -264,7 +264,9 @@ public final class GalleryView: BlockView {
     case .horizontal:
       contentOffset = CGPoint(x: offset, y: 0)
     }
-    collectionView.setContentOffset(contentOffset, animated: animated)
+    if collectionView.contentOffset != contentOffset {
+      collectionView.setContentOffset(contentOffset, animated: animated)
+    }
   }
 }
 
