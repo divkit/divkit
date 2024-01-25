@@ -55,12 +55,21 @@
     box-shadow: var(--divkit-indicator-active-box-shadow);
 }
 
-.indicator_placement_default .indicator__item:first-child {
+/* Do not use justify-content: center here, beacuse with overflow items will be still centered instead of left/right aligned */
+.indicator_placement_default.indicator_direction_ltr .indicator__item:first-child {
     margin-left: auto;
 }
 
-.indicator_placement_default .indicator__item:last-child {
+.indicator_placement_default.indicator_direction_ltr .indicator__item:last-child {
     margin-right: auto;
+}
+
+.indicator_placement_default.indicator_direction_rtl .indicator__item:first-child {
+    margin-right: auto;
+}
+
+.indicator_placement_default.indicator_direction_rtl .indicator__item:last-child {
+    margin-left: auto;
 }
 
 .indicator_placement_stretch .indicator__item {

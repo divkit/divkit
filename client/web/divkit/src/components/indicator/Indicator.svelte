@@ -33,6 +33,8 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    const direction = rootCtx.direction;
+
     let activeStyle: DrawableStyle = {
         width: 13,
         height: 13,
@@ -202,7 +204,8 @@
     }
 
     $: mods = {
-        placement
+        placement,
+        direction: $direction
     };
 </script>
 
