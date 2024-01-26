@@ -12,9 +12,9 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      itemSpacing: try dictionary.getOptionalField("item_spacing", templateToType: templateToType),
-      maxVisibleItems: try dictionary.getOptionalExpressionField("max_visible_items")
+      parent: dictionary["type"] as? String,
+      itemSpacing: dictionary.getOptionalField("item_spacing", templateToType: templateToType),
+      maxVisibleItems: dictionary.getOptionalExpressionField("max_visible_items")
     )
   }
 

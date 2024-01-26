@@ -15,8 +15,8 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      property: try dictionary.getOptionalExpressionField("property")
+      parent: dictionary["type"] as? String,
+      property: dictionary.getOptionalExpressionField("property")
     )
   }
 

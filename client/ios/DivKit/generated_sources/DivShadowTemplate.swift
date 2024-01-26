@@ -11,16 +11,12 @@ public final class DivShadowTemplate: TemplateValue {
   public let offset: Field<DivPointTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        blur: try dictionary.getOptionalExpressionField("blur"),
-        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
-        offset: try dictionary.getOptionalField("offset", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-shadow_template." + field, representation: representation)
-    }
+    self.init(
+      alpha: dictionary.getOptionalExpressionField("alpha"),
+      blur: dictionary.getOptionalExpressionField("blur"),
+      color: dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
+      offset: dictionary.getOptionalField("offset", templateToType: templateToType)
+    )
   }
 
   init(

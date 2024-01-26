@@ -10,8 +10,8 @@ public final class DivTextRangeBorderTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
-      stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
+      cornerRadius: dictionary.getOptionalExpressionField("corner_radius"),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
     )
   }
 

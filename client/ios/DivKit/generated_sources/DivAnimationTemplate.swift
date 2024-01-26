@@ -17,20 +17,16 @@ public final class DivAnimationTemplate: TemplateValue {
   public let startValue: Field<Expression<Double>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        duration: try dictionary.getOptionalExpressionField("duration"),
-        endValue: try dictionary.getOptionalExpressionField("end_value"),
-        interpolator: try dictionary.getOptionalExpressionField("interpolator"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType),
-        name: try dictionary.getOptionalExpressionField("name"),
-        repeatCount: try dictionary.getOptionalField("repeat", templateToType: templateToType),
-        startDelay: try dictionary.getOptionalExpressionField("start_delay"),
-        startValue: try dictionary.getOptionalExpressionField("start_value")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-animation_template." + field, representation: representation)
-    }
+    self.init(
+      duration: dictionary.getOptionalExpressionField("duration"),
+      endValue: dictionary.getOptionalExpressionField("end_value"),
+      interpolator: dictionary.getOptionalExpressionField("interpolator"),
+      items: dictionary.getOptionalArray("items", templateToType: templateToType),
+      name: dictionary.getOptionalExpressionField("name"),
+      repeatCount: dictionary.getOptionalField("repeat", templateToType: templateToType),
+      startDelay: dictionary.getOptionalExpressionField("start_delay"),
+      startValue: dictionary.getOptionalExpressionField("start_value")
+    )
   }
 
   init(

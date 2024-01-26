@@ -11,15 +11,11 @@ public final class DivLinearGradientTemplate: TemplateValue {
   public let colors: Field<[Expression<Color>]>? // at least 2 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        angle: try dictionary.getOptionalExpressionField("angle"),
-        colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-linear-gradient_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      angle: dictionary.getOptionalExpressionField("angle"),
+      colors: dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
+    )
   }
 
   init(

@@ -13,18 +13,14 @@ public final class DivTimerTemplate: TemplateValue {
   public let valueVariable: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        duration: try dictionary.getOptionalExpressionField("duration"),
-        endActions: try dictionary.getOptionalArray("end_actions", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        tickActions: try dictionary.getOptionalArray("tick_actions", templateToType: templateToType),
-        tickInterval: try dictionary.getOptionalExpressionField("tick_interval"),
-        valueVariable: try dictionary.getOptionalField("value_variable")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-timer_template." + field, representation: representation)
-    }
+    self.init(
+      duration: dictionary.getOptionalExpressionField("duration"),
+      endActions: dictionary.getOptionalArray("end_actions", templateToType: templateToType),
+      id: dictionary.getOptionalField("id"),
+      tickActions: dictionary.getOptionalArray("tick_actions", templateToType: templateToType),
+      tickInterval: dictionary.getOptionalExpressionField("tick_interval"),
+      valueVariable: dictionary.getOptionalField("value_variable")
+    )
   }
 
   init(

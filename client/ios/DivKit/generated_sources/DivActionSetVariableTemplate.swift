@@ -11,15 +11,11 @@ public final class DivActionSetVariableTemplate: TemplateValue {
   public let variableName: Field<Expression<String>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        value: try dictionary.getOptionalField("value", templateToType: templateToType),
-        variableName: try dictionary.getOptionalExpressionField("variable_name")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-set-variable_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalField("value", templateToType: templateToType),
+      variableName: dictionary.getOptionalExpressionField("variable_name")
+    )
   }
 
   init(

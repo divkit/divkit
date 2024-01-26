@@ -14,11 +14,11 @@ public final class DivFocusTemplate: TemplateValue {
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
-        down: try dictionary.getOptionalExpressionField("down"),
-        forward: try dictionary.getOptionalExpressionField("forward"),
-        left: try dictionary.getOptionalExpressionField("left"),
-        right: try dictionary.getOptionalExpressionField("right"),
-        up: try dictionary.getOptionalExpressionField("up")
+        down: dictionary.getOptionalExpressionField("down"),
+        forward: dictionary.getOptionalExpressionField("forward"),
+        left: dictionary.getOptionalExpressionField("left"),
+        right: dictionary.getOptionalExpressionField("right"),
+        up: dictionary.getOptionalExpressionField("up")
       )
     }
 
@@ -127,11 +127,11 @@ public final class DivFocusTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-      border: try dictionary.getOptionalField("border", templateToType: templateToType),
-      nextFocusIds: try dictionary.getOptionalField("next_focus_ids", templateToType: templateToType),
-      onBlur: try dictionary.getOptionalArray("on_blur", templateToType: templateToType),
-      onFocus: try dictionary.getOptionalArray("on_focus", templateToType: templateToType)
+      background: dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: dictionary.getOptionalField("border", templateToType: templateToType),
+      nextFocusIds: dictionary.getOptionalField("next_focus_ids", templateToType: templateToType),
+      onBlur: dictionary.getOptionalArray("on_blur", templateToType: templateToType),
+      onFocus: dictionary.getOptionalArray("on_focus", templateToType: templateToType)
     )
   }
 

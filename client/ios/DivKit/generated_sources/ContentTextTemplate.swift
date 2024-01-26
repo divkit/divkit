@@ -10,14 +10,10 @@ public final class ContentTextTemplate: TemplateValue {
   public let value: Field<Expression<String>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        value: try dictionary.getOptionalExpressionField("value")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "content_text_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalExpressionField("value")
+    )
   }
 
   init(

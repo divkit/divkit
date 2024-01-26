@@ -10,14 +10,10 @@ public final class IntegerValueTemplate: TemplateValue {
   public let value: Field<Expression<Int>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        value: try dictionary.getOptionalExpressionField("value")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "integer_value_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalExpressionField("value")
+    )
   }
 
   init(

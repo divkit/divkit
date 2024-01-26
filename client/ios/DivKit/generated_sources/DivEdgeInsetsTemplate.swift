@@ -15,13 +15,13 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      bottom: try dictionary.getOptionalExpressionField("bottom"),
-      end: try dictionary.getOptionalExpressionField("end"),
-      left: try dictionary.getOptionalExpressionField("left"),
-      right: try dictionary.getOptionalExpressionField("right"),
-      start: try dictionary.getOptionalExpressionField("start"),
-      top: try dictionary.getOptionalExpressionField("top"),
-      unit: try dictionary.getOptionalExpressionField("unit")
+      bottom: dictionary.getOptionalExpressionField("bottom"),
+      end: dictionary.getOptionalExpressionField("end"),
+      left: dictionary.getOptionalExpressionField("left"),
+      right: dictionary.getOptionalExpressionField("right"),
+      start: dictionary.getOptionalExpressionField("start"),
+      top: dictionary.getOptionalExpressionField("top"),
+      unit: dictionary.getOptionalExpressionField("unit")
     )
   }
 

@@ -10,14 +10,10 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
     public let selector: Field<Expression<Bool>>? // default value: true
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          div: try dictionary.getOptionalField("div", templateToType: templateToType),
-          selector: try dictionary.getOptionalExpressionField("selector")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "prototype_template." + field, representation: representation)
-      }
+      self.init(
+        div: dictionary.getOptionalField("div", templateToType: templateToType),
+        selector: dictionary.getOptionalExpressionField("selector")
+      )
     }
 
     init(
@@ -110,15 +106,11 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
   public let prototypes: Field<[PrototypeTemplate]>? // at least 1 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        data: try dictionary.getOptionalExpressionField("data"),
-        dataElementName: try dictionary.getOptionalField("data_element_name"),
-        prototypes: try dictionary.getOptionalArray("prototypes", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-collection-item-builder_template." + field, representation: representation)
-    }
+    self.init(
+      data: dictionary.getOptionalExpressionField("data"),
+      dataElementName: dictionary.getOptionalField("data_element_name"),
+      prototypes: dictionary.getOptionalArray("prototypes", templateToType: templateToType)
+    )
   }
 
   init(

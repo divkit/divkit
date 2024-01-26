@@ -12,16 +12,12 @@ public final class DivShapeDrawableTemplate: TemplateValue {
   public let stroke: Field<DivStrokeTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
-        shape: try dictionary.getOptionalField("shape", templateToType: templateToType),
-        stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-shape-drawable_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      color: dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
+      shape: dictionary.getOptionalField("shape", templateToType: templateToType),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
+    )
   }
 
   init(

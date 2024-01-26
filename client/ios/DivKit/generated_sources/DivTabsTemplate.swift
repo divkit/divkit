@@ -11,15 +11,11 @@ public final class DivTabsTemplate: TemplateValue {
     public let titleClickAction: Field<DivActionTemplate>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          div: try dictionary.getOptionalField("div", templateToType: templateToType),
-          title: try dictionary.getOptionalExpressionField("title"),
-          titleClickAction: try dictionary.getOptionalField("title_click_action", templateToType: templateToType)
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "item_template." + field, representation: representation)
-      }
+      self.init(
+        div: dictionary.getOptionalField("div", templateToType: templateToType),
+        title: dictionary.getOptionalExpressionField("title"),
+        titleClickAction: dictionary.getOptionalField("title_click_action", templateToType: templateToType)
+      )
     }
 
     init(
@@ -153,24 +149,24 @@ public final class DivTabsTemplate: TemplateValue {
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
-        activeBackgroundColor: try dictionary.getOptionalExpressionField("active_background_color", transform: Color.color(withHexString:)),
-        activeFontWeight: try dictionary.getOptionalExpressionField("active_font_weight"),
-        activeTextColor: try dictionary.getOptionalExpressionField("active_text_color", transform: Color.color(withHexString:)),
-        animationDuration: try dictionary.getOptionalExpressionField("animation_duration"),
-        animationType: try dictionary.getOptionalExpressionField("animation_type"),
-        cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
-        cornersRadius: try dictionary.getOptionalField("corners_radius", templateToType: templateToType),
-        fontFamily: try dictionary.getOptionalExpressionField("font_family"),
-        fontSize: try dictionary.getOptionalExpressionField("font_size"),
-        fontSizeUnit: try dictionary.getOptionalExpressionField("font_size_unit"),
-        fontWeight: try dictionary.getOptionalExpressionField("font_weight"),
-        inactiveBackgroundColor: try dictionary.getOptionalExpressionField("inactive_background_color", transform: Color.color(withHexString:)),
-        inactiveFontWeight: try dictionary.getOptionalExpressionField("inactive_font_weight"),
-        inactiveTextColor: try dictionary.getOptionalExpressionField("inactive_text_color", transform: Color.color(withHexString:)),
-        itemSpacing: try dictionary.getOptionalExpressionField("item_spacing"),
-        letterSpacing: try dictionary.getOptionalExpressionField("letter_spacing"),
-        lineHeight: try dictionary.getOptionalExpressionField("line_height"),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType)
+        activeBackgroundColor: dictionary.getOptionalExpressionField("active_background_color", transform: Color.color(withHexString:)),
+        activeFontWeight: dictionary.getOptionalExpressionField("active_font_weight"),
+        activeTextColor: dictionary.getOptionalExpressionField("active_text_color", transform: Color.color(withHexString:)),
+        animationDuration: dictionary.getOptionalExpressionField("animation_duration"),
+        animationType: dictionary.getOptionalExpressionField("animation_type"),
+        cornerRadius: dictionary.getOptionalExpressionField("corner_radius"),
+        cornersRadius: dictionary.getOptionalField("corners_radius", templateToType: templateToType),
+        fontFamily: dictionary.getOptionalExpressionField("font_family"),
+        fontSize: dictionary.getOptionalExpressionField("font_size"),
+        fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
+        fontWeight: dictionary.getOptionalExpressionField("font_weight"),
+        inactiveBackgroundColor: dictionary.getOptionalExpressionField("inactive_background_color", transform: Color.color(withHexString:)),
+        inactiveFontWeight: dictionary.getOptionalExpressionField("inactive_font_weight"),
+        inactiveTextColor: dictionary.getOptionalExpressionField("inactive_text_color", transform: Color.color(withHexString:)),
+        itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
+        letterSpacing: dictionary.getOptionalExpressionField("letter_spacing"),
+        lineHeight: dictionary.getOptionalExpressionField("line_height"),
+        paddings: dictionary.getOptionalField("paddings", templateToType: templateToType)
       )
     }
 
@@ -492,49 +488,45 @@ public final class DivTabsTemplate: TemplateValue {
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-        border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
-        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
-        dynamicHeight: try dictionary.getOptionalExpressionField("dynamic_height"),
-        extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
-        focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
-        hasSeparator: try dictionary.getOptionalExpressionField("has_separator"),
-        height: try dictionary.getOptionalField("height", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        restrictParentScroll: try dictionary.getOptionalExpressionField("restrict_parent_scroll"),
-        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
-        selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
-        selectedTab: try dictionary.getOptionalExpressionField("selected_tab"),
-        separatorColor: try dictionary.getOptionalExpressionField("separator_color", transform: Color.color(withHexString:)),
-        separatorPaddings: try dictionary.getOptionalField("separator_paddings", templateToType: templateToType),
-        switchTabsByContentSwipeEnabled: try dictionary.getOptionalExpressionField("switch_tabs_by_content_swipe_enabled"),
-        tabTitleStyle: try dictionary.getOptionalField("tab_title_style", templateToType: templateToType),
-        titlePaddings: try dictionary.getOptionalField("title_paddings", templateToType: templateToType),
-        tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
-        transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
-        transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
-        transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
-        transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
-        transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalExpressionField("visibility"),
-        visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
-        visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
-        width: try dictionary.getOptionalField("width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-tabs_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
+      alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: dictionary.getOptionalExpressionField("alpha"),
+      background: dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: dictionary.getOptionalField("border", templateToType: templateToType),
+      columnSpan: dictionary.getOptionalExpressionField("column_span"),
+      disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      dynamicHeight: dictionary.getOptionalExpressionField("dynamic_height"),
+      extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      hasSeparator: dictionary.getOptionalExpressionField("has_separator"),
+      height: dictionary.getOptionalField("height", templateToType: templateToType),
+      id: dictionary.getOptionalField("id"),
+      items: dictionary.getOptionalArray("items", templateToType: templateToType),
+      margins: dictionary.getOptionalField("margins", templateToType: templateToType),
+      paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      restrictParentScroll: dictionary.getOptionalExpressionField("restrict_parent_scroll"),
+      rowSpan: dictionary.getOptionalExpressionField("row_span"),
+      selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+      selectedTab: dictionary.getOptionalExpressionField("selected_tab"),
+      separatorColor: dictionary.getOptionalExpressionField("separator_color", transform: Color.color(withHexString:)),
+      separatorPaddings: dictionary.getOptionalField("separator_paddings", templateToType: templateToType),
+      switchTabsByContentSwipeEnabled: dictionary.getOptionalExpressionField("switch_tabs_by_content_swipe_enabled"),
+      tabTitleStyle: dictionary.getOptionalField("tab_title_style", templateToType: templateToType),
+      titlePaddings: dictionary.getOptionalField("title_paddings", templateToType: templateToType),
+      tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
+      transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
+      transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
+      transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
+      transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      visibility: dictionary.getOptionalExpressionField("visibility"),
+      visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
+      visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
+      width: dictionary.getOptionalField("width", templateToType: templateToType)
+    )
   }
 
   init(

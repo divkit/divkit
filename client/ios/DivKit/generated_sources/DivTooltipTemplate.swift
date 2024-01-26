@@ -16,19 +16,15 @@ public final class DivTooltipTemplate: TemplateValue {
   public let position: Field<Expression<Position>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        animationIn: try dictionary.getOptionalField("animation_in", templateToType: templateToType),
-        animationOut: try dictionary.getOptionalField("animation_out", templateToType: templateToType),
-        div: try dictionary.getOptionalField("div", templateToType: templateToType),
-        duration: try dictionary.getOptionalExpressionField("duration"),
-        id: try dictionary.getOptionalField("id"),
-        offset: try dictionary.getOptionalField("offset", templateToType: templateToType),
-        position: try dictionary.getOptionalExpressionField("position")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-tooltip_template." + field, representation: representation)
-    }
+    self.init(
+      animationIn: dictionary.getOptionalField("animation_in", templateToType: templateToType),
+      animationOut: dictionary.getOptionalField("animation_out", templateToType: templateToType),
+      div: dictionary.getOptionalField("div", templateToType: templateToType),
+      duration: dictionary.getOptionalExpressionField("duration"),
+      id: dictionary.getOptionalField("id"),
+      offset: dictionary.getOptionalField("offset", templateToType: templateToType),
+      position: dictionary.getOptionalExpressionField("position")
+    )
   }
 
   init(

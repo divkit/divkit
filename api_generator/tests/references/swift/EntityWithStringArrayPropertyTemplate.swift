@@ -10,14 +10,10 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue {
   public let array: Field<[Expression<String>]>? // at least 1 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        array: try dictionary.getOptionalExpressionArray("array")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_array_property_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      array: dictionary.getOptionalExpressionArray("array")
+    )
   }
 
   init(

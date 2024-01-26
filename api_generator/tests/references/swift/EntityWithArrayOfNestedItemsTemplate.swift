@@ -10,14 +10,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
     public let property: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          entity: try dictionary.getOptionalField("entity", templateToType: templateToType),
-          property: try dictionary.getOptionalExpressionField("property")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "item_template." + field, representation: representation)
-      }
+      self.init(
+        entity: dictionary.getOptionalField("entity", templateToType: templateToType),
+        property: dictionary.getOptionalExpressionField("property")
+      )
     }
 
     init(
@@ -118,14 +114,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
   public let items: Field<[ItemTemplate]>? // at least 1 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_of_nested_items_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      items: dictionary.getOptionalArray("items", templateToType: templateToType)
+    )
   }
 
   init(

@@ -12,14 +12,10 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
   public let array: Field<Expression<[Any]>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        array: try dictionary.getOptionalExpressionField("array")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_raw_array_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      array: dictionary.getOptionalExpressionField("array")
+    )
   }
 
   init(

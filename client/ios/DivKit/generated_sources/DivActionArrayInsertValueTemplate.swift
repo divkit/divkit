@@ -12,16 +12,12 @@ public final class DivActionArrayInsertValueTemplate: TemplateValue {
   public let variableName: Field<Expression<String>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        index: try dictionary.getOptionalExpressionField("index"),
-        value: try dictionary.getOptionalField("value", templateToType: templateToType),
-        variableName: try dictionary.getOptionalExpressionField("variable_name")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-array-insert-value_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      index: dictionary.getOptionalExpressionField("index"),
+      value: dictionary.getOptionalField("value", templateToType: templateToType),
+      variableName: dictionary.getOptionalExpressionField("variable_name")
+    )
   }
 
   init(

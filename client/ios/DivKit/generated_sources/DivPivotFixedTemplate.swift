@@ -12,9 +12,9 @@ public final class DivPivotFixedTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      unit: try dictionary.getOptionalExpressionField("unit"),
-      value: try dictionary.getOptionalExpressionField("value")
+      parent: dictionary["type"] as? String,
+      unit: dictionary.getOptionalExpressionField("unit"),
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 

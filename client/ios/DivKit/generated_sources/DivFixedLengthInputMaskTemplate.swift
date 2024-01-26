@@ -11,15 +11,11 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
     public let regex: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          key: try dictionary.getOptionalExpressionField("key"),
-          placeholder: try dictionary.getOptionalExpressionField("placeholder"),
-          regex: try dictionary.getOptionalExpressionField("regex")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "pattern_element_template." + field, representation: representation)
-      }
+      self.init(
+        key: dictionary.getOptionalExpressionField("key"),
+        placeholder: dictionary.getOptionalExpressionField("placeholder"),
+        regex: dictionary.getOptionalExpressionField("regex")
+      )
     }
 
     init(
@@ -119,17 +115,13 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue {
   public let rawTextVariable: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        alwaysVisible: try dictionary.getOptionalExpressionField("always_visible"),
-        pattern: try dictionary.getOptionalExpressionField("pattern"),
-        patternElements: try dictionary.getOptionalArray("pattern_elements", templateToType: templateToType),
-        rawTextVariable: try dictionary.getOptionalField("raw_text_variable")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-fixed-length-input-mask_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      alwaysVisible: dictionary.getOptionalExpressionField("always_visible"),
+      pattern: dictionary.getOptionalExpressionField("pattern"),
+      patternElements: dictionary.getOptionalArray("pattern_elements", templateToType: templateToType),
+      rawTextVariable: dictionary.getOptionalField("raw_text_variable")
+    )
   }
 
   init(

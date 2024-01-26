@@ -10,14 +10,10 @@ public final class UrlValueTemplate: TemplateValue {
   public let value: Field<Expression<URL>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        value: try dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "url_value_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
+    )
   }
 
   init(

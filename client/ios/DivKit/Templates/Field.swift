@@ -7,14 +7,14 @@ import Serialization
 @frozen
 public indirect enum Field<T> {
   case value(T)
-  case link(TemplatedPropertyLink)
+  case link(String)
 }
 
 extension Field {
   @usableFromInline
   func resolveValue(
     validator: AnyValueValidator<T>? = nil,
-    valueForLink: (TemplatedPropertyLink) -> DeserializationResult<T>
+    valueForLink: (String) -> DeserializationResult<T>
   ) -> DeserializationResult<T> {
     switch self {
     case let .value(value):
@@ -37,7 +37,7 @@ extension Field {
     )
   }
 
-  var link: TemplatedPropertyLink? {
+  var link: String? {
     switch self {
     case .value: return nil
     case let .link(link): return link
@@ -52,11 +52,10 @@ extension Field {
   ) -> DeserializationResult<T> {
     resolveValue(
       validator: validator,
-      valueForLink: {
-        safeValueForLink(
-          { try context.templateData.getField($0, transform: transform, validator: validator) },
-          link: $0
-        )
+      valueForLink: { link in
+        safeValueForLink {
+          try context.templateData.getField(link, transform: transform, validator: validator)
+        }
       }
     )
   }
@@ -67,11 +66,10 @@ extension Field {
     transform: (U) -> T?
   ) -> DeserializationResult<T> {
     resolveValue(
-      valueForLink: {
-        let result = safeValueForLink(
-          { try context.templateData.getField($0, transform: transform) },
-          link: $0
-        )
+      valueForLink: { link in
+        let result = safeValueForLink {
+          try context.templateData.getField(link, transform: transform)
+        }
         if case let .failure(errors) = result {
           if errors.count == 1, case .noData = errors.first {
             return .noValue
@@ -180,10 +178,9 @@ extension Field where T: TemplateValue {
   ) -> DeserializationResult<ResolvedValue> {
     switch self {
     case let .link(link):
-      let valueDictResult: DeserializationResult<[String: Any]> = safeValueForLink(
-        { try context.templateData.getField($0) },
-        link: link
-      )
+      let valueDictResult: DeserializationResult<[String: Any]> = safeValueForLink {
+        try context.templateData.getField(link)
+      }
       guard let valueDict = valueDictResult.value else {
         if let errorsOrWarnings = valueDictResult.errorsOrWarnings {
           return .failure(errorsOrWarnings)
@@ -261,11 +258,10 @@ extension Field {
 
 @inlinable
 func safeValueForLink<T>(
-  _ valueForLink: (TemplatedPropertyLink) throws -> T,
-  link: TemplatedPropertyLink
+  _ valueForLink: () throws -> T
 ) -> DeserializationResult<T> {
   do {
-    return try .success(valueForLink(link))
+    return try .success(valueForLink())
   } catch let error as DeserializationError {
     return .failure(NonEmptyArray(error))
   } catch {

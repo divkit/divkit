@@ -21,17 +21,19 @@ extension Field {
     context: TemplatesContext,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E>, E.RawValue == String {
-    resolveExpression(
-      valueForLink: { safeValueForLink(
-        { try context.templateData.getField(
-          $0,
+    switch self {
+    case let .value(value):
+      return .success(value)
+    case let .link(link):
+      return safeValueForLink {
+        try context.templateData.getField(
+          link,
           transform: {
             expressionTransform($0, transform: E.init(rawValue:), validator: validator)
           }
-        ) },
-        link: $0
-      ) }
-    )
+        )
+      }
+    }
   }
 
   @inlinable
@@ -40,17 +42,17 @@ extension Field {
     transform: (U) -> E?,
     validator: AnyValueValidator<E>? = nil
   ) -> DeserializationResult<T> where T == Expression<E> {
-    resolveExpression(
-      valueForLink: { safeValueForLink(
-        { try context.templateData.getField(
-          $0,
-          transform: {
-            expressionTransform($0, transform: transform, validator: validator)
-          }
-        ) },
-        link: $0
-      ) }
-    )
+    switch self {
+    case let .value(value):
+      return .success(value)
+    case let .link(link):
+      return safeValueForLink {
+        try context.templateData.getField(
+          link,
+          transform: { expressionTransform($0, transform: transform, validator: validator) }
+        )
+      }
+    }
   }
 
   @inlinable
@@ -122,17 +124,5 @@ extension Field {
       return .noValue
     }
     return result
-  }
-
-  @usableFromInline
-  func resolveExpression<E>(
-    valueForLink: (TemplatedPropertyLink) -> DeserializationResult<T>
-  ) -> DeserializationResult<T> where T == Expression<E> {
-    switch self {
-    case let .value(value):
-      return .success(value)
-    case let .link(link):
-      return valueForLink(link)
-    }
   }
 }

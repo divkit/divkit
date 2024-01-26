@@ -10,14 +10,10 @@ public final class DivActionCopyToClipboardTemplate: TemplateValue {
   public let content: Field<DivActionCopyToClipboardContentTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        content: try dictionary.getOptionalField("content", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-copy-to-clipboard_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      content: dictionary.getOptionalField("content", templateToType: templateToType)
+    )
   }
 
   init(

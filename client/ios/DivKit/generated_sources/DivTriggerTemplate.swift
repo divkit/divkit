@@ -12,15 +12,11 @@ public final class DivTriggerTemplate: TemplateValue {
   public let mode: Field<Expression<Mode>>? // default value: on_condition
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-        condition: try dictionary.getOptionalExpressionField("condition"),
-        mode: try dictionary.getOptionalExpressionField("mode")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-trigger_template." + field, representation: representation)
-    }
+    self.init(
+      actions: dictionary.getOptionalArray("actions", templateToType: templateToType),
+      condition: dictionary.getOptionalExpressionField("condition"),
+      mode: dictionary.getOptionalExpressionField("mode")
+    )
   }
 
   init(

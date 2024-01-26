@@ -10,14 +10,10 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue {
   public let neighbourPageWidth: Field<DivFixedSizeTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        neighbourPageWidth: try dictionary.getOptionalField("neighbour_page_width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-neighbour-page-size_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      neighbourPageWidth: dictionary.getOptionalField("neighbour_page_width", templateToType: templateToType)
+    )
   }
 
   init(

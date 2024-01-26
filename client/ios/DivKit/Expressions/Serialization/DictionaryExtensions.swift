@@ -6,21 +6,21 @@ import Serialization
 extension [String: Any] {
   func getOptionalExpressionField<T: RawRepresentable>(
     _ key: String
-  ) throws -> Field<Expression<T>>? {
-    try getOptionalExpressionField(key, transform: T.init(rawValue:))
+  ) -> Field<Expression<T>>? {
+    getOptionalExpressionField(key, transform: T.init(rawValue:))
   }
 
   func getOptionalExpressionField<T: ValidSerializationValue>(
     _ key: String
-  ) throws -> Field<Expression<T>>? {
-    try getOptionalExpressionField(key, transform: { $0 as T })
+  ) -> Field<Expression<T>>? {
+    getOptionalExpressionField(key, transform: { $0 as T })
   }
 
   func getOptionalExpressionField<T, U>(
     _ key: String,
     transform: (U) -> T?
-  ) throws -> Field<Expression<T>>? {
-    try getOptionalField(
+  ) -> Field<Expression<T>>? {
+    getOptionalField(
       key,
       transform: { expressionTransform($0, transform: transform) }
     )
@@ -28,15 +28,15 @@ extension [String: Any] {
 
   func getOptionalExpressionArray<T: ValidSerializationValue>(
     _ key: String
-  ) throws -> Field<[Expression<T>]>? {
-    try getOptionalExpressionArray(key, transform: { $0 as T })
+  ) -> Field<[Expression<T>]>? {
+    getOptionalExpressionArray(key, transform: { $0 as T })
   }
 
   func getOptionalExpressionArray<T, U>(
     _ key: String,
     transform: (U) -> T?
-  ) throws -> Field<[Expression<T>]>? {
-    try getOptionalArray(
+  ) -> Field<[Expression<T>]>? {
+    getOptionalArray(
       key,
       transform: { (value: U) in
         expressionTransform(value, transform: transform)

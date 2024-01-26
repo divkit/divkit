@@ -14,11 +14,11 @@ public final class DivFadeTransitionTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      alpha: try dictionary.getOptionalExpressionField("alpha"),
-      duration: try dictionary.getOptionalExpressionField("duration"),
-      interpolator: try dictionary.getOptionalExpressionField("interpolator"),
-      startDelay: try dictionary.getOptionalExpressionField("start_delay")
+      parent: dictionary["type"] as? String,
+      alpha: dictionary.getOptionalExpressionField("alpha"),
+      duration: dictionary.getOptionalExpressionField("duration"),
+      interpolator: dictionary.getOptionalExpressionField("interpolator"),
+      startDelay: dictionary.getOptionalExpressionField("start_delay")
     )
   }
 

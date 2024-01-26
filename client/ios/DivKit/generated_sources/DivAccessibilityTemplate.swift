@@ -18,12 +18,12 @@ public final class DivAccessibilityTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      description: try dictionary.getOptionalExpressionField("description"),
-      hint: try dictionary.getOptionalExpressionField("hint"),
-      mode: try dictionary.getOptionalExpressionField("mode"),
-      muteAfterAction: try dictionary.getOptionalExpressionField("mute_after_action"),
-      stateDescription: try dictionary.getOptionalExpressionField("state_description"),
-      type: try dictionary.getOptionalField("type")
+      description: dictionary.getOptionalExpressionField("description"),
+      hint: dictionary.getOptionalExpressionField("hint"),
+      mode: dictionary.getOptionalExpressionField("mode"),
+      muteAfterAction: dictionary.getOptionalExpressionField("mute_after_action"),
+      stateDescription: dictionary.getOptionalExpressionField("state_description"),
+      type: dictionary.getOptionalField("type")
     )
   }
 

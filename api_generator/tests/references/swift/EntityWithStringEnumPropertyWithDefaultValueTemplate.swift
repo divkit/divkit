@@ -13,8 +13,8 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      value: try dictionary.getOptionalExpressionField("value")
+      parent: dictionary["type"] as? String,
+      value: dictionary.getOptionalExpressionField("value")
     )
   }
 

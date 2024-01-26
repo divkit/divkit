@@ -15,12 +15,12 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
-      cornerRadius: try dictionary.getOptionalField("corner_radius", templateToType: templateToType),
-      itemHeight: try dictionary.getOptionalField("item_height", templateToType: templateToType),
-      itemWidth: try dictionary.getOptionalField("item_width", templateToType: templateToType),
-      stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      backgroundColor: dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
+      cornerRadius: dictionary.getOptionalField("corner_radius", templateToType: templateToType),
+      itemHeight: dictionary.getOptionalField("item_height", templateToType: templateToType),
+      itemWidth: dictionary.getOptionalField("item_width", templateToType: templateToType),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
     )
   }
 

@@ -13,17 +13,13 @@ public final class DivRadialGradientTemplate: TemplateValue {
   public let radius: Field<DivRadialGradientRadiusTemplate>? // default value: .divRadialGradientRelativeRadius(DivRadialGradientRelativeRadius(value: .value(.farthestCorner)))
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        centerX: try dictionary.getOptionalField("center_x", templateToType: templateToType),
-        centerY: try dictionary.getOptionalField("center_y", templateToType: templateToType),
-        colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:)),
-        radius: try dictionary.getOptionalField("radius", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      centerX: dictionary.getOptionalField("center_x", templateToType: templateToType),
+      centerY: dictionary.getOptionalField("center_y", templateToType: templateToType),
+      colors: dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:)),
+      radius: dictionary.getOptionalField("radius", templateToType: templateToType)
+    )
   }
 
   init(

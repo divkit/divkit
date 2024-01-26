@@ -10,14 +10,10 @@ public final class DivPatchTemplate: TemplateValue {
     public let items: Field<[DivTemplate]>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          id: try dictionary.getOptionalField("id"),
-          items: try dictionary.getOptionalArray("items", templateToType: templateToType)
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "change_template." + field, representation: representation)
-      }
+      self.init(
+        id: dictionary.getOptionalField("id"),
+        items: dictionary.getOptionalArray("items", templateToType: templateToType)
+      )
     }
 
     init(
@@ -111,14 +107,10 @@ public final class DivPatchTemplate: TemplateValue {
   public let mode: Field<Expression<Mode>>? // default value: partial
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        changes: try dictionary.getOptionalArray("changes", templateToType: templateToType),
-        mode: try dictionary.getOptionalExpressionField("mode")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-patch_template." + field, representation: representation)
-    }
+    self.init(
+      changes: dictionary.getOptionalArray("changes", templateToType: templateToType),
+      mode: dictionary.getOptionalExpressionField("mode")
+    )
   }
 
   init(

@@ -11,8 +11,8 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      jsonProperty: try dictionary.getOptionalField("json_property")
+      parent: dictionary["type"] as? String,
+      jsonProperty: dictionary.getOptionalField("json_property")
     )
   }
 

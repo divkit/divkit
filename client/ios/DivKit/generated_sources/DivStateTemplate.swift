@@ -13,17 +13,13 @@ public final class DivStateTemplate: TemplateValue {
     public let swipeOutActions: Field<[DivActionTemplate]>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          animationIn: try dictionary.getOptionalField("animation_in", templateToType: templateToType),
-          animationOut: try dictionary.getOptionalField("animation_out", templateToType: templateToType),
-          div: try dictionary.getOptionalField("div", templateToType: templateToType),
-          stateId: try dictionary.getOptionalField("state_id"),
-          swipeOutActions: try dictionary.getOptionalArray("swipe_out_actions", templateToType: templateToType)
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "state_template." + field, representation: representation)
-      }
+      self.init(
+        animationIn: dictionary.getOptionalField("animation_in", templateToType: templateToType),
+        animationOut: dictionary.getOptionalField("animation_out", templateToType: templateToType),
+        div: dictionary.getOptionalField("div", templateToType: templateToType),
+        stateId: dictionary.getOptionalField("state_id"),
+        swipeOutActions: dictionary.getOptionalArray("swipe_out_actions", templateToType: templateToType)
+      )
     }
 
     init(
@@ -188,44 +184,40 @@ public final class DivStateTemplate: TemplateValue {
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-        border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
-        defaultStateId: try dictionary.getOptionalExpressionField("default_state_id"),
-        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
-        divId: try dictionary.getOptionalField("div_id"),
-        extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
-        focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
-        height: try dictionary.getOptionalField("height", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
-        selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
-        stateIdVariable: try dictionary.getOptionalField("state_id_variable"),
-        states: try dictionary.getOptionalArray("states", templateToType: templateToType),
-        tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
-        transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
-        transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector"),
-        transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
-        transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
-        transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
-        transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalExpressionField("visibility"),
-        visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
-        visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
-        width: try dictionary.getOptionalField("width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-state_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
+      alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: dictionary.getOptionalExpressionField("alpha"),
+      background: dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: dictionary.getOptionalField("border", templateToType: templateToType),
+      columnSpan: dictionary.getOptionalExpressionField("column_span"),
+      defaultStateId: dictionary.getOptionalExpressionField("default_state_id"),
+      disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      divId: dictionary.getOptionalField("div_id"),
+      extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      height: dictionary.getOptionalField("height", templateToType: templateToType),
+      id: dictionary.getOptionalField("id"),
+      margins: dictionary.getOptionalField("margins", templateToType: templateToType),
+      paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      rowSpan: dictionary.getOptionalExpressionField("row_span"),
+      selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+      stateIdVariable: dictionary.getOptionalField("state_id_variable"),
+      states: dictionary.getOptionalArray("states", templateToType: templateToType),
+      tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
+      transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transitionAnimationSelector: dictionary.getOptionalExpressionField("transition_animation_selector"),
+      transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
+      transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
+      transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
+      transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      visibility: dictionary.getOptionalExpressionField("visibility"),
+      visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
+      visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
+      width: dictionary.getOptionalField("width", templateToType: templateToType)
+    )
   }
 
   init(

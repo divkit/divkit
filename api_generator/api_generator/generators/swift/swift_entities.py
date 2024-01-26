@@ -123,20 +123,15 @@ class SwiftEntity(Entity):
         if not props:
             return Text(f'public init(dictionary: [String: Any]{args_decl}) throws {{}}')
         result = Text(f'public convenience init(dictionary: [String: Any]{args_decl}) throws {{')
-        tails = [','] * (len(props) - 1) + ['']
-        properties_deserialization = [Text('self.init(')]
-        for tail, prop in zip(tails, props):
-            line = f'{prop.declaration_name}: try dictionary.{prop.deserialization_expression(False)}{tail}'
-            properties_deserialization += [Text(indent_width=2, init_lines=line)]
-        properties_deserialization += [Text(')')]
-        if not any(not p.optional for p in props):
-            result += list(map(lambda t: t.indented(), properties_deserialization))
-        else:
-            result += '  do {'
-            result += list(map(lambda t: t.indented(indent_width=4), properties_deserialization))
-            result += '  } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {'
-            result += f'    throw DeserializationError.invalidFieldRepresentation(field: "{self.name}." + field, representation: representation)'
-            result += '  }'
+        lines = Text('self.init(')
+        for prop in props:
+            tail = '' if prop == props[-1] else ','
+            if prop.name == PARENT_PROPERTY.name:
+                lines += f'  {prop.declaration_name}: dictionary["type"] as? String{tail}'
+            else:
+                lines += f'  {prop.declaration_name}: dictionary.{prop.deserialization_expression}{tail}'
+        lines += ')'
+        result += lines.indented()
         result += '}'
         return result
 
@@ -594,32 +589,21 @@ class SwiftProperty(Property):
     def parsed_value_is_optional(self) -> bool:
         return self.optional or self.default_value is not None
 
-    def deserialization_expression(self, in_value_resolving: bool) -> str:
-        mode = SwiftProperty.SwiftMode(GenerationMode.TEMPLATE, self.supports_expressions)
+    @property
+    def deserialization_expression(self) -> str:
         if isinstance(self.property_type, Array):
             type_suffix = 'Array'
-            item_type = cast(SwiftPropertyType, self.property_type.property_type)
-            type_str = item_type.declaration(mode)
         else:
             type_suffix = 'Field'
-            item_type = cast(SwiftPropertyType, self.property_type)
-            type_str = item_type.declaration(mode)
-        include_type = in_value_resolving and self.property_type.can_be_templated
-        type_arg = f', type: {type_str}.self' if include_type else ''
-        if not include_type and self.property_type.can_be_templated:
+        if self.property_type.can_be_templated:
             template_to_type_arg = swift_template_deserializable_args(self.mode)
         else:
             template_to_type_arg = ''
         optional_suffix = 'Optional' if self.parsed_value_is_optional or self.mode.is_template else ''
         expression_suffix = 'Expression' if self.supports_expressions else ''
-        if in_value_resolving:
-            validator_arg_string = self.validator_arg(entity_name='ResolvedValue',
-                                                      mode=GenerationMode.NORMAL_WITH_TEMPLATES)
-        else:
-            validator_arg_string = self.validator_arg(entity_name='Self',
-                                                      mode=self.mode)
+        validator_arg_string = self.validator_arg(entity_name='Self', mode=self.mode)
         transformed = cast(SwiftPropertyType, self.property_type).transform_arg
-        expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}{type_arg}'
+        expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}'
         return f'get{optional_suffix}{expression_suffix}{type_suffix}({expr})'
 
     def add_default_value_to(self, declaration: str, public_default_value: bool = False) -> str:

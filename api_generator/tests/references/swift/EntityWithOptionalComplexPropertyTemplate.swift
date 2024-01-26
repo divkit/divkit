@@ -9,13 +9,9 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
     public let value: Field<Expression<URL>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          value: try dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "property_template." + field, representation: representation)
-      }
+      self.init(
+        value: dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
+      )
     }
 
     init(
@@ -89,8 +85,8 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      property: try dictionary.getOptionalField("property", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      property: dictionary.getOptionalField("property", templateToType: templateToType)
     )
   }
 

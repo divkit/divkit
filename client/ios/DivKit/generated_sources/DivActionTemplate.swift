@@ -11,15 +11,11 @@ public final class DivActionTemplate: TemplateValue {
     public let text: Field<Expression<String>>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          action: try dictionary.getOptionalField("action", templateToType: templateToType),
-          actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-          text: try dictionary.getOptionalExpressionField("text")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "menu_item_template." + field, representation: representation)
-      }
+      self.init(
+        action: dictionary.getOptionalField("action", templateToType: templateToType),
+        actions: dictionary.getOptionalArray("actions", templateToType: templateToType),
+        text: dictionary.getOptionalExpressionField("text")
+      )
     }
 
     init(
@@ -132,21 +128,17 @@ public final class DivActionTemplate: TemplateValue {
   public let url: Field<Expression<URL>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
-        isEnabled: try dictionary.getOptionalExpressionField("is_enabled"),
-        logId: try dictionary.getOptionalField("log_id"),
-        logUrl: try dictionary.getOptionalExpressionField("log_url", transform: URL.init(string:)),
-        menuItems: try dictionary.getOptionalArray("menu_items", templateToType: templateToType),
-        payload: try dictionary.getOptionalField("payload"),
-        referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
-        typed: try dictionary.getOptionalField("typed", templateToType: templateToType),
-        url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action_template." + field, representation: representation)
-    }
+    self.init(
+      downloadCallbacks: dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
+      isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
+      logId: dictionary.getOptionalField("log_id"),
+      logUrl: dictionary.getOptionalExpressionField("log_url", transform: URL.init(string:)),
+      menuItems: dictionary.getOptionalArray("menu_items", templateToType: templateToType),
+      payload: dictionary.getOptionalField("payload"),
+      referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+      typed: dictionary.getOptionalField("typed", templateToType: templateToType),
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+    )
   }
 
   init(

@@ -9,14 +9,10 @@ public final class DivDimensionTemplate: TemplateValue {
   public let value: Field<Expression<Double>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        unit: try dictionary.getOptionalExpressionField("unit"),
-        value: try dictionary.getOptionalExpressionField("value")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-dimension_template." + field, representation: representation)
-    }
+    self.init(
+      unit: dictionary.getOptionalExpressionField("unit"),
+      value: dictionary.getOptionalExpressionField("value")
+    )
   }
 
   init(

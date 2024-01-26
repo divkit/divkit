@@ -11,9 +11,9 @@ public final class DivTransformTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      pivotX: try dictionary.getOptionalField("pivot_x", templateToType: templateToType),
-      pivotY: try dictionary.getOptionalField("pivot_y", templateToType: templateToType),
-      rotation: try dictionary.getOptionalExpressionField("rotation")
+      pivotX: dictionary.getOptionalField("pivot_x", templateToType: templateToType),
+      pivotY: dictionary.getOptionalField("pivot_y", templateToType: templateToType),
+      rotation: dictionary.getOptionalExpressionField("rotation")
     )
   }
 

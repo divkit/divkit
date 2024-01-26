@@ -11,8 +11,8 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      spaceBetweenCenters: try dictionary.getOptionalField("space_between_centers", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      spaceBetweenCenters: dictionary.getOptionalField("space_between_centers", templateToType: templateToType)
     )
   }
 

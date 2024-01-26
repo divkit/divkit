@@ -10,8 +10,8 @@ public final class DivDownloadCallbacksTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      onFailActions: try dictionary.getOptionalArray("on_fail_actions", templateToType: templateToType),
-      onSuccessActions: try dictionary.getOptionalArray("on_success_actions", templateToType: templateToType)
+      onFailActions: dictionary.getOptionalArray("on_fail_actions", templateToType: templateToType),
+      onSuccessActions: dictionary.getOptionalArray("on_success_actions", templateToType: templateToType)
     )
   }
 

@@ -13,11 +13,11 @@ public final class DivBorderTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
-      cornersRadius: try dictionary.getOptionalField("corners_radius", templateToType: templateToType),
-      hasShadow: try dictionary.getOptionalExpressionField("has_shadow"),
-      shadow: try dictionary.getOptionalField("shadow", templateToType: templateToType),
-      stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
+      cornerRadius: dictionary.getOptionalExpressionField("corner_radius"),
+      cornersRadius: dictionary.getOptionalField("corners_radius", templateToType: templateToType),
+      hasShadow: dictionary.getOptionalExpressionField("has_shadow"),
+      shadow: dictionary.getOptionalField("shadow", templateToType: templateToType),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
     )
   }
 

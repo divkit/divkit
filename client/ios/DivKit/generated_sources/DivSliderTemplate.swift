@@ -14,11 +14,11 @@ public final class DivSliderTemplate: TemplateValue {
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
       self.init(
-        end: try dictionary.getOptionalExpressionField("end"),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        start: try dictionary.getOptionalExpressionField("start"),
-        trackActiveStyle: try dictionary.getOptionalField("track_active_style", templateToType: templateToType),
-        trackInactiveStyle: try dictionary.getOptionalField("track_inactive_style", templateToType: templateToType)
+        end: dictionary.getOptionalExpressionField("end"),
+        margins: dictionary.getOptionalField("margins", templateToType: templateToType),
+        start: dictionary.getOptionalExpressionField("start"),
+        trackActiveStyle: dictionary.getOptionalField("track_active_style", templateToType: templateToType),
+        trackInactiveStyle: dictionary.getOptionalField("track_inactive_style", templateToType: templateToType)
       )
     }
 
@@ -140,17 +140,13 @@ public final class DivSliderTemplate: TemplateValue {
     public let textColor: Field<Expression<Color>>? // default value: #FF000000
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          fontSize: try dictionary.getOptionalExpressionField("font_size"),
-          fontSizeUnit: try dictionary.getOptionalExpressionField("font_size_unit"),
-          fontWeight: try dictionary.getOptionalExpressionField("font_weight"),
-          offset: try dictionary.getOptionalField("offset", templateToType: templateToType),
-          textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:))
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "text_style_template." + field, representation: representation)
-      }
+      self.init(
+        fontSize: dictionary.getOptionalExpressionField("font_size"),
+        fontSizeUnit: dictionary.getOptionalExpressionField("font_size_unit"),
+        fontWeight: dictionary.getOptionalExpressionField("font_weight"),
+        offset: dictionary.getOptionalField("offset", templateToType: templateToType),
+        textColor: dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:))
+      )
     }
 
     init(
@@ -321,53 +317,49 @@ public final class DivSliderTemplate: TemplateValue {
   public let width: Field<DivSizeTemplate>? // default value: .divMatchParentSize(DivMatchParentSize())
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
-        alpha: try dictionary.getOptionalExpressionField("alpha"),
-        background: try dictionary.getOptionalArray("background", templateToType: templateToType),
-        border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
-        disappearActions: try dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
-        extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
-        focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
-        height: try dictionary.getOptionalField("height", templateToType: templateToType),
-        id: try dictionary.getOptionalField("id"),
-        margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        maxValue: try dictionary.getOptionalExpressionField("max_value"),
-        minValue: try dictionary.getOptionalExpressionField("min_value"),
-        paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        ranges: try dictionary.getOptionalArray("ranges", templateToType: templateToType),
-        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
-        secondaryValueAccessibility: try dictionary.getOptionalField("secondary_value_accessibility", templateToType: templateToType),
-        selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
-        thumbSecondaryStyle: try dictionary.getOptionalField("thumb_secondary_style", templateToType: templateToType),
-        thumbSecondaryTextStyle: try dictionary.getOptionalField("thumb_secondary_text_style", templateToType: templateToType),
-        thumbSecondaryValueVariable: try dictionary.getOptionalField("thumb_secondary_value_variable"),
-        thumbStyle: try dictionary.getOptionalField("thumb_style", templateToType: templateToType),
-        thumbTextStyle: try dictionary.getOptionalField("thumb_text_style", templateToType: templateToType),
-        thumbValueVariable: try dictionary.getOptionalField("thumb_value_variable"),
-        tickMarkActiveStyle: try dictionary.getOptionalField("tick_mark_active_style", templateToType: templateToType),
-        tickMarkInactiveStyle: try dictionary.getOptionalField("tick_mark_inactive_style", templateToType: templateToType),
-        tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
-        trackActiveStyle: try dictionary.getOptionalField("track_active_style", templateToType: templateToType),
-        trackInactiveStyle: try dictionary.getOptionalField("track_inactive_style", templateToType: templateToType),
-        transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
-        transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
-        transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
-        transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
-        transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalExpressionField("visibility"),
-        visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
-        visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
-        width: try dictionary.getOptionalField("width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-slider_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
+      alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: dictionary.getOptionalExpressionField("alpha"),
+      background: dictionary.getOptionalArray("background", templateToType: templateToType),
+      border: dictionary.getOptionalField("border", templateToType: templateToType),
+      columnSpan: dictionary.getOptionalExpressionField("column_span"),
+      disappearActions: dictionary.getOptionalArray("disappear_actions", templateToType: templateToType),
+      extensions: dictionary.getOptionalArray("extensions", templateToType: templateToType),
+      focus: dictionary.getOptionalField("focus", templateToType: templateToType),
+      height: dictionary.getOptionalField("height", templateToType: templateToType),
+      id: dictionary.getOptionalField("id"),
+      margins: dictionary.getOptionalField("margins", templateToType: templateToType),
+      maxValue: dictionary.getOptionalExpressionField("max_value"),
+      minValue: dictionary.getOptionalExpressionField("min_value"),
+      paddings: dictionary.getOptionalField("paddings", templateToType: templateToType),
+      ranges: dictionary.getOptionalArray("ranges", templateToType: templateToType),
+      rowSpan: dictionary.getOptionalExpressionField("row_span"),
+      secondaryValueAccessibility: dictionary.getOptionalField("secondary_value_accessibility", templateToType: templateToType),
+      selectedActions: dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+      thumbSecondaryStyle: dictionary.getOptionalField("thumb_secondary_style", templateToType: templateToType),
+      thumbSecondaryTextStyle: dictionary.getOptionalField("thumb_secondary_text_style", templateToType: templateToType),
+      thumbSecondaryValueVariable: dictionary.getOptionalField("thumb_secondary_value_variable"),
+      thumbStyle: dictionary.getOptionalField("thumb_style", templateToType: templateToType),
+      thumbTextStyle: dictionary.getOptionalField("thumb_text_style", templateToType: templateToType),
+      thumbValueVariable: dictionary.getOptionalField("thumb_value_variable"),
+      tickMarkActiveStyle: dictionary.getOptionalField("tick_mark_active_style", templateToType: templateToType),
+      tickMarkInactiveStyle: dictionary.getOptionalField("tick_mark_inactive_style", templateToType: templateToType),
+      tooltips: dictionary.getOptionalArray("tooltips", templateToType: templateToType),
+      trackActiveStyle: dictionary.getOptionalField("track_active_style", templateToType: templateToType),
+      trackInactiveStyle: dictionary.getOptionalField("track_inactive_style", templateToType: templateToType),
+      transform: dictionary.getOptionalField("transform", templateToType: templateToType),
+      transitionChange: dictionary.getOptionalField("transition_change", templateToType: templateToType),
+      transitionIn: dictionary.getOptionalField("transition_in", templateToType: templateToType),
+      transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
+      transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
+      visibility: dictionary.getOptionalExpressionField("visibility"),
+      visibilityAction: dictionary.getOptionalField("visibility_action", templateToType: templateToType),
+      visibilityActions: dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
+      width: dictionary.getOptionalField("width", templateToType: templateToType)
+    )
   }
 
   init(

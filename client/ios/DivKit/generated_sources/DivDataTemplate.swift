@@ -10,14 +10,10 @@ public final class DivDataTemplate: TemplateValue {
     public let stateId: Field<Int>?
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          div: try dictionary.getOptionalField("div", templateToType: templateToType),
-          stateId: try dictionary.getOptionalField("state_id")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "state_template." + field, representation: representation)
-      }
+      self.init(
+        div: dictionary.getOptionalField("div", templateToType: templateToType),
+        stateId: dictionary.getOptionalField("state_id")
+      )
     }
 
     init(
@@ -121,18 +117,14 @@ public final class DivDataTemplate: TemplateValue {
   public let variables: Field<[DivVariableTemplate]>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        logId: try dictionary.getOptionalField("log_id"),
-        states: try dictionary.getOptionalArray("states", templateToType: templateToType),
-        timers: try dictionary.getOptionalArray("timers", templateToType: templateToType),
-        transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector"),
-        variableTriggers: try dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
-        variables: try dictionary.getOptionalArray("variables", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-data_template." + field, representation: representation)
-    }
+    self.init(
+      logId: dictionary.getOptionalField("log_id"),
+      states: dictionary.getOptionalArray("states", templateToType: templateToType),
+      timers: dictionary.getOptionalArray("timers", templateToType: templateToType),
+      transitionAnimationSelector: dictionary.getOptionalExpressionField("transition_animation_selector"),
+      variableTriggers: dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
+      variables: dictionary.getOptionalArray("variables", templateToType: templateToType)
+    )
   }
 
   init(

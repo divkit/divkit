@@ -13,15 +13,11 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
     public let url: Field<Expression<URL>>? // valid schemes: [https]; default value: https://yandex.ru
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          int: try dictionary.getOptionalExpressionField("int"),
-          nonOptional: try dictionary.getOptionalExpressionField("non_optional"),
-          url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "nested_template." + field, representation: representation)
-      }
+      self.init(
+        int: dictionary.getOptionalExpressionField("int"),
+        nonOptional: dictionary.getOptionalExpressionField("non_optional"),
+        url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+      )
     }
 
     init(
@@ -121,10 +117,10 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      int: try dictionary.getOptionalExpressionField("int"),
-      nested: try dictionary.getOptionalField("nested", templateToType: templateToType),
-      url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
+      parent: dictionary["type"] as? String,
+      int: dictionary.getOptionalExpressionField("int"),
+      nested: dictionary.getOptionalField("nested", templateToType: templateToType),
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
     )
   }
 

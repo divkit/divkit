@@ -10,14 +10,10 @@ public final class DivActionFocusElementTemplate: TemplateValue {
   public let elementId: Field<Expression<String>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        elementId: try dictionary.getOptionalExpressionField("element_id")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action-focus-element_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      elementId: dictionary.getOptionalExpressionField("element_id")
+    )
   }
 
   init(

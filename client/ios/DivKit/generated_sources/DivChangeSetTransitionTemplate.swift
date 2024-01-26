@@ -10,14 +10,10 @@ public final class DivChangeSetTransitionTemplate: TemplateValue {
   public let items: Field<[DivChangeTransitionTemplate]>? // at least 1 elements
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        items: try dictionary.getOptionalArray("items", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-change-set-transition_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      items: dictionary.getOptionalArray("items", templateToType: templateToType)
+    )
   }
 
   init(

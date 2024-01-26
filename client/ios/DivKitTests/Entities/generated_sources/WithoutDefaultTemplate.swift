@@ -12,7 +12,7 @@ public final class WithoutDefaultTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type")
+      parent: dictionary["type"] as? String
     )
   }
 

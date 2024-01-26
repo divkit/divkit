@@ -11,9 +11,9 @@ public final class DivInputValidatorBaseTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      allowEmpty: try dictionary.getOptionalExpressionField("allow_empty"),
-      labelId: try dictionary.getOptionalExpressionField("label_id"),
-      variable: try dictionary.getOptionalField("variable")
+      allowEmpty: dictionary.getOptionalExpressionField("allow_empty"),
+      labelId: dictionary.getOptionalExpressionField("label_id"),
+      variable: dictionary.getOptionalField("variable")
     )
   }
 

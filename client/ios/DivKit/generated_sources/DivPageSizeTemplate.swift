@@ -10,14 +10,10 @@ public final class DivPageSizeTemplate: TemplateValue {
   public let pageWidth: Field<DivPercentageSizeTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        pageWidth: try dictionary.getOptionalField("page_width", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-page-size_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      pageWidth: dictionary.getOptionalField("page_width", templateToType: templateToType)
+    )
   }
 
   init(

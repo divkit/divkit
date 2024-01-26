@@ -13,10 +13,10 @@ public final class DivCircleShapeTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      backgroundColor: try dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
-      radius: try dictionary.getOptionalField("radius", templateToType: templateToType),
-      stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      backgroundColor: dictionary.getOptionalExpressionField("background_color", transform: Color.color(withHexString:)),
+      radius: dictionary.getOptionalField("radius", templateToType: templateToType),
+      stroke: dictionary.getOptionalField("stroke", templateToType: templateToType)
     )
   }
 

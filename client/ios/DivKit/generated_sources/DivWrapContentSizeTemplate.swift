@@ -10,14 +10,10 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
     public let value: Field<Expression<Int>>? // constraint: number >= 0
 
     public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-      do {
-        self.init(
-          unit: try dictionary.getOptionalExpressionField("unit"),
-          value: try dictionary.getOptionalExpressionField("value")
-        )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "constraint_size_template." + field, representation: representation)
-      }
+      self.init(
+        unit: dictionary.getOptionalExpressionField("unit"),
+        value: dictionary.getOptionalExpressionField("value")
+      )
     }
 
     init(
@@ -105,10 +101,10 @@ public final class DivWrapContentSizeTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      constrained: try dictionary.getOptionalExpressionField("constrained"),
-      maxSize: try dictionary.getOptionalField("max_size", templateToType: templateToType),
-      minSize: try dictionary.getOptionalField("min_size", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      constrained: dictionary.getOptionalExpressionField("constrained"),
+      maxSize: dictionary.getOptionalField("max_size", templateToType: templateToType),
+      minSize: dictionary.getOptionalField("min_size", templateToType: templateToType)
     )
   }
 

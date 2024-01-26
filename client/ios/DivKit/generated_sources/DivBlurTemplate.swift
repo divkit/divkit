@@ -10,14 +10,10 @@ public final class DivBlurTemplate: TemplateValue {
   public let radius: Field<Expression<Int>>? // constraint: number >= 0
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        radius: try dictionary.getOptionalExpressionField("radius")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-blur_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      radius: dictionary.getOptionalExpressionField("radius")
+    )
   }
 
   init(

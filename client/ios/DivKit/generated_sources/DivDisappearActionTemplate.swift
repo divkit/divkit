@@ -17,22 +17,18 @@ public final class DivDisappearActionTemplate: TemplateValue {
   public let visibilityPercentage: Field<Expression<Int>>? // constraint: number >= 0 && number < 100; default value: 0
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        disappearDuration: try dictionary.getOptionalExpressionField("disappear_duration"),
-        downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
-        isEnabled: try dictionary.getOptionalExpressionField("is_enabled"),
-        logId: try dictionary.getOptionalField("log_id"),
-        logLimit: try dictionary.getOptionalExpressionField("log_limit"),
-        payload: try dictionary.getOptionalField("payload"),
-        referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
-        typed: try dictionary.getOptionalField("typed", templateToType: templateToType),
-        url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
-        visibilityPercentage: try dictionary.getOptionalExpressionField("visibility_percentage")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-disappear-action_template." + field, representation: representation)
-    }
+    self.init(
+      disappearDuration: dictionary.getOptionalExpressionField("disappear_duration"),
+      downloadCallbacks: dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
+      isEnabled: dictionary.getOptionalExpressionField("is_enabled"),
+      logId: dictionary.getOptionalField("log_id"),
+      logLimit: dictionary.getOptionalExpressionField("log_limit"),
+      payload: dictionary.getOptionalField("payload"),
+      referer: dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+      typed: dictionary.getOptionalField("typed", templateToType: templateToType),
+      url: dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
+      visibilityPercentage: dictionary.getOptionalExpressionField("visibility_percentage")
+    )
   }
 
   init(

@@ -11,8 +11,8 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      parent: try dictionary.getOptionalField("type"),
-      entity: try dictionary.getOptionalField("entity", templateToType: templateToType)
+      parent: dictionary["type"] as? String,
+      entity: dictionary.getOptionalField("entity", templateToType: templateToType)
     )
   }
 

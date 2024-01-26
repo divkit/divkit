@@ -12,10 +12,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
-      bottom: try dictionary.getOptionalExpressionField("bottom"),
-      left: try dictionary.getOptionalExpressionField("left"),
-      right: try dictionary.getOptionalExpressionField("right"),
-      top: try dictionary.getOptionalExpressionField("top")
+      bottom: dictionary.getOptionalExpressionField("bottom"),
+      left: dictionary.getOptionalExpressionField("left"),
+      right: dictionary.getOptionalExpressionField("right"),
+      top: dictionary.getOptionalExpressionField("top")
     )
   }
 

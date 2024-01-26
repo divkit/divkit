@@ -9,14 +9,10 @@ public final class DivPointTemplate: TemplateValue {
   public let y: Field<DivDimensionTemplate>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        x: try dictionary.getOptionalField("x", templateToType: templateToType),
-        y: try dictionary.getOptionalField("y", templateToType: templateToType)
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-point_template." + field, representation: representation)
-    }
+    self.init(
+      x: dictionary.getOptionalField("x", templateToType: templateToType),
+      y: dictionary.getOptionalField("y", templateToType: templateToType)
+    )
   }
 
   init(

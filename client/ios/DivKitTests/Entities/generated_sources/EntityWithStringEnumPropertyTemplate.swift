@@ -14,14 +14,10 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue {
   public let property: Field<Expression<Property>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        property: try dictionary.getOptionalExpressionField("property")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_enum_property_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      property: dictionary.getOptionalExpressionField("property")
+    )
   }
 
   init(

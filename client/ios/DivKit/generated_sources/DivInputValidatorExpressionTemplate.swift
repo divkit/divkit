@@ -13,17 +13,13 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
   public let variable: Field<String>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
-    do {
-      self.init(
-        parent: try dictionary.getOptionalField("type"),
-        allowEmpty: try dictionary.getOptionalExpressionField("allow_empty"),
-        condition: try dictionary.getOptionalExpressionField("condition"),
-        labelId: try dictionary.getOptionalExpressionField("label_id"),
-        variable: try dictionary.getOptionalField("variable")
-      )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-input-validator-expression_template." + field, representation: representation)
-    }
+    self.init(
+      parent: dictionary["type"] as? String,
+      allowEmpty: dictionary.getOptionalExpressionField("allow_empty"),
+      condition: dictionary.getOptionalExpressionField("condition"),
+      labelId: dictionary.getOptionalExpressionField("label_id"),
+      variable: dictionary.getOptionalField("variable")
+    )
   }
 
   init(
