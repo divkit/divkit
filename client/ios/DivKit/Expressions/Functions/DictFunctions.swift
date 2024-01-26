@@ -15,6 +15,10 @@ enum DictFunctions: String, CaseIterable {
   case getDictOptColor
   case getDictOptUrl
 
+  case getArrayFromDict
+  case getOptArrayFromDict
+  case getDictFromDict
+  case getOptDictFromDict
   case getStringFromDict
   case getOptStringFromDict
   case getIntegerFromDict
@@ -99,6 +103,14 @@ enum DictFunctions: String, CaseIterable {
           FunctionVarTernary(impl: _getOptUrlFromDictWithStringFallback),
         ]
       )
+    case .getArrayFromDict:
+      return FunctionVarBinary(impl: _getArrayFromDict)
+    case .getOptArrayFromDict:
+      return FunctionVarBinary(impl: _getOptArrayFromDict)
+    case .getDictFromDict:
+      return FunctionVarBinary(impl: _getDictFromDict)
+    case .getOptDictFromDict:
+      return FunctionVarBinary(impl: _getOptDictFromDict)
     }
   }
 
@@ -306,6 +318,38 @@ enum DictFunctions: String, CaseIterable {
     return url
   }
 
+  private func _getDictFromDict(
+    dict: [String: AnyHashable],
+    path: [String]
+  ) throws -> [String: AnyHashable] {
+    let expression = makeExpression("getDictFromDict", path)
+    let result = try getProp(
+      dict: dict,
+      path: path,
+      expression: expression
+    )
+    guard let dict = result as? [String: AnyHashable] else {
+      throw Error.incorrectValueType(expression, "dict", result.actualType).message
+    }
+    return dict
+  }
+
+  private func _getArrayFromDict(
+    dict: [String: AnyHashable],
+    path: [String]
+  ) throws -> [AnyHashable] {
+    let expression = makeExpression("getArrayFromDict", path)
+    let result = try getProp(
+      dict: dict,
+      path: path,
+      expression: expression
+    )
+    guard let dict = result as? [AnyHashable] else {
+      throw Error.incorrectValueType(expression, "array", result.actualType).message
+    }
+    return dict
+  }
+
   private func _getDictOptString(
     fallback: String,
     dict: [String: AnyHashable],
@@ -390,6 +434,26 @@ enum DictFunctions: String, CaseIterable {
   ) -> Bool {
     guard let value = try? _getBooleanFromDict(dict: dict, path: path) else {
       return fallback
+    }
+    return value
+  }
+
+  private func _getOptDictFromDict(
+    dict: [String: AnyHashable],
+    path: [String]
+  ) -> [String: AnyHashable] {
+    guard let value = try? _getDictFromDict(dict: dict, path: path) else {
+      return [:]
+    }
+    return value
+  }
+
+  private func _getOptArrayFromDict(
+    dict: [String: AnyHashable],
+    path: [String]
+  ) -> [AnyHashable] {
+    guard let value = try? _getArrayFromDict(dict: dict, path: path) else {
+      return []
     }
     return value
   }

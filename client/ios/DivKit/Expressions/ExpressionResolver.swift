@@ -131,6 +131,20 @@ public final class ExpressionResolver {
     }
   }
 
+  func resolveDict(
+    _ expression: Expression<[String: Any]>?
+  ) -> [String: Any]? {
+    switch expression {
+    case let .value(value):
+      return value
+    case let .link(link):
+      variableTracker(Set(link.variablesNames.map(DivVariableName.init(rawValue:))))
+      return evaluateSingleItem(link: link)
+    case .none:
+      return nil
+    }
+  }
+
   private func resolveEscaping<T>(_ value: T?) -> T? {
     guard var value = value as? String, value.contains("\\") else {
       return value

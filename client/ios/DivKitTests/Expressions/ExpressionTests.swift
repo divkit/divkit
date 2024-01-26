@@ -42,6 +42,10 @@ private func runTest(_ testCase: ExpressionTestCase) {
     XCTAssertEqual(testCase.resolveNumeric(), expectedValue)
   case let .datetime(expectedValue):
     XCTAssertEqual(testCase.resolveNumeric(), expectedValue)
+  case let .array(expectedValue):
+    XCTAssertEqual(testCase.resolveArray(), expectedValue)
+  case let .dict(expectedValue):
+    XCTAssertEqual(testCase.resolveDict(), expectedValue)
   case let .error(expectedMessage):
     var errorMessage = ""
     _ = testCase.resolveValue(errorTracker: { errorMessage = $0.message })
@@ -119,6 +123,27 @@ extension ExpressionTestCase {
     )
     return resolver.resolveNumeric(expression)
   }
+
+  fileprivate func resolveArray() -> [AnyHashable]? {
+    let expression: Expression<[Any]>? = try? ExpressionLink<[Any]>(rawValue: expression)
+      .map { .link($0) }
+    let resolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: DivPersistentValuesStorage()
+    )
+    return resolver.resolveArray(expression) as? [AnyHashable]
+  }
+
+  fileprivate func resolveDict() -> [String: AnyHashable]? {
+    let expression: Expression<[String: Any]>? =
+      try? ExpressionLink<[String: Any]>(rawValue: expression)
+        .map { .link($0) }
+    let resolver = ExpressionResolver(
+      variables: variables,
+      persistentValuesStorage: DivPersistentValuesStorage()
+    )
+    return resolver.resolveDict(expression) as? [String: AnyHashable]
+  }
 }
 
 private enum ExpectedValue: Decodable {
@@ -127,6 +152,8 @@ private enum ExpectedValue: Decodable {
   case integer(Int)
   case bool(Bool)
   case datetime(Date)
+  case array([AnyHashable])
+  case dict([String: AnyHashable])
   case error(String)
 
   public init(from decoder: Decoder) throws {
@@ -154,6 +181,18 @@ private enum ExpectedValue: Decodable {
     case "datetime":
       let value = try container.decode(String.self, forKey: .value)
       self = .datetime(value.toDatetime()!)
+    case "array":
+      let value = try JSONObject(from: decoder).makeDictionary()
+      guard let array = value?["value"] as? [AnyHashable] else {
+        fallthrough
+      }
+      self = .array(array)
+    case "dict":
+      let value = try JSONObject(from: decoder).makeDictionary()
+      guard let dict = value?["value"] as? [String: AnyHashable] else {
+        fallthrough
+      }
+      self = .dict(dict)
     case "error":
       let value = try container.decode(String.self, forKey: .value)
       self = .error(value)
