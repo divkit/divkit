@@ -14,11 +14,24 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
-            app:titleTextColor="#000"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="2"
+                android:gravity="center_vertical"
+                android:textColor="#000"
+                android:scrollbars="vertical"
+                android:scrollbarSize="2dp"
+                android:scrollbarThumbVertical="@drawable/scrollbar_color"
+                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"/>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/single_container"

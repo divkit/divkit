@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -51,6 +52,7 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
         binding = ScenarioActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        binding.title.setMovementMethod(ScrollingMovementMethod())
         position = intent.getIntExtra(EXTRA_POSITION, -1)
         metadataBottomSheet = MetadataBottomSheet()
         if (position >= 0) {
@@ -125,7 +127,7 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
     }
 
     private fun bindScenario(scenario: Scenario) {
-        supportActionBar?.title = scenario.title
+        binding.title.text = scenario.title
         binding.metadataButton.setOnClickListener {
             metadataBottomSheet.showNow(supportFragmentManager, MetadataBottomSheet.TAG)
             (metadataBottomSheet.dialog as BottomSheetDialog).behavior.run {
