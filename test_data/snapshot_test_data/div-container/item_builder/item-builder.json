@@ -1,6 +1,7 @@
 {
   "description": "Container with item_builder.",
   "platforms": [
+    "ios",
     "web"
   ],
   "templates": {

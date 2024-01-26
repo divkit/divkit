@@ -1,6 +1,7 @@
 {
   "description": "Inner data_element_name should override outer one.",
   "platforms": [
+    "ios",
     "web"
   ],
   "templates": {},
@@ -64,7 +65,7 @@
                           "items": [
                             {
                               "type": "text",
-                              "text": "@{getOptStringFromDict('', it, 'title') != '' ? getStringFromDict(it, 'title') : '<title is missing>'}",
+                              "text": "@{getOptStringFromDict('<title is missing>', it, 'title')}",
                               "font_size": 16
                             },
                             {
