@@ -7,6 +7,7 @@
 * Fixed div models generating without templates.
 
 # iOS Client:
+* Added action payload to `DivReporter.reportAction`.
 * Add operators error messages.
 * Supported datetime format functions.
 * Added `list` value support for `div-accessibility.type`.
