@@ -10,18 +10,20 @@ typealias ErrorObserver = (errors: List<Throwable>, warnings: List<Throwable>) -
 internal class ErrorCollector {
     private val observers = mutableSetOf<ErrorObserver>()
     private val runtimeErrors = mutableListOf<Throwable>()
-    private var parsingErrors = mutableListOf<Throwable>()
-    private var errors = mutableListOf<Throwable>()
+    private var parsingErrors = emptyList<Throwable>()
     private var warnings = mutableListOf<Throwable>()
+
+    private var errors = mutableListOf<Throwable>()
+    private var errorsAreValid = true
 
     fun logError(e: Throwable) {
         runtimeErrors.add(e)
-        rebuildErrorsAndNotify()
+        notifyObservers()
     }
 
     fun logWarning(warning: Throwable) {
         warnings.add(warning)
-        rebuildErrorsAndNotify()
+        notifyObservers()
     }
 
     fun getWarnings(): Iterator<Throwable> = warnings.listIterator()
@@ -29,26 +31,33 @@ internal class ErrorCollector {
     fun cleanRuntimeWarningsAndErrors() {
         warnings.clear()
         runtimeErrors.clear()
-        rebuildErrorsAndNotify()
+        notifyObservers()
     }
 
-    private fun rebuildErrorsAndNotify() {
+    private fun notifyObservers() {
+        errorsAreValid = false
+        if (observers.isEmpty()) return
+        rebuildErrors()
+        observers.forEach { it(errors, warnings) }
+    }
+
+    private fun rebuildErrors() {
+        if (errorsAreValid) return
         errors.clear()
         errors.addAll(parsingErrors)
         errors.addAll(runtimeErrors)
-
-        observers.forEach { it(errors, warnings) }
+        errorsAreValid = true
     }
 
     fun observeAndGet(observer: ErrorObserver): Disposable {
         observers.add(observer)
+        rebuildErrors()
         observer(errors, warnings)
         return Disposable { observers.remove(observer) }
     }
 
     fun attachParsingErrors(divData: DivData?) {
-        parsingErrors.clear()
-        parsingErrors.addAll(divData?.parsingErrors ?: emptyList())
-        rebuildErrorsAndNotify()
+        parsingErrors = divData?.parsingErrors ?: emptyList()
+        notifyObservers()
     }
 }
