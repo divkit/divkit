@@ -1,7 +1,6 @@
 import AVFoundation
 import BasePublic
 import Foundation
-import NetworkingPublic
 
 final class DefaultPlayer: Player {
   private let eventPipe = SignalPipe<PlayerEvent>()
