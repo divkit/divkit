@@ -172,7 +172,8 @@
       }
     },
     "list": {
-      "type": "page_element"
+      "type": "page_element",
+      "$items": "items"
     },
     "list_item": {
       "type": "grid",
