@@ -16,7 +16,7 @@ ext {
     if (regularVersion == null) {
         divkitVersionName = "${divkitVersion.versionName}${PublicationType.fromString(publicationType).getVersionSuffix()}"
     } else {
-        divkitVersionName = "regular-$regularVersion"
+        divkitVersionName = "${divkitVersion.versionName}-regular-$regularVersion"
     }
 }
 
