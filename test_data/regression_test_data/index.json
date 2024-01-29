@@ -2254,7 +2254,7 @@
         "First state should be replaced",
         "Second state should persist without changes"
       ],
-      "file": "patch/state_transactional_broken.json"
+      "file": "patch/state_transactional_success.json"
     },
     {
       "title": "Patch tabs partial",

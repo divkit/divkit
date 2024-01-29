@@ -83,26 +83,26 @@
         }) : undefined;
     }
 
-    function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
+    function replaceItems(newItems: (MaybeMissing<DivBaseData> | undefined)[]): void {
         const states = componentContext.json.states;
 
         if (!states) {
             return;
         }
 
-        const newStates = states.map((it, index) => {
+        items = states.map((it, index) => {
             return {
                 ...it,
-                div: items[index]
+                div: newItems[index]
             };
         });
 
         componentContext.json = {
             ...componentContext.json,
-            states: newStates
+            states: items
         };
         if (selectedId) {
-            selectState(newStates.find(it => it.state_id === selectedId) || null);
+            selectState(items.find(it => it.state_id === selectedId) || null);
         }
     }
 
