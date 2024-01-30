@@ -432,6 +432,7 @@
 
                 <!-- zero-width space, so other baseline-elements could be aligned without value -->
                 <span
+                    class={css.input__aligner}
                     aria-hidden="true"
                     style={makeStyle(verticalPaddingStl)}
                 >​</span>
