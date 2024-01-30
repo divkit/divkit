@@ -293,8 +293,11 @@
         }
 
         const rangeBbox = tracksInner.getBoundingClientRect();
-        const part = (pageX - rangeBbox.left) / rangeBbox.width;
-        const newVal = (maxValue - minValue) * part;
+        let part = (pageX - rangeBbox.left) / rangeBbox.width;
+        if ($direction === 'rtl') {
+            part = 1 - part;
+        }
+        const newVal = minValue + (maxValue - minValue) * part;
         const final = Math.round(clamp(newVal, minValue, maxValue));
         const middle = (value + value2) / 2;
 
