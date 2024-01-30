@@ -63,9 +63,7 @@ class EntityWithPropertyWithDefaultValue(
             )
         }
 
-        private val INT_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
         private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
-        private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
@@ -116,9 +114,7 @@ class EntityWithPropertyWithDefaultValue(
                 )
             }
 
-            private val INT_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
             private val INT_VALIDATOR = ValueValidator<Long> { it: Long -> it >= 0 }
-            private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
             private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Nested(env, json = it) }

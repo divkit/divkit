@@ -42,7 +42,6 @@ class EntityWithSimpleProperties(
         private val ID_DEFAULT_VALUE = 0L
         private val INTEGER_DEFAULT_VALUE = Expression.constant(0L)
 
-        private val POSITIVE_INTEGER_TEMPLATE_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
         private val POSITIVE_INTEGER_VALIDATOR = ValueValidator<Long> { it: Long -> it > 0 }
     }
 

@@ -786,15 +786,18 @@ class KotlinPropertyType(PropertyType):
                 GenerationMode.NORMAL_WITH_TEMPLATES,
                 supports_expressions
             )
-            validator_instance_name_with = self.validator_instance_name(
-                property_name=property_name,
-                with_templates=True
-            )
             validator_instance_name_without = self.validator_instance_name(
                 property_name=property_name,
                 with_templates=False
             )
-            result += f'private val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}'
+
+            if with_template_validators:
+                validator_instance_name_with = self.validator_instance_name(
+                    property_name=property_name,
+                    with_templates=True
+                )
+                result += f'private val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}'
+
             result += f'private val {validator_instance_name_without} = ValueValidator<{validator_type}> {definition}'
 
         return result

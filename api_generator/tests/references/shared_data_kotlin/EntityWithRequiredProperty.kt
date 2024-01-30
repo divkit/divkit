@@ -23,7 +23,6 @@ class EntityWithRequiredProperty(
     companion object {
         const val TYPE = "entity_with_required_property"
 
-        private val PROPERTY_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
         private val PROPERTY_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
     }
 
