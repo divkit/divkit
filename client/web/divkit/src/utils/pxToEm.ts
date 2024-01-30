@@ -10,7 +10,7 @@ export function pxToEm(value: number): string {
 
     const casted = Number(value);
 
-    if (isNaN(casted)) {
+    if (Number.isNaN(casted)) {
         return '0';
     }
 

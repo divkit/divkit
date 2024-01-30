@@ -457,7 +457,7 @@
             throw new Error('Missing data for "set-current-item" action');
         }
 
-        if (isNaN(Number(item))) {
+        if (Number.isNaN(Number(item))) {
             throw new Error('Incorrect item for "set-current-item" action');
         }
 

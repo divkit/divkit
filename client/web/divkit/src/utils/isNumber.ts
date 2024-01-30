@@ -5,5 +5,5 @@ export function isNumber(val: number | undefined): val is number {
 
     const num = Number(val);
 
-    return !isNaN(num);
+    return !Number.isNaN(num);
 }

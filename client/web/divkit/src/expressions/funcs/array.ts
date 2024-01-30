@@ -29,11 +29,12 @@ function arrayGetter(jsType: string, runtimeType: string) {
             throw new Error(`Incorrect value type: expected "${runtimeType}", got "${type}".`);
         }
         if (jsType === 'number' && runtimeType === 'integer') {
-            if (val !== Math.round(val as number)) {
+            checkIntegerOverflow(ctx, val as number);
+            try {
+                val = toBigInt(val as number);
+            } catch (_err) {
                 throw new Error('Cannot convert value to integer.');
             }
-            checkIntegerOverflow(ctx, val);
-            val = toBigInt(val);
         }
         if (jsType === 'string' && runtimeType === 'color') {
             val = transformColorValue(val as string);

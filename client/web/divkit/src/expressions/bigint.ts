@@ -15,6 +15,12 @@ export function toBigInt(val: number | bigint | string): number | bigint {
     if (res > MAX_INT || res < MIN_INT) {
         throw new Error('Integer overflow.');
     }
+    if (typeof res === 'number' && (
+        Number.isNaN(res) ||
+        res !== Math.round(res)
+    )) {
+        throw new Error('Incorrect integer value.');
+    }
     return res;
 }
 

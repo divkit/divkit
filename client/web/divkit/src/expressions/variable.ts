@@ -77,26 +77,23 @@ export class StringVariable extends Variable<string, 'string'> {
 
 export class IntegerVariable extends Variable<number | bigint, 'integer'> {
     protected convertValue(value: unknown) {
-        if (
-            (typeof value !== 'bigint' && typeof value !== 'number') ||
-            typeof value === 'number' &&
-                (
-                    isNaN(value) ||
-                    value !== Math.round(value)
-                ) ||
-            value > MAX_INT ||
-            value < MIN_INT
-        ) {
+        if (typeof value !== 'bigint' && typeof value !== 'number') {
             throw new Error('Incorrect variable value');
         }
 
-        return toBigInt(value);
+        try {
+            return toBigInt(value);
+        } catch (_err) {
+            throw new Error('Incorrect variable value');
+        }
     }
 
     protected fromString(val: string) {
-        const res = toBigInt(val);
-
-        return this.convertValue(res);
+        try {
+            return toBigInt(val);
+        } catch (_err) {
+            throw new Error('Incorrect variable value');
+        }
     }
 
     getType(): 'integer' {
@@ -108,7 +105,7 @@ export class NumberVariable extends Variable<number, 'number'> {
     protected convertValue(value: unknown) {
         if (
             typeof value !== 'number' ||
-            isNaN(value) ||
+            Number.isNaN(value) ||
             !isFinite(value)
         ) {
             throw new Error('Incorrect variable value');

@@ -28,7 +28,7 @@ function toString(
 function toNumber(_ctx: EvalContext, arg: IntegerValue | StringValue): EvalValue {
     const num = Number(arg.value);
 
-    if (isNaN(num) || !Number.isFinite(num)) {
+    if (Number.isNaN(num) || !Number.isFinite(num)) {
         throw new Error('Unable to convert value to Number.');
     }
 
@@ -54,17 +54,10 @@ function toIntegerNumber(_ctx: EvalContext, arg: NumberValue): EvalValue {
 
 function toIntegerString(_ctx: EvalContext, arg: StringValue): EvalValue {
     let num: number | bigint;
+
     try {
         num = toBigInt(arg.value);
     } catch (err) {
-        throw new Error('Unable to convert value to Integer.');
-    }
-
-    if (
-        (typeof num === 'number' && (isNaN(num) || num % 1 !== 0)) ||
-        num > MAX_INT ||
-        num < MIN_INT
-    ) {
         throw new Error('Unable to convert value to Integer.');
     }
 
