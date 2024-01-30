@@ -77,6 +77,7 @@ internal class DivContainerBinder @Inject constructor(
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
         val resolver = divView.expressionResolver
+        val oldResolver = divView.oldExpressionResolver
         val subscriber = divView.expressionSubscriber
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
@@ -94,11 +95,11 @@ internal class DivContainerBinder @Inject constructor(
         }
 
         val items = div.buildItems(resolver)
-        val oldItems = oldDiv?.buildItems(resolver)?.let {
+        val oldItems = oldDiv?.buildItems(oldResolver)?.let {
             when {
                 div === oldDiv -> it
-                DivComparator.areValuesReplaceable(oldDiv, div, resolver) &&
-                    DivComparator.areChildrenReplaceable(it, items, resolver) -> it
+                DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, resolver) &&
+                    DivComparator.areChildrenReplaceable(it, items, oldResolver, resolver) -> it
 
                 else -> {
                     view.replaceWithReuse(it, items, divView)
@@ -167,7 +168,7 @@ internal class DivContainerBinder @Inject constructor(
         var shift = 0
         items.forEachIndexed { index, item ->
             val childView = getChildAt(index + shift)
-            val oldChildDiv = (childView as? DivHolderView<DivBase>)?.div
+            val oldChildDiv = (childView as? DivHolderView<*>)?.div
 
             val patchShift = applyPatchToChild(divView, newDiv, oldDiv, item.value(), index + shift, resolver, subscriber)
             if (patchShift > NO_PATCH_SHIFT) {
@@ -345,14 +346,6 @@ internal class DivContainerBinder @Inject constructor(
         addSubscription(
             newDiv.orientation.observe(resolver) { orientation -> applyOrientation(orientation) }
         )
-    }
-
-    private fun DivWrapLayout.applyOrientation(orientation: DivContainer.Orientation) {
-        wrapDirection = if (orientation == DivContainer.Orientation.HORIZONTAL) {
-            WrapDirection.ROW
-        } else {
-            WrapDirection.COLUMN
-        }
     }
 
     private inline fun <T> T.bindContentAlignment(

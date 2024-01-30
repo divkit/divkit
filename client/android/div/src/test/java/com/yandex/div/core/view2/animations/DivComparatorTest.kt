@@ -33,19 +33,24 @@ class DivComparatorTest {
         val div1 = divText(text = "Text 01")
         val div2 = divText(text = "Text 02")
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
     fun `the same instance of div is replaceable`() {
         val div = divText(text = "Text")
 
-        assertTrue(DivComparator.areDivsReplaceable(div, div, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div, div, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
     fun `nulls are replaceable`() {
-        assertTrue(DivComparator.areDivsReplaceable(null as Div?, null as Div?, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(
+            null as Div?,
+            null as Div?,
+            ExpressionResolver.EMPTY,
+            ExpressionResolver.EMPTY
+        ))
     }
 
     @Test
@@ -53,7 +58,7 @@ class DivComparatorTest {
         val div1 = divText(text = "Text 01")
         val div2 = divImage(imageUrl = "https://image")
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -61,7 +66,7 @@ class DivComparatorTest {
         val div1 = divText(id = "01", text = "Text 01")
         val div2 = divText(id = "02", text = "Text 02")
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -69,7 +74,7 @@ class DivComparatorTest {
         val div1 = divText(id = "01", text = "Text 01", transitionIn = transitionMock)
         val div2 = divText(id = "02", text = "Text 02", transitionIn = transitionMock)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -77,7 +82,7 @@ class DivComparatorTest {
         val div1 = divCustom(type = "type_a")
         val div2 = divCustom(type = "type_b")
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -85,7 +90,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divText(text = "Text 01")))
         val div2 = divContainer(items = listOf(divText(text = "Text 02")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -93,7 +98,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
         val div2 = divContainer(items = listOf(divText(text = "Text 02")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -101,7 +106,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divContainer(items = listOf(divText(text = "Text")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -109,7 +114,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
         val div2 = divContainer(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -117,7 +122,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01")))
         val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -125,7 +130,7 @@ class DivComparatorTest {
         val div1 = divContainer(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
         val div2 = divContainer(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -133,7 +138,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divText(text = "Text 01")))
         val div2 = divGrid(items = listOf(divText(text = "Text 02")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -141,7 +146,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
         val div2 = divGrid(items = listOf(divText(text = "Text 02")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -149,7 +154,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divGrid(items = listOf(divText(text = "Text")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -157,7 +162,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
         val div2 = divGrid(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -165,7 +170,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01")))
         val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -173,7 +178,7 @@ class DivComparatorTest {
         val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
         val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -181,7 +186,7 @@ class DivComparatorTest {
         val div1 = divGallery(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divGallery(items = listOf(divText(text = "Text")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -189,7 +194,7 @@ class DivComparatorTest {
         val div1 = divPager(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divPager(items = listOf(divText(text = "Text")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -197,7 +202,7 @@ class DivComparatorTest {
         val div1 = divTabs(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divTabs(items = listOf(divText(text = "Text")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     @Test
@@ -205,7 +210,7 @@ class DivComparatorTest {
         val div1 = divState(items = listOf(divImage(imageUrl = "https://image")))
         val div2 = divState(items = listOf(divText(text = "Text")))
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2, ExpressionResolver.EMPTY, ExpressionResolver.EMPTY))
     }
 
     private fun divText(

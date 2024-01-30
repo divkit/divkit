@@ -130,7 +130,8 @@ internal class DivStateBinder @Inject constructor(
                 divView.divTransitionHandler.runTransitions(root = layout, endTransitions = false)
             }
         } else if (newStateDivValue != null) {
-            val areDivsReplaceable = outgoing != null && DivComparator.areDivsReplaceable(oldDiv, newStateDiv, resolver)
+            val areDivsReplaceable = outgoing != null &&
+                DivComparator.areDivsReplaceable(oldDiv, newStateDiv, divView.oldExpressionResolver, resolver)
             incoming = if (areDivsReplaceable) {
                 outgoing
             } else {
@@ -281,9 +282,14 @@ internal class DivStateBinder @Inject constructor(
         val transition = if (divState.allowsTransitionsOnStateChange(resolver)
             && (outgoingDiv?.containsStateInnerTransitions(resolver) == true
                     || incomingDiv?.containsStateInnerTransitions(resolver) == true)) {
-            val transitionBuilder = divView.viewComponent.transitionBuilder
-            val transitionHolder = divView.viewComponent.stateTransitionHolder
-            setupTransitions(transitionBuilder, transitionHolder, incomingState, outgoingState, resolver)
+            setupTransitions(
+                divView.viewComponent.transitionBuilder,
+                divView.viewComponent.stateTransitionHolder,
+                incomingState,
+                outgoingState,
+                resolver,
+                divView.oldExpressionResolver
+            )
         } else {
             setupAnimation(divView, incomingState, outgoingState, incoming, outgoing)
         }
@@ -302,24 +308,26 @@ internal class DivStateBinder @Inject constructor(
         transitionHolder: DivStateTransitionHolder,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
-        resolver: ExpressionResolver,
+        incomingResolver: ExpressionResolver,
+        outgoingResolver: ExpressionResolver,
     ) : Transition? {
         if (incomingState == outgoingState) {
             return null
         }
 
         val transition = transitionBuilder.buildTransitions(
-            from = outgoingState?.div?.walk(resolver)
+            from = outgoingState?.div?.walk(outgoingResolver)
                 ?.onEnter { div -> div !is Div.State }
                 ?.filter { div ->
                     div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
-            to = incomingState.div?.walk(resolver)
+            to = incomingState.div?.walk(incomingResolver)
                 ?.onEnter { div -> div !is Div.State }
                 ?.filter { div ->
                     div.value().transitionTriggers?.allowsTransitionsOnStateChange() ?: true
                 },
-            resolver = resolver
+            fromResolver = outgoingResolver,
+            toResolver = incomingResolver
         )
 
         transitionHolder.append(transition)
@@ -349,8 +357,8 @@ internal class DivStateBinder @Inject constructor(
                     animation.toTransition(incoming = true, resolver)?.let {
                         transition.addTransition(it
                             .addTarget(incoming)
-                            .setDuration(animation.duration.evaluate(resolver).toLong())
-                            .setStartDelay(animation.startDelay.evaluate(resolver).toLong())
+                            .setDuration(animation.duration.evaluate(resolver))
+                            .setStartDelay(animation.startDelay.evaluate(resolver))
                             .setInterpolator(animation.interpolator.evaluate(resolver).androidInterpolator)
                         )
                     }
@@ -368,8 +376,8 @@ internal class DivStateBinder @Inject constructor(
                     animation.toTransition(incoming = false, resolver)?.let {
                         transition.addTransition(it
                             .addTarget(outgoing)
-                            .setDuration(animation.duration.evaluate(resolver).toLong())
-                            .setStartDelay(animation.startDelay.evaluate(resolver).toLong())
+                            .setDuration(animation.duration.evaluate(resolver))
+                            .setStartDelay(animation.startDelay.evaluate(resolver))
                             .setInterpolator(animation.interpolator.evaluate(resolver).androidInterpolator)
                         )
                     }

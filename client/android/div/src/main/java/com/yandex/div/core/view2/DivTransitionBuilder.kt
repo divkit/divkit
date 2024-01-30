@@ -1,10 +1,8 @@
 package com.yandex.div.core.view2
 
 import android.content.Context
-import android.graphics.Path
 import android.util.DisplayMetrics
 import android.view.Gravity
-import androidx.core.graphics.PathParser
 import androidx.transition.ChangeBounds
 import androidx.transition.Transition
 import androidx.transition.TransitionSet
@@ -19,7 +17,6 @@ import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.Slide
 import com.yandex.div.core.view2.animations.plusAssign
 import com.yandex.div.core.view2.divs.toPx
-import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
@@ -39,26 +36,40 @@ internal class DivTransitionBuilder @Inject constructor(
     private val displayMetrics: DisplayMetrics
         get() = context.resources.displayMetrics
 
-    fun buildTransitions(fromDiv: Div?, toDiv: Div?, resolver: ExpressionResolver): TransitionSet {
-        return buildTransitions(from = fromDiv?.walk(resolver), to = toDiv?.walk(resolver), resolver)
+    fun buildTransitions(
+        fromDiv: Div?,
+        toDiv: Div?,
+        fromResolver: ExpressionResolver,
+        toResolver: ExpressionResolver,
+    ): TransitionSet {
+        return buildTransitions(
+            from = fromDiv?.walk(fromResolver),
+            to = toDiv?.walk(fromResolver),
+            fromResolver,
+            toResolver
+        )
     }
 
-    fun buildTransitions(from: Sequence<Div>?, to: Sequence<Div>?,
-                         resolver: ExpressionResolver): TransitionSet {
+    fun buildTransitions(
+        from: Sequence<Div>?,
+        to: Sequence<Div>?,
+        fromResolver: ExpressionResolver,
+        toResolver: ExpressionResolver,
+    ): TransitionSet {
         val transitionSet = TransitionSet().apply {
             ordering = TransitionSet.ORDERING_TOGETHER
         }
 
         if (from != null) {
-            transitionSet += buildOutgoingTransitions(from, resolver)
+            transitionSet += buildOutgoingTransitions(from, fromResolver)
         }
 
         if (from != null && to != null) {
-            transitionSet += buildChangeTransitions(from, resolver)
+            transitionSet += buildChangeTransitions(from, fromResolver)
         }
 
         if (to != null) {
-            transitionSet += buildIncomingTransitions(to, resolver)
+            transitionSet += buildIncomingTransitions(to, toResolver)
         }
 
         return transitionSet
@@ -152,8 +163,8 @@ internal class DivTransitionBuilder @Inject constructor(
             is DivAppearanceTransition.Fade -> {
                 Fade(alpha = value.alpha.evaluate(resolver).toFloat()).apply {
                     mode = transitionMode
-                    duration = value.duration.evaluate(resolver).toLong()
-                    startDelay = value.startDelay.evaluate(resolver).toLong()
+                    duration = value.duration.evaluate(resolver)
+                    startDelay = value.startDelay.evaluate(resolver)
                     interpolator = value.interpolator.evaluate(resolver).androidInterpolator
                 }
             }
@@ -165,8 +176,8 @@ internal class DivTransitionBuilder @Inject constructor(
                     pivotY = value.pivotY.evaluate(resolver).toFloat()
                 ).apply {
                     mode = transitionMode
-                    duration = value.duration.evaluate(resolver).toLong()
-                    startDelay = value.startDelay.evaluate(resolver).toLong()
+                    duration = value.duration.evaluate(resolver)
+                    startDelay = value.startDelay.evaluate(resolver)
                     interpolator = value.interpolator.evaluate(resolver).androidInterpolator
                 }
             }
@@ -177,8 +188,8 @@ internal class DivTransitionBuilder @Inject constructor(
                     slideEdge = value.edge.evaluate(resolver).toGravity()
                 ).apply {
                     mode = transitionMode
-                    duration = value.duration.evaluate(resolver).toLong()
-                    startDelay = value.startDelay.evaluate(resolver).toLong()
+                    duration = value.duration.evaluate(resolver)
+                    startDelay = value.startDelay.evaluate(resolver)
                     interpolator = value.interpolator.evaluate(resolver).androidInterpolator
                 }
             }
@@ -206,24 +217,11 @@ internal class DivTransitionBuilder @Inject constructor(
 
             is DivChangeTransition.Bounds -> {
                 ChangeBounds().apply {
-                    duration = value.duration.evaluate(resolver).toLong()
-                    startDelay = value.startDelay.evaluate(resolver).toLong()
+                    duration = value.duration.evaluate(resolver)
+                    startDelay = value.startDelay.evaluate(resolver)
                     interpolator = value.interpolator.evaluate(resolver).androidInterpolator
                 }
             }
         }
-    }
-
-    private fun String.toPathOrNull(): Path? {
-        return try {
-            PathParser.createPathFromPathData(this)
-        } catch (e: RuntimeException) {
-            KLog.e(TAG, e) { "Unable to parse path data: $this" }
-            null
-        }
-    }
-
-    private companion object {
-        private const val TAG = "DivTransitionController"
     }
 }

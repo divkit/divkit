@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.div
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.util.map
@@ -31,7 +32,7 @@ class DivViewAdapter(
 
     override fun onBindViewHolder(holder: DivViewHolder, position: Int) {
         with(items[position]) {
-            holder.view.prepareForRecycleOrCleanup(this.data)
+            holder.view.prepareForRecycleOrCleanup(newData = this.data, newDataTag = DivDataTag(this.id))
             holder.setData(this)
         }
         if (resetCount >= 0) {

@@ -16,7 +16,8 @@ internal object DivComparator {
         old: DivData?,
         new: DivData,
         stateId: Long,
-        resolver: ExpressionResolver
+        oldResolver: ExpressionResolver,
+        newResolver: ExpressionResolver,
     ): Boolean {
         if (old == null) {
             return false
@@ -24,27 +25,34 @@ internal object DivComparator {
         val oldState = old.states.find { it.stateId == stateId } ?: return false
         val newState = new.states.find { it.stateId == stateId } ?: return false
 
-        return areDivsReplaceable(oldState.div, newState.div, resolver)
+        return areDivsReplaceable(oldState.div, newState.div, oldResolver, newResolver)
     }
 
-    fun areDivsReplaceable(old: Div?, new: Div?, resolver: ExpressionResolver): Boolean {
+    fun areDivsReplaceable(
+        old: Div?,
+        new: Div?,
+        oldResolver: ExpressionResolver,
+        newResolver: ExpressionResolver,
+    ): Boolean {
         if (old?.javaClass != new?.javaClass) {
             return false
         }
         if (old == null || new == null || old === new) {
             return true
         }
-        return areValuesReplaceable(old.value(), new.value(), resolver) && areChildrenReplaceable(
-            extractChildren(old, resolver),
-            extractChildren(new, resolver),
-            resolver
+        return areValuesReplaceable(old.value(), new.value(), oldResolver, newResolver) && areChildrenReplaceable(
+            extractChildren(old, oldResolver),
+            extractChildren(new, newResolver),
+            oldResolver,
+            newResolver
         )
     }
 
     fun areValuesReplaceable(
         old: DivBase,
         new: DivBase,
-        resolver: ExpressionResolver
+        oldResolver: ExpressionResolver,
+        newResolver: ExpressionResolver,
     ): Boolean {
         if (old.id != null && new.id != null && old.id != new.id && (old.hasTransitions() || new.hasTransitions())) {
             return false
@@ -53,10 +61,10 @@ internal object DivComparator {
             return false
         }
         if (old is DivContainer && new is DivContainer) {
-            if (old.isOverlap(resolver) != new.isOverlap(resolver)) {
+            if (old.isOverlap(oldResolver) != new.isOverlap(newResolver)) {
                 return false
             }
-            if (old.isWrapContainer(resolver) != new.isWrapContainer(resolver)) {
+            if (old.isWrapContainer(oldResolver) != new.isWrapContainer(newResolver)) {
                 return false
             }
         }
@@ -66,14 +74,15 @@ internal object DivComparator {
     fun areChildrenReplaceable(
         oldChildren: List<Div>,
         newChildren: List<Div>,
-        resolver: ExpressionResolver
+        oldResolver: ExpressionResolver,
+        newResolver: ExpressionResolver,
     ): Boolean {
         if (oldChildren.size != newChildren.size) {
             return false
         }
 
         return oldChildren.zip(newChildren).all {
-            areDivsReplaceable(it.first, it.second, resolver)
+            areDivsReplaceable(it.first, it.second, oldResolver, newResolver)
         }
     }
 

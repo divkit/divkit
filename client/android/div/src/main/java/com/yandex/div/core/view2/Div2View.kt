@@ -68,6 +68,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
+import java.util.UUID
 import java.util.WeakHashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -108,8 +109,11 @@ class Div2View private constructor(
     internal val releaseViewVisitor: ReleaseViewVisitor
         get() = viewComponent.releaseViewVisitor
     private var _expressionsRuntime: ExpressionsRuntime? = null
+    private var oldExpressionsRuntime: ExpressionsRuntime? = null
     private val variableController: VariableController?
         get() = _expressionsRuntime?.variableController
+    internal val oldExpressionResolver: ExpressionResolver
+        get() = oldExpressionsRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
 
@@ -152,13 +156,12 @@ class Div2View private constructor(
             bindingProvider.update(dataTag, field)
         }
 
-    private fun updateExpressionsRuntime() {
-        val data = divData ?: return
-        val oldRuntime = _expressionsRuntime
-        val newRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(dataTag, data)
-        _expressionsRuntime = newRuntime
-        if (oldRuntime != newRuntime) {
-            oldRuntime?.clearBinding()
+    private fun updateExpressionsRuntime(data: DivData? = divData, tag: DivDataTag = dataTag) {
+        data ?: return
+        oldExpressionsRuntime = _expressionsRuntime
+        _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data)
+        if (oldExpressionsRuntime != _expressionsRuntime) {
+            oldExpressionsRuntime?.clearBinding()
         }
     }
 
@@ -232,7 +235,8 @@ class Div2View private constructor(
         histogramReporter.onRenderStarted()
 
         var oldData = divData ?: oldDivData
-        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, expressionResolver)) {
+        updateExpressionsRuntime(data, tag)
+        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
             oldData = null
         }
         dataTag = tag
@@ -254,6 +258,7 @@ class Div2View private constructor(
             updateNow(data, tag)
         }
         sendCreationHistograms()
+        oldExpressionsRuntime = _expressionsRuntime
         return result
     }
 
@@ -271,7 +276,8 @@ class Div2View private constructor(
         histogramReporter.onRenderStarted()
 
         var oldData = divData
-        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, expressionResolver)) {
+        updateExpressionsRuntime(data, tag)
+        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
             oldData = null
         }
         dataTag = tag
@@ -290,6 +296,7 @@ class Div2View private constructor(
         }
         div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
+        oldExpressionsRuntime = _expressionsRuntime
         return result
     }
 
@@ -428,12 +435,18 @@ class Div2View private constructor(
     }
 
     /** Returns true if div can be replaced with given DivData or false otherwise **/
-    fun prepareForRecycleOrCleanup(newData: DivData, oldData: DivData? = null): Boolean {
+    fun prepareForRecycleOrCleanup(
+        newData: DivData,
+        oldData: DivData? = null,
+        newDataTag: DivDataTag? = null
+    ): Boolean {
+        val tag = newDataTag ?: DivDataTag(UUID.randomUUID().toString())
         val canBeReplaced = DivComparator.isDivDataReplaceable(
             divData ?: oldData,
             newData,
             stateId,
-            expressionResolver
+            expressionResolver,
+            div2Component.expressionsRuntimeProvider.getOrCreate(tag, newData).expressionResolver
         )
         if (canBeReplaced) {
             releaseChildren(this)
@@ -573,7 +586,7 @@ class Div2View private constructor(
         oldState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
 
-        val allowsTransition = oldData?.allowsTransitionsOnDataChange(expressionResolver) == true ||
+        val allowsTransition = oldData?.allowsTransitionsOnDataChange(oldExpressionResolver) == true ||
             newData.allowsTransitionsOnDataChange(expressionResolver)
         addNewStateViewWithTransition(oldData, newData, oldState?.div, newState.div,
             newStateView, allowsTransition)
@@ -606,7 +619,9 @@ class Div2View private constructor(
         val newStateView = if (DivComparator.areDivsReplaceable(
                 currentState?.div,
                 newState.div,
-                expressionResolver)
+                expressionResolver,
+                expressionResolver
+            )
         ) {
             bindAndUpdateState(newState, stateId, temporary)
         } else {
@@ -697,9 +712,10 @@ class Div2View private constructor(
         }
 
         val transition = viewComponent.transitionBuilder.buildTransitions(
-            from = oldDiv?.let { divSequenceForTransition(oldData, it) },
-            to = newDiv?.let { divSequenceForTransition(newData, it) },
-            resolver = expressionResolver
+            from = oldDiv?.let { divSequenceForTransition(oldData, it, oldExpressionResolver) },
+            to = newDiv?.let { divSequenceForTransition(newData, it, expressionResolver) },
+            fromResolver = oldExpressionResolver,
+            toResolver = expressionResolver
         )
 
         if (transition.transitionCount == 0) {
@@ -715,8 +731,7 @@ class Div2View private constructor(
         return transition
     }
 
-    private fun divSequenceForTransition(divData: DivData?, div: Div): Sequence<Div> {
-        val resolver = expressionResolver
+    private fun divSequenceForTransition(divData: DivData?, div: Div, resolver: ExpressionResolver): Sequence<Div> {
         val selectors = ArrayDeque<DivTransitionSelector>().apply {
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }

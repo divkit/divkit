@@ -84,7 +84,7 @@ internal class DivGalleryBinder @Inject constructor(
 
         view.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
-        val itemStateBinder = { itemView: View, div: Div ->
+        val itemStateBinder = { itemView: View, _: Div ->
             itemView.bindStates(divView.rootDiv(), divView, resolver, divBinder.get())
         }
         view.adapter =
@@ -342,7 +342,7 @@ internal class DivGalleryBinder @Inject constructor(
             val resolver = div2View.expressionResolver
             val divView = if (oldDiv != null
                     && rootView.child != null
-                    && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
+                    && DivComparator.areDivsReplaceable(oldDiv, div, div2View.oldExpressionResolver, resolver)) {
                 rootView.child!!
             } else {
                 val newDivView = viewCreator.create(div, resolver)

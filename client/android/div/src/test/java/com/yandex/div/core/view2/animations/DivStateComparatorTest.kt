@@ -18,7 +18,13 @@ class DivStateComparatorTest {
         val data1 = readDiv("text_state.json")
         val data2 = readDiv("text_state.json")
 
-        Assert.assertTrue(DivComparator.isDivDataReplaceable(data1, data2, 0, ExpressionResolver.EMPTY))
+        Assert.assertTrue(DivComparator.isDivDataReplaceable(
+            data1,
+            data2,
+            0,
+            ExpressionResolver.EMPTY,
+            ExpressionResolver.EMPTY
+        ))
     }
 
     @Test
@@ -26,7 +32,13 @@ class DivStateComparatorTest {
         val data1 = readDiv("text_state.json")
         val data2 = readDiv("text_state.json", stateId = 1)
 
-        Assert.assertFalse(DivComparator.isDivDataReplaceable(data1, data2, 1, ExpressionResolver.EMPTY))
+        Assert.assertFalse(DivComparator.isDivDataReplaceable(
+            data1,
+            data2,
+            1,
+            ExpressionResolver.EMPTY,
+            ExpressionResolver.EMPTY
+        ))
     }
 
     @Test
@@ -34,7 +46,13 @@ class DivStateComparatorTest {
         val data1 = readDiv("text_state.json")
         val data2 = readDiv("gallery_text_container.json")
 
-        Assert.assertFalse(DivComparator.isDivDataReplaceable(data1, data2, 0, ExpressionResolver.EMPTY))
+        Assert.assertFalse(DivComparator.isDivDataReplaceable(
+            data1,
+            data2,
+            0,
+            ExpressionResolver.EMPTY,
+            ExpressionResolver.EMPTY
+        ))
     }
 
     private fun readDiv(resource: String, stateId: Long = 0) : DivData {

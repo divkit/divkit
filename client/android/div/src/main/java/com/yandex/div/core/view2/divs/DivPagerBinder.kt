@@ -587,7 +587,7 @@ internal class DivPagerBinder @Inject constructor(
             val resolver = div2View.expressionResolver
             val divView = if (oldDiv != null
                     && frameLayout.isNotEmpty()
-                    && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
+                    && DivComparator.areDivsReplaceable(oldDiv, div, div2View.oldExpressionResolver, resolver)) {
                 frameLayout[0]
             } else {
                 val newDivView = viewCreator.create(div, resolver)

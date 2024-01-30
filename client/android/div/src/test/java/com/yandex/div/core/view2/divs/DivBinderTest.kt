@@ -43,6 +43,7 @@ open class DivBinderTest {
 
     internal val context = RuntimeEnvironment.application
     private val expressionResolver = mock<ExpressionResolver>()
+    private val oldExpressionResolver = mock<ExpressionResolver>()
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
         on { divTag } doReturn DivDataTag("id")
@@ -50,6 +51,7 @@ open class DivBinderTest {
         on { logId } doReturn "id"
         on { config } doReturn mock()
         on { expressionResolver } doReturn expressionResolver
+        on { oldExpressionResolver } doReturn oldExpressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
     }
     private val divExtensionController = DivExtensionController(emptyList())
@@ -65,7 +67,7 @@ open class DivBinderTest {
     }
 
     private val transitionBuilder = mock<DivTransitionBuilder> {
-        on { buildTransitions(fromDiv = anyOrNull(), toDiv = anyOrNull(), any()) } doReturn TransitionSet()
+        on { buildTransitions(fromDiv = anyOrNull(), toDiv = anyOrNull(), any(), any()) } doReturn TransitionSet()
     }
 
     private val viewIdProvider = DivViewIdProvider()
