@@ -15,10 +15,10 @@
         "text",
         "edit_text",
         "header",
-        "tab_bar",
         "list",
-        "select"
+        "auto"
       ],
+      "default_value": "auto",
       "supports_expressions": false,
       "$description": "translations.json#/div_accessibility_type",
       "platforms": [
