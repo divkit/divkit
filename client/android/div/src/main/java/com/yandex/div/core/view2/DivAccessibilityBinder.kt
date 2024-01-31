@@ -8,6 +8,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
@@ -158,7 +159,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Mode.MERGE -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
                 if (!isDescendant) {
-                    isFocusable = true
+                    isFocusable = this !is DivSliderView
                 } else {
                     setActionable(false)
                 }
@@ -169,7 +170,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             }
             DivAccessibility.Mode.DEFAULT -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
-                isFocusable = true
+                isFocusable = this !is DivSliderView
             }
         }
         divView.setPropagatedAccessibilityMode(this, mode)
