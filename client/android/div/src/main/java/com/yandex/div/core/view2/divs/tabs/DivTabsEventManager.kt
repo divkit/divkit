@@ -44,12 +44,12 @@ internal class DivTabsEventManager(
         // This assumption is safe as long as we display only one page in ViewPager.
         if (currentPagePosition != NO_POSITION) {
             val previousTab = div.items[currentPagePosition]
-            visibilityActionTracker.trackVisibilityActionsOf(div2View, null, previousTab.div)
+            visibilityActionTracker.cancelTrackingViewsHierarchy(div2View, viewPager, previousTab.div)
             div2View.unbindViewFromDiv(viewPager)
         }
 
         val selectedTab = div.items[position]
-        visibilityActionTracker.trackVisibilityActionsOf(div2View, viewPager, selectedTab.div)
+        visibilityActionTracker.startTrackingViewsHierarchy(div2View, viewPager, selectedTab.div)
         div2View.bindViewToDiv(viewPager, selectedTab.div)
 
         currentPagePosition = position

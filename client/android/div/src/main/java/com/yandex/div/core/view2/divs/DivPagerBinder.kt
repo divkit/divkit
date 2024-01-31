@@ -508,7 +508,7 @@ internal class DivPagerBinder @Inject constructor(
                 }
                 val childDiv = divs[childPosition]
 
-                divView.div2Component.visibilityActionTracker.trackVisibilityActionsOf(divView, child, childDiv)
+                divView.div2Component.visibilityActionTracker.startTrackingViewsHierarchy(divView, child, childDiv)
             }
         }
     }
