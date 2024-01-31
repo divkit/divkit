@@ -201,6 +201,8 @@ internal class DivAccessibilityBinder @Inject constructor(
             DivAccessibility.Type.EDIT_TEXT -> AccessibilityType.EDIT_TEXT
             DivAccessibility.Type.HEADER -> AccessibilityType.HEADER
             DivAccessibility.Type.LIST -> AccessibilityType.LIST
+            DivAccessibility.Type.SELECT -> AccessibilityType.SELECT
+            DivAccessibility.Type.TAB_BAR -> AccessibilityType.TAB_WIDGET
         }
 
     private enum class AccessibilityType {
