@@ -13,14 +13,6 @@ private let exclusions = [
   "div-indicator/fixed-width-max_items_rectangle_worm.json",
 ]
 
-private let casesWithPlaceholerOnly = [
-  "div-image/placeholder-color.json",
-  "div-image/preview.json",
-  "div-image/custom-preview.json",
-  "div-gif-image/placeholder-color.json",
-  "div-gif-image/preview.json",
-]
-
 private let divExtensions: [String: [DivExtensionHandler]] = [
   "div-image/custom-preview.json": [labelImagePreviewExtension],
 ]
@@ -56,16 +48,9 @@ private func doTest(_ file: JsonFile) {
   test.run(
     file.name,
     customCaseName: file.name.removingFileExtension,
-    imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? PlaceholderFactory() : nil,
     blocksState: file.subdirectory == indicatorSubdirectory ? defaultPagerViewState : [:],
     extensions: divExtensions[file.path] ?? []
   )
-}
-
-private final class PlaceholderFactory: DivImageHolderFactory {
-  func make(_: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
-    placeholder?.toImageHolder() ?? NilImageHolder()
-  }
 }
 
 private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(

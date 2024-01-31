@@ -72,11 +72,15 @@ class PicassoDivImageLoader(
     }
 
     override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
-        val request = Request.Builder().url(imageUrl).build()
-        val call = httpClient.newCall(request)
+        var loadReference: LoadReference = EMPTY_LOAD_REFERENCE
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
                 val response = runCatching {
+                    val request = Request.Builder().url(imageUrl).build()
+                    val call = httpClient.newCall(request)
+                    loadReference = LoadReference {
+                        call.cancel()
+                    }
                     call.execute()
                 }.getOrNull() ?: return@withContext null
                 val source = response.cacheResponse?.let { BitmapSource.MEMORY } ?: BitmapSource.NETWORK
@@ -89,9 +93,7 @@ class PicassoDivImageLoader(
             } ?: callback.onError()
         }
 
-        return LoadReference {
-            call.cancel()
-        }
+        return loadReference
     }
 
     fun resetIdle() {
@@ -101,6 +103,7 @@ class PicassoDivImageLoader(
 
     private companion object {
         const val DISK_CACHE_SIZE = 16_777_216L
+        val EMPTY_LOAD_REFERENCE = LoadReference { }
     }
 
     private inner class DownloadCallbackAdapter(

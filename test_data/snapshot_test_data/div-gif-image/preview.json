@@ -13,7 +13,7 @@
         "state_id": 0,
         "div": {
           "type": "gif",
-          "gif_url": "https://yandex.ru",
+          "gif_url": "empty://",
           "placeholder_color": "#f00",
           "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
           "width": {

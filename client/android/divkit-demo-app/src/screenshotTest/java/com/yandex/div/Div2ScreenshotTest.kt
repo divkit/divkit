@@ -52,7 +52,7 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            val filter = { filename: String -> filename.endsWith(CASE_EXTENSION) && !filename.contains("templates") }
+            val filter = { filename: String -> filename.endsWith(CASE_EXTENSION) }
             val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)
             val productionCases = AssetEnumerator(context).enumerate(PRODUCTION_CASES_PATH, filter)
             return (testCases + productionCases).withEscapedParameter()

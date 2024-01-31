@@ -45,7 +45,6 @@ open class DivKitSnapshotTestCase: XCTestCase {
     _ fileName: String,
     testName: String = #function,
     customCaseName: String? = nil,
-    imageHolderFactory: DivImageHolderFactory? = nil,
     blocksState: BlocksState = [:],
     extensions: [DivExtensionHandler] = []
   ) {
@@ -59,7 +58,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     let divKitComponents = DivKitComponents(
       extensionHandlers: extensions,
       fontProvider: YSFontProvider(),
-      imageHolderFactory: imageHolderFactory ?? TestImageHolderFactory(),
+      imageHolderFactory: TestImageHolderFactory(),
       layoutDirection: getLayoutDirection(from: jsonDict)
     )
     for (path, state) in blocksState {
@@ -197,10 +196,9 @@ private let testBundle = Bundle(for: DivKitSnapshotTestCase.self)
 private final class TestImageHolderFactory: DivImageHolderFactory {
   private var reportedUrls = Set<String>()
 
-  func make(_ url: URL?, _: ImagePlaceholder?) -> ImageHolder {
-    guard let url else {
-      XCTFail("Predefined images not supported in tests")
-      return UIImage()
+  func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
+    guard let url, url.absoluteString != "empty://" else {
+      return placeholder?.toImageHolder() ?? NilImageHolder()
     }
 
     if let image = UIImage(named: url.lastPathComponent, in: testBundle, compatibleWith: nil) {
