@@ -78,6 +78,11 @@ object SelectEnumValue : EnumValue("select"),
     Accessibility.Type
 
 @Generated
+object AutoEnumValue : EnumValue("auto"),
+    Accessibility.Type,
+    Gallery.Scrollbar
+
+@Generated
 object SelfEnumValue : EnumValue("_self"),
     Action.Target
 
@@ -275,10 +280,6 @@ object BoldEnumValue : EnumValue("bold"),
 @Generated
 object PagingEnumValue : EnumValue("paging"),
     Gallery.ScrollMode
-
-@Generated
-object AutoEnumValue : EnumValue("auto"),
-    Gallery.Scrollbar
 
 @Generated
 object FillEnumValue : EnumValue("fill"),
@@ -482,6 +483,10 @@ val DivScope.select: SelectEnumValue
     get() = SelectEnumValue
 
 @Generated
+val DivScope.auto: AutoEnumValue
+    get() = AutoEnumValue
+
+@Generated
 val DivScope.self: SelfEnumValue
     get() = SelfEnumValue
 
@@ -644,10 +649,6 @@ val DivScope.bold: BoldEnumValue
 @Generated
 val DivScope.paging: PagingEnumValue
     get() = PagingEnumValue
-
-@Generated
-val DivScope.auto: AutoEnumValue
-    get() = AutoEnumValue
 
 @Generated
 val DivScope.fill: FillEnumValue

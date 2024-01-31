@@ -40,7 +40,7 @@ class CollectionItemBuilder internal constructor(
 
     class Properties internal constructor(
         /**
-         * Data that will be used to create collection items.
+         * Data that will be used to create collection elements.
          */
         val data: Property<List<Any>>?,
         /**
@@ -49,7 +49,7 @@ class CollectionItemBuilder internal constructor(
          */
         val dataElementName: Property<String>?,
         /**
-         * Array of `div` from which the collection items will be created.
+         * Array of `div` elements from which the collection elements will be created.
          */
         val prototypes: Property<List<Prototype>>?,
     ) {
@@ -85,11 +85,11 @@ class CollectionItemBuilder internal constructor(
 
         class Properties internal constructor(
             /**
-             * `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+             * `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
              */
             val div: Property<Div>?,
             /**
-             * A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+             * A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
              * Default value: `true`.
              */
             val selector: Property<Boolean>?,
@@ -107,9 +107,9 @@ class CollectionItemBuilder internal constructor(
 }
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
- * @param prototypes Array of `div` from which the collection items will be created.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
 fun DivScope.collectionItemBuilder(
@@ -126,9 +126,9 @@ fun DivScope.collectionItemBuilder(
 )
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
- * @param prototypes Array of `div` from which the collection items will be created.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
 fun DivScope.collectionItemBuilderProps(
@@ -143,9 +143,9 @@ fun DivScope.collectionItemBuilderProps(
 )
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
- * @param prototypes Array of `div` from which the collection items will be created.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
 fun TemplateScope.collectionItemBuilderRefs(
@@ -160,9 +160,9 @@ fun TemplateScope.collectionItemBuilderRefs(
 )
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
- * @param prototypes Array of `div` from which the collection items will be created.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
 fun CollectionItemBuilder.override(
@@ -179,9 +179,9 @@ fun CollectionItemBuilder.override(
 )
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
- * @param prototypes Array of `div` from which the collection items will be created.
+ * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
 fun CollectionItemBuilder.defer(
@@ -198,7 +198,7 @@ fun CollectionItemBuilder.defer(
 )
 
 /**
- * @param data Data that will be used to create collection items.
+ * @param data Data that will be used to create collection elements.
  */
 @Generated
 fun CollectionItemBuilder.evaluate(
@@ -216,8 +216,8 @@ fun CollectionItemBuilder.evaluate(
 fun CollectionItemBuilder.asList() = listOf(this)
 
 /**
- * @param div `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun DivScope.collectionItemBuilderPrototype(
@@ -232,8 +232,8 @@ fun DivScope.collectionItemBuilderPrototype(
 )
 
 /**
- * @param div `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun DivScope.collectionItemBuilderPrototypeProps(
@@ -246,8 +246,8 @@ fun DivScope.collectionItemBuilderPrototypeProps(
 )
 
 /**
- * @param div `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun TemplateScope.collectionItemBuilderPrototypeRefs(
@@ -260,8 +260,8 @@ fun TemplateScope.collectionItemBuilderPrototypeRefs(
 )
 
 /**
- * @param div `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.override(
@@ -276,8 +276,8 @@ fun CollectionItemBuilder.Prototype.override(
 )
 
 /**
- * @param div `Div` from which the collection items will be created. In `Div`, you can use expressions using data from `data`, to access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param div `Div` from which the collection elements will be created. In `Div`, you can use expressions using data from `data`. To access the next `data` element, you need to use the same prefix as in `data_element_prefix`.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.defer(
@@ -292,7 +292,7 @@ fun CollectionItemBuilder.Prototype.defer(
 )
 
 /**
- * @param selector A condition that is used to select a prototype for the next item in the collection. If there is more than 1 true condition, the prototype that is earlier will be selected. If none of the conditions are met, the data element will be skipped.
+ * @param selector A condition that is used to select the prototype for the next element in the collection. If there is more than 1 true condition, the earlier prototype is selected. If none of the conditions are met, the element from `data` is skipped.
  */
 @Generated
 fun CollectionItemBuilder.Prototype.evaluate(

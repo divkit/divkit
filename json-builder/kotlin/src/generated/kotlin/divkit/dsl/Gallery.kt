@@ -181,7 +181,7 @@ class Gallery internal constructor(
          */
         val scrollMode: Property<ScrollMode>?,
         /**
-         * Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+         * Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
          * Default value: `none`.
          */
         val scrollbar: Property<Scrollbar>?,
@@ -300,7 +300,7 @@ class Gallery internal constructor(
     sealed interface ScrollMode
 
     /**
-     * Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+     * Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
      * 
      * Possible values: [none], [auto].
      */
@@ -333,7 +333,7 @@ class Gallery internal constructor(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -451,7 +451,7 @@ fun DivScope.gallery(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -567,7 +567,7 @@ fun DivScope.galleryProps(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -683,7 +683,7 @@ fun TemplateScope.galleryRefs(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -801,7 +801,7 @@ fun Gallery.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -908,7 +908,7 @@ fun Gallery.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param visibility Element visibility.
  */
 @Generated
@@ -995,7 +995,7 @@ fun Gallery.evaluate(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1114,7 +1114,7 @@ fun Component<Gallery>.override(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1222,7 +1222,7 @@ fun Component<Gallery>.defer(
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
- * @param scrollbar Scrollbar behaviour. Hidden by default. On different platforms, the scrollbar may occupy a different space, since this is a user setting. Consider this in sizes. <li>`none` — scrollbar is hidden.</li><li>`auto` — scrollbar is shown if there is not enough space and is necessary out the current platform.</li>
+ * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param visibility Element visibility.
  */
 @Generated

@@ -66,6 +66,7 @@ class Accessibility internal constructor(
         val stateDescription: Property<String>?,
         /**
          * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
+         * Default value: `auto`.
          */
         val type: Property<Type>?,
     ) {
@@ -93,7 +94,7 @@ class Accessibility internal constructor(
     /**
      * Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.
      * 
-     * Possible values: [none], [button], [image], [text], [edit_text], [header], [tab_bar], [list], [select].
+     * Possible values: [none], [button], [image], [text], [edit_text], [header], [tab_bar], [list], [select], [auto].
      */
     @Generated
     sealed interface Type

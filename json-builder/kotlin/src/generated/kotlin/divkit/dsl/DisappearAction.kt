@@ -58,7 +58,7 @@ class DisappearAction internal constructor(
          */
         val downloadCallbacks: Property<DownloadCallbacks>?,
         /**
-         * This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+         * The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
          * Default value: `true`.
          */
         val isEnabled: Property<Boolean>?,
@@ -111,7 +111,7 @@ class DisappearAction internal constructor(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -150,7 +150,7 @@ fun DivScope.disappearAction(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -187,7 +187,7 @@ fun DivScope.disappearActionProps(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -224,7 +224,7 @@ fun TemplateScope.disappearActionRefs(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -263,7 +263,7 @@ fun DisappearAction.override(
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
  * @param downloadCallbacks Callbacks that are called after [data loading](../../interaction.dita#loading-data).
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param payload Additional parameters, passed to the host application.
@@ -301,7 +301,7 @@ fun DisappearAction.defer(
 
 /**
  * @param disappearDuration Time in milliseconds during which an element must be outside the visible area to trigger `disappear-action`.
- * @param isEnabled This parameter allows you to disable the action for any reason. When an action is disabled, it stops responding to the event associated with it (click, change in visibility, etc.).
+ * @param isEnabled The parameter disables the action. Disabled actions stop listening to their associated event (clicks, changes in visibility, and so on).
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
