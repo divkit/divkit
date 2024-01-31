@@ -9,6 +9,7 @@ import com.yandex.div.core.TestViewComponentBuilder
 import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.path
+import com.yandex.div.core.svg.SvgDivImageLoader
 import com.yandex.div.core.view2.animations.DIV_STATE_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.state.DivStateSwitcher
@@ -28,10 +29,11 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class Div2ViewTest {
     private val divImageLoader = mock<DivImageLoader>()
+    private val svgDivImageLoader = mock<Lazy<SvgDivImageLoader>>()
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val backingContext = Div2Context(
         baseContext = activity,
-        configuration = DivConfiguration.Builder(divImageLoader).build()
+        configuration = DivConfiguration.Builder(divImageLoader, svgDivImageLoader).build()
     )
     private val stateSwitcher = mock<DivStateSwitcher>()
     private val component = TestComponent(

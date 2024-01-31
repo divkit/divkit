@@ -9,6 +9,7 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
+import com.yandex.div.core.svg.SvgDivImageLoader
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
@@ -40,7 +41,7 @@ fun divConfiguration(
 ): DivConfiguration.Builder {
     val reporter = MetricaUtils.getReporter(activity)
     val flagPreferenceProvider = Container.flagPreferenceProvider
-    return DivConfiguration.Builder(Container.imageLoader)
+    return DivConfiguration.Builder(Container.imageLoader, lazyOf(SvgDivImageLoader()))
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
         .divCustomViewFactory(DemoDivCustomViewFactory())
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))

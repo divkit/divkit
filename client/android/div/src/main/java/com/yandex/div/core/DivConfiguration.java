@@ -15,6 +15,7 @@ import com.yandex.div.core.images.DivImageLoader;
 import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.state.DivStateChangeListener;
+import com.yandex.div.core.svg.SvgDivImageLoader;
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView;
 import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.Lazy;
+
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
  * Create instance using {@link Builder} class.
@@ -38,6 +41,8 @@ public class DivConfiguration {
 
     @NonNull
     private final DivImageLoader mImageLoader;
+    @NonNull
+    private final Lazy<SvgDivImageLoader> mSvgImageLoader;
     @NonNull
     private final DivActionHandler mActionHandler;
     @NonNull
@@ -103,6 +108,7 @@ public class DivConfiguration {
 
     private DivConfiguration(
             @NonNull DivImageLoader imageLoader,
+            @NonNull Lazy<SvgDivImageLoader> svgImageLoader,
             @NonNull DivActionHandler actionHandler,
             @NonNull Div2Logger div2Logger,
             @NonNull DivDataChangeListener divDataChangeListener,
@@ -141,6 +147,7 @@ public class DivConfiguration {
             float recyclerScrollInterceptionAngle
     ) {
         mImageLoader = imageLoader;
+        mSvgImageLoader = svgImageLoader;
         mActionHandler = actionHandler;
         mDiv2Logger = div2Logger;
         mDivDataChangeListener = divDataChangeListener;
@@ -190,6 +197,10 @@ public class DivConfiguration {
     public DivImageLoader getImageLoader() {
         return mImageLoader;
     }
+
+    @Provides
+    @NonNull
+    public Lazy<SvgDivImageLoader> getSvgImageLoader() { return mSvgImageLoader; }
 
     @Provides
     @NonNull
@@ -407,6 +418,8 @@ public class DivConfiguration {
 
         @NonNull
         private final DivImageLoader mImageLoader;
+        @NonNull
+        private final Lazy<SvgDivImageLoader> mSvgImageLoader;
         @Nullable
         private DivActionHandler mActionHandler;
         @Nullable
@@ -465,8 +478,12 @@ public class DivConfiguration {
         private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
 
-        public Builder(@NonNull DivImageLoader imageLoader) {
+        public Builder(
+            @NonNull DivImageLoader imageLoader,
+            @NonNull Lazy<SvgDivImageLoader> svgImageLoader
+        ) {
             mImageLoader = imageLoader;
+            mSvgImageLoader = svgImageLoader;
         }
 
         /**
@@ -728,6 +745,7 @@ public class DivConfiguration {
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
             return new DivConfiguration(
                     mImageLoader,
+                    mSvgImageLoader,
                     mActionHandler == null ? new DivActionHandler() : mActionHandler,
                     mDiv2Logger == null ? Div2Logger.STUB : mDiv2Logger,
                     mDivDataChangeListener == null ? DivDataChangeListener.STUB : mDivDataChangeListener,

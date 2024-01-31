@@ -8,6 +8,7 @@ import com.yandex.div.core.TestComponent
 import com.yandex.div.core.TestViewComponentBuilder
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.svg.SvgDivImageLoader
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
@@ -17,6 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
@@ -51,10 +53,11 @@ class GlobalVariableScopesTest {
         }
 
         private val divImageLoader = mock<DivImageLoader>()
+        private val svgDivImageLoader = mock<Lazy<SvgDivImageLoader>>()
         private val activity = Robolectric.buildActivity(Activity::class.java).get()
         private val div2Context = Div2Context(
                 baseContext = activity,
-                configuration = DivConfiguration.Builder(divImageLoader)
+                configuration = DivConfiguration.Builder(divImageLoader, svgDivImageLoader)
                         .globalVariableController(variableController)
                         .build()
         )

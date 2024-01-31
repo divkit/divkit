@@ -8,6 +8,7 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.svg.SvgDivImageLoader
 import com.yandex.div.core.view2.divs.CONTAINER_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -26,11 +27,12 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class Div2RebindTest {
     private val divImageLoader = mock<DivImageLoader>()
+    private val svgDivImageLoader = mock<Lazy<SvgDivImageLoader>>()
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val div2Context = Div2Context(
         activity,
-        DivConfiguration.Builder(divImageLoader).build()
+        DivConfiguration.Builder(divImageLoader, svgDivImageLoader).build()
     )
 
     private val div2View = Div2View(div2Context)
