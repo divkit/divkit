@@ -1,11 +1,14 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
+import android.graphics.drawable.PictureDrawable
 import android.widget.ImageView
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
-import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.svg.FlexibleDivImageLoader
+import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
@@ -32,7 +35,7 @@ import javax.inject.Inject
 @DivScope
 internal class DivImageBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
-    private val imageLoader: DivImageLoader,
+    private val imageLoader: FlexibleDivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivImage, DivImageView> {
@@ -227,6 +230,7 @@ internal class DivImageBinder @Inject constructor(
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
             synchronous = synchronous,
+            shouldBeRasterized = div.shouldBeRasterized(),
             onSetPlaceholder = { drawable ->
                 if (!isImageLoaded && !isImagePreview) {
                     setPlaceholder(drawable)
@@ -234,10 +238,18 @@ internal class DivImageBinder @Inject constructor(
             },
             onSetPreview = {
                 if (!isImageLoaded) {
-                    currentBitmapWithoutFilters = it
-                    applyFiltersAndSetBitmap(divView, div.filters)
-                    previewLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    when (it) {
+                        is ImageRepresentation.Bitmap -> {
+                            currentBitmapWithoutFilters = (it.value as Bitmap)
+                            applyFiltersAndSetBitmap(divView, div.filters)
+                            previewLoaded()
+                            applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                        }
+                        is ImageRepresentation.PictureDrawable -> {
+                            previewLoaded()
+                            setImageDrawable(it.value as PictureDrawable)
+                        }
+                    }
                 }
             }
         )
@@ -304,6 +316,7 @@ internal class DivImageBinder @Inject constructor(
         this.imageUrl = imageUrl
         val reference = imageLoader.loadImage(
             imageUrl.toString(),
+            div.shouldBeRasterized(),
             object : DivIdLoggingImageDownloadCallback(divView) {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
@@ -312,6 +325,16 @@ internal class DivImageBinder @Inject constructor(
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
                     applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    invalidate()
+                }
+
+                override fun onSuccess(pictureDrawable: PictureDrawable) {
+                    super.onSuccess(pictureDrawable)
+
+                    setImageDrawable(pictureDrawable)
+                    applyLoadingFade(div, resolver, null)
+                    imageLoaded()
+
                     invalidate()
                 }
 
@@ -324,6 +347,14 @@ internal class DivImageBinder @Inject constructor(
 
         divView.addLoadReference(reference, this)
         loadReference = reference
+    }
+
+    /**
+     * Vector format Image doesn't support color and filters.
+     * If color or filters are specified for Image, it should be rasterized.
+     */
+    private fun DivImage.shouldBeRasterized() : Boolean {
+        return tintColor != null || !filters.isNullOrEmpty()
     }
 
     private fun DivImageView.applyLoadingFade(

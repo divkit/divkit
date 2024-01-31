@@ -1,18 +1,19 @@
 package com.yandex.div.core.view2.divs
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
-import android.graphics.drawable.ScaleDrawable
 import android.os.AsyncTask
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.CachedBitmap
-import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.svg.FlexibleDivImageLoader
+import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -37,7 +38,7 @@ private const val GIF_SUFFIX = ".gif"
 @DivScope
 internal class DivGifImageBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
-    private val imageLoader: DivImageLoader,
+    private val imageLoader: FlexibleDivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivGifImage, DivGifImageView> {
@@ -111,7 +112,14 @@ internal class DivGifImageBinder @Inject constructor(
             },
             onSetPreview = {
                 if (!isImageLoaded) {
-                    setPreview(it)
+                    when (it) {
+                        is ImageRepresentation.Bitmap -> {
+                            setPreview(it.value as Bitmap)
+                        }
+                        is ImageRepresentation.PictureDrawable -> {
+                            setPreview(it.value as PictureDrawable)
+                        }
+                    }
                     previewLoaded()
                 }
             }
