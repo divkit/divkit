@@ -1377,6 +1377,42 @@
       "file": "variables/div_variable_trigger_loops.json"
     },
     {
+      "title": "Vector images",
+      "tags": [
+        "Vector",
+        "Vector_images",
+        "Svg"
+      ],
+      "steps": [
+        "Look at the images"
+      ],
+      "expected_results": [
+        "The first image should be a simple image with no effects in black and blue colors.",
+        "The second image should be transparent in black and blue colors.",
+        "The third image should be a simple image with no effects in black and blue colors.",
+        "The fourth image should have a blur effect in black and blue colors.",
+        "The fifth image should be in green color."
+      ],
+      "file": "div_image_vector.json"
+    },
+    {
+      "title": "Vector background images",
+      "tags": [
+        "Vector",
+        "Vector_background_images",
+        "Svg"
+      ],
+      "steps": [
+        "Look at the images"
+      ],
+      "expected_results": [
+        "The first image should be a simple background image with no effects in black and blue colors.",
+        "The second image should be transparent in black and blue colors.",
+        "The third image should have a blur effect in black and blue colors."
+      ],
+      "file": "div_background_vector.json"
+    },
+    {
       "title": "Sequential animations",
       "steps": [
         "Click on image"
