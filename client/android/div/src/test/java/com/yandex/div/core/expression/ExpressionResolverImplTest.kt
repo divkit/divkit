@@ -342,6 +342,25 @@ class ExpressionResolverImplTest {
     }
 
     @Test
+    fun `test nested subscribe to expression`() {
+        var callbackCalled = false
+        underTest.subscribeToExpression(
+            "@{some_number}",
+            listOf("some_number")
+        ) {
+            underTest.subscribeToExpression(
+                "@{some_number+${Any().hashCode()}}",
+                listOf("some_number")
+            ) {
+                callbackCalled = true
+            }
+        }
+        variables["some_number"]?.set("111")
+        variables["some_number"]?.set("112")
+        assert(callbackCalled)
+    }
+
+    @Test
     fun `cache work with converter correctly`() {
         val mutableExpression = mutableExpression<Long>(
             rawExpression = "@{timer}",
