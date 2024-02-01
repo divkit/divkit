@@ -45,7 +45,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue {
       case "weight":
         weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator).merged(with: weightValue)
       case parent?.weight?.link:
-        weightValue = weightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.weightValidator))
+        weightValue = weightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.weightValidator) })
       default: break
       }
     }

@@ -85,23 +85,23 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue {
       case "stroke":
         strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.backgroundColor?.link:
-        backgroundColorValue = backgroundColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        backgroundColorValue = backgroundColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.cornerRadius?.link:
-        cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
+        cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
       case parent?.itemHeight?.link:
-        itemHeightValue = itemHeightValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
+        itemHeightValue = itemHeightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
       case parent?.itemWidth?.link:
-        itemWidthValue = itemWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
+        itemWidthValue = itemWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self))
+        strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      cornerRadiusValue = cornerRadiusValue.merged(with: parent.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      itemHeightValue = itemHeightValue.merged(with: parent.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      itemWidthValue = itemWidthValue.merged(with: parent.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      cornerRadiusValue = cornerRadiusValue.merged(with: { parent.cornerRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      itemHeightValue = itemHeightValue.merged(with: { parent.itemHeight?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      itemWidthValue = itemWidthValue.merged(with: { parent.itemWidth?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       backgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "background_color", error: $0) },

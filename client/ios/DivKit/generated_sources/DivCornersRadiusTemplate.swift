@@ -70,13 +70,13 @@ public final class DivCornersRadiusTemplate: TemplateValue {
       case "top-right":
         topRightValue = deserialize(__dictValue, validator: ResolvedValue.topRightValidator).merged(with: topRightValue)
       case parent?.bottomLeft?.link:
-        bottomLeftValue = bottomLeftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator))
+        bottomLeftValue = bottomLeftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator) })
       case parent?.bottomRight?.link:
-        bottomRightValue = bottomRightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator))
+        bottomRightValue = bottomRightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator) })
       case parent?.topLeft?.link:
-        topLeftValue = topLeftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topLeftValidator))
+        topLeftValue = topLeftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topLeftValidator) })
       case parent?.topRight?.link:
-        topRightValue = topRightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topRightValidator))
+        topRightValue = topRightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topRightValidator) })
       default: break
       }
     }

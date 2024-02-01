@@ -59,14 +59,14 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
         case "selector":
           selectorValue = deserialize(__dictValue).merged(with: selectorValue)
         case parent?.div?.link:
-          divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
+          divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
         case parent?.selector?.link:
-          selectorValue = selectorValue.merged(with: deserialize(__dictValue))
+          selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
         default: break
         }
       }
       if let parent = parent {
-        divValue = divValue.merged(with: parent.div?.resolveValue(context: context, useOnlyLinks: true))
+        divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) })
       }
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
@@ -168,16 +168,16 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue {
       case "prototypes":
         prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).merged(with: prototypesValue)
       case parent?.data?.link:
-        dataValue = dataValue.merged(with: deserialize(__dictValue))
+        dataValue = dataValue.merged(with: { deserialize(__dictValue) })
       case parent?.dataElementName?.link:
-        dataElementNameValue = dataElementNameValue.merged(with: deserialize(__dictValue))
+        dataElementNameValue = dataElementNameValue.merged(with: { deserialize(__dictValue) })
       case parent?.prototypes?.link:
-        prototypesValue = prototypesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self))
+        prototypesValue = prototypesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      prototypesValue = prototypesValue.merged(with: parent.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true))
+      prototypesValue = prototypesValue.merged(with: { parent.prototypes?.resolveValue(context: context, validator: ResolvedValue.prototypesValidator, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       dataValue.errorsOrWarnings?.map { .nestedObjectError(field: "data", error: $0) },

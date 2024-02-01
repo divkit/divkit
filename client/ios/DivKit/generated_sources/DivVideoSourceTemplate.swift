@@ -68,9 +68,9 @@ public final class DivVideoSourceTemplate: TemplateValue {
         case "width":
           widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).merged(with: widthValue)
         case parent?.height?.link:
-          heightValue = heightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.heightValidator))
+          heightValue = heightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.heightValidator) })
         case parent?.width?.link:
-          widthValue = widthValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.widthValidator))
+          widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
         default: break
         }
       }
@@ -198,18 +198,18 @@ public final class DivVideoSourceTemplate: TemplateValue {
       case "url":
         urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
       case parent?.bitrate?.link:
-        bitrateValue = bitrateValue.merged(with: deserialize(__dictValue))
+        bitrateValue = bitrateValue.merged(with: { deserialize(__dictValue) })
       case parent?.mimeType?.link:
-        mimeTypeValue = mimeTypeValue.merged(with: deserialize(__dictValue))
+        mimeTypeValue = mimeTypeValue.merged(with: { deserialize(__dictValue) })
       case parent?.resolution?.link:
-        resolutionValue = resolutionValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self))
+        resolutionValue = resolutionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self) })
       case parent?.url?.link:
-        urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
       default: break
       }
     }
     if let parent = parent {
-      resolutionValue = resolutionValue.merged(with: parent.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      resolutionValue = resolutionValue.merged(with: { parent.resolution?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       bitrateValue.errorsOrWarnings?.map { .nestedObjectError(field: "bitrate", error: $0) },

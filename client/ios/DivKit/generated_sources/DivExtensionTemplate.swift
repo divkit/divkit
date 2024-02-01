@@ -58,9 +58,9 @@ public final class DivExtensionTemplate: TemplateValue {
       case "params":
         paramsValue = deserialize(__dictValue).merged(with: paramsValue)
       case parent?.id?.link:
-        idValue = idValue.merged(with: deserialize(__dictValue))
+        idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.params?.link:
-        paramsValue = paramsValue.merged(with: deserialize(__dictValue))
+        paramsValue = paramsValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

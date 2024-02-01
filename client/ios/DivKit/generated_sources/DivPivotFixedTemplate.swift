@@ -55,9 +55,9 @@ public final class DivPivotFixedTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue).merged(with: valueValue)
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue))
+        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

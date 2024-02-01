@@ -60,17 +60,17 @@ public final class DivTransformTemplate: TemplateValue {
       case "rotation":
         rotationValue = deserialize(__dictValue).merged(with: rotationValue)
       case parent?.pivotX?.link:
-        pivotXValue = pivotXValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self))
+        pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
       case parent?.pivotY?.link:
-        pivotYValue = pivotYValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self))
+        pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
       case parent?.rotation?.link:
-        rotationValue = rotationValue.merged(with: deserialize(__dictValue))
+        rotationValue = rotationValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }
     if let parent = parent {
-      pivotXValue = pivotXValue.merged(with: parent.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      pivotYValue = pivotYValue.merged(with: parent.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      pivotXValue = pivotXValue.merged(with: { parent.pivotX?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      pivotYValue = pivotYValue.merged(with: { parent.pivotY?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },

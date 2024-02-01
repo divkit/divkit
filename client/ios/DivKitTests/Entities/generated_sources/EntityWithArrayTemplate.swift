@@ -55,12 +55,12 @@ public final class EntityWithArrayTemplate: TemplateValue {
       case "array":
         arrayValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self).merged(with: arrayValue)
       case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self))
+        arrayValue = arrayValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      arrayValue = arrayValue.merged(with: parent.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true))
+      arrayValue = arrayValue.merged(with: { parent.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }

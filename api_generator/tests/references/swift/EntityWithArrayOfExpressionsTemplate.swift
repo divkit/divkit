@@ -53,7 +53,7 @@ public final class EntityWithArrayOfExpressionsTemplate: TemplateValue {
       case "items":
         itemsValue = deserialize(__dictValue, validator: ResolvedValue.itemsValidator).merged(with: itemsValue)
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.itemsValidator))
+        itemsValue = itemsValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.itemsValidator) })
       default: break
       }
     }

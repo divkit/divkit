@@ -53,7 +53,7 @@ public final class DivActionFocusElementTemplate: TemplateValue {
       case "element_id":
         elementIdValue = deserialize(__dictValue).merged(with: elementIdValue)
       case parent?.elementId?.link:
-        elementIdValue = elementIdValue.merged(with: deserialize(__dictValue))
+        elementIdValue = elementIdValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

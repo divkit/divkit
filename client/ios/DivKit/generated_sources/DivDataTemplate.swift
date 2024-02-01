@@ -63,14 +63,14 @@ public final class DivDataTemplate: TemplateValue {
         case "state_id":
           stateIdValue = deserialize(__dictValue).merged(with: stateIdValue)
         case parent?.div?.link:
-          divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
+          divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
         case parent?.stateId?.link:
-          stateIdValue = stateIdValue.merged(with: deserialize(__dictValue))
+          stateIdValue = stateIdValue.merged(with: { deserialize(__dictValue) })
         default: break
         }
       }
       if let parent = parent {
-        divValue = divValue.merged(with: parent.div?.resolveValue(context: context, useOnlyLinks: true))
+        divValue = divValue.merged(with: { parent.div?.resolveValue(context: context, useOnlyLinks: true) })
       }
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .nestedObjectError(field: "div", error: $0) },
@@ -206,25 +206,25 @@ public final class DivDataTemplate: TemplateValue {
       case "variables":
         variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).merged(with: variablesValue)
       case parent?.logId?.link:
-        logIdValue = logIdValue.merged(with: deserialize(__dictValue))
+        logIdValue = logIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.states?.link:
-        statesValue = statesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self))
+        statesValue = statesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self) })
       case parent?.timers?.link:
-        timersValue = timersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self))
+        timersValue = timersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self) })
       case parent?.transitionAnimationSelector?.link:
-        transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: deserialize(__dictValue))
+        transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: { deserialize(__dictValue) })
       case parent?.variableTriggers?.link:
-        variableTriggersValue = variableTriggersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self))
+        variableTriggersValue = variableTriggersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self) })
       case parent?.variables?.link:
-        variablesValue = variablesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self))
+        variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      statesValue = statesValue.merged(with: parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true))
-      timersValue = timersValue.merged(with: parent.timers?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      variableTriggersValue = variableTriggersValue.merged(with: parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      variablesValue = variablesValue.merged(with: parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      statesValue = statesValue.merged(with: { parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) })
+      timersValue = timersValue.merged(with: { parent.timers?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variableTriggersValue = variableTriggersValue.merged(with: { parent.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      variablesValue = variablesValue.merged(with: { parent.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },

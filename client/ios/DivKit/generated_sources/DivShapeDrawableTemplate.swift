@@ -77,17 +77,17 @@ public final class DivShapeDrawableTemplate: TemplateValue {
       case "stroke":
         strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.shape?.link:
-        shapeValue = shapeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self))
+        shapeValue = shapeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self) })
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self))
+        strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      shapeValue = shapeValue.merged(with: parent.shape?.resolveValue(context: context, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      shapeValue = shapeValue.merged(with: { parent.shape?.resolveValue(context: context, useOnlyLinks: true) })
+      strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },

@@ -53,7 +53,7 @@ public final class EntityWithRawArrayTemplate: TemplateValue {
       case "array":
         arrayValue = deserialize(__dictValue).merged(with: arrayValue)
       case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: deserialize(__dictValue))
+        arrayValue = arrayValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

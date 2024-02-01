@@ -274,7 +274,7 @@ class SwiftEntity(Entity):
             result += f'    case parent?.{prop.declaration_name}?.link:'
             local_var_name = prop.value_resolving_local_var_name
             deserialize = cast(SwiftProperty, prop).deserialize_from_value_expression
-            result += f'      {local_var_name} = {local_var_name}.merged(with: {deserialize})'
+            result += f'      {local_var_name} = {local_var_name}.merged(with: {{ {deserialize} }})'
         result += '    default: break'
         result += '    }'
         result += '  }'
@@ -285,7 +285,7 @@ class SwiftEntity(Entity):
             for prop in templateable_props:
                 local_var_name = prop.value_resolving_local_var_name
                 merged_with = f'parent.{prop.declaration_name}?.{prop.resolve_value_expression}'
-                result += f'    {local_var_name} = {local_var_name}.merged(with: {merged_with})'
+                result += f'    {local_var_name} = {local_var_name}.merged(with: {{ {merged_with} }})'
             result += '  }'
 
         required_props = list(filter(lambda p: not p.parsed_value_is_optional, template_props))
@@ -783,7 +783,7 @@ class SwiftPropertyType(PropertyType):
             args = ', '.join(args)
             return f'{entity.declaration_prefix}{utils.capitalize_camel_case(entity.original_name)}({args})'
         elif isinstance(self, Dictionary):
-            return f'try! JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""") as! [String: Any]'
+            return f'(try! JSONSerialization.jsonObject(jsonString: """\n{default_value}\n""") as! [String: Any])'
         else:
             return None
 

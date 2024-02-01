@@ -49,7 +49,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
         case "value":
           valueValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: valueValue)
         case parent?.value?.link:
-          valueValue = valueValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+          valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
         default: break
         }
       }
@@ -119,12 +119,12 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue {
       case "property":
         propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self))
+        propertyValue = propertyValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      propertyValue = propertyValue.merged(with: { parent.property?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }

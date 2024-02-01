@@ -53,12 +53,12 @@ public final class DivActionCopyToClipboardTemplate: TemplateValue {
       case "content":
         contentValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionCopyToClipboardContentTemplate.self).merged(with: contentValue)
       case parent?.content?.link:
-        contentValue = contentValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionCopyToClipboardContentTemplate.self))
+        contentValue = contentValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionCopyToClipboardContentTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      contentValue = contentValue.merged(with: parent.content?.resolveValue(context: context, useOnlyLinks: true))
+      contentValue = contentValue.merged(with: { parent.content?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       contentValue.errorsOrWarnings?.map { .nestedObjectError(field: "content", error: $0) }

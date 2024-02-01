@@ -63,14 +63,14 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
         case "property":
           propertyValue = deserialize(__dictValue).merged(with: propertyValue)
         case parent?.entity?.link:
-          entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self))
+          entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
         case parent?.property?.link:
-          propertyValue = propertyValue.merged(with: deserialize(__dictValue))
+          propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
         default: break
         }
       }
       if let parent = parent {
-        entityValue = entityValue.merged(with: parent.entity?.resolveValue(context: context, useOnlyLinks: true))
+        entityValue = entityValue.merged(with: { parent.entity?.resolveValue(context: context, useOnlyLinks: true) })
       }
       var errors = mergeErrors(
         entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) },
@@ -157,12 +157,12 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue {
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self).merged(with: itemsValue)
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self))
+        itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      itemsValue = itemsValue.merged(with: { parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }

@@ -20,6 +20,8 @@ extension DeserializationResult {
     }
   }
 
+  private var hasValue: Bool { value != nil }
+
   public var warnings: NonEmptyArray<DeserializationError>? {
     switch self {
     case let .partialSuccess(_, warnings):
@@ -60,20 +62,30 @@ extension DeserializationResult {
     }
   }
 
-  public func merged(with other: DeserializationResult<T>?) -> DeserializationResult<T> {
-    let mergedValue = value ?? other?.value
-    let mergedErrors: NonEmptyArray<DeserializationError>? =
-      NonEmptyArray(mergeErrors(errorsOrWarnings, other?.errorsOrWarnings))
+  public func merged(with other: () -> DeserializationResult<T>?) -> DeserializationResult<T> {
+    if hasValue {
+      return self
+    } else if let other = other() {
+      if other.hasValue {
+        return other
+      } else if let mergedErrors =
+        NonEmptyArray(mergeErrors(errorsOrWarnings, other.errorsOrWarnings)) {
+        return .failure(mergedErrors)
+      }
+    }
+    return .noValue
+  }
 
-    switch (mergedValue, mergedErrors) {
-    case let (.some(value), .some(warnings)):
-      return .partialSuccess(value, warnings: warnings)
-    case let (.some(value), .none):
-      return .success(value)
-    case let (.none, .some(errors)):
-      return .failure(errors)
-    case (.none, .none):
-      return .noValue
+  public func merged(with other: DeserializationResult<T>?) -> DeserializationResult<T> {
+    if hasValue {
+      self
+    } else if let other, other.hasValue {
+      other
+    } else if let mergedErrors =
+      NonEmptyArray(mergeErrors(errorsOrWarnings, other?.errorsOrWarnings)) {
+      .failure(mergedErrors)
+    } else {
+      .noValue
     }
   }
 }

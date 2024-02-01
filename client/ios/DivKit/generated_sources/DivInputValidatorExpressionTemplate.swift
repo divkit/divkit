@@ -91,13 +91,13 @@ public final class DivInputValidatorExpressionTemplate: TemplateValue {
       case "variable":
         variableValue = deserialize(__dictValue).merged(with: variableValue)
       case parent?.allowEmpty?.link:
-        allowEmptyValue = allowEmptyValue.merged(with: deserialize(__dictValue))
+        allowEmptyValue = allowEmptyValue.merged(with: { deserialize(__dictValue) })
       case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: deserialize(__dictValue))
+        conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
       case parent?.labelId?.link:
-        labelIdValue = labelIdValue.merged(with: deserialize(__dictValue))
+        labelIdValue = labelIdValue.merged(with: { deserialize(__dictValue) })
       case parent?.variable?.link:
-        variableValue = variableValue.merged(with: deserialize(__dictValue))
+        variableValue = variableValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

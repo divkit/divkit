@@ -71,11 +71,11 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
         case "url":
           urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
         case parent?.int?.link:
-          intValue = intValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.intValidator))
+          intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
         case parent?.nonOptional?.link:
-          nonOptionalValue = nonOptionalValue.merged(with: deserialize(__dictValue))
+          nonOptionalValue = nonOptionalValue.merged(with: { deserialize(__dictValue) })
         case parent?.url?.link:
-          urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator))
+          urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
         default: break
         }
       }
@@ -169,16 +169,16 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue {
       case "url":
         urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
       case parent?.int?.link:
-        intValue = intValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.intValidator))
+        intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
       case parent?.nested?.link:
-        nestedValue = nestedValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self))
+        nestedValue = nestedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self) })
       case parent?.url?.link:
-        urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator))
+        urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator) })
       default: break
       }
     }
     if let parent = parent {
-      nestedValue = nestedValue.merged(with: parent.nested?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      nestedValue = nestedValue.merged(with: { parent.nested?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       intValue.errorsOrWarnings?.map { .nestedObjectError(field: "int", error: $0) },

@@ -47,7 +47,7 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue {
       case "json_property":
         jsonPropertyValue = deserialize(__dictValue).merged(with: jsonPropertyValue)
       case parent?.jsonProperty?.link:
-        jsonPropertyValue = jsonPropertyValue.merged(with: deserialize(__dictValue))
+        jsonPropertyValue = jsonPropertyValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

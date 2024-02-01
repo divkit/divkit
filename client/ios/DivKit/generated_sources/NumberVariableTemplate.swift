@@ -67,9 +67,9 @@ public final class NumberVariableTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue).merged(with: valueValue)
       case parent?.name?.link:
-        nameValue = nameValue.merged(with: deserialize(__dictValue))
+        nameValue = nameValue.merged(with: { deserialize(__dictValue) })
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

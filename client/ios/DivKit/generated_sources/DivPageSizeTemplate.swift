@@ -53,12 +53,12 @@ public final class DivPageSizeTemplate: TemplateValue {
       case "page_width":
         pageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self).merged(with: pageWidthValue)
       case parent?.pageWidth?.link:
-        pageWidthValue = pageWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self))
+        pageWidthValue = pageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      pageWidthValue = pageWidthValue.merged(with: parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true))
+      pageWidthValue = pageWidthValue.merged(with: { parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       pageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "page_width", error: $0) }

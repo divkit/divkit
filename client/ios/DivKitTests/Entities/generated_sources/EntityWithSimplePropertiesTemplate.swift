@@ -127,23 +127,23 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       case "url":
         urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
       case parent?.boolean?.link:
-        booleanValue = booleanValue.merged(with: deserialize(__dictValue))
+        booleanValue = booleanValue.merged(with: { deserialize(__dictValue) })
       case parent?.booleanInt?.link:
-        booleanIntValue = booleanIntValue.merged(with: deserialize(__dictValue))
+        booleanIntValue = booleanIntValue.merged(with: { deserialize(__dictValue) })
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.double?.link:
-        doubleValue = doubleValue.merged(with: deserialize(__dictValue))
+        doubleValue = doubleValue.merged(with: { deserialize(__dictValue) })
       case parent?.id?.link:
-        idValue = idValue.merged(with: deserialize(__dictValue))
+        idValue = idValue.merged(with: { deserialize(__dictValue) })
       case parent?.integer?.link:
-        integerValue = integerValue.merged(with: deserialize(__dictValue))
+        integerValue = integerValue.merged(with: { deserialize(__dictValue) })
       case parent?.positiveInteger?.link:
-        positiveIntegerValue = positiveIntegerValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator))
+        positiveIntegerValue = positiveIntegerValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator) })
       case parent?.string?.link:
-        stringValue = stringValue.merged(with: deserialize(__dictValue))
+        stringValue = stringValue.merged(with: { deserialize(__dictValue) })
       case parent?.url?.link:
-        urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
       default: break
       }
     }

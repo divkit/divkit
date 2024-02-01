@@ -53,7 +53,7 @@ public final class ColorValueTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       default: break
       }
     }

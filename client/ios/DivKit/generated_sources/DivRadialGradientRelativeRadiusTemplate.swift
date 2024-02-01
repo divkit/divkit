@@ -55,7 +55,7 @@ public final class DivRadialGradientRelativeRadiusTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

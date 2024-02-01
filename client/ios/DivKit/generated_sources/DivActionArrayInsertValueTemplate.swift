@@ -77,16 +77,16 @@ public final class DivActionArrayInsertValueTemplate: TemplateValue {
       case "variable_name":
         variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
       case parent?.index?.link:
-        indexValue = indexValue.merged(with: deserialize(__dictValue))
+        indexValue = indexValue.merged(with: { deserialize(__dictValue) })
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
       case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: deserialize(__dictValue))
+        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }
     if let parent = parent {
-      valueValue = valueValue.merged(with: parent.value?.resolveValue(context: context, useOnlyLinks: true))
+      valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       indexValue.errorsOrWarnings?.map { .nestedObjectError(field: "index", error: $0) },

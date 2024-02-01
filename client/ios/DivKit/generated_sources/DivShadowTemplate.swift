@@ -78,18 +78,18 @@ public final class DivShadowTemplate: TemplateValue {
       case "offset":
         offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).merged(with: offsetValue)
       case parent?.alpha?.link:
-        alphaValue = alphaValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
+        alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
       case parent?.blur?.link:
-        blurValue = blurValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.blurValidator))
+        blurValue = blurValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.blurValidator) })
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.offset?.link:
-        offsetValue = offsetValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self))
+        offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      offsetValue = offsetValue.merged(with: parent.offset?.resolveValue(context: context, useOnlyLinks: true))
+      offsetValue = offsetValue.merged(with: { parent.offset?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },

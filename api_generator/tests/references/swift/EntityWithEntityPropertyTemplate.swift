@@ -45,12 +45,12 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue {
       case "entity":
         entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).merged(with: entityValue)
       case parent?.entity?.link:
-        entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self))
+        entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      entityValue = entityValue.merged(with: { parent.entity?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       entityValue.errorsOrWarnings?.map { .nestedObjectError(field: "entity", error: $0) }

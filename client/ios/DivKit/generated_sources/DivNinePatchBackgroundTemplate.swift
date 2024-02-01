@@ -67,14 +67,14 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue {
       case "insets":
         insetsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self).merged(with: insetsValue)
       case parent?.imageUrl?.link:
-        imageUrlValue = imageUrlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
       case parent?.insets?.link:
-        insetsValue = insetsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self))
+        insetsValue = insetsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      insetsValue = insetsValue.merged(with: parent.insets?.resolveValue(context: context, useOnlyLinks: true))
+      insetsValue = insetsValue.merged(with: { parent.insets?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
