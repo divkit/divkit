@@ -74,16 +74,16 @@ public final class DivTriggerTemplate: TemplateValue {
       case "mode":
         modeValue = deserialize(__dictValue).merged(with: modeValue)
       case parent?.actions?.link:
-        actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
+        actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self) })
       case parent?.condition?.link:
-        conditionValue = conditionValue.merged(with: deserialize(__dictValue))
+        conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
       case parent?.mode?.link:
-        modeValue = modeValue.merged(with: deserialize(__dictValue))
+        modeValue = modeValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }
     if let parent = parent {
-      actionsValue = actionsValue.merged(with: parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
+      actionsValue = actionsValue.merged(with: { parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },

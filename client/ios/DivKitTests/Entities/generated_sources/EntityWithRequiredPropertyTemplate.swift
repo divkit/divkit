@@ -55,7 +55,7 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue {
       case "property":
         propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.propertyValidator))
+        propertyValue = propertyValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.propertyValidator) })
       default: break
       }
     }

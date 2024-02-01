@@ -63,9 +63,9 @@ public final class DivLinearGradientTemplate: TemplateValue {
       case "colors":
         colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
       case parent?.angle?.link:
-        angleValue = angleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.angleValidator))
+        angleValue = angleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.angleValidator) })
       case parent?.colors?.link:
-        colorsValue = colorsValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator))
+        colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
       default: break
       }
     }

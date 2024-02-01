@@ -53,7 +53,7 @@ public final class DivPhoneInputMaskTemplate: TemplateValue {
       case "raw_text_variable":
         rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
       case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue))
+        rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

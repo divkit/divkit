@@ -48,7 +48,7 @@ public final class DivAspectTemplate: TemplateValue {
       case "ratio":
         ratioValue = deserialize(__dictValue, validator: ResolvedValue.ratioValidator).merged(with: ratioValue)
       case parent?.ratio?.link:
-        ratioValue = ratioValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.ratioValidator))
+        ratioValue = ratioValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.ratioValidator) })
       default: break
       }
     }

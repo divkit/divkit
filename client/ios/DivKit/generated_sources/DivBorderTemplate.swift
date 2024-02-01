@@ -80,22 +80,22 @@ public final class DivBorderTemplate: TemplateValue {
       case "stroke":
         strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.cornerRadius?.link:
-        cornerRadiusValue = cornerRadiusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator))
+        cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
       case parent?.cornersRadius?.link:
-        cornersRadiusValue = cornersRadiusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self))
+        cornersRadiusValue = cornersRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self) })
       case parent?.hasShadow?.link:
-        hasShadowValue = hasShadowValue.merged(with: deserialize(__dictValue))
+        hasShadowValue = hasShadowValue.merged(with: { deserialize(__dictValue) })
       case parent?.shadow?.link:
-        shadowValue = shadowValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self))
+        shadowValue = shadowValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self) })
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self))
+        strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      cornersRadiusValue = cornersRadiusValue.merged(with: parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      shadowValue = shadowValue.merged(with: parent.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      cornersRadiusValue = cornersRadiusValue.merged(with: { parent.cornersRadius?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      shadowValue = shadowValue.merged(with: { parent.shadow?.resolveOptionalValue(context: context, useOnlyLinks: true) })
+      strokeValue = strokeValue.merged(with: { parent.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },

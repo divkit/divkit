@@ -53,7 +53,7 @@ public final class DivPercentageSizeTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
       default: break
       }
     }

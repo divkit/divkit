@@ -53,7 +53,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue {
       case "color":
         colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       default: break
       }
     }

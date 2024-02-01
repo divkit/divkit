@@ -94,17 +94,17 @@ public final class DivAccessibilityTemplate: TemplateValue {
       case "type":
         typeValue = deserialize(__dictValue).merged(with: typeValue)
       case parent?.description?.link:
-        descriptionValue = descriptionValue.merged(with: deserialize(__dictValue))
+        descriptionValue = descriptionValue.merged(with: { deserialize(__dictValue) })
       case parent?.hint?.link:
-        hintValue = hintValue.merged(with: deserialize(__dictValue))
+        hintValue = hintValue.merged(with: { deserialize(__dictValue) })
       case parent?.mode?.link:
-        modeValue = modeValue.merged(with: deserialize(__dictValue))
+        modeValue = modeValue.merged(with: { deserialize(__dictValue) })
       case parent?.muteAfterAction?.link:
-        muteAfterActionValue = muteAfterActionValue.merged(with: deserialize(__dictValue))
+        muteAfterActionValue = muteAfterActionValue.merged(with: { deserialize(__dictValue) })
       case parent?.stateDescription?.link:
-        stateDescriptionValue = stateDescriptionValue.merged(with: deserialize(__dictValue))
+        stateDescriptionValue = stateDescriptionValue.merged(with: { deserialize(__dictValue) })
       case parent?.type?.link:
-        typeValue = typeValue.merged(with: deserialize(__dictValue))
+        typeValue = typeValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

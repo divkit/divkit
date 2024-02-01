@@ -67,9 +67,9 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue {
       case "variable_name":
         variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
       case parent?.index?.link:
-        indexValue = indexValue.merged(with: deserialize(__dictValue))
+        indexValue = indexValue.merged(with: { deserialize(__dictValue) })
       case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: deserialize(__dictValue))
+        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

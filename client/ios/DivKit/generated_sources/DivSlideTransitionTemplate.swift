@@ -87,20 +87,20 @@ public final class DivSlideTransitionTemplate: TemplateValue {
       case "start_delay":
         startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case parent?.distance?.link:
-        distanceValue = distanceValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self))
+        distanceValue = distanceValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
       case parent?.duration?.link:
-        durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
+        durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
       case parent?.edge?.link:
-        edgeValue = edgeValue.merged(with: deserialize(__dictValue))
+        edgeValue = edgeValue.merged(with: { deserialize(__dictValue) })
       case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue))
+        interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
       case parent?.startDelay?.link:
-        startDelayValue = startDelayValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startDelayValidator))
+        startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
       default: break
       }
     }
     if let parent = parent {
-      distanceValue = distanceValue.merged(with: parent.distance?.resolveOptionalValue(context: context, useOnlyLinks: true))
+      distanceValue = distanceValue.merged(with: { parent.distance?.resolveOptionalValue(context: context, useOnlyLinks: true) })
     }
     let errors = mergeErrors(
       distanceValue.errorsOrWarnings?.map { .nestedObjectError(field: "distance", error: $0) },

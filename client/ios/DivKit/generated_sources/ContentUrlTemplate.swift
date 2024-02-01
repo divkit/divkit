@@ -53,7 +53,7 @@ public final class ContentUrlTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
       default: break
       }
     }

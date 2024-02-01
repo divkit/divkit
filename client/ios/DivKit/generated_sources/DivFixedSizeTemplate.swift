@@ -63,9 +63,9 @@ public final class DivFixedSizeTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue))
+        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
       default: break
       }
     }

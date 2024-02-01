@@ -100,19 +100,19 @@ public final class DivEdgeInsetsTemplate: TemplateValue {
       case "unit":
         unitValue = deserialize(__dictValue).merged(with: unitValue)
       case parent?.bottom?.link:
-        bottomValue = bottomValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomValidator))
+        bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
       case parent?.end?.link:
-        endValue = endValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.endValidator))
+        endValue = endValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.endValidator) })
       case parent?.left?.link:
-        leftValue = leftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.leftValidator))
+        leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
       case parent?.right?.link:
-        rightValue = rightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rightValidator))
+        rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
       case parent?.start?.link:
-        startValue = startValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startValidator))
+        startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
       case parent?.top?.link:
-        topValue = topValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topValidator))
+        topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue))
+        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

@@ -53,7 +53,7 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue {
       case "array":
         arrayValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator).merged(with: arrayValue)
       case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator))
+        arrayValue = arrayValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) })
       default: break
       }
     }

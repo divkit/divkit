@@ -13,14 +13,14 @@ public final class EntityWithJsonProperty {
   init(
     jsonProperty: [String: Any]? = nil
   ) {
-    self.jsonProperty = try! jsonProperty ?? JSONSerialization.jsonObject(jsonString: """
+    self.jsonProperty = jsonProperty ?? (try! JSONSerialization.jsonObject(jsonString: """
     {
         "key": "value",
         "items": [
             "value"
         ]
     }
-    """) as! [String: Any]
+    """) as! [String: Any])
   }
 }
 

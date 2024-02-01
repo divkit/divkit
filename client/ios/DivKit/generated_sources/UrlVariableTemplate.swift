@@ -67,9 +67,9 @@ public final class UrlVariableTemplate: TemplateValue {
       case "value":
         valueValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: valueValue)
       case parent?.name?.link:
-        nameValue = nameValue.merged(with: deserialize(__dictValue))
+        nameValue = nameValue.merged(with: { deserialize(__dictValue) })
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.init(string:)) })
       default: break
       }
     }

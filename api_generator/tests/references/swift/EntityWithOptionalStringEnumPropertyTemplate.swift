@@ -47,7 +47,7 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue {
       case "property":
         propertyValue = deserialize(__dictValue).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(__dictValue))
+        propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

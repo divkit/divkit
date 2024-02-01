@@ -53,7 +53,7 @@ public final class DivBlurTemplate: TemplateValue {
       case "radius":
         radiusValue = deserialize(__dictValue, validator: ResolvedValue.radiusValidator).merged(with: radiusValue)
       case parent?.radius?.link:
-        radiusValue = radiusValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.radiusValidator))
+        radiusValue = radiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.radiusValidator) })
       default: break
       }
     }

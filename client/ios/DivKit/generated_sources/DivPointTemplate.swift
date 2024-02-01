@@ -62,15 +62,15 @@ public final class DivPointTemplate: TemplateValue {
       case "y":
         yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: yValue)
       case parent?.x?.link:
-        xValue = xValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self))
+        xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
       case parent?.y?.link:
-        yValue = yValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self))
+        yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
       default: break
       }
     }
     if let parent = parent {
-      xValue = xValue.merged(with: parent.x?.resolveValue(context: context, useOnlyLinks: true))
-      yValue = yValue.merged(with: parent.y?.resolveValue(context: context, useOnlyLinks: true))
+      xValue = xValue.merged(with: { parent.x?.resolveValue(context: context, useOnlyLinks: true) })
+      yValue = yValue.merged(with: { parent.y?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },

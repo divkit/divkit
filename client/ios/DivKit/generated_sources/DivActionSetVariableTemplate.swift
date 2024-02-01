@@ -67,14 +67,14 @@ public final class DivActionSetVariableTemplate: TemplateValue {
       case "variable_name":
         variableNameValue = deserialize(__dictValue).merged(with: variableNameValue)
       case parent?.value?.link:
-        valueValue = valueValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self))
+        valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
       case parent?.variableName?.link:
-        variableNameValue = variableNameValue.merged(with: deserialize(__dictValue))
+        variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }
     if let parent = parent {
-      valueValue = valueValue.merged(with: parent.value?.resolveValue(context: context, useOnlyLinks: true))
+      valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) })
     }
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },

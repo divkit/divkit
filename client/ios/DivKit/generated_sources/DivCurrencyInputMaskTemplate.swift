@@ -63,9 +63,9 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue {
       case "raw_text_variable":
         rawTextVariableValue = deserialize(__dictValue).merged(with: rawTextVariableValue)
       case parent?.locale?.link:
-        localeValue = localeValue.merged(with: deserialize(__dictValue))
+        localeValue = localeValue.merged(with: { deserialize(__dictValue) })
       case parent?.rawTextVariable?.link:
-        rawTextVariableValue = rawTextVariableValue.merged(with: deserialize(__dictValue))
+        rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
       default: break
       }
     }

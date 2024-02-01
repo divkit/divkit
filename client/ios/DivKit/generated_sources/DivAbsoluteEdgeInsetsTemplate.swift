@@ -70,13 +70,13 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue {
       case "top":
         topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
       case parent?.bottom?.link:
-        bottomValue = bottomValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomValidator))
+        bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
       case parent?.left?.link:
-        leftValue = leftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.leftValidator))
+        leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
       case parent?.right?.link:
-        rightValue = rightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rightValidator))
+        rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
       case parent?.top?.link:
-        topValue = topValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topValidator))
+        topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
       default: break
       }
     }

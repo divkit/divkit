@@ -68,11 +68,11 @@ public final class DivStrokeTemplate: TemplateValue {
       case "width":
         widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).merged(with: widthValue)
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
       case parent?.unit?.link:
-        unitValue = unitValue.merged(with: deserialize(__dictValue))
+        unitValue = unitValue.merged(with: { deserialize(__dictValue) })
       case parent?.width?.link:
-        widthValue = widthValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.widthValidator))
+        widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
       default: break
       }
     }
