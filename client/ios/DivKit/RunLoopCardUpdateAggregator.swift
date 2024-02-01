@@ -42,6 +42,11 @@ final class RunLoopCardUpdateAggregator {
     batch = []
     updateCardAction(reasons)
   }
+  
+  func forceUpdate() {
+    batch.append(.variable(.all))
+    flushUpdateActions()
+  }
 }
 
 extension [DivActionURLHandler.UpdateReason] {

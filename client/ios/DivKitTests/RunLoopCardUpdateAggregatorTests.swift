@@ -71,6 +71,12 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
 
     XCTAssertEqual([], updateReasons)
   }
+  
+  func test_ForceUpdate_CallsUpdateCardAction() {
+    updateReasons = []
+    aggregator.forceUpdate()
+    XCTAssertEqual([.variable(.all)], updateReasons)
+  }
 }
 
 extension DivActionURLHandler.UpdateReason: Equatable {

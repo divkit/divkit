@@ -329,6 +329,10 @@ public final class DivKitComponents {
   public func flushUpdateActions() {
     updateAggregator.flushUpdateActions()
   }
+  
+  public func forceUpdate() {
+    updateAggregator.forceUpdate()
+  }
 
   private func onVariablesChanged(event: DivVariablesStorage.ChangeEvent) {
     switch event.kind {
