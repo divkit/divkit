@@ -1,3 +1,23 @@
+## 29.5.0
+
+# Android Client:
+* Supported functions `getArrayFromDict`, `getDictFromDict`, `getOptArrayFromDict`, `getOptDictFromDict`.
+* Supported accessibility for `slider`.
+* Added type `auto` for accessibility.
+* Fixed visibility actions not working for items children inside `div-pager` and `div-tabs`.
+
+# iOS Client:
+* Fixed cursor position in the text with emoji.
+* Improved `DivData` parsing.
+
+# Web Client:
+* Fixed several input issues in the `slider` with two thumbs.
+* Fixed `gallery` markup in several cases.
+* Fixed `input` focus outlines in several cases.
+* Fixed a processing error when setting an incorrect value for the `integer` variable.
+* Fixed an issue with the `state` patches.
+
+
 ## 29.4.0
 
 # Android Client:
