@@ -8,7 +8,7 @@
 
 # iOS Client:
 * Fixed cursor position in the text with emoji.
-* Improved `DivData` parsing with `Templates`.
+* Improved `DivData` parsing.
 
 # Web Client:
 * Fixed several input issues in the `slider` with two thumbs.
