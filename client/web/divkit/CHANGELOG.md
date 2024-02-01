@@ -1,3 +1,12 @@
+## 29.5.0 (February 5, 2024)
+
+* Fixed several input issues in the `slider` with two thumbs.
+* Fixed `gallery` markup in several cases.
+* Fixed `input` focus outlines in several cases.
+* Fixed a processing error when setting an incorrect value for the `integer` variable.
+* Fixed an issue with the `state` patches.
+
+
 ## 29.4.0 (January 29, 2024)
 
 * Added `item_builder` property support in the `container` component.
