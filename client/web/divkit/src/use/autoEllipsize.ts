@@ -4,24 +4,30 @@ import { debounce } from '../utils/debounce';
 export interface AutoEllipsizeOptions {
     enabled: BooleanInt | undefined;
     lineClamp: number | undefined;
+    maxLines: number | undefined;
 }
 
 export function autoEllipsize(node: HTMLElement, opts: AutoEllipsizeOptions) {
     let resizeObserver: ResizeObserver | null = null;
 
     const recalc = () => {
+        const computedStyle = getComputedStyle(node);
+        const lineHeight = parseFloat(computedStyle.lineHeight);
+
         node.style.webkitLineClamp = '';
         node.style.maxHeight = '';
 
         const offsetHeight = node.offsetHeight;
         const scrollHeight = node.scrollHeight;
-        const lineHeight = parseFloat(getComputedStyle(node).lineHeight);
 
         if (scrollHeight <= offsetHeight + 1e-9) {
             return;
         }
 
-        const lines = Math.max(1, Math.floor(offsetHeight / lineHeight));
+        let lines = Math.max(1, Math.floor(offsetHeight / lineHeight));
+        if (opts.maxLines && opts.maxLines < lines) {
+            lines = opts.maxLines;
+        }
 
         node.style.webkitLineClamp = String(lines);
         node.style.maxHeight = lineHeight * lines + 'px';

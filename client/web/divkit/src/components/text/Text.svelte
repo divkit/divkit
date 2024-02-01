@@ -42,6 +42,7 @@
     let lineHeight = 1.25;
     let customLineHeight = false;
     let maxHeight = '';
+    let maxLines: number | undefined;
     let lineClamp: string | number = '';
     let multiline = false;
     let halign: AlignmentHorizontal = 'start';
@@ -71,6 +72,7 @@
         lineHeight = 1.25;
         customLineHeight = false;
         maxHeight = '';
+        maxLines = undefined;
         lineClamp = '';
         multiline = false;
         halign = 'start';
@@ -127,13 +129,15 @@
     $: singleline = $jsonMaxLines === 1;
     $: {
         let newMaxHeight = '';
+        let newMaxLines: number | undefined;
         let newLineClamp: string | number = '';
         let newMultiline = false;
 
         if ($jsonMaxLines && $jsonMaxLines > 1) {
-            let lines = Number($jsonMaxLines);
+            const lines = Number($jsonMaxLines);
 
             newMaxHeight = lines * lineHeight + 'em';
+            newMaxLines = lines;
             newLineClamp = lines;
             newMultiline = true;
         } else if ($jsonAutoEllipsize && $jsonMaxLines !== 1) {
@@ -141,6 +145,7 @@
         }
 
         maxHeight = newMaxHeight;
+        maxLines = newMaxLines;
         lineClamp = newLineClamp;
         multiline = newMultiline;
     }
@@ -421,7 +426,8 @@
         style={makeStyle(style)}
         use:autoEllipsize={{
             enabled: $jsonAutoEllipsize,
-            lineClamp: typeof lineClamp === 'number' ? lineClamp : undefined
+            lineClamp: typeof lineClamp === 'number' ? lineClamp : undefined,
+            maxLines
         }}
     >
         {#if renderList.length}
