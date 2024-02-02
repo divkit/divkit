@@ -5,6 +5,7 @@
 * Supported accessibility for `slider`.
 * Added type `auto` for accessibility.
 * Fixed visibility actions not working for items children inside `div-pager` and `div-tabs`.
+* Fixed border redrawing after rebind.
 
 # iOS Client:
 * Fixed cursor position in the text with emoji.

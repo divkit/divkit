@@ -44,5 +44,6 @@ internal class DivBorderSupportsMixin: DivBorderSupports {
             }
         }
         borderDrawer?.needClipping = needClipping
+        view.invalidate()
     }
 }
