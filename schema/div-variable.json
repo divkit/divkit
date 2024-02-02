@@ -237,11 +237,7 @@
       "$ref": "#/definitions/dict_variable"
     },
     {
-      "$ref": "#/definitions/array_variable",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$ref": "#/definitions/array_variable"
     }
   ]
 }
