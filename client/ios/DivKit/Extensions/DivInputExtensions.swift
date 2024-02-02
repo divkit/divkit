@@ -45,6 +45,11 @@ extension DivInput: DivBlockModeling {
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
+    let inputPath = context.parentPath + (id ?? DivInput.type)
+    let isFocused = context.blockStateStorage.isFocused(
+      element: IdAndCardId(path: inputPath)
+    )
+
     return TextInputBlock(
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
@@ -58,7 +63,8 @@ extension DivInput: DivBlockModeling {
       maxVisibleLines: resolveMaxVisibleLines(expressionResolver),
       selectAllOnFocus: resolveSelectAllOnFocus(expressionResolver),
       maskValidator: mask?.makeMaskValidator(expressionResolver),
-      path: context.parentPath,
+      path: inputPath,
+      isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView,

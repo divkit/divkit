@@ -12,12 +12,15 @@ public final class DivActionHandler {
   private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
   private let persistentValuesStorage: DivPersistentValuesStorage
+  private let blockStateStorage: DivBlockStateStorage
+  private let updateCard: DivActionURLHandler.UpdateCardAction
   private let reporter: DivReporter
 
   private let setVariableActionHandler: SetVariableActionHandler
   private let arrayInsertValueActionHandler: ArrayInsertValueActionHandler
   private let arrayRemoveValueActionHandler: ArrayRemoveValueActionHandler
   private let copyToClipboardActionHandler: CopyToClipboardActionHandler
+  private let focusElementActionHandler: FocusElementActionHandler
 
   init(
     divActionURLHandler: DivActionURLHandler,
@@ -27,6 +30,8 @@ public final class DivActionHandler {
     trackDisappear: @escaping TrackVisibility,
     variablesStorage: DivVariablesStorage,
     persistentValuesStorage: DivPersistentValuesStorage,
+    blockStateStorage: DivBlockStateStorage,
+    updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     reporter: DivReporter
   ) {
     self.divActionURLHandler = divActionURLHandler
@@ -36,12 +41,15 @@ public final class DivActionHandler {
     self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
     self.persistentValuesStorage = persistentValuesStorage
+    self.blockStateStorage = blockStateStorage
+    self.updateCard = updateCard
     self.reporter = reporter
 
     setVariableActionHandler = SetVariableActionHandler()
     arrayInsertValueActionHandler = ArrayInsertValueActionHandler()
     arrayRemoveValueActionHandler = ArrayRemoveValueActionHandler()
     copyToClipboardActionHandler = CopyToClipboardActionHandler()
+    focusElementActionHandler = FocusElementActionHandler()
   }
 
   public convenience init(
@@ -78,6 +86,8 @@ public final class DivActionHandler {
       trackDisappear: trackDisappear,
       variablesStorage: variablesStorage,
       persistentValuesStorage: persistentValuesStorage,
+      blockStateStorage: blockStateStorage,
+      updateCard: updateCard,
       reporter: reporter ?? DefaultDivReporter()
     )
   }
@@ -117,7 +127,9 @@ public final class DivActionHandler {
     let context = DivActionHandlingContext(
       cardId: cardId,
       expressionResolver: expressionResolver,
-      variablesStorage: variablesStorage
+      variablesStorage: variablesStorage,
+      blockStateStorage: blockStateStorage,
+      updateCard: updateCard
     )
 
     var isHandled = true
@@ -130,10 +142,9 @@ public final class DivActionHandler {
       arrayRemoveValueActionHandler.handle(action, context: context)
     case let .divActionCopyToClipboard(action):
       copyToClipboardActionHandler.handle(action, context: context)
+    case let .divActionFocusElement(action):
+      focusElementActionHandler.handle(action, context: context)
     case .none:
-      isHandled = false
-    default:
-      DivKitLogger.error("Action not supported")
       isHandled = false
     }
 

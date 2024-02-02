@@ -3,8 +3,24 @@ import Foundation
 import BaseTinyPublic
 import LayoutKit
 
+public struct IdAndCardId: Hashable {
+  let id: String
+  let cardId: DivCardID
+
+  public init(id: String, cardId: DivCardID) {
+    self.id = id
+    self.cardId = cardId
+  }
+
+  public init(path: UIElementPath) {
+    id = path.leaf
+    cardId = DivCardID(rawValue: path.root)
+  }
+}
+
 public final class DivBlockStateStorage {
   public private(set) var states: BlocksState
+  var focusedElement: IdAndCardId?
   private var statesById: [IdAndCardId: ElementState] = [:]
   private let lock = RWLock()
 
@@ -48,10 +64,29 @@ public final class DivBlockStateStorage {
     }
   }
 
+  public func setFocused(isFocused: Bool, element: IdAndCardId) {
+    lock.write {
+      if isFocused {
+        focusedElement = element
+      } else {
+        if focusedElement == element {
+          focusedElement = nil
+        }
+      }
+    }
+  }
+
+  public func isFocused(element: IdAndCardId) -> Bool {
+    lock.read {
+      focusedElement == element
+    }
+  }
+
   public func reset() {
     lock.write {
       states = [:]
       statesById = [:]
+      focusedElement = nil
     }
   }
 
@@ -59,6 +94,9 @@ public final class DivBlockStateStorage {
     lock.write {
       states = states.filter { $0.key.root != cardId.rawValue }
       statesById = statesById.filter { $0.key.cardId != cardId }
+      if focusedElement?.cardId == cardId {
+        focusedElement = nil
+      }
     }
   }
 }
@@ -68,22 +106,11 @@ extension DivBlockStateStorage: ElementStateObserver {
     setState(path: path, state: state)
   }
 
+  public func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
+    setFocused(isFocused: isFocused, element: IdAndCardId(path: path))
+  }
+
   func state(for path: UIElementPath) -> ElementState? {
     getStateUntyped(path)
-  }
-}
-
-private struct IdAndCardId: Hashable {
-  let id: String
-  let cardId: DivCardID
-
-  init(id: String, cardId: DivCardID) {
-    self.id = id
-    self.cardId = cardId
-  }
-
-  init(path: UIElementPath) {
-    id = path.leaf
-    cardId = DivCardID(rawValue: path.root)
   }
 }

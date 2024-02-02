@@ -33,6 +33,24 @@
       "file": "actions/copy-to-clipboard.json"
     },
     {
+      "title": "Focus action",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "click on Focus 1, 2, 3 button",
+        "click on \"Change state and focus\""
+      ],
+      "expected_results": [
+        "related element is selected",
+        "button changes to input and it gets focus"
+      ],
+      "file": "actions/focus-element-mobile.json"
+    },
+    {
       "title": "Simple tap",
       "tags": [
         "DivAction"

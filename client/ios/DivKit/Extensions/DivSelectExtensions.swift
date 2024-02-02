@@ -48,6 +48,11 @@ extension DivSelect: DivBlockModeling {
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
     let onBlurActions = focus?.onBlur?.uiActions(context: context) ?? []
 
+    let selectPath = context.parentPath + (id ?? DivSelect.type)
+    let isFocused = context.blockStateStorage.isFocused(
+      element: IdAndCardId(path: selectPath)
+    )
+
     return TextInputBlock(
       widthTrait: resolveContentWidthTrait(context),
       heightTrait: resolveContentHeightTrait(context),
@@ -56,7 +61,8 @@ extension DivSelect: DivBlockModeling {
       rawTextValue: nil,
       textTypo: textTypo,
       inputType: makeInputType(expressionResolver),
-      path: context.parentPath,
+      path: selectPath,
+      isFocused: isFocused,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView,

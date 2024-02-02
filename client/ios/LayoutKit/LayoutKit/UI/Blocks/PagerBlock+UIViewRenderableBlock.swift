@@ -149,6 +149,10 @@ extension PagerView: ElementStateObserver {
       )
     }
   }
+
+  func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
+    observer?.focusedElementChanged(isFocused: isFocused, forPath: path)
+  }
 }
 
 extension PagerView: VisibleBoundsTrackingContainer {

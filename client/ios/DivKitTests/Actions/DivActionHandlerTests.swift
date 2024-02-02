@@ -33,20 +33,6 @@ final class DivActionHandlerTests: XCTestCase {
     XCTAssertEqual(url("https://some.url"), handledUrl)
   }
 
-  func test_UrlPassedToUrlHandler_IfTypedActionNotHandled() {
-    handle(
-      DivAction(
-        logId: "test_log_id",
-        typed: .divActionFocusElement(
-          DivActionFocusElement(elementId: .value("id"))
-        ),
-        url: .value(url("https://some.url"))
-      )
-    )
-
-    XCTAssertEqual(url("https://some.url"), handledUrl)
-  }
-
   func test_UrlNotPassedToUrlHandler_IfTypedActionHandled() {
     handle(
       DivAction(

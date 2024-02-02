@@ -65,11 +65,37 @@ final class DivBlockStateStorageTests: XCTestCase {
     XCTAssertNil(storage.getStateUntyped("id", cardId: "card_id"))
   }
 
+  func test_Reset_ResetsFocusedElement() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
+    storage.reset()
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
   func test_Reset_ResettingByCardId() {
     storage.setState(id: "id", cardId: "card_id", state: state1)
     storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state2)
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
     storage.reset(cardId: "card_id")
     XCTAssertNil(storage.getStateUntyped("id", cardId: "card_id"))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_SetFocused_StoresLast() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id_1", cardId: "card_id_1"))
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id_2", cardId: "card_id_2"))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_2", cardId: "card_id_2")))
+  }
+
+  func test_IfElementFocused_Unfocuses() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
+    storage.setFocused(isFocused: false, element: IdAndCardId(id: "id", cardId: "card_id"))
+    XCTAssertFalse(storage.isFocused(element: IdAndCardId(id: "id", cardId: "card_id")))
+  }
+
+  func test_IfElementNotFocused_DoesNothing() {
+    storage.setFocused(isFocused: true, element: IdAndCardId(id: "id_1", cardId: "card_id_1"))
+    storage.setFocused(isFocused: false, element: IdAndCardId(id: "id_2", cardId: "card_id_2"))
+    XCTAssertTrue(storage.isFocused(element: IdAndCardId(id: "id_1", cardId: "card_id_1")))
   }
 }
 

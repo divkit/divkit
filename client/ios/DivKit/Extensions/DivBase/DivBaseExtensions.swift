@@ -56,9 +56,10 @@ extension DivBase {
     visibilityActions += makeDisappearActions(context: context)
     let hasVisibilityActions = !visibilityActions.isEmpty
 
-    let focusState: FocusViewState = context.blockStateStorage
-      .getState(context.parentPath) ?? .default
-    let border = getBorder(focusState)
+    let isFocused = context.blockStateStorage.isFocused(
+      element: IdAndCardId(path: context.parentPath)
+    )
+    let border = getBorder(isFocused)
 
     let boundary: BoundaryTrait?
     if !clipToBounds {
@@ -78,7 +79,7 @@ extension DivBase {
     )
 
     block = try applyBackground(
-      getBackground(focusState),
+      getBackground(isFocused),
       to: block,
       context: context
     )
@@ -126,15 +127,15 @@ extension DivBase {
     )
   }
 
-  private func getBackground(_ focusState: FocusViewState) -> [DivBackground]? {
-    guard focusState.isFocused else {
+  private func getBackground(_ isFocused: Bool) -> [DivBackground]? {
+    guard isFocused else {
       return background
     }
     return focus?.background ?? background
   }
 
-  private func getBorder(_ focusState: FocusViewState) -> DivBorder? {
-    guard focusState.isFocused else {
+  private func getBorder(_ isFocused: Bool) -> DivBorder? {
+    guard isFocused else {
       return border
     }
     return focus?.border ?? border

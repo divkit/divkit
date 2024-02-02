@@ -31,6 +31,7 @@ extension TextInputBlock {
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setParentScrollView(parentScrollView)
+    inputView.setIsFocused(isFocused)
     inputView.setOnFocusActions(onFocusActions)
     inputView.setOnBlurActions(onBlurActions)
     inputView.setPath(path)
@@ -66,6 +67,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
   private var textAlignmentVertical: TextInputBlock.TextAlignmentVertical = .center
+  private var isInputFocused = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -124,6 +126,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   @objc func onTapGesture(sender _: UITapGestureRecognizer) {
+    focusTextInput()
+  }
+
+  private func focusTextInput() {
     if singleLineInput.isHidden {
       multiLineInput.becomeFirstResponder()
     } else {
@@ -188,6 +194,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setParentScrollView(_ parentScrollView: ScrollView?) {
     self.parentScrollView = parentScrollView
+  }
+
+  func setIsFocused(_ isFocused: Bool) {
+    isInputFocused = isFocused
+    if isFocused {
+      focusTextInput()
+    }
   }
 
   func setOnFocusActions(_ onFocusActions: [UserInterfaceAction]) {
@@ -319,6 +332,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override func didMoveToWindow() {
     if window != nil {
       startKeyboardTracking()
+      if isInputFocused {
+        focusTextInput()
+      }
     } else {
       stopAllTracking()
     }
@@ -443,14 +459,16 @@ extension TextInputBlockView {
 
   private func onFocus() {
     onFocusActions.perform(sendingFrom: self)
+    isInputFocused = true
     guard let path else { return }
-    observer?.elementStateChanged(FocusViewState(isFocused: true), forPath: path)
+    observer?.focusedElementChanged(isFocused: true, forPath: path)
   }
 
   private func onBlur() {
     onBlurActions.perform(sendingFrom: self)
+    isInputFocused = false
     guard let path else { return }
-    observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
+    observer?.focusedElementChanged(isFocused: false, forPath: path)
   }
 
   private func inputViewReplaceTextIn(view _: UIView, range: Range<String.Index>, text: String) -> Bool {
