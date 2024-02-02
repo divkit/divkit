@@ -195,6 +195,7 @@ extension DivVariablesStorage: DivVariableUpdater {
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) {
+    var changeEvent: ChangeEvent? = nil
     lock.write {
       var variables = cardVariables[cardId]
       if let oldValue = variables?[name] {
@@ -204,16 +205,17 @@ extension DivVariablesStorage: DivVariableUpdater {
         let oldValues = allValues
         variables?[name] = newValue
         cardVariables[cardId] = variables
-        notify(
-          ChangeEvent(
-            kind: .local(cardId, [name]),
-            oldValues: oldValues,
-            newValues: allValues
-          )
+        changeEvent = ChangeEvent(
+          kind: .local(cardId, [name]),
+          oldValues: oldValues,
+          newValues: allValues
         )
       } else {
         globalStorage.update(name: name, valueFactory: valueFactory)
       }
+    }
+    if let changeEvent {
+      notify(changeEvent)
     }
   }
 }

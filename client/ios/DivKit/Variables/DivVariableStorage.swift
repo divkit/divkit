@@ -19,8 +19,12 @@ public final class DivVariableStorage {
   /// Gets all available variables including variables from outer storage.
   public var allValues: DivVariables {
     lock.read {
-      (outerStorage?.allValues ?? [:]) + values
+      _allValues
     }
+  }
+
+  private var _allValues: DivVariables {
+    (outerStorage?.allValues ?? [:]) + values
   }
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
@@ -69,12 +73,13 @@ public final class DivVariableStorage {
   /// Updates variable value if a variable with the given name already exists.
   /// Does not affect outer storage.
   public func put(name: DivVariableName, value: DivVariableValue) {
+    var oldValues: DivVariables = [:]
     lock.write {
-      let oldValues = allValues
+      oldValues = _allValues
       values[name] = value
-      if oldValues[name] != value {
-        notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
-      }
+    }
+    if oldValues[name] != value {
+      notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
     }
   }
 
@@ -85,20 +90,20 @@ public final class DivVariableStorage {
     _ variables: DivVariables,
     notifyObservers: Bool = true
   ) {
+    let oldValues = allValues
+    var changedVariables = Set<DivVariableName>()
     lock.write {
-      let oldValues = allValues
       values = values + variables
       if notifyObservers {
-        var changedVariables = Set<DivVariableName>()
         for (name, value) in variables {
           if oldValues[name] != value {
             changedVariables.insert(name)
           }
         }
-        if !changedVariables.isEmpty {
-          notify(ChangeEvent(changedVariables: changedVariables, oldValues: oldValues))
-        }
       }
+    }
+    if !changedVariables.isEmpty {
+      notify(ChangeEvent(changedVariables: changedVariables, oldValues: oldValues))
     }
   }
 
