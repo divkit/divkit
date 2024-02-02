@@ -9,7 +9,7 @@ extension DivContainer: DivBlockModeling {
       to: { try makeBaseBlock(context: context) },
       context: context,
       actionsHolder: self,
-      customA11yDescriptionProvider: { [unowned self] in
+      customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
         resolveAccessibilityDescription(context)
       },
       clipToBounds: resolveClipToBounds(context.expressionResolver)

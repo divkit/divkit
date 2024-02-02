@@ -5,7 +5,7 @@ extension DivAccessibility {
   func resolve(
     _ expressionResolver: ExpressionResolver,
     id: String?,
-    customDescriptionProvider: (() -> String?)?
+    customParams: CustomAccessibilityParams
   ) -> AccessibilityElement {
     if resolveMode(expressionResolver) == .exclude {
       return AccessibilityElement(
@@ -16,17 +16,17 @@ extension DivAccessibility {
     }
 
     var label: String? = nil
-    if let customDescriptionProvider {
+    if let customDescriptionProvider = customParams.descriptionProvider {
       label = customDescriptionProvider()
     } else if let description = resolveDescription(expressionResolver) {
       label = description
     }
-    if label == nil, type != nil {
+    if label == nil, type != .auto {
       label = ""
     }
 
     return AccessibilityElement(
-      traits: traits,
+      traits: traits ?? customParams.defaultTraits,
       strings: AccessibilityElement.Strings(
         label: label,
         hint: resolveHint(expressionResolver),
@@ -38,7 +38,7 @@ extension DivAccessibility {
     )
   }
 
-  private var traits: AccessibilityElement.Traits {
+  private var traits: AccessibilityElement.Traits? {
     switch type {
     case .button:
       return .button
@@ -54,9 +54,26 @@ extension DivAccessibility {
       return .tabBar
     case .select:
       DivKitLogger.warning("Unsupported accessibility type")
-      return .none
-    case .list, .none?, nil:
-      return .none
+      return AccessibilityElement.Traits.none
+    case .none, .list:
+      return AccessibilityElement.Traits.none
+    case .auto:
+      return nil
     }
+  }
+}
+
+struct CustomAccessibilityParams {
+  static let `default` = CustomAccessibilityParams()
+  
+  let defaultTraits: AccessibilityElement.Traits
+  let descriptionProvider: (() -> String?)?
+  
+  init(
+    defaultTraits: AccessibilityElement.Traits = .none,
+    descriptionProvider: (() -> String?)? = nil
+  ) {
+    self.defaultTraits = defaultTraits
+    self.descriptionProvider = descriptionProvider
   }
 }

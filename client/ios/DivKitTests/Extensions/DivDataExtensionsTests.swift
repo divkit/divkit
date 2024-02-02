@@ -81,7 +81,7 @@ final class DivDataExtensionsTests: XCTestCase {
         items: [
           divText(
             text: "0",
-            width: divFixedSize(10)
+            width: fixedSize(10)
           ),
         ]
       )

@@ -22,12 +22,28 @@ func divData(_ div: Div) -> DivData {
   )
 }
 
+func divGifImage(
+  accessibility: DivAccessibility? = nil,
+  gifUrl: String,
+  height: DivSize? = nil,
+  width: DivSize? = nil
+) -> Div {
+  .divGifImage(DivGifImage(
+    accessibility: accessibility,
+    gifUrl: .value(url(gifUrl)),
+    height: height,
+    width: width
+  ))
+}
+
 func divImage(
+  accessibility: DivAccessibility? = nil,
   height: DivSize? = nil,
   imageUrl: String,
   width: DivSize? = nil
 ) -> Div {
   .divImage(DivImage(
+    accessibility: accessibility,
     height: height,
     imageUrl: .value(url(imageUrl)),
     width: width
@@ -375,6 +391,10 @@ func divTabsItem(
   )
 }
 
-func divFixedSize(_ value: Int) -> DivSize {
+func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
+}
+
+func wrapContentSize() -> DivSize {
+  .divWrapContentSize(DivWrapContentSize())
 }

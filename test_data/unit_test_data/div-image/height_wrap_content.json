@@ -1,7 +1,0 @@
-{
-  "type": "image",
-  "image_url": "https://yastatic.net/s3/home/divkit/chess.png",
-  "height": {
-    "type": "wrap_content"
-  }
-}

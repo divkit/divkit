@@ -72,7 +72,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 text: "Hello!".withTypo(),
                 verticalAlignment: .leading
               ),
-              accessibilityElement: accessibility(label: "Hello!")
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Hello!"
+              )
             ),
           ]
         ),
@@ -112,7 +115,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 text: "Item 1".withTypo(),
                 verticalAlignment: .leading
               ),
-              accessibilityElement: accessibility(label: "Item 1")
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Item 1"
+              )
             ),
             DecoratingBlock(
               child: TextBlock(
@@ -120,7 +126,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 text: "Item 2".withTypo(),
                 verticalAlignment: .leading
               ),
-              accessibilityElement: accessibility(label: "Item 2")
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Item 2"
+              )
             ),
           ]
         ),
@@ -160,7 +169,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 text: "itemBuilder".withTypo(),
                 verticalAlignment: .leading
               ),
-              accessibilityElement: accessibility(label: "itemBuilder")
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "itemBuilder"
+              )
             ),
           ]
         ),
@@ -205,7 +217,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                 text: "Hello!".withTypo(),
                 verticalAlignment: .leading
               ),
-              accessibilityElement: accessibility(label: "Hello!")
+              accessibilityElement: accessibility(
+                traits: .staticText,
+                label: "Hello!"
+              )
             ),
             DecoratingBlock(
               child: TextBlock(
@@ -225,7 +240,10 @@ final class DivContainerExtensionsTests: XCTestCase {
                       text: "Nested item".withTypo(),
                       verticalAlignment: .leading
                     ),
-                    accessibilityElement: accessibility(label: "Nested item")
+                    accessibilityElement: accessibility(
+                      traits: .staticText,
+                      label: "Nested item"
+                    )
                   ),
                 ]
               ),

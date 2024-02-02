@@ -19,7 +19,10 @@ final class DivTextExtensionsTests: XCTestCase {
           text: "Hello!".withTypo(),
           verticalAlignment: .leading
         ),
-        accessibilityElement: accessibility(label: "Hello!")
+        accessibilityElement: accessibility(
+          traits: .staticText,
+          label: "Hello!"
+        )
       ),
       ids: []
     )
@@ -84,7 +87,10 @@ final class DivTextExtensionsTests: XCTestCase {
           uiAction(logId: "action_log_id", url: "https://some.url")
         ),
         actionAnimation: .default,
-        accessibilityElement: accessibility(label: "Hello!")
+        accessibilityElement: accessibility(
+          traits: .staticText,
+          label: "Hello!"
+        )
       ),
       ids: []
     )

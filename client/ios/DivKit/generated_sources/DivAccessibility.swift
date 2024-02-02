@@ -16,6 +16,7 @@ public final class DivAccessibility {
     case tabBar = "tab_bar"
     case list = "list"
     case select = "select"
+    case auto = "auto"
   }
 
   @frozen
@@ -30,7 +31,7 @@ public final class DivAccessibility {
   public let mode: Expression<Mode> // default value: default
   public let muteAfterAction: Expression<Bool> // default value: false
   public let stateDescription: Expression<String>?
-  public let type: Kind?
+  public let type: Kind // default value: auto
 
   public func resolveDescription(_ resolver: ExpressionResolver) -> String? {
     resolver.resolveString(description, initializer: { $0 })
@@ -65,7 +66,7 @@ public final class DivAccessibility {
     self.mode = mode ?? .value(.default)
     self.muteAfterAction = muteAfterAction ?? .value(false)
     self.stateDescription = stateDescription
-    self.type = type
+    self.type = type ?? .auto
   }
 }
 
@@ -99,7 +100,7 @@ extension DivAccessibility: Serializable {
     result["mode"] = mode.toValidSerializationValue()
     result["mute_after_action"] = muteAfterAction.toValidSerializationValue()
     result["state_description"] = stateDescription?.toValidSerializationValue()
-    result["type"] = type?.rawValue
+    result["type"] = type.rawValue
     return result
   }
 }

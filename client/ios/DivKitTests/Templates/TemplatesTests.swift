@@ -56,7 +56,7 @@ private let gallery = divData(
     div: divGallery(
       items: (0..<3).map { _ in
         divContainer(
-          height: divFixedSize(320),
+          height: fixedSize(320),
           items: [
             divText(
               fontSize: 16,
@@ -67,12 +67,12 @@ private let gallery = divData(
               text: "Lorem ipsum dolor sit amet"
             ),
             divImage(
-              height: divFixedSize(100),
+              height: fixedSize(100),
               imageUrl: "https://image.url",
-              width: divFixedSize(100)
+              width: fixedSize(100)
             ),
           ],
-          width: divFixedSize(260)
+          width: fixedSize(260)
         )
       }
     ),

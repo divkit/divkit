@@ -41,7 +41,10 @@ final class DivBaseExtensionsTests: XCTestCase {
         child: DecoratingBlock(
           child: textBlock(text: "Hello!"),
           paddings: EdgeInsets(horizontal: 20),
-          accessibilityElement: accessibility(label: "Hello!")
+          accessibilityElement: accessibility(
+            traits: .staticText,
+            label: "Hello!"
+          )
         ),
         boundary: .noClip,
         paddings: EdgeInsets(vertical: 10)

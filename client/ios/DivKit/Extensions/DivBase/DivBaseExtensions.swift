@@ -11,7 +11,7 @@ extension DivBase {
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
     options: BasePropertiesOptions = [],
-    customA11yDescriptionProvider: (() -> String?)? = nil,
+    customAccessibilityParams: CustomAccessibilityParams = .default,
     clipToBounds: Bool = true
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
@@ -71,12 +71,11 @@ extension DivBase {
 
     let shadow = border?.resolveShadow(expressionResolver)
 
-    let accessibilityElement = (accessibility ?? DivAccessibility())
-      .resolve(
-        expressionResolver,
-        id: id,
-        customDescriptionProvider: customA11yDescriptionProvider
-      )
+    let accessibilityElement = (accessibility ?? DivAccessibility()).resolve(
+      expressionResolver,
+      id: id,
+      customParams: customAccessibilityParams
+    )
 
     block = try applyBackground(
       getBackground(focusState),

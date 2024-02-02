@@ -14,7 +14,7 @@ public final class DivAccessibilityTemplate: TemplateValue {
   public let mode: Field<Expression<Mode>>? // default value: default
   public let muteAfterAction: Field<Expression<Bool>>? // default value: false
   public let stateDescription: Field<Expression<String>>?
-  public let type: Field<Kind>?
+  public let type: Field<Kind>? // default value: auto
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(

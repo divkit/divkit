@@ -108,6 +108,34 @@ final class DivAccessibilityExtentionsTests: XCTestCase {
     assertEqual(element, expectedElement)
   }
 
+  func test_defaultTraits_UsedForAutoType() {
+    let element = DivAccessibility(
+      description: .value("Description"),
+      type: .auto
+    ).resolve(defaultTraits: .header)
+
+    let expectedElement = AccessibilityElement(
+      traits: .header,
+      strings: AccessibilityElement.Strings(label: "Description")
+    )
+
+    assertEqual(element, expectedElement)
+  }
+
+  func test_defaultTraits_HasLowerPriorityThanType() {
+    let element = DivAccessibility(
+      description: .value("Description"),
+      type: .button
+    ).resolve(defaultTraits: .header)
+
+    let expectedElement = AccessibilityElement(
+      traits: .button,
+      strings: AccessibilityElement.Strings(label: "Description")
+    )
+
+    assertEqual(element, expectedElement)
+  }
+
   func test_customDescriptionProvider_HasHigherPriorityThanDescription() {
     let element = DivAccessibility(
       description: .value("Description"),
@@ -126,12 +154,16 @@ final class DivAccessibilityExtentionsTests: XCTestCase {
 extension DivAccessibility {
   fileprivate func resolve(
     id: String? = nil,
+    defaultTraits: AccessibilityElement.Traits = .none,
     customDescriptionProvider: (() -> String?)? = nil
   ) -> AccessibilityElement {
     resolve(
       DivBlockModelingContext.default.expressionResolver,
       id: id,
-      customDescriptionProvider: customDescriptionProvider
+      customParams: CustomAccessibilityParams(
+        defaultTraits: defaultTraits,
+        descriptionProvider: customDescriptionProvider
+      )
     )
   }
 }

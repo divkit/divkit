@@ -10,7 +10,8 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
     try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,
-      actionsHolder: self
+      actionsHolder: self,
+      customAccessibilityParams: CustomAccessibilityParams(defaultTraits: .image)
     )
   }
 
