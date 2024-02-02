@@ -4,6 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
+import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.ViewPager2Wrapper
@@ -24,6 +29,29 @@ internal class DivPagerView @JvmOverloads constructor(
     internal var currentItem: Int
         get() = viewPager.currentItem
         set(value) = viewPager.setCurrentItem(value, false)
+
+    private val accessibilityDelegateCompat = getRecyclerView()?.let {
+        object : RecyclerViewAccessibilityDelegate(it) {
+            override fun onRequestSendAccessibilityEvent(
+                host: ViewGroup?, child: View?, event: AccessibilityEvent?
+            ): Boolean {
+                if (child != null && event?.eventType == AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED) {
+                    (child.getTag(R.id.div_pager_item_clip_id) as Int?)?.let { pos ->
+                        viewPager.adapter?.let { adapter ->
+                            if (pos >= 0 && pos < adapter.itemCount) {
+                                currentItem = pos
+                            }
+                        }
+                    }
+                }
+                return super.onRequestSendAccessibilityEvent(host, child, event)
+            }
+        }
+    }
+
+    init {
+        getRecyclerView()?.setAccessibilityDelegateCompat(accessibilityDelegateCompat)
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

@@ -273,7 +273,7 @@ internal class DivBaseBinder @Inject constructor(
         if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
             // Shortcut for empty accessibility binding
             applyAccessibilityMode(divView, newDiv, mode = null)
-            bindAccessibilityType(newDiv, oldDiv)
+            divAccessibilityBinder.bindType(this, newDiv, DivAccessibility.Type.AUTO)
             return
         }
 

@@ -16,7 +16,6 @@ import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
 import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivSlider
@@ -212,7 +211,6 @@ internal class DivAccessibilityBinder @Inject constructor(
                 div is DivSlider -> AccessibilityType.SLIDER
                 div is DivImage && div.accessibility != null -> AccessibilityType.IMAGE
                 div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
-                div is DivPager && div.accessibility?.description != null -> AccessibilityType.PAGER
                 else -> AccessibilityType.NONE
             }
             DivAccessibility.Type.NONE -> AccessibilityType.NONE

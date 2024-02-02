@@ -30,4 +30,5 @@
     <item name="div_transition_position" type="id"/>
 
     <item name="div_releasable_list" type="id"/>
+    <item name="div_pager_item_clip_id" type="id"/>
 </resources>

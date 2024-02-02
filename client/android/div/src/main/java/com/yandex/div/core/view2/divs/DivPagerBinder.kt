@@ -12,6 +12,7 @@ import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.dagger.DivScope
@@ -538,7 +539,7 @@ internal class DivPagerBinder @Inject constructor(
 
         override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
             val div = items[position]
-            holder.bind(div2View, div, path)
+            holder.bind(div2View, div, path, position)
             translationBinder.invoke(holder, position)
         }
 
@@ -583,7 +584,7 @@ internal class DivPagerBinder @Inject constructor(
 
         private var oldDiv: Div? = null
 
-        fun bind(div2View: Div2View, div: Div, path: DivStatePath) {
+        fun bind(div2View: Div2View, div: Div, path: DivStatePath, position: Int) {
             val resolver = div2View.expressionResolver
             val divView = if (oldDiv != null
                     && frameLayout.isNotEmpty()
@@ -596,6 +597,7 @@ internal class DivPagerBinder @Inject constructor(
                 newDivView
             }
 
+            frameLayout.setTag(R.id.div_pager_item_clip_id, position)
             oldDiv = div
             divBinder.bind(divView, div, div2View, path)
         }
