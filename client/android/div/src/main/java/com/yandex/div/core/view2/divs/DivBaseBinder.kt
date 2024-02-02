@@ -272,7 +272,7 @@ internal class DivBaseBinder @Inject constructor(
     ) {
         if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
             // Shortcut for empty accessibility binding
-            applyAccessibilityMode(divView, DivAccessibility.Mode.DEFAULT)
+            applyAccessibilityMode(divView, newDiv, mode = null)
             bindAccessibilityType(newDiv, oldDiv)
             return
         }
@@ -344,7 +344,7 @@ internal class DivBaseBinder @Inject constructor(
         // We can't compare accessibility mode with previous one due to actual value depends on parent mode
         // and should be recalculated.
 
-        applyAccessibilityMode(divView, newDiv.accessibility?.mode?.evaluate(resolver))
+        applyAccessibilityMode(divView, newDiv, newDiv.accessibility?.mode?.evaluate(resolver))
 
         if (newDiv.accessibility?.mode.isConstantOrNull()) {
             return
@@ -352,13 +352,13 @@ internal class DivBaseBinder @Inject constructor(
 
         subscriber.addSubscription(
             newDiv.accessibility?.mode?.observe(resolver) { mode ->
-                applyAccessibilityMode(divView, mode)
+                applyAccessibilityMode(divView, newDiv, mode)
             }
         )
     }
 
-    private fun View.applyAccessibilityMode(divView: Div2View, mode: DivAccessibility.Mode?) {
-        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode ?: DivAccessibility.Mode.DEFAULT)
+    private fun View.applyAccessibilityMode(divView: Div2View, base: DivBase, mode: DivAccessibility.Mode?) {
+        divAccessibilityBinder.bindAccessibilityMode(this, divView, mode, base)
     }
 
     private fun View.bindAccessibilityStateDescription(

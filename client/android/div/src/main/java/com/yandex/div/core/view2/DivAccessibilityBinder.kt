@@ -35,7 +35,8 @@ internal class DivAccessibilityBinder @Inject constructor(
     fun bindAccessibilityMode(
         view: View,
         divView: Div2View,
-        mode: DivAccessibility.Mode,
+        mode: DivAccessibility.Mode?,
+        divBase: DivBase,
     ) {
         if (!enabled) {
             return
@@ -45,14 +46,14 @@ internal class DivAccessibilityBinder @Inject constructor(
         }
 
         if (parentMode != null) {
-            val propagatedMode = getPropagatedMode(parentMode, mode)
+            val propagatedMode = getPropagatedMode(parentMode, mode ?: divBase.getDefaultAccessibilityMode)
             view.applyAccessibilityMode(
                 propagatedMode,
                 divView,
                 isDescendant = parentMode == propagatedMode
             )
         } else {
-            view.applyAccessibilityMode(mode, divView, isDescendant = false)
+            view.applyAccessibilityMode(mode ?: divBase.getDefaultAccessibilityMode, divView, isDescendant = false)
         }
     }
 
@@ -85,6 +86,25 @@ internal class DivAccessibilityBinder @Inject constructor(
 
         ViewCompat.setAccessibilityDelegate(view, accessibilityDelegate)
     }
+
+    private val DivBase.getDefaultAccessibilityMode: DivAccessibility.Mode
+        get() = when (this) {
+            is DivImage -> if (accessibility == null && doubletapActions.isNullOrEmpty() &&
+                actions.isNullOrEmpty() && longtapActions.isNullOrEmpty()) {
+                DivAccessibility.Mode.EXCLUDE
+            } else {
+                DivAccessibility.Mode.DEFAULT
+            }
+
+            is DivSeparator -> if (accessibility == null && doubletapActions.isNullOrEmpty() &&
+                actions.isNullOrEmpty() && longtapActions.isNullOrEmpty()) {
+                DivAccessibility.Mode.EXCLUDE
+            } else {
+                DivAccessibility.Mode.DEFAULT
+            }
+
+            else -> DivAccessibility.Mode.DEFAULT
+        }
 
     private val DivBase.isClickable: Boolean
         get() = when (this) {
