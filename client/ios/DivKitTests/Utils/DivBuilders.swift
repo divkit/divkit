@@ -36,6 +36,16 @@ func divGifImage(
   ))
 }
 
+func divInput(
+  accessibility: DivAccessibility? = nil,
+  textVariable: String
+) -> Div {
+  .divInput(DivInput(
+    accessibility: accessibility,
+    textVariable: textVariable
+  ))
+}
+
 func divImage(
   accessibility: DivAccessibility? = nil,
   height: DivSize? = nil,

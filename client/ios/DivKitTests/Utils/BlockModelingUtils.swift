@@ -6,8 +6,11 @@ import Foundation
 import BaseUIPublic
 import CommonCorePublic
 
-func makeBlock(_ div: Div) -> StateBlock {
-  try! divData(div).makeBlock(context: .default) as! StateBlock
+func makeBlock(
+  _ div: Div,
+  context: DivBlockModelingContext = .default
+) -> StateBlock {
+  try! divData(div).makeBlock(context: context) as! StateBlock
 }
 
 func separatorBlock() -> Block {

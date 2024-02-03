@@ -81,7 +81,8 @@ extension DivBlockModelingContext {
   init(
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],
-    scheduler: Scheduling? = nil
+    scheduler: Scheduling? = nil,
+    variableStorage: DivVariableStorage? = nil
   ) {
     self.init(
       cardId: DivKitTests.cardId,
@@ -90,6 +91,7 @@ extension DivBlockModelingContext {
       blockStateStorage: blockStateStorage,
       imageHolderFactory: FakeImageHolderFactory(),
       extensionHandlers: extensionHandlers,
+      variablesStorage: DivVariablesStorage(outerStorage: variableStorage),
       scheduler: scheduler,
       persistentValuesStorage: DivPersistentValuesStorage()
     )
