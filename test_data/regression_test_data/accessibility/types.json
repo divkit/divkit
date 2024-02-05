@@ -73,13 +73,6 @@
             {
               "type": "button",
               "accessibility": {
-                "type": "edit_text"
-              },
-              "text": "type: edit_text"
-            },
-            {
-              "type": "button",
-              "accessibility": {
                 "type": "header"
               },
               "text": "type: header"

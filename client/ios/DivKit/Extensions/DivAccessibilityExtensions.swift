@@ -48,11 +48,7 @@ extension DivAccessibility {
       return .image
     case .text:
       return .staticText
-    case .editText:
-      return .searchField
-    case .tabBar:
-      return .tabBar
-    case .select:
+    case .editText, .select, .tabBar:
       DivKitLogger.warning("Unsupported accessibility type")
       return AccessibilityElement.Traits.none
     case .none, .list:
