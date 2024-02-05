@@ -106,6 +106,7 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(FormatDateAsUTC)
         registry.register(FormatDateAsLocalWithLocale)
         registry.register(FormatDateAsUTCWithLocale)
+        registry.register(Timestamp)
 
         // Interval functions
         registry.register(GetIntervalTotalWeeks)

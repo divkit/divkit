@@ -65,6 +65,7 @@ enum DatetimeFunctions: String, CaseIterable {
   case formatDateAsLocalWithLocale
   case formatDateAsUTC
   case formatDateAsUTCWithLocale
+  case timestamp
 
   var function: Function {
     switch self {
@@ -114,6 +115,8 @@ enum DatetimeFunctions: String, CaseIterable {
       return FunctionBinary(impl: _formatDateAsUTC)
     case .formatDateAsUTCWithLocale:
       return FunctionTernary(impl: _formatDateAsUTCWithLocale)
+    case .timestamp:
+      return FunctionUnary(impl: _timestamp)
     }
   }
 }
@@ -293,6 +296,10 @@ private func _formatDateAsUTCWithLocale(
   locale: String
 ) throws -> String {
   try formatDate(value, format, isUTC: true, locale: locale)
+}
+
+private func _timestamp(_ value: Date) -> Int {
+  return Int(value.timeIntervalSince1970)
 }
 
 private func formatDate(

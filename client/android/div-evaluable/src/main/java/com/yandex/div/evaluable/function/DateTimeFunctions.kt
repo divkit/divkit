@@ -650,6 +650,25 @@ internal object FormatDateAsUTCWithLocale : Function() {
     }
 }
 
+internal object Timestamp : Function() {
+
+    override val name = "timestamp"
+
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.DATETIME))
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    override fun evaluate(
+        evaluationContext: EvaluationContext,
+        expressionContext: ExpressionContext,
+        args: List<Any>
+    ): Any {
+        val first = args.first()
+        val datetime = first as DateTime
+        return datetime.time
+    }
+}
+
 private fun throwExceptionIfZInTimezone(pattern: String): Unit {
     if (pattern.toLowerCase().contains("z")) {
         throw EvaluableException("z/Z not supported in [$pattern]")
