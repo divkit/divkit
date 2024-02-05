@@ -257,7 +257,7 @@ public final class ContainerBlock: BlockWithLayout {
     case .horizontal:
       result = (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
     case .vertical:
-      result = children.map(\.content.intrinsicContentWidth).max()!
+      result = children.map(\.content.intrinsicContentWidth).max() ?? 0
     }
 
     if case let .intrinsic(_, minSize, maxSize) = widthTrait {
@@ -338,7 +338,7 @@ public final class ContainerBlock: BlockWithLayout {
       // MOBYANDEXIOS-1092: Only non-resizable children can influence the width of a container
       // because the widths of resizable children depend on the width of container itself
       result = children.filter { !$0.content.isHorizontallyResizable }
-        .map(\.content.widthOfHorizontallyNonResizableBlock).max()!
+        .map(\.content.widthOfHorizontallyNonResizableBlock).max() ?? 0
     }
 
     cached.nonResizableSize = (width: result, height: nil)
@@ -385,7 +385,7 @@ public final class ContainerBlock: BlockWithLayout {
       crossAlignment: crossAlignment,
       size: CGSize(width: .zero, height: height)
     )
-    result = layout.blockFrames.map(\.maxX).max()!
+    result = layout.blockFrames.map(\.maxX).max() ?? 0
     cached.nonResizableSize = (width: result, height: height)
     return result
   }

@@ -78,7 +78,7 @@ func decreaseConstrainedBlockSizes(
 
 private func sort(blockSizes: [ConstrainedBlockSize])
   -> (CGFloat, [(Int, ConstrainedBlockSize)]) {
-  let minBlockSize = blockSizes.map(\.size).min()!
+  let minBlockSize = blockSizes.map(\.size).min() ?? 0
   let blocksWithCoefficients = blockSizes.map {
     ConstrainedBlockSize(
       size: $0.size,

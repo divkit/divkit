@@ -9,7 +9,7 @@ struct ContainerBlockLayout {
     case doesNotFit(notFittingPartSize: CGFloat)
 
     init(offsets: [CGFloat], margin: CGFloat) {
-      let minOffset = offsets.min()! - margin
+      let minOffset = (offsets.min() ?? 0) - margin
       if minOffset.isApproximatelyLessThan(0) {
         self = .doesNotFit(notFittingPartSize: -minOffset)
       } else {
@@ -372,8 +372,8 @@ struct ContainerBlockLayout {
 
   public var contentSize: CGSize {
     CGSize(
-      width: blockFrames.map(\.maxX).max()!,
-      height: blockFrames.map(\.maxY).max()!
+      width: blockFrames.map(\.maxX).max() ?? 0,
+      height: blockFrames.map(\.maxY).max() ?? 0
     )
   }
 
