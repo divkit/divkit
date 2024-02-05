@@ -3,7 +3,6 @@
 # Android Client:
 * Supported functions `getArrayFromDict`, `getDictFromDict`, `getOptArrayFromDict`, `getOptDictFromDict`.
 * Supported accessibility for `slider`.
-* Added type `auto` for accessibility.
 * Fixed visibility actions not working for items children inside `div-pager` and `div-tabs`.
 
 # iOS Client:
