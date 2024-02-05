@@ -17,10 +17,8 @@
         "header",
         "tab_bar",
         "list",
-        "select",
-        "auto"
+        "select"
       ],
-      "default_value": "auto",
       "supports_expressions": false,
       "$description": "translations.json#/div_accessibility_type",
       "platforms": [

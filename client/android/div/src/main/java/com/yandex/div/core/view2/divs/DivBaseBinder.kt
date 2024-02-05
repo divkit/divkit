@@ -273,7 +273,6 @@ internal class DivBaseBinder @Inject constructor(
         if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
             // Shortcut for empty accessibility binding
             applyAccessibilityMode(divView, DivAccessibility.Mode.DEFAULT)
-            bindAccessibilityType(newDiv, oldDiv)
             return
         }
 
@@ -288,12 +287,19 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?
     ) {
-        if (oldDiv != null && newDiv.accessibility?.type == oldDiv.accessibility?.type) {
+        if (newDiv.accessibility?.type == oldDiv?.accessibility?.type) {
             return
         }
 
-        divAccessibilityBinder.bindType(this, newDiv, newDiv.accessibility?.type
-            ?: DivAccessibility.Type.AUTO)
+        applyAccessibilityType(newDiv, newDiv.accessibility?.type)
+    }
+
+    private fun View.applyAccessibilityType(div: DivBase, type: DivAccessibility.Type?) {
+        if (type == null) {
+            divAccessibilityBinder.bindTypeAutomatically(this, div)
+        } else {
+            divAccessibilityBinder.bindType(this, type)
+        }
     }
 
     private fun View.bindAccessibilityDescriptionAndHint(

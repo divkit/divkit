@@ -12,14 +12,11 @@ import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
-import com.yandex.div2.DivPager
 import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSeparator
-import com.yandex.div2.DivSlider
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 import javax.inject.Inject
@@ -56,58 +53,66 @@ internal class DivAccessibilityBinder @Inject constructor(
         }
     }
 
-    fun bindType(view: View, divBase: DivBase, type: DivAccessibility.Type) {
+    fun bindType(view: View, type: DivAccessibility.Type) {
         if (!enabled) {
             return
         }
-
         val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
-        val accessibilityType = type.toAccessibilityType(divBase)
 
         val accessibilityDelegate =
-            if (accessibilityType == AccessibilityType.LIST && view is BackHandlingRecyclerView) {
+            if (type == DivAccessibility.Type.LIST && view is BackHandlingRecyclerView) {
                 AccessibilityListDelegate(view)
             } else {
                 AccessibilityDelegateWrapper(
                     originalDelegate,
-                    initializeAccessibilityNodeInfo = { _, info ->
-                        info?.bindType(accessibilityType)
-                        if (divBase.isClickable) {
-                            info?.addAction(AccessibilityNodeInfoCompat
-                                .AccessibilityActionCompat.ACTION_CLICK)
-                        }
-                        if (divBase.isLongClickable) {
-                            info?.addAction(AccessibilityNodeInfoCompat
-                                .AccessibilityActionCompat.ACTION_LONG_CLICK)
-                        }
-                    })
+                    initializeAccessibilityNodeInfo = { _, info -> info?.bindType(type) })
             }
 
         ViewCompat.setAccessibilityDelegate(view, accessibilityDelegate)
     }
 
-    private val DivBase.isClickable: Boolean
-        get() = when (this) {
-            is DivContainer -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivImage -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivGifImage -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivSeparator -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivText -> action != null ||
-                !actions.isNullOrEmpty()
-            else -> false
+    fun bindTypeAutomatically(view: View, div: DivBase) {
+        if (!enabled) {
+            return
+        }
+        if (div.actsAsButton) {
+            bindType(view, DivAccessibility.Type.BUTTON)
+            return
         }
 
-    private val DivBase.isLongClickable: Boolean
+        when (div) {
+            is DivImage -> bindType(view, DivAccessibility.Type.IMAGE)
+            is DivInput -> bindType(view, DivAccessibility.Type.EDIT_TEXT)
+            is DivGifImage -> bindType(view, DivAccessibility.Type.IMAGE)
+            is DivText -> bindType(view, DivAccessibility.Type.TEXT)
+            is DivTabs -> bindType(view, DivAccessibility.Type.TAB_BAR)
+            is DivSelect -> bindType(view, DivAccessibility.Type.SELECT)
+            else -> bindType(view, DivAccessibility.Type.NONE)
+        }
+    }
+
+    private val DivBase.actsAsButton: Boolean
         get() = when (this) {
-            is DivContainer -> !doubletapActions.isNullOrEmpty()
-            is DivImage -> !doubletapActions.isNullOrEmpty()
-            is DivGifImage -> !doubletapActions.isNullOrEmpty()
-            is DivSeparator -> !doubletapActions.isNullOrEmpty()
-            is DivText -> !doubletapActions.isNullOrEmpty()
+            is DivContainer -> action != null ||
+                    !actions.isNullOrEmpty() ||
+                    !longtapActions.isNullOrEmpty() ||
+                    !doubletapActions.isNullOrEmpty()
+            is DivImage -> action != null ||
+                    !actions.isNullOrEmpty() ||
+                    !longtapActions.isNullOrEmpty() ||
+                    !doubletapActions.isNullOrEmpty()
+            is DivGifImage -> action != null ||
+                    !actions.isNullOrEmpty() ||
+                    !longtapActions.isNullOrEmpty() ||
+                    !doubletapActions.isNullOrEmpty()
+            is DivSeparator -> action != null ||
+                    !actions.isNullOrEmpty() ||
+                    !longtapActions.isNullOrEmpty() ||
+                    !doubletapActions.isNullOrEmpty()
+            is DivText -> action != null ||
+                    !actions.isNullOrEmpty() ||
+                    !longtapActions.isNullOrEmpty() ||
+                    !doubletapActions.isNullOrEmpty()
             else -> false
         }
 
@@ -116,22 +121,20 @@ internal class DivAccessibilityBinder @Inject constructor(
      * properly recognize role of View provided by [DivAccessibility.Type].
      * For example, if [type] is [DivAccessibility.Type.BUTTON], TalkBack announces View as "Button".
      */
-    private fun AccessibilityNodeInfoCompat.bindType(type: AccessibilityType) {
+    private fun AccessibilityNodeInfoCompat.bindType(type: DivAccessibility.Type) {
         this.className = when (type) {
-            AccessibilityType.NONE -> ""
-            AccessibilityType.BUTTON -> "android.widget.Button"
-            AccessibilityType.EDIT_TEXT -> "android.widget.EditText"
-            AccessibilityType.HEADER -> "android.widget.TextView"
-            AccessibilityType.IMAGE -> "android.widget.ImageView"
-            AccessibilityType.LIST -> ""
-            AccessibilityType.PAGER -> "androidx.viewpager.widget.ViewPager"
-            AccessibilityType.SLIDER -> "android.widget.SeekBar"
-            AccessibilityType.SELECT -> "android.widget.Spinner"
-            AccessibilityType.TAB_WIDGET -> "android.widget.TabWidget"
-            AccessibilityType.TEXT -> "android.widget.TextView"
+            DivAccessibility.Type.NONE -> ""
+            DivAccessibility.Type.BUTTON -> "android.widget.Button"
+            DivAccessibility.Type.IMAGE -> "android.widget.ImageView"
+            DivAccessibility.Type.TEXT -> "android.widget.TextView"
+            DivAccessibility.Type.EDIT_TEXT -> "android.widget.EditText"
+            DivAccessibility.Type.HEADER -> "android.widget.TextView"
+            DivAccessibility.Type.TAB_BAR -> "android.widget.TabWidget"
+            DivAccessibility.Type.LIST -> ""
+            DivAccessibility.Type.SELECT -> "android.widget.Spinner"
         }
 
-        if (AccessibilityType.HEADER == type) {
+        if (DivAccessibility.Type.HEADER == type) {
             this.isHeading = true
         }
     }
@@ -180,43 +183,5 @@ internal class DivAccessibilityBinder @Inject constructor(
         isClickable = actionable
         isLongClickable = actionable
         isFocusable = actionable
-    }
-
-    private fun DivAccessibility.Type.toAccessibilityType(div: DivBase): AccessibilityType =
-        when (this) {
-            DivAccessibility.Type.AUTO -> when {
-                div is DivInput -> AccessibilityType.EDIT_TEXT
-                div is DivText -> AccessibilityType.TEXT
-                div is DivTabs -> AccessibilityType.TAB_WIDGET
-                div is DivSelect -> AccessibilityType.SELECT
-                div is DivSlider -> AccessibilityType.SLIDER
-                div is DivImage && div.accessibility != null -> AccessibilityType.IMAGE
-                div is DivGallery && div.accessibility?.description != null -> AccessibilityType.PAGER
-                div is DivPager && div.accessibility?.description != null -> AccessibilityType.PAGER
-                else -> AccessibilityType.NONE
-            }
-            DivAccessibility.Type.NONE -> AccessibilityType.NONE
-            DivAccessibility.Type.BUTTON -> AccessibilityType.BUTTON
-            DivAccessibility.Type.IMAGE -> AccessibilityType.IMAGE
-            DivAccessibility.Type.TEXT -> AccessibilityType.TEXT
-            DivAccessibility.Type.EDIT_TEXT -> AccessibilityType.EDIT_TEXT
-            DivAccessibility.Type.HEADER -> AccessibilityType.HEADER
-            DivAccessibility.Type.LIST -> AccessibilityType.LIST
-            DivAccessibility.Type.SELECT -> AccessibilityType.SELECT
-            DivAccessibility.Type.TAB_BAR -> AccessibilityType.TAB_WIDGET
-        }
-
-    private enum class AccessibilityType {
-        NONE,
-        BUTTON,
-        EDIT_TEXT,
-        HEADER,
-        IMAGE,
-        LIST,
-        SLIDER,
-        SELECT,
-        TAB_WIDGET,
-        PAGER,
-        TEXT,
     }
 }
