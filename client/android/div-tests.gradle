@@ -38,7 +38,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$versions.mockito"
     testImplementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
     testImplementation "org.robolectric:robolectric:$versions.robolectric"
-    testImplementation "org.robolectric:shadows-supportv4:$versions.robolectric"
     testImplementation "org.easytesting:fest-reflect:$versions.festReflect"
     testImplementation("com.squareup:fest-android:$versions.festAndroid") {
         exclude module: "support-v4"
