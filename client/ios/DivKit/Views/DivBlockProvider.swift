@@ -167,9 +167,10 @@ final class DivBlockProvider {
         cardId = divCardID
       case let .state(divCardID):
         cardId = divCardID
-      case let .variable(affectedCards):
-        if case let .specific(cardIds) = affectedCards,
-           cardIds.contains(self.cardId) || affectedCards == .all {
+      case .variable(.all):
+        return true
+      case let .variable(.specific(cardIds)):
+        if cardIds.contains(self.cardId) {
           return true
         }
         continue
