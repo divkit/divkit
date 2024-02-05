@@ -137,9 +137,26 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
-  private let tapRecognizer = UITapGestureRecognizer()
-  private let doubleTapRecognizer = UITapGestureRecognizer()
-  private let longPressRecognizer = UILongPressGestureRecognizer()
+  private var tapRecognizer: UITapGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      tapRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
+
+  private var doubleTapRecognizer: UITapGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      doubleTapRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
+
+  private var longPressRecognizer: UILongPressGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      longPressRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
   override var isHighlighted: Bool {
     didSet {
@@ -194,21 +211,33 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   init() {
     super.init(frame: .zero)
     isExclusiveTouch = true
+  }
 
-    tapRecognizer.addTarget(self, action: #selector(handleTap))
-    tapRecognizer.isEnabled = false
-    addGestureRecognizer(tapRecognizer)
+  private func configureRecognizers() {
+    guard model.shouldHandleTap else {
+      tapRecognizer = nil
+      doubleTapRecognizer = nil
+      longPressRecognizer = nil
+      return
+    }
 
-    doubleTapRecognizer.addTarget(self, action: #selector(handleTap))
-    doubleTapRecognizer.numberOfTapsRequired = 2
-    doubleTapRecognizer.isEnabled = false
-    addGestureRecognizer(doubleTapRecognizer)
+    let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+    self.tapRecognizer = tapRecognizer
 
-    longPressRecognizer.addTarget(self, action: #selector(handleLongPress))
-    longPressRecognizer.isEnabled = false
-    addGestureRecognizer(longPressRecognizer)
+    longPressRecognizer = if model.shouldHandleLongTap {
+      UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+    } else {
+      nil
+    }
 
-    tapRecognizer.require(toFail: doubleTapRecognizer)
+    if model.shouldHandleDoubleTap {
+      let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+      doubleTapRecognizer.numberOfTapsRequired = 2
+      self.doubleTapRecognizer = doubleTapRecognizer
+      tapRecognizer.require(toFail: doubleTapRecognizer)
+    } else {
+      doubleTapRecognizer = nil
+    }
   }
 
   @available(*, unavailable)
@@ -219,13 +248,12 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     // This breaks UX due to UIView reusing, so just skip them here.
     guard bounds.contains(recognizer.location(in: self)) else { return }
     model.analyticsURL.flatMap(AnalyticsUrlEvent.init(analyticsUrl:))?.sendFrom(self)
-    let actions: [UserInterfaceAction]?
-    if recognizer === doubleTapRecognizer {
-      actions = model.doubleTapActions?.asArray()
+    let actions: [UserInterfaceAction]? = if recognizer === doubleTapRecognizer {
+      model.doubleTapActions?.asArray()
     } else if recognizer === tapRecognizer {
-      actions = model.actions?.asArray()
+      model.actions?.asArray()
     } else {
-      actions = []
+      []
     }
     actions?.perform(sendingFrom: self)
   }
@@ -348,9 +376,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         )
     }
 
-    tapRecognizer.isEnabled = model.shouldHandleTap
-    doubleTapRecognizer.isEnabled = model.shouldHandleDoubleTap
-    longPressRecognizer.isEnabled = model.shouldHandleLongTap
+    configureRecognizers()
 
     if #available(iOS 13.0, *) {
       interactions.forEach(removeInteraction)

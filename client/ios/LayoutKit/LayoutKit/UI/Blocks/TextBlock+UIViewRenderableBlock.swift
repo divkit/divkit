@@ -131,38 +131,40 @@ private final class TextBlockView: UIView {
 
   private var textLayout: AttributedStringLayout<ActionsAttribute>?
 
-  private lazy var tapRecognizer = UITapGestureRecognizer(
-    target: self,
-    action: #selector(handleTap(_:))
-  )
+  private var tapRecognizer: UITapGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      tapRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
-  private lazy var hideSelectionMenuTapRecognizer = UITapGestureRecognizer(
-    target: self,
-    action: #selector(handleHideSelectionMenuTap(_:))
-  )
+  private var hideSelectionMenuTapRecognizer: UITapGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      hideSelectionMenuTapRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
-  private lazy var doubleTapSelectionRecognizer = {
-    let result = UITapGestureRecognizer(
-      target: self,
-      action: #selector(handleSelectionDoubleTap(_:))
-    )
-    result.numberOfTapsRequired = 2
-    return result
-  }()
+  private var doubleTapSelectionRecognizer: UITapGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      doubleTapSelectionRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
-  private lazy var longTapSelectionRecognizer = UILongPressGestureRecognizer(
-    target: self,
-    action: #selector(handleSelectionLongTap(_:))
-  )
+  private var longTapSelectionRecognizer: UILongPressGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      longTapSelectionRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
-  private lazy var panSelectionRecognizer = {
-    let result = UIPanGestureRecognizer(
-      target: self,
-      action: #selector(handleSelectionPan(_:))
-    )
-    result.delegate = self
-    return result
-  }()
+  private var panSelectionRecognizer: UIPanGestureRecognizer? {
+    didSet {
+      oldValue.flatMap(removeGestureRecognizer(_:))
+      panSelectionRecognizer.flatMap(addGestureRecognizer(_:))
+    }
+  }
 
   private var delayedSelectionTapGesture: UITapGestureRecognizer?
 
@@ -185,23 +187,7 @@ private final class TextBlockView: UIView {
 
       isUserInteractionEnabled = model.isUserInteractionEnabled
 
-      if model.canSelect {
-        addGestureRecognizer(doubleTapSelectionRecognizer)
-        addGestureRecognizer(longTapSelectionRecognizer)
-        addGestureRecognizer(panSelectionRecognizer)
-        addGestureRecognizer(hideSelectionMenuTapRecognizer)
-      } else {
-        removeGestureRecognizer(doubleTapSelectionRecognizer)
-        removeGestureRecognizer(longTapSelectionRecognizer)
-        removeGestureRecognizer(panSelectionRecognizer)
-        removeGestureRecognizer(hideSelectionMenuTapRecognizer)
-      }
-
-      if model.text.hasActions || model.truncationToken?.hasActions == true {
-        addGestureRecognizer(tapRecognizer)
-      } else {
-        removeGestureRecognizer(tapRecognizer)
-      }
+      configureRecognizers()
 
       setNeedsDisplay()
     }
@@ -218,6 +204,48 @@ private final class TextBlockView: UIView {
 
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+  private func configureRecognizers() {
+    if model.canSelect {
+      let doubleTapSelectionRecognizer = UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleSelectionDoubleTap(_:))
+      )
+      doubleTapSelectionRecognizer.numberOfTapsRequired = 2
+      self.doubleTapSelectionRecognizer = doubleTapSelectionRecognizer
+
+      self.longTapSelectionRecognizer = UILongPressGestureRecognizer(
+        target: self,
+        action: #selector(handleSelectionLongTap(_:))
+      )
+
+      let panSelectionRecognizer = UIPanGestureRecognizer(
+        target: self,
+        action: #selector(handleSelectionPan(_:))
+      )
+      panSelectionRecognizer.delegate = self
+      self.panSelectionRecognizer = panSelectionRecognizer
+
+      hideSelectionMenuTapRecognizer = UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleHideSelectionMenuTap(_:))
+      )
+    } else {
+      self.doubleTapSelectionRecognizer = nil
+      self.longTapSelectionRecognizer = nil
+      self.panSelectionRecognizer = nil
+      self.hideSelectionMenuTapRecognizer = nil
+    }
+
+    tapRecognizer = if model.text.hasActions || model.truncationToken?.hasActions == true {
+      UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleTap(_:))
+      )
+    } else {
+      nil
+    }
+  }
 
   override func draw(_ rect: CGRect) {
     guard let model else { return }
