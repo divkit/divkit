@@ -67,11 +67,7 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: .default
             ),
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "Hello!".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "Hello!"),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
@@ -110,22 +106,14 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "Item 1".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "Item 1"),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 1"
               )
             ),
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "Item 2".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "Item 2"),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 2"
@@ -164,11 +152,7 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "itemBuilder".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "itemBuilder"),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "itemBuilder"
@@ -212,22 +196,14 @@ final class DivContainerExtensionsTests: XCTestCase {
           layoutDirection: .vertical,
           children: [
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "Hello!".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "Hello!"),
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
               )
             ),
             DecoratingBlock(
-              child: TextBlock(
-                widthTrait: .resizable,
-                text: "Excluded item".withTypo(),
-                verticalAlignment: .leading
-              ),
+              child: textBlock(text: "Excluded item"),
               accessibilityElement: accessibility(hideElementWithChildren: true)
             ),
             DecoratingBlock(
@@ -235,11 +211,7 @@ final class DivContainerExtensionsTests: XCTestCase {
                 layoutDirection: .vertical,
                 children: [
                   DecoratingBlock(
-                    child: TextBlock(
-                      widthTrait: .resizable,
-                      text: "Nested item".withTypo(),
-                      verticalAlignment: .leading
-                    ),
+                    child: textBlock(text: "Nested item"),
                     accessibilityElement: accessibility(
                       traits: .staticText,
                       label: "Nested item"

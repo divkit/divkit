@@ -23,7 +23,8 @@ func textBlock(text: String) -> Block {
   TextBlock(
     widthTrait: .resizable,
     text: text.withTypo(),
-    verticalAlignment: .leading
+    verticalAlignment: .leading,
+    accessibilityElement: nil
   )
 }
 

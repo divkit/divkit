@@ -17,7 +17,8 @@ final class DivTextExtensionsTests: XCTestCase {
         child: TextBlock(
           widthTrait: .resizable,
           text: "Hello!".withTypo(),
-          verticalAlignment: .leading
+          verticalAlignment: .leading,
+          accessibilityElement: nil
         ),
         accessibilityElement: accessibility(
           traits: .staticText,
@@ -48,15 +49,39 @@ final class DivTextExtensionsTests: XCTestCase {
           widthTrait: .resizable,
           text: "Hello!".withTypo(),
           verticalAlignment: .leading,
-          accessibilityElement: accessibility(
-            traits: .staticText,
-            label: "Hello!"
-          )
+          accessibilityElement: nil
         ),
         accessibilityElement: accessibility(
           traits: .button,
           label: "Accessibility description",
           identifier: "text_id"
+        )
+      ),
+      ids: []
+    )
+
+    assertEqual(block, expectedBlock)
+  }
+
+  func test_WithAccessibilityWithoutDescription_AppliesTextAsDescription() throws {
+    let block = makeBlock(
+      divText(
+        accessibility: DivAccessibility(type: .button),
+        text: "Hello!"
+      )
+    )
+
+    let expectedBlock = StateBlock(
+      child: DecoratingBlock(
+        child: TextBlock(
+          widthTrait: .resizable,
+          text: "Hello!".withTypo(),
+          verticalAlignment: .leading,
+          accessibilityElement: nil
+        ),
+        accessibilityElement: accessibility(
+          traits: .button,
+          label: "Hello!"
         )
       ),
       ids: []
@@ -78,11 +103,7 @@ final class DivTextExtensionsTests: XCTestCase {
 
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
-        child: TextBlock(
-          widthTrait: .resizable,
-          text: "Hello!".withTypo(),
-          verticalAlignment: .leading
-        ),
+        child: textBlock(text: "Hello!"),
         actions: NonEmptyArray(
           uiAction(logId: "action_log_id", url: "https://some.url")
         ),

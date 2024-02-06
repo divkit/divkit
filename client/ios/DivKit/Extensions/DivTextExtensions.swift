@@ -115,6 +115,7 @@ extension DivText: DivBlockModeling {
       maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
       minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
       images: images,
+      accessibilityElement: nil,
       truncationToken: truncationToken,
       truncationImages: truncationImages,
       canSelect: resolveSelectable(expressionResolver)
