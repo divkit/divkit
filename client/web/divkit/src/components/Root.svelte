@@ -52,7 +52,7 @@
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { FocusableMethods, ParentMethods, ROOT_CTX, RootCtxValue, Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
-    import { wrapError, WrappedError } from '../utils/wrapError';
+    import { type LogError, wrapError, WrappedError } from '../utils/wrapError';
     import { simpleCheckInput } from '../utils/simpleCheckInput';
     import { ACTION_CTX, ActionCtxValue } from '../context/action';
     import { STATE_CTX, StateCtxValue, StateInterface } from '../context/state';
@@ -236,6 +236,7 @@
     }
 
     function getDerivedFromVars<T>(
+        logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
         keepComplex = false
@@ -261,6 +262,7 @@
     }
 
     function getJsonWithVars<T>(
+        logError: LogError,
         jsonProp: T,
         additionalVars?: Map<string, Variable>,
         keepComplex = false
@@ -686,7 +688,7 @@
     }
 
     export function execAction(action: MaybeMissing<Action | VisibilityAction | DisappearAction>): void {
-        execActionInternal(getJsonWithVars(action));
+        execActionInternal(getJsonWithVars(logError, action));
     }
 
     function execActionInternal(
@@ -1097,10 +1099,20 @@
                 });
             },
             getDerivedFromVars(jsonProp, additionalVars, keepComplex = false) {
-                return getDerivedFromVars(jsonProp, mergeVars(res.variables, additionalVars), keepComplex);
+                return getDerivedFromVars(
+                    res.logError,
+                    jsonProp,
+                    mergeVars(res.variables, additionalVars),
+                    keepComplex
+                );
             },
             getJsonWithVars(jsonProp, additionalVars, keepComplex = false) {
-                return getJsonWithVars(jsonProp, mergeVars(res.variables, additionalVars), keepComplex);
+                return getJsonWithVars(
+                    res.logError,
+                    jsonProp,
+                    mergeVars(res.variables, additionalVars),
+                    keepComplex
+                );
             },
             produceChildContext(div, opts = {}) {
                 const componentContext = produceComponentContext(res);
@@ -1497,7 +1509,7 @@
                                 (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                             ) {
                                 trigger.actions.forEach(action => {
-                                    const resultAction = getJsonWithVars(action);
+                                    const resultAction = getJsonWithVars(logError, action);
                                     if (resultAction.log_id) {
                                         execActionInternal(resultAction as Action);
                                     }
@@ -1524,7 +1536,7 @@
     if (timers && typeof document !== 'undefined') {
         const controller = timersController = new TimersController({
             logError,
-            applyVars: getJsonWithVars,
+            applyVars: json => getJsonWithVars(logError, json),
             hasVariableWithType,
             setVariableValue,
             execAnyActions
