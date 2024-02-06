@@ -5,6 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringDef
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
@@ -16,8 +19,12 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
 import com.yandex.div.core.experiments.Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED
+import com.yandex.div.core.view2.AccessibilityDelegateWrapper
+import com.yandex.div.core.view2.AccessibilityListDelegate
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.DivGestureListener
+import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_BLUR
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_CLICK
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_DOUBLE_CLICK
@@ -65,6 +72,8 @@ internal class DivActionBinder @Inject constructor(
         doubleTapActions: List<DivAction>?,
         actionAnimation: DivAnimation
     ) {
+        val originalDelegate = ViewCompat.getAccessibilityDelegate(target)
+
         val onApply = {
             applyDivActions(
                 divView = divView,
@@ -72,7 +81,8 @@ internal class DivActionBinder @Inject constructor(
                 actions = actions.onlyEnabled(divView.expressionResolver),
                 doubleTapActions = doubleTapActions.onlyEnabled(divView.expressionResolver),
                 longTapActions = longTapActions.onlyEnabled(divView.expressionResolver),
-                actionAnimation = actionAnimation
+                actionAnimation = actionAnimation,
+                originalDelegate = originalDelegate,
             )
         }
         val resolver = divView.expressionResolver
@@ -90,7 +100,8 @@ internal class DivActionBinder @Inject constructor(
         actions: List<DivAction>,
         longTapActions: List<DivAction>,
         doubleTapActions: List<DivAction>,
-        actionAnimation: DivAnimation
+        actionAnimation: DivAnimation,
+        originalDelegate: AccessibilityDelegateCompat?,
     ) {
         val clickableState = target.isClickable
         val longClickableState = target.isLongClickable
@@ -115,6 +126,21 @@ internal class DivActionBinder @Inject constructor(
         ) {
             target.isClickable = clickableState
             target.isLongClickable = longClickableState
+
+            val accessibilityWrapper = AccessibilityDelegateWrapper(
+                originalDelegate,
+                initializeAccessibilityNodeInfo = { _, info ->
+                    if (actions.isNotEmpty()) {
+                        info?.addAction(AccessibilityNodeInfoCompat
+                            .AccessibilityActionCompat.ACTION_CLICK)
+                    }
+                    if (longTapActions.isNotEmpty()) {
+                        info?.addAction(AccessibilityNodeInfoCompat
+                            .AccessibilityActionCompat.ACTION_LONG_CLICK)
+                    }
+                })
+
+            ViewCompat.setAccessibilityDelegate(target, accessibilityWrapper)
         }
     }
 

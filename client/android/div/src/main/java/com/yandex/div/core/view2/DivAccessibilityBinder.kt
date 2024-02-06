@@ -11,9 +11,7 @@ import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
@@ -72,14 +70,6 @@ internal class DivAccessibilityBinder @Inject constructor(
                     originalDelegate,
                     initializeAccessibilityNodeInfo = { _, info ->
                         info?.bindType(accessibilityType)
-                        if (divBase.isClickable) {
-                            info?.addAction(AccessibilityNodeInfoCompat
-                                .AccessibilityActionCompat.ACTION_CLICK)
-                        }
-                        if (divBase.isLongClickable) {
-                            info?.addAction(AccessibilityNodeInfoCompat
-                                .AccessibilityActionCompat.ACTION_LONG_CLICK)
-                        }
                     })
             }
 
@@ -103,31 +93,6 @@ internal class DivAccessibilityBinder @Inject constructor(
             }
 
             else -> DivAccessibility.Mode.DEFAULT
-        }
-
-    private val DivBase.isClickable: Boolean
-        get() = when (this) {
-            is DivContainer -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivImage -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivGifImage -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivSeparator -> action != null ||
-                !actions.isNullOrEmpty()
-            is DivText -> action != null ||
-                !actions.isNullOrEmpty()
-            else -> false
-        }
-
-    private val DivBase.isLongClickable: Boolean
-        get() = when (this) {
-            is DivContainer -> !doubletapActions.isNullOrEmpty()
-            is DivImage -> !doubletapActions.isNullOrEmpty()
-            is DivGifImage -> !doubletapActions.isNullOrEmpty()
-            is DivSeparator -> !doubletapActions.isNullOrEmpty()
-            is DivText -> !doubletapActions.isNullOrEmpty()
-            else -> false
         }
 
     /**
