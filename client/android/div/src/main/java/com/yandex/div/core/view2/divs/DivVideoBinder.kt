@@ -35,6 +35,8 @@ internal class DivVideoBinder @Inject constructor(
         val oldDiv = view.div
         val resolver = divView.expressionResolver
 
+        baseBinder.bindView(view, div, oldDiv, divView)
+
         val source = div.createSource(resolver)
         val config = DivPlayerPlaybackConfig(
             autoplay = div.autostart.evaluate(resolver),
@@ -122,7 +124,6 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         videoViewMapper.addView(view, div)
-        baseBinder.bindView(view, div, oldDiv, divView)
         view.bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
     }
 
