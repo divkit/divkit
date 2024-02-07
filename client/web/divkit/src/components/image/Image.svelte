@@ -86,6 +86,7 @@
     $: jsonTintMode = componentContext.getDerivedFromVars(componentContext.json.tint_mode);
     $: jsonAppearanceAnimation = componentContext.getDerivedFromVars(componentContext.json.appearance_animation);
     $: jsonFilters = componentContext.getDerivedFromVars(componentContext.json.filters);
+    $: jsonPreloadRequired = componentContext.getDerivedFromVars(componentContext.json.preload_required);
 
     $: {
         let img = componentContext.json.type === 'gif' ? $jsonGifUrl : $jsonImageUrl;
@@ -248,7 +249,7 @@
                         bind:this={img}
                         class={css.image__image}
                         src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                        loading="lazy"
+                        loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
                         decoding="async"
                         style={makeStyle(style)}
                         {alt}
@@ -262,7 +263,7 @@
                     bind:this={img}
                     class={css.image__image}
                     src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                    loading="lazy"
+                    loading={$jsonPreloadRequired ? 'eager' : 'lazy'}
                     decoding="async"
                     style={makeStyle(style)}
                     {alt}

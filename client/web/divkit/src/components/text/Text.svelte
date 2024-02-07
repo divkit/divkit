@@ -63,6 +63,7 @@
             height: string;
             wrapperStyle: Style;
             svgFilterId: string;
+            preloadRequired: boolean;
         };
     })[] = [];
     let usedTintColors: [string, TintMode][] = [];
@@ -360,7 +361,8 @@
                         width: imageWidth,
                         height: imageHeight,
                         wrapperStyle,
-                        svgFilterId
+                        svgFilterId,
+                        preloadRequired: Boolean(item.image.preload_required)
                     }
                 });
             }
@@ -447,7 +449,7 @@
                     <span style={makeStyle(item.image.wrapperStyle)}><img
                         class={css.text__image}
                         src={item.image.url}
-                        loading="lazy"
+                        loading={item.image.preloadRequired ? 'eager' : 'lazy'}
                         decoding="async"
                         aria-hidden="true"
                         alt=""

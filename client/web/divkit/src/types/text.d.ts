@@ -48,6 +48,7 @@ export interface TextImage {
     height?: FixedSize;
     tint_color?: string;
     tint_mode?: TintMode;
+    preload_required?: BooleanInt;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
