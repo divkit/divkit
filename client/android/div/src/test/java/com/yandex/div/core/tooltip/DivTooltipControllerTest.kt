@@ -91,6 +91,7 @@ class DivTooltipControllerTest {
     private val tooltipView = mock<View> {
         on { width } doReturn 100
         on { height } doReturn 50
+        on { viewTreeObserver } doReturn mock()
     }
 
     private val div2Builder = mock<Div2Builder> {

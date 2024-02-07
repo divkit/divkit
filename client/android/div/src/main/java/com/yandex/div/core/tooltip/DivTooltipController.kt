@@ -9,9 +9,13 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
+import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.postDelayed
 import androidx.core.view.children
+import androidx.core.view.doOnPreDraw
 import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
@@ -189,6 +193,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
+                tooltipView.doOnPreDraw {
+                    val view = it.getWrappedTooltip()
+                    view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                    view?.performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+                    view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+                }
+
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
                 if (divTooltip.duration.evaluate(resolver) != 0L) {
                     mainThreadHandler.postDelayed(divTooltip.duration.evaluate(resolver).toLong()) {
@@ -208,6 +219,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
     private fun stopVisibilityTracking(div2View: Div2View, div: Div) {
         divVisibilityActionTracker.trackVisibilityActionsOf(div2View, null, div)
     }
+
+    private fun View.getWrappedTooltip(): View =
+        (this as? FrameLayout)?.children?.firstOrNull() ?: this
 }
 
 private class TooltipData(
