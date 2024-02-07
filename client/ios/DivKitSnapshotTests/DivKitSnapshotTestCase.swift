@@ -85,6 +85,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
             )
           }
           divKitComponents.flushUpdateActions()
+          view.forceLayout()
           try checkSnapshots(
             view: view,
             caseName: caseName,

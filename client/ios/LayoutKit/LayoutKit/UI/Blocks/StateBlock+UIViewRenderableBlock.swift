@@ -157,19 +157,22 @@ private final class StateBlockView: BlockView {
       superview: self
     )
 
-    forceLayout()
+    let viewsToAdd = subviewStorage.getViewsToAdd()
+    if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
+      setNeedsLayout()
+    } else {
+      forceLayout()
 
-    subviewStorage.getViewsToAdd().forEach {
-      $0.addWithAnimation(in: self)
-    }
+      viewsToAdd.forEach {
+        $0.addWithAnimation(in: self)
+      }
 
-    viewsToTransition.forEach { id, frame in
-      if let view = subviewStorage.getView(id) {
-        view.changeBoundsWithAnimation(in: self, startFrame: frame)
+      viewsToTransition.forEach { id, frame in
+        if let view = subviewStorage.getView(id) {
+          view.changeBoundsWithAnimation(in: self, startFrame: frame)
+        }
       }
     }
-
-    setNeedsLayout()
   }
 
   override func layoutSubviews() {
