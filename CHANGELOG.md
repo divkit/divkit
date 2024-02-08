@@ -9,6 +9,7 @@
 * Added `focus_element` action support.
 * Added `auto` `div-accessibility.type`.
 * Fixed accessibility for `div-input`.
+* Fixed concurrency crash in `DivStateManager`.
 
 # Web Client:
 * Added support for the `preload_required` property in `image`, `gif` and `text` components.

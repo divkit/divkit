@@ -27,43 +27,61 @@ public class DivStateManager {
 
   private let rwLock = RWLock()
 
-  public private(set) var items: [DivStatePath: Item]
-  private var stateBindings: [DivStatePath: Binding<String>] = [:]
-  public private(set) var blockIds: [DivStatePath: Set<String>] = [:]
-  public private(set) var blockVisibility: [DivBlockPath: Bool] = [:]
+  private var _items: [DivStatePath: Item]
+  private var _stateBindings: [DivStatePath: Binding<String>] = [:]
+  private var _blockIds: [DivStatePath: Set<String>] = [:]
+  private var _blockVisibility: [DivBlockPath: Bool] = [:]
+
+  public var items: [DivStatePath: Item] {
+    rwLock.read {
+      _items
+    }
+  }
+
+  public var blockIds: [DivStatePath: Set<String>] {
+    rwLock.read {
+      _blockIds
+    }
+  }
+
+  public var blockVisibility: [DivBlockPath: Bool] {
+    rwLock.read {
+      _blockVisibility
+    }
+  }
 
   public init() {
-    self.items = [:]
+    self._items = [:]
   }
 
   public init(items: [DivStatePath: Item]) {
-    self.items = items
+    self._items = items
   }
 
   func get(stateBlockPath: DivStatePath) -> Item? {
     rwLock.read {
-      items[stateBlockPath]
+      _items[stateBlockPath]
     }
   }
 
   func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
     rwLock.write {
-      stateBindings[stateBlockPath] = stateBinding
-      guard stateBinding.value != items[stateBlockPath]?.currentStateID.rawValue else { return }
+      _stateBindings[stateBlockPath] = stateBinding
+      guard stateBinding.value != _items[stateBlockPath]?.currentStateID.rawValue else { return }
       updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
     }
   }
 
   func resetBinding(for stateBlockPath: DivStatePath) {
     rwLock.write {
-      _ = stateBindings.removeValue(forKey: stateBlockPath)
+      _ = _stateBindings.removeValue(forKey: stateBlockPath)
     }
   }
 
   public func setState(stateBlockPath: DivStatePath, stateID: DivStateID) {
     rwLock.write {
-      stateBindings[stateBlockPath]?.value = stateID.rawValue
-      items[stateBlockPath] = Item(
+      _stateBindings[stateBlockPath]?.value = stateID.rawValue
+      _items[stateBlockPath] = Item(
         currentStateID: stateID,
         previousState: .empty
       )
@@ -78,15 +96,15 @@ public class DivStateManager {
 
   private func updateState(path: DivStatePath, stateID: DivStateID) {
     // need to take a write lock before
-    let previousItem = items[path]
+    let previousItem = _items[path]
     let previousState: PreviousState
     if let previousStateID = previousItem?.currentStateID {
       previousState = .withID(previousStateID)
     } else {
       previousState = .initial
     }
-    stateBindings[path]?.value = stateID.rawValue
-    items[path] = Item(
+    _stateBindings[path]?.value = stateID.rawValue
+    _items[path] = Item(
       currentStateID: stateID,
       previousState: previousState
     )
@@ -94,54 +112,62 @@ public class DivStateManager {
 
   public func removeState(path: DivStatePath) {
     rwLock.write {
-      _ = items.removeValue(forKey: path)
+      _ = _items.removeValue(forKey: path)
     }
   }
 
   public func isBlockAdded(_ id: String, stateBlockPath: DivStatePath) -> Bool {
-    guard let item = get(stateBlockPath: stateBlockPath),
-          let currentBlockIds = blockIds[stateBlockPath + item.currentStateID] else {
+    rwLock.read {
+      guard let item = _items[stateBlockPath],
+            let currentBlockIds = _blockIds[stateBlockPath + item.currentStateID] else {
+        return false
+      }
+
+      switch item.previousState {
+      case .empty:
+        return false
+      case .initial:
+        if currentBlockIds.contains(id) {
+          return true
+        }
+      case let .withID(previousStateId):
+        if currentBlockIds.contains(id),
+           let previousBlockIds = _blockIds[stateBlockPath + previousStateId],
+           !previousBlockIds.contains(id) {
+          return true
+        }
+      }
+
       return false
     }
-
-    switch item.previousState {
-    case .empty:
-      return false
-    case .initial:
-      if currentBlockIds.contains(id) {
-        return true
-      }
-    case let .withID(previousStateId):
-      if currentBlockIds.contains(id),
-         let previousBlockIds = blockIds[stateBlockPath + previousStateId],
-         !previousBlockIds.contains(id) {
-        return true
-      }
-    }
-
-    return false
   }
 
   public func updateBlockIdsWithStateChangeTransition(statePath: DivStatePath, div: Div) {
-    blockIds[statePath] = div.idsWithStateChangeTransitionInCurrentState
+    rwLock.write {
+      _blockIds[statePath] = div.idsWithStateChangeTransitionInCurrentState
+    }
   }
 
   public func getVisibleIds(statePath: DivStatePath) -> Set<String> {
-    var ids = blockIds[statePath] ?? Set<String>()
-    blockVisibility.forEach { blockPath, isVisible in
-      if blockPath.statePath == statePath {
-        if isVisible {
-          ids.insert(blockPath.blockId)
-        } else {
-          ids.remove(blockPath.blockId)
+    rwLock.read {
+      var ids = _blockIds[statePath] ?? Set<String>()
+      _blockVisibility.forEach { blockPath, isVisible in
+        if blockPath.statePath == statePath {
+          if isVisible {
+            ids.insert(blockPath.blockId)
+          } else {
+            ids.remove(blockPath.blockId)
+          }
         }
       }
+      return ids
     }
-    return ids
   }
 
   public func shouldBlockAppearWithTransition(path: DivBlockPath) -> Bool {
-    blockVisibility[path] == false
+    rwLock.read {
+      _blockVisibility[path] == false
+    }
   }
 
   public func setBlockVisibility(statePath: DivStatePath, div: DivBase, isVisible: Bool) {
@@ -150,15 +176,19 @@ public class DivStateManager {
       return
     }
 
-    if let id = div.id, div.shouldApplyTransition(.visibilityChange) {
-      blockVisibility[statePath + id] = isVisible
+    rwLock.write {
+      if let id = div.id, div.shouldApplyTransition(.visibilityChange) {
+        _blockVisibility[statePath + id] = isVisible
+      }
     }
   }
 
   public func reset() {
-    items = [:]
-    blockIds = [:]
-    blockVisibility = [:]
+    rwLock.write {
+      _items = [:]
+      _blockIds = [:]
+      _blockVisibility = [:]
+    }
   }
 }
 
