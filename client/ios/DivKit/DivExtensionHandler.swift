@@ -18,7 +18,17 @@ import LayoutKit
 public protocol DivExtensionHandler: AccessibilityContaining {
   /// A unique identifier for the extension.
   var id: String { get }
-
+  
+  /// Notifies extension handler that div will be processed by DivKit.
+  ///
+  /// - Parameters:
+  ///   - div: The `DivBase` to which extension handler is attached.
+  ///   - context: The context in which the block is being modeled.
+  func accept(
+    div: DivBase,
+    context: DivBlockModelingContext
+  )
+  
   /// Applies additional properties to the block before the base properties.
   ///
   /// - Parameters:
@@ -49,6 +59,11 @@ public protocol DivExtensionHandler: AccessibilityContaining {
 }
 
 extension DivExtensionHandler {
+  public func accept(
+    div: DivBase,
+    context: DivBlockModelingContext
+  ) {}
+  
   public func applyBeforeBaseProperties(
     to block: Block,
     div _: DivBase,

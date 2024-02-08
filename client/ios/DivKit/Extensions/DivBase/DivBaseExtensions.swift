@@ -14,6 +14,12 @@ extension DivBase {
     customAccessibilityParams: CustomAccessibilityParams = .default,
     clipToBounds: Bool = true
   ) throws -> Block {
+    let extensionHandlers = context.getExtensionHandlers(for: self)
+    
+    extensionHandlers.forEach {
+      $0.accept(div: self, context: context)
+    }
+    
     let expressionResolver = context.expressionResolver
     let statePath = context.parentDivStatePath ?? DivData.rootPath
 
@@ -26,7 +32,7 @@ extension DivBase {
 
     var block = try block()
 
-    let extensionHandlers = context.getExtensionHandlers(for: self)
+    
     extensionHandlers.forEach {
       block = $0.applyBeforeBaseProperties(to: block, div: self, context: context)
     }
