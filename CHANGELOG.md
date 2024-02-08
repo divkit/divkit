@@ -1,3 +1,21 @@
+## 29.6.0
+
+# Android Client:
+* Supported page switching inside `pager` using focus.
+* `separator` and `image` without any `action` or `accessibility` block are excluded from accessibility.
+* Fixed subscription in `video` to fields with `variables` 
+
+# iOS Client:
+* Added `focus_element` action support.
+* Added `auto` `div-accessibility.type`.
+* Fixed accessibility for `div-input`.
+
+# Web Client:
+* Added support for the `preload_required` property in `image`, `gif` and `text` components.
+* Fixed an issue with the `max_lines` and `auto_ellipsize` on the same `text` component.
+* Errors from expressions now also contain the `path` property.
+
+
 ## 29.5.0
 
 # Android Client:

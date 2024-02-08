@@ -1,3 +1,10 @@
+## 29.6.0 (February 12, 2024)
+
+* Added support for the `preload_required` property in `image`, `gif` and `text` components.
+* Fixed an issue with the `max_lines` and `auto_ellipsize` on the same `text` component.
+* Errors from expressions now also contain the `path` property.
+
+
 ## 29.5.0 (February 5, 2024)
 
 * Fixed several input issues in the `slider` with two thumbs.
