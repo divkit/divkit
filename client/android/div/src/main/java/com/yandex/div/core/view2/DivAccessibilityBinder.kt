@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div2.DivAccessibility
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @DivScope
 @Mockable
 internal class DivAccessibilityBinder @Inject constructor(
-    @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean
+    @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean,
+    private val accessibilityStateProvider: AccessibilityStateProvider,
 ) {
     fun bindAccessibilityMode(
         view: View,
@@ -55,7 +57,7 @@ internal class DivAccessibilityBinder @Inject constructor(
     }
 
     fun bindType(view: View, divBase: DivBase, type: DivAccessibility.Type) {
-        if (!enabled) {
+        if (!accessibilityStateProvider.isAccessibilityEnabled(view.context)) {
             return
         }
 

@@ -22,6 +22,7 @@ import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
@@ -48,6 +49,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         private val divVisibilityActionTracker: DivVisibilityActionTracker,
         private val divPreloader: DivPreloader,
         private val errorCollectors: ErrorCollectors,
+        private val accessibilityStateProvider: AccessibilityStateProvider,
         private val createPopup: CreatePopupCall
 ) {
     private val tooltips = mutableMapOf<String, TooltipData>()
@@ -59,6 +61,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
             tooltipRestrictor: DivTooltipRestrictor,
             divVisibilityActionTracker: DivVisibilityActionTracker,
             divPreloader: DivPreloader,
+            accessibilityStateProvider: AccessibilityStateProvider,
             errorCollectors: ErrorCollectors
     ) : this(
         div2Builder,
@@ -66,6 +69,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         divVisibilityActionTracker,
         divPreloader,
         errorCollectors,
+        accessibilityStateProvider,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
     fun showTooltip(tooltipId: String, div2View: Div2View, multiple: Boolean = false) {
@@ -193,11 +197,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
-                tooltipView.doOnPreDraw {
-                    val view = it.getWrappedTooltip()
-                    view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-                    view?.performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
-                    view?.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+                if (accessibilityStateProvider.isAccessibilityEnabled(tooltipView.context)) {
+                    tooltipView.doOnPreDraw {
+                        val view = it.getWrappedTooltip()
+                        view.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                        view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS, null)
+                        view.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+                    }
                 }
 
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)

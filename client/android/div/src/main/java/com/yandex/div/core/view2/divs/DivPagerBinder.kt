@@ -20,6 +20,7 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.makeFocusable
@@ -55,7 +56,8 @@ internal class DivPagerBinder @Inject constructor(
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
     private val divActionBinder: DivActionBinder,
-    private val pagerIndicatorConnector: PagerIndicatorConnector
+    private val pagerIndicatorConnector: PagerIndicatorConnector,
+    private val accessibilityStateProvider: AccessibilityStateProvider,
 ) : DivViewBinder<DivPager, DivPagerView> {
 
     private var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
@@ -86,6 +88,7 @@ internal class DivPagerBinder @Inject constructor(
         baseBinder.bindView(view, div, oldDiv, divView)
 
         val pageTranslations = SparseArray<Float>()
+        val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(view.context)
         view.setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         var divItems = div.nonNullItems
         if (div.infiniteScroll.evaluate(resolver)) {
@@ -116,7 +119,8 @@ internal class DivPagerBinder @Inject constructor(
                 }
             },
             viewCreator = viewCreator,
-            path = path
+            path = path,
+            accessibilityEnabled = a11yEnabled,
         )
 
         val reusableObserver = { _: Any ->
@@ -190,6 +194,9 @@ internal class DivPagerBinder @Inject constructor(
         })
         if (div.infiniteScroll.evaluate(resolver)) {
             setInfiniteScroll(view)
+        }
+        if (a11yEnabled) {
+            view.enableAccessibility()
         }
     }
 
@@ -520,7 +527,8 @@ internal class DivPagerBinder @Inject constructor(
         private val divBinder: DivBinder,
         private val translationBinder: (holder: PagerViewHolder, position: Int) -> Unit,
         private val viewCreator: DivViewCreator,
-        private val path: DivStatePath
+        private val path: DivStatePath,
+        private val accessibilityEnabled: Boolean,
     ) : DivPatchableAdapter<PagerViewHolder>(divs, div2View) {
 
         override val subscriptions = mutableListOf<Disposable>()
@@ -532,7 +540,7 @@ internal class DivPagerBinder @Inject constructor(
             view.layoutParams =
                 ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-            return PagerViewHolder(view, divBinder, viewCreator)
+            return PagerViewHolder(view, divBinder, viewCreator, accessibilityEnabled)
         }
 
         override fun getItemCount() = items.size
@@ -579,7 +587,8 @@ internal class DivPagerBinder @Inject constructor(
     private class PagerViewHolder(
         val frameLayout: PageLayout,
         private val divBinder: DivBinder,
-        private val viewCreator: DivViewCreator
+        private val viewCreator: DivViewCreator,
+        private val accessibilityEnabled: Boolean,
     ) : RecyclerView.ViewHolder(frameLayout) {
 
         private var oldDiv: Div? = null
@@ -597,7 +606,9 @@ internal class DivPagerBinder @Inject constructor(
                 newDivView
             }
 
-            frameLayout.setTag(R.id.div_pager_item_clip_id, position)
+            if (accessibilityEnabled) {
+                frameLayout.setTag(R.id.div_pager_item_clip_id, position)
+            }
             oldDiv = div
             divBinder.bind(divView, div, div2View, path)
         }

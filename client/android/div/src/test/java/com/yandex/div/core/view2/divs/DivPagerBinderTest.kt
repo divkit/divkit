@@ -4,6 +4,7 @@ import androidx.core.view.get
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.PagerState
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
@@ -30,6 +31,7 @@ class DivPagerBinderTest: DivBinderTest() {
 
     private val divViewState = mock<DivViewState>()
     private val divBinder = mock<DivBinder>()
+    private val accessibilityStateProvider = AccessibilityStateProvider(false)
 
     private val underTest = DivPagerBinder(
         baseBinder = baseBinder,
@@ -37,7 +39,8 @@ class DivPagerBinderTest: DivBinderTest() {
         divBinder = { divBinder },
         divPatchCache = mock(),
         divActionBinder = mock(),
-        pagerIndicatorConnector = PagerIndicatorConnector()
+        pagerIndicatorConnector = PagerIndicatorConnector(),
+        accessibilityStateProvider = accessibilityStateProvider,
     )
 
     private val div = div()

@@ -11,6 +11,7 @@ import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
@@ -91,7 +92,7 @@ class DivTooltipControllerTest {
     private val tooltipView = mock<View> {
         on { width } doReturn 100
         on { height } doReturn 50
-        on { viewTreeObserver } doReturn mock()
+        on { context } doReturn mock()
     }
 
     private val div2Builder = mock<Div2Builder> {
@@ -110,6 +111,7 @@ class DivTooltipControllerTest {
     private val errorCollectors = mock<ErrorCollectors> {
         on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn errorCollector
     }
+    private val accessibilityStateProvider = AccessibilityStateProvider(false)
 
     private val divPreloader = mock<DivPreloader> {
         on { preload(any(), any(), any()) } doAnswer {
@@ -131,7 +133,7 @@ class DivTooltipControllerTest {
     }
 
     private val underTest = DivTooltipController(
-        { div2Builder }, tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors
+        { div2Builder }, tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors, accessibilityStateProvider
     ) { _, _, _ ->
         popupWindow
     }
