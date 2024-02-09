@@ -30,8 +30,10 @@ internal class DivPagerView @JvmOverloads constructor(
         get() = viewPager.currentItem
         set(value) = viewPager.setCurrentItem(value, false)
 
-    private val accessibilityDelegateCompat = getRecyclerView()?.let {
-        object : RecyclerViewAccessibilityDelegate(it) {
+    fun enableAccessibility() {
+        val recycler = getRecyclerView() ?: return
+        if (recycler.compatAccessibilityDelegate != null) return
+        val accessibilityDelegateCompat = object : RecyclerViewAccessibilityDelegate(recycler) {
             override fun onRequestSendAccessibilityEvent(
                 host: ViewGroup?, child: View?, event: AccessibilityEvent?
             ): Boolean {
@@ -47,10 +49,8 @@ internal class DivPagerView @JvmOverloads constructor(
                 return super.onRequestSendAccessibilityEvent(host, child, event)
             }
         }
-    }
 
-    init {
-        getRecyclerView()?.setAccessibilityDelegateCompat(accessibilityDelegateCompat)
+        recycler.setAccessibilityDelegateCompat(accessibilityDelegateCompat)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
