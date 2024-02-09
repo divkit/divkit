@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.accessibility.AccessibilityManager
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.widget.SuperLineHeightEditText
@@ -25,8 +26,29 @@ internal class DivInputView @JvmOverloads constructor(
 
     private var textChangeWatcher: TextWatcher? = null
 
+    private val accessibilityManager = context.getSystemService(
+        Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager
+
+    private var _hint: String? = null
+
     init {
         setPadding(0, 0, 0, 0)
+    }
+
+    fun setInputHint(hint: String?) {
+        _hint = hint
+        this.hint = when {
+            accessibilityManager?.isTouchExplorationEnabled != true -> hint
+            hint.isNullOrEmpty() && contentDescription.isNullOrEmpty() -> null
+            hint.isNullOrEmpty() -> contentDescription
+            contentDescription.isNullOrEmpty() -> hint
+            else -> "${hint.trimEnd('.')}. $contentDescription"
+        }
+    }
+
+    override fun setContentDescription(contentDescription: CharSequence?) {
+        super.setContentDescription(contentDescription)
+        setInputHint(_hint)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

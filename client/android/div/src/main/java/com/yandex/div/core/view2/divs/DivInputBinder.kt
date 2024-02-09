@@ -201,7 +201,7 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeHintText(div: DivInput, resolver: ExpressionResolver) {
         val hintTextExpr = div.hintText ?: return
 
-        val callback = { _: Any -> hint = hintTextExpr.evaluate(resolver) }
+        val callback = { _: Any -> setInputHint(hintTextExpr.evaluate(resolver)) }
         addSubscription(hintTextExpr.observeAndGet(resolver, callback))
     }
 
