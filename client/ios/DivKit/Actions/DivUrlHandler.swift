@@ -15,6 +15,23 @@ public protocol DivUrlHandler {
   ///   - sender: An optional sender object that can provide additional context for the URL handling
   /// process.
   func handle(_ url: URL, sender: AnyObject?)
+
+  /// Handles the specified URL.
+  ///
+  /// - Parameters:
+  ///   - url: The URL to be processed and handled.
+  ///   - info: Additional information about associated `action`.
+  ///   - sender: An optional sender object that can provide additional context for the URL handling
+  /// process.
+  func handle(_ url: URL, info: DivActionInfo, sender: AnyObject?)
+}
+
+extension DivUrlHandler {
+  public func handle(_: URL, sender _: AnyObject?) {}
+
+  public func handle(_ url: URL, info _: DivActionInfo, sender: AnyObject?) {
+    handle(url, sender: sender)
+  }
 }
 
 public struct DivUrlHandlerDelegate: DivUrlHandler {

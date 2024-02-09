@@ -10,6 +10,7 @@
 * Added `auto` `div-accessibility.type`.
 * Fixed accessibility for `div-input`.
 * Fixed concurrency crash in `DivStateManager`.
+* Added more information about associated `action` in URL handling.
 
 # Web Client:
 * Added support for the `preload_required` property in `image`, `gif` and `text` components.

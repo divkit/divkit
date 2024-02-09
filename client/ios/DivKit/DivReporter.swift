@@ -22,12 +22,6 @@ extension DivReporter {
   }
 }
 
-public struct DivActionInfo {
-  public let logId: String
-  public let source: UserInterfaceAction.DivActionSource
-  public let payload: [String: Any]?
-}
-
 final class DefaultDivReporter: DivReporter {
   func reportError(cardId _: DivCardID, error _: DivError) {}
 }
