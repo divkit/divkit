@@ -51,6 +51,8 @@ open class AspectImageView @JvmOverloads constructor(
 
     override fun setScaleType(scaleType: ScaleType?) = Unit
 
+    override fun getBaseline() = measuredHeight - paddingBottom
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         applyAspectRatio(widthMeasureSpec, heightMeasureSpec)

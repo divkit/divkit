@@ -878,7 +878,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             }
             val childTop = paddingTop + when (gravity) {
                 Gravity.TOP -> {
-                    val considerBaseline = lp.isBaselineAligned && lp.height != MATCH_PARENT
+                    val considerBaseline = lp.isBaselineAligned && lp.height != MATCH_PARENT && child.baseline != -1
                     if (considerBaseline) maxBaselineAscent - child.baseline else lp.topMargin
                 }
                 Gravity.CENTER_VERTICAL -> (childSpace - childHeight + lp.topMargin - lp.bottomMargin) / 2

@@ -56,4 +56,6 @@ internal class DivVideoView @JvmOverloads constructor(
         }
         return null
     }
+
+    override fun getBaseline() = measuredHeight - paddingBottom
 }
