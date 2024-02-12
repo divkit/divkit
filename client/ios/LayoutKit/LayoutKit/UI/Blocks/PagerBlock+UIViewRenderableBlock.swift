@@ -107,8 +107,6 @@ private final class PagerView: BlockView {
 
       if selectedActions.count > pageIndex {
         selectedActions[pageIndex].perform(sendingFrom: self)
-      } else {
-        assertionFailure("Invalid page index")
       }
     }
   }
@@ -138,16 +136,14 @@ extension PagerView: ElementStateObserver {
       return
     }
 
-    if !galleryState.isScrolling {
-      setState(
-        path: model.path,
-        state: PagerViewState(
-          numberOfPages: model.itemsCountWithoutInfinite,
-          currentPage: Int(pageIndex.rounded()) - model.infiniteCorrection
-        ),
-        selectedActions: selectedActions
-      )
-    }
+    setState(
+      path: model.path,
+      state: PagerViewState(
+        numberOfPages: model.itemsCountWithoutInfinite,
+        currentPage: Int(pageIndex.rounded()) - model.infiniteCorrection
+      ),
+      selectedActions: selectedActions
+    )
   }
 
   func focusedElementChanged(isFocused: Bool, forPath path: UIElementPath) {
