@@ -18,4 +18,9 @@ internal class ExpressionsRuntime(
     fun onAttachedToWindow(view: DivViewFacade) {
         triggersController.onAttachedToWindow(view)
     }
+
+    internal fun cleanup() {
+        variableController.cleanup()
+        triggersController.clearBinding()
+    }
 }

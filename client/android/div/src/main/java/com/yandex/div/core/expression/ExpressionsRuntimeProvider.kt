@@ -56,6 +56,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         }
     }
 
+    internal fun cleanupRuntimes() {
+        runtimes.values.forEach {
+            it.cleanup()
+        }
+    }
+
     private fun ensureVariablesSynced(
         v: VariableController,
         data: DivData,

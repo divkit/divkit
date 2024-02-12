@@ -18,6 +18,7 @@ internal class VariableController {
 
     private var onAnyVariableChangeCallback: ((Variable) -> Unit)? = null
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
+    private val declarationObserver = { v : Variable -> onVariableDeclared(v) }
 
     private fun addObserver(name: String, observer: (Variable) -> Unit) {
         val observers = onChangeObservers.getOrPut(name) {
@@ -92,7 +93,7 @@ internal class VariableController {
      */
     fun addSource(source: VariableSource) {
         source.observeVariables(notifyVariableChangedCallback)
-        source.observeDeclaration { onVariableDeclared(it) }
+        source.observeDeclaration(declarationObserver)
         extraVariablesSources.add(source)
     }
 
@@ -113,6 +114,14 @@ internal class VariableController {
         }
 
         return null
+    }
+
+    internal fun cleanup() {
+        extraVariablesSources.forEach { variableSource ->
+            variableSource.removeVariablesObserver(notifyVariableChangedCallback)
+            variableSource.removeDeclarationObserver(declarationObserver)
+        }
+        onAnyVariableChangeCallback = null
     }
 
     @Throws(VariableDeclarationException::class)
