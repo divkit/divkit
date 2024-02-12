@@ -20,7 +20,7 @@ import com.yandex.div.core.view2.divs.dpToPx
 
 private const val POPUP_ITEM_HEIGHT = 48
 
-internal open class SelectView constructor(context: Context) : SuperLineHeightTextView(context) {
+internal open class SelectView constructor(context: Context) : EllipsizedTextView(context) {
     init {
         this.setOnClickListener {
             popupWindow.resetPosition()

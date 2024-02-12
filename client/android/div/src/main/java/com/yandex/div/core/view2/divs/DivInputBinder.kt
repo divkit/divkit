@@ -35,7 +35,6 @@ import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputValidator
 import com.yandex.div2.DivPhoneInputMask
-import com.yandex.div2.DivSizeUnit
 import java.util.Locale
 import java.util.regex.PatternSyntaxException
 import javax.inject.Inject
@@ -183,12 +182,6 @@ internal class DivInputBinder @Inject constructor(
             applyLineHeight(lineHeightExpr.evaluate(resolver), fontSizeUnit)
         }
         addSubscription(lineHeightExpr.observeAndGet(resolver, callback))
-    }
-
-    private fun DivInputView.applyLineHeight(lineHeight: Long?, unit: DivSizeUnit) {
-        val height = lineHeight?.unitToPx(resources.displayMetrics, unit)
-        setFixedLineHeight(height)
-        (this as TextView).applyLineHeight(lineHeight, unit)
     }
 
     private fun DivInputView.observeMaxVisibleLines(div: DivInput, resolver: ExpressionResolver) {

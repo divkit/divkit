@@ -9,7 +9,6 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.internal.util.isHyphenationEnabled
 
@@ -17,7 +16,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+) : SuperLineHeightTextView(context, attrs, defStyleAttr) {
 
     var ellipsis: CharSequence = DEFAULT_ELLIPSIS
         set(value) {

@@ -7,29 +7,26 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.widget.addTextChangedListener
-import com.yandex.div.core.util.extractMaxHeight
-import kotlin.math.roundToInt
-
-private const val UNDEFINED = -1
+import com.yandex.div.core.widget.FixedLineHeightHelper
+import com.yandex.div.core.widget.FixedLineHeightView
 
 internal open class SuperLineHeightEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = androidx.appcompat.R.attr.editTextStyle
-) : AppCompatEditText(context, attrs, defStyleAttr) {
-
-    private var fixedLineHeight = UNDEFINED
-
-    private var extraPaddingTop = 0
-    private var extraPaddingBottom = 0
+) : AppCompatEditText(context, attrs, defStyleAttr), FixedLineHeightView {
 
     private var verticallyScrolling = true
 
-    private val visibleLineCount get() = when {
+    private inline val visibleLineCount get() = when {
         lineCount == 0 -> 1
         lineCount > maxLines -> maxLines
         else -> lineCount
     }
+
+    private val fixedLineHeightHelper = FixedLineHeightHelper(this)
+
+    override var fixedLineHeight by fixedLineHeightHelper::lineHeight
 
     private var currentLineCount = 0
 
@@ -51,39 +48,17 @@ internal open class SuperLineHeightEditText @JvmOverloads constructor(
         }
     }
 
-    fun setFixedLineHeight(lineHeight: Int?) {
-        fixedLineHeight = lineHeight ?: UNDEFINED
-    }
-
-    override fun setLineSpacing(add: Float, mult: Float) {
-        extraPaddingTop = (add / 2).roundToInt()
-        extraPaddingBottom = (add / 2).toInt()
-        super.setLineSpacing(add, mult)
-    }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (fixedLineHeight == UNDEFINED ||
-            MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
-            return
+        fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {
+            super.setMeasuredDimension(measuredWidthAndState, it)
         }
-
-        val maxHeight = extractMaxHeight(heightMeasureSpec)
-        var resultHeight = minOf(
-            maxHeight,
-            fixedLineHeight * visibleLineCount + paddingTop + paddingBottom
-        )
-        resultHeight = maxOf(minimumHeight, resultHeight)
-        val fixedHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-            resultHeight,
-            MeasureSpec.getMode(measuredHeightAndState)
-        )
-        setMeasuredDimension(measuredWidthAndState, fixedHeightMeasureSpec)
     }
 
-    override fun getCompoundPaddingTop() = super.getCompoundPaddingTop() + extraPaddingTop
+    override fun getCompoundPaddingTop() = super.getCompoundPaddingTop() + fixedLineHeightHelper.extraPaddingTop
 
-    override fun getCompoundPaddingBottom() = super.getCompoundPaddingBottom() + extraPaddingBottom
+    override fun getCompoundPaddingBottom() =
+        super.getCompoundPaddingBottom() + fixedLineHeightHelper.extraPaddingBottom
 
     override fun setHorizontallyScrolling(whether: Boolean) {
         verticallyScrolling = !whether

@@ -12,19 +12,21 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.ViewCompat;
+
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.font.DivTypefaceType;
+import com.yandex.div.internal.widget.SuperLineHeightTextView;
 
 /**
  * View that represents tab title inside {@link BaseIndicatorTabLayout}.
  */
-public final class TabView extends AppCompatTextView {
+public final class TabView extends SuperLineHeightTextView {
 
     private static final String ELLIPSIS_PLACEHOLDER_TO_MEASURE_WIDTH = "...";
 

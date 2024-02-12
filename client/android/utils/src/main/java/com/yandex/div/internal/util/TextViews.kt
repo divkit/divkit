@@ -5,8 +5,8 @@ import android.text.Layout
 import android.widget.TextView
 import androidx.annotation.ChecksSdkIntAtLeast
 
-val TextView.fontHeight: Int
-    get() = paint.getFontMetricsInt(null)
+val TextView.fontHeight: Float
+    get() = paint.getFontMetrics(null)
 
 // Rendering of Yandex Sans font with soft hyphens is broken on lower APIs.
 // See MORDAANDROID-767

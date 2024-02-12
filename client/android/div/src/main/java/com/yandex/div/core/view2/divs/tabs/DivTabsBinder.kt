@@ -391,7 +391,6 @@ internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: Expres
 
     applyStyle(null)
 
-    includeFontPadding = false
     val paddings = style.paddings
     val metrics = resources.displayMetrics
     val applyTabPaddings = { _: Any? ->

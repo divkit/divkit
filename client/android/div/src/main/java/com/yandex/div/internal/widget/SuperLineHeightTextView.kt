@@ -2,59 +2,33 @@ package com.yandex.div.internal.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import com.yandex.div.core.util.extractMaxHeight
-import kotlin.math.roundToInt
-
-private const val UNDEFINED = -1
+import androidx.appcompat.widget.AppCompatTextView
+import com.yandex.div.core.widget.FixedLineHeightHelper
+import com.yandex.div.core.widget.FixedLineHeightView
 
 /**
  * For some reason line height is ignored on one-line TextViews in Android.
  */
-internal open class SuperLineHeightTextView @JvmOverloads constructor(
+open class SuperLineHeightTextView @JvmOverloads constructor(
     context: Context?,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
-) : EllipsizedTextView(context!!, attrs, defStyle) {
+) : AppCompatTextView(context!!, attrs, defStyle), FixedLineHeightView {
 
-    private var extraPaddingTop = 0
-    private var extraPaddingBottom = 0
-    private var shouldAddExtraSpacing = true
+    private inline val visibleLineCount get() = minOf(lineCount, maxLines)
+    private val fixedLineHeightHelper = FixedLineHeightHelper(this)
 
-    private var fixedLineHeight = UNDEFINED
-    private val visibleLineCount get() = minOf(lineCount, maxLines)
-
-    fun setFixedLineHeight(lineHeight: Int?) {
-        fixedLineHeight = lineHeight ?: UNDEFINED
-    }
-
-    override fun setLineSpacing(add: Float, mult: Float) {
-        extraPaddingTop = (add / 2).roundToInt()
-        extraPaddingBottom = (add / 2).toInt()
-        super.setLineSpacing(add, mult)
-    }
+    override var fixedLineHeight by fixedLineHeightHelper::lineHeight
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (fixedLineHeight != UNDEFINED && MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY) {
-            measureWithFixedLineHeight(heightMeasureSpec)
+        fixedLineHeightHelper.measureWithFixedLineHeight(heightMeasureSpec, visibleLineCount) {
+            super.setMeasuredDimension(measuredWidthAndState, it)
         }
-        lastMeasuredHeight = measuredHeight
     }
 
-    private fun measureWithFixedLineHeight(heightMeasureSpec: Int) {
-        val maxHeight = extractMaxHeight(heightMeasureSpec)
-        val fixedHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
-            minOf(maxHeight, fixedLineHeight * visibleLineCount + paddingBottom + paddingTop),
-            MeasureSpec.getMode(heightMeasureSpec)
-        )
-        super.setMeasuredDimension(measuredWidthAndState, fixedHeightMeasureSpec)
-    }
+    override fun getCompoundPaddingTop() = super.getCompoundPaddingTop() + fixedLineHeightHelper.extraPaddingTop
 
-    override fun getCompoundPaddingTop(): Int {
-        return super.getCompoundPaddingTop() + extraPaddingTop
-    }
-
-    override fun getCompoundPaddingBottom(): Int {
-        return super.getCompoundPaddingBottom() + extraPaddingBottom
-    }
+    override fun getCompoundPaddingBottom() =
+        super.getCompoundPaddingBottom() + fixedLineHeightHelper.extraPaddingBottom
 }
