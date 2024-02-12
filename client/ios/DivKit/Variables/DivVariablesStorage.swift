@@ -87,6 +87,7 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     variables: DivVariables
   ) {
+    var changeEvent: ChangeEvent? = nil
     lock.write {
       let oldValues = allValues
       cardVariables[cardId] = variables
@@ -98,14 +99,14 @@ public final class DivVariablesStorage {
       if changedVariables.isEmpty {
         return
       }
-
-      notify(
-        ChangeEvent(
-          kind: .local(cardId, changedVariables),
-          oldValues: oldValues,
-          newValues: allValues
-        )
+      changeEvent = ChangeEvent(
+        kind: .local(cardId, changedVariables),
+        oldValues: oldValues,
+        newValues: allValues
       )
+    }
+    if let changeEvent {
+      notify(changeEvent)
     }
   }
 
