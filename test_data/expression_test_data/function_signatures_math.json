@@ -372,8 +372,8 @@
     },
     {
       "name": "ceil(number) number",
-      "function_name": "floor",
-      "doc": "Round argument value up. 1.49 -> 2.0, 1.5 -> 2.0. Returns number value.",
+      "function_name": "ceil",
+      "doc": "Rounds argument value up. 1.49 -> 2.0, 1.5 -> 2.0. Returns number value.",
       "arguments": [
         {
           "type": "number",
