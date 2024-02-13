@@ -23,7 +23,7 @@ class EntityWithArrayOfExpressions with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfExpressions(
-      items: safeParseObjExpr((json['items'] as List<dynamic>).map((v) => (v as String)).toList(),)!,
+      items: safeParseObjExpr((json['items'] as List<dynamic>).map((v) => safeParseStr(v?.toString(),)!,).toList(),)!,
     );
   }
 }

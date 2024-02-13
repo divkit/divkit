@@ -23,7 +23,7 @@ class EntityWithStringArrayProperty with EquatableMixin {
       return null;
     }
     return EntityWithStringArrayProperty(
-      array: safeParseObjExpr((json['array'] as List<dynamic>).map((v) => (v as String)).toList(),)!,
+      array: safeParseObjExpr((json['array'] as List<dynamic>).map((v) => safeParseStr(v?.toString(),)!,).toList(),)!,
     );
   }
 }

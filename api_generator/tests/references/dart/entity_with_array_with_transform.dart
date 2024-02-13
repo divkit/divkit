@@ -23,7 +23,7 @@ class EntityWithArrayWithTransform with EquatableMixin {
       return null;
     }
     return EntityWithArrayWithTransform(
-      array: safeParseObjExpr((json['array'] as List<dynamic>).map((v) => (v as int)).toList(),)!,
+      array: safeParseObjExpr((json['array'] as List<dynamic>).map((v) => safeParseColor(v,)!,).toList(),)!,
     );
   }
 }

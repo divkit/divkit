@@ -23,7 +23,7 @@ class EntityWithArrayOfEnums with EquatableMixin {
       return null;
     }
     return EntityWithArrayOfEnums(
-      items: safeParseObj((json['items'] as List<dynamic>).map((s) => EntityWithArrayOfEnumsItem.fromJson(s)!).toList(),)!,
+      items: safeParseObj((json['items'] as List<dynamic>).map((v) => safeParseStrEnum(v, parse: EntityWithArrayOfEnumsItem.fromJson,)!,).toList(),)!,
     );
   }
 }
