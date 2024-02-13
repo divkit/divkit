@@ -18,4 +18,4 @@ if "%5" neq "" (
 )
 
 echo Executing api_generator with [config = !config!] [schemaDir = !schemaDir!] [outputDir = !outputDir!] [optionalArgs = !optionalArgs!]
-python3 -u -m api_generator -c !config! -s !schemaDir! -o !outputDir! !optionalArgs!
+python -u -m api_generator -c !config! -s !schemaDir! -o !outputDir! !optionalArgs!
