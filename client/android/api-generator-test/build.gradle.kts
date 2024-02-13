@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id("com.android.library")
@@ -36,7 +37,7 @@ android {
     defaultConfig {
         minSdk = rootProject.ext["minSdkVersion"] as Int
         targetSdk = rootProject.ext["targetSdkVersion"] as Int
-        buildConfigField("String", "TEMPLATES_JSON_PATH", "\"$testDataPath\"")
+        buildConfigField("String", "TEMPLATES_JSON_PATH", "\"${fixPath(testDataPath)}\"")
     }
 
     project.tasks.preBuild.dependsOn("generateHomePojoTask")
@@ -76,7 +77,7 @@ schemes.forEach { item ->
         val schemesDirectory = (item["scheme"] as File).absolutePath
         val generatedDir = item["generated"] as String
         val configPath = (item["config"] as File).absolutePath
-        val binPath = File(divKitPublicDir, "api_generator/api_generator.sh").absolutePath
+        val binPath = File(divKitPublicDir, "api_generator/api_generator.${getScriptExt()}").absolutePath
 
         commandLine = listOf(binPath, configPath, schemesDirectory, generatedDir)
 
@@ -95,4 +96,16 @@ tasks.register("generateHomePojoTask") {
     dependsOn(provider {
         tasks.filter { task -> task.name.startsWith("scheme_") }
     })
+}
+
+fun getScriptExt(): String {
+    return if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        "bat"
+    } else {
+        "sh"
+    }
+}
+
+fun fixPath(path: String): String {
+    return path.replace("\\", "/")
 }

@@ -13,7 +13,7 @@ android {
     buildFeatures { buildConfig = true }
 
     defaultConfig {
-        buildConfigField "String", "DIV2_JSON_PATH", "\"$crossplatformProjectDir/\""
+        buildConfigField "String", "DIV2_JSON_PATH", "\"${fixPath(crossplatformProjectDir)}/\""
         buildConfigField "String", "VERSION_NAME", "\"${rootProject.property('divkitVersionName')}\""
     }
 }
@@ -53,4 +53,8 @@ dependencies {
 
     testImplementation "androidx.test:core-ktx:$versions.androidx.test"
     testImplementation "org.json:json:$versions.json"
+}
+
+static def fixPath(String path) {
+    return path.replace("\\", "/")
 }

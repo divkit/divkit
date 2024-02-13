@@ -1,3 +1,5 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
@@ -37,7 +39,7 @@ dependencies {
 }
 
 task generateDivModel(type: Exec) {
-    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
+    def execPath = new File(projectDir, "../../../api_generator/api_generator.${getScriptExt()}").absolutePath
     def configPath = new File(projectDir, 'div2-generator-config.json').absolutePath
     def schemaPath = new File(projectDir, "../../../schema").absolutePath
     def modelPath = new File(generatedSrcDir, "com/yandex/div2")
@@ -55,7 +57,7 @@ task generateDivModel(type: Exec) {
 }
 
 task generateDivSharedData(type: Exec) {
-    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
+    def execPath = new File(projectDir, "../../../api_generator/api_generator.${getScriptExt()}").absolutePath
     def sharedDataConfigPath = new File(projectDir, 'div2-shared-data-generator-config.json').absolutePath
     def sharedDataPath = new File(projectDir, "../../../shared_data").absolutePath
     def modelPath = new File(generatedSrcSharedDataDir, "com/yandex/div2")
@@ -76,5 +78,13 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
         freeCompilerArgs += '-opt-in=kotlin.RequiresOptIn'
         freeCompilerArgs += '-opt-in=com.yandex.div.data.DivModelInternalApi'
+    }
+}
+
+static def getScriptExt() {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        return 'bat'
+    } else {
+        return 'sh'
     }
 }

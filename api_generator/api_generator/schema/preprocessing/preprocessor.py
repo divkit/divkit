@@ -194,7 +194,7 @@ def internal_resolve_structure(
     if os.path.isdir(path):
         return entities.SchemaDirectory(path, parent_dir, lang)
 
-    with open(path, 'r') as file:
+    with open(path, 'r', encoding='utf-8') as file:
         json_data = json.loads(file.read())
         file.close()
 
