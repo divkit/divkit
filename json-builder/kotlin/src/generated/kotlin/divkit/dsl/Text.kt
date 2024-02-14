@@ -469,6 +469,7 @@ class Text internal constructor(
         operator fun plus(additive: Properties): Image = Image(
             Properties(
                 height = additive.height ?: properties.height,
+                preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
                 start = additive.start ?: properties.start,
                 tintColor = additive.tintColor ?: properties.tintColor,
                 tintMode = additive.tintMode ?: properties.tintMode,
@@ -483,6 +484,11 @@ class Text internal constructor(
              * Default value: `{"type": "fixed","value":20}`.
              */
             val height: Property<FixedSize>?,
+            /**
+             * Background image must be loaded before the display.
+             * Default value: `false`.
+             */
+            val preloadRequired: Property<Boolean>?,
             /**
              * A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
              */
@@ -510,6 +516,7 @@ class Text internal constructor(
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
                 result.tryPutProperty("height", height)
+                result.tryPutProperty("preload_required", preloadRequired)
                 result.tryPutProperty("start", start)
                 result.tryPutProperty("tint_color", tintColor)
                 result.tryPutProperty("tint_mode", tintMode)
@@ -2204,6 +2211,7 @@ fun Text.Ellipsis.asList() = listOf(this)
 
 /**
  * @param height Image height.
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2214,6 +2222,7 @@ fun Text.Ellipsis.asList() = listOf(this)
 fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
     height: FixedSize? = null,
+    preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -2222,6 +2231,7 @@ fun DivScope.textImage(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         height = valueOrNull(height),
+        preloadRequired = valueOrNull(preloadRequired),
         start = valueOrNull(start),
         tintColor = valueOrNull(tintColor),
         tintMode = valueOrNull(tintMode),
@@ -2232,6 +2242,7 @@ fun DivScope.textImage(
 
 /**
  * @param height Image height.
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2242,6 +2253,7 @@ fun DivScope.textImage(
 fun DivScope.textImageProps(
     `use named arguments`: Guard = Guard.instance,
     height: FixedSize? = null,
+    preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -2249,6 +2261,7 @@ fun DivScope.textImageProps(
     width: FixedSize? = null,
 ) = Text.Image.Properties(
     height = valueOrNull(height),
+    preloadRequired = valueOrNull(preloadRequired),
     start = valueOrNull(start),
     tintColor = valueOrNull(tintColor),
     tintMode = valueOrNull(tintMode),
@@ -2258,6 +2271,7 @@ fun DivScope.textImageProps(
 
 /**
  * @param height Image height.
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2268,6 +2282,7 @@ fun DivScope.textImageProps(
 fun TemplateScope.textImageRefs(
     `use named arguments`: Guard = Guard.instance,
     height: ReferenceProperty<FixedSize>? = null,
+    preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
@@ -2275,6 +2290,7 @@ fun TemplateScope.textImageRefs(
     width: ReferenceProperty<FixedSize>? = null,
 ) = Text.Image.Properties(
     height = height,
+    preloadRequired = preloadRequired,
     start = start,
     tintColor = tintColor,
     tintMode = tintMode,
@@ -2284,6 +2300,7 @@ fun TemplateScope.textImageRefs(
 
 /**
  * @param height Image height.
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2294,6 +2311,7 @@ fun TemplateScope.textImageRefs(
 fun Text.Image.override(
     `use named arguments`: Guard = Guard.instance,
     height: FixedSize? = null,
+    preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -2302,6 +2320,7 @@ fun Text.Image.override(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         height = valueOrNull(height) ?: properties.height,
+        preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
         start = valueOrNull(start) ?: properties.start,
         tintColor = valueOrNull(tintColor) ?: properties.tintColor,
         tintMode = valueOrNull(tintMode) ?: properties.tintMode,
@@ -2312,6 +2331,7 @@ fun Text.Image.override(
 
 /**
  * @param height Image height.
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2322,6 +2342,7 @@ fun Text.Image.override(
 fun Text.Image.defer(
     `use named arguments`: Guard = Guard.instance,
     height: ReferenceProperty<FixedSize>? = null,
+    preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
@@ -2330,6 +2351,7 @@ fun Text.Image.defer(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         height = height ?: properties.height,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
         tintMode = tintMode ?: properties.tintMode,
@@ -2339,6 +2361,7 @@ fun Text.Image.defer(
 )
 
 /**
+ * @param preloadRequired Background image must be loaded before the display.
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
@@ -2347,6 +2370,7 @@ fun Text.Image.defer(
 @Generated
 fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
     tintMode: ExpressionProperty<BlendMode>? = null,
@@ -2354,6 +2378,7 @@ fun Text.Image.evaluate(
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         height = properties.height,
+        preloadRequired = preloadRequired ?: properties.preloadRequired,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
         tintMode = tintMode ?: properties.tintMode,
