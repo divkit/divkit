@@ -10,6 +10,7 @@
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
 		431276EE2A72B8F2000CC821 /* DivView+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */; };
+		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
 		435653DB29742C9300224B9D /* BlockWithFixedWrapContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */; };
@@ -275,6 +276,7 @@
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
 		431276ED2A72B8F2000CC821 /* DivView+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DivView+SwiftUI.swift"; sourceTree = "<group>"; };
+		431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivActionURLHandlerTests.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
 		435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockWithFixedWrapContent.swift; sourceTree = "<group>"; };
@@ -744,6 +746,7 @@
 			children = (
 				8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */,
 				8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */,
+				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -1638,6 +1641,7 @@
 				8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */,
 				8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */,
 				8C23F41229DDB3810069F3F7 /* EntityTemplate.swift in Sources */,
+				431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */,
 				8C23F43629DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C23F41C29DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift in Sources */,
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,

@@ -148,7 +148,7 @@ private final class MockActionLogger: DivActionLogger {
   }
 }
 
-private final class MockPatchProvider: DivPatchProvider {
+final class MockPatchProvider: DivPatchProvider {
   func getPatch(url _: URL, completion _: @escaping DivPatchProviderCompletion) {}
 
   func cancelRequests() {}

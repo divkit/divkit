@@ -214,6 +214,9 @@ public final class DivActionURLHandler {
     count: Int,
     overflow: OverflowMode
   ) -> Int {
+    guard count != 0 else {
+      return current
+    }
     switch overflow {
     case .ring:
       return (current + 1) % count
@@ -270,9 +273,12 @@ public final class DivActionURLHandler {
     count: Int,
     overflow: OverflowMode
   ) -> Int {
+    guard count != 0 else {
+      return current
+    }
     switch overflow {
     case .ring:
-      return (count + (current - 1)) % count
+      return (current + count - 1) % count
     case .clamp:
       return max(0, current - 1)
     }
@@ -284,18 +290,22 @@ public final class DivActionURLHandler {
     index: Int,
     itemsCount: Int
   ) {
+    let clampedIndex = clamp(index, min: 0, max: max(0, itemsCount - 1))
+    guard clampedIndex == index else {
+      return
+    }
     blockStateStorage.setState(
       id: id,
       cardId: cardId,
       state: GalleryViewState(
-        contentPageIndex: CGFloat(max(0, index)),
+        contentPageIndex: CGFloat(clampedIndex),
         itemsCount: itemsCount
       )
     )
   }
 
   private func setPagerCurrentItem(id: String, cardId: DivCardID, index: Int, numberOfPages: Int) {
-    let clampedIndex = clamp(index, min: 0, max: numberOfPages - 1)
+    let clampedIndex = clamp(index, min: 0, max: max(0, numberOfPages - 1))
     guard clampedIndex == index else {
       return
     }
@@ -311,11 +321,15 @@ public final class DivActionURLHandler {
   }
 
   private func setTabsCurrentItem(id: String, cardId: DivCardID, index: Int, countOfPages: Int) {
+    let clampedIndex = clamp(index, min: 0, max: max(0, countOfPages - 1))
+    guard clampedIndex == index else {
+      return
+    }
     blockStateStorage.setState(
       id: id,
       cardId: cardId,
       state: TabViewState(
-        selectedPageIndex: CGFloat(max(0, index)),
+        selectedPageIndex: CGFloat(clampedIndex),
         countOfPages: countOfPages
       )
     )
