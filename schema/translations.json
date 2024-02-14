@@ -400,8 +400,8 @@
     "ru": "Массив `div`, из которых будут созданы элементы коллекции."
   },
   "div_collection_item_builder_prototypes_data_element_name": {
-    "en": "Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.",
-    "ru": "Имя для обращения к очередному элементу `data` в прототипе. Работа с этим элементом ведется как со словарями."
+    "en": "Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.",
+    "ru": "Имя для обращения к очередному элементу `data` в прототипе. Работа с этим элементом ведется так же, как со словарями."
   },
   "div_collection_item_builder_prototypes_data_element_prefix": {
     "en": "Prefix for accessing the next `data` element in the prototype.",
@@ -2132,8 +2132,8 @@
     "ru": "Дополнительная информация, которая может быть использована внутри плеера."
   },
   "div_video_preload_required": {
-    "en": "This option turns on preloading of video sources.",
-    "ru": "Опция включает предзагрузку видео."
+    "en": "Enables video preloading.",
+    "ru": "Включает предзагрузку видео."
   },
   "div_video_preview": {
     "en": "Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`",
