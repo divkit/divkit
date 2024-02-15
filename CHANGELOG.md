@@ -1,3 +1,10 @@
+## 29.7.0
+
+# Android Client:
+* Fixed text line height so that it behaves as on other platforms.
+* Fixed baseline alignment for `image`, `gif-image` and `video`.
+
+
 ## 29.6.0
 
 # Android Client:
