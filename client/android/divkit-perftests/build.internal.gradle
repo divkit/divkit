@@ -1,4 +1,0 @@
-dependencies {
-    implementation "com.yandex:pulse:$versions.pulse"
-    androidTestImplementation "com.yandex.mobile.perftests:perftests-runner:$versions.perftests"
-}
