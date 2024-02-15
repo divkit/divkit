@@ -4,6 +4,7 @@ import type { RootCtxValue } from '../context/root';
 import type { MaybeMissing } from '../expressions/json';
 import type { ComponentContext } from '../types/componentContext';
 import { getUrlSchema, isBuiltinSchema } from '../utils/url';
+import { correctNonNegativeNumber } from '../utils/correctNonNegativeNumber';
 
 interface CalcedAction {
     index: number | undefined;
@@ -187,7 +188,7 @@ export function visibilityAction(node: HTMLElement, {
                                 }
 
                                 rootCtx.logStat(isVisibility ? 'visible' : 'disappear', calcedAction);
-                            }, calcedParams.visibility_duration || 800);
+                            }, correctNonNegativeNumber(calcedParams.visibility_duration, 800));
                         }
                     } else if (shouldClear) {
                         if (status.timer) {

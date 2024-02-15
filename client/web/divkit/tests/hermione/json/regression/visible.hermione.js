@@ -11,17 +11,17 @@ describe('regression', () => {
             await this.browser.$('span=visible').then(elem => elem.click());
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(1);
+            logs.length.should.equal(2);
             logs.some(it => it.action.log_id === 'update_visibility_visible').should.equal(true);
 
             await this.browser.assertView('visible', '#root');
         });
-        
+
         it('Click on invisible', async function() {
             await this.browser.$('span=invisible').then(elem => elem.click());
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(1);
+            logs.length.should.equal(2);
             logs.some(it => it.action.log_id === 'update_visibility_invisible').should.equal(true);
 
             await this.browser.assertView('invisible', '#root');
@@ -31,7 +31,7 @@ describe('regression', () => {
             await this.browser.$('span=gone').then(elem => elem.click());
             const logs = await this.browser.execute(() => window.divkitLogs);
 
-            logs.length.should.equal(1);
+            logs.length.should.equal(2);
             logs.some(it => it.action.log_id === 'update_visibility_gone').should.equal(true);
 
             await this.browser.assertView('gone', '#root');
