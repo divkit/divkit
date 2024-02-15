@@ -1,0 +1,85 @@
+{
+  "templates": {
+    "rect": {
+      "type": "separator",
+      "alignment_horizontal": "center",
+      "margins": {
+        "top": 24
+      },
+      "width": {
+        "type": "fixed",
+        "value": 280
+      },
+      "height": {
+        "type": "fixed",
+        "value": 280
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "@{bg_color}"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      },
+      "extensions": [
+        {
+          "id": "gesture",
+          "params": {
+            "swipe_up": [
+              {
+                "log_id": "swipe_up",
+                "url": "div-action://set_variable?name=bg_color&value=%23f7cb4d"
+              }
+            ],
+            "swipe_down": [
+              {
+                "log_id": "swipe_down",
+                "url": "div-action://set_variable?name=bg_color&value=%2341b375"
+              }
+            ],
+            "swipe_left": [
+              {
+                "log_id": "swipe_left",
+                "url": "div-action://set_variable?name=bg_color&value=%237baaf7"
+              }
+            ],
+            "swipe_right": [
+              {
+                "log_id": "swipe_right",
+                "url": "div-action://set_variable?name=bg_color&value=%23ba67c8"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "bg_color",
+        "type": "color",
+        "value": "#e67c73"
+      }
+    ],
+    "log_id": "card_with_gesture",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "rect"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

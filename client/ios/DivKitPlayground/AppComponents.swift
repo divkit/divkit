@@ -34,6 +34,7 @@ enum AppComponents {
         sizeProviderExtensionHandler,
         ShimmerImagePreviewExtension(),
         VideoDurationExtensionHandler(),
+        GestureExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(imageLoadingOptimizationEnabled: true),
       fontProvider: fontProvider,

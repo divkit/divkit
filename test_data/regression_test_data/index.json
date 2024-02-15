@@ -2392,6 +2392,25 @@
         "Slider should change value, but its view shouldn't be moved."
       ],
       "file": "slider_scroll_horizontal.json"
+    },
+    {
+      "title": "Gesture",
+      "tags": [
+        "extensions"
+      ],
+      "steps": [
+        "Swipe up",
+        "Swipe down",
+        "Swipe left",
+        "Swipe right"
+      ],
+      "expected_results": [
+        "Rect turns yellow",
+        "Rect turns green",
+        "Rect turns blue",
+        "Rect turns purple"
+      ],
+      "file": "gesture.json"
     }
   ]
 }

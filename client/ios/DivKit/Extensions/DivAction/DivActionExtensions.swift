@@ -4,7 +4,7 @@ import LayoutKit
 extension DivAction: DivActionBase {}
 
 extension DivAction {
-  func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
+  public func uiAction(context: DivBlockModelingContext) -> UserInterfaceAction? {
     guard resolveIsEnabled(context.expressionResolver) else {
       return nil
     }
@@ -56,7 +56,7 @@ extension DivAction {
 }
 
 extension [DivAction] {
-  func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
+  public func uiActions(context: DivBlockModelingContext) -> [UserInterfaceAction] {
     compactMap { $0.uiAction(context: context) }
   }
 }
