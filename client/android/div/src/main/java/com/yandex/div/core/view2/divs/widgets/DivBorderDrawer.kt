@@ -33,6 +33,8 @@ import com.yandex.div2.DivStroke
 import kotlin.math.max
 import kotlin.math.min
 
+private const val STROKE_OFFSET_PERCENTAGE = 0.1f
+
 internal class DivBorderDrawer(
     private val metrics: DisplayMetrics,
     private val view: View,
@@ -240,6 +242,9 @@ internal class DivBorderDrawer(
     private inner class BorderParams {
         val paint = Paint()
         val path = Path()
+        private val halfDp = 0.5.dpToPxF(metrics)
+        private val strokeOffset // magic formula to avoid border artifacts
+            get() = min(halfDp, max(1f, strokeWidth * STROKE_OFFSET_PERCENTAGE))
         private val rect = RectF()
 
         init {
@@ -248,12 +253,12 @@ internal class DivBorderDrawer(
         }
 
         fun setPaintParams(strokeWidth: Float, borderColor: Int) {
-            paint.strokeWidth = strokeWidth
+            paint.strokeWidth = strokeWidth + strokeOffset
             paint.color = borderColor
         }
 
         fun invalidatePath(radii: FloatArray) {
-            val halfWidth = strokeWidth / 2f
+            val halfWidth = (strokeWidth - strokeOffset) / 2f
             rect.set(halfWidth, halfWidth, view.width.toFloat() - halfWidth, view.height.toFloat() - halfWidth)
 
             path.reset()
