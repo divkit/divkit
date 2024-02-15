@@ -766,10 +766,20 @@ class Div2View private constructor(
 
     @JvmOverloads
     fun handleActionWithResult(action: DivAction, reason: String = DivActionReason.EXTERNAL): Boolean {
-        return div2Component.actionHandler.handleActionWithReason(action, this, reason)
+        return div2Component.actionBinder.handleAction(
+            divView = this,
+            action = action,
+            reason = reason,
+            actionUid = null,
+            viewActionHandler = actionHandler)
     }
 
     override fun handleUri(uri: Uri) {
+        actionHandler?.let {
+            it.handleUri(uri, this)
+            return
+        }
+
         div2Component.actionHandler.handleUri(uri, this)
     }
 
