@@ -29,7 +29,7 @@ public final class DivView: VisibleBoundsTrackingView {
     }
   }
 
-  private var oldFrame: CGRect = .zero
+  private var oldBounds: CGRect = .zero
 
   /// Initializes a new `DivView` instance.
   ///
@@ -101,7 +101,7 @@ public final class DivView: VisibleBoundsTrackingView {
     blockView.frame = bounds
     blockView.layoutIfNeeded()
     blockView.onVisibleBoundsChanged(
-      from: .zero,
+      from: oldBounds,
       to: blockProvider?.lastVisibleBounds ?? .zero
     )
   }
@@ -219,17 +219,17 @@ extension DivView: UIActionEventPerforming {
 extension DivView {
   public override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
-    frameDidChange(frame: frame)
+    boundsDidChange(bounds: bounds)
   }
 
-  private func frameDidChange(frame: CGRect) {
-    if oldFrame.width != frame.width, blockProvider?.cardSize?.width == .matchParent {
+  private func boundsDidChange(bounds: CGRect) {
+    if oldBounds.width != bounds.width, blockProvider?.cardSize?.width == .matchParent {
       invalidateIntrinsicContentSize()
     }
-    if oldFrame.height != frame.height, blockProvider?.cardSize?.height == .matchParent {
+    if oldBounds.height != bounds.height, blockProvider?.cardSize?.height == .matchParent {
       invalidateIntrinsicContentSize()
     }
-    oldFrame = frame
+    oldBounds = bounds
   }
 }
 

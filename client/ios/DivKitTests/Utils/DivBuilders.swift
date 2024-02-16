@@ -70,7 +70,8 @@ func divText(
   paddings: DivEdgeInsets? = nil,
   text: String = "",
   textExpression: String? = nil,
-  width: DivSize? = nil
+  width: DivSize? = nil,
+  visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
   let textValue: Expression<String>
   if let textExpression {
@@ -87,6 +88,7 @@ func divText(
     margins: margins,
     paddings: paddings,
     text: textValue,
+    visibilityActions: visibilityActions,
     width: width
   ))
 }
