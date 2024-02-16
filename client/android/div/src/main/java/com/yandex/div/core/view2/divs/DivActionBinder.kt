@@ -325,17 +325,19 @@ internal class DivActionBinder @Inject constructor(
         reason: String,
         actionUid: String? = null,
         viewActionHandler: DivActionHandler? = (divView as? Div2View)?.actionHandler,
-    ) {
-        if (!action.isEnabled.evaluate(divView.expressionResolver)) return
+    ): Boolean {
+        if (!action.isEnabled.evaluate(divView.expressionResolver)) return false
         if (actionHandler.useActionUid && actionUid != null) {
-            if (viewActionHandler == null ||
-                !viewActionHandler.handleActionWithReason(action, divView, actionUid, reason)) {
-                actionHandler.handleActionWithReason(action, divView, actionUid, reason)
+            if (viewActionHandler?.handleActionWithReason(
+                    action, divView, actionUid, reason) == true) {
+                return true
             }
+            return actionHandler.handleActionWithReason(action, divView, actionUid, reason)
         } else {
-            if (viewActionHandler == null || !viewActionHandler.handleActionWithReason(action, divView, reason)) {
-                actionHandler.handleActionWithReason(action, divView, reason)
+            if (viewActionHandler?.handleActionWithReason(action, divView, reason) == true) {
+                return true
             }
+            return actionHandler.handleActionWithReason(action, divView, reason)
         }
     }
 
