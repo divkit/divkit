@@ -20,18 +20,6 @@ return <DivKit id="smth" json={json} />;
 
 All other props are similar to the `render` options for the `@divkitframework/divkit` module.
 
-### Important: Configure your build config to minimize the result code size
-
-For this, specify the `process.env.IS_SERVER` env variable:
-
-```js
-new webpack.DefinePlugin({
-    'process.env.IS_SERVER': JSON.stringify(isServer)
-})
-```
-
-Where `isServer` - current env, `true` or `false`.
-
 ### SSR
 
 SSR is supported. Make sure to pass the same props both on the client and the server.

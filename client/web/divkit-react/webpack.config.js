@@ -1,7 +1,7 @@
 const path = require('path');
 const isProd = process.env.NODE_ENV === 'production';
 
-module.exports = {
+const base = {
     mode: isProd ? 'production' : 'development',
     devtool: isProd ? 'source-map' : 'eval-cheap-source-map',
     resolve: {
@@ -35,18 +35,71 @@ module.exports = {
             }
         ]
     },
-    entry: {
-        divkit: './src/divkit.tsx',
-    },
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        library: {
-            type: 'commonjs2'
-        }
-    },
     externals: [
         'react',
         '@divkitframework/divkit/server',
         '@divkitframework/divkit/client-hydratable'
     ]
 };
+
+module.exports = [
+    {
+        ...base,
+        target: 'web',
+        entry: {
+            divkit: './src/divkit-client.tsx',
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist/client/cjs'),
+            library: {
+                type: 'commonjs2'
+            }
+        },
+    },
+    {
+        ...base,
+        target: 'web',
+        entry: {
+            divkit: './src/divkit-client.tsx',
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist/client/esm'),
+            library: {
+                type: 'module'
+            }
+        },
+        experiments: {
+            outputModule: true
+        }
+    },
+    {
+        ...base,
+        target: 'node',
+        entry: {
+            divkit: './src/divkit-server.tsx',
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist/server/cjs'),
+            library: {
+                type: 'commonjs2'
+            }
+        },
+    },
+    {
+        ...base,
+        target: 'node',
+        entry: {
+            divkit: './src/divkit-server.tsx',
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist/server/esm'),
+            library: {
+                type: 'module'
+            },
+            chunkFormat: 'module'
+        },
+        experiments: {
+            outputModule: true
+        }
+    }
+]

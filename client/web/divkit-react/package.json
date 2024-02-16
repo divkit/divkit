@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/react",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "description": "React binding for DivKit",
     "keywords": [
         "server-driven-ui",
@@ -17,8 +17,19 @@
         "dist/*",
         "typings/*"
     ],
-    "main": "./dist/divkit.js",
+    "main": "./dist/client/cjs/divkit.js",
+    "module": "./dist/client/esm/divkit.mjs",
     "types": "./typings/divkit.d.ts",
+    "exports": {
+        "node": {
+            "import": "./dist/server/esm/divkit.mjs",
+            "default": "./dist/server/cjs/divkit.js"
+        },
+        "default": {
+            "import": "./dist/client/esm/divkit.mjs",
+            "default": "./dist/client/cjs/divkit.js"
+        }
+    },
     "scripts": {
         "check:ts": "tsc --noEmit",
         "check:eslint": "eslint --quiet .",
@@ -51,9 +62,9 @@
         "eslint": "7.32.0",
         "react": "18.2.0",
         "typescript": "5.0.4",
-        "webpack": "5.80.0",
-        "webpack-cli": "5.0.2",
-        "webpack-dev-server": "4.13.3"
+        "webpack": "5.90.1",
+        "webpack-cli": "5.1.4",
+        "webpack-dev-server": "5.0.1"
     },
     "peerDependencies": {
         "@divkitframework/divkit": "*",
