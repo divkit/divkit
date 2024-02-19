@@ -144,18 +144,22 @@ public final class DivVariableStorage {
     name: DivVariableName,
     valueFactory: (DivVariableValue) -> DivVariableValue?
   ) {
+    var oldValues: DivVariables?
     let hasLocalValue = lock.write {
       guard let oldValue = values[name] else {
         return false
       }
 
       if let value = valueFactory(oldValue), value != oldValue {
-        let oldValues = allValues
+        oldValues = _allValues
         values[name] = value
-        notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
       }
 
       return true
+    }
+
+    if let oldValues {
+      notify(ChangeEvent(changedVariables: [name], oldValues: oldValues))
     }
 
     if hasLocalValue {
