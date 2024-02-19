@@ -261,7 +261,7 @@ class DartGenerator(Generator):
         cases_len = len(string_enumeration.cases)
         for i in range(cases_len):
             result += f'  {allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))}' \
-                      f'(\'{utils.snake_case(string_enumeration.cases[i][0])}\')' + (
+                      f'(\'{string_enumeration.cases[i][0]}\')' + (
                           ',' if i != cases_len - 1 else ';')
         result += EMPTY
         result += '  final String value;'
@@ -302,7 +302,7 @@ class DartGenerator(Generator):
         result += '    }'
         result += '    switch (json) {'
         for i in range(cases_len):
-            result += f'      case \'{utils.snake_case(string_enumeration.cases[i][0])}\':\n        return ' \
+            result += f'      case \'{string_enumeration.cases[i][0]}\':\n        return ' \
                       f'{full_name}.{allowed_name(utils.lower_camel_case(string_enumeration.cases[i][0]))};'
         result += '    }'
         result += '    return null;'
