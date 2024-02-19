@@ -23,6 +23,7 @@ class TabsItemsViewTest {
     }
     private val tabsLayout = mock<DivTabsLayout> {
         on { viewPager } doReturn viewPager
+        on { resources } doReturn mock()
     }
     private val underTest = DivViewWithItems.Tabs(tabsLayout)
 

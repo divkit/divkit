@@ -1,9 +1,11 @@
 package com.yandex.div.core.view2.items
 
+import android.util.DisplayMetrics
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.kotlin.mock
 
 @RunWith(Parameterized::class)
 internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
@@ -26,7 +28,8 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
 
     @Test
     fun `next item`() {
-        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
+        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount, scrollRange = 0,
+        scrollOffset = 0, metrics = mock())
 
         Assert.assertEquals(testCase.nextItem, underTest.nextItem())
     }
@@ -34,7 +37,8 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
 
     @Test
     fun `previous item`() {
-        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount)
+        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount, scrollRange = 0,
+            scrollOffset = 0, metrics = mock())
 
         Assert.assertEquals(testCase.previousItem, underTest.previousItem())
     }

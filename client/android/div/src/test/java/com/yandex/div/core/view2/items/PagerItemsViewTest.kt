@@ -28,6 +28,7 @@ class PagerItemsViewTest {
     }
     private val view = mock<DivPagerView> {
         on { viewPager } doReturn viewPager
+        on { resources } doReturn mock()
     }
 
     private val underTest = DivViewWithItems.Pager(view)

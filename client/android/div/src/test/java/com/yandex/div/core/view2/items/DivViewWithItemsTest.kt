@@ -16,9 +16,13 @@ class DivViewWithItemsTest {
 
     @Test
     fun `create paging gallery`() {
+        val view = mock<DivRecyclerView> {
+            on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING)
+            on { resources } doReturn mock()
+        }
         Assert.assertThat(
             DivViewWithItems.create(
-                mock<DivRecyclerView> { on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING) },
+                view,
                 mock()
             ) { Direction.NEXT },
             instanceOf(DivViewWithItems.PagingGallery::class.java)
@@ -27,9 +31,13 @@ class DivViewWithItemsTest {
 
     @Test
     fun `create gallery`() {
+        val view = mock<DivRecyclerView> {
+            on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT)
+            on { resources } doReturn mock()
+        }
         Assert.assertThat(
             DivViewWithItems.create(
-                mock<DivRecyclerView> { on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT) },
+                view,
                 mock()
             ) { Direction.NEXT },
             instanceOf(DivViewWithItems.Gallery::class.java)
@@ -38,16 +46,22 @@ class DivViewWithItemsTest {
 
     @Test
     fun `create pager`() {
+        val view = mock<DivPagerView> {
+            on { resources } doReturn mock()
+        }
         Assert.assertThat(
-            DivViewWithItems.create(mock<DivPagerView>(), mock()) { Direction.NEXT },
+            DivViewWithItems.create(view, mock()) { Direction.NEXT },
             instanceOf(DivViewWithItems.Pager::class.java)
         )
     }
 
     @Test
     fun `create tabs`() {
+        val view = mock<DivTabsLayout> {
+            on { resources } doReturn mock()
+        }
         Assert.assertThat(
-            DivViewWithItems.create(mock<DivTabsLayout>(), mock()) { Direction.NEXT },
+            DivViewWithItems.create(view, mock()) { Direction.NEXT },
             instanceOf(DivViewWithItems.Tabs::class.java)
         )
     }

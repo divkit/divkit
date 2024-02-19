@@ -6,12 +6,15 @@ import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.view2.divs.dpToPx
+import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivSizeUnit
 
 /**
  * Abstract view having items.
@@ -29,24 +32,60 @@ internal sealed class DivViewWithItems {
     abstract val itemCount: Int
 
     /**
+     * DisplayMetrics
+     */
+    abstract val metrics: DisplayMetrics
+
+    /**
+     * Scroll range.
+     */
+    open val scrollRange: Int = 0
+
+    /**
+     * Scroll range.
+     */
+    open val scrollOffset: Int = 0
+
+    /**
+     * Scroll to @param dp value.
+     */
+    open fun scrollTo(value: Int, sizeUnit: DivSizeUnit = DivSizeUnit.PX) = Unit
+
+    /**
+     * Scroll to the end of recycler view.
+     */
+    open fun scrollToTheEnd() = Unit
+
+    /**
      * Implementation of [DivViewWithItems] specific for div gallery with `scroll_mode` "paging"
      */
     internal class PagingGallery(
         private val view: DivRecyclerView,
         private val direction: Direction
     ) : DivViewWithItems() {
+        override val metrics = view.resources.displayMetrics
+
         override var currentItem: Int
             get() = view.currentItem(direction)
             set(value) = checkItem(value, itemCount) { view.smoothScrollToPosition(value) }
 
         override val itemCount: Int
             get() = view.itemCount
+
+        override val scrollRange get() = view.scrollRange()
+        override val scrollOffset get() = view.scrollOffset()
+
+        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit) =
+            view.scrollTo(value, sizeUnit, metrics)
+        override fun scrollToTheEnd() = view.scrollToTheEnd(metrics)
     }
 
     /**
      * Implementation of [DivViewWithItems] specific for div gallery with `scroll_mode` "default".
      */
     internal class Gallery(private val view: DivRecyclerView, private val direction: Direction) : DivViewWithItems() {
+        override val metrics = view.resources.displayMetrics
+
         override var currentItem: Int
             get() = view.currentItem(direction)
             set(value) {
@@ -66,12 +105,21 @@ internal sealed class DivViewWithItems {
 
         override val itemCount: Int
             get() = view.itemCount
+
+        override val scrollRange get() = view.scrollRange()
+        override val scrollOffset get() = view.scrollOffset()
+
+        override fun scrollTo(value: Int, sizeUnit: DivSizeUnit) =
+            view.scrollTo(value, sizeUnit, metrics)
+        override fun scrollToTheEnd() = view.scrollToTheEnd(metrics)
     }
 
     /**
      * Implementation of [DivViewWithItems] specific for div pager.
      */
     internal class Pager(private val view: DivPagerView) : DivViewWithItems() {
+        override val metrics = view.resources.displayMetrics
+
         override var currentItem: Int
             get() = view.viewPager.currentItem
             set(value) = checkItem(value, itemCount) { view.viewPager.setCurrentItem(value, true) }
@@ -84,6 +132,8 @@ internal sealed class DivViewWithItems {
      * Implementation of [DivViewWithItems] specific for div tabs.
      */
     internal class Tabs(private val view: DivTabsLayout) : DivViewWithItems() {
+        override val metrics = view.resources.displayMetrics
+
         override var currentItem: Int
             get() = view.viewPager.currentItem
             set(value) = checkItem(value, itemCount) { view.viewPager.setCurrentItem(value, true) }
@@ -147,6 +197,32 @@ private fun <T : RecyclerView> T.canScroll(): Boolean {
         else -> false
     }
 }
+
+private fun <T : RecyclerView> T.scrollTo(value: Int, sizeUnit: DivSizeUnit, metrics: DisplayMetrics) {
+    val valuePx = when (sizeUnit) {
+        DivSizeUnit.PX -> value
+        DivSizeUnit.SP -> value.spToPx(metrics)
+        DivSizeUnit.DP -> value.dpToPx(metrics)
+    }
+    val lm = linearLayoutManager ?: return
+    when (lm.orientation) {
+        RecyclerView.HORIZONTAL -> smoothScrollBy(valuePx - computeHorizontalScrollOffset(), 0)
+        RecyclerView.VERTICAL -> smoothScrollBy(0, valuePx - computeVerticalScrollOffset())
+    }
+}
+
+private fun <T : RecyclerView> T.scrollRange() = when (linearLayoutManager?.orientation) {
+    RecyclerView.HORIZONTAL -> computeHorizontalScrollRange() - width + paddingLeft + paddingRight
+    else -> computeVerticalScrollRange() -height + paddingTop + paddingBottom
+}
+
+private fun <T : RecyclerView> T.scrollOffset() = when (linearLayoutManager?.orientation) {
+    RecyclerView.HORIZONTAL -> computeHorizontalScrollOffset()
+    else -> computeVerticalScrollOffset()
+}
+
+private fun <T : RecyclerView> T.scrollToTheEnd(metrics: DisplayMetrics) =
+    scrollTo(scrollRange(), DivSizeUnit.PX, metrics)
 
 private fun LinearLayoutManager.visibleItemPosition(direction: Direction): Int {
     return when (direction) {

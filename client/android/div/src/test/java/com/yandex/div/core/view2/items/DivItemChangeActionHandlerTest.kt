@@ -30,6 +30,7 @@ class DivItemChangeActionHandlerTest {
     private val divItemsView = mock<DivViewWithItems> {
         on { currentItem } doReturn CURRENT_ITEM
         on { itemCount } doReturn ITEM_COUNT
+        on { metrics } doReturn mock()
     }
 
     @Before

@@ -33,6 +33,7 @@ class GalleryItemsViewTest {
     private val recyclerView = mock<DivRecyclerView> {
         on { layoutManager } doReturn layoutManager
         on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT)
+        on { resources } doReturn mock()
     }
 
     private val underTest = createUnderTest()
@@ -153,7 +154,10 @@ class GalleryItemsViewTest {
 
     @Test
     fun `set current item on snapping recycler view`() {
-        val view = mock<DivRecyclerView> { on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING) }
+        val view = mock<DivRecyclerView> {
+            on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING)
+            on { resources } doReturn mock()
+        }
         whenever(view.layoutManager).thenReturn(layoutManager)
         val underTest = createUnderTest(drv = view)
 

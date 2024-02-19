@@ -47,7 +47,7 @@
       },
       "height": {
         "type": "fixed",
-        "value": 100
+        "value": 80
       },
       "border": {
         "corner_radius": 6
@@ -115,6 +115,66 @@
             },
             {
               "type": "header",
+              "text": "scroll_mode = default. overflow=ring"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery4",
+              "scroll_mode": "default",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                }
+              ]
+            },
+            {
+              "type": "header",
               "text": "scroll_mode = paging"
             },
             {
@@ -150,6 +210,66 @@
               ]
             },
             {
+              "type": "header",
+              "text": "scroll_mode = paging. overflow=ring"
+            },
+            {
+              "type": "gallery",
+              "id": "gallery3",
+              "scroll_mode": "paging",
+              "default_item": 1,
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 600
+                  }
+                }
+              ]
+            },
+            {
               "type": "container",
               "orientation": "horizontal",
               "content_alignment_horizontal": "center",
@@ -165,6 +285,14 @@
                     {
                       "log_id": "gallery2/first",
                       "url": "div-action://set_current_item?id=gallery2&item=0"
+                    },
+                    {
+                      "log_id": "gallery3/first",
+                      "url": "div-action://set_current_item?id=gallery3&item=0"
+                    },
+                    {
+                      "log_id": "gallery4/first",
+                      "url": "div-action://set_current_item?id=gallery4&item=0"
                     }
                   ]
                 },
@@ -179,6 +307,14 @@
                     {
                       "log_id": "gallery2/prev",
                       "url": "div-action://set_previous_item?id=gallery2"
+                    },
+                    {
+                      "log_id": "gallery3/prev",
+                      "url": "div-action://set_previous_item?id=gallery3&overflow=ring"
+                    },
+                    {
+                      "log_id": "gallery4/prev",
+                      "url": "div-action://set_previous_item?id=gallery4&overflow=ring"
                     }
                   ]
                 },
@@ -193,6 +329,14 @@
                     {
                       "log_id": "gallery2/next",
                       "url": "div-action://set_next_item?id=gallery2"
+                    },
+                    {
+                      "log_id": "gallery3/next",
+                      "url": "div-action://set_next_item?id=gallery3&overflow=ring"
+                    },
+                    {
+                      "log_id": "gallery4/next",
+                      "url": "div-action://set_next_item?id=gallery4&overflow=ring"
                     }
                   ]
                 },
@@ -207,6 +351,134 @@
                     {
                       "log_id": "gallery2/last",
                       "url": "div-action://set_current_item?id=gallery2&item=5"
+                    },
+                    {
+                      "log_id": "gallery3/last",
+                      "url": "div-action://set_current_item?id=gallery3&item=5"
+                    },
+                    {
+                      "log_id": "gallery4/last",
+                      "url": "div-action://set_current_item?id=gallery4&item=5"
+                    }
+                  ]
+                }
+              ],
+              "paddings": {
+                "top": 10
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "<<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_to_start",
+                      "url": "div-action://scroll_to_start?id=gallery1"
+                    },
+                    {
+                      "log_id": "gallery2/scroll_to_start",
+                      "url": "div-action://scroll_to_start?id=gallery2"
+                    },
+                    {
+                      "log_id": "gallery3/scroll_to_start",
+                      "url": "div-action://scroll_to_start?id=gallery3"
+                    },
+                    {
+                      "log_id": "gallery4/scroll_to_start",
+                      "url": "div-action://scroll_to_start?id=gallery4"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "<",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_backward by 150dp",
+                      "url": "div-action://scroll_backward?id=gallery1&step=50"
+                    },
+                    {
+                      "log_id": "gallery2/scroll_backward by 50dp",
+                      "url": "div-action://scroll_backward?id=gallery2&step=50"
+                    },
+                    {
+                      "log_id": "gallery3/scroll_backward by 50dp",
+                      "url": "div-action://scroll_backward?id=gallery3&step=50&overflow=ring"
+                    },
+                    {
+                      "log_id": "gallery4/scroll_backward by 50dp",
+                      "url": "div-action://scroll_backward?id=gallery4&step=50&overflow=ring"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "*",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_to_position 300dp",
+                      "url": "div-action://scroll_to_position?id=gallery1&step=300"
+                    },
+                    {
+                      "log_id": "gallery2/scroll_to_position 300dp",
+                      "url": "div-action://scroll_to_position?id=gallery2&step=300"
+                    },
+                    {
+                      "log_id": "gallery3/scroll_to_position 300dp",
+                      "url": "div-action://scroll_to_position?id=gallery3&step=300"
+                    },
+                    {
+                      "log_id": "gallery4/scroll_to_position 300dp",
+                      "url": "div-action://scroll_to_position?id=gallery4&step=300"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_forward by 50dp",
+                      "url": "div-action://scroll_forward?id=gallery1&step=50"
+                    },
+                    {
+                      "log_id": "gallery2/scroll_forward by 50dp",
+                      "url": "div-action://scroll_forward?id=gallery2&step=50"
+                    },
+                    {
+                      "log_id": "gallery3/scroll_forward by 50dp",
+                      "url": "div-action://scroll_forward?id=gallery3&step=50&overflow=ring"
+                    },
+                    {
+                      "log_id": "gallery4/scroll_forward by 50dp",
+                      "url": "div-action://scroll_forward?id=gallery4&step=50&overflow=ring"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">>",
+                  "actions": [
+                    {
+                      "log_id": "gallery1/scroll_to_end",
+                      "url": "div-action://scroll_to_end?id=gallery1"
+                    },
+                    {
+                      "log_id": "gallery2/scroll_to_end",
+                      "url": "div-action://scroll_to_end?id=gallery2"
+                    },
+                    {
+                      "log_id": "gallery3/scroll_to_end",
+                      "url": "div-action://scroll_to_end?id=gallery3"
+                    },
+                    {
+                      "log_id": "gallery4/scroll_to_end",
+                      "url": "div-action://scroll_to_end?id=gallery4"
                     }
                   ]
                 }
@@ -221,3 +493,4 @@
     ]
   }
 }
+
