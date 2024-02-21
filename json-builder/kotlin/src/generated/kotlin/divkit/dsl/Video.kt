@@ -178,7 +178,7 @@ class Video internal constructor(
          */
         val playerSettingsPayload: Property<Map<String, Any>>?,
         /**
-         * This option turns on preloading of video sources.
+         * Enables video preloading.
          * Default value: `false`.
          */
         val preloadRequired: Property<Boolean>?,
@@ -325,7 +325,7 @@ class Video internal constructor(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -457,7 +457,7 @@ fun DivScope.video(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -587,7 +587,7 @@ fun DivScope.videoProps(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -717,7 +717,7 @@ fun TemplateScope.videoRefs(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -849,7 +849,7 @@ fun Video.override(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -964,7 +964,7 @@ fun Video.defer(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
@@ -1056,7 +1056,7 @@ fun Video.evaluate(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -1189,7 +1189,7 @@ fun Component<Video>.override(
  * @param paddings Internal margins from the element stroke.
  * @param pauseActions Actions performed when playback is paused.
  * @param playerSettingsPayload Additional information that can be used in the player.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param resumeActions Actions performed when video playback resumes.
@@ -1305,7 +1305,7 @@ fun Component<Video>.defer(
  * @param autostart This option turns on automatic video playback. On the web, the video starts if muted playback is turned on.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param muted This option mutes video.
- * @param preloadRequired This option turns on preloading of video sources.
+ * @param preloadRequired Enables video preloading.
  * @param preview Video preview encoded in `base64`. Will be shown until the video is ready to play. `Data url` format: `data:[;base64],<data>`
  * @param repeatable This option turns on video repeat.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.

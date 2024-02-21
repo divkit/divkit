@@ -44,7 +44,7 @@ class CollectionItemBuilder internal constructor(
          */
         val data: Property<List<Any>>?,
         /**
-         * Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+         * Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
          * Default value: `it`.
          */
         val dataElementName: Property<String>?,
@@ -108,7 +108,7 @@ class CollectionItemBuilder internal constructor(
 
 /**
  * @param data Data that will be used to create collection elements.
- * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
  * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
@@ -127,7 +127,7 @@ fun DivScope.collectionItemBuilder(
 
 /**
  * @param data Data that will be used to create collection elements.
- * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
  * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
@@ -144,7 +144,7 @@ fun DivScope.collectionItemBuilderProps(
 
 /**
  * @param data Data that will be used to create collection elements.
- * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
  * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
@@ -161,7 +161,7 @@ fun TemplateScope.collectionItemBuilderRefs(
 
 /**
  * @param data Data that will be used to create collection elements.
- * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
  * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
@@ -180,7 +180,7 @@ fun CollectionItemBuilder.override(
 
 /**
  * @param data Data that will be used to create collection elements.
- * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is like working with DivKit dictionaries.
+ * @param dataElementName Name for accessing the next `data` element in the prototype. Working with this element is the same as with dictionaries.
  * @param prototypes Array of `div` elements from which the collection elements will be created.
  */
 @Generated
