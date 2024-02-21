@@ -33,6 +33,7 @@ import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
 import com.yandex.div.core.widget.makeUnspecifiedSpec
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.nonNullItems
@@ -595,6 +596,12 @@ internal class DivPagerBinder @Inject constructor(
 
         fun bind(div2View: Div2View, div: Div, path: DivStatePath, position: Int) {
             val resolver = div2View.expressionResolver
+
+            if (frameLayout.tryRebindRecycleContainerChildren(div2View, div)) {
+                oldDiv = div
+                return
+            }
+
             val divView = if (oldDiv != null
                     && frameLayout.isNotEmpty()
                     && DivComparator.areDivsReplaceable(oldDiv, div, div2View.oldExpressionResolver, resolver)) {
@@ -611,6 +618,10 @@ internal class DivPagerBinder @Inject constructor(
             }
             oldDiv = div
             divBinder.bind(divView, div, div2View, path)
+        }
+
+        private fun getPagerView(): DivPagerView {
+            return ((frameLayout.parent as ViewGroup).parent as ViewGroup).parent as DivPagerView
         }
     }
 

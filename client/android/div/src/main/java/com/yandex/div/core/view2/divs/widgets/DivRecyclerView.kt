@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.view.ContextThemeWrapper
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
@@ -171,6 +173,11 @@ internal class DivRecyclerView @JvmOverloads constructor(
         if (currentAdapter is Releasable) {
             currentAdapter.release()
         }
+    }
+
+    fun getItemView(index: Int): View? {
+        val wrappedChild = this.getChildAt(index) as? ViewGroup ?: return null
+        return wrappedChild.getChildAt(0)
     }
 
     private fun Float.toTouchPoint(): Int {

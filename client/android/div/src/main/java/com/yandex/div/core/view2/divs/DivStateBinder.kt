@@ -107,9 +107,13 @@ internal class DivStateBinder @Inject constructor(
 
         val outgoing = if (layout.childCount > 0) layout.getChildAt(0) else null
         val incoming: View?
+        val reusableIncomingView = newStateDiv?.let {
+            divView.currentRebindReusableList?.get(newStateDiv)?.view
+        }
+
         if (layout.stateId != newState.stateId) {
             incoming = if (newStateDiv != null) {
-                viewCreator.create(newStateDiv, resolver).apply { createLayoutParams() }
+                reusableIncomingView ?: viewCreator.create(newStateDiv, resolver).apply { createLayoutParams() }
             } else {
                 null
             }
@@ -135,7 +139,7 @@ internal class DivStateBinder @Inject constructor(
             incoming = if (areDivsReplaceable) {
                 outgoing
             } else {
-                viewCreator.create(newStateDiv, resolver).apply { createLayoutParams() }
+                reusableIncomingView ?: viewCreator.create(newStateDiv, resolver).apply { createLayoutParams() }
             }
             if (!areDivsReplaceable) {
                 layout.releaseAndRemoveChildren(divView)

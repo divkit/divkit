@@ -11,7 +11,9 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
+import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -29,7 +31,8 @@ internal class DivGridBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divPatchManager: DivPatchManager,
     private val divPatchCache: DivPatchCache,
-    private val divBinder: Provider<DivBinder>
+    private val divBinder: Provider<DivBinder>,
+    private val divViewCreator: Provider<DivViewCreator>,
 ) : DivViewBinder<DivGrid, DivGridLayout> {
 
     override fun bindView(view: DivGridLayout, div: DivGrid, divView: Div2View, path: DivStatePath) {
@@ -52,18 +55,20 @@ internal class DivGridBinder @Inject constructor(
         view.observeContentAlignment(div.contentAlignmentHorizontal, div.contentAlignmentVertical, resolver)
 
         val items = div.nonNullItems
-        if (oldDiv != null) {
-            for (i in items.size..oldDiv.nonNullItems.lastIndex) {
-                divView.unbindViewFromDiv(view.getChildAt(i))
-            }
-        }
+
+        view.tryRebindPlainContainerChildren(
+            divView,
+            items,
+            divViewCreator
+        )
+
         var viewsPositionDiff = 0
         for (gridIndex in items.indices) {
             val childDivValue = items[gridIndex].value()
             val childView = view.getChildAt(gridIndex + viewsPositionDiff)
             val childDivId = childDivValue.id
             // applying div patch
-            if (childDivId != null) {
+            if (childDivId != null && !divView.complexRebindInProgress) {
                 val patchViewsToAdd = divPatchManager.createViewsForId(divView, childDivId)
                 val patchDivs = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)
                 if (patchViewsToAdd != null && patchDivs != null) {

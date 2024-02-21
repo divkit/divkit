@@ -28,6 +28,7 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
@@ -94,10 +95,17 @@ internal class DivContainerBinder @Inject constructor(
             divView.unbindViewFromDiv(childView)
         }
 
+        view.tryRebindPlainContainerChildren(
+            divView,
+            div.buildItems(resolver),
+            divViewCreator
+        )
+
         val items = div.buildItems(resolver)
         val oldItems = oldDiv?.buildItems(oldResolver)?.let {
             when {
                 div === oldDiv -> it
+                divView.complexRebindInProgress -> null
                 DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, resolver) &&
                     DivComparator.areChildrenReplaceable(it, items, oldResolver, resolver) -> it
 
@@ -175,7 +183,7 @@ internal class DivContainerBinder @Inject constructor(
                 shift += patchShift
             } else {
                 binder.bind(childView, item, divView, path)
-                childView.bindChildAlignment(newDiv, oldDiv, item.value(), oldChildDiv, resolver, subscriber)
+                childView.bindChildAlignment(newDiv, oldDiv, item.value(), oldChildDiv, resolver, subscriber, divView)
             }
         }
     }
@@ -196,7 +204,7 @@ internal class DivContainerBinder @Inject constructor(
             patchViewsToAdd.forEachIndexed { patchIndex, patchView ->
                 val patchDivValue = patchDivs[patchIndex].value()
                 addView(patchView, childIndex + patchIndex)
-                patchView.bindChildAlignment(newDiv, oldDiv, patchDivValue, null, resolver, subscriber)
+                patchView.bindChildAlignment(newDiv, oldDiv, patchDivValue, null, resolver, subscriber, divView)
                 if (patchDivValue.hasSightActions) {
                     divView.bindViewToDiv(patchView, patchDivs[patchIndex])
                 }
@@ -532,9 +540,11 @@ internal class DivContainerBinder @Inject constructor(
         newChildDiv: DivBase,
         oldChildDiv: DivBase?,
         resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
+        subscriber: ExpressionSubscriber,
+        divView: Div2View,
     ) {
-        if (newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
+        if (!divView.complexRebindInProgress
+            && newDiv.contentAlignmentHorizontal.equalsToConstant(oldDiv?.contentAlignmentHorizontal)
             && newDiv.contentAlignmentVertical.equalsToConstant(oldDiv?.contentAlignmentVertical)
             && newChildDiv.alignmentHorizontal.equalsToConstant(oldChildDiv?.alignmentHorizontal)
             && newChildDiv.alignmentVertical.equalsToConstant(oldChildDiv?.alignmentVertical)) {

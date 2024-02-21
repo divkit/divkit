@@ -8,7 +8,20 @@ sealed class EnumWithDefaultType : Hashable {
     class WithDefaultCase(val value: WithDefault) : EnumWithDefaultType()
     class WithoutDefaultCase(val value: WithoutDefault) : EnumWithDefaultType()
 
+    private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
+
+    override fun propertiesHash(): Int {
+        _propertiesHash?.let {
+            return it
+        }
+        return when(this) {
+            is WithDefaultCase -> 31 + this.value.propertiesHash()
+            is WithoutDefaultCase -> 62 + this.value.propertiesHash()
+        }.also {
+            _propertiesHash = it
+        }
+    }
 
     override fun hash(): Int {
         _hash?.let {

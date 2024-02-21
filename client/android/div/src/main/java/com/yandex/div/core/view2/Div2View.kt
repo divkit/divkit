@@ -8,6 +8,7 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnAttach
@@ -49,6 +50,8 @@ import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.core.view2.reuse.RebindTask
+import com.yandex.div.core.view2.reuse.ReusableTokenList
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
@@ -92,6 +95,7 @@ class Div2View private constructor(
         .build()
 
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
+    private val complexRebindEnabled = div2Component.isComplexRebindEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 
@@ -128,6 +132,16 @@ class Div2View private constructor(
     @VisibleForTesting
     internal var stateId = DivData.INVALID_STATE_ID
     private var config = DivViewConfig.DEFAULT
+
+    private var rebindTask: RebindTask? = null
+    internal val currentRebindReusableList: ReusableTokenList?
+        get() {
+            if (!complexRebindInProgress) return null
+
+            return rebindTask?.reusableList
+        }
+    internal val complexRebindInProgress: Boolean
+        get() = rebindTask?.rebindInProgress ?: false
 
     private val renderConfig = {
         DivKit.getInstance(context).component.histogramRecordConfiguration.renderConfiguration.get()
@@ -224,9 +238,16 @@ class Div2View private constructor(
                 defStyleAttr: Int = 0
     ) : this(context, attrs, defStyleAttr, SystemClock.uptimeMillis())
 
-    fun setData(data: DivData?, tag: DivDataTag) = setData(data, divData, tag)
+    fun setData(
+        data: DivData?,
+        tag: DivDataTag
+    ) = setData(data, divData, tag)
 
-    fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean = synchronized(monitor) {
+    fun setData(
+        data: DivData?,
+        oldDivData: DivData?,
+        tag: DivDataTag
+    ): Boolean = synchronized(monitor) {
         if (data == null || divData === data) {
             return false
         }
@@ -236,15 +257,20 @@ class Div2View private constructor(
 
         var oldData = divData ?: oldDivData
         updateExpressionsRuntime(data, tag)
-        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
-            oldData = null
-        }
         dataTag = tag
 
         data.states.forEach {
             div2Component.preloader.preload(it.div, expressionResolver)
         }
 
+        if (complexRebindEnabled && oldData != null && view.getChildAt(0) is ViewGroup) {
+            complexRebind(data, oldData)
+            return false
+        }
+
+        if (!DivComparator.isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver)) {
+            oldData = null
+        }
 
         val result = if (oldData != null) {
             if (data.allowsTransitionsOnDataChange(expressionResolver)) {
@@ -463,6 +489,9 @@ class Div2View private constructor(
     }
 
     private fun cleanup(removeChildren: Boolean) {
+        rebindTask?.clear()?.let {
+            rebindTask = null
+        }
         if (removeChildren) {
             releaseAndRemoveChildren(this)
         }
@@ -959,7 +988,46 @@ class Div2View private constructor(
         }
     }
 
+    private fun complexRebind(newData: DivData, oldData: DivData) {
+        val stateToBind = newData.stateToBind ?: return
+        histogramReporter.onRebindingStarted()
+        divData = newData
+
+        val task = this.rebindTask ?: RebindTask(
+            div2View = this,
+            div2Component.divBinder,
+            oldExpressionResolver,
+            expressionResolver
+        ).also {
+            this.rebindTask = it
+        }
+
+        val state = newData.stateToBind ?: return
+        val viewToRebind = (view.getChildAt(0) as ViewGroup).apply {
+            bindLayoutParams(state.div.value(), expressionResolver)
+        }
+
+        div2Component.stateManager.updateState(dataTag, stateToBind.stateId, false)
+        val result = task.prepareAndRebind(
+            oldData,
+            newData,
+            viewToRebind,
+            DivStatePath.fromState(newData.stateId())
+        )
+        if (!result) {
+            updateNow(newData, dataTag)
+            return
+        }
+        requestLayout()
+
+        histogramReporter.onRebindingFinished()
+        div2Component.divBinder.attachIndicators()
+        sendCreationHistograms()
+    }
+
     private val DivData.stateToBind get() = states.find { it.stateId == stateId } ?: states.firstOrNull()
+
+    fun stateToBind(divData: DivData): DivData.State? = divData.stateToBind
 
     var visualErrorsEnabled: Boolean
         set(value) {

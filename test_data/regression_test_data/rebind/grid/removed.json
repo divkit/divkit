@@ -1,0 +1,142 @@
+{
+  "templates": {
+    "grid_element": {
+      "type": "separator",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "height": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    },
+    "button": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#550055"
+        }
+      ],
+      "paddings": {
+        "left": 50,
+        "right": 50,
+        "top": 20,
+        "bottom": 20
+      },
+      "margins": {
+        "left": 30,
+        "right": 30
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "text_color": "#FFF"
+    }
+  },
+  "card": {
+    "log_id": "grid_layout",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "grid",
+              "width": {
+                "type": "fixed",
+                "value": 288
+              },
+              "height": {
+                "type": "fixed",
+                "value": 192
+              },
+              "margins": {
+                "top": 16
+              },
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              },
+              "alignment_horizontal": "center",
+              "column_count": 3,
+              "items": [
+                {
+                  "type": "grid_element",
+                  "row_span": 1,
+                  "background_color": "#D098D3"
+                },
+                {
+                  "type": "grid_element",
+                  "background_color": "#FFCC00"
+                },
+                {
+                  "type": "grid_element",
+                  "row_span": 1,
+                  "background_color": "#e1bae3"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "space-between",
+              "margins": {
+                "top": 30,
+                "bottom": 30
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "UnDo",
+                  "actions": [
+                    {
+                      "log_id": "rebinding",
+                      "url": "div-demo-action://set_data?path=rebind/grid/un_removed.json"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "Next",
+                  "actions": [
+                    {
+                      "log_id": "rebinding",
+                      "url": "div-demo-action://set_data?path=rebind/grid/column_count_changed.json"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

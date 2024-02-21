@@ -88,6 +88,10 @@ internal class DivBinder @Inject constructor(
 ) {
     @MainThread
     fun bind(view: View, div: Div, divView: Div2View, path: DivStatePath) = suppressExpressionErrors {
+        divView.currentRebindReusableList?.pop(div)?.let {
+            return@suppressExpressionErrors
+        }
+
         if (!validator.validate(div, divView.expressionResolver)) {
             bindLayoutParams(view, div.value(), divView.expressionResolver)
             return

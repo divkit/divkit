@@ -30,6 +30,7 @@ import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
@@ -340,6 +341,12 @@ internal class DivGalleryBinder @Inject constructor(
 
         fun bind(div2View: Div2View, div: Div, path: DivStatePath) {
             val resolver = div2View.expressionResolver
+
+            if (rootView.tryRebindRecycleContainerChildren(div2View, div)) {
+                oldDiv = div
+                return
+            }
+
             val divView = if (oldDiv != null
                     && rootView.child != null
                     && DivComparator.areDivsReplaceable(oldDiv, div, div2View.oldExpressionResolver, resolver)) {

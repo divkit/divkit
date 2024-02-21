@@ -71,4 +71,10 @@ internal class DivPagerView @JvmOverloads constructor(
         val intercepted = onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event) ?: false
         return intercepted || super.onInterceptTouchEvent(event)
     }
+
+    fun getPageView(index: Int): View? {
+        val recyclerView = getRecyclerView() ?: return null
+        val wrappedChild = recyclerView.getChildAt(index) as? ViewGroup ?: return null
+        return wrappedChild.getChildAt(0)
+    }
 }

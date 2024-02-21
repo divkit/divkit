@@ -21,13 +21,24 @@ class EntityWithArrayOfNestedItems(
     @JvmField final val items: List<Item>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
+    private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
+
+    override fun propertiesHash(): Int {
+        _propertiesHash?.let {
+            return it
+        }
+        val propertiesHash = javaClass.hashCode()
+        _propertiesHash = propertiesHash
+        return propertiesHash
+    }
 
     override fun hash(): Int {
         _hash?.let {
             return it
         }
         val hash = 
+            propertiesHash() +
             items.sumOf { it.hash() }
         _hash = hash
         return hash

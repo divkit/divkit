@@ -17,6 +17,7 @@ class DivGridBinderTest : DivBinderTest() {
         divPatchManager = mock(),
         divPatchCache = mock(),
         divBinder = { mock() },
+        divViewCreator = mock(),
     )
 
     @Test

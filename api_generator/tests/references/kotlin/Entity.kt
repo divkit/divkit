@@ -38,7 +38,37 @@ sealed class Entity : JSONSerializable, Hashable {
     class WithStringEnumPropertyWithDefaultValue(val value: EntityWithStringEnumPropertyWithDefaultValue) : Entity()
     class WithoutProperties(val value: EntityWithoutProperties) : Entity()
 
+    private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
+
+    override fun propertiesHash(): Int {
+        _propertiesHash?.let {
+            return it
+        }
+        return when(this) {
+            is WithArray -> 31 + this.value.propertiesHash()
+            is WithArrayOfEnums -> 62 + this.value.propertiesHash()
+            is WithArrayOfExpressions -> 93 + this.value.propertiesHash()
+            is WithArrayOfNestedItems -> 124 + this.value.propertiesHash()
+            is WithArrayWithTransform -> 155 + this.value.propertiesHash()
+            is WithComplexProperty -> 186 + this.value.propertiesHash()
+            is WithComplexPropertyWithDefaultValue -> 217 + this.value.propertiesHash()
+            is WithEntityProperty -> 248 + this.value.propertiesHash()
+            is WithOptionalComplexProperty -> 279 + this.value.propertiesHash()
+            is WithOptionalProperty -> 310 + this.value.propertiesHash()
+            is WithOptionalStringEnumProperty -> 341 + this.value.propertiesHash()
+            is WithPropertyWithDefaultValue -> 372 + this.value.propertiesHash()
+            is WithRawArray -> 403 + this.value.propertiesHash()
+            is WithRequiredProperty -> 434 + this.value.propertiesHash()
+            is WithSimpleProperties -> 465 + this.value.propertiesHash()
+            is WithStringArrayProperty -> 496 + this.value.propertiesHash()
+            is WithStringEnumProperty -> 527 + this.value.propertiesHash()
+            is WithStringEnumPropertyWithDefaultValue -> 558 + this.value.propertiesHash()
+            is WithoutProperties -> 589 + this.value.propertiesHash()
+        }.also {
+            _propertiesHash = it
+        }
+    }
 
     override fun hash(): Int {
         _hash?.let {

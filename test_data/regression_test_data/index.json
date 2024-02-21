@@ -2411,6 +2411,121 @@
         "Rect turns purple"
       ],
       "file": "gesture.json"
+    },
+    {
+      "title": "Rebind container",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/container/un_added.json"
+    },
+    {
+      "title": "Rebind grid",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/grid/un_added.json"
+    },
+    {
+      "title": "Rebind gallery",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/gallery/un_added.json"
+    },
+    {
+      "title": "Rebind pager",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/pager/un_added.json"
+    },
+    {
+      "title": "Rebind tabs",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "web": "Complex Rebind is supported only on Android",
+        "ios": "Complex Rebind is supported only on Android"
+      },
+      "tags": [
+        "Rebind"
+      ],
+      "steps": [
+        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
+        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
+        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+      ],
+      "expected_results": [
+        "No crashes, asserts or parsing errors",
+        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+      ],
+      "file": "rebind/tabs/un_added.json"
     }
   ]
 }

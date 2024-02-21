@@ -1,4 +1,4 @@
-from typing import cast
+from typing import cast, List
 
 from .kotlin_entities import (
     KotlinEntity,
@@ -60,8 +60,35 @@ class KotlinGenerator(Generator):
             result += EMPTY
             result += entity.value_resolving_declaration.indented(indent_width=4)
         else:
+            prop_names = map(lambda prop_name: prop_name.declaration_name, entity.instance_properties_kotlin)
+
+            prop_filter = ['items']
+            is_div_state = utils.capitalize_camel_case(entity.name) == 'DivState'
+
+            if is_div_state:
+                prop_filter.append('states')
+
+            generate_properties = True if len(set(prop_filter).intersection(prop_names)) > 0 else False
+
             result += EMPTY
+            if generate_properties:
+                result += '    private var _propertiesHash: Int? = null '
             result += '    private var _hash: Int? = null '
+            if generate_properties:
+                result += EMPTY
+                result += '    override fun propertiesHash(): Int {'
+                result += '        _propertiesHash?.let {'
+                result += '            return it'
+                result += '        }'
+                if len(entity.instance_properties_kotlin) > 1:
+                    result += '        val propertiesHash = '
+                    result += self._generate_hash(list(filter(lambda it: it.declaration_name not in prop_filter,
+                                                              entity.instance_properties_kotlin))).indented(indent_width=12)
+                else:
+                    result += '        val propertiesHash = javaClass.hashCode()'
+                result += '        _propertiesHash = propertiesHash'
+                result += '        return propertiesHash'
+                result += '    }'
             result += EMPTY
             result += '    override fun hash(): Int {'
             result += '        _hash?.let {'
@@ -70,24 +97,18 @@ class KotlinGenerator(Generator):
 
             if entity.instance_properties_kotlin:
                 result += '        val hash = '
-                for prop in entity.instance_properties_kotlin:
-                    hash_type = 'hash()' if prop.use_custom_hash else 'hashCode()'
+                if generate_properties:
+                    hash_text = Text()
+                    hash_text += 'propertiesHash() +'
+                    hash_text += self._generate_hash(
+                        list(filter(lambda it: it.declaration_name in prop_filter, entity.instance_properties_kotlin)))
 
-                    prop_hash = ''
-                    if prop.should_be_optional:
-                        prop_hash += '('
-                    prop_hash += prop.declaration_name
-                    if prop.should_be_optional:
-                        prop_hash += '?'
-                    prop_hash += '.'
-                    if isinstance(prop.property_type, Array) and prop.use_custom_hash:
-                        prop_hash += f'sumOf {{ it.{hash_type} }}'
-                    else:
-                        prop_hash += hash_type
-                    if prop.should_be_optional:
-                        prop_hash += ' ?: 0)'
-                    prop_hash += " +" if prop != entity.instance_properties_kotlin[-1] else ""
-                    result += Text(prop_hash).indented(indent_width=12)
+                    result += hash_text.indented(indent_width=12)
+                else:
+                    result += self._generate_hash(list(filter(
+                        lambda it: it.declaration_name not in prop_filter,
+                        entity.instance_properties_kotlin))
+                    ).indented(indent_width=12)
             else:
                 result += '        val hash = javaClass.hashCode()'
 
@@ -145,6 +166,29 @@ class KotlinGenerator(Generator):
         result += '}'
 
         return result
+
+    @staticmethod
+    def _generate_hash(props: List[KotlinProperty]) -> Text:
+        hash_text = Text()
+        for prop in props:
+            hash_type = 'hash()' if prop.use_custom_hash else 'hashCode()'
+
+            prop_hash = ''
+            if prop.should_be_optional:
+                prop_hash += '('
+            prop_hash += prop.declaration_name
+            if prop.should_be_optional:
+                prop_hash += '?'
+            prop_hash += '.'
+            if isinstance(prop.property_type, Array) and prop.use_custom_hash:
+                prop_hash += f'sumOf {{ it.{hash_type} }}'
+            else:
+                prop_hash += hash_type
+            if prop.should_be_optional:
+                prop_hash += ' ?: 0)'
+            prop_hash += " +" if prop != props[-1] else ""
+            hash_text += prop_hash
+        return hash_text
 
     @staticmethod
     def __declaration_as_interface(entity: KotlinEntity) -> Text:
@@ -254,21 +298,14 @@ class KotlinGenerator(Generator):
         result += EMPTY
 
         if not entity_enumeration.mode.is_template:
-            result += '    private var _hash: Int? = null '
+            hash_types = ['propertiesHash', 'hash']
+
+            for hash_type in hash_types:
+                result += f'    private var _{hash_type}: Int? = null '
             result += EMPTY
-            result += '    override fun hash(): Int {'
-            result += '        _hash?.let {'
-            result += '            return it'
-            result += '        }'
-            result += '        return when(this) {'
-            for i, decl in enumerate(entity_declarations, start=1):
-                naming = entity_enumeration.format_case_naming(decl)
-                result += f'            is {naming} -> {i * 31} + this.value.hash()'
-            result += '        }.also {'
-            result += '            _hash = it'
-            result += '        }'
-            result += '    }'
-            result += EMPTY
+            for hash_type in hash_types:
+                result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type)
+                result += EMPTY
             if self._generate_equality:
                 result += '    fun isHashCalculated() = _hash != null'
                 result += EMPTY
@@ -396,6 +433,27 @@ class KotlinGenerator(Generator):
         result += f'        val {ENTITY_STATIC_CREATOR} = {{ {static_creator_lambda} }}'
         result += '    }'
         result += '}'
+        return result
+
+    @staticmethod
+    def _hash_enumeration_declaration(
+            entity_enumeration: KotlinEntityEnumeration,
+            entity_declarations: List[str],
+            hash_type: str
+    ) -> Text:
+        result = Text()
+        result += f'    override fun {hash_type}(): Int {{'
+        result += f'        _{hash_type}?.let {{'
+        result += '            return it'
+        result += '        }'
+        result += '        return when(this) {'
+        for i, decl in enumerate(entity_declarations, start=1):
+            naming = entity_enumeration.format_case_naming(decl)
+            result += f'            is {naming} -> {i * 31} + this.value.{hash_type}()'
+        result += '        }.also {'
+        result += f'            _{hash_type} = it'
+        result += '        }'
+        result += '    }'
         return result
 
     def _string_enumeration_declaration(self, string_enumeration: StringEnumeration) -> Text:
