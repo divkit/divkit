@@ -36,7 +36,7 @@ class TwoWayVariableBinderTest {
     }
     private val expressionsRuntime = ExpressionsRuntime(mock(), variableController, mock())
     private val expressionsRuntimeProvider = mock<ExpressionsRuntimeProvider> {
-        on { getOrCreate(any(), any()) } doReturn expressionsRuntime
+        on { getOrCreate(any(), any(), any()) } doReturn expressionsRuntime
     }
 
     private val divView = mock<Div2View> {

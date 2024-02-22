@@ -54,7 +54,7 @@ internal abstract class TwoWayVariableBinder<T>(
         val tag = divView.dataTag
         var variable: Variable? = null
         val variableController =
-            expressionsRuntimeProvider.getOrCreate(tag, data).variableController
+            expressionsRuntimeProvider.getOrCreate(tag, data, divView).variableController
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
             pendingValue = value

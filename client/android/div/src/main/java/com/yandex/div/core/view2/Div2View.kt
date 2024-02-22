@@ -173,7 +173,7 @@ class Div2View private constructor(
     private fun updateExpressionsRuntime(data: DivData? = divData, tag: DivDataTag = dataTag) {
         data ?: return
         oldExpressionsRuntime = _expressionsRuntime
-        _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data)
+        _expressionsRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(tag, data, this)
         if (oldExpressionsRuntime != _expressionsRuntime) {
             oldExpressionsRuntime?.clearBinding()
         }
@@ -472,7 +472,7 @@ class Div2View private constructor(
             newData,
             stateId,
             expressionResolver,
-            div2Component.expressionsRuntimeProvider.getOrCreate(tag, newData).expressionResolver
+            div2Component.expressionsRuntimeProvider.getOrCreate(tag, newData, this).expressionResolver
         )
         if (canBeReplaced) {
             releaseChildren(this)
