@@ -1,3 +1,18 @@
+## 29.8.0
+
+# Android Client:
+* New rebinding algorithm is implemented under `complexRebind` flag (can be enabled using the DivConfiguration builder).
+* Implemented new actions to scroll gallery `scroll_to_start`, `scroll_to_end`, `scroll_backward`, `scroll_forward`.
+* Fixed autoallipsizing of `div-text` with fixed line height.
+* Fixed artifacts on drawing corner_radius with border.
+
+# iOS Client:
+* `GestureExtensionHandler` introduced.
+
+# Web Client:
+* The `visibility_duration` and `disappear_duration` properties in `actions` now supports the value 0.
+
+
 ## 29.7.0
 
 # Android Client:
