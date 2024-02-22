@@ -29,10 +29,9 @@ internal class ReleaseManager @Inject constructor(
                 Lifecycle.Event.ON_DESTROY -> {
                     divToRelease[source]?.forEach {
                         it.cleanup()
+                        runtimeProvider.cleanupRuntime(it)
                     }
                     divToRelease.remove(source)
-
-                    runtimeProvider.cleanupRuntimes()
                 }
                 else -> Unit
             }

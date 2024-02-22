@@ -10,6 +10,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.toVariable
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -21,6 +22,7 @@ import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections
+import java.util.WeakHashMap
 import javax.inject.Inject
 
 /**
@@ -37,10 +39,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     private val storedValuesController: StoredValuesController,
 ) {
     private val runtimes = Collections.synchronizedMap(mutableMapOf<String, ExpressionsRuntime>())
+    private val divDataTags = WeakHashMap<Div2View, MutableSet<String>>()
 
-    internal fun getOrCreate(tag: DivDataTag, data: DivData): ExpressionsRuntime {
+    internal fun getOrCreate(tag: DivDataTag, data: DivData, div2View: Div2View): ExpressionsRuntime {
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
         val errorCollector = errorCollectors.getOrCreate(tag, data)
+        divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
         ensureVariablesSynced(result.variableController, data, errorCollector)
         result.triggersController.ensureTriggersSynced(data.variableTriggers ?: emptyList())
         return result
@@ -56,10 +60,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         }
     }
 
-    internal fun cleanupRuntimes() {
-        runtimes.values.forEach {
-            it.cleanup()
+    internal fun cleanupRuntime(view: Div2View) {
+        divDataTags[view]?.forEach {
+            runtimes[it]?.cleanup()
+            runtimes.remove(it)
         }
+        divDataTags.remove(view)
     }
 
     private fun ensureVariablesSynced(
