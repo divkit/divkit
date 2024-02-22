@@ -9,7 +9,7 @@ import com.yandex.div2.Div
 
 internal fun logRebindDiff(
     reusableList: ReusableTokenList,
-    bindingPoints: List<ExistingToken>,
+    bindingPoints: Set<ExistingToken>,
     aloneExisting: List<ExistingToken>,
     aloneNew: List<NewToken>,
 ) {
@@ -47,7 +47,7 @@ internal fun logRebindDiff(
 
 private fun Div.printSelf(
     reusableList: ReusableTokenList,
-    bindingPoints: List<ExistingToken>,
+    bindingPoints: Set<ExistingToken>,
     builder: StringBuilder,
     step: Int = 1,
 ) {
