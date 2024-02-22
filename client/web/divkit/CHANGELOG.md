@@ -1,4 +1,4 @@
-## 29.8.0 (February 19, 2024)
+## 29.8.0 (February 26, 2024)
 
 * The `visibility_duration` and `disappear_duration` properties in `actions` now supports the value 0.
 
