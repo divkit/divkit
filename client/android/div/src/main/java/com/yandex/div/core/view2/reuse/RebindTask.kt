@@ -17,7 +17,7 @@ internal class RebindTask(
     private val resolver: ExpressionResolver,
     private val newResolver: ExpressionResolver,
 ) {
-    private val bindingPoints: MutableList<ExistingToken> = mutableListOf()
+    private val bindingPoints: MutableSet<ExistingToken> = mutableSetOf()
     private val aloneExisting = mutableListOf<ExistingToken>()
     private val aloneNew = mutableListOf<NewToken>()
 
@@ -154,6 +154,8 @@ internal class RebindTask(
         }
 
         bindingPoints.forEach {
+            if (bindingPoints.contains(it.parentToken)) return@forEach
+
             divBinder.bind(it.view, it.div, div2View, path)
         }
 
