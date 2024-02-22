@@ -1,3 +1,8 @@
+## 29.8.0 (February 19, 2024)
+
+* The `visibility_duration` and `disappear_duration` properties in `actions` now supports the value 0.
+
+
 ## 29.6.0 (February 12, 2024)
 
 * Added support for the `preload_required` property in `image`, `gif` and `text` components.
