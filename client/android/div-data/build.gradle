@@ -1,3 +1,5 @@
+import com.yandex.div.gradle.UtilsKt
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
@@ -37,17 +39,13 @@ dependencies {
 }
 
 task generateDivModel(type: Exec) {
-    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
     def configPath = new File(projectDir, 'div2-generator-config.json').absolutePath
     def schemaPath = new File(projectDir, "../../../schema").absolutePath
     def modelPath = new File(generatedSrcDir, "com/yandex/div2")
 
-    doFirst {
-        println "Process schema: $schemaPath"
-        println commandLine
-    }
+    workingDir "../../../api_generator"
 
-    commandLine execPath, configPath, schemaPath, modelPath
+    commandLine UtilsKt.pythonExecutableName, "-m", "api_generator", "-c", configPath, "-s", schemaPath, "-o", modelPath
 
     inputs.file configPath
     inputs.dir schemaPath
@@ -55,17 +53,13 @@ task generateDivModel(type: Exec) {
 }
 
 task generateDivSharedData(type: Exec) {
-    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
     def sharedDataConfigPath = new File(projectDir, 'div2-shared-data-generator-config.json').absolutePath
     def sharedDataPath = new File(projectDir, "../../../shared_data").absolutePath
-    def modelPath = new File(generatedSrcSharedDataDir, "com/yandex/div2")
+    def modelPath = new File(generatedSrcSharedDataDir, "com/yandex/div2").absolutePath
 
-    doFirst {
-        println "Process shared data: $sharedDataPath"
-        println commandLine
-    }
+    workingDir "../../../api_generator"
 
-    commandLine execPath, sharedDataConfigPath, sharedDataPath, modelPath
+    commandLine UtilsKt.pythonExecutableName, "-m", "api_generator", "-c", sharedDataConfigPath, "-s", sharedDataPath, "-o", modelPath
 
     inputs.file sharedDataConfigPath
     inputs.dir sharedDataPath

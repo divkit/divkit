@@ -66,10 +66,6 @@ android {
     }
 }
 
-afterEvaluate {
-    println(android.sourceSets.main.java.srcDirs)
-}
-
 configurations.all {
     resolutionStrategy {
         eachDependency { details ->

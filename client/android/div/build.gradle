@@ -1,3 +1,5 @@
+import groovy.json.JsonOutput
+
 apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
@@ -13,8 +15,8 @@ android {
     buildFeatures { buildConfig = true }
 
     defaultConfig {
-        buildConfigField "String", "DIV2_JSON_PATH", "\"$crossplatformProjectDir/\""
-        buildConfigField "String", "VERSION_NAME", "\"${rootProject.property('divkitVersionName')}\""
+        buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)
+        buildConfigField "String", "VERSION_NAME", JsonOutput.toJson(rootProject.property('divkitVersionName'))
     }
 }
 

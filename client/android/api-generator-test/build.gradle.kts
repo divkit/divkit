@@ -1,4 +1,6 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import groovy.json.JsonOutput
+import com.yandex.div.gradle.pythonExecutableName
 
 plugins {
     id("com.android.library")
@@ -36,7 +38,7 @@ android {
     defaultConfig {
         minSdk = rootProject.ext["minSdkVersion"] as Int
         targetSdk = rootProject.ext["targetSdkVersion"] as Int
-        buildConfigField("String", "TEMPLATES_JSON_PATH", "\"$testDataPath\"")
+        buildConfigField("String", "TEMPLATES_JSON_PATH", JsonOutput.toJson(testDataPath))
     }
 
     project.tasks.preBuild.dependsOn("generateHomePojoTask")
@@ -74,16 +76,12 @@ val schemes = listOf(
 schemes.forEach { item ->
     tasks.register<Exec>("scheme_${item["name"]}") {
         val schemesDirectory = (item["scheme"] as File).absolutePath
-        val generatedDir = item["generated"] as String
+        val generatedDir = File(item["generated"] as String).absolutePath
         val configPath = (item["config"] as File).absolutePath
-        val binPath = File(divKitPublicDir, "api_generator/api_generator.sh").absolutePath
 
-        commandLine = listOf(binPath, configPath, schemesDirectory, generatedDir)
+        workingDir = File("../../../api_generator")
 
-        doFirst {
-            println("Process schemes: $schemesDirectory")
-            println(commandLine.joinToString(" "))
-        }
+        commandLine = listOf(pythonExecutableName, "-m", "api_generator", "-c", configPath, "-s", schemesDirectory, "-o", generatedDir)
 
         inputs.dir(item["scheme"]!!)
         inputs.file(item["config"]!!)
