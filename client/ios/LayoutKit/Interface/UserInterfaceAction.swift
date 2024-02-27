@@ -157,17 +157,17 @@ extension UserInterfaceAction.Payload: Codable {
   private var kind: Kind {
     switch self {
     case .empty:
-      return .empty
+      .empty
     case .url:
-      return .url
+      .url
     case .menu:
-      return .menu
+      .menu
     case .json:
-      return .json
+      .json
     case .composite:
-      return .composite
+      .composite
     case .divAction:
-      return .divAction
+      .divAction
     }
   }
 
@@ -239,17 +239,17 @@ extension UserInterfaceAction.Payload: CustomDebugStringConvertible {
   public var debugDescription: String {
     switch self {
     case .empty:
-      return "Empty"
+      "Empty"
     case let .url(value):
-      return "URL: \(value)"
+      "URL: \(value)"
     case let .menu(value):
-      return "Menu: \(value)"
+      "Menu: \(value)"
     case let .json(value):
-      return "JSON: \(value))"
+      "JSON: \(value))"
     case let .divAction(params):
-      return "DivAction: \(params.action)"
+      "DivAction: \(params.action)"
     case let .composite(lhs, rhs):
-      return """
+      """
       Composite [
       \(lhs.debugDescription.indented())
       \(rhs.debugDescription.indented())

@@ -11,7 +11,7 @@ extension DivDrawable {
   ) -> Block {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return shapeDrawable.makeBlock(
+      shapeDrawable.makeBlock(
         context: context,
         widthTrait: widthTrait,
         corners: corners
@@ -22,14 +22,14 @@ extension DivDrawable {
   func resolveWidth(_ context: DivBlockModelingContext) -> CGFloat {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return shapeDrawable.resolveWidth(context)
+      shapeDrawable.resolveWidth(context)
     }
   }
 
   func resolveHeight(_ context: DivBlockModelingContext) -> CGFloat {
     switch self {
     case let .divShapeDrawable(shapeDrawable):
-      return shapeDrawable.resolveHeight(context)
+      shapeDrawable.resolveHeight(context)
     }
   }
 }

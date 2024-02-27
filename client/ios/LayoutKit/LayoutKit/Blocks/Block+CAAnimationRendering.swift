@@ -19,9 +19,9 @@ extension AnimationChanges {
   public var keyPath: String {
     switch self {
     case .transform:
-      return "transform"
+      "transform"
     case .opacity:
-      return "opacity"
+      "opacity"
     }
   }
 }
@@ -30,9 +30,9 @@ extension AnimationChanges {
   public var values: [NSValue] {
     switch self {
     case let .transform(values):
-      return values.map { NSValue(caTransform3D: $0) }
+      values.map { NSValue(caTransform3D: $0) }
     case let .opacity(values):
-      return values.map { NSNumber(value: $0 as Float) }
+      values.map { NSNumber(value: $0 as Float) }
     }
   }
 }
@@ -41,9 +41,9 @@ extension AnimationChanges {
   fileprivate var isAdditive: Bool {
     switch self {
     case .opacity:
-      return false
+      false
     case .transform:
-      return true
+      true
     }
   }
 }
@@ -52,13 +52,13 @@ extension CAMediaTimingFunction {
   fileprivate static func from(blockTimingFunction: TimingFunction) -> CAMediaTimingFunction {
     switch blockTimingFunction {
     case .linear:
-      return .linear
+      .linear
     case .easeIn:
-      return .easeIn
+      .easeIn
     case .easeOut:
-      return .easeOut
+      .easeOut
     case .easeInEaseOut:
-      return .easeInEaseOut
+      .easeInEaseOut
     }
   }
 }

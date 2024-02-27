@@ -45,14 +45,14 @@ struct IndicatorStateAnimator {
   func highlightedIndicatorScale(for state: IndicatorState, borderScale: Scale) -> Scale {
     switch configuration.animation {
     case .scale:
-      return (
+      (
         configuration.highlightedWidthScale
           .interpolated(to: 1, progress: 1 - state.progress) * borderScale.x,
         configuration.highlightedHeightScale
           .interpolated(to: 1, progress: 1 - state.progress) * borderScale.y
       )
     case .worm, .slider:
-      return (1, 1)
+      (1, 1)
     }
   }
 

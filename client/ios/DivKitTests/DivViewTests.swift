@@ -13,19 +13,19 @@ final class DivViewTests: XCTestCase {
     let divView = DivView(divKitComponents: components)
     divView.setSource(.init(kind: .divData(testData), cardId: "card"))
     divView.frame = testFrame
-    
+
     divView.onVisibleBoundsChanged(to: testFrame)
     divView.forceLayout()
     delay()
-    
+
     divView.onVisibleBoundsChanged(to: .zero)
     divView.forceLayout()
     delay()
-    
+
     divView.onVisibleBoundsChanged(to: testFrame)
     divView.forceLayout()
     delay()
-    
+
     XCTAssertEqual(components.visibilityCounter.visibilityCount(for: path), 2)
   }
 }
@@ -45,7 +45,7 @@ private let testData = divData(
         logId: "action",
         logLimit: .value(10),
         visibilityDuration: .value(0)
-      )
+      ),
     ]
   )
 )

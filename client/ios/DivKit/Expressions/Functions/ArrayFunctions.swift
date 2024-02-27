@@ -35,34 +35,34 @@ enum ArrayFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .getArrayString:
-      return FunctionBinary(impl: _getArrayString)
+      FunctionBinary(impl: _getArrayString)
     case .getArrayNumber:
-      return FunctionBinary(impl: _getArrayNumber)
+      FunctionBinary(impl: _getArrayNumber)
     case .getArrayInteger:
-      return FunctionBinary(impl: _getArrayInteger)
+      FunctionBinary(impl: _getArrayInteger)
     case .getArrayBoolean:
-      return FunctionBinary(impl: _getArrayBoolean)
+      FunctionBinary(impl: _getArrayBoolean)
     case .getArrayColor:
-      return FunctionBinary(impl: _getArrayColor)
+      FunctionBinary(impl: _getArrayColor)
     case .getArrayUrl:
-      return FunctionBinary(impl: _getArrayUrl)
+      FunctionBinary(impl: _getArrayUrl)
     case .getArrayOptString:
-      return FunctionTernary(impl: _getArrayOptString)
+      FunctionTernary(impl: _getArrayOptString)
     case .getArrayOptNumber:
-      return FunctionTernary(impl: _getArrayOptNumber)
+      FunctionTernary(impl: _getArrayOptNumber)
     case .getArrayOptInteger:
-      return FunctionTernary(impl: _getArrayOptInteger)
+      FunctionTernary(impl: _getArrayOptInteger)
     case .getArrayOptBoolean:
-      return FunctionTernary(impl: _getArrayOptBoolean)
+      FunctionTernary(impl: _getArrayOptBoolean)
     case .getArrayOptColor:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _getArrayOptColorWithColorFallback),
           FunctionTernary(impl: _getArrayOptColorWithStringFallback),
         ]
       )
     case .getArrayOptUrl:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _getArrayOptUrlWithURLFallback),
           FunctionTernary(impl: _getArrayOptUrlWithStringFallback),
@@ -70,47 +70,47 @@ enum ArrayFunctions: String, CaseIterable {
       )
 
     case .getStringFromArray:
-      return FunctionBinary(impl: _getStringFromArray)
+      FunctionBinary(impl: _getStringFromArray)
     case .getOptStringFromArray:
-      return FunctionTernary(impl: _getOptStringFromArray)
+      FunctionTernary(impl: _getOptStringFromArray)
     case .getIntegerFromArray:
-      return FunctionBinary(impl: _getIntegerFromArray)
+      FunctionBinary(impl: _getIntegerFromArray)
     case .getOptIntegerFromArray:
-      return FunctionTernary(impl: _getOptIntegerFromArray)
+      FunctionTernary(impl: _getOptIntegerFromArray)
     case .getNumberFromArray:
-      return FunctionBinary(impl: _getNumberFromArray)
+      FunctionBinary(impl: _getNumberFromArray)
     case .getOptNumberFromArray:
-      return FunctionTernary(impl: _getOptNumberFromArray)
+      FunctionTernary(impl: _getOptNumberFromArray)
     case .getBooleanFromArray:
-      return FunctionBinary(impl: _getBooleanFromArray)
+      FunctionBinary(impl: _getBooleanFromArray)
     case .getOptBooleanFromArray:
-      return FunctionTernary(impl: _getOptBooleanFromArray)
+      FunctionTernary(impl: _getOptBooleanFromArray)
     case .getColorFromArray:
-      return FunctionBinary(impl: _getColorFromArray)
+      FunctionBinary(impl: _getColorFromArray)
     case .getOptColorFromArray:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _getOptColorFromArrayWithColorFallback),
           FunctionTernary(impl: _getOptColorFromArrayWithStringFallback),
         ]
       )
     case .getUrlFromArray:
-      return FunctionBinary(impl: _getUrlFromArray)
+      FunctionBinary(impl: _getUrlFromArray)
     case .getOptUrlFromArray:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _getOptUrlFromArrayWithURLFallback),
           FunctionTernary(impl: _getOptUrlFromArrayWithStringFallback),
         ]
       )
     case .getArrayFromArray:
-      return FunctionBinary(impl: _getArrayFromArray)
+      FunctionBinary(impl: _getArrayFromArray)
     case .getOptArrayFromArray:
-      return FunctionBinary(impl: _getOptArrayFromArray)
+      FunctionBinary(impl: _getOptArrayFromArray)
     case .getDictFromArray:
-      return FunctionBinary(impl: _getDictFromArray)
+      FunctionBinary(impl: _getDictFromArray)
     case .getOptDictFromArray:
-      return FunctionBinary(impl: _getOptDictFromArray)
+      FunctionBinary(impl: _getOptDictFromArray)
     }
   }
 
@@ -510,15 +510,15 @@ enum ArrayFunctions: String, CaseIterable {
     private var description: String {
       switch self {
       case let .indexOutOfBounds(expression, requstedIndex, arraySize):
-        return "Failed to evaluate [\(expression)]. Requested index (\(requstedIndex)) out of bounds array size (\(arraySize))."
+        "Failed to evaluate [\(expression)]. Requested index (\(requstedIndex)) out of bounds array size (\(arraySize))."
       case let .incorrectValueType(expression, expectedType, actualType):
-        return "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
+        "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
       case let .cannotConvertToInteger(expression):
-        return "Failed to evaluate [\(expression)]. Cannot convert value to integer."
+        "Failed to evaluate [\(expression)]. Cannot convert value to integer."
       case let .integerOverflow(expression):
-        return "Failed to evaluate [\(expression)]. Integer overflow."
+        "Failed to evaluate [\(expression)]. Integer overflow."
       case let .incorrectColorFormat(expression):
-        return "Failed to evaluate [\(expression)]. Unable to convert value to Color, expected format #AARRGGBB."
+        "Failed to evaluate [\(expression)]. Unable to convert value to Color, expected format #AARRGGBB."
       }
     }
 

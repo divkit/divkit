@@ -84,17 +84,17 @@ public final class GenericViewBlock: BlockWithTraits {
 
   public var intrinsicContentWidth: CGFloat {
     switch width {
-    case .resizable: return 0
-    case let .fixed(width): return width
-    case let .intrinsic(calculator): return calculator.calculateWidth()
+    case .resizable: 0
+    case let .fixed(width): width
+    case let .intrinsic(calculator): calculator.calculateWidth()
     }
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch height {
-    case .resizable: return 0
-    case let .fixed(height): return height
-    case let .intrinsic(calculator): return calculator.calculateHeight(width: width)
+    case .resizable: 0
+    case let .fixed(height): height
+    case let .intrinsic(calculator): calculator.calculateHeight(width: width)
     }
   }
 
@@ -120,9 +120,9 @@ extension GenericViewBlock: ElementStateUpdatingDefaultImpl {}
 extension GenericViewBlock.Content {
   static func ===(lhs: GenericViewBlock.Content, rhs: GenericViewBlock.Content) -> Bool {
     switch (lhs, rhs) {
-    case let (.view(lView), .view(rView)): return lView === rView
-    case let (.layer(lView), .layer(rView)): return lView === rView
-    case (.view, _), (.layer, _): return false
+    case let (.view(lView), .view(rView)): lView === rView
+    case let (.layer(lView), .layer(rView)): lView === rView
+    case (.view, _), (.layer, _): false
     }
   }
 }
@@ -130,10 +130,10 @@ extension GenericViewBlock.Content {
 extension GenericViewBlock.Trait {
   public static func ==(lhs: GenericViewBlock.Trait, rhs: GenericViewBlock.Trait) -> Bool {
     switch (lhs, rhs) {
-    case (.resizable, .resizable): return true
-    case let (.fixed(lhs), .fixed(rhs)): return lhs == rhs
-    case let (.intrinsic(lhs), .intrinsic(rhs)): return lhs === rhs
-    case (.resizable, _), (.fixed, _), (.intrinsic, _): return false
+    case (.resizable, .resizable): true
+    case let (.fixed(lhs), .fixed(rhs)): lhs == rhs
+    case let (.intrinsic(lhs), .intrinsic(rhs)): lhs === rhs
+    case (.resizable, _), (.fixed, _), (.intrinsic, _): false
     }
   }
 }
@@ -147,9 +147,9 @@ extension CGFloat? {
 extension GenericViewBlock.Trait {
   fileprivate var layoutTrait: LayoutTrait {
     switch self {
-    case .resizable: return .resizable
-    case .intrinsic: return .intrinsic
-    case let .fixed(size): return .fixed(size)
+    case .resizable: .resizable
+    case .intrinsic: .intrinsic
+    case let .fixed(size): .fixed(size)
     }
   }
 }
@@ -157,9 +157,9 @@ extension GenericViewBlock.Trait {
 extension GenericViewBlock.Content? {
   static func !==(lhs: GenericViewBlock.Content?, rhs: GenericViewBlock.Content?) -> Bool {
     switch (lhs, rhs) {
-    case let (lValue?, rValue?): return !(lValue === rValue)
-    case (nil, nil): return false
-    case (nil, _), (.some, _): return true
+    case let (lValue?, rValue?): !(lValue === rValue)
+    case (nil, nil): false
+    case (nil, _), (.some, _): true
     }
   }
 

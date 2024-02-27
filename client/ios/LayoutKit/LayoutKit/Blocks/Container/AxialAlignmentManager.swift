@@ -99,9 +99,9 @@ extension CGFloat {
   ) -> CGPoint {
     switch layoutDirection {
     case .horizontal:
-      return CGPoint(x: self, y: 0)
+      CGPoint(x: self, y: 0)
     case .vertical:
-      return CGPoint(x: 0, y: self)
+      CGPoint(x: 0, y: self)
     }
   }
 }

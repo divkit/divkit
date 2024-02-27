@@ -142,14 +142,13 @@ private final class SwipeContainerView: UIScrollView, UIScrollViewDelegate {
   }
 
   private func updateContentOffset() {
-    let x: CGFloat
-    switch state {
+    let x: CGFloat = switch state {
     case .left:
-      x = 0
+      0
     case .normal:
-      x = bounds.width
+      bounds.width
     case .right:
-      x = bounds.width * 2
+      bounds.width * 2
     }
     contentOffset = CGPoint(x: x, y: 0)
   }

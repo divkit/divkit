@@ -24,9 +24,9 @@ extension DivImageProtocol {
   ) -> ImagePlaceholder {
     if
       let base64 = resolvePreview(expressionResolver) {
-      return .imageData(ImageData(base64: base64, highPriority: highPriority))
+      .imageData(ImageData(base64: base64, highPriority: highPriority))
     } else {
-      return .color(resolvePlaceholderColor(expressionResolver))
+      .color(resolvePlaceholderColor(expressionResolver))
     }
   }
 

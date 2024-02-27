@@ -6,8 +6,8 @@ public enum Visibility {
 extension Visibility {
   public var isVisible: Bool {
     switch self {
-    case .visible: return true
-    case .notVisible: return false
+    case .visible: true
+    case .notVisible: false
     }
   }
 }

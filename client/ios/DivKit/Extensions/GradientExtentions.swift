@@ -71,17 +71,17 @@ extension DivRadialGradient {
   func resolveRadius(_ resolver: ExpressionResolver) -> Gradient.Radial.Radius {
     switch radius {
     case let .divFixedSize(size):
-      return .absolute(size.resolveValue(resolver) ?? 0)
+      .absolute(size.resolveValue(resolver) ?? 0)
     case let .divRadialGradientRelativeRadius(radius):
       switch radius.resolveValue(resolver) ?? .farthestCorner {
       case .farthestCorner:
-        return .relativeToBorders(.farthestCorner)
+        .relativeToBorders(.farthestCorner)
       case .farthestSide:
-        return .relativeToBorders(.farthestSide)
+        .relativeToBorders(.farthestSide)
       case .nearestCorner:
-        return .relativeToBorders(.nearestCorner)
+        .relativeToBorders(.nearestCorner)
       case .nearestSide:
-        return .relativeToBorders(.nearestSide)
+        .relativeToBorders(.nearestSide)
       }
     }
   }
@@ -89,18 +89,18 @@ extension DivRadialGradient {
   func resolveCenterX(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
     switch centerX {
     case let .divRadialGradientRelativeCenter(x):
-      return .relative(x.resolveValue(resolver) ?? 0)
+      .relative(x.resolveValue(resolver) ?? 0)
     case let .divRadialGradientFixedCenter(x):
-      return .absolute(x.resolveValue(resolver) ?? 0)
+      .absolute(x.resolveValue(resolver) ?? 0)
     }
   }
 
   func resolveCenterY(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
     switch centerY {
     case let .divRadialGradientRelativeCenter(y):
-      return .relative(y.resolveValue(resolver) ?? 0)
+      .relative(y.resolveValue(resolver) ?? 0)
     case let .divRadialGradientFixedCenter(y):
-      return .absolute(y.resolveValue(resolver) ?? 0)
+      .absolute(y.resolveValue(resolver) ?? 0)
     }
   }
 }

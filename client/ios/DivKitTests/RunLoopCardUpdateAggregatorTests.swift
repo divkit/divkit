@@ -71,7 +71,7 @@ final class RunLoopCardUpdateAggregatorTests: XCTestCase {
 
     XCTAssertEqual([], updateReasons)
   }
-  
+
   func test_ForceUpdate_CallsUpdateCardAction() {
     updateReasons = []
     aggregator.forceUpdate()
@@ -86,15 +86,15 @@ extension DivActionURLHandler.UpdateReason: Equatable {
   ) -> Bool {
     switch (lhs, rhs) {
     case let (.timer(lhsCardId), .timer(rhsCardId)):
-      return lhsCardId == rhsCardId
+      lhsCardId == rhsCardId
     case let (.variable(lhsVariables), .variable(rhsVariables)):
-      return lhsVariables == rhsVariables
+      lhsVariables == rhsVariables
     case let (.state(lhsCardId), .state(rhsCardId)):
-      return lhsCardId == rhsCardId
+      lhsCardId == rhsCardId
     case let (.patch(lhsCardId, lhsPatch), .patch(rhsCardId, rhsPatch)):
-      return lhsCardId == rhsCardId && lhsPatch == rhsPatch
+      lhsCardId == rhsCardId && lhsPatch == rhsPatch
     case (.timer, _), (variable, _), (.state, _), (.patch, _):
-      return false
+      false
     }
   }
 }

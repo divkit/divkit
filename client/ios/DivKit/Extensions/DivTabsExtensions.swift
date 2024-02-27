@@ -89,11 +89,10 @@ extension DivTabs: DivBlockModeling {
   ) -> TabViewState {
     let stateStorage = context.blockStateStorage
     let path = context.parentPath
-    let index: CGFloat
-    if let state: TabViewState = stateStorage.getState(path) {
-      index = state.selectedPageIndex
+    let index: CGFloat = if let state: TabViewState = stateStorage.getState(path) {
+      state.selectedPageIndex
     } else {
-      index = CGFloat(resolveSelectedTab(context.expressionResolver))
+      CGFloat(resolveSelectedTab(context.expressionResolver))
     }
     let newState = TabViewState(
       selectedPageIndex: min(index, CGFloat(tabs.count) - 1),
@@ -180,9 +179,9 @@ extension DivTabs.TabTitleStyle {
 extension Typo {
   fileprivate func with(height: Int?) -> Typo {
     if let height {
-      return with(height: CGFloat(height))
+      with(height: CGFloat(height))
     } else {
-      return self
+      self
     }
   }
 }

@@ -3,13 +3,13 @@ import Foundation
 extension Div {
   var children: [Div] {
     switch self {
-    case let .divContainer(div): return div.nonNilItems
-    case let .divGrid(div): return div.nonNilItems
-    case let .divGallery(div): return div.nonNilItems
-    case let .divPager(div): return div.nonNilItems
-    case let .divTabs(div): return div.items.map(\.div)
-    case let .divCustom(div): return div.items ?? []
-    case let .divState(div): return div.states.compactMap(\.div)
+    case let .divContainer(div): div.nonNilItems
+    case let .divGrid(div): div.nonNilItems
+    case let .divGallery(div): div.nonNilItems
+    case let .divPager(div): div.nonNilItems
+    case let .divTabs(div): div.items.map(\.div)
+    case let .divCustom(div): div.items ?? []
+    case let .divState(div): div.states.compactMap(\.div)
     case .divGifImage,
          .divImage,
          .divIndicator,
@@ -19,7 +19,7 @@ extension Div {
          .divSlider,
          .divVideo,
          .divText:
-      return []
+      []
     }
   }
 }
@@ -28,18 +28,18 @@ extension Div {
   var isHorizontallyMatchParent: Bool {
     switch value.width {
     case .divMatchParentSize:
-      return true
+      true
     case .divFixedSize, .divWrapContentSize:
-      return false
+      false
     }
   }
 
   var isVerticallyMatchParent: Bool {
     switch value.height {
     case .divMatchParentSize:
-      return true
+      true
     case .divFixedSize, .divWrapContentSize:
-      return false
+      false
     }
   }
 }

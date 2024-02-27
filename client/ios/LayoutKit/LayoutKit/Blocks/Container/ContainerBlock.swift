@@ -234,9 +234,9 @@ public final class ContainerBlock: BlockWithLayout {
   public var calculateWidthFirst: Bool {
     switch widthTrait {
     case .fixed, .weighted:
-      return true
+      true
     case .intrinsic:
-      return !(layoutDirection == .vertical && layoutMode == .wrap)
+      !(layoutDirection == .vertical && layoutMode == .wrap)
     }
   }
 
@@ -252,12 +252,11 @@ public final class ContainerBlock: BlockWithLayout {
       return cached
     }
 
-    var result: CGFloat
-    switch layoutDirection {
+    var result: CGFloat = switch layoutDirection {
     case .horizontal:
-      result = (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
+      (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
     case .vertical:
-      result = children.map(\.content.intrinsicContentWidth).max() ?? 0
+      children.map(\.content.intrinsicContentWidth).max() ?? 0
     }
 
     if case let .intrinsic(_, minSize, maxSize) = widthTrait {
@@ -328,16 +327,14 @@ public final class ContainerBlock: BlockWithLayout {
       return cached.width
     }
 
-    let result: CGFloat
-
-    switch layoutDirection {
+    let result: CGFloat = switch layoutDirection {
     case .horizontal:
-      result = (children.map(\.content.widthOfHorizontallyNonResizableBlock) + gaps)
+      (children.map(\.content.widthOfHorizontallyNonResizableBlock) + gaps)
         .reduce(0, +)
     case .vertical:
       // MOBYANDEXIOS-1092: Only non-resizable children can influence the width of a container
       // because the widths of resizable children depend on the width of container itself
-      result = children.filter { !$0.content.isHorizontallyResizable }
+      children.filter { !$0.content.isHorizontallyResizable }
         .map(\.content.widthOfHorizontallyNonResizableBlock).max() ?? 0
     }
 
@@ -556,11 +553,11 @@ extension ContainerBlock.CrossAlignment {
   ) -> CGFloat {
     switch self {
     case .leading, .baseline:
-      return 0
+      0
     case .center:
-      return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
+      ((availableSpace - contentSize) * 0.5).roundedToScreenScale
     case .trailing:
-      return availableSpace - contentSize
+      availableSpace - contentSize
     }
   }
 }

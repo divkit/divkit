@@ -12,13 +12,13 @@ extension FontWeight {
   fileprivate var fontName: String {
     switch self {
     case .light:
-      return "YSText-Light"
+      "YSText-Light"
     case .regular:
-      return "YSText-Regular"
+      "YSText-Regular"
     case .medium, .semibold:
-      return "YSText-Medium"
+      "YSText-Medium"
     case .bold:
-      return "YSText-Bold"
+      "YSText-Bold"
     }
   }
 }

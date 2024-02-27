@@ -29,9 +29,9 @@ enum EqualityOperators: String, CaseIterable {
     FunctionBinary {
       switch self {
       case .equals:
-        return $0 == $1
+        $0 == $1
       case .notEquals:
-        return $0 != $1
+        $0 != $1
       }
     }
   }

@@ -340,9 +340,9 @@ extension GalleryViewState {
   fileprivate var currentItemIndex: Int {
     switch contentPosition {
     case let .offset(_, firstVisibleItemsIndex):
-      return firstVisibleItemsIndex
+      firstVisibleItemsIndex
     case let .paging(index):
-      return Int(index)
+      Int(index)
     }
   }
 }

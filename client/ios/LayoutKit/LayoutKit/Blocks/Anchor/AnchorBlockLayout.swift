@@ -13,15 +13,14 @@ extension AnchorBlock.Layout {
   ) {
     let leadingSize = leading?.size(forResizableBlockSize: size) ?? .zero
     let trailingSize = trailing?.size(forResizableBlockSize: size) ?? .zero
-    let freeSize: CGSize
-    switch direction {
+    let freeSize = switch direction {
     case .horizontal:
-      freeSize = CGSize(
+      CGSize(
         width: max(0, size.width - leadingSize.width - trailingSize.width),
         height: size.height
       )
     case .vertical:
-      freeSize = CGSize(
+      CGSize(
         width: size.width,
         height: max(0, size.height - leadingSize.height - trailingSize.height)
       )
@@ -32,10 +31,9 @@ extension AnchorBlock.Layout {
       height: min(desiredCenterSize.height, freeSize.height)
     )
     func makeCrossOffset(contentSize: CGFloat) -> CGFloat {
-      let crossDimension: CGFloat
-      switch direction {
-      case .horizontal: crossDimension = size.height
-      case .vertical: crossDimension = size.width
+      let crossDimension: CGFloat = switch direction {
+      case .horizontal: size.height
+      case .vertical: size.width
       }
       return crossAlignment.offset(
         forAvailableSpace: crossDimension,

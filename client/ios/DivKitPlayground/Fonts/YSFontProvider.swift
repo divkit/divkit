@@ -15,13 +15,13 @@ extension DivFontWeight {
   fileprivate var fontName: String {
     switch self {
     case .light:
-      return "YSText-Light"
+      "YSText-Light"
     case .regular:
-      return YSFontProvider.regularFontName
+      YSFontProvider.regularFontName
     case .medium:
-      return YSFontProvider.mediumFontName
+      YSFontProvider.mediumFontName
     case .bold:
-      return "YSText-Bold"
+      "YSText-Bold"
     }
   }
 }

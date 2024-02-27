@@ -244,9 +244,9 @@ extension UICollectionView {
       ($0, layoutAttributesForItem(at: $0)?.frame)
     }.compactMap { indexPath, frame in
       if let frame {
-        return (indexPath, frame)
+        (indexPath, frame)
       } else {
-        return nil
+        nil
       }
     }
   }

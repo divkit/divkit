@@ -95,9 +95,9 @@ extension GalleryViewModel {
   fileprivate func frames(fitting size: CGSize?, layoutMode: PagerBlock.LayoutMode) -> [CGRect] {
     switch direction {
     case .horizontal:
-      return horizontallyOrientedFrames(fitting: size, layoutMode: layoutMode)
+      horizontallyOrientedFrames(fitting: size, layoutMode: layoutMode)
     case .vertical:
-      return verticallyOrientedFrames(fitting: size, layoutMode: layoutMode)
+      verticallyOrientedFrames(fitting: size, layoutMode: layoutMode)
     }
   }
 
@@ -253,11 +253,11 @@ extension Alignment {
   fileprivate func origin(of dimension: CGFloat, minimum: CGFloat, maximum: CGFloat) -> CGFloat {
     switch self {
     case .leading:
-      return minimum
+      minimum
     case .center:
-      return floor((minimum + maximum - dimension) / 2)
+      floor((minimum + maximum - dimension) / 2)
     case .trailing:
-      return maximum - dimension
+      maximum - dimension
     }
   }
 }
@@ -266,9 +266,9 @@ extension CGPoint {
   fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
     switch direction {
     case .horizontal:
-      return x
+      x
     case .vertical:
-      return y
+      y
     }
   }
 }
@@ -277,9 +277,9 @@ extension CGSize {
   fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
     switch direction {
     case .horizontal:
-      return width
+      width
     case .vertical:
-      return height
+      height
     }
   }
 }

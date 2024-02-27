@@ -57,9 +57,9 @@ extension NonEmpty<[UserInterfaceAction]>? {
   fileprivate var hasPayload: Bool {
     switch self {
     case let .some(actions):
-      return !actions.filter { $0.payload != .empty }.isEmpty
+      !actions.filter { $0.payload != .empty }.isEmpty
     case .none:
-      return false
+      false
     }
   }
 }
@@ -74,9 +74,9 @@ extension LongTapActions {
   fileprivate var hasPayload: Bool {
     switch self {
     case let .actions(actions):
-      return !actions.filter { $0.payload != .empty }.isEmpty
+      !actions.filter { $0.payload != .empty }.isEmpty
     case .contextMenu:
-      return false
+      false
     }
   }
 }
@@ -496,8 +496,8 @@ extension DecoratingView: TooltipAnchorView {
 extension DecoratingView.HighlightState {
   var alpha: CGFloat {
     switch self {
-    case .normal: return 1
-    case .highlighted: return 0.5
+    case .normal: 1
+    case .highlighted: 0.5
     }
   }
 }
@@ -507,8 +507,8 @@ extension DecoratingView.Model {
     for highlightState: DecoratingView.HighlightState
   ) -> Color {
     switch highlightState {
-    case .normal: return backgroundColor
-    case .highlighted: return highlightedBackgroundColor ?? backgroundColor
+    case .normal: backgroundColor
+    case .highlighted: highlightedBackgroundColor ?? backgroundColor
     }
   }
 
@@ -517,10 +517,10 @@ extension DecoratingView.Model {
   ) -> [TransitioningAnimation]? {
     switch highlightState {
     case .normal:
-      return actionAnimation?.touchUp
+      actionAnimation?.touchUp
         .map { $0.modifyingFade(childAlpha: childAlpha) }
     case .highlighted:
-      return actionAnimation?.touchDown
+      actionAnimation?.touchDown
         .map { $0.modifyingFade(childAlpha: childAlpha) }
     }
   }
@@ -530,7 +530,7 @@ extension TransitioningAnimation {
   fileprivate func modifyingFade(childAlpha: CGFloat) -> Self {
     switch kind {
     case .fade:
-      return TransitioningAnimation(
+      TransitioningAnimation(
         kind: .fade,
         start: start * childAlpha,
         end: end * childAlpha,
@@ -539,7 +539,7 @@ extension TransitioningAnimation {
         timingFunction: timingFunction
       )
     case .scaleXY, .translationX, .translationY:
-      return self
+      self
     }
   }
 }
@@ -571,8 +571,8 @@ extension ContextMenu {
 extension BlurEffect {
   fileprivate func cast() -> UIBlurEffect.Style {
     switch self {
-    case .light: return .light
-    case .dark: return .dark
+    case .light: .light
+    case .dark: .dark
     }
   }
 }

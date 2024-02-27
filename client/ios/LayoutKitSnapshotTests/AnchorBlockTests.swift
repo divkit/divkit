@@ -68,12 +68,11 @@ final class AnchorBlockTests: LayoutKitSnapshotTest {
 
   private func perform(_ configuration: Configuration, name: String = #function) {
     ContainerBlock.LayoutDirection.allCases.forEach { direction in
-      let size: CGSize
-      switch direction {
+      let size: CGSize = switch direction {
       case .horizontal:
-        size = CGSize(width: axialSize, height: crossSize)
+        .init(width: axialSize, height: crossSize)
       case .vertical:
-        size = CGSize(width: crossSize, height: axialSize)
+        .init(width: crossSize, height: axialSize)
       }
 
       func makeCenterOverlay(content: Block, color: Color) -> Block {
@@ -175,13 +174,11 @@ extension Configuration.Item {
     let widthTrait: LayoutTrait
     let heightTrait: LayoutTrait
 
-    let crossTrait: LayoutTrait
-
-    switch crossSize {
+    let crossTrait: LayoutTrait = switch crossSize {
     case let .fixed(size):
-      crossTrait = .fixed(size)
+      .fixed(size)
     case let .weighted(weight):
-      crossTrait = .weighted(weight)
+      .weighted(weight)
     }
 
     switch direction {

@@ -20,9 +20,9 @@ struct ContainerBlockLayout {
     var insetValue: CGFloat {
       switch self {
       case .fits:
-        return 0
+        0
       case let .doesNotFit(notFittingPartSize: inset):
-        return inset
+        inset
       }
     }
   }
@@ -78,11 +78,11 @@ struct ContainerBlockLayout {
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
     switch layoutMode {
     case .noWrap:
-      return calculateNoWrapLayoutFrames(
+      calculateNoWrapLayoutFrames(
         children: children
       )
     case .wrap:
-      return calculateWrapLayoutFrames(
+      calculateWrapLayoutFrames(
         children: children,
         separator: separator,
         lineSeparator: lineSeparator
@@ -205,13 +205,12 @@ struct ContainerBlockLayout {
           let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
           width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
         }
-        let height: CGFloat
-        if block.isVerticallyResizable {
-          height = blockMeasure.measureNext(block.verticalMeasure)
+        let height: CGFloat = if block.isVerticallyResizable {
+          blockMeasure.measureNext(block.verticalMeasure)
         } else if block.isVerticallyConstrained {
-          height = constrainedBlockSizesIterator.next() ?? 0
+          constrainedBlockSizesIterator.next() ?? 0
         } else {
-          height = block.heightOfVerticallyNonResizableBlock(forWidth: width)
+          block.heightOfVerticallyNonResizableBlock(forWidth: width)
         }
         let alignmentSpace = size.width - width
         let x = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
@@ -340,14 +339,14 @@ struct ContainerBlockLayout {
   ) -> CGFloat {
     switch layoutDirection {
     case .horizontal:
-      return group
+      group
         .map { item in item.childSize.height + item.child.baselineOffset(
           ascent: lineAscent,
           width: item.childSize.width
         ) }
         .max() ?? 0
     case .vertical:
-      return group.map { item in item.childSize.width }.max() ?? 0
+      group.map { item in item.childSize.width }.max() ?? 0
     }
   }
 

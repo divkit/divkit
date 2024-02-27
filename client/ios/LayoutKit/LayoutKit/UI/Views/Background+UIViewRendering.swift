@@ -293,13 +293,13 @@ extension Background {
          .gradient,
          .ninePatchImage,
          .block:
-      return false
+      false
     case .transparentAction:
-      return true
+      true
     case let .composite(lhs, rhs, _):
-      return lhs.isUserInteractionEnabled || rhs.isUserInteractionEnabled
+      lhs.isUserInteractionEnabled || rhs.isUserInteractionEnabled
     case let .withInsets(background, _):
-      return background.isUserInteractionEnabled
+      background.isUserInteractionEnabled
     }
   }
 }

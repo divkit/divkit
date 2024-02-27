@@ -53,10 +53,10 @@ extension DivAnimation {
 extension DivAnimationInterpolator {
   func asTimingFunction() -> TimingFunction {
     switch self {
-    case .linear: return .linear
-    case .easeIn: return .easeIn
-    case .easeOut: return .easeOut
-    case .easeInOut, .ease, .spring: return .easeInEaseOut
+    case .linear: .linear
+    case .easeIn: .easeIn
+    case .easeOut: .easeOut
+    case .easeInOut, .ease, .spring: .easeInEaseOut
     }
   }
 }
@@ -69,9 +69,9 @@ private enum TimeOrientation {
 extension DivAnimation.Name {
   fileprivate var kind: TransitioningAnimation.Kind? {
     switch self {
-    case .fade: return .fade
-    case .scale: return .scaleXY
-    case .set, .translate, .noAnimation, .native: return nil
+    case .fade: .fade
+    case .scale: .scaleXY
+    case .set, .translate, .noAnimation, .native: nil
     }
   }
 }
@@ -101,8 +101,8 @@ extension TransitioningAnimation.Kind {
 extension TimeOrientation {
   fileprivate func inverted() -> Self {
     switch self {
-    case .direct: return .reverse
-    case .reverse: return .direct
+    case .direct: .reverse
+    case .reverse: .direct
     }
   }
 }

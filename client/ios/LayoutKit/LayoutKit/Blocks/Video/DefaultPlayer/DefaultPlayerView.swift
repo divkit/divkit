@@ -40,11 +40,11 @@ extension VideoScale {
   fileprivate var videoGravity: AVLayerVideoGravity? {
     switch self {
     case .fill:
-      return .resizeAspectFill
+      .resizeAspectFill
     case .noScale:
-      return nil
+      nil
     case .fit:
-      return .resizeAspect
+      .resizeAspect
     }
   }
 }

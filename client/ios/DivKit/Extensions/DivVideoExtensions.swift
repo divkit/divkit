@@ -99,11 +99,11 @@ extension DivVideoScale {
   fileprivate var scale: VideoScale {
     switch self {
     case .fill:
-      return .fill
+      .fill
     case .noScale:
-      return .noScale
+      .noScale
     case .fit:
-      return .fit
+      .fit
     }
   }
 }

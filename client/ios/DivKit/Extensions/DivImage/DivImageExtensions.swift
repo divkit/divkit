@@ -20,11 +20,12 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
 
     let expressionResolver = context.expressionResolver
     let highPriority = resolveHighPriorityPreviewShow(expressionResolver)
-    let imageHolderFactory: DivImageHolderFactory
-    if highPriority, let highPriorityImageHolderFactory = context.highPriorityImageHolderFactory {
-      imageHolderFactory = highPriorityImageHolderFactory
+    let imageHolderFactory: DivImageHolderFactory = if highPriority,
+                                                       let highPriorityImageHolderFactory = context
+                                                       .highPriorityImageHolderFactory {
+      highPriorityImageHolderFactory
     } else {
-      imageHolderFactory = context.imageHolderFactory
+      context.imageHolderFactory
     }
 
     return ImageBlock(
@@ -47,17 +48,17 @@ extension DivBlendMode {
   fileprivate var tintMode: TintMode {
     switch self {
     case .sourceIn:
-      return .sourceIn
+      .sourceIn
     case .sourceAtop:
-      return .sourceAtop
+      .sourceAtop
     case .darken:
-      return .darken
+      .darken
     case .lighten:
-      return .lighten
+      .lighten
     case .multiply:
-      return .multiply
+      .multiply
     case .screen:
-      return .screen
+      .screen
     }
   }
 }

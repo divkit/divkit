@@ -16,11 +16,10 @@ extension DivAction {
       payload = makeDivActionPayload(cardId: context.cardId, source: .tap)
     }
 
-    let path: UIElementPath
-    if let cardLogId = context.cardLogId {
-      path = UIElementPath(cardLogId) + logId
+    let path = if let cardLogId = context.cardLogId {
+      UIElementPath(cardLogId) + logId
     } else {
-      path = UIElementPath(logId)
+      UIElementPath(logId)
     }
 
     return UserInterfaceAction(payload: payload, path: path)

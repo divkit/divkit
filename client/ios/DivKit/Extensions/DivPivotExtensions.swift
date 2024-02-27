@@ -6,9 +6,9 @@ extension DivPivot {
   func resolveAnchorValue(_ expressionResolver: ExpressionResolver) -> AnchorValue {
     switch self {
     case let .divPivotPercentage(value):
-      return .relative(value: value.resolveValue(expressionResolver) ?? 50)
+      .relative(value: value.resolveValue(expressionResolver) ?? 50)
     case let .divPivotFixed(value):
-      return .absolute(value: value.resolveValue(expressionResolver).flatMap(CGFloat.init) ?? 0)
+      .absolute(value: value.resolveValue(expressionResolver).flatMap(CGFloat.init) ?? 0)
     }
   }
 }

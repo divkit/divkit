@@ -225,18 +225,18 @@ extension ContainerBlock.LayoutDirection {
   var buildingDirectionKeyPath: WritableKeyPath<CGSize, CGFloat> {
     switch self {
     case .horizontal:
-      return \.width
+      \.width
     case .vertical:
-      return \.height
+      \.height
     }
   }
 
   var transferDirectionKeyPath: KeyPath<CGSize, CGFloat> {
     switch self {
     case .horizontal:
-      return \.height
+      \.height
     case .vertical:
-      return \.width
+      \.width
     }
   }
 }
@@ -245,18 +245,18 @@ extension ContainerBlock.Child {
   fileprivate func isResizable(for layoutDirection: ContainerBlock.LayoutDirection) -> Bool {
     switch layoutDirection {
     case .horizontal:
-      return content.isHorizontallyResizable
+      content.isHorizontallyResizable
     case .vertical:
-      return content.isVerticallyResizable
+      content.isVerticallyResizable
     }
   }
 
   fileprivate func isConstrained(for layoutDirection: ContainerBlock.LayoutDirection) -> Bool {
     switch layoutDirection {
     case .horizontal:
-      return content.isHorizontallyConstrained
+      content.isHorizontallyConstrained
     case .vertical:
-      return content.isVerticallyConstrained
+      content.isVerticallyConstrained
     }
   }
 }

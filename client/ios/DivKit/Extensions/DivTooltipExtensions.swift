@@ -40,15 +40,15 @@ extension DivTooltip {
 extension DivTooltip.Position {
   fileprivate func cast() -> BlockTooltip.Position {
     switch self {
-    case .left: return .left
-    case .topLeft: return .topLeft
-    case .top: return .top
-    case .topRight: return .topRight
-    case .right: return .right
-    case .bottomRight: return .bottomRight
-    case .bottom: return .bottom
-    case .bottomLeft: return .bottomLeft
-    case .center: return .center
+    case .left: .left
+    case .topLeft: .topLeft
+    case .top: .top
+    case .topRight: .topRight
+    case .right: .right
+    case .bottomRight: .bottomRight
+    case .bottom: .bottom
+    case .bottomLeft: .bottomLeft
+    case .center: .center
     }
   }
 }

@@ -7,9 +7,9 @@ extension ContainerBlock.LayoutDirection: CustomDebugStringConvertible {
   public var debugDescription: String {
     switch self {
     case .horizontal:
-      return "Horizontal"
+      "Horizontal"
     case .vertical:
-      return "Vertical"
+      "Vertical"
     }
   }
 }
@@ -17,9 +17,9 @@ extension ContainerBlock.LayoutDirection: CustomDebugStringConvertible {
 extension BlockAlignment2D: CustomDebugStringConvertible {
   public var debugDescription: String {
     if horizontal != vertical {
-      return "V: \(vertical) H: \(horizontal)"
+      "V: \(vertical) H: \(horizontal)"
     } else {
-      return horizontal.debugDescription
+      horizontal.debugDescription
     }
   }
 }
@@ -179,11 +179,11 @@ extension LayoutTrait: CustomDebugStringConvertible {
   public var debugDescription: String {
     switch self {
     case .intrinsic:
-      return "I"
+      "I"
     case let .weighted(value):
-      return "R(\(value.rawValue))"
+      "R(\(value.rawValue))"
     case let .fixed(value):
-      return "\(value)"
+      "\(value)"
     }
   }
 }
@@ -192,9 +192,9 @@ extension AnimationChanges: CustomDebugStringConvertible {
   public var debugDescription: String {
     switch self {
     case let .transform(values):
-      return "transform\(values)"
+      "transform\(values)"
     case let .opacity(values):
-      return "opacity\(values)"
+      "opacity\(values)"
     }
   }
 }

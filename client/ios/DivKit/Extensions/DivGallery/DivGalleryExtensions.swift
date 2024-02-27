@@ -77,9 +77,9 @@ extension DivGallery.Orientation {
   fileprivate var direction: GalleryViewModel.Direction {
     switch self {
     case .horizontal:
-      return .horizontal
+      .horizontal
     case .vertical:
-      return .vertical
+      .vertical
     }
   }
 }
@@ -88,9 +88,9 @@ extension DivGallery.ScrollMode {
   fileprivate var blockScrollMode: GalleryViewModel.ScrollMode {
     switch self {
     case .default:
-      return .default
+      .default
     case .paging:
-      return .autoPaging
+      .autoPaging
     }
   }
 }
@@ -98,9 +98,9 @@ extension DivGallery.ScrollMode {
 extension DivGallery.CrossContentAlignment {
   fileprivate var blockAlignment: Alignment {
     switch self {
-    case .start: return .leading
-    case .center: return .center
-    case .end: return .trailing
+    case .start: .leading
+    case .center: .center
+    case .end: .trailing
     }
   }
 }
@@ -109,9 +109,9 @@ extension DivGallery.Scrollbar {
   fileprivate var blockScrollbar: GalleryViewModel.Scrollbar {
     switch self {
     case .none:
-      return .none
+      .none
     case .auto:
-      return .auto
+      .auto
     }
   }
 }

@@ -23,9 +23,9 @@ public struct GalleryViewModel: Equatable {
     public var isHorizontal: Bool {
       switch self {
       case .horizontal:
-        return true
+        true
       case .vertical:
-        return false
+        false
       }
     }
   }
@@ -47,9 +47,9 @@ public struct GalleryViewModel: Equatable {
     public var show: Bool {
       switch self {
       case .none:
-        return false
+        false
       case .auto:
-        return true
+        true
       }
     }
   }

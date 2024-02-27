@@ -8,9 +8,9 @@ extension BoundaryTrait {
   var clipsToBounds: Bool {
     switch self {
     case .noClip:
-      return false
+      false
     case .clipCorner, .clipPath:
-      return true
+      true
     }
   }
 
@@ -60,15 +60,15 @@ extension BoundaryTrait {
   private func makeMaskPath(for size: CGSize, inset: CGFloat) -> CGPath? {
     switch self {
     case let .clipPath(path):
-      return path
+      path
     case let .clipCorner(cornerRadii):
-      return .roundedRect(
+      .roundedRect(
         size: size,
         cornerRadii: cornerRadii,
         inset: inset
       )
     case .noClip:
-      return nil
+      nil
     }
   }
 }

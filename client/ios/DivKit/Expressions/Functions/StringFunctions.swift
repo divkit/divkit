@@ -12,17 +12,17 @@ enum StringFunctions: String, CaseIterable {
     private var description: String {
       switch self {
       case .cast:
-        return "Argument couldn't be casted to String"
+        "Argument couldn't be casted to String"
       case .indexesCast:
-        return "Indexes couldn't be casted to Integer"
+        "Indexes couldn't be casted to Integer"
       case let .indexesOrder(expression):
-        return "Failed to evaluate [\(expression)]. Indexes should be in ascending order."
+        "Failed to evaluate [\(expression)]. Indexes should be in ascending order."
       case let .indexesValue(expression):
-        return "Failed to evaluate [\(expression)]. Indexes are out of bounds."
+        "Failed to evaluate [\(expression)]. Indexes are out of bounds."
       case .encodeEmpty:
-        return "String is empty after encoding."
+        "String is empty after encoding."
       case .decodeEmpty:
-        return "String is empty after decoding."
+        "String is empty after decoding."
       }
     }
 
@@ -51,47 +51,47 @@ enum StringFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .len:
-      return FunctionUnary(impl: _len)
+      FunctionUnary(impl: _len)
     case .contains:
-      return FunctionBinary(impl: _contains)
+      FunctionBinary(impl: _contains)
     case .substring:
-      return FunctionTernary(impl: _substring)
+      FunctionTernary(impl: _substring)
     case .replaceAll:
-      return FunctionTernary(impl: _replaceAll)
+      FunctionTernary(impl: _replaceAll)
     case .index:
-      return FunctionBinary(impl: _index)
+      FunctionBinary(impl: _index)
     case .lastIndex:
-      return FunctionBinary(impl: _lastIndex)
+      FunctionBinary(impl: _lastIndex)
     case .trim:
-      return FunctionUnary(impl: _trim)
+      FunctionUnary(impl: _trim)
     case .trimLeft:
-      return FunctionUnary(impl: _trimLeft)
+      FunctionUnary(impl: _trimLeft)
     case .trimRight:
-      return FunctionUnary(impl: _trimRight)
+      FunctionUnary(impl: _trimRight)
     case .toUpperCase:
-      return FunctionUnary(impl: _toUpperCase)
+      FunctionUnary(impl: _toUpperCase)
     case .toLowerCase:
-      return FunctionUnary(impl: _toLowerCase)
+      FunctionUnary(impl: _toLowerCase)
     case .encodeUri:
-      return FunctionUnary(impl: _encodeUri)
+      FunctionUnary(impl: _encodeUri)
     case .decodeUri:
-      return FunctionUnary(impl: _decodeUri)
+      FunctionUnary(impl: _decodeUri)
     case .padStart:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _padStart),
           FunctionTernary(impl: _padStartInt),
         ]
       )
     case .padEnd:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionTernary(impl: _padEnd),
           FunctionTernary(impl: _padEndInt),
         ]
       )
     case .testRegex:
-      return FunctionBinary(impl: _testRegex)
+      FunctionBinary(impl: _testRegex)
     }
   }
 }

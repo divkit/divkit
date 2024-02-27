@@ -42,7 +42,7 @@ final class DivBlockProvider {
       cardSize = DivViewSize(block: block)
     }
   }
-  
+
   weak var parentScrollView: ScrollView? {
     didSet {
       guard oldValue !== parentScrollView else { return }
@@ -262,9 +262,9 @@ extension DivActionURLHandler.UpdateReason {
   fileprivate func patch(for divCardId: DivCardID) -> DivPatch? {
     switch self {
     case let .patch(cardId, patch):
-      return cardId == divCardId ? patch : nil
+      cardId == divCardId ? patch : nil
     case .timer, .variable, .state:
-      return nil
+      nil
     }
   }
 }

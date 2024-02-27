@@ -311,9 +311,9 @@ extension BoundaryTrait? {
   fileprivate var shouldApplyBoundary: Bool {
     switch self {
     case .noClip?, .none:
-      return false
+      false
     case .clipPath?, .clipCorner?:
-      return true
+      true
     }
   }
 }

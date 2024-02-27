@@ -13,9 +13,9 @@ extension CommonHandler: Equatable {
   ) -> Bool {
     switch (lhs, rhs) {
     case let (.action(lAction), .action(rAction)):
-      return lAction == rAction
+      lAction == rAction
     case (.action, _), (.block, _):
-      return false
+      false
     }
   }
 }

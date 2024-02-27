@@ -83,12 +83,11 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
     }
 
     let widths = contents.map(\.intrinsicContentWidth)
-    var result: CGFloat
-    switch direction {
+    var result: CGFloat = switch direction {
     case .horizontal:
-      result = widths.reduce(0, +)
+      widths.reduce(0, +)
     case .vertical:
-      result = widths.max()!
+      widths.max()!
     }
 
     if case let .intrinsic(_, minSize, maxSize) = widthTrait {
@@ -106,12 +105,11 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       $0?.intrinsicContentHeight(forWidth: width)
     }
 
-    var result: CGFloat
-    switch direction {
+    var result: CGFloat = switch direction {
     case .horizontal:
-      result = heights.max()!
+      heights.max()!
     case .vertical:
-      result = heights.reduce(0, +)
+      heights.reduce(0, +)
     }
 
     if case let .intrinsic(_, minSize, maxSize) = widthTrait {

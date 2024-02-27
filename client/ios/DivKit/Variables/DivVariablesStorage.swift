@@ -87,7 +87,7 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     variables: DivVariables
   ) {
-    var changeEvent: ChangeEvent? = nil
+    var changeEvent: ChangeEvent?
     lock.write {
       let oldValues = allValues
       cardVariables[cardId] = variables

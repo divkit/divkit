@@ -104,9 +104,9 @@ extension DivVariablesStorage.ChangeEvent.Kind {
   var names: Set<DivVariableName> {
     switch self {
     case let .local(_, names):
-      return names
+      names
     case let .global(names):
-      return names
+      names
     }
   }
 }
@@ -117,9 +117,9 @@ private func makeChangedCardIds(
 ) -> [DivCardID] {
   switch eventKind {
   case let .local(cardId, _):
-    return [cardId]
+    [cardId]
   case .global:
-    return cardIds
+    cardIds
   }
 }
 
@@ -168,9 +168,9 @@ extension Expression {
   fileprivate var variablesNames: Set<DivVariableName> {
     switch self {
     case let .link(link):
-      return Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
+      Set(link.variablesNames.map(DivVariableName.init(rawValue:)))
     case .value:
-      return []
+      []
     }
   }
 }

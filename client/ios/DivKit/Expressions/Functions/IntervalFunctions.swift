@@ -13,21 +13,21 @@ enum IntervalFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .getIntervalSeconds:
-      return FunctionUnary(impl: _getIntervalSeconds)
+      FunctionUnary(impl: _getIntervalSeconds)
     case .getIntervalTotalSeconds:
-      return FunctionUnary(impl: _getIntervalTotalSeconds)
+      FunctionUnary(impl: _getIntervalTotalSeconds)
     case .getIntervalMinutes:
-      return FunctionUnary(impl: _getIntervalMinutes)
+      FunctionUnary(impl: _getIntervalMinutes)
     case .getIntervalTotalMinutes:
-      return FunctionUnary(impl: _getIntervalTotalMinutes)
+      FunctionUnary(impl: _getIntervalTotalMinutes)
     case .getIntervalHours:
-      return FunctionUnary(impl: _getIntervalHours)
+      FunctionUnary(impl: _getIntervalHours)
     case .getIntervalTotalHours:
-      return FunctionUnary(impl: _getIntervalTotalHours)
+      FunctionUnary(impl: _getIntervalTotalHours)
     case .getIntervalTotalDays:
-      return FunctionUnary(impl: _getIntervalTotalDays)
+      FunctionUnary(impl: _getIntervalTotalDays)
     case .getIntervalTotalWeeks:
-      return FunctionUnary(impl: _getIntervalTotalWeeks)
+      FunctionUnary(impl: _getIntervalTotalWeeks)
     }
   }
 

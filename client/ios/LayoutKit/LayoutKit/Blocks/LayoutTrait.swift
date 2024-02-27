@@ -65,9 +65,9 @@ extension LayoutTrait {
   public var isConstrained: Bool {
     switch self {
     case let .intrinsic(constrained, _, _):
-      return constrained
+      constrained
     case .fixed, .weighted:
-      return false
+      false
     }
   }
 }

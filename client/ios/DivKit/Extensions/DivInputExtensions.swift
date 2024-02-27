@@ -144,15 +144,15 @@ extension DivAlignmentHorizontal {
   fileprivate var textAlignment: TextInputBlock.TextAlignmentHorizontal {
     switch self {
     case .left:
-      return .left
+      .left
     case .center:
-      return .center
+      .center
     case .right:
-      return .right
+      .right
     case .start:
-      return .start
+      .start
     case .end:
-      return .end
+      .end
     }
   }
 }
@@ -177,15 +177,15 @@ extension DivInput.KeyboardType {
   fileprivate var system: TextInputBlock.InputType {
     switch self {
     case .singleLineText, .multiLineText:
-      return .default
+      .default
     case .phone:
-      return .keyboard(.phonePad)
+      .keyboard(.phonePad)
     case .number:
-      return .keyboard(.decimalPad)
+      .keyboard(.decimalPad)
     case .email:
-      return .keyboard(.emailAddress)
+      .keyboard(.emailAddress)
     case .uri:
-      return .keyboard(.URL)
+      .keyboard(.URL)
     }
   }
 }
@@ -194,16 +194,16 @@ extension DivInputMask {
   fileprivate func makeMaskValidator(_ resolver: ExpressionResolver) -> MaskValidator? {
     switch self {
     case let .divFixedLengthInputMask(divFixedLengthInputMask):
-      return MaskValidator(formatter: FixedLengthMaskFormatter(
+      MaskValidator(formatter: FixedLengthMaskFormatter(
         pattern: divFixedLengthInputMask.resolvePattern(resolver) ?? "",
         alwaysVisible: divFixedLengthInputMask.resolveAlwaysVisible(resolver),
         patternElements: divFixedLengthInputMask.patternElements
           .map { $0.makePatternElement(resolver) }
       ))
     case .divCurrencyInputMask:
-      return nil
+      nil
     case .divPhoneInputMask:
-      return MaskValidator(formatter: PhoneMaskFormatter(
+      MaskValidator(formatter: PhoneMaskFormatter(
         masksByCountryCode: PhoneMasks().value.typedJSON(),
         extraSymbols: PhoneMasks.extraNumbers
       ))
@@ -213,14 +213,14 @@ extension DivInputMask {
   fileprivate func makeRawVariable(_ context: DivBlockModelingContext) -> Binding<String>? {
     switch self {
     case let .divFixedLengthInputMask(divFixedLengthInputMask):
-      return context.makeBinding(
+      context.makeBinding(
         variableName: divFixedLengthInputMask.rawTextVariable,
         defaultValue: ""
       )
     case .divCurrencyInputMask:
-      return nil
+      nil
     case let .divPhoneInputMask(divPhoneInputMask):
-      return context.makeBinding(
+      context.makeBinding(
         variableName: divPhoneInputMask.rawTextVariable,
         defaultValue: ""
       )

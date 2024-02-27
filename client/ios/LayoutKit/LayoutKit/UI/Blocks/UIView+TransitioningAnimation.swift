@@ -61,23 +61,21 @@ extension UIView {
       let nonZeroValue = value.isZero ? .ulpOfOne : value
       transform = CGAffineTransform(scale: nonZeroValue)
     case .translationX:
-      let x: CGFloat
-      if value == TransitioningAnimation.defaultLeadingSlideDistance {
-        x = -bounds.width
+      let x: CGFloat = if value == TransitioningAnimation.defaultLeadingSlideDistance {
+        -bounds.width
       } else if value == TransitioningAnimation.defaultTrailingSlideDistance {
-        x = bounds.width
+        bounds.width
       } else {
-        x = value
+        value
       }
       transform = CGAffineTransform(translationX: x, y: 0)
     case .translationY:
-      let y: CGFloat
-      if value == TransitioningAnimation.defaultLeadingSlideDistance {
-        y = -bounds.height
+      let y: CGFloat = if value == TransitioningAnimation.defaultLeadingSlideDistance {
+        -bounds.height
       } else if value == TransitioningAnimation.defaultTrailingSlideDistance {
-        y = bounds.height
+        bounds.height
       } else {
-        y = value
+        value
       }
       transform = CGAffineTransform(translationX: 0, y: y)
     }
@@ -110,10 +108,10 @@ private typealias AnimationParams = (
 extension TimingFunction {
   func cast() -> UIView.AnimationOptions {
     switch self {
-    case .linear: return .curveLinear
-    case .easeIn: return .curveEaseIn
-    case .easeOut: return .curveEaseOut
-    case .easeInEaseOut: return .curveEaseInOut
+    case .linear: .curveLinear
+    case .easeIn: .curveEaseIn
+    case .easeOut: .curveEaseOut
+    case .easeInEaseOut: .curveEaseInOut
     }
   }
 }

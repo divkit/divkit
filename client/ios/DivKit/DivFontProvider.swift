@@ -41,13 +41,13 @@ extension DivFontWeight {
   fileprivate var baseUIFontWeight: BaseUIPublic.FontWeight {
     switch self {
     case .light:
-      return .light
+      .light
     case .regular:
-      return .regular
+      .regular
     case .medium:
-      return .medium
+      .medium
     case .bold:
-      return .bold
+      .bold
     }
   }
 }

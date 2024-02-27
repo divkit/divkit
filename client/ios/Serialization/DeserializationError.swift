@@ -25,44 +25,44 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   private func getDescription(path: [String]) -> String {
     switch self {
     case let .composite(error, causes):
-      return "[\(path.joined(separator: "/"))]: \(error)," +
+      "[\(path.joined(separator: "/"))]: \(error)," +
         "    caused by    " +
         "\(causes.map { $0.getDescription(path: path) }.joined(separator: ";    "))"
     case let .nestedObjectError(field, error):
-      return error.getDescription(path: path + [field])
+      error.getDescription(path: path + [field])
     default:
-      return "[\(path.joined(separator: "/"))]: \(errorMessage)"
+      "[\(path.joined(separator: "/"))]: \(errorMessage)"
     }
   }
 
   public var errorMessage: String {
     switch self {
     case .generic:
-      return "Deserialization error"
+      "Deserialization error"
     case .nonUTF8String:
-      return "Non-UTF8 string"
+      "Non-UTF8 string"
     case .invalidJSONData:
-      return "Invalid JSON"
+      "Invalid JSON"
     case let .missingType(representation):
-      return "Missing type: \(representation)"
+      "Missing type: \(representation)"
     case let .unknownType(type):
-      return "Unknown type: \(type)"
+      "Unknown type: \(type)"
     case let .invalidFieldRepresentation(field, representation):
-      return "Invalid '\(field)' value: \(dbgStrLimited(representation))"
+      "Invalid '\(field)' value: \(dbgStrLimited(representation))"
     case let .typeMismatch(expected, representation):
-      return "Type mismatch: \(dbgStrLimited(representation)), but '\(expected)' expected"
+      "Type mismatch: \(dbgStrLimited(representation)), but '\(expected)' expected"
     case let .invalidValue(result, value):
-      return "Invalid value: '\(dbgStrLimited(result))', from '\(dbgStrLimited(value))'"
+      "Invalid value: '\(dbgStrLimited(result))', from '\(dbgStrLimited(value))'"
     case let .requiredFieldIsMissing(field):
-      return "Required field is missing: \(field)"
+      "Required field is missing: \(field)"
     case let .nestedObjectError(_, error):
-      return error.errorMessage
+      error.errorMessage
     case .noData:
-      return "No data"
+      "No data"
     case let .composite(error, _):
-      return "\(error)"
+      "\(error)"
     case let .unexpectedError(message):
-      return "Unexpected error: \(message)"
+      "Unexpected error: \(message)"
     }
   }
 
@@ -93,29 +93,29 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   public var rootCauses: [DeserializationError] {
     switch self {
     case let .composite(_, causes):
-      return causes.flatMap(\.rootCauses)
+      causes.flatMap(\.rootCauses)
     case let .nestedObjectError(field, error):
-      return error.rootCauses.map { .nestedObjectError(field: field, error: $0) }
+      error.rootCauses.map { .nestedObjectError(field: field, error: $0) }
     default:
-      return [self]
+      [self]
     }
   }
 
   private var subkind: String {
     switch self {
-    case .generic: return "generic"
-    case .invalidFieldRepresentation: return "invalidFieldRepresentation"
-    case .invalidJSONData: return "invalidJSONData"
-    case .invalidValue: return "invalidValue"
-    case .missingType: return "missingType"
-    case let .nestedObjectError(_, error): return error.subkind
-    case .noData: return "noData"
-    case .nonUTF8String: return "nonUTF8String"
-    case .requiredFieldIsMissing: return "requiredFieldIsMissing"
-    case .typeMismatch: return "typeMismatch"
-    case .unexpectedError: return "unexpectedError"
-    case .unknownType: return "unknownType"
-    case .composite: return "composite"
+    case .generic: "generic"
+    case .invalidFieldRepresentation: "invalidFieldRepresentation"
+    case .invalidJSONData: "invalidJSONData"
+    case .invalidValue: "invalidValue"
+    case .missingType: "missingType"
+    case let .nestedObjectError(_, error): error.subkind
+    case .noData: "noData"
+    case .nonUTF8String: "nonUTF8String"
+    case .requiredFieldIsMissing: "requiredFieldIsMissing"
+    case .typeMismatch: "typeMismatch"
+    case .unexpectedError: "unexpectedError"
+    case .unknownType: "unknownType"
+    case .composite: "composite"
     }
   }
 
@@ -125,7 +125,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     public var description: String {
       switch self {
       case let .invalidValue(result, value):
-        return "Invalid value: '\(dbgStrLimited(result))', from: '\(dbgStrLimited(value))'"
+        "Invalid value: '\(dbgStrLimited(result))', from: '\(dbgStrLimited(value))'"
       }
     }
   }
@@ -138,9 +138,9 @@ fileprivate func dbgStrLimited(_ val: (some Any)?, limit: UInt = 100) -> String 
 extension String {
   fileprivate func crop(_ limit: UInt) -> String {
     if self.count <= limit {
-      return self
+      self
     } else {
-      return "\(self.prefix(Int(limit)))..."
+      "\(self.prefix(Int(limit)))..."
     }
   }
 }

@@ -220,4 +220,3 @@ extension Range<Int> {
     String.Index(integerLiteral: lowerBound)..<String.Index(integerLiteral: upperBound)
   }
 }
-

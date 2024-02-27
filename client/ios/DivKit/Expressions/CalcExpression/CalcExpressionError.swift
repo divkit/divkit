@@ -39,22 +39,21 @@ extension CalcExpression {
       case let .missingVariable(symbol):
         return "Variable '\(symbol.escapedName)' is missing."
       case let .arityMismatch(symbol):
-        let arity: Arity
-        switch symbol {
+        let arity: Arity = switch symbol {
         case let .function(_, requiredArity):
-          arity = requiredArity
+          requiredArity
         case .infix("()"):
-          arity = .atLeast(1)
+          .atLeast(1)
         case .array, .infix("[]"):
-          arity = 1
+          1
         case .infix("?:"):
-          arity = 3
+          3
         case .infix:
-          arity = 2
+          2
         case .postfix, .prefix:
-          arity = 1
+          1
         case .variable:
-          arity = 0
+          0
         }
         let description = symbol.description
         return "\(description.prefix(1).uppercased())\(description.dropFirst()) expects \(arity)"
@@ -66,9 +65,9 @@ extension CalcExpression {
     func makeOutputMessage(for expression: String) -> String {
       switch self {
       case let .shortMessage(message):
-        return "Failed to evaluate [\(expression.escaped)]. \(message)"
+        "Failed to evaluate [\(expression.escaped)]. \(message)"
       default:
-        return self.description
+        self.description
       }
     }
   }

@@ -84,11 +84,10 @@ public final class DefaultTooltipManager: TooltipManager {
           let tooltip = existingAnchorViews.compactMap({ $0?.makeTooltip(id: info.id) }).first
     else { return }
 
-    let window: UIWindow?
-    if #available(iOS 13.0, *) {
-      window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
+    let window: UIWindow? = if #available(iOS 13.0, *) {
+      (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
     } else {
-      window = UIApplication.shared.windows.first
+      UIApplication.shared.windows.first
     }
 
     let view = TooltipContainerView(

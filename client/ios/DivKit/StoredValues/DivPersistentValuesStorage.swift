@@ -83,39 +83,39 @@ extension DivStoredValue {
   var variable: DivVariableValue? {
     switch type {
     case .string:
-      return .string(value)
+      .string(value)
     case .number:
       if let value = Double(value) {
-        return .number(value)
+        .number(value)
       } else {
-        return nil
+        nil
       }
     case .integer:
       if let value = Int(value) {
-        return .integer(value)
+        .integer(value)
       } else {
-        return nil
+        nil
       }
     case .bool:
       switch value.lowercased() {
       case "0", "false":
-        return .bool(false)
+        .bool(false)
       case "1", "true":
-        return .bool(true)
+        .bool(true)
       default:
-        return nil
+        nil
       }
     case .color:
       if let value = Color.color(withHexString: value) {
-        return .color(value)
+        .color(value)
       } else {
-        return nil
+        nil
       }
     case .url:
       if let value = URL(string: value) {
-        return .url(value)
+        .url(value)
       } else {
-        return nil
+        nil
       }
     }
   }

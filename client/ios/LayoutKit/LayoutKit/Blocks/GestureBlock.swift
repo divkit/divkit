@@ -28,7 +28,7 @@ public final class GestureBlock: WrapperBlock, LayoutCachingDefaultImpl {
       rightActions: rightActions
     )
   }
-  
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? GestureBlock else {
       return false

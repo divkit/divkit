@@ -21,23 +21,23 @@ enum DatetimeFunctions: String, CaseIterable {
     private var description: String {
       switch self {
       case let .month(date, value):
-        return "Failed to evaluate [setMonth(\(date.formatString), \(value))]. Expecting month in [1..12], instead got \(value)."
+        "Failed to evaluate [setMonth(\(date.formatString), \(value))]. Expecting month in [1..12], instead got \(value)."
       case let .day(date, value):
-        return "Failed to evaluate [setDay(\(date.formatString), \(value))]. Unable to set day \(value) for date \(date.formatString)."
+        "Failed to evaluate [setDay(\(date.formatString), \(value))]. Unable to set day \(value) for date \(date.formatString)."
       case let .hours(date, value):
-        return "Failed to evaluate [setHours(\(date.formatString), \(value))]. Expecting hours in [0..23], instead got \(value)."
+        "Failed to evaluate [setHours(\(date.formatString), \(value))]. Expecting hours in [0..23], instead got \(value)."
       case let .minutes(date, value):
-        return "Failed to evaluate [setMinutes(\(date.formatString), \(value))]. Expecting minutes in [0..59], instead got \(value)."
+        "Failed to evaluate [setMinutes(\(date.formatString), \(value))]. Expecting minutes in [0..59], instead got \(value)."
       case let .seconds(date, value):
-        return "Failed to evaluate [setSeconds(\(date.formatString), \(value))]. Expecting seconds in [0..59], instead got \(value)."
+        "Failed to evaluate [setSeconds(\(date.formatString), \(value))]. Expecting seconds in [0..59], instead got \(value)."
       case let .millis(date, value):
-        return "Failed to evaluate [setMillis(\(date.formatString), \(value))]. Expecting millis in [0..999], instead got \(value)."
+        "Failed to evaluate [setMillis(\(date.formatString), \(value))]. Expecting millis in [0..999], instead got \(value)."
       case let .components(funcName):
-        return "Failed to evaluate [\(funcName)]. Date components not found."
+        "Failed to evaluate [\(funcName)]. Date components not found."
       case let .component(funcName, component):
-        return "Failed to evaluate [\(funcName)]. Component '\(component)' not found."
+        "Failed to evaluate [\(funcName)]. Component '\(component)' not found."
       case let .format(format):
-        return "z/Z not supported in [\(format)]"
+        "z/Z not supported in [\(format)]"
       }
     }
   }
@@ -69,51 +69,51 @@ enum DatetimeFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .parseUnixTime:
-      return FunctionUnary(impl: _parseUnixTime)
+      FunctionUnary(impl: _parseUnixTime)
     case .parseUnixTimeAsLocal:
-        return FunctionUnary(impl: _parseUnixTimeAsLocal)
+      FunctionUnary(impl: _parseUnixTimeAsLocal)
     case .nowLocal:
-      return FunctionNullary(impl: _nowLocal)
+      FunctionNullary(impl: _nowLocal)
     case .addMillis:
-      return FunctionBinary(impl: _addMillis)
+      FunctionBinary(impl: _addMillis)
     case .setYear:
-      return FunctionBinary(impl: _setYear)
+      FunctionBinary(impl: _setYear)
     case .setMonth:
-      return FunctionBinary(impl: _setMonth)
+      FunctionBinary(impl: _setMonth)
     case .setDay:
-      return FunctionBinary(impl: _setDay)
+      FunctionBinary(impl: _setDay)
     case .setHours:
-      return FunctionBinary(impl: _setHours)
+      FunctionBinary(impl: _setHours)
     case .setMinutes:
-      return FunctionBinary(impl: _setMinutes)
+      FunctionBinary(impl: _setMinutes)
     case .setSeconds:
-      return FunctionBinary(impl: _setSeconds)
+      FunctionBinary(impl: _setSeconds)
     case .setMillis:
-      return FunctionBinary(impl: _setMillis)
+      FunctionBinary(impl: _setMillis)
     case .getYear:
-      return FunctionUnary(impl: _getYear)
+      FunctionUnary(impl: _getYear)
     case .getMonth:
-      return FunctionUnary(impl: _getMonth)
+      FunctionUnary(impl: _getMonth)
     case .getDay:
-      return FunctionUnary(impl: _getDay)
+      FunctionUnary(impl: _getDay)
     case .getDayOfWeek:
-      return FunctionUnary(impl: _getDayOfWeek)
+      FunctionUnary(impl: _getDayOfWeek)
     case .getHours:
-      return FunctionUnary(impl: _getHours)
+      FunctionUnary(impl: _getHours)
     case .getMinutes:
-      return FunctionUnary(impl: _getMinutes)
+      FunctionUnary(impl: _getMinutes)
     case .getSeconds:
-      return FunctionUnary(impl: _getSeconds)
+      FunctionUnary(impl: _getSeconds)
     case .getMillis:
-      return FunctionUnary(impl: _getMillis)
+      FunctionUnary(impl: _getMillis)
     case .formatDateAsLocal:
-      return FunctionBinary(impl: _formatDateAsLocal)
+      FunctionBinary(impl: _formatDateAsLocal)
     case .formatDateAsLocalWithLocale:
-      return FunctionTernary(impl: _formatDateAsLocalWithLocale)
+      FunctionTernary(impl: _formatDateAsLocalWithLocale)
     case .formatDateAsUTC:
-      return FunctionBinary(impl: _formatDateAsUTC)
+      FunctionBinary(impl: _formatDateAsUTC)
     case .formatDateAsUTCWithLocale:
-      return FunctionTernary(impl: _formatDateAsUTCWithLocale)
+      FunctionTernary(impl: _formatDateAsUTCWithLocale)
     }
   }
 }
@@ -301,7 +301,7 @@ private func formatDate(
   isUTC: Bool = false,
   locale: String? = nil
 ) throws -> String {
-  guard !format.contains("Z") && !format.contains("z") else {
+  guard !format.contains("Z"), !format.contains("z") else {
     throw DatetimeFunctions.Error.format(format).message
   }
   return makeDateFormatter(format, isUTC: isUTC, locale: locale).string(from: value)

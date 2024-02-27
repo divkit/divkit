@@ -4,13 +4,13 @@ extension DivFontWeight {
   var fontWeight: Font.Weight {
     switch self {
     case .light:
-      return .light
+      .light
     case .regular:
-      return .regular
+      .regular
     case .medium:
-      return .medium
+      .medium
     case .bold:
-      return .bold
+      .bold
     }
   }
 }

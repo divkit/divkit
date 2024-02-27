@@ -27,18 +27,18 @@ public final class VideoBlock: BlockWithTraits {
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
-      return value
+      value
     case .intrinsic, .weighted:
-      return 0
+      0
     }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     switch heightTrait {
     case let .fixed(value):
-      return value
+      value
     case .intrinsic, .weighted:
-      return 0
+      0
     }
   }
 

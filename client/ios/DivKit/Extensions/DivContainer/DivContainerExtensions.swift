@@ -26,12 +26,11 @@ extension DivContainer: DivBlockModeling {
     )
     let expressionResolver = context.expressionResolver
     let orientation = resolveOrientation(expressionResolver)
-    let block: Block
-    switch orientation {
+    let block: Block = switch orientation {
     case .overlap:
-      block = try makeOverlapBlock(context: childContext)
+      try makeOverlapBlock(context: childContext)
     case .horizontal, .vertical:
-      block = try makeContainerBlock(
+      try makeContainerBlock(
         context: childContext,
         orientation: orientation,
         layoutMode: resolveLayoutMode(expressionResolver)
@@ -229,11 +228,11 @@ extension DivAlignmentHorizontal {
   var alignment: Alignment {
     switch self {
     case .left, .start:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .right, .end:
-      return .trailing
+      .trailing
     }
   }
 
@@ -241,30 +240,30 @@ extension DivAlignmentHorizontal {
     .CrossAlignment {
     switch self {
     case .left:
-      return .leading
+      .leading
     case .right:
-      return .trailing
+      .trailing
     case .start:
-      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+      uiLayoutDirection == .leftToRight ? .leading : .trailing
     case .center:
-      return .center
+      .center
     case .end:
-      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+      uiLayoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 
   func makeContentAlignment(uiLayoutDirection: UserInterfaceLayoutDirection) -> Alignment {
     switch self {
     case .left:
-      return .leading
+      .leading
     case .right:
-      return .trailing
+      .trailing
     case .start:
-      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+      uiLayoutDirection == .leftToRight ? .leading : .trailing
     case .center:
-      return .center
+      .center
     case .end:
-      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+      uiLayoutDirection == .rightToLeft ? .leading : .trailing
     }
   }
 }
@@ -287,13 +286,13 @@ extension DivAlignmentVertical {
   var crossAlignment: ContainerBlock.CrossAlignment {
     switch self {
     case .top:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .bottom:
-      return .trailing
+      .trailing
     case .baseline:
-      return .baseline
+      .baseline
     }
   }
 }
@@ -334,9 +333,9 @@ extension DivContainer.LayoutMode {
   fileprivate var system: ContainerBlock.LayoutMode {
     switch self {
     case .noWrap:
-      return .noWrap
+      .noWrap
     case .wrap:
-      return .wrap
+      .wrap
     }
   }
 }
@@ -351,30 +350,30 @@ fileprivate func makeCrossAlignment(
   case .horizontal:
     switch verticalAlignment {
     case .top:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .bottom:
-      return .trailing
+      .trailing
     case .baseline:
-      return .baseline
+      .baseline
     case .spaceBetween, .spaceEvenly, .spaceAround:
-      return .leading
+      .leading
     }
   case .vertical:
     switch horizontalAlignment {
     case .left:
-      return uiLayoutDirection == .leftToRight ? .leading : .trailing
+      uiLayoutDirection == .leftToRight ? .leading : .trailing
     case .right:
-      return uiLayoutDirection == .rightToLeft ? .leading : .trailing
+      uiLayoutDirection == .rightToLeft ? .leading : .trailing
     case .start:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .end:
-      return .trailing
+      .trailing
     case .spaceBetween, .spaceEvenly, .spaceAround:
-      return .center
+      .center
     }
   }
 }

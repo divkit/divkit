@@ -75,11 +75,11 @@ extension LayoutTrait {
   fileprivate var intrinsicSize: CGFloat {
     switch self {
     case let .fixed(value):
-      return value
+      value
     case let .intrinsic(_, minSize, _):
-      return minSize
+      minSize
     case .weighted:
-      return 0
+      0
     }
   }
 }

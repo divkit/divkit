@@ -503,9 +503,9 @@ extension TextFieldBlock.Placeholders.Separate {
   ) -> CGFloat {
     switch field.position {
     case .center:
-      return (blockSize.height - height) / 2
+      (blockSize.height - height) / 2
     case .normal:
-      return blockSize.height - (heightTextField + height) / 2
+      blockSize.height - (heightTextField + height) / 2
     }
   }
 }
@@ -514,11 +514,11 @@ extension TextFieldBlock.KeyboardAppearance {
   fileprivate var uiValue: UIKeyboardAppearance {
     switch self {
     case .default:
-      return .default
+      .default
     case .light:
-      return .light
+      .light
     case .dark:
-      return .dark
+      .dark
     }
   }
 }
@@ -556,13 +556,13 @@ extension TextFieldBlock.TextAutocapitalizationType {
   fileprivate var uiType: UITextAutocapitalizationType {
     switch self {
     case .none:
-      return .none
+      .none
     case .words:
-      return .words
+      .words
     case .sentences:
-      return .sentences
+      .sentences
     case .allCharacters:
-      return .allCharacters
+      .allCharacters
     }
   }
 }
@@ -571,11 +571,11 @@ extension TextFieldBlock.TextAutocorrectionType {
   fileprivate var uiType: UITextAutocorrectionType {
     switch self {
     case .default:
-      return .default
+      .default
     case .no:
-      return .no
+      .no
     case .yes:
-      return .yes
+      .yes
     }
   }
 }
@@ -584,29 +584,29 @@ extension TextFieldBlock.KeyboardType {
   fileprivate var uiType: UIKeyboardType {
     switch self {
     case .default:
-      return .default
+      .default
     case .asciiCapable:
-      return .asciiCapable
+      .asciiCapable
     case .numbersAndPunctuation:
-      return .numbersAndPunctuation
+      .numbersAndPunctuation
     case .URL:
-      return .URL
+      .URL
     case .numberPad:
-      return .numberPad
+      .numberPad
     case .phonePad:
-      return .phonePad
+      .phonePad
     case .namePhonePad:
-      return .namePhonePad
+      .namePhonePad
     case .emailAddress:
-      return .emailAddress
+      .emailAddress
     case .decimalPad:
-      return .decimalPad
+      .decimalPad
     case .twitter:
-      return .twitter
+      .twitter
     case .webSearch:
-      return .webSearch
+      .webSearch
     case .asciiCapableNumberPad:
-      return .asciiCapableNumberPad
+      .asciiCapableNumberPad
     }
   }
 }

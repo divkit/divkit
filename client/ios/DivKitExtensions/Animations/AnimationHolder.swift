@@ -22,11 +22,11 @@ func ==(lhs: AnimationHolder, rhs: AnimationHolder) -> Bool {
 func ==(lhs: AnimationHolder?, rhs: AnimationHolder?) -> Bool {
   switch (lhs, rhs) {
   case (.none, .none):
-    return true
+    true
   case let (.some(value1), .some(value2)):
-    return value1 == value2
+    value1 == value2
   default:
-    return false
+    false
   }
 }
 

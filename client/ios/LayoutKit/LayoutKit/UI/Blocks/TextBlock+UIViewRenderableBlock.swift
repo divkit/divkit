@@ -466,9 +466,9 @@ extension TextBlockView: UIGestureRecognizerDelegate {
   override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     if gestureRecognizer == panSelectionRecognizer,
        selectedRange == nil {
-      return false
+      false
     } else {
-      return super.gestureRecognizerShouldBegin(gestureRecognizer)
+      super.gestureRecognizerShouldBegin(gestureRecognizer)
     }
   }
 }
@@ -483,9 +483,9 @@ extension Image {
 extension Alignment {
   fileprivate var position: NSAttributedString.VerticalPosition {
     switch self {
-    case .leading: return .top
-    case .center: return .center
-    case .trailing: return .bottom
+    case .leading: .top
+    case .center: .center
+    case .trailing: .bottom
     }
   }
 }
@@ -538,11 +538,11 @@ extension Gradient {
   fileprivate var uiView: UIView {
     switch self {
     case let .linear(gradient):
-      return LinearGradientView(gradient)
+      LinearGradientView(gradient)
     case let .radial(gradient):
-      return RadialGradientView(gradient)
+      RadialGradientView(gradient)
     case let .box(color):
-      return BoxShadowView(shadowColor: color)
+      BoxShadowView(shadowColor: color)
     }
   }
 }

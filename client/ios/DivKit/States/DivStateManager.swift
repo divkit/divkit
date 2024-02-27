@@ -97,11 +97,10 @@ public class DivStateManager {
   private func updateState(path: DivStatePath, stateID: DivStateID) {
     // need to take a write lock before
     let previousItem = _items[path]
-    let previousState: PreviousState
-    if let previousStateID = previousItem?.currentStateID {
-      previousState = .withID(previousStateID)
+    let previousState: PreviousState = if let previousStateID = previousItem?.currentStateID {
+      .withID(previousStateID)
     } else {
-      previousState = .initial
+      .initial
     }
     _stateBindings[path]?.value = stateID.rawValue
     _items[path] = Item(

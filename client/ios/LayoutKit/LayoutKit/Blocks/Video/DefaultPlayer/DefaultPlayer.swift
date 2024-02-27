@@ -76,11 +76,11 @@ final class DefaultPlayer: Player {
       .map { playbackStatus -> PlayerEvent in
         switch playbackStatus {
         case .playing:
-          return .play
+          .play
         case .paused:
-          return .pause
+          .pause
         case .buffering:
-          return .buffering
+          .buffering
         }
       }
       .addObserver { weakSelf?.eventPipe.send($0) }

@@ -61,10 +61,10 @@ extension DivAccessibility {
 
 struct CustomAccessibilityParams {
   static let `default` = CustomAccessibilityParams()
-  
+
   let defaultTraits: AccessibilityElement.Traits
   let descriptionProvider: (() -> String?)?
-  
+
   init(
     defaultTraits: AccessibilityElement.Traits = .none,
     descriptionProvider: (() -> String?)? = nil

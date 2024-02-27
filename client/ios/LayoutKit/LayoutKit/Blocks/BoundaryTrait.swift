@@ -35,9 +35,9 @@ extension BoundaryTrait {
   func allCornersAreApproximatelyEqualToZero() -> Bool {
     switch self {
     case .noClip, .clipPath:
-      return true
+      true
     case let .clipCorner(radii):
-      return radii.allCornersAreApproximatelyEqualToZero()
+      radii.allCornersAreApproximatelyEqualToZero()
     }
   }
 }

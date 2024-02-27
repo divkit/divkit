@@ -21,9 +21,9 @@ extension TimeMeasure.Status {
   fileprivate var histogramType: UIStatePayload.RenderingTime.HistogramType {
     switch self {
     case .cold:
-      return .cold
+      .cold
     case .warm:
-      return .warm
+      .warm
     }
   }
 }

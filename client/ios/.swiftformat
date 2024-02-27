@@ -1,4 +1,4 @@
---swiftversion 5.7
+--swiftversion 5.9
 
 --exclude DivKit/generated_sources
 --exclude DivKit/shared_data_generated_sources

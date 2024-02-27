@@ -142,9 +142,9 @@ private func makeEnumeratedItems(
     .enumerated()
     .compactMap {
       if let element = $0.element, element.span == span {
-        return ($0.offset, element)
+        ($0.offset, element)
       } else {
-        return nil
+        nil
       }
     }
 }
@@ -455,8 +455,8 @@ private struct WeightedItem {
 extension GridBlock.Item.Weight {
   fileprivate func value(at direction: Direction) -> LayoutTrait.Weight? {
     switch direction {
-    case .horizontal: return column
-    case .vertical: return row
+    case .horizontal: column
+    case .vertical: row
     }
   }
 }
@@ -464,8 +464,8 @@ extension GridBlock.Item.Weight {
 extension GridBlock.Span {
   fileprivate func value(at direction: Direction) -> Int {
     switch direction {
-    case .horizontal: return columns
-    case .vertical: return rows
+    case .horizontal: columns
+    case .vertical: rows
     }
   }
 }
@@ -475,8 +475,8 @@ private typealias Direction = GridBlock.Direction
 extension Direction {
   fileprivate func selectDimension(from coords: (row: Int, column: Int)) -> Int {
     switch self {
-    case .horizontal: return coords.column
-    case .vertical: return coords.row
+    case .horizontal: coords.column
+    case .vertical: coords.row
     }
   }
 }

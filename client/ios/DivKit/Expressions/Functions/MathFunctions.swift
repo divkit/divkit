@@ -22,84 +22,84 @@ enum MathFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .div:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _divInt),
           FunctionBinary(impl: _divDouble),
         ]
       )
     case .mod:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _modInt),
           FunctionBinary(impl: _modDouble),
         ]
       )
     case .mul:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarUnary(impl: _mulInt),
           FunctionVarUnary(impl: _mulDouble),
         ]
       )
     case .sub:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarUnary(impl: _subInt),
           FunctionVarUnary(impl: _subDouble),
         ]
       )
     case .sum:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarUnary(impl: _sumInt),
           FunctionVarUnary(impl: _sumDouble),
         ]
       )
     case .maxInteger:
-      return FunctionNullary(impl: _maxInteger)
+      FunctionNullary(impl: _maxInteger)
     case .minInteger:
-      return FunctionNullary(impl: _minInteger)
+      FunctionNullary(impl: _minInteger)
     case .maxNumber:
-      return FunctionNullary(impl: _maxNumber)
+      FunctionNullary(impl: _maxNumber)
     case .minNumber:
-      return FunctionNullary(impl: _minNumber)
+      FunctionNullary(impl: _minNumber)
     case .max:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarUnary(impl: _maxInt),
           FunctionVarUnary(impl: _maxDouble),
         ]
       )
     case .min:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarUnary(impl: _minInt),
           FunctionVarUnary(impl: _minDouble),
         ]
       )
     case .abs:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _absInt),
           FunctionUnary(impl: _absDouble),
         ]
       )
     case .signum:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _signumInt),
           FunctionUnary(impl: _signumDouble),
         ]
       )
     case .round:
-      return FunctionUnary(impl: _round)
+      FunctionUnary(impl: _round)
     case .floor:
-      return FunctionUnary(impl: _floor)
+      FunctionUnary(impl: _floor)
     case .ceil:
-      return FunctionUnary(impl: _ceil)
+      FunctionUnary(impl: _ceil)
     case .copySign:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _copySignInt),
           FunctionBinary(impl: _copySignDouble),
@@ -263,9 +263,9 @@ private enum Error {
   private var description: String {
     switch self {
     case let .typeMismatch(args):
-      return "Type mismatch \(args.map { "\($0)" }.joined(separator: " "))"
+      "Type mismatch \(args.map { "\($0)" }.joined(separator: " "))"
     case let .divisionByZero(function, lhs, rhs):
-      return "Failed to evaluate [\(function)(\(lhs), \(rhs))]. Division by zero is not supported."
+      "Failed to evaluate [\(function)(\(lhs), \(rhs))]. Division by zero is not supported."
     }
   }
 

@@ -35,34 +35,34 @@ enum DictFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .getDictString:
-      return FunctionVarBinary(impl: _getDictString)
+      FunctionVarBinary(impl: _getDictString)
     case .getDictNumber:
-      return FunctionVarBinary(impl: _getDictNumber)
+      FunctionVarBinary(impl: _getDictNumber)
     case .getDictInteger:
-      return FunctionVarBinary(impl: _getDictInteger)
+      FunctionVarBinary(impl: _getDictInteger)
     case .getDictBoolean:
-      return FunctionVarBinary(impl: _getDictBoolean)
+      FunctionVarBinary(impl: _getDictBoolean)
     case .getDictColor:
-      return FunctionVarBinary(impl: _getDictColor)
+      FunctionVarBinary(impl: _getDictColor)
     case .getDictUrl:
-      return FunctionVarBinary(impl: _getDictUrl)
+      FunctionVarBinary(impl: _getDictUrl)
     case .getDictOptString:
-      return FunctionVarTernary(impl: _getDictOptString)
+      FunctionVarTernary(impl: _getDictOptString)
     case .getDictOptNumber:
-      return FunctionVarTernary(impl: _getDictOptNumber)
+      FunctionVarTernary(impl: _getDictOptNumber)
     case .getDictOptInteger:
-      return FunctionVarTernary(impl: _getDictOptInteger)
+      FunctionVarTernary(impl: _getDictOptInteger)
     case .getDictOptBoolean:
-      return FunctionVarTernary(impl: _getDictOptBoolean)
+      FunctionVarTernary(impl: _getDictOptBoolean)
     case .getDictOptColor:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarTernary(impl: _getDictOptColorWithColorFallback),
           FunctionVarTernary(impl: _getDictOptColorWithStringFallback),
         ]
       )
     case .getDictOptUrl:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarTernary(impl: _getDictOptUrlWithURLFallback),
           FunctionVarTernary(impl: _getDictOptUrlWithStringFallback),
@@ -70,47 +70,47 @@ enum DictFunctions: String, CaseIterable {
       )
 
     case .getStringFromDict:
-      return FunctionVarBinary(impl: _getStringFromDict)
+      FunctionVarBinary(impl: _getStringFromDict)
     case .getOptStringFromDict:
-      return FunctionVarTernary(impl: _getOptStringFromDict)
+      FunctionVarTernary(impl: _getOptStringFromDict)
     case .getIntegerFromDict:
-      return FunctionVarBinary(impl: _getIntegerFromDict)
+      FunctionVarBinary(impl: _getIntegerFromDict)
     case .getOptIntegerFromDict:
-      return FunctionVarTernary(impl: _getOptIntegerFromDict)
+      FunctionVarTernary(impl: _getOptIntegerFromDict)
     case .getNumberFromDict:
-      return FunctionVarBinary(impl: _getNumberFromDict)
+      FunctionVarBinary(impl: _getNumberFromDict)
     case .getOptNumberFromDict:
-      return FunctionVarTernary(impl: _getOptNumberFromDict)
+      FunctionVarTernary(impl: _getOptNumberFromDict)
     case .getBooleanFromDict:
-      return FunctionVarBinary(impl: _getBooleanFromDict)
+      FunctionVarBinary(impl: _getBooleanFromDict)
     case .getOptBooleanFromDict:
-      return FunctionVarTernary(impl: _getOptBooleanFromDict)
+      FunctionVarTernary(impl: _getOptBooleanFromDict)
     case .getColorFromDict:
-      return FunctionVarBinary(impl: _getColorFromDict)
+      FunctionVarBinary(impl: _getColorFromDict)
     case .getOptColorFromDict:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarTernary(impl: _getOptColorFromDictWithStringFallback),
           FunctionVarTernary(impl: _getOptColorFromDictWithColorFallback),
         ]
       )
     case .getUrlFromDict:
-      return FunctionVarBinary(impl: _getUrlFromDict)
+      FunctionVarBinary(impl: _getUrlFromDict)
     case .getOptUrlFromDict:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionVarTernary(impl: _getOptUrlFromDictWithURLFallback),
           FunctionVarTernary(impl: _getOptUrlFromDictWithStringFallback),
         ]
       )
     case .getArrayFromDict:
-      return FunctionVarBinary(impl: _getArrayFromDict)
+      FunctionVarBinary(impl: _getArrayFromDict)
     case .getOptArrayFromDict:
-      return FunctionVarBinary(impl: _getOptArrayFromDict)
+      FunctionVarBinary(impl: _getOptArrayFromDict)
     case .getDictFromDict:
-      return FunctionVarBinary(impl: _getDictFromDict)
+      FunctionVarBinary(impl: _getDictFromDict)
     case .getOptDictFromDict:
-      return FunctionVarBinary(impl: _getOptDictFromDict)
+      FunctionVarBinary(impl: _getOptDictFromDict)
     }
   }
 
@@ -589,17 +589,17 @@ private enum Error {
   private var description: String {
     switch self {
     case let .missingProperty(expression, missing):
-      return "Failed to evaluate [\(expression)]. Missing property \"\(missing)\" in the dict."
+      "Failed to evaluate [\(expression)]. Missing property \"\(missing)\" in the dict."
     case let .wrongPath(expression):
-      return "Failed to evaluate [\(expression)]. Path is wrong."
+      "Failed to evaluate [\(expression)]. Path is wrong."
     case let .incorrectValueType(expression, expectedType, actualType):
-      return "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
+      "Failed to evaluate [\(expression)]. Incorrect value type: expected \"\(expectedType)\", got \"\(actualType)\"."
     case let .cannotConvertToInteger(expression):
-      return "Failed to evaluate [\(expression)]. Cannot convert value to integer."
+      "Failed to evaluate [\(expression)]. Cannot convert value to integer."
     case let .integerOverflow(expression):
-      return "Failed to evaluate [\(expression)]. Integer overflow."
+      "Failed to evaluate [\(expression)]. Integer overflow."
     case let .incorrectColorFormat(expression):
-      return "Failed to evaluate [\(expression)]. Unable to convert value to Color, expected format #AARRGGBB."
+      "Failed to evaluate [\(expression)]. Unable to convert value to Color, expected format #AARRGGBB."
     }
   }
 

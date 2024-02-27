@@ -118,13 +118,13 @@ private enum SnapshotTestError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .updateModeEnabled:
-      return "Snapshot saved. Don't forget to change mode back to `verify`!"
+      "Snapshot saved. Don't forget to change mode back to `verify`!"
     case .comparisonFailed:
-      return "View snapshot is not equal to reference. Diff is attached in test result"
+      "View snapshot is not equal to reference. Diff is attached in test result"
     case .nilPNGData:
-      return "UIImage.pngData() returns nil"
+      "UIImage.pngData() returns nil"
     case .imageCouldNotBeCreated:
-      return "UIImage could not be created with data"
+      "UIImage could not be created with data"
     }
   }
 }

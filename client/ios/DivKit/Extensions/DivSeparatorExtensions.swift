@@ -79,9 +79,9 @@ extension DivSeparator.DelimiterStyle.Orientation {
   fileprivate var direction: SeparatorBlock.Direction {
     switch self {
     case .horizontal:
-      return .horizontal
+      .horizontal
     case .vertical:
-      return .vertical
+      .vertical
     }
   }
 }

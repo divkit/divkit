@@ -13,7 +13,7 @@ enum CastFunctions: String, CaseIterable {
   var function: Function {
     switch self {
     case .toBoolean:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _stringToBoolean),
           FunctionUnary(impl: _intToBoolean),
@@ -23,7 +23,7 @@ enum CastFunctions: String, CaseIterable {
         }
       )
     case .toString:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _boolToString),
           FunctionUnary(impl: _doubleToString),
@@ -36,7 +36,7 @@ enum CastFunctions: String, CaseIterable {
         }
       )
     case .toNumber:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _intToNumber),
           FunctionUnary(impl: _stringToNumber),
@@ -46,7 +46,7 @@ enum CastFunctions: String, CaseIterable {
         }
       )
     case .toInteger:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: _boolToInteger),
           FunctionUnary(impl: _doubleToInteger),
@@ -57,9 +57,9 @@ enum CastFunctions: String, CaseIterable {
         }
       )
     case .toColor:
-      return FunctionUnary(impl: _stringToColor)
+      FunctionUnary(impl: _stringToColor)
     case .toUrl:
-      return FunctionUnary(impl: _stringToUrl)
+      FunctionUnary(impl: _stringToUrl)
     }
   }
 }
@@ -156,9 +156,9 @@ extension Bool {
   fileprivate func toInteger() -> Int {
     switch self {
     case true:
-      return 1
+      1
     case false:
-      return 0
+      0
     }
   }
 }
@@ -237,22 +237,22 @@ extension AnyCalcExpression.Error {
   private static func formatValue(_ value: Any?) -> String {
     switch value {
     case let strValue as String:
-      return "'\(strValue)'"
+      "'\(strValue)'"
     case let doubleValue as Double:
-      return doubleValue.toString() ?? ""
+      doubleValue.toString() ?? ""
     default:
-      return "\(value ?? "")"
+      "\(value ?? "")"
     }
   }
 
   private static func formatType(_ value: Any?) -> String {
     switch value {
     case is Double:
-      return "Number"
+      "Number"
     case is Bool:
-      return "Boolean"
+      "Boolean"
     default:
-      return "\(type(of: value))"
+      "\(type(of: value))"
     }
   }
 }

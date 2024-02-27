@@ -132,11 +132,11 @@ extension DivState: DivBlockModeling {
   ) -> DivState.State? {
     switch stateManagerItem.previousState {
     case .empty:
-      return nil
+      nil
     case .initial:
-      return states[0]
+      states[0]
     case let .withID(stateId):
-      return states.first(where: { $0.stateId == stateId.rawValue })
+      states.first(where: { $0.stateId == stateId.rawValue })
     }
   }
 }
@@ -180,10 +180,10 @@ extension TransitioningAnimation.Kind {
 extension DivAnimation.Name {
   fileprivate var kind: TransitioningAnimation.Kind? {
     switch self {
-    case .fade: return .fade
-    case .scale: return .scaleXY
-    case .translate: return .translationY
-    case .set, .noAnimation, .native: return nil
+    case .fade: .fade
+    case .scale: .scaleXY
+    case .translate: .translationY
+    case .set, .noAnimation, .native: nil
     }
   }
 }

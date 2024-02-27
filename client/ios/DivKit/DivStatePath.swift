@@ -58,9 +58,9 @@ extension Tagged where Tag == DivDataStateIDTag, RawValue == Int {
 extension DivStatePath? {
   public static func +(parent: Self, child: String) -> DivStatePath {
     if let parent {
-      return parent + DivStateID(rawValue: child)
+      parent + DivStateID(rawValue: child)
     } else {
-      return DivStatePath(rawValue: UIElementPath(child))
+      DivStatePath(rawValue: UIElementPath(child))
     }
   }
 }

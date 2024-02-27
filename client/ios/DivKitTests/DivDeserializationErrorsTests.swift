@@ -200,24 +200,24 @@ extension DeserializationError: Equatable {
          (.noData, .noData),
          (.requiredFieldIsMissing, .requiredFieldIsMissing),
          (.unexpectedError, .unexpectedError):
-      return true
+      true
     case let (.nonUTF8String(lhsStr), .nonUTF8String(rhsStr)):
-      return lhsStr == rhsStr
+      lhsStr == rhsStr
     case let (.invalidJSONData(lhsData), .invalidJSONData(rhsData)):
-      return lhsData == rhsData
+      lhsData == rhsData
     case let (.unknownType(lhsType), .unknownType(rhsType)):
-      return lhsType == rhsType
+      lhsType == rhsType
     case let (.invalidFieldRepresentation(lhsField, _), .invalidFieldRepresentation(rhsField, _)):
-      return lhsField == rhsField
+      lhsField == rhsField
     case let (
       .nestedObjectError(lhsFieldName, lhsError),
       .nestedObjectError(rhsFieldName, rhsError)
     ):
-      return lhsFieldName == rhsFieldName && lhsError == rhsError
+      lhsFieldName == rhsFieldName && lhsError == rhsError
     case let (.typeMismatch(lhsExpected, _), .typeMismatch(rhsExpected, _)):
-      return lhsExpected == rhsExpected
+      lhsExpected == rhsExpected
     case let (.composite(lhsError, lhsCauses), .composite(rhsError, rhsCauses)):
-      return lhsError == rhsError && lhsCauses == rhsCauses
+      lhsError == rhsError && lhsCauses == rhsCauses
     default:
       switch lhs {
       case .generic,
@@ -233,7 +233,7 @@ extension DeserializationError: Equatable {
            .composite,
            .noData,
            .unexpectedError:
-        return false
+        false
       }
     }
   }
@@ -246,7 +246,7 @@ extension DeserializationError.DerivedError: Equatable {
   ) -> Bool {
     switch (lhs, rhs) {
     case (.invalidValue, .invalidValue):
-      return true
+      true
     }
   }
 }

@@ -263,8 +263,8 @@ private final class SegmentedSelectorView: UIView {
 extension SwitchableContainerBlock.Selection {
   fileprivate var toggled: SwitchableContainerBlock.Selection {
     switch self {
-    case .left: return .right
-    case .right: return .left
+    case .left: .right
+    case .right: .left
     }
   }
 }

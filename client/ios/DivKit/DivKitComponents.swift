@@ -329,7 +329,7 @@ public final class DivKitComponents {
   public func flushUpdateActions() {
     updateAggregator.flushUpdateActions()
   }
-  
+
   public func forceUpdate() {
     updateAggregator.forceUpdate()
   }

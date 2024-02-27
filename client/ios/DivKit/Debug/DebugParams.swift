@@ -46,11 +46,10 @@ public struct DebugParams {
 #if os(iOS)
 extension DebugParams {
   public static func showDebugInfo(_ view: ViewType) {
-    let window: UIWindow?
-    if #available(iOS 13.0, *) {
-      window = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
+    let window: UIWindow? = if #available(iOS 13.0, *) {
+      (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first
     } else {
-      window = UIApplication.shared.windows.first
+      UIApplication.shared.windows.first
     }
     view.frame.center = window?.center ?? .zero
     window?.addSubview(view)

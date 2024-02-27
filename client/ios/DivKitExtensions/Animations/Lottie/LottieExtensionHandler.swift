@@ -33,17 +33,16 @@ public final class LottieExtensionHandler: DivExtensionHandler {
       return block
     }
 
-    let animationHolder: AnimationHolder
-    switch params.source {
+    let animationHolder: AnimationHolder = switch params.source {
     case let .url(url):
-      animationHolder = RemoteAnimationHolder(
+      RemoteAnimationHolder(
         url: url,
         animationType: .lottie,
         requester: requester,
         localDataProvider: localAnimationDataProvider
       )
     case let .json(json):
-      animationHolder = JSONAnimationHolder(json: json)
+      JSONAnimationHolder(json: json)
     }
     return LottieAnimationBlock(
       animatableView: Lazy(
@@ -150,8 +149,8 @@ private struct LottieExtensionParams {
 extension LottieExtensionParams.Source {
   fileprivate var url: URL? {
     switch self {
-    case let .url(url): return url
-    case .json: return nil
+    case let .url(url): url
+    case .json: nil
     }
   }
 }

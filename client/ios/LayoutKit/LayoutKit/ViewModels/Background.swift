@@ -30,27 +30,27 @@ public func +=(lhs: inout Background, rhs: Background) {
 public func ==(lhs: Background, rhs: Background) -> Bool {
   switch (lhs, rhs) {
   case let (.solidColor(color1), .solidColor(color2)):
-    return color1 == color2
+    color1 == color2
   case let (.tiledImage(image1), .tiledImage(image2)):
-    return imagesDataAreEqual(image1, image2)
+    imagesDataAreEqual(image1, image2)
   case let (.image(image1), .image(image2)):
-    return image1 == image2
+    image1 == image2
   case let (.ninePatchImage(image1), .ninePatchImage(image2)):
-    return image1 == image2
+    image1 == image2
   case let (.gradient(gradient1), .gradient(gradient2)):
-    return gradient1 == gradient2
+    gradient1 == gradient2
   case let (.transparentAction(action1), .transparentAction(action2)):
-    return action1 == action2
+    action1 == action2
   case let (.block(block1), .block(block2)):
-    return block1 == block2
+    block1 == block2
   case let (
     .composite(background11, background12, blendingCoefficient1),
     .composite(background21, background22, blendingCoefficient2)
   ):
-    return background11 == background21 && background12 == background22 && blendingCoefficient1 ==
+    background11 == background21 && background12 == background22 && blendingCoefficient1 ==
       blendingCoefficient2
   case let (.withInsets(background1, insets1), .withInsets(background2, insets2)):
-    return background1 == background2 && insets1 == insets2
+    background1 == background2 && insets1 == insets2
   case (.solidColor, _),
        (.tiledImage, _),
        (.image, _),
@@ -60,7 +60,7 @@ public func ==(lhs: Background, rhs: Background) -> Bool {
        (.composite, _),
        (.withInsets, _),
        (.ninePatchImage, _):
-    return false
+    false
   }
 }
 
@@ -107,20 +107,20 @@ extension Background: ImageContaining {
   public func getImageHolders() -> [ImageHolder] {
     switch self {
     case let .composite(first, second, _):
-      return first.getImageHolders() + second.getImageHolders()
+      first.getImageHolders() + second.getImageHolders()
     case let .image(image):
-      return [image.imageHolder]
+      [image.imageHolder]
     case let .ninePatchImage(image):
-      return [image.imageHolder]
+      [image.imageHolder]
     case let .withInsets(background, _):
-      return background.getImageHolders()
+      background.getImageHolders()
     case let .block(block):
-      return block.getImageHolders()
+      block.getImageHolders()
     case .solidColor,
          .tiledImage,
          .gradient,
          .transparentAction:
-      return []
+      []
     }
   }
 }

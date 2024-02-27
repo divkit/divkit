@@ -24,13 +24,13 @@ enum ComparisonOperators: String, CaseIterable {
     FunctionBinary {
       switch self {
       case .greater:
-        return $0 > $1
+        $0 > $1
       case .greaterOrEqual:
-        return $0 >= $1
+        $0 >= $1
       case .less:
-        return $0 < $1
+        $0 < $1
       case .lessOrEqual:
-        return $0 <= $1
+        $0 <= $1
       }
     }
   }

@@ -62,19 +62,19 @@ extension Div {
          .divVideo,
          .divText:
       // no children
-      return self
+      self
     case let .divContainer(value):
-      return .divContainer(value.applyPatch(patch))
+      .divContainer(value.applyPatch(patch))
     case let .divGallery(value):
-      return .divGallery(value.applyPatch(patch))
+      .divGallery(value.applyPatch(patch))
     case let .divGrid(value):
-      return .divGrid(value.applyPatch(patch))
+      .divGrid(value.applyPatch(patch))
     case let .divPager(value):
-      return .divPager(value.applyPatch(patch))
+      .divPager(value.applyPatch(patch))
     case let .divState(value):
-      return .divState(value.applyPatch(patch))
+      .divState(value.applyPatch(patch))
     case let .divTabs(value):
-      return .divTabs(value.applyPatch(patch))
+      .divTabs(value.applyPatch(patch))
     }
   }
 }

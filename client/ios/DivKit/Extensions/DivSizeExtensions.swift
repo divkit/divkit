@@ -41,9 +41,9 @@ extension DivSize {
   var isIntrinsic: Bool {
     switch self {
     case .divFixedSize, .divMatchParentSize:
-      return false
+      false
     case .divWrapContentSize:
-      return true
+      true
     }
   }
 }
@@ -53,13 +53,13 @@ extension DivSize: Equatable {
   public static func ==(lhs: DivSize, rhs: DivSize) -> Bool {
     switch (lhs, rhs) {
     case let (.divFixedSize(l), .divFixedSize(r)):
-      return l == r
+      l == r
     case let (.divMatchParentSize(l), .divMatchParentSize(r)):
-      return l == r
+      l == r
     case let (.divWrapContentSize(l), .divWrapContentSize(r)):
-      return l == r
+      l == r
     default:
-      return false
+      false
     }
   }
 }

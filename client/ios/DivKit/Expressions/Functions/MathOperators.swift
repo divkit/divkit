@@ -12,18 +12,18 @@ enum MathOperators: String, CaseIterable {
   var symbol: AnyCalcExpression.Symbol {
     switch self {
     case .sum, .sub, .mul, .div, .mod:
-      return .infix(rawValue)
+      .infix(rawValue)
     case .plus:
-      return .prefix("+")
+      .prefix("+")
     case .minus:
-      return .prefix("-")
+      .prefix("-")
     }
   }
 
   var function: Function {
     switch self {
     case .sum:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _sumInt),
           FunctionBinary(impl: _sumDouble),
@@ -32,7 +32,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeError
       )
     case .sub:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _subInt),
           FunctionBinary(impl: _subDouble),
@@ -40,7 +40,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeError
       )
     case .mul:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _mulInt),
           FunctionBinary(impl: _mulDouble),
@@ -48,7 +48,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeError
       )
     case .div:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _divInt),
           FunctionBinary(impl: _divDouble),
@@ -56,7 +56,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeError
       )
     case .mod:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: _modInt),
           FunctionBinary(impl: _modDouble),
@@ -64,7 +64,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeError
       )
     case .plus:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary<Int, Int> { $0 },
           FunctionUnary<Double, Double> { $0 },
@@ -72,7 +72,7 @@ enum MathOperators: String, CaseIterable {
         makeError: makeUnaryError
       )
     case .minus:
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary<Int, Int> { -$0 },
           FunctionUnary<Double, Double> { -$0 },
@@ -168,9 +168,9 @@ private enum Error {
   private var description: String {
     switch self {
     case let .divisionByZero(symbol, lhs, rhs):
-      return "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
+      "Failed to evaluate [\(lhs) \(symbol) \(rhs)]. Division by zero is not supported."
     case let .unaryUnsupportedType(symbol, symbolName, arg):
-      return "Failed to evaluate [\(symbol)\(arg.formattedValue)]. A Number is expected after a unary \(symbolName)."
+      "Failed to evaluate [\(symbol)\(arg.formattedValue)]. A Number is expected after a unary \(symbolName)."
     }
   }
 

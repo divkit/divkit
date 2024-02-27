@@ -146,14 +146,13 @@ public final class DivView: VisibleBoundsTrackingView {
       assertionFailure("Width depends on other dimension size")
       width = DivView.noIntrinsicMetric
     }
-    let height: CGFloat
-    switch cardSize.height {
+    let height: CGFloat = switch cardSize.height {
     case .matchParent:
-      height = bounds.height == 0 ? DivView.noIntrinsicMetric : bounds.height
+      bounds.height == 0 ? DivView.noIntrinsicMetric : bounds.height
     case let .desired(value):
-      height = value
+      value
     case let .dependsOnOtherDimensionSize(heightForWidth):
-      height = heightForWidth(width)
+      heightForWidth(width)
     }
     return CGSize(width: width, height: height)
   }

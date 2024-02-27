@@ -37,7 +37,7 @@ private struct GestureExtensionParams {
     self.leftActions = params.makeDivActions(for: "swipe_left")
     self.rightActions = params.makeDivActions(for: "swipe_right")
 
-    if upActions == nil && downActions == nil && leftActions == nil && rightActions == nil {
+    if upActions == nil, downActions == nil, leftActions == nil, rightActions == nil {
       DivKitLogger.warning("No actions provided for gesture")
       return nil
     }
@@ -49,8 +49,8 @@ extension [String: Any] {
     let actions = (self[key] as? [[String: Any]])?.map {
       DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: $0)
     }
-    actions?.compactMap { $0.warnings }.reduce([], +).forEach { DivKitLogger.warning($0.errorMessage) }
-    actions?.compactMap { $0.errors }.reduce([], +).forEach { DivKitLogger.error($0.errorMessage) }
-    return actions?.compactMap { $0.value }
+    actions?.compactMap(\.warnings).reduce([], +).forEach { DivKitLogger.warning($0.errorMessage) }
+    actions?.compactMap(\.errors).reduce([], +).forEach { DivKitLogger.error($0.errorMessage) }
+    return actions?.compactMap(\.value)
   }
 }

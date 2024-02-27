@@ -88,9 +88,9 @@ extension DivSize {
   ) -> LayoutTrait.Weight? {
     switch self {
     case .divFixedSize, .divWrapContentSize:
-      return nil
+      nil
     case let .divMatchParentSize(size):
-      return size.resolveWeight(expressionResolver)
+      size.resolveWeight(expressionResolver)
         .flatMap { LayoutTrait.Weight(floatLiteral: $0) }
     }
   }

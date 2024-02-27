@@ -108,9 +108,9 @@ extension Character {
 extension JSONDictionary {
   fileprivate var maskValue: String? {
     if case let .string(mask) = self["value"] {
-      return mask
+      mask
     } else {
-      return nil
+      nil
     }
   }
 

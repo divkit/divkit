@@ -164,11 +164,10 @@ extension ScrollPageIndicatorLayer {
     let x = xPosition * params.itemWidth + params.offsetX
     let y = params.visibleRect.center.y
     let center = CGPoint(x: x, y: y)
-    let width: CGFloat
-    if case let .stretch(spacing, _) = configuration.itemPlacement {
-      width = params.itemWidth - spacing
+    let width: CGFloat = if case let .stretch(spacing, _) = configuration.itemPlacement {
+      params.itemWidth - spacing
     } else {
-      width = configuration.pageSize.width
+      configuration.pageSize.width
     }
     return CGRect(center: center, size: CGSize(width: width, height: configuration.pageSize.height))
   }
@@ -180,14 +179,14 @@ extension ScrollPageIndicatorLayer {
   ) -> Scale {
     switch state.kind {
     case .normal:
-      return (
+      (
         configuration.disappearingWidthScale
           .interpolated(to: 1, progress: state.progress) * borderScale.x,
         configuration.disappearingHeightScale
           .interpolated(to: 1, progress: state.progress) * borderScale.y
       )
     case .highlighted:
-      return animator.highlightedIndicatorScale(
+      animator.highlightedIndicatorScale(
         for: state,
         borderScale: (borderScale.x, borderScale.y)
       )

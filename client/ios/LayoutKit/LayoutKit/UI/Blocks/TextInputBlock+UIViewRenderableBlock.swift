@@ -231,11 +231,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       setupMaskedViewModelIfNeeded(mask: mask, rawTextValue: rawTextValue)
     } else {
       self.textValue = textValue
-      let text: String
-      if let selectionItems = self.selectionItems {
-        text = selectionItems.first { $0.value == textValue.value }?.text ?? ""
+      let text: String = if let selectionItems = self.selectionItems {
+        selectionItems.first { $0.value == textValue.value }?.text ?? ""
       } else {
-        text = textValue.value
+        textValue.value
       }
       setTextData(text)
     }
@@ -471,7 +470,11 @@ extension TextInputBlockView {
     observer?.focusedElementChanged(isFocused: false, forPath: path)
   }
 
-  private func inputViewReplaceTextIn(view _: UIView, range: Range<String.Index>, text: String) -> Bool {
+  private func inputViewReplaceTextIn(
+    view _: UIView,
+    range: Range<String.Index>,
+    text: String
+  ) -> Bool {
     if maskedViewModel != nil {
       if text == "" {
         if range.isEmpty {
@@ -543,7 +546,7 @@ extension TextInputBlockView: UITextFieldDelegate {
     } else {
       nsRange = range
     }
-    
+
     guard let range = Range(nsRange, in: currentText) else {
       return false
     }
@@ -596,9 +599,9 @@ extension TextInputBlockView {
 
   private var cusorOffset: CGFloat {
     if singleLineInput.isHidden {
-      return multiLineCusorOffset
+      multiLineCusorOffset
     } else {
-      return singleLineCusorOffset
+      singleLineCusorOffset
     }
   }
 }
@@ -627,29 +630,29 @@ extension TextInputBlock.InputType.KeyboardType {
   fileprivate var uiType: UIKeyboardType {
     switch self {
     case .default:
-      return .default
+      .default
     case .asciiCapable:
-      return .asciiCapable
+      .asciiCapable
     case .numbersAndPunctuation:
-      return .numbersAndPunctuation
+      .numbersAndPunctuation
     case .URL:
-      return .URL
+      .URL
     case .numberPad:
-      return .numberPad
+      .numberPad
     case .phonePad:
-      return .phonePad
+      .phonePad
     case .namePhonePad:
-      return .namePhonePad
+      .namePhonePad
     case .emailAddress:
-      return .emailAddress
+      .emailAddress
     case .decimalPad:
-      return .decimalPad
+      .decimalPad
     case .twitter:
-      return .twitter
+      .twitter
     case .webSearch:
-      return .webSearch
+      .webSearch
     case .asciiCapableNumberPad:
-      return .asciiCapableNumberPad
+      .asciiCapableNumberPad
     }
   }
 }
@@ -658,15 +661,15 @@ extension TextInputBlockView {
   fileprivate var textAlignment: TextAlignment {
     switch textAlignmentHorizontal {
     case .left:
-      return .left
+      .left
     case .center:
-      return .center
+      .center
     case .right:
-      return .right
+      .right
     case .start:
-      return layoutDirection == .rightToLeft ? .right : .left
+      layoutDirection == .rightToLeft ? .right : .left
     case .end:
-      return layoutDirection == .rightToLeft ? .left : .right
+      layoutDirection == .rightToLeft ? .left : .right
     }
   }
 }
@@ -675,11 +678,11 @@ extension TextInputBlock.TextAlignmentVertical {
   fileprivate var contentAlignment: UIControl.ContentVerticalAlignment {
     switch self {
     case .top:
-      return .top
+      .top
     case .center:
-      return .center
+      .center
     case .bottom:
-      return .bottom
+      .bottom
     }
   }
 }

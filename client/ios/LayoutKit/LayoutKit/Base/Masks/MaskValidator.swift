@@ -38,12 +38,15 @@ public final class MaskValidator: Equatable {
     )
   }
 
-  public func removeSymbols(at range: Range<String.Index>, data: InputData) -> (String, CursorData?) {
+  public func removeSymbols(
+    at range: Range<String.Index>,
+    data: InputData
+  ) -> (String, CursorData?) {
     let range = range.clamped(to: data.text.wholeStringRange)
     return (
       String(data.rawData.filter {
         data.text.distance(from: range.lowerBound, to: $0.index) < 0 ||
-        data.text.distance(from: range.upperBound, to: $0.index) >= 0
+          data.text.distance(from: range.upperBound, to: $0.index) >= 0
       }.map(\.char)),
       data.rawData.firstIndex { data.text.distance(from: range.lowerBound, to: $0.index) >= 0 }
         .flatMap {

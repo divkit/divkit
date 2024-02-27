@@ -65,9 +65,9 @@ extension DeserializationError: DivError {
   private func getPath(parent: UIElementPath?) -> UIElementPath? {
     switch self {
     case let .nestedObjectError(field, error):
-      return error.getPath(parent: parent.map { $0 + field } ?? UIElementPath(field))
+      error.getPath(parent: parent.map { $0 + field } ?? UIElementPath(field))
     default:
-      return parent
+      parent
     }
   }
 

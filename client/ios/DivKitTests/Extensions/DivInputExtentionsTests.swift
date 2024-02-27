@@ -27,7 +27,7 @@ final class DivInputExtensionsTests: XCTestCase {
           hint: NSAttributedString(string: ""),
           textValue: context.makeBinding(variableName: "input_variable", defaultValue: ""),
           textTypo: Typo(font: fontSpecifiers.text.font(weight: .regular, size: 12))
-            .with(color: Color.colorWithARGBHexCode(0xFF000000)),
+            .with(color: Color.colorWithARGBHexCode(0xFF_00_00_00)),
           path: .root + "0",
           layoutDirection: .leftToRight
         ),
@@ -54,7 +54,7 @@ final class DivInputExtensionsTests: XCTestCase {
           hint: NSAttributedString(string: ""),
           textValue: context.makeBinding(variableName: "input_variable", defaultValue: ""),
           textTypo: Typo(font: fontSpecifiers.text.font(weight: .regular, size: 12))
-            .with(color: Color.colorWithARGBHexCode(0xFF000000)),
+            .with(color: Color.colorWithARGBHexCode(0xFF_00_00_00)),
           path: .root + "0",
           layoutDirection: .leftToRight
         ),

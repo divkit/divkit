@@ -39,8 +39,8 @@ extension Field {
 
   var link: String? {
     switch self {
-    case .value: return nil
-    case let .link(link): return link
+    case .value: nil
+    case let .link(link): link
     }
   }
 
@@ -165,9 +165,9 @@ extension Field where T: TemplateValue {
   func resolveParent(templates: [TemplateName: Any]) throws -> Field<T> {
     switch self {
     case let .link(link):
-      return .link(link)
+      .link(link)
     case let .value(value):
-      return try .value(value.resolveParent(templates: templates))
+      try .value(value.resolveParent(templates: templates))
     }
   }
 
@@ -200,9 +200,9 @@ extension Field where T: TemplateValue {
   func tryResolveParent(templates: [TemplateName: Any]) -> Field<T>? {
     switch self {
     case .link:
-      return self
+      self
     case let .value(value):
-      return value.tryResolveParent(templates: templates).map(Field.value)
+      value.tryResolveParent(templates: templates).map(Field.value)
     }
   }
 

@@ -64,9 +64,9 @@ final class CalcExpression: CustomStringConvertible {
     var description: String {
       switch self {
       case let .exactly(value):
-        return "\(value) argument\(value == 1 ? "" : "s")"
+        "\(value) argument\(value == 1 ? "" : "s")"
       case let .atLeast(value):
-        return "at least \(value) argument\(value == 1 ? "" : "s")"
+        "at least \(value) argument\(value == 1 ? "" : "s")"
       }
     }
 
@@ -86,10 +86,10 @@ final class CalcExpression: CustomStringConvertible {
       switch (self, arity) {
       case let (.exactly(lhs), .exactly(rhs)),
            let (.atLeast(lhs), .atLeast(rhs)):
-        return lhs == rhs
+        lhs == rhs
       case let (.atLeast(min), .exactly(value)),
            let (.exactly(value), .atLeast(min)):
-        return value >= min
+        value >= min
       }
     }
   }
@@ -123,7 +123,7 @@ final class CalcExpression: CustomStringConvertible {
            let .postfix(name),
            let .function(name, _),
            let .array(name):
-        return name
+        name
       }
     }
 
@@ -136,23 +136,23 @@ final class CalcExpression: CustomStringConvertible {
     var description: String {
       switch self {
       case .variable:
-        return "variable \(escapedName)"
+        "variable \(escapedName)"
       case .infix("?:"):
-        return "ternary operator \(escapedName)"
+        "ternary operator \(escapedName)"
       case .infix("[]"):
-        return "subscript operator \(escapedName)"
+        "subscript operator \(escapedName)"
       case .infix("()"):
-        return "function call operator \(escapedName)"
+        "function call operator \(escapedName)"
       case .infix:
-        return "infix operator \(escapedName)"
+        "infix operator \(escapedName)"
       case .prefix:
-        return "prefix operator \(escapedName)"
+        "prefix operator \(escapedName)"
       case .postfix:
-        return "postfix operator \(escapedName)"
+        "postfix operator \(escapedName)"
       case .function:
-        return "function \(escapedName)()"
+        "function \(escapedName)()"
       case .array:
-        return "array \(escapedName)[]"
+        "array \(escapedName)[]"
       }
     }
   }
@@ -169,7 +169,7 @@ final class CalcExpression: CustomStringConvertible {
     root = try expression.root.optimized(
       withImpureSymbols: impureSymbols,
       pureSymbols: {
-        if let fn = try pureSymbols($0){
+        if let fn = try pureSymbols($0) {
           return fn
         }
         if case let .function(name, _) = $0 {
@@ -234,9 +234,9 @@ extension CalcExpression {
   static func errorEvaluator(for symbol: Symbol) -> SymbolEvaluator {
     switch symbol {
     case .infix("[]"), .function("[]", _), .infix("()"):
-      return { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
+      { _ in throw Error.unexpectedToken(String(symbol.name.prefix(1))) }
     default:
-      return { _ in throw Error.undefinedSymbol(symbol) }
+      { _ in throw Error.undefinedSymbol(symbol) }
     }
   }
 }
@@ -360,9 +360,9 @@ extension CalcExpression {
          0xC_00_00...0xC_FF_FD,
          0xD_00_00...0xD_FF_FD,
          0xE_00_00...0xE_FF_FD:
-      return true
+      true
     default:
-      return false
+      false
     }
   }
 
@@ -373,9 +373,9 @@ extension CalcExpression {
          0x1D_C0...0x1D_FF,
          0x20_D0...0x20_FF,
          0xFE_20...0xFE_2F:
-      return true
+      true
     default:
-      return isIdentifierHead(c)
+      isIdentifierHead(c)
     }
   }
 }
@@ -420,14 +420,14 @@ private enum Subexpression: CustomStringConvertible {
     case let .symbol(symbol, args, _) where args.isEmpty:
       switch symbol {
       case .infix, .prefix, .postfix:
-        return false
+        false
       default:
-        return true
+        true
       }
     case .symbol, .literal:
-      return true
+      true
     case .error:
-      return false
+      false
     }
   }
 
@@ -493,22 +493,20 @@ private enum Subexpression: CustomStringConvertible {
         return "\(args[0])[\(args[1])]"
       case let .infix(name):
         let lhs = args[0]
-        let lhsDescription: String
-        switch lhs {
+        let lhsDescription = switch lhs {
         case let .symbol(.infix(opName), _, _)
           where !CalcExpression.operator(opName, takesPrecedenceOver: name):
-          lhsDescription = "(\(lhs))"
+          "(\(lhs))"
         default:
-          lhsDescription = "\(lhs)"
+          "\(lhs)"
         }
         let rhs = args[1]
-        let rhsDescription: String
-        switch rhs {
+        let rhsDescription = switch rhs {
         case let .symbol(.infix(opName), _, _)
           where CalcExpression.operator(name, takesPrecedenceOver: opName):
-          rhsDescription = "(\(rhs))"
+          "(\(rhs))"
         default:
-          rhsDescription = "\(rhs)"
+          "\(rhs)"
         }
         return "\(lhsDescription) \(symbol.escapedName) \(rhsDescription)"
       case .variable:
@@ -657,9 +655,9 @@ extension UnicodeScalarView {
     var value: String {
       switch self {
       case let .number(value):
-        return value
+        value
       case let .integer(value):
-        return value
+        value
       }
     }
   }
@@ -698,9 +696,9 @@ extension UnicodeScalarView {
     scanCharacters {
       switch $0 {
       case " ", "\t", "\n", "\r":
-        return false
+        false
       default:
-        return true
+        true
       }
     }
   }
@@ -709,9 +707,9 @@ extension UnicodeScalarView {
     if let _ = scanCharacters({
       switch $0 {
       case " ", "\t", "\n", "\r":
-        return true
+        true
       default:
-        return false
+        false
       }
     }) {
       return true
@@ -748,9 +746,9 @@ extension UnicodeScalarView {
       scanCharacters {
         switch $0 {
         case "0"..."9", "A"..."F", "a"..."f":
-          return true
+          true
         default:
-          return false
+          false
         }
       }
     }
@@ -926,9 +924,9 @@ extension UnicodeScalarView {
           let hex = scanCharacters {
             switch $0 {
             case "0"..."9", "A"..."F", "a"..."f":
-              return true
+              true
             default:
-              return false
+              false
             }
           } ?? ""
           guard scanCharacter("}") else {

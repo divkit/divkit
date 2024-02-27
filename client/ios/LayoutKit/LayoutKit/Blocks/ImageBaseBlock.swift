@@ -43,18 +43,18 @@ extension ImageBaseBlock {
   public var isVerticallyResizable: Bool {
     switch height {
     case let .trait(trait):
-      return trait.isResizable
+      trait.isResizable
     case .ratio:
-      return false
+      false
     }
   }
 
   public var isVerticallyConstrained: Bool {
     switch height {
     case let .trait(trait):
-      return trait.isConstrained
+      trait.isConstrained
     case .ratio:
-      return false
+      false
     }
   }
 

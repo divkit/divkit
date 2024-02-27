@@ -31,12 +31,11 @@ public struct TabViewLayout: Equatable {
 
     let newWidth = width ?? max(contentsModel.intrinsicWidth, separatorInsets.horizontalInsets.sum)
 
-    let height: CGFloat?
-    switch contentsModel.pagesHeight {
+    let height: CGFloat? = switch contentsModel.pagesHeight {
     case .byHighestPage:
-      height = oldHeight
+      oldHeight
     case .bySelectedPage:
-      height = nil
+      nil
     }
     let newHeight = height ??
       contentsModel.intrinsicHeight(

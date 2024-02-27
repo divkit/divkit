@@ -195,29 +195,29 @@ public final class TextFieldBlock: Block {
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
-      return value
+      value
     case let .intrinsic(_, minSize, _):
-      return minSize
+      minSize
     case .weighted:
-      return 0
+      0
     }
   }
 
   private var gap: CGFloat {
     switch placeholders {
     case let .separate(placeholders):
-      return placeholders.gap
+      placeholders.gap
     case .fieldOnly, .none:
-      return 0
+      0
     }
   }
 
   private func getHeaderHeight(forWidth _: CGFloat) -> CGFloat {
     switch placeholders {
     case let .separate(placeholders):
-      return placeholders.headerAttributes.height.rawValue
+      placeholders.headerAttributes.height.rawValue
     case .fieldOnly, .none:
-      return 0
+      0
     }
   }
 
@@ -334,11 +334,11 @@ extension TextFieldBlock.ToolbarType {
   ) -> Bool {
     switch (lhs, rhs) {
     case let (.default(lhs), .default(rhs)):
-      return lhs == rhs
+      lhs == rhs
     case let (.custom(lhs), .custom(rhs)):
-      return lhs == rhs
+      lhs == rhs
     default:
-      return false
+      false
     }
   }
 }

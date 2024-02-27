@@ -36,9 +36,9 @@ extension DivAppearanceTransition {
       value1 = item.distance?.resolveScaledValue(expressionResolver).map {
         switch edge {
         case .left, .top:
-          return -$0
+          -$0
         case .right, .bottom:
-          return $0
+          $0
         }
       } ?? getDefaultSlideValue(edge)
       value2 = 0
@@ -67,9 +67,9 @@ extension TransitioningAnimationType {
   func inverted() -> Self {
     switch self {
     case .appearing:
-      return .disappearing
+      .disappearing
     case .disappearing:
-      return .appearing
+      .appearing
     }
   }
 }
@@ -77,9 +77,9 @@ extension TransitioningAnimationType {
 fileprivate func getDefaultSlideValue(_ edge: DivSlideTransition.Edge) -> Double {
   switch edge {
   case .left, .top:
-    return TransitioningAnimation.defaultLeadingSlideDistance
+    TransitioningAnimation.defaultLeadingSlideDistance
   case .right, .bottom:
-    return TransitioningAnimation.defaultTrailingSlideDistance
+    TransitioningAnimation.defaultTrailingSlideDistance
   }
 }
 

@@ -255,15 +255,15 @@ extension DivAlignmentHorizontal {
   ) -> TextAlignment {
     switch self {
     case .start:
-      return uiLayoutDirection == .leftToRight ? .left : .right
+      uiLayoutDirection == .leftToRight ? .left : .right
     case .end:
-      return uiLayoutDirection == .leftToRight ? .right : .left
+      uiLayoutDirection == .leftToRight ? .right : .left
     case .left:
-      return .left
+      .left
     case .center:
-      return .center
+      .center
     case .right:
-      return .right
+      .right
     }
   }
 }
@@ -325,8 +325,8 @@ extension DivText.Range {
 extension DivLineStyle {
   fileprivate var underlineStyle: UnderlineStyle {
     switch self {
-    case .none: return []
-    case .single: return .single
+    case .none: []
+    case .single: .single
     }
   }
 }

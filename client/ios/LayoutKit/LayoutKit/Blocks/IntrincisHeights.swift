@@ -3,13 +3,12 @@ import CoreGraphics
 extension [Block] {
   func intrinsicHeights(forWidth width: CGFloat) -> [CGFloat] {
     map {
-      let blockWidth: CGFloat
-      if $0.isHorizontallyResizable {
-        blockWidth = width
+      let blockWidth: CGFloat = if $0.isHorizontallyResizable {
+        width
       } else if $0.isHorizontallyConstrained {
-        blockWidth = Swift.min($0.widthOfHorizontallyNonResizableBlock, width)
+        Swift.min($0.widthOfHorizontallyNonResizableBlock, width)
       } else {
-        blockWidth = $0.widthOfHorizontallyNonResizableBlock
+        $0.widthOfHorizontallyNonResizableBlock
       }
       return $0.intrinsicContentHeight(forWidth: blockWidth)
     }

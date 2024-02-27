@@ -16,13 +16,13 @@ enum ColorFunctions: CaseIterable {
     private var description: String {
       switch self {
       case let .cast(type):
-        return "Argument couldn't be casted to \(type)"
+        "Argument couldn't be casted to \(type)"
       case let .outOfRange(expression):
-        return "Failed to evaluate [\(expression)]. Value out of range 0..1."
+        "Failed to evaluate [\(expression)]. Value out of range 0..1."
       case let .get(channel, value):
-        return makeErrorDescription("[getColor\(channel.description)('\(value)')]")
+        makeErrorDescription("[getColor\(channel.description)('\(value)')]")
       case let .set(channel, first, second):
-        return makeErrorDescription("[setColor\(channel.description)('\(first)', \(second))]")
+        makeErrorDescription("[setColor\(channel.description)('\(first)', \(second))]")
       }
     }
   }
@@ -50,24 +50,24 @@ enum ColorFunctions: CaseIterable {
   var rawValue: String {
     switch self {
     case .argb:
-      return "argb"
+      "argb"
     case .rgb:
-      return "rgb"
+      "rgb"
     case let .get(channel):
-      return "getColor\(channel.description)"
+      "getColor\(channel.description)"
     case let .set(channel):
-      return "setColor\(channel.description)"
+      "setColor\(channel.description)"
     }
   }
 
   var function: Function {
     switch self {
     case .argb:
-      return FunctionQuaternary(impl: _argb)
+      FunctionQuaternary(impl: _argb)
     case .rgb:
-      return FunctionTernary(impl: _rgb)
+      FunctionTernary(impl: _rgb)
     case let .get(channel):
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionUnary(impl: { try getChannel(channel, from: $0) }),
           FunctionUnary(impl: { getChannelFromColor(channel, from: $0) }),
@@ -76,7 +76,7 @@ enum ColorFunctions: CaseIterable {
         ColorFunctions.Error.get(channel, String(describing: $0.first?.value)).message
       }
     case let .set(channel):
-      return OverloadedFunction(
+      OverloadedFunction(
         functions: [
           FunctionBinary(impl: { try setChannel(channel, to: $0, value: $1) }),
           FunctionBinary(impl: { try setChannelForColor(channel, to: $0, value: $1) }),
@@ -151,26 +151,26 @@ extension Color {
   fileprivate func makeChannel(_ channel: ColorFunctions.Channel) -> Double {
     switch channel {
     case .alpha:
-      return alpha
+      alpha
     case .red:
-      return red
+      red
     case .green:
-      return green
+      green
     case .blue:
-      return blue
+      blue
     }
   }
 
   fileprivate func set(_ value: Double, for channel: ColorFunctions.Channel) -> Color {
     switch channel {
     case .alpha:
-      return Color(red: red, green: green, blue: blue, alpha: value)
+      Color(red: red, green: green, blue: blue, alpha: value)
     case .red:
-      return Color(red: value, green: green, blue: blue, alpha: alpha)
+      Color(red: value, green: green, blue: blue, alpha: alpha)
     case .green:
-      return Color(red: red, green: value, blue: blue, alpha: alpha)
+      Color(red: red, green: value, blue: blue, alpha: alpha)
     case .blue:
-      return Color(red: red, green: green, blue: value, alpha: alpha)
+      Color(red: red, green: green, blue: value, alpha: alpha)
     }
   }
 }

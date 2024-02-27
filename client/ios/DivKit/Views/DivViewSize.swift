@@ -20,12 +20,12 @@ public struct DivViewSize: Equatable {
     public static func ==(lhs: DivDimension, rhs: DivDimension) -> Bool {
       switch (lhs, rhs) {
       case let (.desired(lhs), .desired(rhs)):
-        return lhs == rhs
+        lhs == rhs
       case (.matchParent, .matchParent),
            (.dependsOnOtherDimensionSize, dependsOnOtherDimensionSize):
-        return true
+        true
       default:
-        return false
+        false
       }
     }
   }
@@ -59,14 +59,13 @@ public struct DivViewSize: Equatable {
       assertionFailure("Unexpected width")
       width = -1
     }
-    let height: CGFloat
-    switch self.height {
+    let height: CGFloat = switch self.height {
     case .matchParent:
-      height = parentViewSize.height
+      parentViewSize.height
     case let .desired(value):
-      height = value
+      value
     case let .dependsOnOtherDimensionSize(heightForWidth):
-      height = heightForWidth(width)
+      heightForWidth(width)
     }
     return CGSize(width: width, height: height)
   }

@@ -7,9 +7,9 @@ extension Expression where T == Bool {
   func toValidSerializationValue() -> ValidSerializationValue {
     switch self {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -18,9 +18,9 @@ extension Expression where T == Double {
   func toValidSerializationValue() -> ValidSerializationValue {
     switch self {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -29,9 +29,9 @@ extension Expression where T == Int {
   func toValidSerializationValue() -> ValidSerializationValue {
     switch self {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -40,9 +40,9 @@ extension Expression where T == Color {
   func toValidSerializationValue() -> String {
     switch self {
     case let .value(value):
-      return value.hexString
+      value.hexString
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -51,9 +51,9 @@ extension Expression where T == String {
   func toValidSerializationValue() -> String {
     switch self {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -62,9 +62,9 @@ extension Expression where T == URL {
   func toValidSerializationValue() -> String {
     switch self {
     case let .value(value):
-      return value.absoluteString
+      value.absoluteString
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -73,9 +73,9 @@ extension Expression where T == [Any] {
   func toValidSerializationValue() -> ValidSerializationValue {
     switch self {
     case let .value(value):
-      return value
+      value
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }
@@ -84,9 +84,9 @@ extension Expression where T: RawRepresentable, T.RawValue == String {
   func toValidSerializationValue() -> String {
     switch self {
     case let .value(value):
-      return value.rawValue
+      value.rawValue
     case let .link(link):
-      return link.rawValue
+      link.rawValue
     }
   }
 }

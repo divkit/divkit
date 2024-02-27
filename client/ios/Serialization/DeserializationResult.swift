@@ -14,9 +14,9 @@ extension DeserializationResult {
   public var value: T? {
     switch self {
     case let .success(value), let .partialSuccess(value, _):
-      return value
+      value
     case .failure, .noValue:
-      return nil
+      nil
     }
   }
 
@@ -25,27 +25,27 @@ extension DeserializationResult {
   public var warnings: NonEmptyArray<DeserializationError>? {
     switch self {
     case let .partialSuccess(_, warnings):
-      return warnings
+      warnings
     case .success, .failure, .noValue:
-      return nil
+      nil
     }
   }
 
   public var errors: NonEmptyArray<DeserializationError>? {
     switch self {
     case let .failure(errors):
-      return errors
+      errors
     case .partialSuccess, .success, .noValue:
-      return nil
+      nil
     }
   }
 
   public var errorsOrWarnings: NonEmptyArray<DeserializationError>? {
     switch self {
     case let .partialSuccess(_, errors), let .failure(errors):
-      return errors
+      errors
     case .success, .noValue:
-      return nil
+      nil
     }
   }
 

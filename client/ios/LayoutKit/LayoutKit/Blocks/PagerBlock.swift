@@ -112,13 +112,12 @@ extension PagerBlock: ElementStateUpdating {
       return self
     }
 
-    let newModel: GalleryViewModel
-    if blocksAreNotEqual {
-      newModel = modified(gallery) {
+    let newModel: GalleryViewModel = if blocksAreNotEqual {
+      modified(gallery) {
         $0.items.apply(contents: newBlocks)
       }
     } else {
-      newModel = gallery
+      gallery
     }
 
     return try PagerBlock(

@@ -73,11 +73,10 @@ func divText(
   width: DivSize? = nil,
   visibilityActions: [DivVisibilityAction]? = nil
 ) -> Div {
-  let textValue: Expression<String>
-  if let textExpression {
-    textValue = expression(textExpression)
+  let textValue: Expression<String> = if let textExpression {
+    expression(textExpression)
   } else {
-    textValue = .value(text)
+    .value(text)
   }
   return .divText(DivText(
     accessibility: accessibility,

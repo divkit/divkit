@@ -53,12 +53,11 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
 
     let page = blockPages[integralIndex]
     let fractionalIndex = pageIndex.truncatingRemainder(dividingBy: 1)
-    let maxOffset: CGFloat
-    switch model.direction {
+    let maxOffset: CGFloat = switch model.direction {
     case .horizontal:
-      maxOffset = max(0, contentSize.width - boundsSize.width)
+      max(0, contentSize.width - boundsSize.width)
     case .vertical:
-      maxOffset = max(0, contentSize.height - boundsSize.height)
+      max(0, contentSize.height - boundsSize.height)
     }
     return min(maxOffset, page.origin + page.size * fractionalIndex)
   }
@@ -91,9 +90,9 @@ extension GalleryViewModel {
   fileprivate func frames(fitting size: CGSize?) -> [CGRect] {
     switch direction {
     case .horizontal:
-      return horizontallyOrientedFrames(fitting: size)
+      horizontallyOrientedFrames(fitting: size)
     case .vertical:
-      return verticallyOrientedFrames(fitting: size)
+      verticallyOrientedFrames(fitting: size)
     }
   }
 
@@ -152,11 +151,11 @@ extension GalleryViewModel {
   fileprivate func pageSize(fitting size: CGSize?) -> CGFloat {
     switch scrollMode {
     case .default:
-      return 0
+      0
     case .autoPaging:
-      return size?.dimension(in: direction) ?? 0
+      size?.dimension(in: direction) ?? 0
     case let .fixedPaging(pageSize: value):
-      return value
+      value
     }
   }
 
@@ -169,15 +168,14 @@ extension GalleryViewModel {
     }
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
-    let maxItemHeight: CGFloat
-    if let size {
-      maxItemHeight = (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
+    let maxItemHeight: CGFloat = if let size {
+      (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
         CGFloat(columnCount)
     } else if let maxNonResizableHeight = blocks
       .maxHeightOfVerticallyNonResizableBlocks(for: widths) {
-      maxItemHeight = maxNonResizableHeight
+      maxNonResizableHeight
     } else {
-      maxItemHeight = 0
+      0
     }
 
     let gaps = self.gaps(forSize: size)
@@ -266,11 +264,11 @@ extension Alignment {
   fileprivate func origin(of dimension: CGFloat, minimum: CGFloat, maximum: CGFloat) -> CGFloat {
     switch self {
     case .leading:
-      return minimum
+      minimum
     case .center:
-      return floor((minimum + maximum - dimension) / 2)
+      floor((minimum + maximum - dimension) / 2)
     case .trailing:
-      return maximum - dimension
+      maximum - dimension
     }
   }
 }
@@ -279,9 +277,9 @@ extension CGPoint {
   fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
     switch direction {
     case .horizontal:
-      return x
+      x
     case .vertical:
-      return y
+      y
     }
   }
 }
@@ -290,9 +288,9 @@ extension CGSize {
   fileprivate func dimension(in direction: GalleryViewModel.Direction) -> CGFloat {
     switch direction {
     case .horizontal:
-      return width
+      width
     case .vertical:
-      return height
+      height
     }
   }
 }

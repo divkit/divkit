@@ -68,8 +68,8 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
 extension DivPager.Orientation {
   var direction: GalleryViewModel.Direction {
     switch self {
-    case .horizontal: return .horizontal
-    case .vertical: return .vertical
+    case .horizontal: .horizontal
+    case .vertical: .vertical
     }
   }
 }

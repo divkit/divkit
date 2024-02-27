@@ -28,13 +28,13 @@ extension DivImageScale {
   fileprivate var contentModeScale: ImageContentMode.Scale {
     switch self {
     case .fill:
-      return .aspectFill
+      .aspectFill
     case .fit:
-      return .aspectFit
+      .aspectFit
     case .stretch:
-      return .resize
+      .resize
     case .noScale:
-      return .noScale
+      .noScale
     }
   }
 }
@@ -59,11 +59,11 @@ extension DivAlignmentHorizontal {
   fileprivate var contentModeAlignment: ImageContentMode.HorizontalAlignment {
     switch self {
     case .left, .start:
-      return .left
+      .left
     case .center:
-      return .center
+      .center
     case .right, .end:
-      return .right
+      .right
     }
   }
 
@@ -71,15 +71,15 @@ extension DivAlignmentHorizontal {
     .HorizontalAlignment {
     switch self {
     case .left:
-      return .left
+      .left
     case .center:
-      return .center
+      .center
     case .right:
-      return .right
+      .right
     case .start:
-      return uiLayoutDirection == .leftToRight ? .left : .right
+      uiLayoutDirection == .leftToRight ? .left : .right
     case .end:
-      return uiLayoutDirection == .leftToRight ? .right : .left
+      uiLayoutDirection == .leftToRight ? .right : .left
     }
   }
 }

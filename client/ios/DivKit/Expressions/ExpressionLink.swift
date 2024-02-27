@@ -129,13 +129,13 @@ extension ExpressionLink.Item: Equatable {
   static func ==(lhs: ExpressionLink.Item, rhs: ExpressionLink.Item) -> Bool {
     switch (lhs, rhs) {
     case let (.calcExpression(left), .calcExpression(right)):
-      return left.description == right.description
+      left.description == right.description
     case let (.string(left), .string(right)):
-      return left == right
+      left == right
     case let (.nestedCalcExpression(left), .nestedCalcExpression(right)):
-      return left == right
+      left == right
     case (.calcExpression, _), (.string, _), (.nestedCalcExpression, _):
-      return false
+      false
     }
   }
 }

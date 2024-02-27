@@ -268,7 +268,7 @@ struct OverloadedFunction: Function {
     }
     guard let function = try functions
       .first(where: { try
-        zip($0.signature.allArguments(arguments.count), arguments)
+          zip($0.signature.allArguments(arguments.count), arguments)
           .allSatisfy { $0.type == $1.type || $0.type == .any }
 
       })
@@ -309,9 +309,9 @@ struct FunctionSignature: Decodable {
 
   var arity: CalcExpression.Arity {
     if arguments.last?.vararg == true {
-      return .atLeast(arguments.count)
+      .atLeast(arguments.count)
     } else {
-      return .exactly(arguments.count)
+      .exactly(arguments.count)
     }
   }
 
@@ -334,34 +334,34 @@ struct FunctionSignature: Decodable {
     var swiftType: Any.Type {
       switch self {
       case .string:
-        return String.self
+        String.self
       case .number:
-        return Double.self
+        Double.self
       case .integer:
-        return Int.self
+        Int.self
       case .boolean:
-        return Bool.self
+        Bool.self
       case .datetime:
-        return Date.self
+        Date.self
       case .color:
-        return Color.self
+        Color.self
       case .url:
-        return URL.self
+        URL.self
       case .dict:
-        return [String: AnyHashable].self
+        [String: AnyHashable].self
       case .array:
-        return [AnyHashable].self
+        [AnyHashable].self
       case .any:
-        return Any.self
+        Any.self
       }
     }
 
     var name: String {
       switch self {
       case .datetime:
-        return "DateTime"
+        "DateTime"
       default:
-        return rawValue.stringWithFirstCharCapitalized()
+        rawValue.stringWithFirstCharCapitalized()
       }
     }
 
@@ -389,19 +389,19 @@ struct FunctionSignature: Decodable {
     private var description: String {
       switch self {
       case let .cast(type):
-        return "Argument couldn't be casted to \(type.rawValue.capitalized)"
+        "Argument couldn't be casted to \(type.rawValue.capitalized)"
       case .arityMismatch:
-        return "Function arity mismatch"
+        "Function arity mismatch"
       case let .typeMismatch(args):
-        return "Type mismatch \(args.map { $0.formattedValue }.joined(separator: " "))"
+        "Type mismatch \(args.map(\.formattedValue).joined(separator: " "))"
       case let .argumentTypeMismatch(i, expected, found):
-        return "Argument \(i + 1) type mismatch, expected: \(expected), found: \(found)"
+        "Argument \(i + 1) type mismatch, expected: \(expected), found: \(found)"
       case let .resultTypeMismatch(expected, found):
-        return "Result type mismatch, expected: \(expected), found: \(found)"
+        "Result type mismatch, expected: \(expected), found: \(found)"
       case .notFound:
-        return "Function with signature is not found"
+        "Function with signature is not found"
       case .type:
-        return "Type is not supported"
+        "Type is not supported"
       }
     }
   }
@@ -419,11 +419,11 @@ struct FunctionSignature: Decodable {
 
   fileprivate func allArguments(_ i: Int) -> [ArgumentSignature] {
     if let last = arguments.last, last.vararg == true {
-      return (arguments + Array(repeating: last, times: UInt(i - arguments.count))).map {
+      (arguments + Array(repeating: last, times: UInt(i - arguments.count))).map {
         .init(type: $0.type)
       }
     } else {
-      return arguments
+      arguments
     }
   }
 

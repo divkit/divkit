@@ -32,9 +32,9 @@ public final class SwipeContainerBlock: WrapperBlock {
   public func intrinsicContentHeight(forWidth: CGFloat) -> CGFloat {
     switch state {
     case .normal:
-      return child.intrinsicContentHeight(forWidth: forWidth)
+      child.intrinsicContentHeight(forWidth: forWidth)
     case .left, .right:
-      return 0
+      0
     }
   }
 

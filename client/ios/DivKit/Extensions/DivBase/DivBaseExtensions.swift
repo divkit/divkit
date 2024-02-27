@@ -15,11 +15,11 @@ extension DivBase {
     clipToBounds: Bool = true
   ) throws -> Block {
     let extensionHandlers = context.getExtensionHandlers(for: self)
-    
+
     extensionHandlers.forEach {
       $0.accept(div: self, context: context)
     }
-    
+
     let expressionResolver = context.expressionResolver
     let statePath = context.parentDivStatePath ?? DivData.rootPath
 
@@ -32,7 +32,6 @@ extension DivBase {
 
     var block = try block()
 
-    
     extensionHandlers.forEach {
       block = $0.applyBeforeBaseProperties(to: block, div: self, context: context)
     }
@@ -67,13 +66,12 @@ extension DivBase {
     )
     let border = getBorder(isFocused)
 
-    let boundary: BoundaryTrait?
-    if !clipToBounds {
-      boundary = .noClip
+    let boundary: BoundaryTrait? = if !clipToBounds {
+      .noClip
     } else if let border {
-      boundary = .clipCorner(border.resolveCornerRadii(expressionResolver))
+      .clipCorner(border.resolveCornerRadii(expressionResolver))
     } else {
-      boundary = nil
+      nil
     }
 
     let shadow = border?.resolveShadow(expressionResolver)
@@ -185,11 +183,14 @@ extension DivBase {
     }
 
     let expressionResolver = context.expressionResolver
-    let animationIn: [TransitioningAnimation]?
-    if isAppearing(statePath: statePath, id: id, context: context) {
-      animationIn = transitionIn?.resolveAnimations(expressionResolver, type: .appearing)
+    let animationIn: [TransitioningAnimation]? = if isAppearing(
+      statePath: statePath,
+      id: id,
+      context: context
+    ) {
+      transitionIn?.resolveAnimations(expressionResolver, type: .appearing)
     } else {
-      animationIn = nil
+      nil
     }
 
     context.stateManager.setBlockVisibility(
@@ -304,15 +305,15 @@ extension LayoutTrait {
   fileprivate func trim(_ insets: SideInsets) -> LayoutTrait {
     switch self {
     case let .fixed(value):
-      return .fixed(value - insets.sum)
+      .fixed(value - insets.sum)
     case let .intrinsic(constrained, minSize, maxSize):
-      return .intrinsic(
+      .intrinsic(
         constrained: constrained,
         minSize: minSize - insets.sum,
         maxSize: maxSize - insets.sum
       )
     case .weighted:
-      return self
+      self
     }
   }
 }

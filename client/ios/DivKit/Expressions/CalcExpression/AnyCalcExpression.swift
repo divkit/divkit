@@ -62,19 +62,19 @@ struct AnyCalcExpression {
       impureSymbols: { symbol in
         switch symbol {
         case .function, .infix, .prefix:
-          return functions[symbol]?.symbolEvaluator
+          functions[symbol]?.symbolEvaluator
         default:
-          return nil
+          nil
         }
       },
       pureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
-          return variables(name).map { value in { _ in value } }
+          variables(name).map { value in { _ in value } }
         case .function, .infix, .prefix:
-          return functions[symbol]?.symbolEvaluator
+          functions[symbol]?.symbolEvaluator
         default:
-          return nil
+          nil
         }
       }
     )
@@ -97,19 +97,19 @@ struct AnyCalcExpression {
       }
       return String(name.dropFirst().dropLast())
     }
-    func funcEvaluator(for symbol: Symbol, _ value: Any) -> CalcExpression.SymbolEvaluator? {
+    func funcEvaluator(for _: Symbol, _ value: Any) -> CalcExpression.SymbolEvaluator? {
       // TODO: should funcEvaluator call the `.infix("()")` implementation?
       switch value {
       case let fn as SymbolEvaluator:
-        return { args in
+        { args in
           try box.store(fn(args.map(box.load)))
         }
       case let fn as CalcExpression.SymbolEvaluator:
-        return { args in
+        { args in
           try fn(args)
         }
       default:
-        return nil
+        nil
       }
     }
 
@@ -565,9 +565,9 @@ extension AnyCalcExpression {
     .infix("!:"): { args in
       switch args[0] {
       case .error:
-        return args[1]
+        args[1]
       default:
-        return args[0]
+        args[0]
       }
     },
   ]

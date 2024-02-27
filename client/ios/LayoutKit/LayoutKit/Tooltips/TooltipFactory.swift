@@ -24,50 +24,49 @@ public enum TooltipFactory {
 
 extension BlockTooltip.Position {
   private func makeTail(color: Color) -> Block {
-    let imageHolder: ImageHolder?
-    switch self {
+    let imageHolder: ImageHolder? = switch self {
     case .left:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         middleTailSize,
         drawingHandler: { drawMiddleTail(style: .right, color: color, context: $0) }
       )
     case .topLeft:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         cornerTailSize,
         drawingHandler: { drawCornerTail(style: .bottomRight, color: color, context: $0) }
       )
     case .top:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         middleTailSize.flipDimensions(),
         drawingHandler: { drawMiddleTail(style: .bottom, color: color, context: $0) }
       )
     case .topRight:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         cornerTailSize,
         drawingHandler: { drawCornerTail(style: .bottomLeft, color: color, context: $0) }
       )
     case .right:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         middleTailSize,
         drawingHandler: { drawMiddleTail(style: .left, color: color, context: $0) }
       )
     case .bottomRight:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         cornerTailSize,
         drawingHandler: { drawCornerTail(style: .topLeft, color: color, context: $0) }
       )
     case .bottom:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         middleTailSize.flipDimensions(),
         drawingHandler: { drawMiddleTail(style: .top, color: color, context: $0) }
       )
     case .bottomLeft:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         cornerTailSize,
         drawingHandler: { drawCornerTail(style: .topRight, color: color, context: $0) }
       )
     case .center:
-      imageHolder = Image.imageOfSize(
+      Image.imageOfSize(
         cornerTailSize,
         drawingHandler: { _ in }
       )
@@ -78,14 +77,14 @@ extension BlockTooltip.Position {
   fileprivate func makeContainer(child: Block, theme: Theme) -> Block {
     switch self {
     case .left:
-      return try! ContainerBlock(
+      try! ContainerBlock(
         layoutDirection: .horizontal,
         verticalChildrenAlignment: .center,
         gaps: [0, -1, 0],
         children: [child, makeTail(color: theme.backgroundColor)]
       )
     case .topLeft:
-      return LayeredBlock(
+      LayeredBlock(
         horizontalChildrenAlignment: .trailing,
         verticalChildrenAlignment: .trailing,
         children: [
@@ -94,14 +93,14 @@ extension BlockTooltip.Position {
         ]
       )
     case .top:
-      return try! ContainerBlock(
+      try! ContainerBlock(
         layoutDirection: .vertical,
         horizontalChildrenAlignment: .center,
         gaps: [0, -1, 0],
         children: [child, makeTail(color: theme.backgroundColor)]
       )
     case .topRight:
-      return LayeredBlock(
+      LayeredBlock(
         verticalChildrenAlignment: .trailing,
         children: [
           makeTail(color: theme.backgroundColor),
@@ -109,26 +108,26 @@ extension BlockTooltip.Position {
         ]
       )
     case .right:
-      return try! ContainerBlock(
+      try! ContainerBlock(
         layoutDirection: .horizontal,
         verticalChildrenAlignment: .center,
         gaps: [0, -1, 0],
         children: [makeTail(color: theme.backgroundColor), child]
       )
     case .bottomRight:
-      return LayeredBlock(children: [
+      LayeredBlock(children: [
         child.addingEdgeInsets(EdgeInsets(top: 5, left: 1, bottom: 0, right: 0)),
         makeTail(color: theme.backgroundColor),
       ])
     case .bottom:
-      return try! ContainerBlock(
+      try! ContainerBlock(
         layoutDirection: .vertical,
         horizontalChildrenAlignment: .center,
         gaps: [0, -1, 0],
         children: [makeTail(color: theme.backgroundColor), child]
       )
     case .bottomLeft:
-      return LayeredBlock(
+      LayeredBlock(
         horizontalChildrenAlignment: .trailing,
         children: [
           child.addingEdgeInsets(EdgeInsets(top: 5, left: 0, bottom: 0, right: 1)),
@@ -136,7 +135,7 @@ extension BlockTooltip.Position {
         ]
       )
     case .center:
-      return try! ContainerBlock(
+      try! ContainerBlock(
         layoutDirection: .vertical,
         horizontalChildrenAlignment: .center,
         gaps: [0, -1, 0],
@@ -150,18 +149,18 @@ extension Theme {
   fileprivate var textColor: Color {
     switch self {
     case .light:
-      return .colorWithHexCode(0xFF_FF_FF_FC)
+      .colorWithHexCode(0xFF_FF_FF_FC)
     case .dark:
-      return .black
+      .black
     }
   }
 
   fileprivate var backgroundColor: Color {
     switch self {
     case .light:
-      return .colorWithHexCode(0x2E_2F_34_FF)
+      .colorWithHexCode(0x2E_2F_34_FF)
     case .dark:
-      return .white
+      .white
     }
   }
 }
@@ -183,22 +182,21 @@ private func drawCornerTail(
   color: Color,
   context: CGContext
 ) {
-  let transform: CGAffineTransform
-  switch style {
+  let transform: CGAffineTransform = switch style {
   case .topLeft:
-    transform = .identity
+    .identity
       .translatedBy(x: 0, y: cornerTailSize.height)
       .scaledBy(x: 1, y: -1)
   case .topRight:
-    transform = .identity
+    .identity
       .translatedBy(x: cornerTailSize.width, y: cornerTailSize.height)
       .scaled(by: -1)
   case .bottomRight:
-    transform = .identity
+    .identity
       .translatedBy(x: cornerTailSize.width, y: 0)
       .scaledBy(x: -1, y: 1)
   case .bottomLeft:
-    transform = .identity
+    .identity
   }
 
   context.saveGState()
@@ -239,22 +237,21 @@ private func drawMiddleTail(
   color: Color,
   context: CGContext
 ) {
-  let transform: CGAffineTransform
-  switch style {
+  let transform: CGAffineTransform = switch style {
   case .left:
-    transform = .identity
+    .identity
       .translatedBy(x: 0, y: middleTailSize.height)
       .scaledBy(x: 1, y: -1)
   case .top:
-    transform = .identity
+    .identity
       .rotated(by: 3 * .pi / 2)
       .scaledBy(x: -1, y: 1)
   case .right:
-    transform = .identity
+    .identity
       .translatedBy(x: middleTailSize.width, y: 0)
       .scaledBy(x: -1, y: 1)
   case .bottom:
-    transform = .identity
+    .identity
       .translatedBy(x: middleTailSize.height, y: middleTailSize.width)
       .scaledBy(x: -1, y: 1)
       .rotated(by: 3 * .pi / 2)

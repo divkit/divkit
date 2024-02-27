@@ -17,12 +17,11 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     self.variablesStorage = variablesStorage
 
     variablesStorage.changeEvents.addObserver { [weak self] event in
-      let variableNames: Set<DivVariableName>
-      switch event.kind {
+      let variableNames: Set<DivVariableName> = switch event.kind {
       case let .global(names):
-        variableNames = names
+        names
       case let .local(_, names):
-        variableNames = names
+        names
       }
       if let updatedVariables = self?.updatedVariables,
          !variableNames.isSubset(of: updatedVariables) {
@@ -59,9 +58,9 @@ public final class SizeProviderExtensionHandler: DivExtensionHandler {
     let hasNotVariableReason = reasons.isEmpty || reasons.contains {
       switch $0 {
       case .variable:
-        return false
+        false
       default:
-        return true
+        true
       }
     }
     if hasNotVariableReason {

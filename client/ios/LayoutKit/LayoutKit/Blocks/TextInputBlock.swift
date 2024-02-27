@@ -124,11 +124,11 @@ public final class TextInputBlock: BlockWithTraits {
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
     case let .fixed(value):
-      return value
+      value
     case let .intrinsic(_, minSize, _):
-      return minSize
+      minSize
     case .weighted:
-      return 0
+      0
     }
   }
 

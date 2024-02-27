@@ -12,27 +12,27 @@ public struct GalleryViewState: ElementState, Equatable {
     public var offset: CGFloat? {
       switch self {
       case let .offset(value, _):
-        return value
+        value
       case .paging:
-        return nil
+        nil
       }
     }
 
     public var pageIndex: CGFloat? {
       switch self {
       case .offset:
-        return nil
+        nil
       case let .paging(index: index):
-        return index
+        index
       }
     }
 
     public var isPaging: Bool {
       switch self {
       case .paging:
-        return true
+        true
       case .offset:
-        return false
+        false
       }
     }
 

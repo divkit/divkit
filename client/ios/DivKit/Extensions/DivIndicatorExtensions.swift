@@ -126,9 +126,9 @@ extension DivShape {
   fileprivate var rectangle: DivRoundedRectangleShape? {
     switch self {
     case let .divRoundedRectangleShape(rectangle):
-      return rectangle
+      rectangle
     case .divCircleShape:
-      return nil
+      nil
     }
   }
 }
@@ -137,11 +137,11 @@ extension DivIndicator.Animation {
   fileprivate var asBlockAnimation: PageIndicatorConfiguration.Animation {
     switch self {
     case .scale:
-      return .scale
+      .scale
     case .worm:
-      return .worm
+      .worm
     case .slider:
-      return .slider
+      .slider
     }
   }
 }
@@ -152,13 +152,13 @@ extension DivIndicatorItemPlacement {
   ) -> PageIndicatorConfiguration.ItemPlacement {
     switch self {
     case let .divDefaultIndicatorItemPlacement(placement):
-      return .fixed(
+      .fixed(
         spaceBetweenCenters: CGFloat(
           placement.spaceBetweenCenters.resolveValue(expressionResolver) ?? 0
         )
       )
     case let .divStretchIndicatorItemPlacement(placement):
-      return .stretch(
+      .stretch(
         spacing: CGFloat(placement.itemSpacing.resolveValue(expressionResolver) ?? 0),
         maxVisibleItems: placement.resolveMaxVisibleItems(expressionResolver)
       )

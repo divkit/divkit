@@ -89,22 +89,22 @@ extension Alignment {
   fileprivate var crossAlignment: ContainerBlock.CrossAlignment {
     switch self {
     case .leading:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .trailing:
-      return .trailing
+      .trailing
     }
   }
 
   fileprivate var axialAlignment: ContainerBlock.AxialAlignment {
     switch self {
     case .leading:
-      return .leading
+      .leading
     case .center:
-      return .center
+      .center
     case .trailing:
-      return .trailing
+      .trailing
     }
   }
 }

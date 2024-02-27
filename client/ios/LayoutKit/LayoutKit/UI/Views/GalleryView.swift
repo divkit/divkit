@@ -257,12 +257,11 @@ public final class GalleryView: BlockView {
   }
 
   private func setContentOffset(_ offset: CGFloat, animated: Bool) {
-    let contentOffset: CGPoint
-    switch model.direction {
+    let contentOffset = switch model.direction {
     case .vertical:
-      contentOffset = CGPoint(x: 0, y: offset)
+      CGPoint(x: 0, y: offset)
     case .horizontal:
-      contentOffset = CGPoint(x: offset, y: 0)
+      CGPoint(x: offset, y: 0)
     }
     if collectionView.contentOffset != contentOffset {
       collectionView.setContentOffset(contentOffset, animated: animated)
@@ -409,9 +408,9 @@ extension GalleryViewModel.ScrollMode {
   fileprivate var decelerationRate: UIScrollView.DecelerationRate {
     switch self {
     case .default:
-      return .normal
+      .normal
     case .autoPaging, .fixedPaging:
-      return .fast
+      .fast
     }
   }
 }

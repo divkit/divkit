@@ -48,12 +48,11 @@ struct TabContentsViewLayout: Equatable {
     pagesInsets: EdgeInsets
   ) -> CGFloat {
     let itemWidth = width - pagesInsets.horizontalInsets.sum
-    let listHeight: CGFloat
-    switch pagesHeightMode {
+    let listHeight: CGFloat = switch pagesHeightMode {
     case .byHighestPage:
-      listHeight = pages.map { $0.intrinsicContentHeight(forWidth: itemWidth) }.max()!
+      pages.map { $0.intrinsicContentHeight(forWidth: itemWidth) }.max()!
     case .bySelectedPage:
-      listHeight = pages.intrinsicContentHeight(
+      pages.intrinsicContentHeight(
         forWidth: itemWidth,
         selectedPageIndex: selectedPageIndex
       )

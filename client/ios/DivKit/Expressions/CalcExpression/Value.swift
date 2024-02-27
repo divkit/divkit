@@ -15,17 +15,17 @@ extension CalcExpression.Value {
   var value: Double {
     switch self {
     case let .integer(integer):
-      return Double(integer)
+      Double(integer)
     case let .number(number):
-      return number
+      number
     case .string:
-      return .nan
+      .nan
     case let .datetime(date):
-      return date.timeIntervalSince1970
+      date.timeIntervalSince1970
     case let .boolean(bool):
-      return bool ? 1 : 0
+      bool ? 1 : 0
     case .error:
-      return .nan
+      .nan
     }
   }
 }

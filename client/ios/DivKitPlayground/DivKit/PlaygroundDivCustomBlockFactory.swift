@@ -14,9 +14,9 @@ struct PlaygroundDivCustomBlockFactory: DivCustomBlockFactory {
     context: DivBlockModelingContext
   ) -> Block {
     if data.name == RiveDivCustomData.divCustomType {
-      return RiveAnimationFactory(requester: requester).makeBlock(data: data, context: context)
+      RiveAnimationFactory(requester: requester).makeBlock(data: data, context: context)
     } else {
-      return TextBlock(
+      TextBlock(
         widthTrait: .intrinsic,
         text: "DivCustom(custom_type = \(data.name))".withTypo(size: 16, weight: .regular)
       )

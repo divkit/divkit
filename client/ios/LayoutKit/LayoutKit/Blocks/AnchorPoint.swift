@@ -19,9 +19,9 @@ public enum AnchorValue: Equatable {
   public func value(for length: CGFloat) -> CGFloat {
     switch self {
     case let .absolute(value):
-      return value / (length == 0 ? .infinity : length)
+      value / (length == 0 ? .infinity : length)
     case let .relative(value):
-      return value / 100
+      value / 100
     }
   }
 }
