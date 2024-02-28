@@ -64,10 +64,10 @@ class DocumentationGenerator(Generator):
 
     @staticmethod
     def __menu_item(obj: DocumentationDeclarable) -> str:
-        toc = '' if obj.include_in_documentation_toc else '\n   hidden: true'
+        toc = '' if obj.include_in_documentation_toc else '\n    hidden: true'
         return '\n'.join([
-            f'  -name: {obj.name}',
-            f'   href: concepts/divs/{obj.name}.md{toc}'
+            f'  - name: {obj.name}',
+            f'    href: concepts/divs/2/{obj.name}.md{toc}'
         ])
 
     def filename(self, name: str) -> str:
@@ -83,13 +83,16 @@ class DocumentationGenerator(Generator):
         return Text([
             f'# {header}',
             '',
-            '## JSON',
+            f'## {params_header}',
+            self.__fields_table(entity),
+            '',
+            '<details>',
+            '<summary>JSON</summary>',
+            '',
             '```json',
             str(entity.json_description(obj_stack=[])),
             '```',
-            '',
-            f'## {params_header}',
-            self.__fields_table(entity)
+            '</details>',
         ])
 
     def __description(self, entity: DocumentationEntity) -> str:
@@ -103,7 +106,7 @@ class DocumentationGenerator(Generator):
 
         properties_table_content = Text(list(map(
             lambda p: f'| {code(p.dict_field)} | {self.__table_description(p)} |',
-            entity.properties_doc
+            sorted(entity.properties_doc, key=lambda x: x.optional)
         )))
 
         inner_types_tables = '\n\n'.join(map(
@@ -173,4 +176,11 @@ class DocumentationGenerator(Generator):
         ])
 
     def _string_enumeration_declaration(self, string_enumeration: StringEnumeration) -> Text:
-        return Text()
+        header = self.__translations['div_generator_string_enumeration']
+        enumeration = '\n'.join(map(lambda entity: f'* {entity[0]}',
+                                    string_enumeration.cases))
+        return Text([
+            f'# {string_enumeration.name}',
+            header,
+            enumeration
+        ])

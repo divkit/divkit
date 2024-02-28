@@ -1,16 +1,6 @@
 # entity_with_complex_property
 Описания пока нет.
 
-## JSON
-```json
-{
-  type*: "entity_with_complex_property",
-  property*: {
-    value*: "string"
-  }
-}
-```
-
 ## Параметры
 | Параметры | Описание |
 | --- | --- |
@@ -21,3 +11,16 @@
 | Параметры | Описание |
 | --- | --- |
 | `value` | <p>**string**</p><p>Обязательный параметр.</p><p>Значение должно быть валидным URL.</p> |
+
+<details>
+<summary>JSON</summary>
+
+```json
+{
+  type*: "entity_with_complex_property",
+  property*: {
+    value*: "string"
+  }
+}
+```
+</details>
