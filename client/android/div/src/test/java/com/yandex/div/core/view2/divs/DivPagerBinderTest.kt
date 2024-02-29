@@ -91,7 +91,7 @@ class DivPagerBinderTest: DivBinderTest() {
     fun `do not log page change when selected page for the first time`() {
         underTest.bindView(divPagerView, divPager, divView, rootPath())
 
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
         verify(divView.div2Component.div2Logger, never()).logPagerChangePage(
             any(),
@@ -105,8 +105,8 @@ class DivPagerBinderTest: DivBinderTest() {
     fun `log page change when selected next page`() {
         underTest.bindView(divPagerView, divPager, divView, rootPath())
 
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
 
         verify(divView.div2Component.div2Logger).logPagerChangePage(
             any(),
@@ -125,7 +125,7 @@ class DivPagerBinderTest: DivBinderTest() {
         val divPager = DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson)
         underTest.bindView(divPagerView, divPager, divView, rootPath())
 
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
         verify(divView).bindViewToDiv(divPagerView.viewPager[0], divPager.nonNullItems[DEFAULT_ITEM])
     }
@@ -134,8 +134,8 @@ class DivPagerBinderTest: DivBinderTest() {
     fun `unbind view from div on previously selected page`() {
         underTest.bindView(divPagerView, divPager, divView, rootPath())
 
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
-        underTest.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
+        divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
 
         verify(divView).unbindViewFromDiv(divPagerView.viewPager[0])
     }

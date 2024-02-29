@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
@@ -60,12 +59,6 @@ internal class DivPagerBinder @Inject constructor(
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val accessibilityStateProvider: AccessibilityStateProvider,
 ) : DivViewBinder<DivPager, DivPagerView> {
-
-    private var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
-    @get:VisibleForTesting
-    var changePageCallbackForLogger: ViewPager2.OnPageChangeCallback? = null
-        private set
-    private var pagerSelectedActionsDispatcher: PagerSelectedActionsDispatcher? = null
 
     override fun bindView(
         view: DivPagerView,
@@ -159,28 +152,24 @@ internal class DivPagerBinder @Inject constructor(
             applyDecorations(view, div, resolver)
         })
 
-        pagerSelectedActionsDispatcher?.detach(view.viewPager)
-        pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
-            divView, div, divItems, divActionBinder
-        ).apply { attach(view.viewPager) }
-
-        if (changePageCallbackForLogger != null) {
-            view.viewPager.unregisterOnPageChangeCallback(changePageCallbackForLogger!!)
-        }
-        changePageCallbackForLogger = PageChangeCallback(
-            div, divItems, divView,
-            view.viewPager.getChildAt(0) as RecyclerView
+        view.pagerSelectedActionsDispatcher = PagerSelectedActionsDispatcher(
+            divView = divView,
+            div = div,
+            divs = divItems,
+            divActionBinder = divActionBinder,
         )
-        view.viewPager.registerOnPageChangeCallback(changePageCallbackForLogger!!)
+
+        view.changePageCallbackForLogger = PageChangeCallback(
+            divView = divView,
+            divPager = div,
+            divs = divItems,
+            recyclerView = view.viewPager.getChildAt(0) as RecyclerView
+        )
 
         divView.currentState?.let { state ->
             val id = div.id ?: div.hashCode().toString()
             val pagerState = state.getBlockState(id) as PagerState?
-            if (changePageCallbackForState != null) {
-                view.viewPager.unregisterOnPageChangeCallback(changePageCallbackForState!!)
-            }
-            changePageCallbackForState = UpdateStateChangePageCallback(id, state)
-            view.viewPager.registerOnPageChangeCallback(changePageCallbackForState!!)
+            view.changePageCallbackForState = UpdateStateChangePageCallback(id, state)
             val correctPosition = if (div.infiniteScroll.evaluate(resolver)) OFFSET_TO_REAL_ITEM else 0
             view.currentItem = (pagerState?.currentPageIndex ?: div.defaultItem.evaluate(resolver)
                 .toIntSafely()) + correctPosition

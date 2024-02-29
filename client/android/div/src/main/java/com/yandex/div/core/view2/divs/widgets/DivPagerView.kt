@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
+import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.view2.divs.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
@@ -24,6 +26,27 @@ internal class DivPagerView @JvmOverloads constructor(
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr),
     DivHolderView<DivPager> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost {
+
+    internal var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
+        set(value) {
+            field?.let(viewPager::unregisterOnPageChangeCallback)
+            value?.let(viewPager::registerOnPageChangeCallback)
+            field = value
+        }
+
+    internal var changePageCallbackForLogger: ViewPager2.OnPageChangeCallback? = null
+        set(value) {
+            field?.let(viewPager::unregisterOnPageChangeCallback)
+            value?.let(viewPager::registerOnPageChangeCallback)
+            field = value
+        }
+
+    internal var pagerSelectedActionsDispatcher: PagerSelectedActionsDispatcher? = null
+        set(value) {
+            field?.detach(viewPager)
+            value?.attach(viewPager)
+            field = value
+        }
 
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
     internal var currentItem: Int
@@ -68,7 +91,9 @@ internal class DivPagerView @JvmOverloads constructor(
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        val intercepted = onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event) ?: false
+        val intercepted =
+            onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event)
+                ?: false
         return intercepted || super.onInterceptTouchEvent(event)
     }
 
