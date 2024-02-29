@@ -19,17 +19,20 @@ public struct UserInterfaceAction: Equatable, Codable {
     public let cardId: String
     public let source: DivActionSource
     public let url: URL?
+    public let prototypeVariables: [String: AnyHashable]
 
     public init(
       action: JSONObject,
       cardId: String,
       source: DivActionSource,
-      url: URL?
+      url: URL?,
+      prototypeVariables: [String: AnyHashable]
     ) {
       self.action = action
       self.cardId = cardId
       self.source = source
       self.url = url
+      self.prototypeVariables = prototypeVariables
     }
   }
 
@@ -203,7 +206,8 @@ extension UserInterfaceAction.Payload: Codable {
         action: container.decode(JSONObject.self, forKey: .json),
         cardId: container.decode(String.self, forKey: .cardId),
         source: UserInterfaceAction.DivActionSource(rawValue: source ?? "") ?? .tap,
-        url: container.decodeIfPresent(URL.self, forKey: .url)
+        url: container.decodeIfPresent(URL.self, forKey: .url),
+        prototypeVariables: [:]
       )
       self = .divAction(params: params)
     }

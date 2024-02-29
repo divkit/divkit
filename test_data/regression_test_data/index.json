@@ -2526,6 +2526,21 @@
         "Test behaves the same with and without \"Complex Rebind\" flag activated"
       ],
       "file": "rebind/tabs/un_added.json"
+    },
+    {
+      "title": "Container with item_builder",
+      "platforms": [
+          "ios",
+          "web"
+      ],
+      "tags": [
+        "actions",
+        "DivContainer"
+      ],
+      "steps": [
+        "Tap to cards. Their description is displayed in the first card."
+      ],
+      "file": "container/item_builder.json"
     }
   ]
 }

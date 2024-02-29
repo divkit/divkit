@@ -41,7 +41,7 @@ public struct DivBlockModelingContext {
   private let variableTracker: ExpressionResolver.VariableTracker
   public private(set) var parentPath: UIElementPath
   private(set) var sizeModifier: DivSizeModifier?
-  private var prototypesStorage = [String: Any]()
+  private(set) var prototypesStorage = [String: AnyHashable]()
 
   public init(
     cardId: DivCardID,

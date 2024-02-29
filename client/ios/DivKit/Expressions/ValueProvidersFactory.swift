@@ -1,10 +1,10 @@
 func makeVariableValueProvider(
   cardId: DivCardID,
   variablesStorage: DivVariablesStorage,
-  prototypesStorage: [String: Any]? = nil
+  prototypesStorage: [String: AnyHashable]? = nil
 ) -> AnyCalcExpression.ValueProvider {
   {
-    if let value: Any = prototypesStorage?[$0] {
+    if let value: Any = prototypesStorage?[$0]?.base {
       return value
     }
     return variablesStorage.getVariableValue(

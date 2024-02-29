@@ -13,7 +13,11 @@ extension DivAction {
       payload = menuPayload
     } else {
       // don't make .divAction payloads for menu actions until DivActionHandler could handle it
-      payload = makeDivActionPayload(cardId: context.cardId, source: .tap)
+      payload = makeDivActionPayload(
+        cardId: context.cardId,
+        source: .tap,
+        prototypeVariables: context.prototypesStorage
+      )
     }
 
     let path = if let cardLogId = context.cardLogId {

@@ -1,0 +1,156 @@
+{
+    "templates": {
+        "exampleCard": {
+            "type": "container",
+            "border": {
+                "corner_radius": 16,
+                "stroke": {
+                    "color": "#aaaaaa",
+                    "width": 1
+                }
+            },
+            "margins": {
+                "bottom": 6
+            },
+            "orientation": "vertical",
+            "paddings": {
+                "top": 12,
+                "bottom": 12,
+                "left": 12,
+                "right": 12
+            }
+        }
+    },
+    "card": {
+        "log_id": "prototypes",
+        "variables": [
+            {
+                "name": "text_variable",
+                "type": "string",
+                "value": "Text displaying the description of the card."
+            },
+            {
+                "name": "data",
+                "type": "array",
+                "value": [
+                    {
+                        "style": "only_text",
+                        "title": "First text card"
+                    },
+                    {
+                        "style": "only_text",
+                        "title": "Second text card"
+                    },
+                    {
+                        "style": "only_text",
+                        "title": "Third text card"
+                    },
+                    {
+                        "style": "with_image",
+                        "title": "Card with image",
+                        "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
+                    }
+                ]
+            }
+        ],
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "items": [
+                        {
+                            "type": "exampleCard",
+                            "items": [
+                                {
+                                    "type": "text",
+                                    "text": "@{text_variable}"
+                                }
+                            ]
+                        },
+                        {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "item_builder": {
+                        "type": "prototype",
+                        "data": "@{data}",
+                        "data_element_name": "item",
+                        "prototypes": [
+                            {
+                                "selector": "@{getStringFromDict(item, 'style') == 'only_text'}",
+                                "div": {
+                                    "type": "exampleCard",
+                                    "actions": [
+                                                {
+                                                    "log_id": "check",
+                                                    "url": "div-action://set_variable?name=text_variable&value=@{getStringFromDict(item, 'title')}"
+                                                }
+                                    ],
+                                    "items": [
+                                        {
+                                            "type": "text",
+                                            "text": "@{getStringFromDict(item, 'title')}",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "font_size": 16,
+                                            "margins": {
+                                                "bottom": 4
+                                            }
+                                        }
+                                    ],
+                                    "width": {
+                                        "type": "wrap_content"
+                                    }
+                                }
+                            },
+                            {
+                                "selector": "@{getStringFromDict(item, 'style') == 'with_image'}",
+                                "div": {
+                                    "type": "exampleCard",
+                                    "actions": [
+                                                {
+                                                    "log_id": "check",
+                                                    "url": "div-action://set_variable?name=text_variable&value=@{getStringFromDict(item, 'title')}"
+                                                }
+                                    ],
+                                    "items": [
+                                        {
+                                            "type": "image",
+                                            "image_url": "@{getStringFromDict(item, 'image_url')}",
+                                            "width": {
+                                                "type": "fixed",
+                                                "value": 50
+                                            },
+                                            "height": {
+                                                "type": "fixed",
+                                                "value": 50
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "@{getStringFromDict(item, 'title')}",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "alignment_vertical": "center",
+                                            "font_size": 16,
+                                            "margins": {
+                                                "left": 4
+                                            }
+                                        }
+                                    ],
+                                    "width": {
+                                        "type": "wrap_content"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+                    ]
+                }
+            }
+        ]
+    }
+}

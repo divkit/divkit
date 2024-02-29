@@ -102,7 +102,8 @@ func divActionPayload(
       action: .object(json),
       cardId: DivKitTests.cardId.rawValue,
       source: .tap,
-      url: url.map { URL(string: $0)! }
+      url: url.map { URL(string: $0)! },
+      prototypeVariables: [:]
     )
   )
 }
