@@ -11,7 +11,7 @@ class EntityWithSimpleProperties with EquatableMixin {
     this.color,
     this.dNum,
     this.id = 0,
-    this.integer = const Expression.value(0),
+    this.integer = const ValueExpression(0),
     this.positiveInteger,
     this.string,
     this.url,

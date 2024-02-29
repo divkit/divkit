@@ -252,7 +252,7 @@ class DartProperty(Property):
             return declaration
 
         if self.supports_expressions:
-            default_value_declaration_to_use = f'const Expression.value({default_value_declaration_to_use})'
+            default_value_declaration_to_use = f'const ValueExpression({default_value_declaration_to_use})'
 
         if in_constructor:
             default_value_declaration_to_use = f'{declaration} = {default_value_declaration_to_use}'
@@ -407,7 +407,7 @@ class DartPropertyType(PropertyType):
                     declaration = cast(DartPropertyType, prop.property_type).internal_declaration(str_type)
 
                     if prop.supports_expressions:
-                        declaration = f'Expression.value({declaration})'
+                        declaration = f'ValueExpression({declaration})'
 
                     args.append(f'{prop.declaration_name}: {declaration}')
 

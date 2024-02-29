@@ -6,7 +6,7 @@ import '../utils/parsing_utils.dart';
 
 class EntityWithStringEnumPropertyWithDefaultValue with EquatableMixin {
   const EntityWithStringEnumPropertyWithDefaultValue({
-    this.value = const Expression.value(EntityWithStringEnumPropertyWithDefaultValueValue.second),
+    this.value = const ValueExpression(EntityWithStringEnumPropertyWithDefaultValueValue.second),
   });
 
   static const type = "entity_with_string_enum_property_with_default_value";

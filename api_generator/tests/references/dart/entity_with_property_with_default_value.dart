@@ -6,9 +6,9 @@ import '../utils/parsing_utils.dart';
 
 class EntityWithPropertyWithDefaultValue with EquatableMixin {
   const EntityWithPropertyWithDefaultValue({
-    this.iNum = const Expression.value(0),
+    this.iNum = const ValueExpression(0),
     this.nested,
-    this.url = const Expression.value(const Uri.parse("https://yandex.ru")),
+    this.url = const ValueExpression(const Uri.parse("https://yandex.ru")),
   });
 
   static const type = "entity_with_property_with_default_value";
@@ -40,9 +40,9 @@ class EntityWithPropertyWithDefaultValue with EquatableMixin {
 
 class EntityWithPropertyWithDefaultValueNested with EquatableMixin {
   const EntityWithPropertyWithDefaultValueNested({
-    this.iNum = const Expression.value(0),
+    this.iNum = const ValueExpression(0),
     required this.nonOptional,
-    this.url = const Expression.value(const Uri.parse("https://yandex.ru")),
+    this.url = const ValueExpression(const Uri.parse("https://yandex.ru")),
   });
 
   // constraint: number >= 0; default value: 0
